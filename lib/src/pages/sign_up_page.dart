@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/pages/login_page.dart';
+import 'package:yogi_application/src/routing/app_routes.dart';
+import 'package:yogi_application/src/features/api_service.dart';
 
 class SignUp extends StatelessWidget {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+  final ApiService apiService = ApiService('http://127.0.0.1:8000');
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -91,7 +99,6 @@ class SignUp extends StatelessWidget {
                 obscureText: true,
                 style: TextStyle(color: Colors.white),
               ),
-              SizedBox(height: 10.0),
 
               SizedBox(height: 10.0),
               Container(
@@ -113,7 +120,8 @@ class SignUp extends StatelessWidget {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-                      // Xử lý sự kiện khi nhấn vào nút "Login"
+                      // sự kiện handle sign up
+                      _handleSignUp(context);
                     },
                     borderRadius: BorderRadius.circular(44.0),
                     child: Center(
@@ -145,9 +153,8 @@ class SignUp extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       // Xử lý sự kiện khi nhấn vào "Sign in"
-                      // Chuyển đến trang đăng ký
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
+
+                      Navigator.pushNamed(context, AppRoutes.login);
                     },
                     child: Text(
                       'Sign in',
@@ -165,5 +172,75 @@ class SignUp extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _handleSignUp(BuildContext context) async {
+    String enteredUsername = usernameController.text;
+    String enteredEmail = emailController.text;
+    String enteredPassword = passwordController.text;
+    String enteredConfirmPassword = confirmPasswordController.text;
+
+    if (enteredUsername.isEmpty ||
+        enteredEmail.isEmpty ||
+        enteredPassword.isEmpty ||
+        enteredConfirmPassword.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please fill in all fields'),
+        ),
+      );
+      return;
+    }
+
+    if (enteredPassword != enteredConfirmPassword) {
+      ScaffoldMessenger.of(context)
+          .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Passwords do not match'),
+        ),
+      );
+      return;
+    }
+
+    try {
+      final response = await apiService.register(
+        enteredUsername,
+        enteredEmail,
+        enteredPassword,
+        enteredConfirmPassword,
+      );
+
+      if (response['status'] == 'success') {
+        ScaffoldMessenger.of(context)
+            .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Register successfully!'),
+          ),
+        );
+        await saveLoginInfo(enteredEmail, enteredPassword);
+        Navigator.pushReplacementNamed(context, AppRoutes.home);
+      } else {
+        ScaffoldMessenger.of(context)
+            .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(response['message'] ?? 'Failed to register'),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error occurs, please try later'),
+        ),
+      );
+      print('Error: $e');
+    }
   }
 }

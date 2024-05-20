@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final ApiService apiService = ApiService('http://127.0.0.1:8000');
 
   @override
   Widget build(BuildContext context) {
@@ -152,32 +154,45 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  void _handleLogin(BuildContext context) {
-    // Lấy giá trị từ TextField
+  Future<void> _handleLogin(BuildContext context) async {
+    // take value
     String enteredEmail = emailController.text;
     String enteredPassword = passwordController.text;
 
-    // Kiểm tra xem có trường nào bị bỏ trống không
+    // empty or not
     if (enteredEmail.isEmpty || enteredPassword.isEmpty) {
-      // Hiển thị thông báo lỗi
+      // error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Please fill in both Email and Password fields'),
         ),
       );
-      return; // Dừng xử lý tiếp theo
+      return;
     }
 
-    // Kiểm tra xác thực, đây chỉ là ví dụ đơn giản
-    if (enteredEmail == 'admin@admin.com' && enteredPassword == 'admin123') {
-      // Nếu thông tin đúng, chuyển hướng đến trang chính của ứng dụng hoặc làm bất kỳ điều gì khác cần thiết
+    try {
+      final response = await apiService.login(enteredEmail, enteredPassword);
 
-      Navigator.pushReplacementNamed(context, AppRoutes.home);
-    } else {
-      // Nếu thông tin không đúng, hiển thị thông báo lỗi
+      // Kiểm tra phản hồi từ API
+      if (response['status'] == 'success') {
+        // check login
+        await saveLoginInfo(enteredEmail, enteredPassword);
+
+        Navigator.pushReplacementNamed(context, AppRoutes.home);
+      } else {
+        // Nếu đăng nhập không thành công, hiển thị thông báo lỗi
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(response['message'] ?? 'Invalid email or password'),
+          ),
+        );
+      }
+    } catch (e) {
+      // Nếu có lỗi xảy ra khi gọi API, hiển thị thông báo lỗi
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Invalid email or password'),
+          content:
+              Text('An error occurred. Please try again later.' + e.toString()),
         ),
       );
     }
