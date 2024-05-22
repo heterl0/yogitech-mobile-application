@@ -1,3 +1,4 @@
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -7,10 +8,26 @@ class ApiService {
 
   ApiService(this.baseUrl);
 
+  get dio => null;
+
+  Future<dynamic> login(String email, String password) async {
+    Response response = await dio.post(
+      Uri.parse('${baseUrl}/api/v1/auth/login/'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'password': password}),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to log in');
+    }
+  }
+
   Future<dynamic> register(
       String username, String email, String password, String rePassword) async {
     final response = await http.post(
-      Uri.parse('${baseUrl}api/v1/users/'),
+      Uri.parse('${baseUrl}/api/v1/users/'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'username': username,
@@ -24,20 +41,6 @@ class ApiService {
       return jsonDecode(response.body);
     } else {
       throw Exception('Failed to register');
-    }
-  }
-
-  Future<dynamic> login(String email, String password) async {
-    final response = await http.post(
-      Uri.parse('${baseUrl}/api/v1/auth/login/'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email, 'password': password}),
-    );
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Failed to log in');
     }
   }
 }

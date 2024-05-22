@@ -5,7 +5,7 @@ import 'package:yogi_application/src/routing/app_routes.dart';
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final ApiService apiService = ApiService('http://127.0.0.1:8000');
+  final ApiService apiService = ApiService('http://10.66.172.236:8000');
 
   @override
   Widget build(BuildContext context) {
@@ -181,6 +181,7 @@ class LoginPage extends StatelessWidget {
         Navigator.pushReplacementNamed(context, AppRoutes.home);
       } else {
         // Nếu đăng nhập không thành công, hiển thị thông báo lỗi
+        print(response);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(response['message'] ?? 'Invalid email or password'),
