@@ -7,6 +7,7 @@ import 'package:yogi_application/src/pages/login_page.dart';
 import 'package:yogi_application/src/pages/sign_up_page.dart';
 import 'package:yogi_application/src/pages/OTP_confirm_page.dart';
 import 'package:yogi_application/src/pages/reset_password_page.dart';
+import 'package:yogi_application/src/custombar/bottombar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,8 +20,7 @@ void main() async {
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: true,
-    initialRoute:
-        isLoggedIn ? AppRoutes.preLaunchSurvey : AppRoutes.preLaunchSurvey,
+    initialRoute: isLoggedIn ? AppRoutes.home : AppRoutes.home,
     // initialRoute: AppRoutes.OtpConfirm,
     routes: {
       AppRoutes.home: (context) =>
@@ -35,14 +35,24 @@ void main() async {
   ));
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final String? savedEmail;
   final String? savedPassword;
 
-  HomePage({required this.savedEmail, required this.savedPassword}) {
-    print('savedEmail: $savedEmail'); // In giá trị của savedEmail ra console
+  HomePage({required this.savedEmail, required this.savedPassword});
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
     print(
-        'savedPassword: $savedPassword'); // In giá trị của savedPassword ra console
+        'savedEmail: ${widget.savedEmail}'); // In giá trị của savedEmail ra console
+    print(
+        'savedPassword: ${widget.savedPassword}'); // In giá trị của savedPassword ra console
   }
 
   @override
@@ -56,7 +66,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (savedEmail != null && savedPassword != null)
+            if (widget.savedEmail != null && widget.savedPassword != null)
               Column(
                 children: [
                   Text(
@@ -65,12 +75,12 @@ class HomePage extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Email: $savedEmail',
+                    'Email: ${widget.savedEmail}',
                     style: TextStyle(fontSize: 14),
                   ),
                   SizedBox(height: 4),
                   Text(
-                    'Password: $savedPassword',
+                    'Password: ${widget.savedPassword}',
                     style: TextStyle(fontSize: 14),
                   ),
                   SizedBox(height: 20),
@@ -83,7 +93,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
-            if (savedEmail != null && savedPassword != null)
+            if (widget.savedEmail != null && widget.savedPassword != null)
               Column(
                 children: [
                   SizedBox(height: 20),
@@ -100,6 +110,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
+      // bottomNavigationBar: ,
     );
   }
 }
