@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 
-class LoginPage extends StatelessWidget {
+class ForgotPasswordPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final ApiService apiService = ApiService('http://10.66.172.236:8000');
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +22,13 @@ class LoginPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Login',
+              'Forgot Password',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 32.0,
+                fontSize: 40.0,
                 fontWeight: FontWeight.bold,
               ),
-              textAlign: TextAlign.left,
+              textAlign: TextAlign.center,
             ),
             SizedBox(height: 16.0),
             TextField(
@@ -39,7 +36,7 @@ class LoginPage extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white.withOpacity(0),
-                hintText: 'Email',
+                hintText: 'Enter your email',
                 hintStyle: TextStyle(color: Color(0xFF8D8E99)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(44.0),
@@ -48,46 +45,7 @@ class LoginPage extends StatelessWidget {
               ),
               style: TextStyle(color: Colors.white),
             ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white.withOpacity(0),
-                hintText: 'Password',
-                hintStyle: TextStyle(
-                  color: Color(0xFF8D8E99),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(44.0),
-                  borderSide: BorderSide(color: Color(0xFF8D8E99)),
-                ),
-              ),
-              obscureText: true,
-              style: TextStyle(color: Colors.white),
-            ),
-            SizedBox(
-              height: 0.0,
-            ),
-
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.forgotpassword);
-                },
-                child: Text(
-                  'Forgot password?',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-
-            SizedBox(height: 0.0),
+            SizedBox(height: 20.0),
             Container(
               height: 50.0,
               decoration: BoxDecoration(
@@ -96,7 +54,7 @@ class LoginPage extends StatelessWidget {
                   colors: [
                     Color(0xFF3BE2B0),
                     Color(0xFF4095D0),
-                    Color(0xFF5986CC), // Màu gradient từ 100% (8800DC)
+                    Color(0xFF5986CC),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -107,13 +65,13 @@ class LoginPage extends StatelessWidget {
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () {
-                    // Xử lý sự kiện khi nhấn vào nút "Login"
-                    _handleLogin(context);
+                    // Xử lý sự kiện khi nhấn vào nút "Send OTP"
+                    _handleSendOTP(context, emailController.text);
                   },
                   borderRadius: BorderRadius.circular(44.0),
                   child: Center(
                     child: Text(
-                      'Login',
+                      'Send OTP',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -139,9 +97,6 @@ class LoginPage extends StatelessWidget {
               ),
               Expanded(child: Divider(color: Colors.white)),
             ]),
-
-            // google sign in button here
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -175,48 +130,12 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Future<void> _handleLogin(BuildContext context) async {
-    // take value
-    String enteredEmail = emailController.text;
-    String enteredPassword = passwordController.text;
-
-    // empty or not
-    if (enteredEmail.isEmpty || enteredPassword.isEmpty) {
-      // error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please fill in both Email and Password fields'),
-        ),
-      );
-      return;
-    }
-
-    try {
-      final response = await apiService.login(enteredEmail, enteredPassword);
-
-      // Kiểm tra phản hồi từ API
-      if (response['status'] == 'success') {
-        // check login
-        await saveLoginInfo(enteredEmail, enteredPassword);
-
-        Navigator.pushReplacementNamed(context, AppRoutes.home);
-      } else {
-        // Nếu đăng nhập không thành công, hiển thị thông báo lỗi
-        print(response);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(response['message'] ?? 'Invalid email or password'),
-          ),
-        );
-      }
-    } catch (e) {
-      // Nếu có lỗi xảy ra khi gọi API, hiển thị thông báo lỗi
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content:
-              Text('An error occurred. Please try again later.' + e.toString()),
-        ),
-      );
-    }
+  void _handleSendOTP(BuildContext context, String email) {
+    // Xử lý sự kiện gửi OTP
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('OTP sent to $email'),
+      ),
+    );
   }
 }

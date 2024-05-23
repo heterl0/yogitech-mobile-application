@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/features/api_service.dart';
+import 'package:yogi_application/src/pages/forgot_password.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/pages/login_page.dart';
 import 'package:yogi_application/src/pages/sign_up_page.dart';
+import 'package:yogi_application/src/pages/OTP_confirm_page.dart';
+import 'package:yogi_application/src/pages/reset_password_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,12 +18,17 @@ void main() async {
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: true,
-    initialRoute: isLoggedIn ? AppRoutes.home : AppRoutes.login,
+    initialRoute:
+        isLoggedIn ? AppRoutes.ResetPassword : AppRoutes.ResetPassword,
+    // initialRoute: AppRoutes.OtpConfirm,
     routes: {
       AppRoutes.home: (context) =>
           HomePage(savedEmail: savedEmail, savedPassword: savedPassword),
       AppRoutes.login: (context) => LoginPage(),
-      AppRoutes.signup: (context) => SignUp()
+      AppRoutes.signup: (context) => SignUp(),
+      AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
+      AppRoutes.OtpConfirm: (context) => OTP_Page(),
+      AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
     },
   ));
 }
@@ -69,6 +77,20 @@ class HomePage extends StatelessWidget {
                     onPressed: () async {
                       await clearLoginInfo(); // Xóa thông tin đăng nhập
                       Navigator.pushReplacementNamed(context, AppRoutes.login);
+                    },
+                  ),
+                ],
+              ),
+            if (savedEmail != null && savedPassword != null)
+              Column(
+                children: [
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    child: const Text('Confirm OTP'),
+                    onPressed: () async {
+                      await clearLoginInfo(); // Xóa thông tin đăng nhập
+                      Navigator.pushReplacementNamed(
+                          context, AppRoutes.OtpConfirm);
                     },
                   ),
                 ],
