@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
+import 'package:yogi_application/src/widgets/box_button.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -66,43 +67,19 @@ class LoginPage extends StatelessWidget {
               obscureText: true,
               style: TextStyle(color: Colors.white),
             ),
-            SizedBox(height: 10.0),
-            Container(
-              height: 50.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(44.0),
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xFF3BE2B0), // Màu gradient từ 0% (3BE2B0)
-                    Color(0xFF4095D0), // Màu gradient từ 50% (4095D0)
-                    Color(0xFF8800DC), // Màu gradient từ 100% (8800DC)
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: [0.0, 0.5, 1.0],
-                ),
-              ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () {
-                    // Xử lý sự kiện khi nhấn vào nút "Login"
-                    _handleLogin(context);
-                  },
-                  borderRadius: BorderRadius.circular(44.0),
-                  child: Center(
-                    child: Text(
-                      'Login',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+            SizedBox(height: 16.0),
+
+            // Thay thế nút Login hiện tại bằng BoxButton
+            BoxButton(
+              title: 'Login',
+              style: ButtonStyleType.Primary,
+              state: ButtonState
+                  .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
+              onPressed: () {
+                _handleLogin(context);
+              },
             ),
+
             SizedBox(height: 10.0),
             Row(children: <Widget>[
               Expanded(
@@ -119,7 +96,7 @@ class LoginPage extends StatelessWidget {
               Expanded(child: Divider(color: Colors.white)),
             ]),
 
-            // google sign in button here
+            // Nút Google Sign In ở đây
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -155,13 +132,13 @@ class LoginPage extends StatelessWidget {
   }
 
   Future<void> _handleLogin(BuildContext context) async {
-    // take value
+    // Lấy giá trị từ TextField
     String enteredEmail = emailController.text;
     String enteredPassword = passwordController.text;
 
-    // empty or not
+    // Kiểm tra rỗng
     if (enteredEmail.isEmpty || enteredPassword.isEmpty) {
-      // error message
+      // Hiển thị thông báo lỗi
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Please fill in both Email and Password fields'),
@@ -175,13 +152,13 @@ class LoginPage extends StatelessWidget {
 
       // Kiểm tra phản hồi từ API
       if (response['status'] == 'success') {
-        // check login
+        // Lưu thông tin đăng nhập
         await saveLoginInfo(enteredEmail, enteredPassword);
 
+        // Chuyển đến trang chủ
         Navigator.pushReplacementNamed(context, AppRoutes.home);
       } else {
         // Nếu đăng nhập không thành công, hiển thị thông báo lỗi
-        print(response);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(response['message'] ?? 'Invalid email or password'),
@@ -192,8 +169,8 @@ class LoginPage extends StatelessWidget {
       // Nếu có lỗi xảy ra khi gọi API, hiển thị thông báo lỗi
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content:
-              Text('An error occurred. Please try again later.' + e.toString()),
+          content: Text(
+              'An error occurred. Please try again later. ${e.toString()}'),
         ),
       );
     }
