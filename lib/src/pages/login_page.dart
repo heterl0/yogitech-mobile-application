@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
 
 class LoginPage extends StatelessWidget {
@@ -27,11 +29,7 @@ class LoginPage extends StatelessWidget {
           children: [
             Text(
               'Login',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 32.0,
-                fontWeight: FontWeight.bold,
-              ),
+              style: h1.copyWith(color: active),
               textAlign: TextAlign.left,
             ),
             SizedBox(height: 16.0),
