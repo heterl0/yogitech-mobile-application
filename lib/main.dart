@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/pages/forgot_password.dart';
+import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/pages/login_page.dart';
 import 'package:yogi_application/src/pages/sign_up_page.dart';
@@ -19,7 +20,7 @@ void main() async {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: true,
     initialRoute:
-        isLoggedIn ? AppRoutes.ResetPassword : AppRoutes.ResetPassword,
+        isLoggedIn ? AppRoutes.preLaunchSurvey : AppRoutes.preLaunchSurvey,
     // initialRoute: AppRoutes.OtpConfirm,
     routes: {
       AppRoutes.home: (context) =>
@@ -29,6 +30,7 @@ void main() async {
       AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
       AppRoutes.OtpConfirm: (context) => OTP_Page(),
       AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
+      AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
     },
   ));
 }

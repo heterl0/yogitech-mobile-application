@@ -5,4 +5,5 @@ class AppRoutes {
   static const String forgotpassword = '/forgotpassword';
   static const String OtpConfirm = '/otpconfirm';
   static const String ResetPassword = '/resetpassword';
+  static const String preLaunchSurvey = '/prelaunchsurvey';
 }
