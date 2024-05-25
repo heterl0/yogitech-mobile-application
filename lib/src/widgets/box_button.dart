@@ -22,6 +22,7 @@ class BoxButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final bool isDisabled = state == ButtonState.Disabled;
     final bool isPressed = state == ButtonState.Pressed;
 
@@ -29,9 +30,9 @@ class BoxButton extends StatelessWidget {
     Color getBackgroundColor() {
       switch (style) {
         case ButtonStyleType.Primary:
-          return primary;
+          return theme.primaryColor;
         case ButtonStyleType.Secondary:
-          return elevationLight;
+          return theme.colorScheme.surface;
         case ButtonStyleType.Tertiary:
           return baseColor;
       }
@@ -45,11 +46,11 @@ class BoxButton extends StatelessWidget {
     Color getTextColor() {
       switch (style) {
         case ButtonStyleType.Primary:
-          return active;
+          return theme.colorScheme.onPrimary;
         case ButtonStyleType.Secondary:
-          return primary;
+          return theme.primaryColor;
         case ButtonStyleType.Tertiary:
-          return isPressed ? active : primary;
+          return isPressed ? theme.colorScheme.onSecondary : theme.primaryColor;
       }
     }
 
@@ -57,12 +58,14 @@ class BoxButton extends StatelessWidget {
     Border? getButtonBorder() {
       if (style == ButtonStyleType.Secondary) {
         if (isPressed || isDisabled) {
-          return Border.all(color: primary, width: 2);
+          return Border.all(color: theme.primaryColor, width: 2);
         } else {
-          return Border.all(color: primary, width: 2);
+          return Border.all(color: theme.primaryColor, width: 2);
         }
       } else if (style == ButtonStyleType.Primary) {
-        return isPressed ? Border.all(color: text, width: 2) : null;
+        return isPressed
+            ? Border.all(color: theme.colorScheme.onPrimary, width: 2)
+            : null;
       }
       return null;
     }
@@ -85,7 +88,7 @@ class BoxButton extends StatelessWidget {
           child: Text(
             title,
             style: h3.copyWith(
-              color: getTextColor(),
+              color: active,
             ),
           ),
         ),

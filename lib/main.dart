@@ -3,6 +3,7 @@ import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/pages/login_page.dart';
 import 'package:yogi_application/src/pages/sign_up_page.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,16 +14,36 @@ void main() async {
 
   bool isLoggedIn = savedEmail != null && savedPassword != null;
 
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: true,
-    initialRoute: isLoggedIn ? AppRoutes.home : AppRoutes.login,
-    routes: {
-      AppRoutes.home: (context) =>
-          HomePage(savedEmail: savedEmail, savedPassword: savedPassword),
-      AppRoutes.login: (context) => LoginPage(),
-      AppRoutes.signup: (context) => SignUp()
-    },
-  ));
+  runApp(MyApp(
+      isLoggedIn: isLoggedIn,
+      savedEmail: savedEmail,
+      savedPassword: savedPassword));
+}
+
+class MyApp extends StatelessWidget {
+  final bool isLoggedIn;
+  final String? savedEmail;
+  final String? savedPassword;
+
+  MyApp({required this.isLoggedIn, this.savedEmail, this.savedPassword});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: true,
+      initialRoute: isLoggedIn ? AppRoutes.home : AppRoutes.login,
+      routes: {
+        AppRoutes.home: (context) =>
+            HomePage(savedEmail: savedEmail, savedPassword: savedPassword),
+        AppRoutes.login: (context) => LoginPage(),
+        AppRoutes.signup: (context) => SignUp()
+      },
+      theme: lightTheme, // Áp dụng Light Theme
+      darkTheme: darkTheme, // Áp dụng Dark Theme
+      themeMode: ThemeMode
+          .light, // Sử dụng ThemeMode.system để tự động chuyển đổi giữa Dark và Light theo hệ thống
+    );
+  }
 }
 
 class HomePage extends StatelessWidget {
@@ -37,11 +58,14 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          title: Text('Homepage'),
-          backgroundColor: Colors.blueGrey),
+        centerTitle: true,
+        title: Text('Homepage'),
+        backgroundColor: theme.primaryColor, // Sử dụng màu chính từ theme
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -56,12 +80,14 @@ class HomePage extends StatelessWidget {
                   SizedBox(height: 8),
                   Text(
                     'Email: $savedEmail',
-                    style: TextStyle(fontSize: 14),
+                    style: theme
+                        .textTheme.bodyText1, // Sử dụng text style từ theme
                   ),
                   SizedBox(height: 4),
                   Text(
                     'Password: $savedPassword',
-                    style: TextStyle(fontSize: 14),
+                    style: theme
+                        .textTheme.bodyText1, // Sử dụng text style từ theme
                   ),
                   SizedBox(height: 20),
                   ElevatedButton(

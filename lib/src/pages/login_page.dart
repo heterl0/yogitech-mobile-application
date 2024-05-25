@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:yogi_application/src/widgets/box_input_field.dart';
+import 'package:yogi_application/src/shared/styles.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -12,8 +13,10 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xFF0d1f29),
+      backgroundColor: darkbg, // Sử dụng màu nền tối từ theme
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -29,42 +32,25 @@ class LoginPage extends StatelessWidget {
           children: [
             Text(
               'Login',
-              style: h1.copyWith(color: active),
+              style: h1.copyWith(
+                  color: theme
+                      .colorScheme.onPrimary), // Sử dụng màu văn bản từ theme
               textAlign: TextAlign.left,
             ),
             SizedBox(height: 16.0),
-            TextField(
+            // Thay thế TextField bằng BoxInputField
+            BoxInputField(
               controller: emailController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white.withOpacity(0),
-                hintText: 'Email',
-                hintStyle: TextStyle(color: Color(0xFF8D8E99)),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(44.0),
-                  borderSide: BorderSide(color: Color(0xFF8D8E99)),
-                ),
-              ),
-              style: TextStyle(color: Colors.white),
+              placeholder: 'Email',
             ),
             SizedBox(height: 16.0),
-            TextField(
+            // Thay thế TextField bằng BoxInputField
+            BoxInputField(
               controller: passwordController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white.withOpacity(0),
-                hintText: 'Password',
-                hintStyle: TextStyle(
-                  color: Color(0xFF8D8E99),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(44.0),
-                  borderSide: BorderSide(color: Color(0xFF8D8E99)),
-                ),
-              ),
-              obscureText: true,
-              style: TextStyle(color: Colors.white),
+              placeholder: 'Password',
+              password: true,
             ),
+
             SizedBox(height: 16.0),
 
             // Thay thế nút Login hiện tại bằng BoxButton
@@ -82,16 +68,20 @@ class LoginPage extends StatelessWidget {
             Row(children: <Widget>[
               Expanded(
                   child: Divider(
-                color: Colors.white,
+                color: theme.dividerColor, // Sử dụng màu viền từ theme
               )),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
-                  "Or sign in with",
-                  style: TextStyle(color: Colors.white),
+                  'Or sign in with',
+                  style: bd_text.copyWith(
+                      color:
+                          theme.primaryColor), // Sử dụng màu văn bản từ theme
                 ),
               ),
-              Expanded(child: Divider(color: Colors.white)),
+              Expanded(
+                  child: Divider(
+                      color: theme.dividerColor)), // Sử dụng màu viền từ theme
             ]),
 
             // Nút Google Sign In ở đây
@@ -115,7 +105,7 @@ class LoginPage extends StatelessWidget {
                   child: Text(
                     'Sign up',
                     style: TextStyle(
-                      color: Colors.blue,
+                      color: theme.primaryColor, // Sử dụng màu chính từ theme
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
