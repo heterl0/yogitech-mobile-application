@@ -37,7 +37,7 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
     return ListTile(
       title: Text(
         widget.title,
-        style: h3.copyWith(
+        style: bd_text.copyWith(
           color: text,
         ),
       ),

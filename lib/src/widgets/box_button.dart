@@ -43,17 +43,6 @@ class BoxButton extends StatelessWidget {
       return gradient;
     }
 
-    Color getTextColor() {
-      switch (style) {
-        case ButtonStyleType.Primary:
-          return theme.colorScheme.onPrimary;
-        case ButtonStyleType.Secondary:
-          return theme.primaryColor;
-        case ButtonStyleType.Tertiary:
-          return isPressed ? theme.colorScheme.onSecondary : theme.primaryColor;
-      }
-    }
-
     // Định nghĩa viền (outline) cho nút với kích thước 2
     Border? getButtonBorder() {
       if (style == ButtonStyleType.Secondary) {
@@ -96,7 +85,7 @@ class BoxButton extends StatelessWidget {
                 child: Text(
                   title,
                   style: h3.copyWith(
-                    color: getTextColor(),
+                    color: active,
                   ),
                 ),
               ),

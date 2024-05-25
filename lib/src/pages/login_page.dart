@@ -5,6 +5,7 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/checkbox.dart';
+import 'package:yogi_application/src/widgets/switch.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 
 class LoginPage extends StatelessWidget {
@@ -65,8 +66,6 @@ class LoginPage extends StatelessWidget {
                 _handleLogin(context);
               },
             ),
-
-            CheckBoxListTile(title: 'title'),
 
             SizedBox(height: 10.0),
             Row(children: <Widget>[
