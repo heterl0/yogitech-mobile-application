@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
 
 class BoxInputField extends StatefulWidget {
   final TextEditingController controller;
@@ -51,7 +52,7 @@ class _BoxInputFieldState extends State<BoxInputField> {
         contentPadding:
             const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
         filled: true,
-        fillColor: theme.colorScheme.surface, // Sử dụng màu nền từ theme
+        fillColor: theme.colorScheme.background, // Sử dụng màu nền từ theme
         prefixIcon: widget.leading,
         suffixIcon: widget.password
             ? GestureDetector(
@@ -71,8 +72,8 @@ class _BoxInputFieldState extends State<BoxInputField> {
             borderSide:
                 BorderSide(color: theme.colorScheme.secondary)), // Màu viền
         focusedBorder: circleBorder.copyWith(
-            borderSide: BorderSide(
-                color: theme.colorScheme.primary)), // Màu viền khi focus
+            borderSide:
+                BorderSide(color: theme.primaryColor)), // Màu viền khi focus
         errorBorder: circleBorder.copyWith(
             borderSide: BorderSide(
                 color: theme.colorScheme.error)), // Màu viền khi có lỗi

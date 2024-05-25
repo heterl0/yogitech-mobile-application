@@ -5,27 +5,23 @@ import 'package:yogi_application/src/shared/styles.dart';
 // Enum to represent more descriptive checkbox states
 enum CheckState { Checked, Unchecked }
 
-class CheckBox extends StatefulWidget {
+class CheckBoxListTile extends StatefulWidget {
   final String title;
   final CheckState state;
   final ValueChanged<bool>? onChanged; // Use ValueChanged for state updates
-  final Color? borderColor; // Custom border color
-  final Color? checkColor; // Custom checkmark color
 
-  const CheckBox({
+  const CheckBoxListTile({
     Key? key,
     required this.title,
     this.state = CheckState.Unchecked,
     this.onChanged,
-    this.borderColor,
-    this.checkColor,
   }) : super(key: key);
 
   @override
-  _CheckBoxState createState() => _CheckBoxState();
+  _CheckBoxListTileState createState() => _CheckBoxListTileState();
 }
 
-class _CheckBoxState extends State<CheckBox> {
+class _CheckBoxListTileState extends State<CheckBoxListTile> {
   bool _isChecked = false; // Internal state for checkbox value
 
   @override
@@ -38,25 +34,40 @@ class _CheckBoxState extends State<CheckBox> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Checkbox(
-      value: _isChecked,
-      onChanged: (value) {
-        setState(() {
-          _isChecked = value!;
-          widget.onChanged?.call(value); // Notify parent widget of state change
-        });
-      },
-      activeColor: theme.primaryColor, // Use theme's primary color
-      checkColor: widget.checkColor ??
-          theme.colorScheme.onPrimary, // Color of the checkmark
-      materialTapTargetSize:
-          MaterialTapTargetSize.shrinkWrap, // Prevent button-like behavior
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4)) // Square checkbox
-      , // Rounded checkbox
-      side: BorderSide(
-          color: widget.borderColor ?? theme.primaryColor,
-          width: 2), // Custom border color
+    return ListTile(
+      title: Text(
+        widget.title,
+        style: h3.copyWith(
+          color: text,
+        ),
+      ),
+      leading: Checkbox(
+        value: _isChecked,
+        onChanged: (value) {
+          setState(() {
+            _isChecked = value!;
+            widget.onChanged
+                ?.call(value); // Notify parent widget of state change
+          });
+        },
+        fillColor: MaterialStateColor.resolveWith((states) {
+          final ThemeData theme = Theme.of(context);
+          return theme.brightness == Brightness.light
+              ? elevationLight
+              : elevationDark;
+        }),
+
+        checkColor: primary, // Color of the checkmark
+        materialTapTargetSize:
+            MaterialTapTargetSize.shrinkWrap, // Prevent button-like behavior
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ), // Square checkbox
+        side: BorderSide(
+          color: theme.scaffoldBackgroundColor,
+          width: 1,
+        ), // Custom border color
+      ),
     );
   }
 }

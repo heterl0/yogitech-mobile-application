@@ -17,15 +17,16 @@ class LoginPage extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: darkbg, // Sử dụng màu nền tối từ theme
+      backgroundColor:
+          theme.scaffoldBackgroundColor, // Sử dụng màu nền tối từ theme
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/login-sign.png'),
-            fit: BoxFit.fitWidth,
-            alignment: Alignment.topCenter,
-          ),
-        ),
+            // image: DecorationImage(
+            //   image: AssetImage('assets/images/login-sign.png'),
+            //   fit: BoxFit.fitWidth,
+            //   alignment: Alignment.topCenter,
+            // ),
+            ),
         padding: EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +55,6 @@ class LoginPage extends StatelessWidget {
 
             SizedBox(height: 16.0),
 
-            CheckBox(title: 'title'),
             // Thay thế nút Login hiện tại bằng BoxButton
             BoxButton(
               title: 'Login',
@@ -65,6 +65,8 @@ class LoginPage extends StatelessWidget {
                 _handleLogin(context);
               },
             ),
+
+            CheckBoxListTile(title: 'title'),
 
             SizedBox(height: 10.0),
             Row(children: <Widget>[

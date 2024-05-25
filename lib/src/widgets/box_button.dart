@@ -34,7 +34,7 @@ class BoxButton extends StatelessWidget {
         case ButtonStyleType.Secondary:
           return theme.colorScheme.surface;
         case ButtonStyleType.Tertiary:
-          return baseColor;
+          return Color(0xFFa4b8be).withOpacity(0);
       }
     }
 
@@ -85,10 +85,21 @@ class BoxButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(44),
             border: getButtonBorder(),
           ),
-          child: Text(
-            title,
-            style: h3.copyWith(
-              color: active,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(44),
+              onTap: isDisabled ? null : onPressed,
+              splashColor: theme.colorScheme.onPrimary.withOpacity(0.4),
+              highlightColor: theme.colorScheme.onPrimary.withOpacity(0.4),
+              child: Center(
+                child: Text(
+                  title,
+                  style: h3.copyWith(
+                    color: getTextColor(),
+                  ),
+                ),
+              ),
             ),
           ),
         ),
