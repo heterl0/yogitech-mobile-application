@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
 
 class BoxInputField extends StatefulWidget {
   final TextEditingController controller;
@@ -69,21 +68,17 @@ class _BoxInputFieldState extends State<BoxInputField> {
               )
             : widget.trailing,
         border: circleBorder.copyWith(
-            borderSide: BorderSide(
-                color:
-                    theme.colorScheme.secondary)), // Sử dụng màu viền từ theme
+            borderSide:
+                BorderSide(color: theme.colorScheme.secondary)), // Màu viền
         focusedBorder: circleBorder.copyWith(
             borderSide: BorderSide(
-                color: theme.colorScheme
-                    .primary)), // Sử dụng màu viền khi focus từ theme
+                color: theme.colorScheme.primary)), // Màu viền khi focus
         errorBorder: circleBorder.copyWith(
             borderSide: BorderSide(
-                color: theme.colorScheme
-                    .error)), // Sử dụng màu viền khi có lỗi từ theme
+                color: theme.colorScheme.error)), // Màu viền khi có lỗi
         enabledBorder: circleBorder.copyWith(
             borderSide: BorderSide(
-                color: theme
-                    .dividerColor)), // Sử dụng màu viền khi enabled từ theme
+                color: theme.colorScheme.secondary)), // Màu viền khi enabled
       ),
     );
   }

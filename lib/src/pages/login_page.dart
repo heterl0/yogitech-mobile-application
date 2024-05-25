@@ -68,20 +68,18 @@ class LoginPage extends StatelessWidget {
             Row(children: <Widget>[
               Expanded(
                   child: Divider(
-                color: theme.dividerColor, // Sử dụng màu viền từ theme
+                color: stroke, // Sử dụng màu viền từ theme
               )),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
                   'Or sign in with',
                   style: bd_text.copyWith(
-                      color:
-                          theme.primaryColor), // Sử dụng màu văn bản từ theme
+                      color: stroke), // Sử dụng màu văn bản từ theme
                 ),
               ),
               Expanded(
-                  child: Divider(
-                      color: theme.dividerColor)), // Sử dụng màu viền từ theme
+                  child: Divider(color: stroke)), // Sử dụng màu viền từ theme
             ]),
 
             // Nút Google Sign In ở đây
@@ -91,10 +89,7 @@ class LoginPage extends StatelessWidget {
               children: [
                 Text(
                   "You don't have an account? ",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                  ),
+                  style: bd_text.copyWith(color: text),
                 ),
                 TextButton(
                   onPressed: () {
@@ -104,11 +99,7 @@ class LoginPage extends StatelessWidget {
                   },
                   child: Text(
                     'Sign up',
-                    style: TextStyle(
-                      color: theme.primaryColor, // Sử dụng màu chính từ theme
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: h3.copyWith(color: primary),
                   ),
                 ),
               ],

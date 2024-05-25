@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
       theme: lightTheme, // Áp dụng Light Theme
       darkTheme: darkTheme, // Áp dụng Dark Theme
       themeMode: ThemeMode
-          .light, // Sử dụng ThemeMode.system để tự động chuyển đổi giữa Dark và Light theo hệ thống
+          .dark, // Sử dụng ThemeMode.system để tự động chuyển đổi giữa Dark và Light theo hệ thống
     );
   }
 }
