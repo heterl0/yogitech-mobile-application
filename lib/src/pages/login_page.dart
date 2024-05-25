@@ -4,6 +4,7 @@ import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
+import 'package:yogi_application/src/widgets/checkbox.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 
 class LoginPage extends StatelessWidget {
@@ -53,6 +54,7 @@ class LoginPage extends StatelessWidget {
 
             SizedBox(height: 16.0),
 
+            CheckBox(title: 'title'),
             // Thay thế nút Login hiện tại bằng BoxButton
             BoxButton(
               title: 'Login',
