@@ -8,7 +8,6 @@ class BottomNav extends StatefulWidget {
 }
 
 class _BottomNavState extends State<BottomNav> {
-  int _currentIndex = 0;
   List<Widget> body = const [Icon(Icons.grid_view)];
 
   @override

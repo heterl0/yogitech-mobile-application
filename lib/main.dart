@@ -9,7 +9,6 @@ import 'package:yogi_application/src/pages/login_page.dart';
 import 'package:yogi_application/src/pages/sign_up_page.dart';
 import 'package:yogi_application/src/pages/OTP_confirm_page.dart';
 import 'package:yogi_application/src/pages/reset_password_page.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
