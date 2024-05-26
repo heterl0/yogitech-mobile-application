@@ -43,7 +43,7 @@ class _MeditateState extends State<Meditate> {
         children: [
           _buildTopRoundedContainer(),
           _buildTitleText(),
-          _buildNavigationBar(),
+          // _buildNavigationBar(),
           _buildMainContent(),
           _buildElevatedButton(),
         ],
@@ -89,73 +89,73 @@ class _MeditateState extends State<Meditate> {
     );
   }
 
-  Widget _buildNavigationBar() {
-    return Positioned(
-      left: 0,
-      bottom: 0,
-      right: 0,
-      child: Container(
-        height: 100,
-        child: Stack(
-          children: [
-            Positioned(
-              left: 0,
-              top: 0,
-              right: 0,
-              child: Container(
-                height: 100,
-                decoration: const BoxDecoration(
-                  color: Color(0xFF0D1F29),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 24,
-              top: 12,
-              right: 24,
-              child: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildNavItem(
-                      label: 'Home',
-                      icon: 'assets/icons/grid_view.png',
-                      isSelected: false,
-                    ),
-                    _buildNavItem(
-                      label: 'Blog',
-                      icon: 'assets/icons/newsmode.png',
-                      isSelected: false,
-                    ),
-                    _buildNavItem(
-                      label: 'Activities',
-                      icon: 'assets/icons/exercise.png',
-                      isSelected: false,
-                    ),
-                    _buildNavItem(
-                      label: 'Meditate',
-                      icon: 'assets/icons/self_improvement.png',
-                      isSelected: true,
-                    ),
-                    _buildNavItem(
-                      label: 'Profile',
-                      icon: 'assets/icons/account_circle.png',
-                      isSelected: false,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _buildNavigationBar() {
+  //   return Positioned(
+  //     left: 0,
+  //     bottom: 0,
+  //     right: 0,
+  //     child: Container(
+  //       height: 100,
+  //       child: Stack(
+  //         children: [
+  //           Positioned(
+  //             left: 0,
+  //             top: 0,
+  //             right: 0,
+  //             child: Container(
+  //               height: 100,
+  //               decoration: const BoxDecoration(
+  //                 color: Color(0xFF0D1F29),
+  //                 borderRadius: BorderRadius.only(
+  //                   topLeft: Radius.circular(24),
+  //                   topRight: Radius.circular(24),
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //           Positioned(
+  //             left: 24,
+  //             top: 12,
+  //             right: 24,
+  //             child: Container(
+  //               child: Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   _buildNavItem(
+  //                     label: 'Home',
+  //                     icon: 'assets/icons/grid_view.png',
+  //                     isSelected: false,
+  //                   ),
+  //                   _buildNavItem(
+  //                     label: 'Blog',
+  //                     icon: 'assets/icons/newsmode.png',
+  //                     isSelected: false,
+  //                   ),
+  //                   _buildNavItem(
+  //                     label: 'Activities',
+  //                     icon: 'assets/icons/exercise.png',
+  //                     isSelected: false,
+  //                   ),
+  //                   _buildNavItem(
+  //                     label: 'Meditate',
+  //                     icon: 'assets/icons/self_improvement.png',
+  //                     isSelected: true,
+  //                   ),
+  //                   _buildNavItem(
+  //                     label: 'Profile',
+  //                     icon: 'assets/icons/account_circle.png',
+  //                     isSelected: false,
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildNavItem({
     required String label,
