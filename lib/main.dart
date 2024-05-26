@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/pages/forgot_password.dart';
+import 'package:yogi_application/src/pages/meditate.dart';
+import 'package:yogi_application/src/pages/perform_meditate.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/pages/login_page.dart';
 import 'package:yogi_application/src/pages/sign_up_page.dart';
@@ -18,8 +20,7 @@ void main() async {
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: true,
-    initialRoute:
-        isLoggedIn ? AppRoutes.ResetPassword : AppRoutes.ResetPassword,
+    initialRoute: isLoggedIn ? AppRoutes.Meditate : AppRoutes.Meditate,
     // initialRoute: AppRoutes.OtpConfirm,
     routes: {
       AppRoutes.home: (context) =>
@@ -29,6 +30,8 @@ void main() async {
       AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
       AppRoutes.OtpConfirm: (context) => OTP_Page(),
       AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
+      AppRoutes.Meditate: (context) => Meditate(),
+      AppRoutes.PerformMeditate: (context) => PerformMeditate(),
     },
   ));
 }
