@@ -37,6 +37,16 @@ dependencies:
   cupertino_icons: ^1.0.6
   google_sign_in: ^6.2.1
   shared_preferences: ^2.2.3
+  dio: ^5.4.3+1
+  flutter_native_splash: ^2.4.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_native_splash:
+  android: true
+  ios: false
+  web: false
+
+  background_image: "assets/native_splash/splash.png"
 
 dev_dependencies:
   flutter_test:

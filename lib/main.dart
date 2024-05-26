@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/pages/forgot_password.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
@@ -8,9 +9,13 @@ import 'package:yogi_application/src/pages/sign_up_page.dart';
 import 'package:yogi_application/src/pages/OTP_confirm_page.dart';
 import 'package:yogi_application/src/pages/reset_password_page.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:dio/dio.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Future.delayed(const Duration(seconds: 3));
+  FlutterNativeSplash.remove();
 
   Map<String, String?> loginInfo = await getLoginInfo();
   String? savedEmail = loginInfo['email'];
@@ -46,8 +51,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var jsonList;
+
+  void getData() async {
+    try {
+      var response = await Dio().post(
+        'http://192.168.10.121:8000/api/v1/auth/login/',
+        data: {
+          'email': 'justingboy2002@gmail.com',
+          'password': 'd0947478477',
+        },
+      );
+      if (response.statusCode == 200) {
+        jsonList = response.data;
+        print(jsonList);
+      }
+      print(response);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
+    getData();
     super.initState();
     print(
         'savedEmail: ${widget.savedEmail}'); // In giá trị của savedEmail ra console
@@ -110,7 +137,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      // bottomNavigationBar: ,
     );
   }
 }
