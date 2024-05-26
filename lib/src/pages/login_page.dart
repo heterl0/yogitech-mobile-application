@@ -4,9 +4,8 @@ import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
-import 'package:yogi_application/src/widgets/checkbox.dart';
-import 'package:yogi_application/src/widgets/switch.dart';
 import 'package:yogi_application/src/shared/styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -34,7 +33,7 @@ class LoginPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Login',
+              AppLocalizations.of(context)!.login,
               style: h1.copyWith(
                   color: theme
                       .colorScheme.onPrimary), // Sử dụng màu văn bản từ theme
@@ -44,13 +43,13 @@ class LoginPage extends StatelessWidget {
             // Thay thế TextField bằng BoxInputField
             BoxInputField(
               controller: emailController,
-              placeholder: 'Email',
+              placeholder: AppLocalizations.of(context)!.email,
             ),
             SizedBox(height: 16.0),
             // Thay thế TextField bằng BoxInputField
             BoxInputField(
               controller: passwordController,
-              placeholder: 'Password',
+              placeholder: AppLocalizations.of(context)!.password,
               password: true,
             ),
 
@@ -58,7 +57,7 @@ class LoginPage extends StatelessWidget {
 
             // Thay thế nút Login hiện tại bằng BoxButton
             BoxButton(
-              title: 'Login',
+              title: AppLocalizations.of(context)!.login,
               style: ButtonStyleType.Primary,
               state: ButtonState
                   .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
@@ -76,7 +75,7 @@ class LoginPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
-                  'Or sign in with',
+                  AppLocalizations.of(context)!.orSignInWith,
                   style: bd_text.copyWith(
                       color: stroke), // Sử dụng màu văn bản từ theme
                 ),
@@ -91,7 +90,7 @@ class LoginPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "You don't have an account? ",
+                  AppLocalizations.of(context)!.dontHaveAccount,
                   style: bd_text.copyWith(color: text),
                 ),
                 TextButton(
@@ -101,7 +100,7 @@ class LoginPage extends StatelessWidget {
                     Navigator.pushNamed(context, AppRoutes.signup);
                   },
                   child: Text(
-                    'Sign up',
+                    AppLocalizations.of(context)!.signUp,
                     style: h3.copyWith(color: primary),
                   ),
                 ),
