@@ -196,13 +196,11 @@ class LoginPage extends StatelessWidget {
 
       // Kiểm tra phản hồi từ API
       if (response['status'] == 'success') {
-        // check login
+        // Lưu thông tin đăng nhập và chuyển đến trang chủ
         await saveLoginInfo(enteredEmail, enteredPassword);
-
         Navigator.pushReplacementNamed(context, AppRoutes.home);
       } else {
         // Nếu đăng nhập không thành công, hiển thị thông báo lỗi
-        print(response);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(response['message'] ?? 'Invalid email or password'),
@@ -213,8 +211,8 @@ class LoginPage extends StatelessWidget {
       // Nếu có lỗi xảy ra khi gọi API, hiển thị thông báo lỗi
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content:
-              Text('An error occurred. Please try again later.' + e.toString()),
+          content: Text(
+              'An error occurred. Please try again later. ' + e.toString()),
         ),
       );
     }
