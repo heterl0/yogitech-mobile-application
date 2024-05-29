@@ -16,7 +16,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var jsonList;
-  
 
   @override
   Widget build(BuildContext context) {
