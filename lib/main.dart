@@ -3,6 +3,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/pages/forgot_password.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
+import 'package:yogi_application/src/pages/meditate.dart';
+import 'package:yogi_application/src/pages/perform_meditate.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/pages/login_page.dart';
 import 'package:yogi_application/src/pages/sign_up_page.dart';
@@ -15,7 +17,7 @@ import 'package:dio/dio.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Future.delayed(const Duration(seconds: 3));
+  await Future.delayed(const Duration(seconds: 10));
   FlutterNativeSplash.remove();
 
   Map<String, String?> loginInfo = await getLoginInfo();
@@ -39,6 +41,8 @@ void main() async {
       AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
       AppRoutes.homepage: (context) =>
           HomePage(savedEmail: savedEmail, savedPassword: savedPassword),
+      AppRoutes.Meditate: (context) => Meditate(),
+      AppRoutes.PerformMeditate: (context) => PerformMeditate(),
     },
   ));
 }
