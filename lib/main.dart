@@ -17,7 +17,7 @@ import 'package:dio/dio.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Future.delayed(const Duration(seconds: 3));
+  await Future.delayed(const Duration(seconds: 10));
   FlutterNativeSplash.remove();
 
   Map<String, String?> loginInfo = await getLoginInfo();
