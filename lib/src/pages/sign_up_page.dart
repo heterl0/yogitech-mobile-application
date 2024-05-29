@@ -107,9 +107,9 @@ class SignUp extends StatelessWidget {
                   borderRadius: BorderRadius.circular(44.0),
                   gradient: LinearGradient(
                     colors: [
-                      Color(0xFF3BE2B0), // Màu gradient từ 0% (3BE2B0)
-                      Color(0xFF4095D0), // Màu gradient từ 50% (4095D0)
-                      Color(0xFF8800DC), // Màu gradient từ 100% (8800DC)
+                      Color(0xFF3BE2B0),
+                      Color(0xFF4095D0),
+                      Color(0xFF5986CC), // Màu gradient từ 100% (8800DC)
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,

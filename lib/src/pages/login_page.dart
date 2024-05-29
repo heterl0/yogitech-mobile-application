@@ -49,23 +49,79 @@ class LoginPage extends StatelessWidget {
             // Thay thế TextField bằng BoxInputField
             BoxInputField(
               controller: passwordController,
-              placeholder: AppLocalizations.of(context)!.password,
-              password: true,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white.withOpacity(0),
+                hintText: 'Password',
+                hintStyle: TextStyle(
+                  color: Color(0xFF8D8E99),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(44.0),
+                  borderSide: BorderSide(color: Color(0xFF8D8E99)),
+                ),
+              ),
+              obscureText: true,
+              style: TextStyle(color: Colors.white),
+            ),
+            SizedBox(
+              height: 0.0,
             ),
 
-            SizedBox(height: 16.0),
-
-            // Thay thế nút Login hiện tại bằng BoxButton
-            BoxButton(
-              title: AppLocalizations.of(context)!.login,
-              style: ButtonStyleType.Primary,
-              state: ButtonState
-                  .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
-              onPressed: () {
-                _handleLogin(context);
-              },
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.forgotpassword);
+                },
+                child: Text(
+                  'Forgot password?',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
 
+            SizedBox(height: 0.0),
+            Container(
+              height: 50.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(44.0),
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF3BE2B0),
+                    Color(0xFF4095D0),
+                    Color(0xFF5986CC), // Màu gradient từ 100% (8800DC)
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  stops: [0.0, 0.5, 1.0],
+                ),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {
+                    // Xử lý sự kiện khi nhấn vào nút "Login"
+                    _handleLogin(context);
+                  },
+                  borderRadius: BorderRadius.circular(44.0),
+                  child: Center(
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             SizedBox(height: 10.0),
             Row(children: <Widget>[
               Expanded(
@@ -133,10 +189,9 @@ class LoginPage extends StatelessWidget {
 
       // Kiểm tra phản hồi từ API
       if (response['status'] == 'success') {
-        // Lưu thông tin đăng nhập
+        // Lưu thông tin đăng nhập và chuyển đến trang chủ
         await saveLoginInfo(enteredEmail, enteredPassword);
 
-        // Chuyển đến trang chủ
         Navigator.pushReplacementNamed(context, AppRoutes.home);
       } else {
         // Nếu đăng nhập không thành công, hiển thị thông báo lỗi
@@ -151,7 +206,7 @@ class LoginPage extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-              'An error occurred. Please try again later. ${e.toString()}'),
+              'An error occurred. Please try again later. ' + e.toString()),
         ),
       );
     }
