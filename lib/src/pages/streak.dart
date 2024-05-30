@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 class Streak extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildBody(context),
+    return MaterialApp(
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: const Color(0xFF0A141C),
+      ),
+      home: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: _buildBody(context),
+        bottomNavigationBar: _buildNavigationBar(),
+      ),
     );
   }
 
@@ -12,12 +19,16 @@ class Streak extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(color: Color(0xFF09141C)),
+      decoration: const BoxDecoration(color: Color(0xFF0A141C)),
       child: Stack(
         children: [
           _buildTopRoundedContainer(),
           _buildTitleText(context),
-          _buildMainContent(),
+          Positioned.fill(
+            child: SingleChildScrollView(
+              child: _buildMainContent(),
+            ),
+          ),
         ],
       ),
     );
@@ -29,7 +40,7 @@ class Streak extends StatelessWidget {
       top: 0,
       right: 0,
       child: Container(
-        height: 120,
+        height: 150,
         decoration: BoxDecoration(
           color: Color(0xFF0D1F29),
           shape: BoxShape.rectangle,
@@ -48,78 +59,80 @@ class Streak extends StatelessWidget {
         Positioned(
           left: 0,
           right: 0,
-          top: 78,
+          top: 100,
           child: Text(
             'Streak',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 24,
+              fontSize: 30,
               fontFamily: 'Readex Pro',
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w800,
               height: 1.2,
             ),
           ),
         ),
         Positioned(
-          right: 10,
-          top: 70,
-          child: _buildBackButton(context),
+          right: 15,
+          top: 94,
+          child: _buildCloseButton(context),
         ),
       ],
     );
   }
 
-  Widget _buildMainContent() {
-    return Positioned(
-      left: 24,
-      top: 150,
-      right: 24,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(), // Placeholder, có thể thay đổi nếu cần
-            SizedBox(height: 24),
-            _buildStreakContainer(),
-          ],
-        ),
+  Widget _buildCloseButton(BuildContext context) {
+    return IconButton(
+      icon: Image.asset(
+        'assets/icons/close.png',
+        color: Colors.white.withOpacity(1),
+        width: 30,
+        height: 30,
       ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
     );
   }
 
-  Widget _buildStreakContainer() {
-    return Container(
-      width: 312,
-      height: 500,
+  Widget _buildMainContent() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildStreakInfo(),
-          const SizedBox(height: 16),
-          _buildMonthInfo(),
-          const SizedBox(height: 16),
-          _buildAdditionalInfo(),
-          const SizedBox(height: 16),
-          _buildPlaceholder(),
+          Container(), // Placeholder, có thể thay đổi nếu cần
+          Container(
+            width: double.infinity,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 20),
+                _buildStreakInfo(),
+                _buildMonthInfo(),
+                SizedBox(height: 20),
+                _buildAdditionalInfo(),
+                SizedBox(height: 20),
+                _buildPlaceholder(),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
   Widget _buildStreakInfo() {
-    return Container(
-      height: 500,
+    return Padding(
+      padding: const EdgeInsets.only(top: 150),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               _buildStreakText(),
               _buildStreakImage(),
@@ -133,7 +146,7 @@ class Streak extends StatelessWidget {
   Widget _buildStreakText() {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.only(top: 8, left: 0),
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -146,13 +159,13 @@ class Streak extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xFF4094CF),
-                fontSize: 48,
+                fontSize: 50,
                 fontFamily: 'Readex Pro',
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w900,
                 height: 0.01,
               ),
             ),
-            const SizedBox(height: 25),
+            SizedBox(height: 25),
             Text(
               'day streak!',
               textAlign: TextAlign.center,
@@ -174,135 +187,45 @@ class Streak extends StatelessWidget {
     return Container(
       width: 120,
       height: 96,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      child: Row(
-        children: [
-          Container(
-            child: Column(
-              children: [
-                Container(
-                  width: 80,
-                  height: 77,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: Image.asset('assets/images/Fire.png').image,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+      padding: const EdgeInsets.fromLTRB(15, 5, 20, 8),
+      child: Container(
+        width: 80,
+        height: 77,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/Fire.png'),
+            fit: BoxFit.fill,
           ),
-        ],
+        ),
       ),
     );
   }
 
   Widget _buildMonthInfo() {
-    return Container(
-      width: double.infinity,
-      alignment: Alignment.topCenter, // Add this line
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'May 2024',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontFamily: 'Readex Pro',
-              fontWeight: FontWeight.w700,
-              height: 0.04,
-            ),
-          ),
-          Row(
-            children: [
-              _buildMonthControl(),
-              const SizedBox(width: 16),
-              _buildMonthControl(),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMonthControl() {
-    return Container(
-      width: 24,
-      height: 24,
-      decoration: BoxDecoration(
-        color: Color(0xFFD9D9D9),
-      ),
-    );
-  }
-
-  Widget _buildAdditionalInfo() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _buildInfoCard(
-          '30 days',
-          'practiced in month',
-          LinearGradient(
-            begin: Alignment(0.91, -0.41),
-            end: Alignment(-0.91, 0.41),
-            colors: [
-              Color(0xFF3BE2B0),
-              Color(0xFF4095D0),
-              Color(0xFF5986CC),
-            ],
-          ),
-        ),
-        _buildInfoCard(
-          'Feb 14',
-          'Begin of the streak',
-          null,
-          borderColor: Color(0x7FA4B7BD),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildInfoCard(String title, String subtitle, Gradient? gradient,
-      {Color? borderColor}) {
-    return Expanded(
+    return Padding(
+      padding: const EdgeInsets.only(top: 15.0), // Adjust the value as needed
       child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: ShapeDecoration(
-          gradient: gradient,
-          color: gradient == null ? Color(0xFF09141C) : null,
-          shape: RoundedRectangleBorder(
-            side: borderColor != null
-                ? BorderSide(width: 1, color: borderColor)
-                : BorderSide.none,
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        width: double.infinity,
+        alignment: Alignment.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              title,
+              'May 2024',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 27,
                 fontFamily: 'Readex Pro',
-                fontWeight: FontWeight.w600,
-                height: 0.06,
+                fontWeight: FontWeight.w900,
+                height: 0.04,
               ),
             ),
-            Text(
-              subtitle,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 10,
-                fontFamily: 'Readex Pro',
-                fontWeight: FontWeight.w400,
-                height: 0.12,
-              ),
+            Row(
+              children: [
+                _buildMonthControlBack(),
+                SizedBox(width: 20),
+                _buildMonthControlForward(),
+              ],
             ),
           ],
         ),
@@ -310,25 +233,249 @@ class Streak extends StatelessWidget {
     );
   }
 
-  Widget _buildPlaceholder() {
+  Widget _buildMonthControlBack() {
     return Container(
-      width: 312,
-      height: 280,
-      decoration: BoxDecoration(color: Color(0xFF8D8E99)),
-    );
-  }
-
-  Widget _buildBackButton(BuildContext context) {
-    return Positioned(
-      right: 13,
-      top: 70,
-      child: IconButton(
-        icon: Image.asset('assets/icons/close.png',
-            color: Colors.white, width: 25, height: 25),
-        onPressed: () {
-          Navigator.pop(context);
-        },
+      width: 27,
+      height: 27,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/icons/arrow_back.png'),
+        ),
       ),
     );
   }
+
+  Widget _buildMonthControlForward() {
+    return Container(
+      width: 27,
+      height: 27,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/icons/arrow_forward.png'),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAdditionalInfo() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              width: 170,
+              height: 65,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF3BE2B0),
+                    Color(0xFF4095D0),
+                    Color(0xFF5986CC),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius:
+                    BorderRadius.circular(16), // This will round the corners
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10, left: 18, bottom: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        '30 days',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: 'Readex Pro',
+                          fontWeight: FontWeight.w600,
+                          height: 0.05,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        'practiced in month',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontFamily: 'Readex Pro',
+                          fontWeight: FontWeight.w400,
+                          height: 0.12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              width: 170,
+              height: 65,
+              decoration: BoxDecoration(
+                color: Color(0xFF0D1F29),
+                borderRadius:
+                    BorderRadius.circular(16), // This will round the corners
+                border: Border.all(
+                  color: Colors.white, // Border color
+                  width: 0.3, // Border width
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10, left: 18, bottom: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        'Feb 14',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: 'Readex Pro',
+                          fontWeight: FontWeight.w600,
+                          height: 0.05,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        'begin of the streak',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontFamily: 'Readex Pro',
+                          fontWeight: FontWeight.w400,
+                          height: 0.12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPlaceholder() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        width: double.infinity,
+        height: 280,
+        decoration: BoxDecoration(color: Color(0xFF8D8E99)),
+        child: Column(
+            // Add children widgets here
+            ),
+      ),
+    );
+  }
+}
+
+Widget _buildNavigationBar() {
+  return Container(
+    height: 100,
+    child: Stack(
+      children: [
+        Container(
+          height: 120,
+          decoration: BoxDecoration(
+            color: Color(0xFF0D1F29),
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 0.0),
+          child: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildNavItem(
+                  label: 'Home',
+                  icon: 'assets/icons/grid_view.png',
+                  isSelected: true,
+                ),
+                _buildNavItem(
+                  label: 'Blog',
+                  icon: 'assets/icons/newsmode.png',
+                  isSelected: false,
+                ),
+                _buildNavItem(
+                  label: 'Activities',
+                  icon: 'assets/icons/exercise.png',
+                  isSelected: false,
+                ),
+                _buildNavItem(
+                  label: 'Meditate',
+                  icon: 'assets/icons/self_improvement.png',
+                  isSelected: false,
+                ),
+                _buildNavItem(
+                  label: 'Profile',
+                  icon: 'assets/icons/account_circle.png',
+                  isSelected: false,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildNavItem({
+  required String label,
+  required String icon,
+  required bool isSelected,
+}) {
+  return GestureDetector(
+    onTap: () {
+      print('Navigated to $label');
+    },
+    child: Column(
+      children: [
+        Image.asset(
+          icon,
+          color: isSelected ? Color(0xFF4094CF) : Color(0xFF8D8E99),
+          width: 24,
+          height: 24,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: TextStyle(
+            color: isSelected ? Color(0xFF4094CF) : Color(0xFF8D8E99),
+            fontSize: 10,
+            fontFamily: 'Readex Pro',
+            fontWeight: FontWeight.w400,
+            height: 1.2,
+          ),
+        ),
+      ],
+    ),
+  );
 }
