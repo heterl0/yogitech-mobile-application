@@ -12,6 +12,7 @@ import 'package:yogi_application/src/pages/OTP_confirm_page.dart';
 import 'package:yogi_application/src/pages/reset_password_page.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/pages/homepage.dart';
+import 'package:yogi_application/src/pages/profile.dart';
 import 'package:dio/dio.dart';
 // comment to rollback
 
@@ -44,6 +45,7 @@ void main() async {
           HomePage(savedEmail: savedEmail, savedPassword: savedPassword),
       AppRoutes.Meditate: (context) => Meditate(),
       AppRoutes.PerformMeditate: (context) => PerformMeditate(),
+      AppRoutes.Profile: (context) => ProfilePage(),
     },
   ));
 }

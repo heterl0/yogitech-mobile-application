@@ -9,4 +9,5 @@ class AppRoutes {
   static const String preLaunchSurvey = '/prelaunchsurvey';
   static const String Meditate = '/meditate';
   static const String PerformMeditate = '/performmeditate';
+  static const String Profile = '/profile';
 }

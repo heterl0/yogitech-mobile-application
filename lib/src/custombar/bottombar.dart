@@ -50,7 +50,7 @@ class CustomBottomBar extends StatelessWidget {
             InkWell(
               onTap: () {
                 // Xử lý sự kiện khi nhấn vào nút Profile
-                Navigator.pushNamed(context, '/profile');
+                Navigator.pushNamed(context, AppRoutes.Profile);
               },
               borderRadius: BorderRadius.circular(44.0),
               child: buildNavItem(Icons.account_circle_outlined, 'Profile'),
