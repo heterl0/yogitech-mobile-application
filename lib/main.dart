@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:yogi_application/src/features/api_service.dart';
+import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/forgot_password.dart';
 import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
@@ -28,7 +29,8 @@ void main() async {
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: true,
-    initialRoute: isLoggedIn ? AppRoutes.streak : AppRoutes.streak,
+    initialRoute:
+        isLoggedIn ? AppRoutes.exercisedetail : AppRoutes.exercisedetail,
     // initialRoute: AppRoutes.OtpConfirm,
     routes: {
       AppRoutes.home: (context) =>
@@ -42,6 +44,7 @@ void main() async {
       AppRoutes.meditate: (context) => Meditate(),
       AppRoutes.performMeditate: (context) => PerformMeditate(),
       AppRoutes.streak: (context) => Streak(),
+      AppRoutes.exercisedetail: (context) => ExerciseDetail(),
     },
   ));
 }

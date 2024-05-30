@@ -65,7 +65,7 @@ class Streak extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 30,
+              fontSize: 26,
               fontFamily: 'Readex Pro',
               fontWeight: FontWeight.w800,
               height: 1.2,
@@ -74,7 +74,7 @@ class Streak extends StatelessWidget {
         ),
         Positioned(
           right: 15,
-          top: 94,
+          top: 92,
           child: _buildCloseButton(context),
         ),
       ],
@@ -101,7 +101,6 @@ class Streak extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(), // Placeholder, có thể thay đổi nếu cần
           Container(
             width: double.infinity,
             child: Column(
@@ -146,7 +145,7 @@ class Streak extends StatelessWidget {
   Widget _buildStreakText() {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.only(top: 8, left: 0),
+        padding: const EdgeInsets.only(top: 1, left: 0),
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -154,18 +153,37 @@ class Streak extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Text(
-              '256',
+            RichText(
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color(0xFF4094CF),
-                fontSize: 50,
-                fontFamily: 'Readex Pro',
-                fontWeight: FontWeight.w900,
-                height: 0.01,
+              text: TextSpan(
+                children: [
+                  WidgetSpan(
+                    child: ShaderMask(
+                      shaderCallback: (bounds) => LinearGradient(
+                        colors: [
+                          Color(0xFF3BE2B0),
+                          Color(0xFF4095D0),
+                          Color(0xFF5986CC)
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ).createShader(bounds),
+                      child: Text(
+                        '256',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 50,
+                          fontFamily: 'Readex Pro',
+                          fontWeight: FontWeight.w900,
+                          height: 1.0, // Adjust as needed
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 25),
+            SizedBox(height: 1),
             Text(
               'day streak!',
               textAlign: TextAlign.center,
@@ -174,7 +192,7 @@ class Streak extends StatelessWidget {
                 fontSize: 12,
                 fontFamily: 'Readex Pro',
                 fontWeight: FontWeight.w400,
-                height: 0,
+                height: 1.0,
               ),
             ),
           ],
@@ -293,7 +311,7 @@ class Streak extends StatelessWidget {
                           color: Colors.white,
                           fontSize: 20,
                           fontFamily: 'Readex Pro',
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
                           height: 0.05,
                         ),
                       ),
@@ -307,7 +325,7 @@ class Streak extends StatelessWidget {
                           color: Colors.white,
                           fontSize: 12,
                           fontFamily: 'Readex Pro',
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.w500,
                           height: 0.12,
                         ),
                       ),
@@ -330,7 +348,7 @@ class Streak extends StatelessWidget {
                     BorderRadius.circular(16), // This will round the corners
                 border: Border.all(
                   color: Colors.white, // Border color
-                  width: 0.3, // Border width
+                  width: 0.6, // Border width
                 ),
               ),
               child: Padding(
@@ -346,7 +364,7 @@ class Streak extends StatelessWidget {
                           color: Colors.white,
                           fontSize: 20,
                           fontFamily: 'Readex Pro',
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
                           height: 0.05,
                         ),
                       ),
@@ -360,7 +378,7 @@ class Streak extends StatelessWidget {
                           color: Colors.white,
                           fontSize: 12,
                           fontFamily: 'Readex Pro',
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.w500,
                           height: 0.12,
                         ),
                       ),
@@ -396,7 +414,7 @@ Widget _buildNavigationBar() {
     child: Stack(
       children: [
         Container(
-          height: 120,
+          height: 100,
           decoration: BoxDecoration(
             color: Color(0xFF0D1F29),
             shape: BoxShape.rectangle,

@@ -10,4 +10,5 @@ class AppRoutes {
   static const String meditate = '/meditate';
   static const String performMeditate = '/performmeditate';
   static const String streak = '/streak';
+  static const String exercisedetail = '/exercisedetail';
 }
