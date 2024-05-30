@@ -28,7 +28,7 @@ void main() async {
   bool isLoggedIn = savedEmail != null && savedPassword != null;
 
   runApp(MaterialApp(
-    debugShowCheckedModeBanner: true,
+    debugShowCheckedModeBanner: false,
     initialRoute: isLoggedIn ? AppRoutes.homepage : AppRoutes.homepage,
     // initialRoute: AppRoutes.OtpConfirm,
     routes: {

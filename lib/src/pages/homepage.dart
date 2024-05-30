@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
-import 'package:yogi_application/src/routing/app_routes.dart';
-import 'package:yogi_application/src/features/api_service.dart';
 
 class HomePage extends StatefulWidget {
   final String? savedEmail;
@@ -16,86 +13,93 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var jsonList;
-  
+  bool _isSearching = false;
+  TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF0A141C),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100), // Set the height of the AppBar
+        preferredSize: Size.fromHeight(_isSearching ? 60 : 100),
         child: ClipRRect(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(24.0),
             bottomRight: Radius.circular(24.0),
           ),
           child: AppBar(
-            automaticallyImplyLeading: false, // Disable the back button
+            automaticallyImplyLeading: false,
             backgroundColor: Color(0xFF0D1F29),
-            bottom: PreferredSize(
-              preferredSize:
-                  Size.fromHeight(0), // Set the height of the bottom content
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 12.0,
-                  right: 20.0,
-                  left: 20.0,
-                ), // Padding bottom content
-
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        // Xử lý khi nhấn vào nút
-                      },
+            title: _isSearching ? _buildSearchBar() : _buildDefaultAppBar(),
+            bottom: _isSearching
+                ? null
+                : PreferredSize(
+                    preferredSize: Size.fromHeight(0),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 12.0,
+                        right: 20.0,
+                        left: 20.0,
+                      ),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            width: 40, // Đặt chiều rộng cho hình ảnh
-                            height: 50, // Đặt chiều cao cho hình ảnh
-                            child: Image.asset('assets/images/Emerald.png'),
-                          ),
-                          SizedBox(width: 0), // Khoảng cách giữa hình ảnh và số
-                          Text(
-                            '5', // Số hiển thị sau hình ảnh
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                          InkWell(
+                            onTap: () {
+                              // Xử lý khi nhấn vào nút
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 40,
+                                  height: 50,
+                                  child:
+                                      Image.asset('assets/images/Emerald.png'),
+                                ),
+                                SizedBox(width: 0),
+                                Text(
+                                  '5',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
                             ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Streak',
+                                style: TextStyle(
+                                  color: Color(0xFF8D8E99),
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                '7',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.search, color: Colors.white),
+                            onPressed: () {
+                              setState(() {
+                                _isSearching = true;
+                              });
+                            },
                           ),
                         ],
                       ),
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Streak',
-                          style:
-                              TextStyle(color: Color(0xFF8D8E99), fontSize: 16),
-                        ),
-                        Text(
-                          '7', // Số ngày duy trì sử dụng app (có thể thay đổi)
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.search, color: Colors.white),
-                      onPressed: () {
-                        // Xử lý khi nhấn nút tìm kiếm
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                  ),
           ),
         ),
       ),
@@ -168,7 +172,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SizedBox(height: 20),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
@@ -215,6 +218,66 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: CustomBottomBar(),
+    );
+  }
+
+  Widget _buildDefaultAppBar() {
+    return Text('');
+  }
+
+  Widget _buildSearchBar() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Row(
+          children: [
+            IconButton(
+              icon: Image.asset('assets/icons/tune.png'),
+              onPressed: () {
+                // Handle filter button press
+              },
+            ),
+            Expanded(
+              child: Container(
+                height: 44,
+                child: TextField(
+                  controller: _searchController,
+                  autofocus: true,
+                  style: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.1),
+                    hintText: 'Search...',
+                    hintStyle: TextStyle(color: Colors.white54),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(44.0),
+                      borderSide: BorderSide(color: Color(0xFF8D8E99)),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                    suffixIcon: IconButton(
+                      icon: Image.asset('assets/icons/search.png'),
+                      onPressed: () {
+                        // Handle the send button press
+                      },
+                    ),
+                  ),
+                  cursorColor: Colors.white,
+                ),
+              ),
+            ),
+            IconButton(
+              icon: Image.asset('assets/icons/close.png'),
+              onPressed: () {
+                setState(() {
+                  _isSearching = false;
+                  _searchController.clear();
+                });
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
