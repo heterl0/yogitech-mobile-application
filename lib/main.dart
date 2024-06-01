@@ -29,27 +29,57 @@ void main() async {
 
   bool isLoggedIn = savedEmail != null && savedPassword != null;
 
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    initialRoute: isLoggedIn ? AppRoutes.homepage : AppRoutes.homepage,
-    // initialRoute: AppRoutes.OtpConfirm,
-    routes: {
-      AppRoutes.home: (context) =>
-          HomePage(savedEmail: savedEmail, savedPassword: savedPassword),
-      AppRoutes.login: (context) => LoginPage(),
-      AppRoutes.signup: (context) => SignUp(),
-      AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
-      AppRoutes.OtpConfirm: (context) => OTP_Page(),
-      AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
-      AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
-      AppRoutes.homepage: (context) =>
-          HomePage(savedEmail: savedEmail, savedPassword: savedPassword),
-      AppRoutes.Meditate: (context) => Meditate(),
-      AppRoutes.PerformMeditate: (context) => PerformMeditate(),
-      AppRoutes.Profile: (context) => ProfilePage(),
-    },
-    theme: lightTheme, // Apply the light theme
-    darkTheme: darkTheme, // Apply the dark theme
-    themeMode: ThemeMode.dark, // Use system theme mode
-  ));
+  runApp(MyApp(savedEmail: savedEmail, savedPassword: savedPassword));
+}
+
+class MyApp extends StatefulWidget {
+  final String? savedEmail;
+  final String? savedPassword;
+
+  const MyApp({Key? key, this.savedEmail, this.savedPassword})
+      : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ThemeMode _themeMode = ThemeMode.dark; // Initialize with dark theme
+
+  void _toggleTheme() {
+    setState(() {
+      // Toggle theme
+      _themeMode =
+          _themeMode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: widget.savedEmail != null && widget.savedPassword != null
+          ? AppRoutes.homepage
+          : AppRoutes.homepage,
+      // initialRoute: AppRoutes.OtpConfirm,
+      routes: {
+        AppRoutes.home: (context) => HomePage(
+            savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
+        AppRoutes.login: (context) => LoginPage(),
+        AppRoutes.signup: (context) => SignUp(),
+        AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
+        AppRoutes.OtpConfirm: (context) => OTP_Page(),
+        AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
+        AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
+        AppRoutes.homepage: (context) => HomePage(
+            savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
+        AppRoutes.Meditate: (context) => Meditate(),
+        AppRoutes.PerformMeditate: (context) => PerformMeditate(),
+        AppRoutes.Profile: (context) => ProfilePage(),
+      },
+      theme: lightTheme, // Apply the light theme
+      darkTheme: darkTheme, // Apply the dark theme
+      themeMode: ThemeMode.dark, // Use system theme mode
+    );
+  }
 }
