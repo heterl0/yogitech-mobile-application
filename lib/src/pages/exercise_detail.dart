@@ -56,7 +56,7 @@ class ExerciseDetail extends StatelessWidget {
         Positioned(
           left: 0,
           right: 0,
-          top: 100,
+          top: 110,
           child: Text(
             'Exercise detail',
             textAlign: TextAlign.center,

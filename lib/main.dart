@@ -9,6 +9,7 @@ import 'package:yogi_application/src/pages/meditate.dart';
 import 'package:yogi_application/src/pages/perform_meditate.dart';
 import 'package:yogi_application/src/pages/result.dart';
 import 'package:yogi_application/src/pages/streak.dart';
+import 'package:yogi_application/src/pages/subscription.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/pages/login_page.dart';
 import 'package:yogi_application/src/pages/sign_up_page.dart';
@@ -30,7 +31,7 @@ void main() async {
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: true,
-    initialRoute: isLoggedIn ? AppRoutes.result : AppRoutes.result,
+    initialRoute: isLoggedIn ? AppRoutes.subscription : AppRoutes.subscription,
     // initialRoute: AppRoutes.OtpConfirm,
     routes: {
       AppRoutes.home: (context) =>
@@ -46,6 +47,7 @@ void main() async {
       AppRoutes.streak: (context) => Streak(),
       AppRoutes.exercisedetail: (context) => ExerciseDetail(),
       AppRoutes.result: (context) => Result(),
+      AppRoutes.subscription: (context) => Subscription(),
     },
   ));
 }

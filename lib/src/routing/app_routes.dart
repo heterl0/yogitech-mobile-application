@@ -12,4 +12,5 @@ class AppRoutes {
   static const String streak = '/streak';
   static const String exercisedetail = '/exercisedetail';
   static const String result = '/result';
+  static const String subscription = 'subscription';
 }

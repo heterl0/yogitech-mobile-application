@@ -257,7 +257,7 @@ class Streak extends StatelessWidget {
       height: 27,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/icons/arrow_back.png'),
+          image: AssetImage('assets/icons/arrow_back_ios.png'),
         ),
       ),
     );
@@ -269,7 +269,7 @@ class Streak extends StatelessWidget {
       height: 27,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/icons/arrow_forward.png'),
+          image: AssetImage('assets/icons/arrow_forward_ios.png'),
         ),
       ),
     );
