@@ -50,6 +50,6 @@ void main() async {
     },
     theme: lightTheme, // Apply the light theme
     darkTheme: darkTheme, // Apply the dark theme
-    themeMode: ThemeMode.system, // Use system theme mode
+    themeMode: ThemeMode.dark, // Use system theme mode
   ));
 }
