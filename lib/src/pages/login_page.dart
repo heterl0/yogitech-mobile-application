@@ -11,8 +11,10 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xFF0d1f29),
+      backgroundColor: theme.primaryColor,
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -28,11 +30,7 @@ class LoginPage extends StatelessWidget {
           children: [
             Text(
               'Login',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 32.0,
-                fontWeight: FontWeight.bold,
-              ),
+              style: h1.copyWith(color: theme.colorScheme.onPrimary),
               textAlign: TextAlign.left,
             ),
             SizedBox(height: 16.0),
