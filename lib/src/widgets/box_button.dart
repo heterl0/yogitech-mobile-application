@@ -79,8 +79,8 @@ class BoxButton extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(44),
               onTap: isDisabled ? null : onPressed,
-              splashColor: theme.colorScheme.onPrimary.withOpacity(0.4),
-              highlightColor: theme.colorScheme.onPrimary.withOpacity(0.4),
+              splashColor: active.withOpacity(0.4),
+              highlightColor: active.withOpacity(0.4),
               child: Center(
                 child: Text(
                   title,

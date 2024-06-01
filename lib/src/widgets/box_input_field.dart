@@ -47,7 +47,7 @@ class _BoxInputFieldState extends State<BoxInputField> {
           fontFamily: 'ReadexPro',
           fontSize: 16,
           fontWeight: FontWeight.w400,
-          color: theme.colorScheme.secondary, // Sử dụng màu gợi ý từ theme
+          color: text, // Sử dụng màu gợi ý từ theme
         ),
         contentPadding:
             const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
