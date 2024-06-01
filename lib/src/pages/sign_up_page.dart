@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/features/api_service.dart';
+import 'package:yogi_application/src/shared/styles.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:yogi_application/src/widgets/box_input_field.dart';
+import 'package:yogi_application/src/widgets/box_button.dart';
 
 class SignUp extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
@@ -12,13 +16,19 @@ class SignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    // Kiểm tra giao diện hiện tại để chọn hình ảnh phù hợp
+    final String imageAsset = theme.brightness == Brightness.dark
+        ? 'assets/images/sign-up-bg.png'
+        : 'assets/images/sign-up-bg_light.png';
+
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: const Color(0xFF0d1f29),
+        backgroundColor: theme.colorScheme.onSecondary,
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/sign-up-bg.png'),
+              image: AssetImage(imageAsset),
               fit: BoxFit.fitWidth,
               alignment: Alignment.topCenter,
             ),
@@ -30,27 +40,29 @@ class SignUp extends StatelessWidget {
             children: [
               Text(
                 'Sign up',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 32.0,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: h1.copyWith(color: theme.colorScheme.onPrimary),
                 textAlign: TextAlign.left,
               ),
               SizedBox(height: 16.0),
-              TextField(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white.withOpacity(0),
-                  hintText: 'Username',
-                  hintStyle: TextStyle(color: Color(0xFF8D8E99)),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(44.0),
-                    borderSide: BorderSide(color: Color(0xFF8D8E99)),
-                  ),
-                ),
-                style: TextStyle(color: Colors.white),
+              // TextField(
+              //   decoration: InputDecoration(
+              //     filled: true,
+              //     fillColor: Colors.white.withOpacity(0),
+              //     hintText: 'Username',
+              //     hintStyle: TextStyle(color: Color(0xFF8D8E99)),
+              //     border: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(44.0),
+              //       borderSide: BorderSide(color: Color(0xFF8D8E99)),
+              //     ),
+              //   ),
+              //   style: TextStyle(color: Colors.white),
+              // ),
+
+              BoxInputField(
+                controller: emailController,
+                placeholder: 'Username',
               ),
+
               SizedBox(height: 16.0),
               TextField(
                 decoration: InputDecoration(
@@ -101,43 +113,30 @@ class SignUp extends StatelessWidget {
               ),
 
               SizedBox(height: 10.0),
-              Container(
-                height: 50.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(44.0),
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xFF3BE2B0),
-                      Color(0xFF4095D0),
-                      Color(0xFF5986CC), // Màu gradient từ 100% (8800DC)
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    stops: [0.0, 0.5, 1.0],
-                  ),
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () {
-                      // sự kiện handle sign up
-                      _handleSignUp(context);
-                    },
-                    borderRadius: BorderRadius.circular(44.0),
-                    child: Center(
-                      child: Text(
-                        'Sign up',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+              BoxButton(
+                title: 'Sign up',
+                style: ButtonStyleType.Primary,
+                state: ButtonState
+                    .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
+                onPressed: () {
+                  _handleSignUp(context);
+                },
               ),
-
+              SizedBox(height: 10.0),
+              Row(children: <Widget>[
+                Expanded(
+                    child: Divider(
+                  color: text,
+                )),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    "Or sign in with",
+                    style: bd_text.copyWith(color: text),
+                  ),
+                ),
+                Expanded(child: Divider(color: text)),
+              ]),
 // google sign in button here
 
               Row(
@@ -145,10 +144,7 @@ class SignUp extends StatelessWidget {
                 children: [
                   Text(
                     "You have an account? ",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
-                    ),
+                    style: bd_text.copyWith(color: text),
                   ),
                   TextButton(
                     onPressed: () {
@@ -158,11 +154,7 @@ class SignUp extends StatelessWidget {
                     },
                     child: Text(
                       'Sign in',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: h3.copyWith(color: primary),
                     ),
                   ),
                 ],

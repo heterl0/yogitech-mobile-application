@@ -66,7 +66,7 @@ class BoxButton extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 100),
           width: double.infinity,
-          height: 44,
+          height: 48,
           alignment: Alignment.center,
           decoration: BoxDecoration(
             gradient: getBackgroundGradient(),
