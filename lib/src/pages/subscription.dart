@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 
-class Subscription extends StatelessWidget {
+class Subscription extends StatefulWidget {
+  @override
+  _SubscriptionState createState() => _SubscriptionState();
+}
+
+class _SubscriptionState extends State<Subscription> {
+  bool _isChecked1 = false;
+  bool _isChecked2 = false;
+  bool _isChecked3 = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -8,7 +17,6 @@ class Subscription extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFF0A141C),
       ),
       home: Scaffold(
-        resizeToAvoidBottomInset: false,
         body: _buildBody(context),
       ),
     );
@@ -23,7 +31,35 @@ class Subscription extends StatelessWidget {
         children: [
           _buildTopRoundedContainer(),
           _buildTitleText(context),
-          _buildMainContent(),
+          Positioned(
+            left: 24,
+            right: 24,
+            top: 150,
+            bottom: 0,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(
+                  bottom:
+                      150), // Adding padding to ensure the button is visible
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
+                  _buildCurrentPlanContainer(),
+                  const SizedBox(height: 16),
+                  _buildSubscriptionContainer(),
+                  const SizedBox(height: 16),
+                  _buildChoosePlanContainer(),
+                  const SizedBox(height: 16),
+                  _buildPlanOptionContainer(),
+                  const SizedBox(height: 16),
+                  _buildPlanOptionContainer2(),
+                  const SizedBox(height: 16),
+                  _buildPlanOptionContainer3(),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ),
+          ),
           _buildNavigationBar(),
         ],
       ),
@@ -55,16 +91,39 @@ class Subscription extends StatelessWidget {
         Positioned(
           left: 0,
           right: 0,
-          top: 100,
-          child: Text(
-            'Exercise detail',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 26,
-              fontFamily: 'Readex Pro',
-              fontWeight: FontWeight.w800,
-              height: 1.2,
+          top: 105,
+          child: Container(
+            width: 68,
+            height: 24,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment
+                  .center, // Centering the content horizontally
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/Emerald.png'),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                    width: 8), // Add some spacing between logo and text
+                Text(
+                  '1.000',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontFamily: 'Readex Pro',
+                    fontWeight: FontWeight.w600,
+                    height: 1.2,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -87,9 +146,8 @@ class Subscription extends StatelessWidget {
       icon: Image.asset(
         'assets/icons/arrow_back.png',
         color: Colors.white.withOpacity(1),
-        width: 30,
-        height: 30,
       ),
+      iconSize: 30,
       onPressed: () {
         Navigator.pop(context);
       },
@@ -101,45 +159,20 @@ class Subscription extends StatelessWidget {
       icon: Image.asset(
         'assets/icons/device_reset.png',
         color: Colors.white.withOpacity(1),
-        width: 30,
-        height: 30,
       ),
+      iconSize: 30,
       onPressed: () {
         Navigator.pop(context);
       },
     );
   }
 
-  Widget _buildMainContent() {
-    return Positioned(
-      left: 0,
-      right: 0,
-      top: 150,
-      bottom: 0,
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildCurrentPlanContainer(),
-            const SizedBox(height: 16),
-            _buildSubscriptionContainer(),
-            const SizedBox(height: 16),
-            _buildChoosePlanContainer(),
-            const SizedBox(height: 16),
-            _buildPlanOptionContainer(),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildCurrentPlanContainer() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             'Your current plan',
@@ -169,8 +202,8 @@ class Subscription extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: ShapeDecoration(
         gradient: LinearGradient(
-          begin: Alignment(0.91, -0.41),
-          end: Alignment(-0.91, 0.41),
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
           colors: [Color(0xFF3BE2B0), Color(0xFF4095D0), Color(0xFF5986CC)],
         ),
         shape: RoundedRectangleBorder(
@@ -186,7 +219,12 @@ class Subscription extends StatelessWidget {
                 Container(
                   width: 48,
                   height: 48,
-                  child: FlutterLogo(),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/MoonPhase.png'),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -218,7 +256,13 @@ class Subscription extends StatelessWidget {
                                     Container(
                                       width: 18,
                                       height: 18,
-                                      child: FlutterLogo(),
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/Emerald.png'),
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
                                     ),
                                     const SizedBox(width: 4),
                                     SizedBox(
@@ -284,7 +328,7 @@ class Subscription extends StatelessWidget {
 
   Widget _buildChoosePlanContainer() {
     return Container(
-      height: 32,
+      height: 48,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -300,24 +344,24 @@ class Subscription extends StatelessWidget {
                 fontSize: 16,
                 fontFamily: 'Readex Pro',
                 fontWeight: FontWeight.w600,
-                height: 0.06,
               ),
             ),
           ),
-          SizedBox(
-            width: double.infinity,
-            height: 16,
-            child: Text(
-              'Unlock all premium exercises',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color(0xFF8D8E99),
-                fontSize: 12,
-                fontFamily: 'Readex Pro',
-                fontWeight: FontWeight.w400,
-                height: 0,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Unlock all premium exercises',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xFF8D8E99),
+                  fontSize: 12,
+                  fontFamily: 'Readex Pro',
+                  fontWeight: FontWeight.w400,
+                ),
               ),
-            ),
+            ],
           ),
         ],
       ),
@@ -326,157 +370,412 @@ class Subscription extends StatelessWidget {
 
   Widget _buildPlanOptionContainer() {
     return Container(
-      height: 248,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.all(6),
+      decoration: ShapeDecoration(
+        color: Color(0xFF09141C),
+        shape: RoundedRectangleBorder(
+          side: BorderSide(width: 1, color: Color(0x7FA4B7BD)),
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(12),
-            decoration: ShapeDecoration(
-              color: Color(0xFF09141C),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(width: 1, color: Color(0x7FA4B7BD)),
-                borderRadius: BorderRadius.circular(16),
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/Universe.png'),
+                fit: BoxFit.fill,
               ),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 48,
-                  height: 48,
-                  child: FlutterLogo(),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Container(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Once a week',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontFamily: 'Readex Pro',
+                      fontWeight: FontWeight.w400,
+                      height: 0.12,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    width: double.infinity,
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          'Once a week',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontFamily: 'Readex Pro',
-                            fontWeight: FontWeight.w400,
-                            height: 0.12,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
                         Container(
-                          width: double.infinity,
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      width: 18,
-                                      height: 18,
-                                      child: FlutterLogo(),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    SizedBox(
-                                      width: 42,
-                                      child: Text(
-                                        '199',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontFamily: 'Readex Pro',
-                                          fontWeight: FontWeight.w600,
-                                          height: 0.06,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                width: 18,
+                                height: 18,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image:
+                                        AssetImage('assets/images/Emerald.png'),
+                                    fit: BoxFit.fill,
+                                  ),
                                 ),
                               ),
-                              const SizedBox(width: 8),
-                              Text(
-                                'or',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Color(0xFF8D8E99),
-                                  fontSize: 10,
-                                  fontFamily: 'Readex Pro',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0.12,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                '109.000đ',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Color(0xFF4094CF),
-                                  fontSize: 16,
-                                  fontFamily: 'Readex Pro',
-                                  fontWeight: FontWeight.w600,
-                                  height: 0.06,
+                              const SizedBox(width: 4),
+                              SizedBox(
+                                width: 42,
+                                child: Text(
+                                  '199',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontFamily: 'Readex Pro',
+                                    fontWeight: FontWeight.w600,
+                                    height: 0.06,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
                         ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'or',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(0xFF8D8E99),
+                            fontSize: 10,
+                            fontFamily: 'Readex Pro',
+                            fontWeight: FontWeight.w400,
+                            height: 0.12,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '109,000đ',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(0xFF4094CF),
+                            fontSize: 16,
+                            fontFamily: 'Readex Pro',
+                            fontWeight: FontWeight.w600,
+                            height: 0.06,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Container(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 24,
-                        height: 24,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              left: 0,
-                              top: 0,
-                              child: Container(
-                                width: 24,
-                                height: 24,
-                                decoration: ShapeDecoration(
-                                  color: Color(0xFF0D1F29),
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                        width: 1, color: Color(0xFF09141C)),
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
+          ),
+          const SizedBox(width: 16),
+          _buildCheckboxItem(
+            value: _isChecked1,
+            onChanged: (value) {
+              setState(() {
+                _isChecked1 = value!;
+                if (value) {
+                  _isChecked2 = false;
+                  _isChecked3 = false;
+                }
+              });
+            },
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildPlanOptionContainer2() {
+    return Container(
+      padding: const EdgeInsets.all(6),
+      decoration: ShapeDecoration(
+        color: Color(0xFF09141C),
+        shape: RoundedRectangleBorder(
+          side: BorderSide(width: 1, color: Color(0x7FA4B7BD)),
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/MoonPhase.png'),
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Once a month',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontFamily: 'Readex Pro',
+                      fontWeight: FontWeight.w400,
+                      height: 0.12,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 18,
+                                height: 18,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image:
+                                        AssetImage('assets/images/Emerald.png'),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              SizedBox(
+                                width: 42,
+                                child: Text(
+                                  '999',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontFamily: 'Readex Pro',
+                                    fontWeight: FontWeight.w600,
+                                    height: 0.06,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'or',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(0xFF8D8E99),
+                            fontSize: 10,
+                            fontFamily: 'Readex Pro',
+                            fontWeight: FontWeight.w400,
+                            height: 0.12,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '399,000đ',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(0xFF4094CF),
+                            fontSize: 16,
+                            fontFamily: 'Readex Pro',
+                            fontWeight: FontWeight.w600,
+                            height: 0.06,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          _buildCheckboxItem(
+            value: _isChecked2,
+            onChanged: (value) {
+              setState(() {
+                _isChecked2 = value!;
+                if (value) {
+                  _isChecked1 = false;
+                  _isChecked3 = false;
+                }
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPlanOptionContainer3() {
+    return Container(
+      padding: const EdgeInsets.all(6),
+      decoration: ShapeDecoration(
+        color: Color(0xFF09141C),
+        shape: RoundedRectangleBorder(
+          side: BorderSide(width: 1, color: Color(0x7FA4B7BD)),
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/Sun.png'),
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Once a year',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontFamily: 'Readex Pro',
+                      fontWeight: FontWeight.w400,
+                      height: 0.12,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 18,
+                                height: 18,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image:
+                                        AssetImage('assets/images/Emerald.png'),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              SizedBox(
+                                width: 42,
+                                child: Text(
+                                  '9,999',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontFamily: 'Readex Pro',
+                                    fontWeight: FontWeight.w600,
+                                    height: 0.06,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'or',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(0xFF8D8E99),
+                            fontSize: 10,
+                            fontFamily: 'Readex Pro',
+                            fontWeight: FontWeight.w400,
+                            height: 0.12,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '4,999,000đ',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(0xFF4094CF),
+                            fontSize: 16,
+                            fontFamily: 'Readex Pro',
+                            fontWeight: FontWeight.w600,
+                            height: 0.06,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          _buildCheckboxItem(
+            value: _isChecked3,
+            onChanged: (value) {
+              setState(() {
+                _isChecked3 = value!;
+                if (value) {
+                  _isChecked1 = false;
+                  _isChecked2 = false;
+                }
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCheckboxItem({
+    required bool value,
+    required Function(bool?) onChanged,
+  }) {
+    return Checkbox(
+      activeColor: Color(0xFF0D1F29), // Background color when checked
+      checkColor: Color(0xFF4095D0), // Tick color when checked
+      value: value,
+      onChanged: onChanged,
     );
   }
 
@@ -496,10 +795,11 @@ class Subscription extends StatelessWidget {
           ),
         ),
         child: Padding(
-            padding: EdgeInsets.only(bottom: 20),
-            child: Center(
-              child: _buildExerciseButton(),
-            )),
+          padding: EdgeInsets.only(bottom: 20),
+          child: Center(
+            child: _buildExerciseButton(),
+          ),
+        ),
       ),
     );
   }
