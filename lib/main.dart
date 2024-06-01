@@ -13,6 +13,7 @@ import 'package:yogi_application/src/pages/reset_password_page.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/pages/profile.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:dio/dio.dart';
 // comment to rollback
 
@@ -47,5 +48,8 @@ void main() async {
       AppRoutes.PerformMeditate: (context) => PerformMeditate(),
       AppRoutes.Profile: (context) => ProfilePage(),
     },
+    theme: lightTheme, // Apply the light theme
+    darkTheme: darkTheme, // Apply the dark theme
+    themeMode: ThemeMode.system, // Use system theme mode
   ));
 }
