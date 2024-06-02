@@ -16,6 +16,10 @@ import 'package:yogi_application/src/pages/sign_up_page.dart';
 import 'package:yogi_application/src/pages/OTP_confirm_page.dart';
 import 'package:yogi_application/src/pages/reset_password_page.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/pages/homepage.dart';
+import 'package:yogi_application/src/pages/profile.dart';
+import 'package:dio/dio.dart';
+// comment to rollback
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,8 +34,8 @@ void main() async {
   bool isLoggedIn = savedEmail != null && savedPassword != null;
 
   runApp(MaterialApp(
-    debugShowCheckedModeBanner: true,
-    initialRoute: isLoggedIn ? AppRoutes.subscription : AppRoutes.subscription,
+    debugShowCheckedModeBanner: false,
+    initialRoute: isLoggedIn ? AppRoutes.homepage : AppRoutes.homepage,
     // initialRoute: AppRoutes.OtpConfirm,
     routes: {
       AppRoutes.home: (context) =>
@@ -48,6 +52,7 @@ void main() async {
       AppRoutes.exercisedetail: (context) => ExerciseDetail(),
       AppRoutes.result: (context) => Result(),
       AppRoutes.subscription: (context) => Subscription(),
+      AppRoutes.Profile: (context) => ProfilePage(),
     },
   ));
 }
