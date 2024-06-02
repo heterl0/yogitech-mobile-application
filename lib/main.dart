@@ -38,7 +38,7 @@ void main() async {
     initialRoute: isLoggedIn ? AppRoutes.homepage : AppRoutes.homepage,
     // initialRoute: AppRoutes.OtpConfirm,
     routes: {
-      AppRoutes.home: (context) =>
+      AppRoutes.homepage: (context) =>
           HomePage(savedEmail: savedEmail, savedPassword: savedPassword),
       AppRoutes.login: (context) => LoginPage(),
       AppRoutes.signup: (context) => SignUp(),

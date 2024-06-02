@@ -198,7 +198,7 @@ class LoginPage extends StatelessWidget {
       if (response['status'] == 'success') {
         // Lưu thông tin đăng nhập và chuyển đến trang chủ
         await saveLoginInfo(enteredEmail, enteredPassword);
-        Navigator.pushReplacementNamed(context, AppRoutes.home);
+        Navigator.pushReplacementNamed(context, AppRoutes.homepage);
       } else {
         // Nếu đăng nhập không thành công, hiển thị thông báo lỗi
         ScaffoldMessenger.of(context).showSnackBar(

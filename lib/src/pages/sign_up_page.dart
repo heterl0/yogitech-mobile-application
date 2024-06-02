@@ -222,7 +222,7 @@ class SignUp extends StatelessWidget {
           ),
         );
         await saveLoginInfo(enteredEmail, enteredPassword);
-        Navigator.pushReplacementNamed(context, AppRoutes.home);
+        Navigator.pushReplacementNamed(context, AppRoutes.homepage);
       } else {
         ScaffoldMessenger.of(context)
             .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại
