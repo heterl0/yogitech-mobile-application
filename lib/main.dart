@@ -65,7 +65,6 @@ class _MyAppState extends State<MyApp> {
       initialRoute: widget.savedEmail != null && widget.savedPassword != null
           ? AppRoutes.homepage
           : AppRoutes.homepage,
-      // initialRoute: AppRoutes.OtpConfirm,
       routes: {
         AppRoutes.homepage: (context) => HomePage(
             savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
@@ -77,11 +76,15 @@ class _MyAppState extends State<MyApp> {
         AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
         AppRoutes.meditate: (context) => Meditate(),
         AppRoutes.performMeditate: (context) => PerformMeditate(),
+        AppRoutes.streak: (context) => Streak(),
+        AppRoutes.exercisedetail: (context) => ExerciseDetail(),
+        AppRoutes.result: (context) => Result(),
+        AppRoutes.subscription: (context) => Subscription(),
         AppRoutes.Profile: (context) => ProfilePage(),
       },
       theme: lightTheme, // Apply the light theme
       darkTheme: darkTheme, // Apply the dark theme
-      themeMode: ThemeMode.dark, // Use system theme mode
+      themeMode: _themeMode, // Use current theme mode
     );
   }
 }
