@@ -3,7 +3,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/forgot_password.dart';
-import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
 import 'package:yogi_application/src/pages/meditate.dart';
 import 'package:yogi_application/src/pages/perform_meditate.dart';
@@ -18,13 +17,14 @@ import 'package:yogi_application/src/pages/reset_password_page.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/pages/profile.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:dio/dio.dart';
 // comment to rollback
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Future.delayed(const Duration(seconds: 5));
+  await Future.delayed(const Duration(seconds: 10));
   FlutterNativeSplash.remove();
 
   Map<String, String?> loginInfo = await getLoginInfo();
@@ -33,26 +33,58 @@ void main() async {
 
   bool isLoggedIn = savedEmail != null && savedPassword != null;
 
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    initialRoute: isLoggedIn ? AppRoutes.homepage : AppRoutes.homepage,
-    // initialRoute: AppRoutes.OtpConfirm,
-    routes: {
-      AppRoutes.homepage: (context) =>
-          HomePage(savedEmail: savedEmail, savedPassword: savedPassword),
-      AppRoutes.login: (context) => LoginPage(),
-      AppRoutes.signup: (context) => SignUp(),
-      AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
-      AppRoutes.OtpConfirm: (context) => OTP_Page(),
-      AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
-      AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
-      AppRoutes.meditate: (context) => Meditate(),
-      AppRoutes.performMeditate: (context) => PerformMeditate(),
-      AppRoutes.streak: (context) => Streak(),
-      AppRoutes.exercisedetail: (context) => ExerciseDetail(),
-      AppRoutes.result: (context) => Result(),
-      AppRoutes.subscription: (context) => Subscription(),
-      AppRoutes.Profile: (context) => ProfilePage(),
-    },
-  ));
+  runApp(MyApp(savedEmail: savedEmail, savedPassword: savedPassword));
+}
+
+class MyApp extends StatefulWidget {
+  final String? savedEmail;
+  final String? savedPassword;
+
+  const MyApp({Key? key, this.savedEmail, this.savedPassword})
+      : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ThemeMode _themeMode = ThemeMode.dark; // Initialize with dark theme
+
+  void _toggleTheme() {
+    setState(() {
+      // Toggle theme
+      _themeMode =
+          _themeMode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: widget.savedEmail != null && widget.savedPassword != null
+          ? AppRoutes.homepage
+          : AppRoutes.homepage,
+      routes: {
+        AppRoutes.homepage: (context) => HomePage(
+            savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
+        AppRoutes.login: (context) => LoginPage(),
+        AppRoutes.signup: (context) => SignUp(),
+        AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
+        AppRoutes.OtpConfirm: (context) => OTP_Page(),
+        AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
+        AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
+        AppRoutes.meditate: (context) => Meditate(),
+        AppRoutes.performMeditate: (context) => PerformMeditate(),
+        AppRoutes.streak: (context) => Streak(),
+        AppRoutes.exercisedetail: (context) => ExerciseDetail(),
+        AppRoutes.result: (context) => Result(),
+        AppRoutes.subscription: (context) => Subscription(),
+        AppRoutes.Profile: (context) => ProfilePage(),
+      },
+      theme: lightTheme, // Apply the light theme
+      darkTheme: darkTheme, // Apply the dark theme
+      themeMode: _themeMode, // Use current theme mode
+    );
+  }
 }

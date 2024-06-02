@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
+import 'package:yogi_application/src/shared/styles.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
 
 class CustomBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return ClipRRect(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(24.0),
         topRight: Radius.circular(24.0),
       ),
       child: BottomAppBar(
-        color: Color(0xFF0D1F29),
+        color: theme.colorScheme.onSecondary,
         height: 100.0,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -72,11 +75,11 @@ class CustomBottomBar extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: Colors.white), // Icon
+            Icon(icon, color: text), // Icon
             SizedBox(height: 4), // Khoảng cách giữa icon và label
             Text(
               label,
-              style: TextStyle(color: Colors.white),
+              style: min_cap.copyWith(color: text),
             ), // Label
           ],
         ),

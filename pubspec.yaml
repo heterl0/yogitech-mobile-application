@@ -31,7 +31,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   http: ^1.2.1
@@ -79,6 +78,15 @@ flutter:
     - assets/audios/
     - assets/native_splash/splash.png
 
+    # fonts:
+    # - family: ReadexPro
+    #   fonts:
+    #     - asset: assets/fonts/ReadexPro-Regular.ttf
+    #     - asset: assets/fonts/ReadexPro-Bold.ttf
+    #       weight: 700
+    #     - asset: assets/fonts/ReadexPro-SemiBold.ttf
+    #       weight: 600
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
@@ -91,17 +99,14 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
 
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: asset/fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  fonts:
+    - family: ReadexPro
+      fonts:
+        - asset: assets/fonts/ReadexPro-Regular.ttf
+        - asset: assets/fonts/ReadexPro-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/ReadexPro-SemiBold.ttf
+          weight: 600
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
