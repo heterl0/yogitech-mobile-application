@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
+import 'package:yogi_application/src/shared/styles.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:yogi_application/src/widgets/box_input_field.dart';
+import 'package:yogi_application/src/widgets/box_button.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    // Kiểm tra giao diện hiện tại để chọn hình ảnh phù hợp
+    final String imageAsset = theme.brightness == Brightness.dark
+        ? 'assets/images/login-sign.png'
+        : 'assets/images/login-sign_light.png';
     return Scaffold(
-      backgroundColor: const Color(0xFF0d1f29),
+      backgroundColor: theme.colorScheme.onSecondary,
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/login-sign.png'),
+            image: AssetImage(imageAsset),
             fit: BoxFit.fitWidth,
             alignment: Alignment.topCenter,
           ),
@@ -23,89 +32,83 @@ class ForgotPasswordPage extends StatelessWidget {
           children: [
             Text(
               'Forgot Password',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 40.0,
-                fontWeight: FontWeight.bold,
-              ),
+              style: h1.copyWith(color: theme.colorScheme.onPrimary),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 16.0),
-            TextField(
+            BoxInputField(
               controller: emailController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white.withOpacity(0),
-                hintText: 'Enter your email',
-                hintStyle: TextStyle(color: Color(0xFF8D8E99)),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(44.0),
-                  borderSide: BorderSide(color: Color(0xFF8D8E99)),
-                ),
-              ),
-              style: TextStyle(color: Colors.white),
+              placeholder: 'Email',
             ),
             SizedBox(height: 20.0),
-            Container(
-              height: 50.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(44.0),
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xFF3BE2B0),
-                    Color(0xFF4095D0),
-                    Color(0xFF5986CC),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: [0.0, 0.5, 1.0],
-                ),
-              ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () {
-                    // Xử lý sự kiện khi nhấn vào nút "Send OTP"
-                    _handleSendOTP(context, emailController.text);
-                  },
-                  borderRadius: BorderRadius.circular(44.0),
-                  child: Center(
-                    child: Text(
-                      'Send OTP',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+            // Container(
+            //   height: 50.0,
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(44.0),
+            //     gradient: LinearGradient(
+            //       colors: [
+            //         Color(0xFF3BE2B0),
+            //         Color(0xFF4095D0),
+            //         Color(0xFF5986CC),
+            //       ],
+            //       begin: Alignment.topLeft,
+            //       end: Alignment.bottomRight,
+            //       stops: [0.0, 0.5, 1.0],
+            //     ),
+            //   ),
+            //   child: Material(
+            //     color: Colors.transparent,
+            //     child: InkWell(
+            //       onTap: () {
+            //         // Xử lý sự kiện khi nhấn vào nút "Send OTP"
+            //         _handleSendOTP(context, emailController.text);
+            //       },
+            //       borderRadius: BorderRadius.circular(44.0),
+            //       child: Center(
+            //         child: Text(
+            //           'Send OTP',
+            //           style: TextStyle(
+            //             color: Colors.white,
+            //             fontWeight: FontWeight.bold,
+            //             fontSize: 18.0,
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+
+            BoxButton(
+              title: 'Send OTP',
+              style: ButtonStyleType.Primary,
+              state: ButtonState
+                  .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
+              onPressed: () {
+                _handleSendOTP(context, emailController.text);
+              },
             ),
+
             SizedBox(height: 10.0),
             Row(children: <Widget>[
               Expanded(
                   child: Divider(
-                color: Colors.white,
+                color: text,
               )),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
                   "Or sign in with",
-                  style: TextStyle(color: Colors.white),
+                  style: bd_text.copyWith(color: text),
                 ),
               ),
-              Expanded(child: Divider(color: Colors.white)),
+              Expanded(child: Divider(color: text)),
             ]),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   "You don't have an account? ",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                  ),
+                  style: bd_text.copyWith(color: text),
                 ),
                 TextButton(
                   onPressed: () {
@@ -115,11 +118,7 @@ class ForgotPasswordPage extends StatelessWidget {
                   },
                   child: Text(
                     'Sign up',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: h3.copyWith(color: primary),
                   ),
                 ),
               ],
