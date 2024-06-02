@@ -57,7 +57,7 @@ class _MeditateState extends State<Meditate> {
       top: 0,
       right: 0,
       child: Container(
-        height: 120,
+        height: 150,
         decoration: BoxDecoration(
           color: Color(0xFF0D1F29),
           shape: BoxShape.rectangle,
@@ -74,15 +74,15 @@ class _MeditateState extends State<Meditate> {
     return Positioned(
       left: 0,
       right: 0,
-      top: 78,
+      top: 100,
       child: Text(
         'Meditate',
         textAlign: TextAlign.center,
         style: TextStyle(
           color: Colors.white,
-          fontSize: 24,
+          fontSize: 27,
           fontFamily: 'Readex Pro',
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w900,
           height: 1.2,
         ),
       ),
