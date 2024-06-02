@@ -3,7 +3,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/forgot_password.dart';
-import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
 import 'package:yogi_application/src/pages/meditate.dart';
 import 'package:yogi_application/src/pages/perform_meditate.dart';
@@ -24,7 +23,7 @@ import 'package:dio/dio.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Future.delayed(const Duration(seconds: 5));
+  await Future.delayed(const Duration(seconds: 10));
   FlutterNativeSplash.remove();
 
   Map<String, String?> loginInfo = await getLoginInfo();
