@@ -84,7 +84,7 @@ class _MyAppState extends State<MyApp> {
       },
       theme: lightTheme, // Apply the light theme
       darkTheme: darkTheme, // Apply the dark theme
-      themeMode: ThemeMode.dark, // Use current theme mode
+      themeMode: ThemeMode.light, // Use current theme mode
     );
   }
 }

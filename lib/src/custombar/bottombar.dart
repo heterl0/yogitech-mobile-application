@@ -45,10 +45,10 @@ class CustomBottomBar extends StatelessWidget {
             InkWell(
               onTap: () {
                 // Xử lý sự kiện khi nhấn vào nút Metitate
-                Navigator.pushNamed(context, '/metitate');
+                Navigator.pushNamed(context, '/meditate');
               },
               borderRadius: BorderRadius.circular(44.0),
-              child: buildNavItem(Icons.account_circle, 'Metitate'),
+              child: buildNavItem(Icons.account_circle, 'Meditate'),
             ),
             InkWell(
               onTap: () {

@@ -1,25 +1,27 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:yogi_application/src/pages/meditate.dart';
+import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/shared/styles.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:yogi_application/src/widgets/box_button.dart';
 
 void main() {
-  runApp(const PerformMeditate());
+  runApp(PerformMeditate());
 }
 
 class PerformMeditate extends StatelessWidget {
   final Duration selectedDuration;
 
-  const PerformMeditate(
+  PerformMeditate(
       {Key? key, this.selectedDuration = const Duration(minutes: 5)})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0A141C),
-      ),
       home: Scaffold(
         body: MeditateCountdownTimer(initialDuration: selectedDuration),
       ),
@@ -149,10 +151,13 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: const BoxDecoration(color: Color(0xFF0A141C)),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.onSecondary,
+      ),
       child: Stack(
         children: [
           _buildTopRoundedContainer(),
@@ -214,14 +219,14 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const Text(
-                              "seconds",
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+                            // const Text(
+                            //   "seconds",
+                            //   style: TextStyle(
+                            //     fontSize: 18,
+                            //     color: Colors.white,
+                            //     fontWeight: FontWeight.w500,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -244,32 +249,42 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
                       startTimer();
                     }
                   },
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width * 0.65,
-                    decoration: BoxDecoration(
-                      color: _isTimerOn
-                          ? Colors.redAccent
-                          : const Color(0xfff24FFCC),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0xFF0D1F29),
-                          spreadRadius: 1,
-                          blurRadius: 2,
-                          offset: Offset(2, 4),
-                        ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Text(
-                      _isTimerOn ? 'Stop' : 'Start',
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: _isTimerOn ? Colors.white : Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                  // child: Container(
+                  //   alignment: Alignment.center,
+                  //   width: MediaQuery.of(context).size.width * 0.65,
+                  //   decoration: BoxDecoration(
+                  //     color: _isTimerOn
+                  //         ? Colors.redAccent
+                  //         : const Color(0xfff24FFCC),
+                  //     borderRadius: BorderRadius.circular(12),
+                  //     boxShadow: const [
+                  //       BoxShadow(
+                  //         color: Color(0xFF0D1F29),
+                  //         spreadRadius: 1,
+                  //         blurRadius: 2,
+                  //         offset: Offset(2, 4),
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   padding: const EdgeInsets.symmetric(vertical: 20),
+                  //   child: Text(
+                  //     _isTimerOn ? 'Stop' : 'Start',
+                  //     style: TextStyle(
+                  //       fontSize: 24,
+                  //       color: _isTimerOn ? Colors.white : Colors.black,
+                  //       fontWeight: FontWeight.w500,
+                  //     ),
+                  //   ),
+                  // ),
+                  child: BoxButton(
+                    title: _isTimerOn ? 'Stop' : 'Start',
+                    style: ButtonStyleType.Primary,
+                    state: ButtonState.Enabled,
+                    onPressed: () {
+                      setState(() {
+                        _isTimerOn = !_isTimerOn;
+                      });
+                    },
                   ),
                 ),
               ],
@@ -281,14 +296,15 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
   }
 
   Widget _buildTopRoundedContainer() {
+    final theme = Theme.of(context);
     return Positioned(
       left: 0,
       top: 0,
       right: 0,
       child: Container(
         height: 150,
-        decoration: const BoxDecoration(
-          color: Color(0xFF0D1F29),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.onSecondary,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(24),
@@ -300,91 +316,18 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
   }
 
   Widget _buildHeader() {
+    final theme = Theme.of(context);
     return Positioned(
       left: 0,
       right: 0,
       top: 100,
-      child: const Text(
+      child: Text(
         'Meditate',
         textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 27,
-          fontFamily: 'Readex Pro',
-          fontWeight: FontWeight.w900,
-          height: 1.2,
-        ),
+        style: h2.copyWith(color: theme.colorScheme.onBackground),
       ),
     );
   }
-
-  // Widget _buildNavigationBar() {
-  //   return Positioned(
-  //     left: 0,
-  //     bottom: 0,
-  //     right: 0,
-  //     child: Container(
-  //       height: 100,
-  //       child: Stack(
-  //         children: [
-  //           Positioned(
-  //             left: 0,
-  //             top: 0,
-  //             right: 0,
-  //             child: Container(
-  //               height: 100,
-  //               decoration: const BoxDecoration(
-  //                 color: Color(0xFF0D1F29),
-  //                 borderRadius: BorderRadius.only(
-  //                   topLeft: Radius.circular(24),
-  //                   topRight: Radius.circular(24),
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //           Positioned(
-  //             left: 24,
-  //             top: 12,
-  //             right: 24,
-  //             child: Container(
-  //               child: Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   _buildNavItem(
-  //                     label: 'Home',
-  //                     icon: 'assets/icons/grid_view.png',
-  //                     isSelected: false,
-  //                   ),
-  //                   _buildNavItem(
-  //                     label: 'Blog',
-  //                     icon: 'assets/icons/newsmode.png',
-  //                     isSelected: false,
-  //                   ),
-  //                   _buildNavItem(
-  //                     label: 'Activities',
-  //                     icon: 'assets/icons/exercise.png',
-  //                     isSelected: false,
-  //                   ),
-  //                   _buildNavItem(
-  //                     label: 'Meditate',
-  //                     icon: 'assets/icons/self_improvement.png',
-  //                     isSelected: true,
-  //                   ),
-  //                   _buildNavItem(
-  //                     label: 'Profile',
-  //                     icon: 'assets/icons/account_circle.png',
-  //                     isSelected: false,
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Widget _buildNavItem({
     required String label,
