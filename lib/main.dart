@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:yogi_application/src/features/api_service.dart';
+import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/forgot_password.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
@@ -63,8 +64,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: widget.savedEmail != null && widget.savedPassword != null
-          ? AppRoutes.homepage
-          : AppRoutes.homepage,
+          ? AppRoutes.activities
+          : AppRoutes.activities,
       routes: {
         AppRoutes.homepage: (context) => HomePage(
             savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
@@ -81,6 +82,7 @@ class _MyAppState extends State<MyApp> {
         AppRoutes.result: (context) => Result(),
         AppRoutes.subscription: (context) => Subscription(),
         AppRoutes.Profile: (context) => ProfilePage(),
+        AppRoutes.activities: (context) => Activities(),
       },
       theme: lightTheme, // Apply the light theme
       darkTheme: darkTheme, // Apply the dark theme
