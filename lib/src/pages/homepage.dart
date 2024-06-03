@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:yogi_application/src/widgets/card.dart';
 
 class HomePage extends StatefulWidget {
   final String? savedEmail;
@@ -164,26 +165,20 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   children: [
                     // Replace these placeholders with your actual content
-                    Container(
-                      width: 150,
-                      height: 132,
-                      color: Colors.blue,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(child: Text('Content 1')),
+                    CustomCard(
+                      title: 'Card with Image',
+                      caption:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                     ),
-                    Container(
-                      width: 150,
-                      height: 132,
-                      color: Colors.green,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(child: Text('Content 2')),
+                    CustomCard(
+                      title: 'Card with Image',
+                      caption:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                     ),
-                    Container(
-                      width: 150,
-                      height: 132,
-                      color: Colors.orange,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(child: Text('Content 3')),
+                    CustomCard(
+                      title: 'Card with Image',
+                      caption:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                     ),
                     // Add more containers if needed
                   ],
@@ -204,26 +199,20 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   children: [
                     // Similar to the "For You" section, add your content here
-                    Container(
-                      width: 150,
-                      height: 132,
-                      color: Colors.blue,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(child: Text('Content 1')),
+                    CustomCard(
+                      title: 'Card with Image',
+                      caption:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                     ),
-                    Container(
-                      width: 150,
-                      height: 132,
-                      color: Colors.green,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(child: Text('Content 2')),
+                    CustomCard(
+                      title: 'Card with Image',
+                      caption:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                     ),
-                    Container(
-                      width: 150,
-                      height: 132,
-                      color: Colors.orange,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(child: Text('Content 3')),
+                    CustomCard(
+                      title: 'Card with Image',
+                      caption:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                     ),
                   ],
                 ),
