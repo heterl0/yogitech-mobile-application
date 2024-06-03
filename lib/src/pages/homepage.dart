@@ -158,10 +158,9 @@ class _HomePageState extends State<HomePage> {
                   style: h3.copyWith(color: theme.colorScheme.onPrimary),
                 ),
               ),
-              SizedBox(height: 10),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
                     // Replace these placeholders with your actual content
@@ -184,7 +183,6 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Text(
@@ -192,10 +190,9 @@ class _HomePageState extends State<HomePage> {
                   style: h3.copyWith(color: theme.colorScheme.onPrimary),
                 ),
               ),
-              SizedBox(height: 10),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.only(left: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
                     // Similar to the "For You" section, add your content here
