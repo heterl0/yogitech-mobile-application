@@ -4,13 +4,13 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:yogi_application/src/pages/meditate.dart';
 
 void main() {
-  runApp(const PerformMeditate());
+  runApp(const performMeditate());
 }
 
-class PerformMeditate extends StatelessWidget {
+class performMeditate extends StatelessWidget {
   final Duration selectedDuration;
 
-  const PerformMeditate(
+  const performMeditate(
       {Key? key, this.selectedDuration = const Duration(minutes: 5)})
       : super(key: key);
 

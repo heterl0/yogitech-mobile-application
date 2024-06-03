@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
-import 'package:yogi_application/src/pages/event_detail.dart';
+import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/widgets/card.dart';
 
-class activities extends StatefulWidget {
-  const activities({super.key});
+class eventDetail extends StatelessWidget {
+  final String title;
+  final String caption;
+  final String subtitle;
 
-  @override
-  _ActivitiesState createState() => _ActivitiesState();
-}
-
-class _ActivitiesState extends State<activities> {
-  // Biến trạng thái để lưu trữ nội dung hiện tại
-  bool _showRankContent = true;
-
+  const eventDetail({Key? key, required this.title, required this.caption, required this.subtitle}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,8 +16,8 @@ class _ActivitiesState extends State<activities> {
         scaffoldBackgroundColor: const Color(0xFF0A141C),
       ),
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: _buildBody(context),
-        bottomNavigationBar: CustomBottomBar(),
       ),
     );
   }
@@ -36,105 +29,97 @@ class _ActivitiesState extends State<activities> {
       decoration: const BoxDecoration(color: Color(0xFF0A141C)),
       child: Stack(
         children: [
-          _buildTopRoundedContainer(),
-          Positioned(
-            left: 24,
-            right: 24,
-            top: 150,
-            bottom: 0,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 16),
-                  // Show title based on current state
-                  _showRankContent ? _buildRankMainTitle() : Container(),
-                  const SizedBox(height: 24),
-                  // Show content based on current state
-                  _showRankContent
-                      ? _buildRankMainContent()
-                      : _buildEventMainContent(),
-                ],
-              ),
-            ),
-          ),
+          _buildImage(),
+          _buildTitleText(context),
+          _buildMainContent(context),
+          _buildNavigationBar(context),
         ],
       ),
     );
   }
 
-  Widget _buildTopRoundedContainer() {
-    return Positioned(
-      left: 0,
-      top: 0,
-      right: 0,
-      child: Container(
-        height: 155,
-        decoration: BoxDecoration(
-          color: Color(0xFF0D1F29),
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(24),
-            bottomRight: Radius.circular(24),
-          ),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              left: 24,
-              bottom: 0,
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _showRankContent = true;
-                  });
-                },
-                child: _buildTitleContainer('Rank', _showRankContent),
-              ),
-            ),
-            Positioned(
-              right: 24,
-              bottom: 0,
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _showRankContent = false;
-                  });
-                },
-                child: _buildTitleContainer('Event', !_showRankContent),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTitleContainer(String title, bool isSelected) {
+  Widget _buildTitleText(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      width: 185,
-      height: 36,
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            width: isSelected ? 2.0 : 0.0,
-            color: isSelected ? primary : Colors.transparent,
+
+    return Stack(
+      children: <Widget>[
+        Positioned(
+          left: 0,
+          right: 0,
+          top: 110,
+          child: Text(
+            '5 days left',
+            textAlign: TextAlign.center,
+            style: h3.copyWith(color: theme.colorScheme.onBackground),
           ),
         ),
+        Positioned(
+          right: 15,
+          top: 100,
+          child: _buildBackButton(context),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBackButton(BuildContext context) {
+    return IconButton(
+      icon: Image.asset(
+        'assets/icons/close.png',
+        color: Colors.white.withOpacity(1),
+        width: 30,
+        height: 30,
       ),
-      child: Center(
-        child: Text(
-          title,
-          textAlign: TextAlign.center,
-          style: h3.copyWith(color: theme.colorScheme.onBackground),
+      onPressed: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => activities()),
+        );
+      },
+    );
+  }
+
+  Widget _buildImage() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 0), // Adjust the value as needed
+      child: Container(
+        width: double.infinity,
+        height: 250,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/yoga.jpeg'),
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildRankMainTitle() {
+  Widget _buildMainContent(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 250),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16),
+              _buildTitle(context),
+              const SizedBox(height: 16),
+              _buildDescription(),
+              const SizedBox(height: 16),
+              _buildTitle2(context),
+              const SizedBox(height: 16),
+              _buildRankMainContent(context),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTitle(BuildContext context) {
     final theme = Theme.of(context);
 
     return Center(
@@ -144,7 +129,7 @@ class _ActivitiesState extends State<activities> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              '5 days left',
+              'Ringo Island',
               style: h2.copyWith(color: theme.colorScheme.onBackground),
             ),
           ],
@@ -153,7 +138,39 @@ class _ActivitiesState extends State<activities> {
     );
   }
 
-  Widget _buildRankMainContent() {
+  Widget _buildDescription() {
+    return Text(
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus',
+      style: TextStyle(
+        color: Color(0xFF8D8E99),
+        fontSize: 12,
+        fontFamily: 'Readex Pro',
+        fontWeight: FontWeight.w400,
+        height: 1.5,
+      ),
+    );
+  }
+
+  Widget _buildTitle2(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      alignment: Alignment.centerLeft, // Aligns the ch // Add padding if needed
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment:
+            CrossAxisAlignment.start, // Aligns the children to the start
+        children: [
+          Text(
+            'Leaderboard',
+            style: h3.copyWith(color: theme.colorScheme.onBackground),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRankMainContent(BuildContext context) {
     final theme = Theme.of(context);
 
     return Container(
@@ -335,48 +352,52 @@ class _ActivitiesState extends State<activities> {
     );
   }
 
-  Widget _buildEventMainContent() {
-  return Container(
-    width: double.infinity,
-    padding: const EdgeInsets.only(top: 0.0), // Adjust the top padding as needed
-    child: GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0), // Add horizontal padding if needed
-      shrinkWrap: true,
-      physics: const BouncingScrollPhysics(), // Enable scrolling
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // 2 columns
-        crossAxisSpacing: 8.0,
-        mainAxisSpacing: 8.0,
-        childAspectRatio: 3 / 2, // Aspect ratio of each card
-      ),
-      itemCount: 6, // Number of cards
-      itemBuilder: (context, index) {
-        final title = 'Event ${index + 1}';
-        final caption = 'Caption ${index + 1}';
-        final subtitle = '${5 - index} days left';
-
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => eventDetail(
-                  title: title,
-                  caption: caption,
-                  subtitle: subtitle,
-                ),
-              ),
-            );
-          },
-          child: CustomCard(
-            title: title,
-            caption: caption,
-            subtitle: subtitle,
+  Widget _buildNavigationBar(BuildContext context) {
+    return Positioned(
+      left: 0,
+      bottom: 0,
+      right: 0,
+      child: Container(
+        height: 100,
+        decoration: BoxDecoration(
+          color: Color(0xFF0D1F29),
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
           ),
-        );
-      },
-    ),
-  );
-}
+        ),
+        child: Padding(
+            padding: EdgeInsets.only(bottom: 20),
+            child: Center(
+              child: _buildJoinButton(context),
+            )),
+      ),
+    );
+  }
 
+  Widget _buildJoinButton(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      width: 324,
+      height: 48,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      decoration: ShapeDecoration(
+        gradient: LinearGradient(
+          begin: Alignment(0.91, -0.41),
+          end: Alignment(-0.91, 0.41),
+          colors: [Color(0xFF3BE2B0), Color(0xFF4095D0), Color(0xFF5986CC)],
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(44),
+        ),
+      ),
+      child: Center(
+        child: Text(
+          'Join in',
+          style: h3.copyWith(color: theme.colorScheme.onBackground),
+        ),
+      ),
+    );
+  }
 }
