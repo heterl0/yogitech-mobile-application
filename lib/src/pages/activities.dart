@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
+import 'package:yogi_application/src/widgets/card.dart';
 
 class Activities extends StatefulWidget {
   const Activities({super.key});
@@ -11,6 +12,9 @@ class Activities extends StatefulWidget {
 }
 
 class _ActivitiesState extends State<Activities> {
+  // Biến trạng thái để lưu trữ nội dung hiện tại
+  bool _showRankContent = true;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -39,12 +43,16 @@ class _ActivitiesState extends State<Activities> {
             bottom: 0,
             child: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 16),
-                  _buildRankMainTitle(),
+                  // Show title based on current state
+                  _showRankContent ? _buildRankMainTitle() : Container(),
                   const SizedBox(height: 24),
-                  _buildRankMainContent(),
+                  // Show content based on current state
+                  _showRankContent
+                      ? _buildRankMainContent()
+                      : _buildEventMainContent(),
                 ],
               ),
             ),
@@ -72,14 +80,28 @@ class _ActivitiesState extends State<Activities> {
         child: Stack(
           children: [
             Positioned(
-              left: 24, // Adjust the left position as needed
-              bottom: 0, // Adjust the bottom position to lower the title
-              child: _buildTitleContainer('Rank', 2),
+              left: 24,
+              bottom: 0,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _showRankContent = true;
+                  });
+                },
+                child: _buildTitleContainer('Rank', _showRankContent),
+              ),
             ),
             Positioned(
-              right: 24, // Adjust the right position as needed
-              bottom: 0, // Adjust the bottom position to lower the title
-              child: _buildTitleContainer('Event', 0),
+              right: 24,
+              bottom: 0,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _showRankContent = false;
+                  });
+                },
+                child: _buildTitleContainer('Event', !_showRankContent),
+              ),
             ),
           ],
         ),
@@ -87,7 +109,7 @@ class _ActivitiesState extends State<Activities> {
     );
   }
 
-  Widget _buildTitleContainer(String title, double bottomBorderWidth) {
+  Widget _buildTitleContainer(String title, bool isSelected) {
     final theme = Theme.of(context);
     return Container(
       width: 185,
@@ -95,7 +117,10 @@ class _ActivitiesState extends State<Activities> {
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(width: bottomBorderWidth, color: primary),
+          bottom: BorderSide(
+            width: isSelected ? 2.0 : 0.0,
+            color: isSelected ? primary : Colors.transparent,
+          ),
         ),
       ),
       child: Center(
@@ -113,7 +138,6 @@ class _ActivitiesState extends State<Activities> {
 
     return Center(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -129,18 +153,20 @@ class _ActivitiesState extends State<Activities> {
   }
 
   Widget _buildRankMainContent() {
+    final theme = Theme.of(context);
+
     return Container(
-      width: 312,
-      height: 168,
+      width: double.infinity,
+      height: 200,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 312,
+            width: 348,
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -176,13 +202,7 @@ class _ActivitiesState extends State<Activities> {
                   child: SizedBox(
                     child: Text(
                       '3 chân 4 cẳng',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: 'Readex Pro',
-                        fontWeight: FontWeight.w600,
-                        height: 0.06,
-                      ),
+                      style: h3.copyWith(color: theme.colorScheme.onBackground),
                     ),
                   ),
                 ),
@@ -190,20 +210,14 @@ class _ActivitiesState extends State<Activities> {
                 Text(
                   '20 gems',
                   textAlign: TextAlign.right,
-                  style: TextStyle(
-                    color: Color(0xFF4094CF),
-                    fontSize: 16,
-                    fontFamily: 'Readex Pro',
-                    fontWeight: FontWeight.w600,
-                    height: 0.06,
-                  ),
+                  style: h3.copyWith(color: theme.colorScheme.onBackground),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 12),
           Container(
-            width: 312,
+            width: 348,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -245,13 +259,7 @@ class _ActivitiesState extends State<Activities> {
                   child: SizedBox(
                     child: Text(
                       '3 chân 4 cẳng',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: 'Readex Pro',
-                        fontWeight: FontWeight.w600,
-                        height: 0.06,
-                      ),
+                      style: h3.copyWith(color: theme.colorScheme.onBackground),
                     ),
                   ),
                 ),
@@ -259,20 +267,14 @@ class _ActivitiesState extends State<Activities> {
                 Text(
                   '19 gems',
                   textAlign: TextAlign.right,
-                  style: TextStyle(
-                    color: Color(0xFF4094CF),
-                    fontSize: 16,
-                    fontFamily: 'Readex Pro',
-                    fontWeight: FontWeight.w600,
-                    height: 0.06,
-                  ),
+                  style: h3.copyWith(color: theme.colorScheme.onBackground),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 12),
           Container(
-            width: 312,
+            width: 348,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -314,13 +316,7 @@ class _ActivitiesState extends State<Activities> {
                   child: SizedBox(
                     child: Text(
                       '3 chân 4 cẳng',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: 'Readex Pro',
-                        fontWeight: FontWeight.w600,
-                        height: 0.06,
-                      ),
+                      style: h3.copyWith(color: theme.colorScheme.onBackground),
                     ),
                   ),
                 ),
@@ -328,13 +324,7 @@ class _ActivitiesState extends State<Activities> {
                 Text(
                   '1 gem',
                   textAlign: TextAlign.right,
-                  style: TextStyle(
-                    color: Color(0xFF4094CF),
-                    fontSize: 16,
-                    fontFamily: 'Readex Pro',
-                    fontWeight: FontWeight.w600,
-                    height: 0.06,
-                  ),
+                  style: h3.copyWith(color: theme.colorScheme.onBackground),
                 ),
               ],
             ),
@@ -346,218 +336,28 @@ class _ActivitiesState extends State<Activities> {
 
   Widget _buildEventMainContent() {
     return Container(
-      width: 312,
-      height: 428,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 150,
-            padding: const EdgeInsets.all(8),
-            decoration: ShapeDecoration(
-              color: Color(0xFF09141C),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(width: 1, color: Color(0x7FA4B7BD)),
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 80,
-                  decoration: ShapeDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment(0.91, -0.41),
-                      end: Alignment(-0.91, 0.41),
-                      colors: [
-                        Color(0xFF3BE2B0),
-                        Color(0xFF4095D0),
-                        Color(0xFF5986CC)
-                      ],
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  width: double.infinity,
-                  height: 28,
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: 16,
-                        child: Text(
-                          'Planking',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontFamily: 'Readex Pro',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                child: Text(
-                                  'Planking',
-                                  style: TextStyle(
-                                    color: Color(0xFF8D8E99),
-                                    fontSize: 10,
-                                    fontFamily: 'Readex Pro',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0.12,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: SizedBox(
-                                child: Text(
-                                  '5 days left',
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    color: Color(0xFF4094CF),
-                                    fontSize: 10,
-                                    fontFamily: 'Readex Pro',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0.12,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          Container(
-            width: 150,
-            padding: const EdgeInsets.all(8),
-            decoration: ShapeDecoration(
-              color: Color(0xFF09141C),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(width: 1, color: Color(0x7FA4B7BD)),
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 80,
-                  decoration: ShapeDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment(0.91, -0.41),
-                      end: Alignment(-0.91, 0.41),
-                      colors: [
-                        Color(0xFF3BE2B0),
-                        Color(0xFF4095D0),
-                        Color(0xFF5986CC)
-                      ],
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  width: double.infinity,
-                  height: 28,
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: 16,
-                        child: Text(
-                          'Planking',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontFamily: 'Readex Pro',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                child: Text(
-                                  'Planking',
-                                  style: TextStyle(
-                                    color: Color(0xFF8D8E99),
-                                    fontSize: 10,
-                                    fontFamily: 'Readex Pro',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0.12,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: SizedBox(
-                                child: Text(
-                                  '5 days left',
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    color: Color(0xFF4094CF),
-                                    fontSize: 10,
-                                    fontFamily: 'Readex Pro',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0.12,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-        ],
+      width: double.infinity,
+      padding:
+          const EdgeInsets.only(top: 0.0), // Adjust the top padding as needed
+      child: GridView.builder(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 4.0), // Add horizontal padding if needed
+        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(), // Enable scrolling
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // 2 columns
+          crossAxisSpacing: 8.0,
+          mainAxisSpacing: 8.0,
+          childAspectRatio: 3 / 2, // Aspect ratio of each card
+        ),
+        itemCount: 6, // Number of cards
+        itemBuilder: (context, index) {
+          return CustomCard(
+            title: 'Event ${index + 1}',
+            caption: 'Caption ${index + 1}',
+            subtitle: '${5 - index} days left',
+          );
+        },
       ),
     );
   }
