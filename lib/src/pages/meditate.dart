@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:yogi_application/src/pages/perform_meditate.dart';
+import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/shared/styles.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
 import 'dart:math';
 
 void main() {
@@ -19,7 +22,7 @@ class _MeditateState extends State<Meditate> {
   bool _isChecked1 = false;
   bool _isChecked2 = false;
   final AudioPlayer _audioPlayer = AudioPlayer();
-  Duration _selectedDuration = Duration();
+  Duration _selectedDuration = const Duration();
 
   @override
   void dispose() {
@@ -29,21 +32,23 @@ class _MeditateState extends State<Meditate> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: _buildBody(),
+      bottomNavigationBar: CustomBottomBar(),
     );
   }
 
   Widget _buildBody() {
+    final theme = Theme.of(context);
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(color: Color(0xFF09141C)),
+      decoration: BoxDecoration(color: theme.colorScheme.background),
       child: Stack(
         children: [
           _buildTopRoundedContainer(),
           _buildTitleText(),
-          // _buildNavigationBar(),
           _buildMainContent(),
           _buildElevatedButton(),
         ],
@@ -52,6 +57,7 @@ class _MeditateState extends State<Meditate> {
   }
 
   Widget _buildTopRoundedContainer() {
+    final theme = Theme.of(context);
     return Positioned(
       left: 0,
       top: 0,
@@ -59,9 +65,9 @@ class _MeditateState extends State<Meditate> {
       child: Container(
         height: 150,
         decoration: BoxDecoration(
-          color: Color(0xFF0D1F29),
+          color: theme.colorScheme.onSecondary,
           shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(24),
             bottomRight: Radius.circular(24),
           ),
@@ -71,126 +77,19 @@ class _MeditateState extends State<Meditate> {
   }
 
   Widget _buildTitleText() {
+    final theme = Theme.of(context);
     return Positioned(
       left: 0,
       right: 0,
       top: 100,
-      child: Text(
-        'Meditate',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 27,
-          fontFamily: 'Readex Pro',
-          fontWeight: FontWeight.w900,
-          height: 1.2,
-        ),
-      ),
-    );
-  }
-
-  // Widget _buildNavigationBar() {
-  //   return Positioned(
-  //     left: 0,
-  //     bottom: 0,
-  //     right: 0,
-  //     child: Container(
-  //       height: 100,
-  //       child: Stack(
-  //         children: [
-  //           Positioned(
-  //             left: 0,
-  //             top: 0,
-  //             right: 0,
-  //             child: Container(
-  //               height: 100,
-  //               decoration: const BoxDecoration(
-  //                 color: Color(0xFF0D1F29),
-  //                 borderRadius: BorderRadius.only(
-  //                   topLeft: Radius.circular(24),
-  //                   topRight: Radius.circular(24),
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //           Positioned(
-  //             left: 24,
-  //             top: 12,
-  //             right: 24,
-  //             child: Container(
-  //               child: Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   _buildNavItem(
-  //                     label: 'Home',
-  //                     icon: 'assets/icons/grid_view.png',
-  //                     isSelected: false,
-  //                   ),
-  //                   _buildNavItem(
-  //                     label: 'Blog',
-  //                     icon: 'assets/icons/newsmode.png',
-  //                     isSelected: false,
-  //                   ),
-  //                   _buildNavItem(
-  //                     label: 'Activities',
-  //                     icon: 'assets/icons/exercise.png',
-  //                     isSelected: false,
-  //                   ),
-  //                   _buildNavItem(
-  //                     label: 'Meditate',
-  //                     icon: 'assets/icons/self_improvement.png',
-  //                     isSelected: true,
-  //                   ),
-  //                   _buildNavItem(
-  //                     label: 'Profile',
-  //                     icon: 'assets/icons/account_circle.png',
-  //                     isSelected: false,
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  Widget _buildNavItem({
-    required String label,
-    required String icon,
-    required bool isSelected,
-  }) {
-    return GestureDetector(
-      onTap: () {
-        print('Navigated to $label');
-      },
-      child: Column(
-        children: [
-          Image.asset(
-            icon,
-            color: isSelected ? Color(0xFF4094CF) : Color(0xFF8D8E99),
-            width: 24,
-            height: 24,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? Color(0xFF4094CF) : Color(0xFF8D8E99),
-              fontSize: 10,
-              fontFamily: 'Readex Pro',
-              fontWeight: FontWeight.w400,
-              height: 1.2,
-            ),
-          ),
-        ],
-      ),
+      child: Text('Meditate',
+          textAlign: TextAlign.center,
+          style: h2.copyWith(color: theme.colorScheme.onBackground)),
     );
   }
 
   Widget _buildMainContent() {
+    final theme = Theme.of(context);
     return Positioned(
       left: 24,
       top: 150,
@@ -199,7 +98,8 @@ class _MeditateState extends State<Meditate> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            color: Color.fromARGB(255, 13, 33, 44), // Đặt màu nền trực tiếp
+            color: const Color.fromARGB(
+                255, 13, 33, 44), // Set background color directly
             child: CupertinoTimerPicker(
               mode: CupertinoTimerPickerMode.ms,
               initialTimerDuration: _selectedDuration,
@@ -213,18 +113,12 @@ class _MeditateState extends State<Meditate> {
               },
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             'Sounds',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontFamily: 'Readex Pro',
-              fontWeight: FontWeight.w600,
-              height: 1.2,
-            ),
+            style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           _buildCheckboxItem(
             title: 'Sound of rain',
             subtitle: 'Deep sound on rainy days',
@@ -236,7 +130,7 @@ class _MeditateState extends State<Meditate> {
               });
             },
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           _buildCheckboxItem(
             title: 'The sound of the stream flowing',
             subtitle: 'Immersing yourself in the refreshing nature',
@@ -259,6 +153,7 @@ class _MeditateState extends State<Meditate> {
     required bool value,
     required ValueChanged<bool?> onChanged,
   }) {
+    final theme = Theme.of(context);
     return Container(
       child: Row(
         children: [
@@ -268,37 +163,22 @@ class _MeditateState extends State<Meditate> {
             activeColor: Colors.transparent,
             checkColor: Colors.white,
             side: MaterialStateBorderSide.resolveWith(
-              (states) => BorderSide(
+              (states) => const BorderSide(
                 color: Colors.white, // Outline color
                 width: 2,
               ),
             ),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'Readex Pro',
-                    fontWeight: FontWeight.w600,
-                    height: 1.2,
-                  ),
+                  style: h3.copyWith(color: theme.colorScheme.onPrimary),
                 ),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    color: Color(0xFF8D8E99),
-                    fontSize: 10,
-                    fontFamily: 'Readex Pro',
-                    fontWeight: FontWeight.w400,
-                    height: 1.2,
-                  ),
-                ),
+                Text(subtitle, style: min_cap.copyWith(color: text)),
               ],
             ),
           ),
@@ -308,15 +188,17 @@ class _MeditateState extends State<Meditate> {
   }
 
   Widget _buildElevatedButton() {
+    final theme = Theme.of(context);
+
     return Positioned(
       right: 27,
-      top: 650,
+      bottom: 20,
       child: ElevatedButton(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.transparent),
           shadowColor: MaterialStateProperty.all(Colors.transparent),
-          padding: MaterialStateProperty.all(EdgeInsets.all(0)),
-          shape: MaterialStateProperty.all(CircleBorder()),
+          padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+          shape: MaterialStateProperty.all(const CircleBorder()),
         ),
         onPressed: () {
           if (_isChecked1) {
@@ -328,24 +210,24 @@ class _MeditateState extends State<Meditate> {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  PerformMeditate(selectedDuration: _selectedDuration),
+                  performMeditate(selectedDuration: _selectedDuration),
             ),
           );
         },
         child: Ink(
           decoration: BoxDecoration(
-            color: Color(0xFF4094CF),
+            color: primary,
             borderRadius: BorderRadius.circular(50),
           ),
           child: Container(
-            width: 67,
-            height: 67,
+            width: 60,
+            height: 60,
             alignment: Alignment.center,
             child: Image.asset(
               'assets/icons/play_arrow.png',
               width: 24,
               height: 24,
-              color: Colors.white,
+              color: active,
             ),
           ),
         ),

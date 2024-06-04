@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:yogi_application/src/features/api_service.dart';
+import 'package:yogi_application/src/pages/activities.dart';
+import 'package:yogi_application/src/pages/event_detail.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/forgot_password.dart';
@@ -21,7 +23,7 @@ import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/pages/profile.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:dio/dio.dart';
-// comment to rollback
+import 'package:yogi_application/src/pages/settings.dart'; // Import SettingsPage
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,11 +70,9 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  void _toggleTheme() {
+  void _toggleTheme(bool isDarkMode) {
     setState(() {
-      // Toggle theme
-      _themeMode =
-          _themeMode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+      _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
     });
   }
 
@@ -93,14 +93,38 @@ class _MyAppState extends State<MyApp> {
         AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
         AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
         AppRoutes.meditate: (context) => Meditate(),
-        AppRoutes.performMeditate: (context) => PerformMeditate(),
+        AppRoutes.performMeditate: (context) => performMeditate(),
         AppRoutes.streak: (context) => Streak(),
-        AppRoutes.exercisedetail: (context) => ExerciseDetail(),
+        AppRoutes.exercisedetail: (context) => exerciseDetail(),
         AppRoutes.result: (context) => Result(),
         AppRoutes.subscription: (context) => Subscription(),
-        AppRoutes.Profile: (context) => ProfilePage(),
-        AppRoutes.paymentHistory: (context) => PaymentHistory(),
-        AppRoutes.changeProfile: (context) => ChangeProfilePage(),
+        AppRoutes.Profile: (context) => ProfilePage(
+            isDarkMode: _themeMode == ThemeMode.dark,
+            onThemeChanged: _toggleTheme),
+        AppRoutes.activities: (context) => activities(),
+        AppRoutes.eventdetail: (context) => eventDetail(
+              title: 'Event Title',
+              caption: 'Event Caption',
+              subtitle: 'Event Subtitle',
+            ),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == AppRoutes.settings) {
+          return MaterialPageRoute(
+            builder: (context) => SettingsPage(
+              isDarkMode: _themeMode == ThemeMode.dark,
+              onThemeChanged: _toggleTheme,
+            ),
+          );
+        } else if (settings.name == AppRoutes.paymentHistory) {
+          return MaterialPageRoute(builder: (context) => PaymentHistory());
+        } else if (settings.name == AppRoutes.changeProfile) {
+          return MaterialPageRoute(builder: (context) => ChangeProfilePage());
+        }
+        return MaterialPageRoute(
+            builder: (context) => HomePage(
+                savedEmail: widget.savedEmail,
+                savedPassword: widget.savedPassword));
       },
       theme: lightTheme, // Apply the light theme
       darkTheme: darkTheme, // Apply the dark theme

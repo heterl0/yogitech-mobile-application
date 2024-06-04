@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/shared/styles.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:yogi_application/src/widgets/card.dart';
 
 class HomePage extends StatefulWidget {
   final String? savedEmail;
@@ -18,28 +21,29 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Color(0xFF0A141C),
+      backgroundColor: theme.colorScheme.background,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(_isSearching ? 60 : 100),
+        preferredSize: Size.fromHeight(_isSearching ? 100 : 100),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(24.0),
             bottomRight: Radius.circular(24.0),
           ),
           child: AppBar(
             automaticallyImplyLeading: false,
-            backgroundColor: Color(0xFF0D1F29),
+            backgroundColor: theme.colorScheme.onSecondary,
             title: _isSearching ? _buildSearchBar() : _buildDefaultAppBar(),
             bottom: _isSearching
                 ? null
                 : PreferredSize(
-                    preferredSize: Size.fromHeight(0),
+                    preferredSize: const Size.fromHeight(0),
                     child: Padding(
                       padding: const EdgeInsets.only(
                         bottom: 12.0,
-                        right: 20.0,
-                        left: 20.0,
+                        right: 24.0,
+                        left: 24.0,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,14 +60,11 @@ class _HomePageState extends State<HomePage> {
                                   child:
                                       Image.asset('assets/images/Emerald.png'),
                                 ),
-                                SizedBox(width: 0),
+                                const SizedBox(width: 0),
                                 Text(
                                   '5',
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
+                                  style: h3.copyWith(
+                                      color: theme.colorScheme.onBackground),
                                 ),
                               ],
                             ),
@@ -73,23 +74,14 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Text(
                                 'Streak',
-                                style: TextStyle(
-                                  color: Color(0xFF8D8E99),
-                                  fontSize: 16,
-                                ),
+                                style: min_cap.copyWith(color: text),
                               ),
-                              Text(
-                                '7',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 36,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              const StreakValue('7777777'),
                             ],
                           ),
                           IconButton(
-                            icon: Icon(Icons.search, color: Colors.white),
+                            icon: Icon(Icons.search,
+                                color: theme.colorScheme.onBackground),
                             onPressed: () {
                               setState(() {
                                 _isSearching = true;
@@ -110,105 +102,113 @@ class _HomePageState extends State<HomePage> {
             children: [
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 24),
-                child: Text(
-                  'Try this exercise for beginners',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Container(
+                  height: 160, // Chiều cao của khung viền
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: primary, width: 2),
+                  ),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Try this exercise',
+                              textAlign: TextAlign.left,
+                              style: bd_text.copyWith(
+                                  color: theme.colorScheme.onPrimary),
+                            ),
+                            Text(
+                              'for beginner',
+                              textAlign: TextAlign.left,
+                              style: h3.copyWith(
+                                  color: theme.colorScheme.onPrimary),
+                            ),
+                            const Spacer(),
+                            Text(
+                              'Warrior 2 pose!',
+                              textAlign: TextAlign.left,
+                              style: h3.copyWith(color: primary),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: 160, // Độ rộng của nửa bên phải
+                        child: const Image(
+                            image: AssetImage(
+                                'assets/images/ads_exercise_for_beginner.png')),
+                      ),
+                    ],
                   ),
                 ),
               ),
               // Placeholder for ad content
-              Container(
-                height: 200, // Example height, replace with actual ad content
-                color: Colors.grey[300],
-                child: Center(
-                  child: Text('Advertisement Placeholder'),
-                ),
-              ),
-              SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Text(
                   'For You',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: h3.copyWith(color: theme.colorScheme.onPrimary),
                 ),
               ),
-              SizedBox(height: 10),
-              SingleChildScrollView(
+              const SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
                     // Replace these placeholders with your actual content
-                    Container(
-                      width: 150,
-                      height: 132,
-                      color: Colors.blue,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(child: Text('Content 1')),
+                    CustomCard(
+                      title: 'Card with Image',
+                      caption:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                     ),
-                    Container(
-                      width: 150,
-                      height: 132,
-                      color: Colors.green,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(child: Text('Content 2')),
+                    CustomCard(
+                      title: 'Card with Image',
+                      caption:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                     ),
-                    Container(
-                      width: 150,
-                      height: 132,
-                      color: Colors.orange,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(child: Text('Content 3')),
+                    CustomCard(
+                      title: 'Card with Image',
+                      caption:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                     ),
                     // Add more containers if needed
                   ],
                 ),
               ),
-              SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Text(
                   'Newest',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: h3.copyWith(color: theme.colorScheme.onPrimary),
                 ),
               ),
-              SizedBox(height: 10),
-              SingleChildScrollView(
+              const SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
                     // Similar to the "For You" section, add your content here
-                    Container(
-                      width: 150,
-                      height: 132,
-                      color: Colors.blue,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(child: Text('Content 1')),
+                    CustomCard(
+                      title: 'Card with Image',
+                      caption:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                     ),
-                    Container(
-                      width: 150,
-                      height: 132,
-                      color: Colors.green,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(child: Text('Content 2')),
+                    CustomCard(
+                      title: 'Card with Image',
+                      caption:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                     ),
-                    Container(
-                      width: 150,
-                      height: 132,
-                      color: Colors.orange,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(child: Text('Content 3')),
+                    CustomCard(
+                      title: 'Card with Image',
+                      caption:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                     ),
                   ],
                 ),
@@ -222,7 +222,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildDefaultAppBar() {
-    return Text('');
+    return const Text('');
   }
 
   Widget _buildSearchBar() {
@@ -244,17 +244,17 @@ class _HomePageState extends State<HomePage> {
                 child: TextField(
                   controller: _searchController,
                   autofocus: true,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.1),
                     hintText: 'Search...',
-                    hintStyle: TextStyle(color: Colors.white54),
+                    hintStyle: const TextStyle(color: Colors.white54),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(44.0),
-                      borderSide: BorderSide(color: Color(0xFF8D8E99)),
+                      borderSide: const BorderSide(color: Color(0xFF8D8E99)),
                     ),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20),
                     suffixIcon: IconButton(
                       icon: Image.asset('assets/icons/search.png'),
                       onPressed: () {
@@ -277,6 +277,26 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+// Phải tạo Widget riêng chỉ nhằm mục đích áp dụng màu Gradient
+class StreakValue extends StatelessWidget {
+  final String text;
+
+  const StreakValue(this.text, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+      shaderCallback: (bounds) {
+        return gradient.createShader(bounds); // Sử dụng gradient từ styles.dart
+      },
+      child: Text(
+        text,
+        style: h2.copyWith(color: Colors.white), // hoặc màu chữ mong muốn
       ),
     );
   }
