@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:yogi_application/src/shared/styles.dart';
+import 'package:yogi_application/src/widgets/box_input_field.dart';
 
 class PrelaunchSurveyPage extends StatelessWidget {
   final TextEditingController firstName = TextEditingController();
@@ -56,62 +59,26 @@ class PrelaunchSurveyPage extends StatelessWidget {
                   ),
                   SizedBox(height: 16.0),
                   // First Name
-                  Text(
-                    'First Name',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.0,
-                    ),
-                  ),
+                  Text('First Name', style: h3.copyWith(color: active)),
                   SizedBox(height: 16.0),
-                  TextField(
+                  BoxInputField(
                     controller: firstName,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0),
-                      hintText: 'First name',
-                      hintStyle: TextStyle(color: Color(0xFF8D8E99)),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(44.0),
-                        borderSide: BorderSide(color: Color(0xFF8D8E99)),
-                      ),
-                    ),
-                    style: TextStyle(color: Colors.white),
+                    placeholder: 'First name',
                   ),
+
                   SizedBox(height: 16.0),
                   // Last Name
-                  Text(
-                    'Last Name',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.0,
-                    ),
-                  ),
+                  Text('Last Name', style: h3.copyWith(color: active)),
                   SizedBox(height: 16.0),
-                  TextField(
+                  BoxInputField(
                     controller: lastName,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0),
-                      hintText: 'Last Name',
-                      hintStyle: TextStyle(color: Color(0xFF8D8E99)),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(44.0),
-                        borderSide: BorderSide(color: Color(0xFF8D8E99)),
-                      ),
-                    ),
-                    style: TextStyle(color: Colors.white),
+                    placeholder: 'Last name',
                   ),
                   SizedBox(height: 16.0),
                   // Birthday
-                  Text(
-                    'Birthday',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.0,
-                    ),
-                  ),
+                  Text('Birthday', style: h3.copyWith(color: active)),
                   SizedBox(height: 16.0),
+
                   TextField(
                     controller: birthday,
                     decoration: InputDecoration(
@@ -133,13 +100,7 @@ class PrelaunchSurveyPage extends StatelessWidget {
                   ),
                   SizedBox(height: 16.0),
                   // Height
-                  Text(
-                    'Height(cm)',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.0,
-                    ),
-                  ),
+                  Text('Height(cm)', style: h3.copyWith(color: active)),
                   SizedBox(height: 16.0),
                   TextField(
                     controller: height,
@@ -164,13 +125,7 @@ class PrelaunchSurveyPage extends StatelessWidget {
                   ),
                   SizedBox(height: 16.0),
                   // Weight
-                  Text(
-                    'Weight(kg)',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.0,
-                    ),
-                  ),
+                  Text('Weight(kg)', style: h3.copyWith(color: active)),
                   SizedBox(height: 16.0),
                   TextField(
                     controller: weight,

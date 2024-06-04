@@ -1,51 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/shared/styles.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:yogi_application/src/pages/personalized_exercise.dart';
+import 'package:yogi_application/src/pages/settings.dart';
+import 'package:yogi_application/src/pages/friendlist.dart';
 
 class ProfilePage extends StatefulWidget {
+  final bool isDarkMode;
+  final ValueChanged<bool> onThemeChanged;
+
+  ProfilePage({required this.isDarkMode, required this.onThemeChanged});
+
   @override
-  State<ProfilePage> createState() => _nameState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _nameState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Color(0xFF0A141C),
+      backgroundColor: theme.colorScheme.background,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
+        preferredSize: const Size.fromHeight(100),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(24.0),
             bottomRight: Radius.circular(24.0),
           ),
           child: AppBar(
             automaticallyImplyLeading: false,
-            backgroundColor: Color(0xFF0D1F29),
+            backgroundColor: theme.colorScheme.onSecondary,
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(0),
+              preferredSize: const Size.fromHeight(0),
               child: Padding(
                 padding: const EdgeInsets.only(
                   bottom: 12.0,
-                  right: 20.0,
-                  left: 20.0,
+                  right: 24.0,
+                  left: 24.0,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      icon: Image.asset('assets/icons/share.png'),
+                      icon: Icon(
+                        Icons.ios_share,
+                        color: theme.colorScheme.onBackground,
+                      ),
                       onPressed: () {},
                     ),
-                    Text(
-                      'Profile',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold),
-                    ),
+                    Text('Profile',
+                        style:
+                            h2.copyWith(color: theme.colorScheme.onBackground)),
                     IconButton(
-                      icon: Image.asset('assets/icons/settings.png'),
-                      onPressed: () {},
+                      icon: Icon(
+                        Icons.settings,
+                        color: theme.colorScheme.onBackground,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SettingsPage(
+                              isDarkMode: widget.isDarkMode,
+                              onThemeChanged: widget.onThemeChanged,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -56,7 +79,7 @@ class _nameState extends State<ProfilePage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.all(16.0),
+          margin: const EdgeInsets.all(24.0),
           child: Column(
             children: [
               Row(
@@ -64,321 +87,141 @@ class _nameState extends State<ProfilePage> {
                   Column(
                     children: [
                       Container(
-                        width: 160, // 2 * radius + 8 (border width) * 2
-                        height: 160,
-                        decoration: BoxDecoration(
+                        width: 144, // 2 * radius + 8 (border width) * 2
+                        height:
+                            144, // Đã sửa lại thành 144 cho khớp tỉ lệ so với Figma
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.blueGrey, // Set the border color
-                            width: 1.5, // Set the border width
-                          ),
                         ),
-                        child: CircleAvatar(
+                        child: const CircleAvatar(
                           radius: 78,
                           backgroundImage:
                               AssetImage('assets/images/avatar.png'),
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
-                        // userName,
                         'Duy',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: h2.copyWith(color: theme.colorScheme.onPrimary),
                       ),
                     ],
                   ),
-                  SizedBox(width: 24),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          padding: EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xFF8D8E99)),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Calorie',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Your total of calories',
-                                    style: TextStyle(
-                                      color: Color(0xFF8D8E99),
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              // Sử dụng InkWell hoặc GestureDetector với một hình ảnh
-                              InkWell(
-                                onTap: () {
-                                  // Xử lý sự kiện khi button được nhấn
-                                  print('Button pressed');
-                                  // Thêm các lệnh xử lý sự kiện của bạn ở đây
-                                },
-                                child: Image.asset(
-                                  'assets/icons/info.png',
-                                  width: 20, // Đặt kích thước cho hình ảnh
-                                  height: 20,
-                                ),
-                              ),
-                            ],
-                          ),
+                        InfoCard(
+                          title: 'Calorie',
+                          subtitle: 'Your total of calories',
+                          iconPath: 'assets/icons/info.png',
+                          onTap: () {
+                            print('Calorie info pressed');
+                          },
                         ),
                         const SizedBox(height: 6),
-                        Container(
-                          padding: EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xFF8D8E99)),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Social',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Your friends and more',
-                                    style: TextStyle(
-                                      color: Color(0xFF8D8E99),
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              // Sử dụng InkWell hoặc GestureDetector với một hình ảnh
-                              InkWell(
-                                onTap: () {
-                                  // Xử lý sự kiện khi button được nhấn
-                                  print('Button pressed');
-                                },
-                                child: Image.asset(
-                                  'assets/icons/diversity_2.png',
-                                  width: 20, // Đặt kích thước cho hình ảnh
-                                  height: 20,
-                                ),
-                              ),
-                            ],
-                          ),
+                        InfoCard(
+                          title: 'Social',
+                          subtitle: 'Your friends and more',
+                          iconPath: 'assets/icons/diversity_2.png',
+                          onTap: () {
+                            print('Social info pressed');
+                          },
                         ),
-                        SizedBox(height: 6),
-                        Container(
-                          padding: EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xFF8D8E99)),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Personalized Exercise',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Your customize exercise',
-                                    style: TextStyle(
-                                      color: Color(0xFF8D8E99),
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ],
+                        const SizedBox(height: 6),
+                        InfoCard(
+                          title: 'Personalized Exercise',
+                          subtitle: 'Your customize exercise',
+                          iconPath: 'assets/icons/tune_setting.png',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    PersonalizedExercisePage(),
                               ),
-                              // Sử dụng InkWell hoặc GestureDetector với một hình ảnh
-                              InkWell(
-                                onTap: () {
-                                  // Xử lý sự kiện khi button được nhấn
-                                  print('Button pressed');
-                                },
-                                child: Image.asset(
-                                  'assets/icons/tune_setting.png',
-                                  width: 20, // Đặt kích thước cho hình ảnh
-                                  height: 20,
-                                ),
-                              ),
-                            ],
-                          ),
+                            );
+                          },
                         ),
                       ],
                     ),
                   ),
                 ],
               ),
-              // Additional Rows can be added below
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               Row(
                 children: [
                   Expanded(
                     child: Column(
                       children: [
-                        Container(
-                          padding: EdgeInsets.all(16.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xFF8D8E99)),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                '6', // Replace with API data
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        StatCard(
+                          title: 'Following',
+                          value: '6', // Replace with API data
+                          valueColor: theme.colorScheme.onPrimary,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => FriendsPage(),
                               ),
-                              SizedBox(width: 10),
-                              Text(
-                                'Following',
-                                style: TextStyle(
-                                  color: Color(0xFF8D8E99),
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
+                            );
+                          },
                         ),
-                        SizedBox(height: 16),
-                        Container(
-                          padding: EdgeInsets.all(16.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xFF8D8E99)),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                '7', // Replace with API data
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        const SizedBox(height: 16),
+                        StatCard(
+                          title: 'Follower',
+                          value: '7', // Replace with API data
+                          valueColor: theme.colorScheme.onPrimary,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => FriendsPage(),
                               ),
-                              SizedBox(width: 10),
-                              Text(
-                                'Follower',
-                                style: TextStyle(
-                                  color: Color(0xFF8D8E99),
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
+                            );
+                          },
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       children: [
-                        Container(
-                          padding: EdgeInsets.all(16.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xFF8D8E99)),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                'EXP',
-                                style: TextStyle(
-                                  color: Color(0xFF8D8E99),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                '999', // Replace with API data
-                                style: TextStyle(
-                                    color: Color(0xFF4095D0),
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
+                        StatCard(
+                          title: 'EXP',
+                          value: '999', // Replace with API data
+                          valueColor: primary,
+                          isTitleFirst: true,
                         ),
-                        SizedBox(height: 16),
-                        Container(
-                          padding: EdgeInsets.all(16.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xFF8D8E99)),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                'BMI',
-                                style: TextStyle(
-                                  color: Color(0xFF8D8E99),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                '18.5', // Replace with API data
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                ),
-                              ),
-                            ],
-                          ),
+                        const SizedBox(height: 16),
+                        StatCard(
+                          title: 'BMI',
+                          value: '18.5', // Replace with API data
+                          valueColor: theme.colorScheme.onPrimary,
+                          isTitleFirst: true,
                         ),
                       ],
                     ),
                   ),
-                  // Add content for second row
                 ],
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               Row(
                 children: [
                   Expanded(
                     child: Container(
-                      margin: EdgeInsets.all(0.0),
+                      margin: const EdgeInsets.all(0.0),
                       height: 160,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFF8D8E99)),
+                        border: Border.all(color: const Color(0xFF8D8E99)),
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 20.0), // Added space for better layout
+              const SizedBox(height: 20.0), // Added space for better layout
               Row(
                 children: [
                   Expanded(
@@ -386,8 +229,7 @@ class _nameState extends State<ProfilePage> {
                       height: 50.0,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(44.0),
-                        border:
-                            Border.all(color: Color(0xFFFF5858), width: 3.0),
+                        border: Border.all(color: error, width: 2.0),
                       ),
                       child: Material(
                         color: Colors.transparent,
@@ -397,14 +239,8 @@ class _nameState extends State<ProfilePage> {
                           },
                           borderRadius: BorderRadius.circular(44.0),
                           child: Center(
-                            child: Text(
-                              'Logout',
-                              style: TextStyle(
-                                color: Color(0xFFFF5858),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.0,
-                              ),
-                            ),
+                            child: Text('Logout',
+                                style: h3.copyWith(color: error)),
                           ),
                         ),
                       ),
@@ -417,6 +253,109 @@ class _nameState extends State<ProfilePage> {
         ),
       ),
       bottomNavigationBar: CustomBottomBar(),
+    );
+  }
+}
+
+// Widget dùng chung cho Calorie, Social và Personalized Exercise
+class InfoCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final String iconPath;
+  final VoidCallback onTap;
+
+  InfoCard({
+    required this.title,
+    required this.subtitle,
+    required this.iconPath,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        border: Border.all(color: stroke),
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        highlightColor:
+            Colors.transparent, // Đặt màu trong suốt cho highlight color
+        splashColor: Colors.transparent, // Đặt màu trong suốt cho splash color
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
+                ),
+                Text(
+                  subtitle,
+                  style: min_cap.copyWith(color: text),
+                ),
+              ],
+            ),
+            Image.asset(
+              iconPath,
+              width: 20,
+              height: 20,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Widget dùng chung cho Following, EXP, Follower và BMI
+class StatCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final Color valueColor;
+  final bool isTitleFirst;
+  final VoidCallback? onTap;
+
+  StatCard({
+    required this.title,
+    required this.value,
+    required this.valueColor,
+    this.isTitleFirst = false,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return GestureDetector(
+      onTap: onTap, // Xử lý sự kiện khi widget được nhấn
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: isTitleFirst
+              ? [
+                  Text(
+                    title,
+                    style: min_cap.copyWith(color: text),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(value, style: h2.copyWith(color: valueColor)),
+                ]
+              : [
+                  Text(value, style: h2.copyWith(color: valueColor)),
+                  const SizedBox(width: 10),
+                  Text(
+                    title,
+                    style: min_cap.copyWith(color: text),
+                  ),
+                ],
+        ),
+      ),
     );
   }
 }

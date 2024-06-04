@@ -37,6 +37,7 @@ final ColorScheme lightColorScheme = ColorScheme.light(
   error: error,
   background: lightbg,
   surface: elevationLight,
+  onBackground: text,
 );
 
 final ColorScheme darkColorScheme = ColorScheme.dark(
@@ -47,6 +48,7 @@ final ColorScheme darkColorScheme = ColorScheme.dark(
   error: error,
   background: darkbg,
   surface: elevationDark,
+  onBackground: active,
 );
 
 // Themes (light and dark)
@@ -67,9 +69,14 @@ final ThemeData darkTheme = ThemeData(
   primaryColor: primary,
   scaffoldBackgroundColor: darkbg,
   textTheme: TextTheme(
-    bodyLarge: TextStyle(color: text),
+    bodyLarge: TextStyle(color: active),
     bodyMedium: TextStyle(color: text),
   ),
   hintColor: text,
   colorScheme: darkColorScheme.copyWith(background: darkbg),
 );
+
+// Function to get custom color based on theme
+Color getCustomColor(BuildContext context) {
+  return Theme.of(context).colorScheme.onBackground;
+}

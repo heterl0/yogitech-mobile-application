@@ -60,26 +60,23 @@ class CustomCard extends StatelessWidget {
                     children: [
                       Text(
                         caption!,
-                        style: min_cap.copyWith(
-                            color: theme.colorScheme.onBackground),
+                        style: min_cap.copyWith(color: text),
                       ),
                       Text(
                         subtitle!,
-                        style:
-                            min_cap.copyWith(color: theme.colorScheme.primary),
+                        style: min_cap.copyWith(color: primary),
                       ),
                     ],
                   ),
                 if (caption != null && subtitle == null)
                   Text(
                     caption!,
-                    style:
-                        min_cap.copyWith(color: theme.colorScheme.onBackground),
+                    style: min_cap.copyWith(color: text),
                   ),
                 if (subtitle != null && caption == null)
                   Text(
                     subtitle!,
-                    style: min_cap.copyWith(color: theme.colorScheme.primary),
+                    style: min_cap.copyWith(color: primary),
                   ),
               ],
             ),

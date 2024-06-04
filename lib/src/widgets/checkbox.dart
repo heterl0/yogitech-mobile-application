@@ -12,7 +12,7 @@ class CheckBoxListTile extends StatefulWidget {
 
   const CheckBoxListTile({
     Key? key,
-    required this.title,
+    this.title = '',
     this.state = CheckState.Unchecked,
     this.onChanged,
   }) : super(key: key);
