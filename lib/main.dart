@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/pages/activities.dart';
+import 'package:yogi_application/src/pages/blog.dart';
+import 'package:yogi_application/src/pages/blog_detail.dart';
 import 'package:yogi_application/src/pages/event_detail.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
@@ -81,8 +83,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: widget.savedEmail != null && widget.savedPassword != null
-          ? AppRoutes.changeProfile
-          : AppRoutes.changeProfile,
+          ? AppRoutes.homepage
+          : AppRoutes.homepage,
       routes: {
         AppRoutes.homepage: (context) => HomePage(
             savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
@@ -101,8 +103,14 @@ class _MyAppState extends State<MyApp> {
         AppRoutes.Profile: (context) => ProfilePage(
             isDarkMode: _themeMode == ThemeMode.dark,
             onThemeChanged: _toggleTheme),
-        AppRoutes.activities: (context) => activities(),
-        AppRoutes.eventdetail: (context) => eventDetail(
+        AppRoutes.activities: (context) => Activities(),
+        AppRoutes.eventDetail: (context) => EventDetail(
+              title: 'Event Title',
+              caption: 'Event Caption',
+              subtitle: 'Event Subtitle',
+            ),
+        AppRoutes.blog: (context) => Blog(),
+        AppRoutes.blogDetail: (context) => BlogDetail(
               title: 'Event Title',
               caption: 'Event Caption',
               subtitle: 'Event Subtitle',

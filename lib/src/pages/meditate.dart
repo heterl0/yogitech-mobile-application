@@ -7,12 +7,6 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'dart:math';
 
-void main() {
-  runApp(MaterialApp(
-    home: Meditate(),
-  ));
-}
-
 class Meditate extends StatefulWidget {
   @override
   _MeditateState createState() => _MeditateState();
