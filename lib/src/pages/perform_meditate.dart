@@ -9,13 +9,13 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
 
 void main() {
-  runApp(PerformMeditate());
+  runApp(const performMeditate());
 }
 
-class PerformMeditate extends StatelessWidget {
+class performMeditate extends StatelessWidget {
   final Duration selectedDuration;
 
-  PerformMeditate(
+  const performMeditate(
       {Key? key, this.selectedDuration = const Duration(minutes: 5)})
       : super(key: key);
 

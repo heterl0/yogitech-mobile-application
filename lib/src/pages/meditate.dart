@@ -210,7 +210,7 @@ class _MeditateState extends State<Meditate> {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  PerformMeditate(selectedDuration: _selectedDuration),
+                  performMeditate(selectedDuration: _selectedDuration),
             ),
           );
         },

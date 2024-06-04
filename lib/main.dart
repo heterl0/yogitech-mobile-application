@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:yogi_application/src/features/api_service.dart';
+import 'package:yogi_application/src/pages/activities.dart';
+import 'package:yogi_application/src/pages/event_detail.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/forgot_password.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
@@ -75,12 +77,18 @@ class _MyAppState extends State<MyApp> {
         AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
         AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
         AppRoutes.meditate: (context) => Meditate(),
-        AppRoutes.performMeditate: (context) => PerformMeditate(),
+        AppRoutes.performMeditate: (context) => performMeditate(),
         AppRoutes.streak: (context) => Streak(),
-        AppRoutes.exercisedetail: (context) => ExerciseDetail(),
+        AppRoutes.exercisedetail: (context) => exerciseDetail(),
         AppRoutes.result: (context) => Result(),
         AppRoutes.subscription: (context) => Subscription(),
         AppRoutes.Profile: (context) => ProfilePage(),
+        AppRoutes.activities: (context) => activities(),
+        AppRoutes.eventdetail: (context) => eventDetail(
+              title: 'Event Title',
+              caption: 'Event Caption',
+              subtitle: 'Event Subtitle',
+            ),
       },
       theme: lightTheme, // Apply the light theme
       darkTheme: darkTheme, // Apply the dark theme
