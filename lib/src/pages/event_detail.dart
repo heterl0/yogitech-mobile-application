@@ -3,12 +3,17 @@ import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 
-class eventDetail extends StatelessWidget {
+class EventDetail extends StatelessWidget {
   final String title;
   final String caption;
   final String subtitle;
 
-  const eventDetail({Key? key, required this.title, required this.caption, required this.subtitle}) : super(key: key);
+  const EventDetail(
+      {Key? key,
+      required this.title,
+      required this.caption,
+      required this.subtitle})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -73,7 +78,7 @@ class eventDetail extends StatelessWidget {
       onPressed: () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => activities()),
+          MaterialPageRoute(builder: (context) => Activities()),
         );
       },
     );

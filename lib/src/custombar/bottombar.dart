@@ -28,11 +28,11 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
               buildNavItem(
                   context, Icons.grid_view, 'Home', AppRoutes.homepage),
               buildNavItem(
-                  context, Icons.newspaper_outlined, 'Blog', AppRoutes.login),
-              buildNavItem(
-                  context, Icons.directions_run, 'Activities', '/activities'),
-              buildNavItem(
-                  context, Icons.self_improvement, 'Meditate', '/meditate'),
+                  context, Icons.newspaper_outlined, 'Blog', AppRoutes.blog),
+              buildNavItem(context, Icons.directions_run, 'Activities',
+                  AppRoutes.activities),
+              buildNavItem(context, Icons.self_improvement, 'Meditate',
+                  AppRoutes.meditate),
               buildNavItem(context, Icons.account_circle_outlined, 'Profile',
                   AppRoutes.Profile),
             ],

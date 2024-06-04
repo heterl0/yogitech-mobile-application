@@ -82,8 +82,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: widget.savedEmail != null && widget.savedPassword != null
-          ? AppRoutes.blog
-          : AppRoutes.blog,
+          ? AppRoutes.homepage
+          : AppRoutes.homepage,
       routes: {
         AppRoutes.homepage: (context) => HomePage(
             savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
@@ -102,8 +102,8 @@ class _MyAppState extends State<MyApp> {
         AppRoutes.Profile: (context) => ProfilePage(
             isDarkMode: _themeMode == ThemeMode.dark,
             onThemeChanged: _toggleTheme),
-        AppRoutes.activities: (context) => activities(),
-        AppRoutes.eventdetail: (context) => eventDetail(
+        AppRoutes.activities: (context) => Activities(),
+        AppRoutes.eventdetail: (context) => EventDetail(
               title: 'Event Title',
               caption: 'Event Caption',
               subtitle: 'Event Subtitle',

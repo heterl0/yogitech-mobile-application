@@ -12,34 +12,31 @@ class Blog extends StatefulWidget {
 }
 
 class _BlogState extends State<Blog> {
-  // Biến trạng thái để lưu trữ nội dung hiện tại
   bool _showRankContent = true;
-  bool _isSearching = false;
-  TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0A141C),
-      ),
-      home: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: <Widget>[
-            _buildTopRoundedContainer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: Stack(
-                children: <Widget>[
-                  _buildTitleText(context),
-                  _buildBody(),
-                ],
-              ),
+    return Scaffold(
+      body: _buildBody(context),
+      bottomNavigationBar: CustomBottomBar(),
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: const BoxDecoration(color: Color(0xFF0A141C)),
+      child: Stack(
+        children: [
+          _buildTopRoundedContainer(),
+          _buildTitleText(context),
+          Positioned.fill(
+            child: SingleChildScrollView(
+              child: _buildBLogMainContent(),
             ),
-          ],
-        ),
-        bottomNavigationBar: CustomBottomBar(),
+          ),
+        ],
       ),
     );
   }
@@ -73,19 +70,25 @@ class _BlogState extends State<Blog> {
           child: Text(
             'Blog',
             textAlign: TextAlign.center,
-            style: h2.copyWith(color: active),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 26,
+              fontFamily: 'Readex Pro',
+              fontWeight: FontWeight.w800,
+              height: 1.2,
+            ),
           ),
         ),
         Positioned(
-          right: 0,
-          top: 100,
-          child: _buildSearchButton(context),
+          right: 15,
+          top: 92,
+          child: _buildCloseButton(context),
         ),
       ],
     );
   }
 
-  Widget _buildSearchButton(BuildContext context) {
+  Widget _buildCloseButton(BuildContext context) {
     return IconButton(
       icon: Image.asset(
         'assets/icons/search.png',
@@ -99,14 +102,14 @@ class _BlogState extends State<Blog> {
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBLogMainContent() {
     return Container(
       width: double.infinity,
       padding:
-          const EdgeInsets.only(top: 168.0), // Adjust the top padding as needed
+          const EdgeInsets.only(top: 170.0), // Adjust the top padding as needed
       child: GridView.builder(
         padding: const EdgeInsets.symmetric(
-            horizontal: 4.0), // Add horizontal padding if needed
+            horizontal: 16.0), // Add horizontal padding if needed
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(), // Enable scrolling
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -122,6 +125,9 @@ class _BlogState extends State<Blog> {
           final subtitle = '${5 - index} days left';
 
           return GestureDetector(
+            onTap: () {
+              // Implement navigation to detail page if needed
+            },
             child: CustomCard(
               title: title,
               caption: caption,

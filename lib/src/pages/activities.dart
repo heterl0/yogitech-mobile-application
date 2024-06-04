@@ -5,27 +5,20 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 
-class activities extends StatefulWidget {
-  const activities({super.key});
-
+class Activities extends StatefulWidget {
   @override
-  _ActivitiesState createState() => _ActivitiesState();
+  State<Activities> createState() => _ActivitiesState();
 }
 
-class _ActivitiesState extends State<activities> {
+class _ActivitiesState extends State<Activities> {
   // Biến trạng thái để lưu trữ nội dung hiện tại
   bool _showRankContent = true;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0A141C),
-      ),
-      home: Scaffold(
-        body: _buildBody(context),
-        bottomNavigationBar: CustomBottomBar(),
-      ),
+    return Scaffold(
+      body: _buildBody(context),
+      bottomNavigationBar: CustomBottomBar(),
     );
   }
 
@@ -336,47 +329,48 @@ class _ActivitiesState extends State<activities> {
   }
 
   Widget _buildEventMainContent() {
-  return Container(
-    width: double.infinity,
-    padding: const EdgeInsets.only(top: 0.0), // Adjust the top padding as needed
-    child: GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0), // Add horizontal padding if needed
-      shrinkWrap: true,
-      physics: const BouncingScrollPhysics(), // Enable scrolling
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // 2 columns
-        crossAxisSpacing: 8.0,
-        mainAxisSpacing: 8.0,
-        childAspectRatio: 3 / 2, // Aspect ratio of each card
-      ),
-      itemCount: 6, // Number of cards
-      itemBuilder: (context, index) {
-        final title = 'Event ${index + 1}';
-        final caption = 'Caption ${index + 1}';
-        final subtitle = '${5 - index} days left';
+    return Container(
+      width: double.infinity,
+      padding:
+          const EdgeInsets.only(top: 0.0), // Adjust the top padding as needed
+      child: GridView.builder(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 4.0), // Add horizontal padding if needed
+        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(), // Enable scrolling
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // 2 columns
+          crossAxisSpacing: 8.0,
+          mainAxisSpacing: 8.0,
+          childAspectRatio: 3 / 2, // Aspect ratio of each card
+        ),
+        itemCount: 6, // Number of cards
+        itemBuilder: (context, index) {
+          final title = 'Event ${index + 1}';
+          final caption = 'Caption ${index + 1}';
+          final subtitle = '${5 - index} days left';
 
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => eventDetail(
-                  title: title,
-                  caption: caption,
-                  subtitle: subtitle,
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EventDetail(
+                    title: title,
+                    caption: caption,
+                    subtitle: subtitle,
+                  ),
                 ),
-              ),
-            );
-          },
-          child: CustomCard(
-            title: title,
-            caption: caption,
-            subtitle: subtitle,
-          ),
-        );
-      },
-    ),
-  );
-}
-
+              );
+            },
+            child: CustomCard(
+              title: title,
+              caption: caption,
+              subtitle: subtitle,
+            ),
+          );
+        },
+      ),
+    );
+  }
 }
