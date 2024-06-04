@@ -3,7 +3,12 @@ import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 
-class CustomBottomBar extends StatelessWidget {
+class CustomBottomBar extends StatefulWidget {
+  @override
+  _CustomBottomBarState createState() => _CustomBottomBarState();
+}
+
+class _CustomBottomBarState extends State<CustomBottomBar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -37,7 +42,7 @@ class CustomBottomBar extends StatelessWidget {
             InkWell(
               onTap: () {
                 // Xử lý sự kiện khi nhấn vào nút Activities
-                Navigator.pushNamed(context, '/activities');
+                Navigator.pushNamed(context, AppRoutes.paymentHistory);
               },
               borderRadius: BorderRadius.circular(44.0),
               child: buildNavItem(Icons.notifications, 'Activities'),
@@ -45,7 +50,7 @@ class CustomBottomBar extends StatelessWidget {
             InkWell(
               onTap: () {
                 // Xử lý sự kiện khi nhấn vào nút Metitate
-                Navigator.pushNamed(context, '/metitate');
+                Navigator.pushNamed(context, AppRoutes.preLaunchSurvey);
               },
               borderRadius: BorderRadius.circular(44.0),
               child: buildNavItem(Icons.account_circle, 'Metitate'),

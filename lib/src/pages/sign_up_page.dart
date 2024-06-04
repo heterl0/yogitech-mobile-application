@@ -12,7 +12,7 @@ class SignUp extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
-  final ApiService apiService = ApiService('http://127.0.0.1:8000');
+  final ApiService apiService = ApiService('https://api.yogitech.me');
 
   @override
   Widget build(BuildContext context) {
