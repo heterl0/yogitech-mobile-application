@@ -5,11 +5,12 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:dio/dio.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final ApiService apiService = ApiService('http://10.66.172.236:8000');
+  final ApiService apiService = ApiService('https://api.yogitech.me');
 
   @override
   Widget build(BuildContext context) {
@@ -156,13 +157,10 @@ class LoginPage extends StatelessWidget {
   }
 
   Future<void> _handleLogin(BuildContext context) async {
-    // take value
     String enteredEmail = emailController.text;
     String enteredPassword = passwordController.text;
 
-    // empty or not
     if (enteredEmail.isEmpty || enteredPassword.isEmpty) {
-      // error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Please fill in both Email and Password fields'),
@@ -174,13 +172,15 @@ class LoginPage extends StatelessWidget {
     try {
       final response = await apiService.login(enteredEmail, enteredPassword);
 
-      // Kiểm tra phản hồi từ API
+      print('Login Response: $response'); // In ra phản hồi từ server
+
+      final dataResponse =
+          await apiService.getData('justingboy2002@gmail.com', 'd0947478477');
+      print('Data Response: $dataResponse'); // In ra phản hồi từ server
       if (response['status'] == 'success') {
-        // Lưu thông tin đăng nhập và chuyển đến trang chủ
         await saveLoginInfo(enteredEmail, enteredPassword);
         Navigator.pushReplacementNamed(context, AppRoutes.homepage);
       } else {
-        // Nếu đăng nhập không thành công, hiển thị thông báo lỗi
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(response['message'] ?? 'Invalid email or password'),
@@ -188,7 +188,6 @@ class LoginPage extends StatelessWidget {
         );
       }
     } catch (e) {
-      // Nếu có lỗi xảy ra khi gọi API, hiển thị thông báo lỗi
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(

@@ -1,8 +1,8 @@
-import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'dart:io';
 
 class ApiService {
   final String baseUrl;
@@ -11,50 +11,39 @@ class ApiService {
 
   var dio = Dio();
 
-  // Future<dynamic> login(String email, String password) async {
-  //   var account;
-  //   var response = await dio.post(
-  //     Uri.parse('${baseUrl}/api/v1/auth/login/'),
-  //     headers: {'Content-Type': 'application/json'},
-  //     body: jsonEncode({'email': email, 'password': password}),
-  //   );
-
-  //   if (response.statusCode == 200) {
-  //     return jsonDecode(response.body);
-  //   } else {
-  //     throw Exception('Failed to log in');
-  //   }
-  // }
   Future<dynamic> login(String email, String password) async {
-    var dio = Dio();
+    Dio dio = Dio();
+    dio.options.headers['Content-Type'] = 'application/json';
+
     try {
-      final response = await dio.post(
-        'http://192.168.10.121:8000/api/v1/auth/login/', // Thay bằng endpoint API của bạn
+      var response = await dio.post(
+        '${baseUrl}/api/v1/auth/login/',
+        data: jsonEncode(
+            {'email': 'justingboy2002@gmail.com', 'password': 'd0947478477'}),
+      );
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('Failed to log in');
+      }
+    } catch (e) {
+      throw Exception('Failed to log in: $e');
+    }
+  }
+
+  Future<dynamic> getData(String email, String password) async {
+    try {
+      var response = await dio.post(
+        '$baseUrl/api/v1/auth/login/',
         data: {
           'email': email,
           'password': password,
         },
       );
-
-      if (response.statusCode == 200) {
-        // Xử lý phản hồi khi đăng nhập thành công
-        print('Đăng nhập thành công!');
-        print('Email: ${response.data['email']}');
-        print('Password: ${response.data['password']}');
-      } else {
-        // Xử lý khi đăng nhập không thành công
-        print('Đăng nhập thất bại: ${response.statusCode}');
-      }
-    } on DioError catch (e) {
-      if (e.response != null) {
-        // Xử lý lỗi khi nhận được phản hồi từ máy chủ
-        print('DioError: ${e.response?.statusCode}');
-        print('DioError: ${e.response?.data}');
-      } else {
-        // Xử lý lỗi khi không nhận được phản hồi từ máy chủ
-        print('Lỗi khi gửi yêu cầu!');
-        print(e.message);
-      }
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to get data: $e');
     }
   }
 

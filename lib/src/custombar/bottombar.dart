@@ -3,7 +3,12 @@ import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 
-class CustomBottomBar extends StatelessWidget {
+class CustomBottomBar extends StatefulWidget {
+  @override
+  _CustomBottomBarState createState() => _CustomBottomBarState();
+}
+
+class _CustomBottomBarState extends State<CustomBottomBar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
