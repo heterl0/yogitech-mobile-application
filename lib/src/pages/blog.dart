@@ -3,17 +3,16 @@ import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/card.dart';
+import 'package:yogi_application/src/pages/blog_detail.dart';
 
 class Blog extends StatefulWidget {
   const Blog({super.key});
 
   @override
-  _BlogState createState() => _BlogState();
+  BlogState createState() => BlogState();
 }
 
-class _BlogState extends State<Blog> {
-  bool _showRankContent = true;
-
+class BlogState extends State<Blog> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,6 +60,8 @@ class _BlogState extends State<Blog> {
   }
 
   Widget _buildTitleText(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Stack(
       children: <Widget>[
         Positioned(
@@ -70,31 +71,25 @@ class _BlogState extends State<Blog> {
           child: Text(
             'Blog',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 26,
-              fontFamily: 'Readex Pro',
-              fontWeight: FontWeight.w800,
-              height: 1.2,
-            ),
+            style: h2.copyWith(color: theme.colorScheme.onBackground),
           ),
         ),
         Positioned(
           right: 15,
           top: 92,
-          child: _buildCloseButton(context),
+          child: _buildSearchButton(context),
         ),
       ],
     );
   }
 
-  Widget _buildCloseButton(BuildContext context) {
+  Widget _buildSearchButton(BuildContext context) {
     return IconButton(
       icon: Image.asset(
         'assets/icons/search.png',
         color: Colors.white.withOpacity(1),
-        width: 30,
-        height: 30,
+        width: 40,
+        height: 40,
       ),
       onPressed: () {
         Navigator.pop(context);
@@ -126,7 +121,18 @@ class _BlogState extends State<Blog> {
 
           return GestureDetector(
             onTap: () {
-              // Implement navigation to detail page if needed
+              // Navigate to blog detail page
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BlogDetail(
+                    // Replace with your detail page class name
+                    title: title,
+                    caption: caption,
+                    subtitle: subtitle,
+                  ),
+                ),
+              );
             },
             child: CustomCard(
               title: title,

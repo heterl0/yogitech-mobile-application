@@ -3,6 +3,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/pages/blog.dart';
+import 'package:yogi_application/src/pages/blog_detail.dart';
 import 'package:yogi_application/src/pages/event_detail.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
@@ -103,12 +104,17 @@ class _MyAppState extends State<MyApp> {
             isDarkMode: _themeMode == ThemeMode.dark,
             onThemeChanged: _toggleTheme),
         AppRoutes.activities: (context) => Activities(),
-        AppRoutes.eventdetail: (context) => EventDetail(
+        AppRoutes.eventDetail: (context) => EventDetail(
               title: 'Event Title',
               caption: 'Event Caption',
               subtitle: 'Event Subtitle',
             ),
         AppRoutes.blog: (context) => Blog(),
+        AppRoutes.blogDetail: (context) => BlogDetail(
+              title: 'Event Title',
+              caption: 'Event Caption',
+              subtitle: 'Event Subtitle',
+            ),
       },
       onGenerateRoute: (settings) {
         if (settings.name == AppRoutes.settings) {
