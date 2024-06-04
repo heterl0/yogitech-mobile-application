@@ -5,6 +5,7 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/pages/personalized_exercise.dart';
 import 'package:yogi_application/src/pages/settings.dart';
 import 'package:yogi_application/src/pages/friendlist.dart';
+import 'package:yogi_application/src/pages/change_BMI.dart';
 
 class ProfilePage extends StatefulWidget {
   final bool isDarkMode;
@@ -198,6 +199,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           value: '18.5', // Replace with API data
                           valueColor: theme.colorScheme.onPrimary,
                           isTitleFirst: true,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChangeBMIPage(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),

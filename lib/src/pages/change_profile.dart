@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
+import 'package:yogi_application/src/widgets/dropdown_field.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:yogi_application/src/pages/change_BMI.dart';
 
 class ChangeProfilePage extends StatefulWidget {
   const ChangeProfilePage({super.key});
@@ -26,17 +27,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final inputDecoration = InputDecoration(
-      filled: true,
-      fillColor: Colors.white.withOpacity(0),
-      hintStyle: TextStyle(
-        color: Color(0xFF8D8E99),
-      ),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(44.0),
-        borderSide: BorderSide(color: Color(0xFF8D8E99)),
-      ),
-    );
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
@@ -120,25 +110,29 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   },
                 ),
                 SizedBox(height: 16),
-                Text('Username', style: h3.copyWith(color: active)),
-                SizedBox(height: 16.0),
+                Text('Username',
+                    style: h3.copyWith(color: theme.colorScheme.onPrimary)),
+                SizedBox(height: 8.0),
                 BoxInputField(
                   controller: userName,
                   placeholder: 'User name',
                 ),
                 SizedBox(height: 16.0),
-                Text('Phone', style: h3.copyWith(color: active)),
-                SizedBox(height: 16.0),
+                Text('Phone',
+                    style: h3.copyWith(color: theme.colorScheme.onPrimary)),
+                SizedBox(height: 8.0),
                 BoxInputField(
                   controller: phone,
                   placeholder: 'Phone number',
                   keyboardType: TextInputType.phone,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   regExp: phoneRegExp, // Đảm bảo phoneRegExp được định nghĩa
+                  errorText: "Invalid phone number",
                 ),
                 SizedBox(height: 16.0),
-                Text('Birthday', style: h3.copyWith(color: active)),
-                SizedBox(height: 16.0),
+                Text('Birthday',
+                    style: h3.copyWith(color: theme.colorScheme.onPrimary)),
+                SizedBox(height: 8.0),
                 BoxInputField(
                   controller: birthday,
                   placeholder: 'Select your birthday',
@@ -161,25 +155,35 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   },
                 ),
                 SizedBox(height: 16.0),
-                Text('Gender', style: h3.copyWith(color: active)),
-                SizedBox(height: 16.0),
-                DropdownButtonFormField<String>(
-                  decoration: inputDecoration,
-                  hint: Text('Select gender',
-                      style: TextStyle(color: Color(0xFF8D8E99))),
-                  items: ['Male', 'Female', 'Other']
-                      .map((label) => DropdownMenuItem(
-                            child: Text(label,
-                                style: TextStyle(color: Color(0xFF8D8E99))),
-                            value: label,
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      gender.text = value!;
-                    });
+                Text('Gender',
+                    style: h3.copyWith(color: theme.colorScheme.onPrimary)),
+                SizedBox(height: 8.0),
+                // DropdownButtonFormField<String>(
+                //   decoration: inputDecoration,
+                //   hint: Text('Select gender',
+                //       style: TextStyle(color: Color(0xFF8D8E99))),
+                //   items: ['Male', 'Female', 'Other']
+                //       .map((label) => DropdownMenuItem(
+                //             child: Text(label,
+                //                 style: TextStyle(color: Color(0xFF8D8E99))),
+                //             value: label,
+                //           ))
+                //       .toList(),
+                //   onChanged: (value) {
+                //     setState(() {
+                //       gender.text = value!;
+                //     });
+                //   },
+                // ),
+                CustomDropdownFormField(
+                  controller: gender,
+                  items: ['Male', 'Female', 'Other'],
+                  placeholder: 'Select gender',
+                  onTap: () {
+                    // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết
                   },
                 ),
+
                 SizedBox(height: 16.0),
                 BoxButton(
                   title: 'Change password', // Set the button text
@@ -195,7 +199,12 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   style: ButtonStyleType
                       .Tertiary, // Set the button style (optional)
                   onPressed: () {
-                    // Handle change avatar action here
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChangeBMIPage(),
+                      ),
+                    );
                   },
                 ),
               ],

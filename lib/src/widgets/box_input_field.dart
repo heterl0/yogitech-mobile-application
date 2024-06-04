@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:flutter/services.dart';
-import 'package:yogi_application/src/shared/styles.dart';
 
 class BoxInputField extends StatefulWidget {
   final TextEditingController controller;
@@ -12,6 +10,7 @@ class BoxInputField extends StatefulWidget {
   final bool readOnly;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
+  final String? errorText;
   final RegExp? regExp;
   final VoidCallback? onTap;
 
@@ -27,6 +26,7 @@ class BoxInputField extends StatefulWidget {
     this.inputFormatters,
     this.regExp,
     this.onTap,
+    this.errorText = 'Invalid input',
   }) : super(key: key);
 
   @override
@@ -35,9 +35,25 @@ class BoxInputField extends StatefulWidget {
 
 class _BoxInputFieldState extends State<BoxInputField> {
   bool _showPassword = false;
-  bool _isFocused = false; // Theo dõi trạng thái focus
-  bool _hasError = false; // Theo dõi trạng thái lỗi
+  bool _isFocused = false;
+  bool _hasError = false;
   FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      setState(() {
+        _isFocused = _focusNode.hasFocus;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   OutlineInputBorder get circleBorder => OutlineInputBorder(
         borderRadius: BorderRadius.circular(44),
@@ -57,13 +73,16 @@ class _BoxInputFieldState extends State<BoxInputField> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final errorText = widget.regExp != null &&
+    final errorText = (widget.regExp != null &&
             widget.controller.text.isNotEmpty &&
-            !widget.regExp!.hasMatch(widget.controller.text)
-        ? 'Invalid phone number'
+            !widget.regExp!.hasMatch(widget.controller.text))
+        ? widget.errorText
         : null;
 
+    _hasError = errorText != null;
+
     return TextField(
+      focusNode: _focusNode,
       readOnly: widget.readOnly,
       onTap: widget.onTap,
       controller: widget.controller,
@@ -82,24 +101,32 @@ class _BoxInputFieldState extends State<BoxInputField> {
           fontFamily: 'ReadexPro',
           fontSize: 16,
           fontWeight: FontWeight.w400,
-          color: text,
+          color: theme.colorScheme.onSurface.withOpacity(0.6),
         ),
         contentPadding:
             const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
         filled: true,
         fillColor: theme.colorScheme.background,
         prefixIcon: widget.leading != null
-            ? IconTheme(
-                data: IconThemeData(
-                    color: getBorderColor(context)), // Use function for color
-                child: widget.leading!,
+            ? SizedBox(
+                width: 24,
+                height: 24,
+                child: IconTheme(
+                  data: IconThemeData(color: getBorderColor(context)),
+                  child: widget.leading!,
+                ),
               )
             : null,
         suffixIcon: widget.password
             ? GestureDetector(
-                child: Icon(
-                  _showPassword ? Icons.visibility : Icons.visibility_off,
-                  color: getBorderColor(context), // Use function for color
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: Icon(
+                    _showPassword ? Icons.visibility : Icons.visibility_off,
+                    color: getBorderColor(context),
+                    size: 18, // Chỉnh kích thước của icon
+                  ),
                 ),
                 onTap: () {
                   setState(() {
@@ -108,11 +135,13 @@ class _BoxInputFieldState extends State<BoxInputField> {
                 },
               )
             : (widget.trailing != null
-                ? IconTheme(
-                    data: IconThemeData(
-                        color:
-                            getBorderColor(context)), // Use function for color
-                    child: widget.trailing!,
+                ? SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: IconTheme(
+                      data: IconThemeData(color: getBorderColor(context)),
+                      child: widget.trailing!,
+                    ),
                   )
                 : null),
         border: circleBorder.copyWith(
@@ -128,7 +157,12 @@ class _BoxInputFieldState extends State<BoxInputField> {
           borderSide: BorderSide(color: theme.colorScheme.secondary),
         ),
         errorText: errorText,
-        errorStyle: min_cap.copyWith(color: error),
+        errorStyle: TextStyle(
+          fontFamily: 'ReadexPro',
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          color: theme.colorScheme.error,
+        ),
       ),
     );
   }
