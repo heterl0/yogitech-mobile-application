@@ -19,4 +19,5 @@ class AppRoutes {
   static const String settings = '/settings';
   static const String paymentHistory = '/payment-history';
   static const String changeProfile = '/chang-profile';
+  static const String blog = '/blog';
 }
