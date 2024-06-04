@@ -3,8 +3,22 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/widgets/switch.dart';
+import 'package:flutter/material.dart';
+import 'package:yogi_application/src/shared/styles.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/widgets/switch.dart';
 
 class SettingsPage extends StatelessWidget {
+  final bool isDarkMode;
+  final ValueChanged<bool> onThemeChanged;
+
+  const SettingsPage({
+    Key? key,
+    required this.isDarkMode,
+    required this.onThemeChanged,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -66,8 +80,8 @@ class SettingsPage extends StatelessWidget {
             children: [
               CustomSwitch(
                 title: 'Dark mode',
-                value: true,
-                onChanged: (value) {},
+                value: isDarkMode,
+                onChanged: onThemeChanged,
               ),
               CustomSwitch(
                 title: 'Vietnamese UI?',

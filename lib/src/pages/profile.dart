@@ -4,8 +4,14 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/pages/personalized_exercise.dart';
 import 'package:yogi_application/src/pages/settings.dart';
+import 'package:yogi_application/src/pages/friendlist.dart';
 
 class ProfilePage extends StatefulWidget {
+  final bool isDarkMode;
+  final ValueChanged<bool> onThemeChanged;
+
+  ProfilePage({required this.isDarkMode, required this.onThemeChanged});
+
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
@@ -56,7 +62,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SettingsPage(),
+                            builder: (context) => SettingsPage(
+                              isDarkMode: widget.isDarkMode,
+                              onThemeChanged: widget.onThemeChanged,
+                            ),
                           ),
                         );
                       },
@@ -149,12 +158,28 @@ class _ProfilePageState extends State<ProfilePage> {
                           title: 'Following',
                           value: '6', // Replace with API data
                           valueColor: theme.colorScheme.onPrimary,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => FriendsPage(),
+                              ),
+                            );
+                          },
                         ),
                         const SizedBox(height: 16),
                         StatCard(
                           title: 'Follower',
                           value: '7', // Replace with API data
                           valueColor: theme.colorScheme.onPrimary,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => FriendsPage(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -294,37 +319,42 @@ class StatCard extends StatelessWidget {
   final String value;
   final Color valueColor;
   final bool isTitleFirst;
+  final VoidCallback? onTap;
 
   StatCard({
     required this.title,
     required this.value,
     required this.valueColor,
-    this.isTitleFirst = false, // Mặc định title sẽ đứng trước value
+    this.isTitleFirst = false,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        children: isTitleFirst
-            ? [
-                Text(
-                  title,
-                  style: min_cap.copyWith(color: text),
-                ),
-                const SizedBox(width: 10),
-                Text(value, style: h2.copyWith(color: valueColor)),
-              ]
-            : [
-                Text(value, style: h2.copyWith(color: valueColor)),
-                const SizedBox(width: 10),
-                Text(
-                  title,
-                  style: min_cap.copyWith(color: text),
-                ),
-              ],
+    return GestureDetector(
+      onTap: onTap, // Xử lý sự kiện khi widget được nhấn
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: isTitleFirst
+              ? [
+                  Text(
+                    title,
+                    style: min_cap.copyWith(color: text),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(value, style: h2.copyWith(color: valueColor)),
+                ]
+              : [
+                  Text(value, style: h2.copyWith(color: valueColor)),
+                  const SizedBox(width: 10),
+                  Text(
+                    title,
+                    style: min_cap.copyWith(color: text),
+                  ),
+                ],
+        ),
       ),
     );
   }

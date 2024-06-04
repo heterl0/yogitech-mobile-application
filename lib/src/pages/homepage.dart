@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
@@ -28,7 +27,7 @@ class _HomePageState extends State<HomePage> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(_isSearching ? 100 : 100),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(24.0),
             bottomRight: Radius.circular(24.0),
           ),
@@ -39,7 +38,7 @@ class _HomePageState extends State<HomePage> {
             bottom: _isSearching
                 ? null
                 : PreferredSize(
-                    preferredSize: Size.fromHeight(0),
+                    preferredSize: const Size.fromHeight(0),
                     child: Padding(
                       padding: const EdgeInsets.only(
                         bottom: 12.0,
@@ -61,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                                   child:
                                       Image.asset('assets/images/Emerald.png'),
                                 ),
-                                SizedBox(width: 0),
+                                const SizedBox(width: 0),
                                 Text(
                                   '5',
                                   style: h3.copyWith(
@@ -77,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                                 'Streak',
                                 style: min_cap.copyWith(color: text),
                               ),
-                              Streak_value('7777777'),
+                              const StreakValue('7777777'),
                             ],
                           ),
                           IconButton(
@@ -131,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                               style: h3.copyWith(
                                   color: theme.colorScheme.onPrimary),
                             ),
-                            Spacer(),
+                            const Spacer(),
                             Text(
                               'Warrior 2 pose!',
                               textAlign: TextAlign.left,
@@ -142,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Container(
                         width: 160, // Độ rộng của nửa bên phải
-                        child: Image(
+                        child: const Image(
                             image: AssetImage(
                                 'assets/images/ads_exercise_for_beginner.png')),
                       ),
@@ -158,9 +157,9 @@ class _HomePageState extends State<HomePage> {
                   style: h3.copyWith(color: theme.colorScheme.onPrimary),
                 ),
               ),
-              SingleChildScrollView(
+              const SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
                     // Replace these placeholders with your actual content
@@ -190,9 +189,9 @@ class _HomePageState extends State<HomePage> {
                   style: h3.copyWith(color: theme.colorScheme.onPrimary),
                 ),
               ),
-              SingleChildScrollView(
+              const SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
                     // Similar to the "For You" section, add your content here
@@ -223,7 +222,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildDefaultAppBar() {
-    return Text('');
+    return const Text('');
   }
 
   Widget _buildSearchBar() {
@@ -245,17 +244,17 @@ class _HomePageState extends State<HomePage> {
                 child: TextField(
                   controller: _searchController,
                   autofocus: true,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.1),
                     hintText: 'Search...',
-                    hintStyle: TextStyle(color: Colors.white54),
+                    hintStyle: const TextStyle(color: Colors.white54),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(44.0),
-                      borderSide: BorderSide(color: Color(0xFF8D8E99)),
+                      borderSide: const BorderSide(color: Color(0xFF8D8E99)),
                     ),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20),
                     suffixIcon: IconButton(
                       icon: Image.asset('assets/icons/search.png'),
                       onPressed: () {
@@ -284,10 +283,10 @@ class _HomePageState extends State<HomePage> {
 }
 
 // Phải tạo Widget riêng chỉ nhằm mục đích áp dụng màu Gradient
-class Streak_value extends StatelessWidget {
+class StreakValue extends StatelessWidget {
   final String text;
 
-  const Streak_value(this.text);
+  const StreakValue(this.text, {super.key});
 
   @override
   Widget build(BuildContext context) {

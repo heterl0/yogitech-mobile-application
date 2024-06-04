@@ -16,4 +16,5 @@ class AppRoutes {
   static const String subscription = 'subscription';
   static const String activities = 'activities';
   static const String eventdetail = 'eventdetail';
+  static const String settings = '/settings';
 }

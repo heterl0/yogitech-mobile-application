@@ -21,7 +21,7 @@ import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/pages/profile.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:dio/dio.dart';
-// comment to rollback
+import 'package:yogi_application/src/pages/settings.dart'; // Import SettingsPage
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,11 +52,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.dark; // Initialize with dark theme
 
-  void _toggleTheme() {
+  void _toggleTheme(bool isDarkMode) {
     setState(() {
-      // Toggle theme
-      _themeMode =
-          _themeMode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+      _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
     });
   }
 
@@ -82,7 +80,9 @@ class _MyAppState extends State<MyApp> {
         AppRoutes.exercisedetail: (context) => exerciseDetail(),
         AppRoutes.result: (context) => Result(),
         AppRoutes.subscription: (context) => Subscription(),
-        AppRoutes.Profile: (context) => ProfilePage(),
+        AppRoutes.Profile: (context) => ProfilePage(
+            isDarkMode: _themeMode == ThemeMode.dark,
+            onThemeChanged: _toggleTheme),
         AppRoutes.activities: (context) => activities(),
         AppRoutes.eventdetail: (context) => eventDetail(
               title: 'Event Title',
@@ -90,9 +90,20 @@ class _MyAppState extends State<MyApp> {
               subtitle: 'Event Subtitle',
             ),
       },
+      onGenerateRoute: (settings) {
+        if (settings.name == AppRoutes.settings) {
+          return MaterialPageRoute(
+            builder: (context) => SettingsPage(
+              isDarkMode: _themeMode == ThemeMode.dark,
+              onThemeChanged: _toggleTheme,
+            ),
+          );
+        }
+        return null; // or some default route, like homepage
+      },
       theme: lightTheme, // Apply the light theme
       darkTheme: darkTheme, // Apply the dark theme
-      themeMode: ThemeMode.dark, // Use current theme mode
+      themeMode: _themeMode, // Use current theme mode
     );
   }
 }
