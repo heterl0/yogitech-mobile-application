@@ -54,24 +54,22 @@ final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   primaryColor: primary,
   scaffoldBackgroundColor: lightbg,
-  backgroundColor: lightbg,
   textTheme: TextTheme(
-    bodyText1: TextStyle(color: text),
-    bodyText2: TextStyle(color: text),
+    bodyLarge: TextStyle(color: text),
+    bodyMedium: TextStyle(color: text),
   ),
-  colorScheme: lightColorScheme,
   hintColor: text,
+  colorScheme: lightColorScheme.copyWith(background: lightbg),
 );
 
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
   primaryColor: primary,
   scaffoldBackgroundColor: darkbg,
-  backgroundColor: darkbg,
   textTheme: TextTheme(
-    bodyText1: TextStyle(color: text),
-    bodyText2: TextStyle(color: text),
+    bodyLarge: TextStyle(color: text),
+    bodyMedium: TextStyle(color: text),
   ),
-  colorScheme: darkColorScheme,
   hintColor: text,
+  colorScheme: darkColorScheme.copyWith(background: darkbg),
 );
