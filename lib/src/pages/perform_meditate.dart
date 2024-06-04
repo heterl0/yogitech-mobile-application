@@ -249,43 +249,43 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
                       startTimer();
                     }
                   },
-                  // child: Container(
-                  //   alignment: Alignment.center,
-                  //   width: MediaQuery.of(context).size.width * 0.65,
-                  //   decoration: BoxDecoration(
-                  //     color: _isTimerOn
-                  //         ? Colors.redAccent
-                  //         : const Color(0xfff24FFCC),
-                  //     borderRadius: BorderRadius.circular(12),
-                  //     boxShadow: const [
-                  //       BoxShadow(
-                  //         color: Color(0xFF0D1F29),
-                  //         spreadRadius: 1,
-                  //         blurRadius: 2,
-                  //         offset: Offset(2, 4),
-                  //       ),
-                  //     ],
-                  //   ),
-                  //   padding: const EdgeInsets.symmetric(vertical: 20),
-                  //   child: Text(
-                  //     _isTimerOn ? 'Stop' : 'Start',
-                  //     style: TextStyle(
-                  //       fontSize: 24,
-                  //       color: _isTimerOn ? Colors.white : Colors.black,
-                  //       fontWeight: FontWeight.w500,
-                  //     ),
-                  //   ),
-                  // ),
-                  child: BoxButton(
-                    title: _isTimerOn ? 'Stop' : 'Start',
-                    style: ButtonStyleType.Primary,
-                    state: ButtonState.Enabled,
-                    onPressed: () {
-                      setState(() {
-                        _isTimerOn = !_isTimerOn;
-                      });
-                    },
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: MediaQuery.of(context).size.width * 0.65,
+                    decoration: BoxDecoration(
+                      color: _isTimerOn
+                          ? Colors.redAccent
+                          : const Color(0xfff24FFCC),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0xFF0D1F29),
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                          offset: Offset(2, 4),
+                        ),
+                      ],
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Text(
+                      _isTimerOn ? 'Stop' : 'Start',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: _isTimerOn ? Colors.white : Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
+                  // child: BoxButton(
+                  //   title: _isTimerOn ? 'Stop' : 'Start',
+                  //   style: ButtonStyleType.Primary,
+                  //   state: ButtonState.Enabled,
+                  //   onPressed: () {
+                  //     setState(() {
+                  //       _isTimerOn = !_isTimerOn;
+                  //     });
+                  //   },
+                  // ),
                 ),
               ],
             ),

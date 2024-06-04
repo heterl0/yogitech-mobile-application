@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:yogi_application/src/pages/personalized_exercise.dart';
+import 'package:yogi_application/src/pages/settings.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -15,9 +17,9 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
+        preferredSize: const Size.fromHeight(100),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(24.0),
             bottomRight: Radius.circular(24.0),
           ),
@@ -25,7 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
             automaticallyImplyLeading: false,
             backgroundColor: theme.colorScheme.onSecondary,
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(0),
+              preferredSize: const Size.fromHeight(0),
               child: Padding(
                 padding: const EdgeInsets.only(
                   bottom: 12.0,
@@ -36,15 +38,28 @@ class _ProfilePageState extends State<ProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      icon: Image.asset('assets/icons/share.png'),
+                      icon: Icon(
+                        Icons.ios_share,
+                        color: theme.colorScheme.onBackground,
+                      ),
                       onPressed: () {},
                     ),
                     Text('Profile',
                         style:
                             h2.copyWith(color: theme.colorScheme.onBackground)),
                     IconButton(
-                      icon: Image.asset('assets/icons/settings.png'),
-                      onPressed: () {},
+                      icon: Icon(
+                        Icons.settings,
+                        color: theme.colorScheme.onBackground,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SettingsPage(),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -66,23 +81,23 @@ class _ProfilePageState extends State<ProfilePage> {
                         width: 144, // 2 * radius + 8 (border width) * 2
                         height:
                             144, // Đã sửa lại thành 144 cho khớp tỉ lệ so với Figma
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                         ),
-                        child: CircleAvatar(
+                        child: const CircleAvatar(
                           radius: 78,
                           backgroundImage:
                               AssetImage('assets/images/avatar.png'),
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         'Duy',
                         style: h2.copyWith(color: theme.colorScheme.onPrimary),
                       ),
                     ],
                   ),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             print('Calorie info pressed');
                           },
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         InfoCard(
                           title: 'Social',
                           subtitle: 'Your friends and more',
@@ -104,13 +119,19 @@ class _ProfilePageState extends State<ProfilePage> {
                             print('Social info pressed');
                           },
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         InfoCard(
                           title: 'Personalized Exercise',
                           subtitle: 'Your customize exercise',
                           iconPath: 'assets/icons/tune_setting.png',
                           onTap: () {
-                            print('Personalized Exercise info pressed');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    PersonalizedExercisePage(),
+                              ),
+                            );
                           },
                         ),
                       ],
@@ -118,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               Row(
                 children: [
                   Expanded(
@@ -129,7 +150,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           value: '6', // Replace with API data
                           valueColor: theme.colorScheme.onPrimary,
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         StatCard(
                           title: 'Follower',
                           value: '7', // Replace with API data
@@ -138,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                   ),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       children: [
@@ -148,7 +169,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           valueColor: primary,
                           isTitleFirst: true,
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         StatCard(
                           title: 'BMI',
                           value: '18.5', // Replace with API data
@@ -160,22 +181,22 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               Row(
                 children: [
                   Expanded(
                     child: Container(
-                      margin: EdgeInsets.all(0.0),
+                      margin: const EdgeInsets.all(0.0),
                       height: 160,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFF8D8E99)),
+                        border: Border.all(color: const Color(0xFF8D8E99)),
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 20.0), // Added space for better layout
+              const SizedBox(height: 20.0), // Added space for better layout
               Row(
                 children: [
                   Expanded(
@@ -229,36 +250,39 @@ class InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         border: Border.all(color: stroke),
         borderRadius: BorderRadius.circular(16.0),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
-              ),
-              Text(
-                subtitle,
-                style: min_cap.copyWith(color: text),
-              ),
-            ],
-          ),
-          InkWell(
-            onTap: onTap,
-            child: Image.asset(
+      child: InkWell(
+        onTap: onTap,
+        highlightColor:
+            Colors.transparent, // Đặt màu trong suốt cho highlight color
+        splashColor: Colors.transparent, // Đặt màu trong suốt cho splash color
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
+                ),
+                Text(
+                  subtitle,
+                  style: min_cap.copyWith(color: text),
+                ),
+              ],
+            ),
+            Image.asset(
               iconPath,
               width: 20,
               height: 20,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -282,7 +306,7 @@ class StatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Row(
         children: isTitleFirst
             ? [
@@ -290,12 +314,12 @@ class StatCard extends StatelessWidget {
                   title,
                   style: min_cap.copyWith(color: text),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(value, style: h2.copyWith(color: valueColor)),
               ]
             : [
                 Text(value, style: h2.copyWith(color: valueColor)),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(
                   title,
                   style: min_cap.copyWith(color: text),

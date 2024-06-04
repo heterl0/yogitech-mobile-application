@@ -22,7 +22,7 @@ class _MeditateState extends State<Meditate> {
   bool _isChecked1 = false;
   bool _isChecked2 = false;
   final AudioPlayer _audioPlayer = AudioPlayer();
-  Duration _selectedDuration = Duration();
+  Duration _selectedDuration = const Duration();
 
   @override
   void dispose() {
@@ -67,7 +67,7 @@ class _MeditateState extends State<Meditate> {
         decoration: BoxDecoration(
           color: theme.colorScheme.onSecondary,
           shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(24),
             bottomRight: Radius.circular(24),
           ),
@@ -98,7 +98,7 @@ class _MeditateState extends State<Meditate> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            color: Color.fromARGB(
+            color: const Color.fromARGB(
                 255, 13, 33, 44), // Set background color directly
             child: CupertinoTimerPicker(
               mode: CupertinoTimerPickerMode.ms,
@@ -113,12 +113,12 @@ class _MeditateState extends State<Meditate> {
               },
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             'Sounds',
             style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           _buildCheckboxItem(
             title: 'Sound of rain',
             subtitle: 'Deep sound on rainy days',
@@ -130,7 +130,7 @@ class _MeditateState extends State<Meditate> {
               });
             },
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           _buildCheckboxItem(
             title: 'The sound of the stream flowing',
             subtitle: 'Immersing yourself in the refreshing nature',
@@ -163,13 +163,13 @@ class _MeditateState extends State<Meditate> {
             activeColor: Colors.transparent,
             checkColor: Colors.white,
             side: MaterialStateBorderSide.resolveWith(
-              (states) => BorderSide(
+              (states) => const BorderSide(
                 color: Colors.white, // Outline color
                 width: 2,
               ),
             ),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,13 +192,13 @@ class _MeditateState extends State<Meditate> {
 
     return Positioned(
       right: 27,
-      top: 650,
+      bottom: 20,
       child: ElevatedButton(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.transparent),
           shadowColor: MaterialStateProperty.all(Colors.transparent),
-          padding: MaterialStateProperty.all(EdgeInsets.all(0)),
-          shape: MaterialStateProperty.all(CircleBorder()),
+          padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+          shape: MaterialStateProperty.all(const CircleBorder()),
         ),
         onPressed: () {
           if (_isChecked1) {
