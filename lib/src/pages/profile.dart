@@ -167,7 +167,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             );
                           },
                         ),
-                        const SizedBox(height: 16),
                         StatCard(
                           title: 'Follower',
                           value: '7', // Replace with API data
@@ -194,7 +193,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           valueColor: primary,
                           isTitleFirst: true,
                         ),
-                        const SizedBox(height: 16),
                         StatCard(
                           title: 'BMI',
                           value: '18.5', // Replace with API data
@@ -274,17 +272,17 @@ class InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        border: Border.all(color: stroke),
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        highlightColor:
-            Colors.transparent, // Đặt màu trong suốt cho highlight color
-        splashColor: Colors.transparent, // Đặt màu trong suốt cho splash color
+
+    return InkWell(
+      // InkWell bao toàn bộ container
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16.0), // Bo góc cho InkWell
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: stroke),
+          borderRadius: BorderRadius.circular(16.0),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -332,10 +330,16 @@ class StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return GestureDetector(
-      onTap: onTap, // Xử lý sự kiện khi widget được nhấn
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16.0), // Bo góc cho InkWell
       child: Container(
         padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          borderRadius:
+              BorderRadius.circular(16.0), // Bo góc cho Container (tùy chọn)
+        ),
         child: Row(
           children: isTitleFirst
               ? [

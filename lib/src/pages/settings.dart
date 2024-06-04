@@ -3,11 +3,7 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/widgets/switch.dart';
-import 'package:flutter/material.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
-import 'package:yogi_application/src/widgets/switch.dart';
+import 'package:yogi_application/src/pages/change_profile.dart';
 
 class SettingsPage extends StatelessWidget {
   final bool isDarkMode;
@@ -88,17 +84,25 @@ class SettingsPage extends StatelessWidget {
                 value: false,
                 onChanged: (value) {},
               ),
-              const SettingItem(
+              SettingItem(
                 title: 'Profile',
                 description: 'Your information, avatar, and BMI',
                 icon: Icons.account_circle_outlined, // Biểu tượng cho mục này
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChangeProfilePage(),
+                    ),
+                  );
+                },
               ),
-              const SettingItem(
+              SettingItem(
                 title: 'Reminder',
                 description: 'Reminds you of exercise time',
                 icon: Icons.alarm, // Biểu tượng cho mục này
               ),
-              const SettingItem(
+              SettingItem(
                 title: 'Notifications',
                 description: 'Application notifications',
                 icon: Icons
@@ -116,68 +120,76 @@ class SettingsPage extends StatelessWidget {
 class SettingItem extends StatelessWidget {
   final String? title;
   final String? description;
-  final IconData? icon; // Thêm thuộc tính icon
+  final IconData? icon;
+  final VoidCallback? onTap; // Thêm thuộc tính onTap
 
   const SettingItem({
     Key? key,
     this.title,
     this.description,
-    this.icon, // Thêm icon vào constructor
+    this.icon,
+    this.onTap, // Thêm onTap vào constructor
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Container(
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(8),
-      constraints: const BoxConstraints(
-        minWidth: double.infinity,
-        minHeight: 80,
-      ),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.background,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: stroke),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-            ),
-            child: ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return gradient.createShader(bounds); // Tạo shader từ gradient
-              },
-              child: Icon(
-                icon, // Sử dụng IconData được truyền vào từ bên ngoài
-                color: Colors.white,
-                size:
-                    36, // Màu icon không quan trọng vì sẽ được thay thế bởi gradient
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(title ?? 'N/A',
-                    style:
-                        bd_text.copyWith(color: theme.colorScheme.onPrimary)),
-                const SizedBox(height: 4),
-                Text('Calories: ${description ?? 'N/A'}',
-                    style: min_cap.copyWith(color: text)),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: stroke),
+        ),
+        child: Material(
+            // Thêm Material để đảm bảo hiệu ứng ripple hoạt động đúng
+            color: Colors.transparent,
+            child: InkWell(
+                onTap: onTap,
+                borderRadius:
+                    BorderRadius.circular(16), // Thêm borderRadius cho InkWell
+                child: Padding(
+                  // Dùng Padding thay vì margin & padding riêng biệt
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: ShaderMask(
+                          shaderCallback: (Rect bounds) {
+                            return gradient
+                                .createShader(bounds); // Tạo shader từ gradient
+                          },
+                          child: Icon(
+                            icon, // Sử dụng IconData được truyền vào từ bên ngoài
+                            color: Colors.white,
+                            size:
+                                36, // Màu icon không quan trọng vì sẽ được thay thế bởi gradient
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(title ?? 'N/A',
+                                style: bd_text.copyWith(
+                                    color: theme.colorScheme.onPrimary)),
+                            const SizedBox(height: 4),
+                            Text('Calories: ${description ?? 'N/A'}',
+                                style: min_cap.copyWith(color: text)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ))));
   }
 }

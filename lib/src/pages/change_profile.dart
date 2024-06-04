@@ -4,6 +4,7 @@ import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
+import 'package:yogi_application/src/widgets/box_button.dart';
 
 class ChangeProfilePage extends StatefulWidget {
   const ChangeProfilePage({super.key});
@@ -61,16 +62,26 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.white),
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: theme.colorScheme.onBackground,
+                      ), // Sử dụng icon "back" có sẵn
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.pop(context); // Thêm sự kiện quay lại
                       },
                     ),
-                    Spacer(),
-                    Text('Profile', style: h2.copyWith(color: active)),
-                    Spacer(
-                      flex: 2,
-                    ),
+                    Text('Edit Profile',
+                        style:
+                            h2.copyWith(color: theme.colorScheme.onBackground)),
+                    Opacity(
+                      opacity: 0.0,
+                      child: IgnorePointer(
+                        child: IconButton(
+                          icon: Image.asset('assets/icons/settings.png'),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ) // Ẩn icon đi
                   ],
                 ),
               ),
@@ -92,10 +103,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     height: 160,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.blueGrey,
-                        width: 1.5,
-                      ),
                     ),
                     child: CircleAvatar(
                       radius: 78,
@@ -104,20 +111,13 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   ),
                 ),
                 SizedBox(height: 8),
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      // Handle change avatar action here
-                    },
-                    child: Text(
-                      'Change avatar',
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                BoxButton(
+                  title: 'Change avatar', // Set the button text
+                  style: ButtonStyleType
+                      .Tertiary, // Set the button style (optional)
+                  onPressed: () {
+                    // Handle change avatar action here
+                  },
                 ),
                 SizedBox(height: 16),
                 Text('Username', style: h3.copyWith(color: active)),
@@ -129,30 +129,23 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 SizedBox(height: 16.0),
                 Text('Phone', style: h3.copyWith(color: active)),
                 SizedBox(height: 16.0),
-                TextField(
+                BoxInputField(
                   controller: phone,
+                  placeholder: 'Phone number',
                   keyboardType: TextInputType.phone,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  decoration: inputDecoration.copyWith(
-                    hintText: 'Phone number',
-                    errorText: phone.text.isNotEmpty &&
-                            !phoneRegExp.hasMatch(phone.text)
-                        ? 'Invalid phone number'
-                        : null,
-                  ),
-                  style: TextStyle(color: Colors.white),
+                  regExp: phoneRegExp, // Đảm bảo phoneRegExp được định nghĩa
                 ),
                 SizedBox(height: 16.0),
                 Text('Birthday', style: h3.copyWith(color: active)),
                 SizedBox(height: 16.0),
-                TextField(
+                BoxInputField(
                   controller: birthday,
-                  readOnly: true,
-                  decoration: inputDecoration.copyWith(
-                    hintText: 'Select your birthday',
-                    suffixIcon:
-                        Icon(Icons.calendar_today, color: Color(0xFF8D8E99)),
-                  ),
+                  placeholder: 'Select your birthday',
+                  trailing: Icon(
+                    Icons.calendar_today,
+                  ), // Thay đổi icon
+                  readOnly: true, // Đặt readOnly thành true
                   onTap: () async {
                     DateTime? pickedDate = await showDatePicker(
                       context: context,
@@ -166,7 +159,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                       });
                     }
                   },
-                  style: TextStyle(color: Colors.white),
                 ),
                 SizedBox(height: 16.0),
                 Text('Gender', style: h3.copyWith(color: active)),
@@ -189,36 +181,22 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   },
                 ),
                 SizedBox(height: 16.0),
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      // Handle change password action here
-                    },
-                    child: Text(
-                      'Change password',
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                BoxButton(
+                  title: 'Change password', // Set the button text
+                  style: ButtonStyleType
+                      .Tertiary, // Set the button style (optional)
+                  onPressed: () {
+                    // Handle change avatar action here
+                  },
                 ),
                 SizedBox(height: 0.0),
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      // Handle change BMI action here
-                    },
-                    child: Text(
-                      'Change BMI',
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                BoxButton(
+                  title: 'Change BMI', // Set the button text
+                  style: ButtonStyleType
+                      .Tertiary, // Set the button style (optional)
+                  onPressed: () {
+                    // Handle change avatar action here
+                  },
                 ),
               ],
             ),
