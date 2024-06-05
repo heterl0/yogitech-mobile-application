@@ -34,7 +34,6 @@ class _ActivitiesState extends State<Activities> {
             left: 24,
             right: 24,
             top: 150,
-            bottom: 0,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,7 +107,7 @@ class _ActivitiesState extends State<Activities> {
     return Container(
       width: 185,
       height: 36,
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(0),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
