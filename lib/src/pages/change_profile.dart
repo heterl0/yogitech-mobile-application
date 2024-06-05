@@ -192,7 +192,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 Center(
                   child: TextButton(
                     onPressed: () {
-                      // Handle change password action here
+                      _showChangePasswordDrawer(context);
                     },
                     child: Text(
                       'Change password',
@@ -226,6 +226,72 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         ),
       ),
       bottomNavigationBar: CustomBottomBar(),
+    );
+  }
+
+  void _showChangePasswordDrawer(BuildContext context) {
+    final theme = Theme.of(context);
+    final TextEditingController currentPassword = TextEditingController();
+    final TextEditingController newPassword = TextEditingController();
+    final TextEditingController confirmNewPassword = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: theme.colorScheme.background,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 24.0,
+            right: 24.0,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 24.0,
+            top: 24.0,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Old password', style: h3.copyWith(color: active)),
+              SizedBox(height: 16.0),
+              BoxInputField(
+                controller: currentPassword,
+                password: true,
+              ),
+              SizedBox(height: 16.0),
+              Text('New password', style: h3.copyWith(color: active)),
+              SizedBox(height: 16.0),
+              BoxInputField(
+                controller: newPassword,
+                password: true,
+              ),
+              SizedBox(height: 16.0),
+              Text('Confirm password', style: h3.copyWith(color: active)),
+              SizedBox(height: 16.0),
+              BoxInputField(
+                controller: confirmNewPassword,
+                password: true,
+              ),
+              SizedBox(height: 24.0),
+              ElevatedButton(
+                onPressed: () {
+                  // Handle save password action here
+                },
+                child: Text('Save'),
+                style: ElevatedButton.styleFrom(
+                  // primary: theme.primaryColor,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 32.0, vertical: 12.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24.0),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

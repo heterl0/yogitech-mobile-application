@@ -11,39 +11,43 @@ class ApiService {
 
   var dio = Dio();
 
+  // Future<dynamic> login(String email, String password) async {
+  //   Dio dio = Dio();
+  //   dio.options.headers['Content-Type'] = 'application/json';
+
+  //   try {
+  //     var response = await dio.post(
+  //       '${baseUrl}/api/v1/auth/login/',
+  //       data: jsonEncode(
+  //           {'email': 'justingboy2002@gmail.com', 'password': 'd0947478477'}),
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       return response.data;
+  //     } else {
+  //       throw Exception('Failed to log in');
+  //     }
+  //   } catch (e) {
+  //     throw Exception('Failed to log in: $e');
+  //   }
+  // }
+
   Future<dynamic> login(String email, String password) async {
-    Dio dio = Dio();
-    dio.options.headers['Content-Type'] = 'application/json';
-
     try {
-      var response = await dio.post(
-        '${baseUrl}/api/v1/auth/login/',
-        data: jsonEncode(
-            {'email': 'justingboy2002@gmail.com', 'password': 'd0947478477'}),
+      Response response = await dio.post(
+        'https://api.yogitech.me/api/v1/auth/login/',
+        data: {'email': email, 'password': password},
       );
-
+      print('POST Response: ${response.data}');
       if (response.statusCode == 200) {
-        return response.data;
+        return jsonDecode(response.data);
       } else {
-        throw Exception('Failed to log in');
+        throw Exception('Failed to register');
       }
+      // Trả về dữ liệu phản hồi
     } catch (e) {
-      throw Exception('Failed to log in: $e');
-    }
-  }
-
-  Future<dynamic> getData(String email, String password) async {
-    try {
-      var response = await dio.post(
-        '$baseUrl/api/v1/auth/login/',
-        data: {
-          'email': email,
-          'password': password,
-        },
-      );
-      return response.data;
-    } catch (e) {
-      throw Exception('Failed to get data: $e');
+      print('POST Error: $e');
+      return null; // Trả về null nếu có lỗi
     }
   }
 

@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
+import 'package:yogi_application/main.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/styles.dart';
@@ -159,6 +163,7 @@ class LoginPage extends StatelessWidget {
   Future<void> _handleLogin(BuildContext context) async {
     String enteredEmail = emailController.text;
     String enteredPassword = passwordController.text;
+    final dio = Dio();
 
     if (enteredEmail.isEmpty || enteredPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -170,20 +175,25 @@ class LoginPage extends StatelessWidget {
     }
 
     try {
-      final response = await apiService.login(enteredEmail, enteredPassword);
+      var dio = Dio();
+      Response response = await dio.post(
+        'https://api.yogitech.me/api/v1/auth/login/',
+        data: {'email': enteredEmail, 'password': enteredPassword},
+      );
 
-      print('Login Response: $response'); // In ra phản hồi từ server
-
-      final dataResponse =
-          await apiService.getData('justingboy2002@gmail.com', 'd0947478477');
-      print('Data Response: $dataResponse'); // In ra phản hồi từ server
-      if (response['status'] == 'success') {
+      print(
+          'Login Response: ${response.data}'); // Print the entire response data
+      // Check if response data is not null and contains a 'status' key
+      if (response.data != null && response.data['status'] == 'success') {
         await saveLoginInfo(enteredEmail, enteredPassword);
         Navigator.pushReplacementNamed(context, AppRoutes.homepage);
       } else {
+        // If response data is not null, show the message if available, otherwise show a default message
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(response['message'] ?? 'Invalid email or password'),
+            content:
+                Text(response.data?['message'] ?? 'Invalid email or password'),
           ),
         );
       }

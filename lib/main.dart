@@ -24,10 +24,11 @@ import 'package:yogi_application/src/pages/profile.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:dio/dio.dart';
 import 'package:yogi_application/src/pages/settings.dart'; // Import SettingsPage
+import 'dart:io';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  HttpOverrides.global = MyHttpOverrides();
   await Future.delayed(const Duration(seconds: 10));
   FlutterNativeSplash.remove();
 
@@ -38,6 +39,15 @@ void main() async {
   bool isLoggedIn = savedEmail != null && savedPassword != null;
 
   runApp(MyApp(savedEmail: savedEmail, savedPassword: savedPassword));
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -54,21 +64,21 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.dark; // Initialize with dark theme
 
-  void getData() async {
-    try {
-      var dio = Dio();
-      var response = await dio.post(
-        'https://api.yogitech.me/api/v1/auth/login/',
-        data: {
-          'email': 'justingboy2002@gmail.com', // Thay bằng email của bạn
-          'password': 'd0947478477', // Thay bằng mật khẩu của bạn
-        },
-      );
-      print(response.data); // In ra phản hồi từ server
-    } catch (e) {
-      print(e);
-    }
-  }
+  // void getData() async {
+  //   try {
+  //     var dio = Dio();
+  //     var response = await dio.post(
+  //       'https://api.yogitech.me/api/v1/auth/login/',
+  //       data: {
+  //         'email': 'justingboy2002@gmail.com', // Thay bằng email của bạn
+  //         'password': 'd0947478477', // Thay bằng mật khẩu của bạn
+  //       },
+  //     );
+  //     print(response.data); // In ra phản hồi từ server
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   void _toggleTheme(bool isDarkMode) {
     setState(() {
@@ -81,8 +91,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: widget.savedEmail != null && widget.savedPassword != null
-          ? AppRoutes.changeProfile
-          : AppRoutes.changeProfile,
+          ? AppRoutes.homepage
+          : AppRoutes.login,
       routes: {
         AppRoutes.homepage: (context) => HomePage(
             savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
