@@ -6,6 +6,7 @@ import 'package:yogi_application/src/pages/event_detail.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/forgot_password.dart';
+import 'package:yogi_application/src/pages/friend_profile.dart';
 import 'package:yogi_application/src/pages/payment_history.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
 import 'package:yogi_application/src/pages/meditate.dart';
@@ -64,22 +65,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.dark; // Initialize with dark theme
 
-  // void getData() async {
-  //   try {
-  //     var dio = Dio();
-  //     var response = await dio.post(
-  //       'https://api.yogitech.me/api/v1/auth/login/',
-  //       data: {
-  //         'email': 'justingboy2002@gmail.com', // Thay bằng email của bạn
-  //         'password': 'd0947478477', // Thay bằng mật khẩu của bạn
-  //       },
-  //     );
-  //     print(response.data); // In ra phản hồi từ server
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
   void _toggleTheme(bool isDarkMode) {
     setState(() {
       _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
@@ -91,8 +76,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: widget.savedEmail != null && widget.savedPassword != null
-          ? AppRoutes.homepage
-          : AppRoutes.login,
+          ? AppRoutes.friendProfile
+          : AppRoutes.friendProfile,
       routes: {
         AppRoutes.homepage: (context) => HomePage(
             savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
@@ -117,6 +102,7 @@ class _MyAppState extends State<MyApp> {
               caption: 'Event Caption',
               subtitle: 'Event Subtitle',
             ),
+        AppRoutes.friendProfile: (context) => FriendProfile(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == AppRoutes.settings) {

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 
 class ChangeProfilePage extends StatefulWidget {
@@ -67,7 +68,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                       },
                     ),
                     Spacer(),
-                    Text('Profile', style: h2.copyWith(color: active)),
+                    Text('Edit Profile', style: h2.copyWith(color: active)),
                     Spacer(
                       flex: 2,
                     ),
@@ -274,19 +275,12 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 password: true,
               ),
               SizedBox(height: 24.0),
-              ElevatedButton(
-                onPressed: () {
-                  // Handle save password action here
-                },
-                child: Text('Save'),
-                style: ElevatedButton.styleFrom(
-                  // primary: theme.primaryColor,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 32.0, vertical: 12.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24.0),
-                  ),
-                ),
+              BoxButton(
+                title: 'save',
+                style: ButtonStyleType.Primary,
+                state: ButtonState
+                    .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
+                onPressed: () {},
               ),
             ],
           ),

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/io.dart';
@@ -45,46 +46,13 @@ class LoginPage extends StatelessWidget {
               textAlign: TextAlign.left,
             ),
             SizedBox(height: 16.0),
-            // TextField(
-            //   controller: emailController,
-            //   decoration: InputDecoration(
-            //     filled: true,
-            //     fillColor: Colors.white.withOpacity(0),
-            //     hintText: 'Email',
-            //     hintStyle: TextStyle(color: Color(0xFF8D8E99)),
-            //     border: OutlineInputBorder(
-            //       borderRadius: BorderRadius.circular(44.0),
-            //       borderSide: BorderSide(color: Color(0xFF8D8E99)),
-            //     ),
-            //   ),
-            //   style: TextStyle(color: Colors.white),
-            // ),
+
             BoxInputField(
               controller: emailController,
               placeholder: 'Email',
             ),
 
             SizedBox(height: 16.0),
-            // TextField(
-            //   controller: passwordController,
-            //   decoration: InputDecoration(
-            //     filled: true,
-            //     fillColor: Colors.white.withOpacity(0),
-            //     hintText: 'Password',
-            //     hintStyle: TextStyle(
-            //       color: Color(0xFF8D8E99),
-            //     ),
-            //     border: OutlineInputBorder(
-            //       borderRadius: BorderRadius.circular(44.0),
-            //       borderSide: BorderSide(color: Color(0xFF8D8E99)),
-            //     ),
-            //   ),
-            //   obscureText: true,
-            //   style: TextStyle(color: Colors.white),
-            // ),
-            SizedBox(
-              height: 0.0,
-            ),
 
             BoxInputField(
               controller: passwordController,
@@ -175,17 +143,9 @@ class LoginPage extends StatelessWidget {
     }
 
     try {
-      var dio = Dio();
-      Response response = await dio.post(
-        'https://api.yogitech.me/api/v1/auth/login/',
-        data: {'email': enteredEmail, 'password': enteredPassword},
-      );
+      final response = await apiService.Login(enteredEmail, enteredPassword);
 
-      print(
-          'Login Response: ${response.data}'); // Print the entire response data
-      // Check if response data is not null and contains a 'status' key
-      if (response.data != null && response.data['status'] == 'success') {
-        await saveLoginInfo(enteredEmail, enteredPassword);
+      if (response.statusCode == 200) {
         Navigator.pushReplacementNamed(context, AppRoutes.homepage);
       } else {
         // If response data is not null, show the message if available, otherwise show a default message
