@@ -26,7 +26,8 @@ import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/pages/profile.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:dio/dio.dart';
-import 'package:yogi_application/src/pages/settings.dart'; // Import SettingsPage
+import 'package:yogi_application/src/pages/settings.dart'; 
+import 'package:yogi_application/src/pages/setup_reminder.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -120,6 +121,7 @@ class _MyAppState extends State<MyApp> {
               isDarkMode: _themeMode == ThemeMode.dark,
               onThemeChanged: _toggleTheme,
             ),
+        AppRoutes.setupreminder: (context) => SetupReminderPage(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == AppRoutes.settings) {

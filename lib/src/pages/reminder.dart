@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/widgets/switch.dart';
+import 'package:yogi_application/src/pages/setup_reminder.dart';
 
 class ReminderPage extends StatefulWidget {
   final bool isDarkMode;
@@ -92,19 +94,10 @@ class _ReminderPageState extends State<ReminderPage> {
           margin: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              ListTile(
-                title: Text('Reminder',
-                    style: h3.copyWith(color: theme.colorScheme.onBackground)),
-                trailing: Switch(
-                  value: widget.isDarkMode,
-                  onChanged: widget.onThemeChanged,
-                  activeColor: theme.brightness == Brightness.light
-                      ? elevationLight
-                      : elevationDark,
-                  activeTrackColor: primary,
-                  inactiveThumbColor: theme.scaffoldBackgroundColor,
-                  inactiveTrackColor: text,
-                ),
+              CustomSwitch(
+                title: 'Reminder',
+                value: widget.isDarkMode,
+                onChanged: widget.onThemeChanged,
               ),
               Container(
                 width: 380,
@@ -117,105 +110,63 @@ class _ReminderPageState extends State<ReminderPage> {
                   ),
                 ),
               ),
-              ListTile(
-                title: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GestureDetector(
-                      onTap: () => _selectTime(context),
-                      child: Text(_selectedTime.format(context),
-                          style: h3.copyWith(
-                              color: theme.colorScheme.onBackground)),
-                    ),
-                  ],
-                ),
-                trailing: Switch(
-                  value: _isReminderEnabled,
-                  onChanged: (value) {
-                    setState(() {
-                      _isReminderEnabled = value;
-                    });
-                  },
-                  activeColor: theme.brightness == Brightness.light
-                      ? elevationLight
-                      : elevationDark,
-                  activeTrackColor: primary,
-                  inactiveThumbColor: theme.scaffoldBackgroundColor,
-                  inactiveTrackColor: text,
-                ),
+              CustomSwitch(
+                title: 'Reminder Time',
+                subtitle: _selectedTime.format(context),
+                value: _isReminderEnabled,
+                onChanged: (value) {
+                  setState(() {
+                    _isReminderEnabled = value;
+                  });
+                  if (value) {
+                    _selectTime(context);
+                  }
+                },
               ),
             ],
           ),
         ),
       ),
       bottomNavigationBar: CustomBottomBar(),
-    );
-  }
-}
-
-class SettingItem extends StatelessWidget {
-  final String? title;
-  final String? description;
-  final IconData? icon;
-
-  const SettingItem({
-    Key? key,
-    this.title,
-    this.description,
-    this.icon,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(8),
-      constraints: const BoxConstraints(
-        minWidth: double.infinity,
-        minHeight: 80,
-      ),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.background,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: stroke),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-            ),
-            child: ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return gradient.createShader(bounds);
-              },
-              child: Icon(
-                icon ?? Icons.alarm_on,
-                color: Colors.white,
-                size: 36,
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(title ?? 'N/A',
-                    style:
-                        bd_text.copyWith(color: theme.colorScheme.onPrimary)),
-                const SizedBox(height: 4),
-                Text(description ?? 'N/A',
-                    style: min_cap.copyWith(color: text)),
+      floatingActionButton: FloatingActionButton(
+        onPressed: null, // Thêm tham số onPressed và gán giá trị null
+        backgroundColor: Colors.transparent, // Làm cho nền của FAB trong suốt
+        elevation: 0, // Loại bỏ bóng đổ
+        child: Ink(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+              begin: Alignment(-0.91, -0.41),
+              end: Alignment(0.41, 0.91),
+              colors: [
+                Color(0xFF3BE2B0),
+                Color(0xFF4095D0),
+                Color(0xFF5986CC),
               ],
             ),
           ),
-        ],
+          child: InkWell(
+            onTap: () {
+              // Chuyển đến trang Setup Reminder khi nhấn vào nút dấu cộng
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SetupReminderPage()),
+              );
+            },
+            borderRadius: BorderRadius.circular(
+                30), // Set the border radius to make it circular
+            child: Container(
+              width: 60,
+              height: 60,
+              alignment: Alignment.center,
+              child: Icon(
+                Icons.add,
+                size: 24,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
