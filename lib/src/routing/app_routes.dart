@@ -21,5 +21,7 @@ class AppRoutes {
   static const String changeProfile = '/chang-profile';
   static const String blog = '/blog';
   static const String blogDetail = '/blogdetail';
+  static const String reminder = '/reminder';
+  
 
 }

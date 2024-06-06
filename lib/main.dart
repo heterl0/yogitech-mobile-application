@@ -12,6 +12,7 @@ import 'package:yogi_application/src/pages/payment_history.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
 import 'package:yogi_application/src/pages/meditate.dart';
 import 'package:yogi_application/src/pages/perform_meditate.dart';
+import 'package:yogi_application/src/pages/reminder.dart';
 import 'package:yogi_application/src/pages/result.dart';
 import 'package:yogi_application/src/pages/streak.dart';
 import 'package:yogi_application/src/pages/subscription.dart';
@@ -114,6 +115,10 @@ class _MyAppState extends State<MyApp> {
               title: 'Event Title',
               caption: 'Event Caption',
               subtitle: 'Event Subtitle',
+            ),
+        AppRoutes.reminder: (context) => ReminderPage(
+              isDarkMode: _themeMode == ThemeMode.dark,
+              onThemeChanged: _toggleTheme,
             ),
       },
       onGenerateRoute: (settings) {
