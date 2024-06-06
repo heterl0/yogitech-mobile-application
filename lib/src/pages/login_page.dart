@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
+import 'package:yogi_application/main.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/styles.dart';
@@ -41,46 +46,13 @@ class LoginPage extends StatelessWidget {
               textAlign: TextAlign.left,
             ),
             SizedBox(height: 16.0),
-            // TextField(
-            //   controller: emailController,
-            //   decoration: InputDecoration(
-            //     filled: true,
-            //     fillColor: Colors.white.withOpacity(0),
-            //     hintText: 'Email',
-            //     hintStyle: TextStyle(color: Color(0xFF8D8E99)),
-            //     border: OutlineInputBorder(
-            //       borderRadius: BorderRadius.circular(44.0),
-            //       borderSide: BorderSide(color: Color(0xFF8D8E99)),
-            //     ),
-            //   ),
-            //   style: TextStyle(color: Colors.white),
-            // ),
+
             BoxInputField(
               controller: emailController,
               placeholder: 'Email',
             ),
 
             SizedBox(height: 16.0),
-            // TextField(
-            //   controller: passwordController,
-            //   decoration: InputDecoration(
-            //     filled: true,
-            //     fillColor: Colors.white.withOpacity(0),
-            //     hintText: 'Password',
-            //     hintStyle: TextStyle(
-            //       color: Color(0xFF8D8E99),
-            //     ),
-            //     border: OutlineInputBorder(
-            //       borderRadius: BorderRadius.circular(44.0),
-            //       borderSide: BorderSide(color: Color(0xFF8D8E99)),
-            //     ),
-            //   ),
-            //   obscureText: true,
-            //   style: TextStyle(color: Colors.white),
-            // ),
-            SizedBox(
-              height: 0.0,
-            ),
 
             BoxInputField(
               controller: passwordController,
@@ -159,6 +131,7 @@ class LoginPage extends StatelessWidget {
   Future<void> _handleLogin(BuildContext context) async {
     String enteredEmail = emailController.text;
     String enteredPassword = passwordController.text;
+    final dio = Dio();
 
     if (enteredEmail.isEmpty || enteredPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -170,20 +143,17 @@ class LoginPage extends StatelessWidget {
     }
 
     try {
-      final response = await apiService.login(enteredEmail, enteredPassword);
+      final response = await apiService.Login(enteredEmail, enteredPassword);
 
-      print('Login Response: $response'); // In ra phản hồi từ server
-
-      final dataResponse =
-          await apiService.getData('justingboy2002@gmail.com', 'd0947478477');
-      print('Data Response: $dataResponse'); // In ra phản hồi từ server
-      if (response['status'] == 'success') {
-        await saveLoginInfo(enteredEmail, enteredPassword);
+      if (response.statusCode == 200) {
         Navigator.pushReplacementNamed(context, AppRoutes.homepage);
       } else {
+        // If response data is not null, show the message if available, otherwise show a default message
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(response['message'] ?? 'Invalid email or password'),
+            content:
+                Text(response.data?['message'] ?? 'Invalid email or password'),
           ),
         );
       }
