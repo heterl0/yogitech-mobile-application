@@ -23,10 +23,11 @@ class _ActivitiesState extends State<Activities> {
   }
 
   Widget _buildBody(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: const BoxDecoration(color: Color(0xFF0A141C)),
+      decoration: BoxDecoration(color: theme.colorScheme.background),
       child: Stack(
         children: [
           _buildTopRoundedContainer(),
@@ -56,6 +57,7 @@ class _ActivitiesState extends State<Activities> {
   }
 
   Widget _buildTopRoundedContainer() {
+    final theme = Theme.of(context);
     return Positioned(
       left: 0,
       top: 0,
@@ -63,7 +65,7 @@ class _ActivitiesState extends State<Activities> {
       child: Container(
         height: 155,
         decoration: BoxDecoration(
-          color: Color(0xFF0D1F29),
+          color: theme.colorScheme.onSecondary,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(24),
@@ -221,13 +223,7 @@ class _ActivitiesState extends State<Activities> {
                   child: Text(
                     '2',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'Readex Pro',
-                      fontWeight: FontWeight.w600,
-                      height: 0.06,
-                    ),
+                    style: h3.copyWith(color: theme.colorScheme.onBackground),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -278,13 +274,7 @@ class _ActivitiesState extends State<Activities> {
                   child: Text(
                     '3',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'Readex Pro',
-                      fontWeight: FontWeight.w600,
-                      height: 0.06,
-                    ),
+                    style: h3.copyWith(color: theme.colorScheme.onBackground),
                   ),
                 ),
                 const SizedBox(width: 8),

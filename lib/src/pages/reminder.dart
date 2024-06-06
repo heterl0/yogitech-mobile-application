@@ -3,7 +3,7 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 
-class ReminderPage extends StatelessWidget {
+class ReminderPage extends StatefulWidget {
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChanged;
 
@@ -12,6 +12,26 @@ class ReminderPage extends StatelessWidget {
     required this.isDarkMode,
     required this.onThemeChanged,
   }) : super(key: key);
+
+  @override
+  _ReminderPageState createState() => _ReminderPageState();
+}
+
+class _ReminderPageState extends State<ReminderPage> {
+  TimeOfDay _selectedTime = TimeOfDay(hour: 5, minute: 20);
+  bool _isReminderEnabled = false;
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime,
+    );
+    if (picked != null && picked != _selectedTime) {
+      setState(() {
+        _selectedTime = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +75,7 @@ class ReminderPage extends StatelessWidget {
                       opacity: 0.0,
                       child: IgnorePointer(
                         child: IconButton(
-                          icon: Image.asset('assets/icons/settings.png'),
+                          icon: Icon(Icons.add), // Placeholder icon
                           onPressed: () {},
                         ),
                       ),
@@ -72,36 +92,57 @@ class ReminderPage extends StatelessWidget {
           margin: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ListTile(
+                title: Text('Reminder',
+                    style: h3.copyWith(color: theme.colorScheme.onBackground)),
+                trailing: Switch(
+                  value: widget.isDarkMode,
+                  onChanged: widget.onThemeChanged,
+                  activeColor: theme.brightness == Brightness.light
+                      ? elevationLight
+                      : elevationDark,
+                  activeTrackColor: primary,
+                  inactiveThumbColor: theme.scaffoldBackgroundColor,
+                  inactiveTrackColor: text,
+                ),
+              ),
+              Container(
+                width: 380,
+                decoration: ShapeDecoration(
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      strokeAlign: BorderSide.strokeAlignCenter,
+                      color: Color(0xFF8D8E99),
+                    ),
+                  ),
+                ),
+              ),
+              ListTile(
+                title: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('05:20 AM',
-                        style: h2.copyWith(color: theme.colorScheme.onPrimary)),
-                    IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () {
-                        // Add your code to handle editing time
-                      },
+                    GestureDetector(
+                      onTap: () => _selectTime(context),
+                      child: Text(_selectedTime.format(context),
+                          style: h3.copyWith(
+                              color: theme.colorScheme.onBackground)),
                     ),
                   ],
                 ),
-              ),
-              const SettingItem(
-                title: 'Morning Reminder',
-                description: 'Remind you to exercise in the morning',
-                icon: Icons.alarm_on,
-              ),
-              const SettingItem(
-                title: 'Afternoon Reminder',
-                description: 'Remind you to exercise in the afternoon',
-                icon: Icons.alarm_on,
-              ),
-              const SettingItem(
-                title: 'Evening Reminder',
-                description: 'Remind you to exercise in the evening',
-                icon: Icons.alarm_on,
+                trailing: Switch(
+                  value: _isReminderEnabled,
+                  onChanged: (value) {
+                    setState(() {
+                      _isReminderEnabled = value;
+                    });
+                  },
+                  activeColor: theme.brightness == Brightness.light
+                      ? elevationLight
+                      : elevationDark,
+                  activeTrackColor: primary,
+                  inactiveThumbColor: theme.scaffoldBackgroundColor,
+                  inactiveTrackColor: text,
+                ),
               ),
             ],
           ),
