@@ -18,7 +18,8 @@ class AppRoutes {
   static const String eventDetail = 'eventdetail';
   static const String settings = '/settings';
   static const String paymentHistory = '/payment-history';
-  static const String changeProfile = '/chang-profile';
+  static const String changeProfile = '/change-profile';
+  static const String friendProfile = '/friend-profile';
   static const String blog = '/blog';
   static const String blogDetail = '/blogdetail';
   static const String reminder = '/reminder';

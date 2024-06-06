@@ -11,61 +11,48 @@ class ApiService {
 
   var dio = Dio();
 
-  Future<dynamic> login(String email, String password) async {
-    Dio dio = Dio();
-    dio.options.headers['Content-Type'] = 'application/json';
-
+  Future<dynamic> Login(String email, String password) async {
     try {
-      var response = await dio.post(
-        '${baseUrl}/api/v1/auth/login/',
-        data: jsonEncode(
-            {'email': 'justingboy2002@gmail.com', 'password': 'd0947478477'}),
-      );
+      final api = baseUrl + '/api/v1/auth/login/';
+      final data = {'email': email, 'password': password};
+      Response response = await dio.post(api, data: data);
+      print('POST Response: ${response.data}');
 
       if (response.statusCode == 200) {
-        return response.data;
+        print(response.statusCode);
+        final accessToken = response.data['access'];
+        final refreshToken = response.data['refresh'];
+        await saveTokens(accessToken, refreshToken);
+        print(response.data['access']);
+        print(response.data['refresh']);
       } else {
-        throw Exception('Failed to log in');
+        print('failed');
       }
     } catch (e) {
-      throw Exception('Failed to log in: $e');
+      print(e);
+      return null;
     }
   }
 
-  Future<dynamic> getData(String email, String password) async {
-    try {
-      var response = await dio.post(
-        '$baseUrl/api/v1/auth/login/',
-        data: {
-          'email': email,
-          'password': password,
-        },
-      );
-      return response.data;
-    } catch (e) {
-      throw Exception('Failed to get data: $e');
-    }
-  }
+  // Future<dynamic> register(
+  //     String username, String email, String password, String rePassword) async {
+  //   final response = await http.post(
+  //     Uri.parse('${baseUrl}/api/v1/users/'),
+  //     headers: {'Content-Type': 'application/json'},
+  //     body: jsonEncode({
+  //       'username': username,
+  //       'email': email,
+  //       'password': password,
+  //       're_password': rePassword,
+  //     }),
+  //   );
 
-  Future<dynamic> register(
-      String username, String email, String password, String rePassword) async {
-    final response = await http.post(
-      Uri.parse('${baseUrl}/api/v1/users/'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'username': username,
-        'email': email,
-        'password': password,
-        're_password': rePassword,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Failed to register');
-    }
-  }
+  //   if (response.statusCode == 200) {
+  //     return jsonDecode(response.body);
+  //   } else {
+  //     throw Exception('Failed to register');
+  //   }
+  // }
 }
 
 Future<void> saveLoginInfo(String email, String password) async {
@@ -81,8 +68,14 @@ Future<Map<String, String?>> getLoginInfo() async {
   return {'email': email, 'password': password};
 }
 
-Future<void> clearLoginInfo() async {
+Future<void> clearToken() async {
   final prefs = await SharedPreferences.getInstance();
-  await prefs.remove('email');
-  await prefs.remove('password');
+  await prefs.remove('refreshToken');
+  await prefs.remove('accessToken');
+}
+
+Future<dynamic> saveTokens(String accessToken, String refreshToken) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('refreshToken', refreshToken);
+  await prefs.setString('accessToken', accessToken);
 }

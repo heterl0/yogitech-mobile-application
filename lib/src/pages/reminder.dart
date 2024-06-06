@@ -129,45 +129,46 @@ class _ReminderPageState extends State<ReminderPage> {
       ),
       bottomNavigationBar: CustomBottomBar(),
       floatingActionButton: FloatingActionButton(
-        onPressed: null, // Thêm tham số onPressed và gán giá trị null
-        backgroundColor: Colors.transparent, // Làm cho nền của FAB trong suốt
-        elevation: 0, // Loại bỏ bóng đổ
+        onPressed: () {
+          _showSetupReminderPage(context);
+        },
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         child: Ink(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            gradient: LinearGradient(
-              begin: Alignment(-0.91, -0.41),
-              end: Alignment(0.41, 0.91),
-              colors: [
-                Color(0xFF3BE2B0),
-                Color(0xFF4095D0),
-                Color(0xFF5986CC),
-              ],
-            ),
+            gradient: gradient, // Áp dụng gradient từ app_colors.dart
           ),
-          child: InkWell(
-            onTap: () {
-              // Chuyển đến trang Setup Reminder khi nhấn vào nút dấu cộng
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SetupReminderPage()),
-              );
-            },
-            borderRadius: BorderRadius.circular(
-                30), // Set the border radius to make it circular
-            child: Container(
-              width: 60,
-              height: 60,
-              alignment: Alignment.center,
-              child: Icon(
-                Icons.add,
-                size: 24,
-                color: Colors.white,
-              ),
+          child: Container(
+            width: 60,
+            height: 60,
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.add,
+              size: 24,
+              color: active, // Sử dụng màu sắc active từ app_colors.dart
             ),
           ),
         ),
       ),
+    );
+  }
+
+  void _showSetupReminderPage(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.6, // Chiều cao ban đầu của bottom sheet
+          minChildSize: 0.2, // Chiều cao tối thiểu của bottom sheet
+          maxChildSize: 1.0, // Chiều cao tối đa của bottom sheet
+          expand: false, // Cho phép mở rộng bottom sheet khi kéo
+          builder: (context, scrollController) {
+            return SetupReminderPage(scrollController: scrollController);
+          },
+        );
+      },
     );
   }
 }

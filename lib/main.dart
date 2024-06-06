@@ -8,6 +8,7 @@ import 'package:yogi_application/src/pages/event_detail.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/forgot_password.dart';
+import 'package:yogi_application/src/pages/friend_profile.dart';
 import 'package:yogi_application/src/pages/payment_history.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
 import 'package:yogi_application/src/pages/meditate.dart';
@@ -28,10 +29,11 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:dio/dio.dart';
 import 'package:yogi_application/src/pages/settings.dart'; 
 import 'package:yogi_application/src/pages/setup_reminder.dart';
+import 'dart:io';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  HttpOverrides.global = MyHttpOverrides();
   await Future.delayed(const Duration(seconds: 10));
   FlutterNativeSplash.remove();
 
@@ -42,6 +44,15 @@ void main() async {
   bool isLoggedIn = savedEmail != null && savedPassword != null;
 
   runApp(MyApp(savedEmail: savedEmail, savedPassword: savedPassword));
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -57,22 +68,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.dark; // Initialize with dark theme
-
-  void getData() async {
-    try {
-      var dio = Dio();
-      var response = await dio.post(
-        'https://api.yogitech.me/api/v1/auth/login/',
-        data: {
-          'email': 'justingboy2002@gmail.com', // Thay bằng email của bạn
-          'password': 'd0947478477', // Thay bằng mật khẩu của bạn
-        },
-      );
-      print(response.data); // In ra phản hồi từ server
-    } catch (e) {
-      print(e);
-    }
-  }
 
   void _toggleTheme(bool isDarkMode) {
     setState(() {
@@ -116,10 +111,6 @@ class _MyAppState extends State<MyApp> {
               title: 'Event Title',
               caption: 'Event Caption',
               subtitle: 'Event Subtitle',
-            ),
-        AppRoutes.reminder: (context) => ReminderPage(
-              isDarkMode: _themeMode == ThemeMode.dark,
-              onThemeChanged: _toggleTheme,
             ),
         AppRoutes.setupreminder: (context) => SetupReminderPage(),
       },

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SetupReminderPage extends StatefulWidget {
-  const SetupReminderPage({Key? key}) : super(key: key);
+  final ScrollController? scrollController;
+
+  const SetupReminderPage({Key? key, this.scrollController}) : super(key: key);
 
   @override
   _SetupReminderPageState createState() => _SetupReminderPageState();
