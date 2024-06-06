@@ -4,12 +4,14 @@ import 'package:yogi_application/src/shared/styles.dart'; // Import your text st
 
 class CustomSwitch extends StatefulWidget {
   final String title;
+  final String? subtitle; // Make subtitle nullable
   final bool value;
   final ValueChanged<bool>? onChanged;
 
   const CustomSwitch({
     Key? key,
     required this.title,
+    this.subtitle, // Make subtitle nullable
     required this.value,
     this.onChanged,
   }) : super(key: key);
@@ -32,11 +34,29 @@ class _CustomSwitchState extends State<CustomSwitch> {
     final theme = Theme.of(context);
 
     return ListTile(
-      title: Text(
-        widget.title,
-        style: h3.copyWith(
-          color: text,
-        ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (widget.subtitle != null) // Check if subtitle exists
+            Text(
+              widget.title,
+              style: h2.copyWith(
+                color: theme.colorScheme.onPrimary,
+              ),
+            ),
+          if (widget.subtitle != null) // Check if subtitle exists
+            Text(
+              widget.subtitle!, // Display subtitle if exists
+              style: bd_text.copyWith(color: text), // Style for subtitle
+            ),
+          if (widget.subtitle == null) // Check if subtitle doesn't exist
+            Text(
+              widget.title, // Display title if no subtitle
+              style: h3.copyWith(
+                color: text,
+              ),
+            ),
+        ],
       ),
       trailing: Switch(
         value: _isOn,
