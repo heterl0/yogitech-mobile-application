@@ -59,6 +59,14 @@ class BoxButton extends StatelessWidget {
       return null;
     }
 
+    Color getTextColor() {
+      if (style == ButtonStyleType.Primary) {
+        return active; // Use your defined active color for primary buttons
+      } else {
+        return primary; // Use your defined gradient color for other styles
+      }
+    }
+
     return GestureDetector(
       onTap: isDisabled ? null : onPressed,
       child: Opacity(
@@ -85,7 +93,7 @@ class BoxButton extends StatelessWidget {
                 child: Text(
                   title,
                   style: h3.copyWith(
-                    color: active,
+                    color: getTextColor(),
                   ),
                 ),
               ),

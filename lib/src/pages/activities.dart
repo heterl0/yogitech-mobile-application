@@ -5,35 +5,29 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 
-class activities extends StatefulWidget {
-  const activities({super.key});
-
+class Activities extends StatefulWidget {
   @override
-  _ActivitiesState createState() => _ActivitiesState();
+  State<Activities> createState() => _ActivitiesState();
 }
 
-class _ActivitiesState extends State<activities> {
+class _ActivitiesState extends State<Activities> {
   // Biến trạng thái để lưu trữ nội dung hiện tại
   bool _showRankContent = true;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0A141C),
-      ),
-      home: Scaffold(
-        body: _buildBody(context),
-        bottomNavigationBar: CustomBottomBar(),
-      ),
+    return Scaffold(
+      body: _buildBody(context),
+      bottomNavigationBar: CustomBottomBar(),
     );
   }
 
   Widget _buildBody(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: const BoxDecoration(color: Color(0xFF0A141C)),
+      decoration: BoxDecoration(color: theme.colorScheme.background),
       child: Stack(
         children: [
           _buildTopRoundedContainer(),
@@ -41,7 +35,6 @@ class _ActivitiesState extends State<activities> {
             left: 24,
             right: 24,
             top: 150,
-            bottom: 0,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,6 +57,7 @@ class _ActivitiesState extends State<activities> {
   }
 
   Widget _buildTopRoundedContainer() {
+    final theme = Theme.of(context);
     return Positioned(
       left: 0,
       top: 0,
@@ -71,7 +65,7 @@ class _ActivitiesState extends State<activities> {
       child: Container(
         height: 155,
         decoration: BoxDecoration(
-          color: Color(0xFF0D1F29),
+          color: theme.colorScheme.onSecondary,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(24),
@@ -115,7 +109,7 @@ class _ActivitiesState extends State<activities> {
     return Container(
       width: 185,
       height: 36,
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(0),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -229,13 +223,7 @@ class _ActivitiesState extends State<activities> {
                   child: Text(
                     '2',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'Readex Pro',
-                      fontWeight: FontWeight.w600,
-                      height: 0.06,
-                    ),
+                    style: h3.copyWith(color: theme.colorScheme.onBackground),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -286,13 +274,7 @@ class _ActivitiesState extends State<activities> {
                   child: Text(
                     '3',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'Readex Pro',
-                      fontWeight: FontWeight.w600,
-                      height: 0.06,
-                    ),
+                    style: h3.copyWith(color: theme.colorScheme.onBackground),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -336,47 +318,48 @@ class _ActivitiesState extends State<activities> {
   }
 
   Widget _buildEventMainContent() {
-  return Container(
-    width: double.infinity,
-    padding: const EdgeInsets.only(top: 0.0), // Adjust the top padding as needed
-    child: GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0), // Add horizontal padding if needed
-      shrinkWrap: true,
-      physics: const BouncingScrollPhysics(), // Enable scrolling
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // 2 columns
-        crossAxisSpacing: 8.0,
-        mainAxisSpacing: 8.0,
-        childAspectRatio: 3 / 2, // Aspect ratio of each card
-      ),
-      itemCount: 6, // Number of cards
-      itemBuilder: (context, index) {
-        final title = 'Event ${index + 1}';
-        final caption = 'Caption ${index + 1}';
-        final subtitle = '${5 - index} days left';
+    return Container(
+      width: double.infinity,
+      padding:
+          const EdgeInsets.only(top: 0.0), // Adjust the top padding as needed
+      child: GridView.builder(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 4.0), // Add horizontal padding if needed
+        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(), // Enable scrolling
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // 2 columns
+          crossAxisSpacing: 8.0,
+          mainAxisSpacing: 8.0,
+          childAspectRatio: 3 / 2, // Aspect ratio of each card
+        ),
+        itemCount: 6, // Number of cards
+        itemBuilder: (context, index) {
+          final title = 'Event ${index + 1}';
+          final caption = 'Caption ${index + 1}';
+          final subtitle = '${5 - index} days left';
 
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => eventDetail(
-                  title: title,
-                  caption: caption,
-                  subtitle: subtitle,
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EventDetail(
+                    title: title,
+                    caption: caption,
+                    subtitle: subtitle,
+                  ),
                 ),
-              ),
-            );
-          },
-          child: CustomCard(
-            title: title,
-            caption: caption,
-            subtitle: subtitle,
-          ),
-        );
-      },
-    ),
-  );
-}
-
+              );
+            },
+            child: CustomCard(
+              title: title,
+              caption: caption,
+              subtitle: subtitle,
+            ),
+          );
+        },
+      ),
+    );
+  }
 }

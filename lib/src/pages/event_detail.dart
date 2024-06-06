@@ -2,20 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
+import 'package:yogi_application/src/widgets/box_button.dart';
 
-class eventDetail extends StatelessWidget {
+class EventDetail extends StatelessWidget {
   final String title;
   final String caption;
   final String subtitle;
 
-  const eventDetail({Key? key, required this.title, required this.caption, required this.subtitle}) : super(key: key);
+  const EventDetail(
+      {Key? key,
+      required this.title,
+      required this.caption,
+      required this.subtitle})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0A141C),
-      ),
       home: Scaffold(
+        backgroundColor: theme.colorScheme.background,
         resizeToAvoidBottomInset: false,
         body: _buildBody(context),
       ),
@@ -23,10 +28,14 @@ class eventDetail extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: const BoxDecoration(color: Color(0xFF0A141C)),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.background,
+      ),
       child: Stack(
         children: [
           _buildImage(),
@@ -46,16 +55,16 @@ class eventDetail extends StatelessWidget {
         Positioned(
           left: 0,
           right: 0,
-          top: 110,
+          top: 80,
           child: Text(
             '5 days left',
             textAlign: TextAlign.center,
-            style: h3.copyWith(color: theme.colorScheme.onBackground),
+            style: h3.copyWith(color: active),
           ),
         ),
         Positioned(
           right: 15,
-          top: 100,
+          top: 74,
           child: _buildBackButton(context),
         ),
       ],
@@ -66,14 +75,14 @@ class eventDetail extends StatelessWidget {
     return IconButton(
       icon: Image.asset(
         'assets/icons/close.png',
-        color: Colors.white.withOpacity(1),
+        color: active,
         width: 30,
         height: 30,
       ),
       onPressed: () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => activities()),
+          MaterialPageRoute(builder: (context) => Activities()),
         );
       },
     );
@@ -130,7 +139,7 @@ class eventDetail extends StatelessWidget {
           children: [
             Text(
               'Ringo Island',
-              style: h2.copyWith(color: theme.colorScheme.onBackground),
+              style: h2.copyWith(color: theme.colorScheme.onPrimary),
             ),
           ],
         ),
@@ -246,13 +255,7 @@ class eventDetail extends StatelessWidget {
                   child: Text(
                     '2',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'Readex Pro',
-                      fontWeight: FontWeight.w600,
-                      height: 0.06,
-                    ),
+                    style: h3.copyWith(color: theme.colorScheme.onBackground),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -303,13 +306,7 @@ class eventDetail extends StatelessWidget {
                   child: Text(
                     '3',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'Readex Pro',
-                      fontWeight: FontWeight.w600,
-                      height: 0.06,
-                    ),
+                    style: h3.copyWith(color: theme.colorScheme.onBackground),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -353,6 +350,7 @@ class eventDetail extends StatelessWidget {
   }
 
   Widget _buildNavigationBar(BuildContext context) {
+    final theme = Theme.of(context);
     return Positioned(
       left: 0,
       bottom: 0,
@@ -360,7 +358,7 @@ class eventDetail extends StatelessWidget {
       child: Container(
         height: 100,
         decoration: BoxDecoration(
-          color: Color(0xFF0D1F29),
+          color: theme.colorScheme.onSecondary,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(24),
@@ -377,27 +375,9 @@ class eventDetail extends StatelessWidget {
   }
 
   Widget _buildJoinButton(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      width: 324,
-      height: 48,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      decoration: ShapeDecoration(
-        gradient: LinearGradient(
-          begin: Alignment(0.91, -0.41),
-          end: Alignment(-0.91, 0.41),
-          colors: [Color(0xFF3BE2B0), Color(0xFF4095D0), Color(0xFF5986CC)],
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(44),
-        ),
-      ),
-      child: Center(
-        child: Text(
-          'Join in',
-          style: h3.copyWith(color: theme.colorScheme.onBackground),
-        ),
-      ),
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24),
+      child: BoxButton(style: ButtonStyleType.Primary, title: 'Join in'),
     );
   }
 }

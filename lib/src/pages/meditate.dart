@@ -7,12 +7,6 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'dart:math';
 
-void main() {
-  runApp(MaterialApp(
-    home: Meditate(),
-  ));
-}
-
 class Meditate extends StatefulWidget {
   @override
   _MeditateState createState() => _MeditateState();
@@ -50,7 +44,7 @@ class _MeditateState extends State<Meditate> {
           _buildTopRoundedContainer(),
           _buildTitleText(),
           _buildMainContent(),
-          _buildElevatedButton(),
+          _buildElevatedButton(context),
         ],
       ),
     );
@@ -187,7 +181,7 @@ class _MeditateState extends State<Meditate> {
     );
   }
 
-  Widget _buildElevatedButton() {
+  Widget _buildElevatedButton(BuildContext context) {
     final theme = Theme.of(context);
 
     return Positioned(
@@ -216,8 +210,8 @@ class _MeditateState extends State<Meditate> {
         },
         child: Ink(
           decoration: BoxDecoration(
-            color: primary,
-            borderRadius: BorderRadius.circular(50),
+            shape: BoxShape.circle,
+            gradient: gradient, // Áp dụng gradient từ app_colors.dart
           ),
           child: Container(
             width: 60,

@@ -4,14 +4,18 @@ import 'package:yogi_application/src/shared/styles.dart'; // Import your text st
 
 class CustomSwitch extends StatefulWidget {
   final String title;
+  final String? subtitle; // Make subtitle nullable
   final bool value;
   final ValueChanged<bool>? onChanged;
+  final bool enabled; // Add enabled property
 
   const CustomSwitch({
     Key? key,
     required this.title,
+    this.subtitle, // Make subtitle nullable
     required this.value,
     this.onChanged,
+    this.enabled = true, // Set default value to true
   }) : super(key: key);
 
   @override
@@ -31,31 +35,57 @@ class _CustomSwitchState extends State<CustomSwitch> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return ListTile(
-      title: Text(
-        widget.title,
-        style: h3.copyWith(
-          color: text,
+    return Opacity(
+      opacity: widget.enabled
+          ? 1.0
+          : 0.5, // Set opacity based on widget enabled property
+      child: ListTile(
+        enabled: widget.enabled, // Set ListTile enabled property
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (widget.subtitle != null) // Check if subtitle exists
+              Text(
+                widget.title,
+                style: h2.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                ),
+              ),
+            if (widget.subtitle != null) // Check if subtitle exists
+              Text(
+                widget.subtitle!, // Display subtitle if exists
+                style: bd_text.copyWith(color: text), // Style for subtitle
+              ),
+            if (widget.subtitle == null) // Check if subtitle doesn't exist
+              Text(
+                widget.title, // Display title if no subtitle
+                style: h3.copyWith(
+                  color: text,
+                ),
+              ),
+          ],
         ),
-      ),
-      trailing: Switch(
-        value: _isOn,
-        onChanged: (value) {
-          setState(() {
-            _isOn = value;
-            if (widget.onChanged != null) {
-              widget.onChanged!(value);
-            }
-          });
-        },
-        activeColor: theme.brightness == Brightness.light
-            ? elevationLight
-            : elevationDark,
-        activeTrackColor: primary,
-        inactiveThumbColor: theme.scaffoldBackgroundColor,
-        inactiveTrackColor: text,
-        trackOutlineColor: MaterialStateColor.resolveWith(
-            (states) => theme.scaffoldBackgroundColor),
+        trailing: Switch(
+          value: _isOn,
+          onChanged: widget.enabled // Check if widget is enabled
+              ? (value) {
+                  setState(() {
+                    _isOn = value;
+                    if (widget.onChanged != null) {
+                      widget.onChanged!(value);
+                    }
+                  });
+                }
+              : null, // Set onChanged to null if widget is disabled
+          activeColor: theme.brightness == Brightness.light
+              ? elevationLight
+              : elevationDark,
+          activeTrackColor: primary,
+          inactiveThumbColor: theme.scaffoldBackgroundColor,
+          inactiveTrackColor: text,
+          trackOutlineColor: MaterialStateColor.resolveWith(
+              (states) => theme.scaffoldBackgroundColor),
+        ),
       ),
     );
   }

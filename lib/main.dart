@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/pages/activities.dart';
+import 'package:yogi_application/src/pages/blog.dart';
+import 'package:yogi_application/src/pages/blog_detail.dart';
 import 'package:yogi_application/src/pages/event_detail.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
@@ -11,6 +13,7 @@ import 'package:yogi_application/src/pages/payment_history.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
 import 'package:yogi_application/src/pages/meditate.dart';
 import 'package:yogi_application/src/pages/perform_meditate.dart';
+import 'package:yogi_application/src/pages/reminder.dart';
 import 'package:yogi_application/src/pages/result.dart';
 import 'package:yogi_application/src/pages/streak.dart';
 import 'package:yogi_application/src/pages/subscription.dart';
@@ -76,8 +79,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: widget.savedEmail != null && widget.savedPassword != null
-          ? AppRoutes.friendProfile
-          : AppRoutes.friendProfile,
+          ? AppRoutes.homepage
+          : AppRoutes.homepage,
       routes: {
         AppRoutes.homepage: (context) => HomePage(
             savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
@@ -96,13 +99,18 @@ class _MyAppState extends State<MyApp> {
         AppRoutes.Profile: (context) => ProfilePage(
             isDarkMode: _themeMode == ThemeMode.dark,
             onThemeChanged: _toggleTheme),
-        AppRoutes.activities: (context) => activities(),
-        AppRoutes.eventdetail: (context) => eventDetail(
+        AppRoutes.activities: (context) => Activities(),
+        AppRoutes.eventDetail: (context) => EventDetail(
               title: 'Event Title',
               caption: 'Event Caption',
               subtitle: 'Event Subtitle',
             ),
-        AppRoutes.friendProfile: (context) => FriendProfile(),
+        AppRoutes.blog: (context) => Blog(),
+        AppRoutes.blogDetail: (context) => BlogDetail(
+              title: 'Event Title',
+              caption: 'Event Caption',
+              subtitle: 'Event Subtitle',
+            ),
       },
       onGenerateRoute: (settings) {
         if (settings.name == AppRoutes.settings) {
