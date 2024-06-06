@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/dropdown_field.dart';
@@ -190,7 +191,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   style: ButtonStyleType
                       .Tertiary, // Set the button style (optional)
                   onPressed: () {
-                    // Handle change avatar action here
+                    _showChangePasswordDrawer(
+                        context); // Handle change avatar action here
                   },
                 ),
                 SizedBox(height: 0.0),
@@ -213,6 +215,65 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         ),
       ),
       bottomNavigationBar: CustomBottomBar(),
+    );
+  }
+
+  void _showChangePasswordDrawer(BuildContext context) {
+    final theme = Theme.of(context);
+    final TextEditingController currentPassword = TextEditingController();
+    final TextEditingController newPassword = TextEditingController();
+    final TextEditingController confirmNewPassword = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: theme.colorScheme.background,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 24.0,
+            right: 24.0,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 24.0,
+            top: 24.0,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Old password', style: h3.copyWith(color: active)),
+              SizedBox(height: 16.0),
+              BoxInputField(
+                controller: currentPassword,
+                password: true,
+              ),
+              SizedBox(height: 16.0),
+              Text('New password', style: h3.copyWith(color: active)),
+              SizedBox(height: 16.0),
+              BoxInputField(
+                controller: newPassword,
+                password: true,
+              ),
+              SizedBox(height: 16.0),
+              Text('Confirm password', style: h3.copyWith(color: active)),
+              SizedBox(height: 16.0),
+              BoxInputField(
+                controller: confirmNewPassword,
+                password: true,
+              ),
+              SizedBox(height: 24.0),
+              BoxButton(
+                title: 'save',
+                style: ButtonStyleType.Primary,
+                state: ButtonState
+                    .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
+                onPressed: () {},
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

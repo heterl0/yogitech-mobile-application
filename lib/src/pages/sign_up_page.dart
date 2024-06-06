@@ -197,42 +197,42 @@ class SignUp extends StatelessWidget {
       return;
     }
 
-    try {
-      final response = await apiService.register(
-        enteredUsername,
-        enteredEmail,
-        enteredPassword,
-        enteredConfirmPassword,
-      );
+    // try {
+    //   final response = await apiService.register(
+    //     enteredUsername,
+    //     enteredEmail,
+    //     enteredPassword,
+    //     enteredConfirmPassword,
+    //   );
 
-      if (response['status'] == 'success') {
-        ScaffoldMessenger.of(context)
-            .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Register successfully!'),
-          ),
-        );
-        await saveLoginInfo(enteredEmail, enteredPassword);
-        Navigator.pushReplacementNamed(context, AppRoutes.homepage);
-      } else {
-        ScaffoldMessenger.of(context)
-            .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(response['message'] ?? 'Failed to register'),
-          ),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context)
-          .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error occurs, please try later'),
-        ),
-      );
-      print('Error: $e');
-    }
+    //   if (response['status'] == 'success') {
+    //     ScaffoldMessenger.of(context)
+    //         .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(
+    //         content: Text('Register successfully!'),
+    //       ),
+    //     );
+    //     await saveLoginInfo(enteredEmail, enteredPassword);
+    //     Navigator.pushReplacementNamed(context, AppRoutes.homepage);
+    //   } else {
+    //     ScaffoldMessenger.of(context)
+    //         .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(
+    //         content: Text(response['message'] ?? 'Failed to register'),
+    //       ),
+    //     );
+    //   }
+    // } catch (e) {
+    //   ScaffoldMessenger.of(context)
+    //       .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: Text('Error occurs, please try later'),
+    //     ),
+    //   );
+    //   print('Error: $e');
+    // }
   }
 }
