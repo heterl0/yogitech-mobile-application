@@ -255,13 +255,7 @@ class EventDetail extends StatelessWidget {
                   child: Text(
                     '2',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'Readex Pro',
-                      fontWeight: FontWeight.w600,
-                      height: 0.06,
-                    ),
+                    style: h3.copyWith(color: theme.colorScheme.onBackground),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -312,13 +306,7 @@ class EventDetail extends StatelessWidget {
                   child: Text(
                     '3',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'Readex Pro',
-                      fontWeight: FontWeight.w600,
-                      height: 0.06,
-                    ),
+                    style: h3.copyWith(color: theme.colorScheme.onBackground),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -362,6 +350,7 @@ class EventDetail extends StatelessWidget {
   }
 
   Widget _buildNavigationBar(BuildContext context) {
+    final theme = Theme.of(context);
     return Positioned(
       left: 0,
       bottom: 0,
@@ -369,7 +358,7 @@ class EventDetail extends StatelessWidget {
       child: Container(
         height: 100,
         decoration: BoxDecoration(
-          color: Color(0xFF0D1F29),
+          color: theme.colorScheme.onSecondary,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(24),
