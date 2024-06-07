@@ -23,5 +23,4 @@ class AppRoutes {
   static const String blog = '/blog';
   static const String blogDetail = '/blogdetail';
   static const String reminder = '/reminder';
-  static const String setupreminder = '/setupreminder';
 }

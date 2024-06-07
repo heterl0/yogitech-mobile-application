@@ -27,8 +27,7 @@ import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/pages/profile.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:dio/dio.dart';
-import 'package:yogi_application/src/pages/settings.dart'; 
-import 'package:yogi_application/src/pages/setup_reminder.dart';
+import 'package:yogi_application/src/pages/settings.dart';
 import 'dart:io';
 
 void main() async {
@@ -112,7 +111,10 @@ class _MyAppState extends State<MyApp> {
               caption: 'Event Caption',
               subtitle: 'Event Subtitle',
             ),
-        AppRoutes.setupreminder: (context) => SetupReminderPage(),
+        AppRoutes.reminder: (context) => ReminderPage(
+              isDarkMode: _themeMode == ThemeMode.dark,
+              onThemeChanged: _toggleTheme,
+            ),
       },
       onGenerateRoute: (settings) {
         if (settings.name == AppRoutes.settings) {
