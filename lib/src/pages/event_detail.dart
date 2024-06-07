@@ -16,20 +16,35 @@ class EventDetail extends StatelessWidget {
       required this.caption,
       required this.subtitle})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return MaterialApp(
-      home: Scaffold(
-        appBar: CustomAppBar(
-          isTransparent: true,
-          title: '',
-          postActions: [],
-        ),
-        backgroundColor: theme.colorScheme.background,
-        resizeToAvoidBottomInset: false,
-        body: _buildBody(context),
+
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: title, // Set the title from widget parameter
+        isTransparent: true, // Maintain transparency for background image
+        showBackButton: false, // Disable default back button behavior
+        preActions: [
+          // Add back button to preActions for left placement
+          IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: text, // Assuming 'text' is your desired color
+            ),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => Activities()),
+              );
+            },
+          ),
+        ],
       ),
+      backgroundColor: theme.colorScheme.background,
+      resizeToAvoidBottomInset: false,
+      body: _buildBody(context),
     );
   }
 
@@ -178,7 +193,7 @@ class EventDetail extends StatelessWidget {
         children: [
           Text(
             'Leaderboard',
-            style: h3.copyWith(color: theme.colorScheme.onBackground),
+            style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
         ],
       ),

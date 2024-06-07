@@ -4,7 +4,7 @@ import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 
-class Streak extends StatelessWidget {
+class Calorie extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -12,23 +12,16 @@ class Streak extends StatelessWidget {
       backgroundColor: theme.colorScheme.background,
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
-        title: "Streak",
-        showBackButton: false,
-        postActions: [
-          IconButton(
-            icon: Icon(Icons.close, color: theme.colorScheme.onBackground),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
+        title: "Calorie",
+        showBackButton: true,
+        onBackPressed: () {
+          Navigator.pop(context);
+        },
       ),
       body: _buildMainContent(context),
       bottomNavigationBar: CustomBottomBar(),
     );
   }
-
-
 
   Widget _buildMainContent(BuildContext context) {
     return SingleChildScrollView(
@@ -64,13 +57,13 @@ class Streak extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
+          flex: 1,
+          child: _buildStreakImage(),
+        ),
+        Expanded(
           flex: 2,
           child: _buildStreakText(),
         ),
-        Expanded(
-          flex: 1,
-          child: _buildStreakImage(),
-        )
       ],
     );
   }
@@ -83,7 +76,7 @@ class Streak extends StatelessWidget {
             return gradient.createShader(bounds);
           },
           child: const Text(
-            "256",
+            "12800",
             style: TextStyle(
               color: active,
               fontSize: 60,
@@ -94,7 +87,7 @@ class Streak extends StatelessWidget {
           ),
         ),
         Text(
-          'day streak!',
+          'calories burned',
           textAlign: TextAlign.center,
           style: bd_text.copyWith(color: text),
         ),
@@ -108,7 +101,7 @@ class Streak extends StatelessWidget {
       height: 96,
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/Fire.png'),
+          image: AssetImage('assets/images/Union.png'),
         ),
       ),
     );
@@ -196,44 +189,13 @@ class Streak extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '30 days',
+                    '800 cal',
                     style: h3.copyWith(color: active, height: 1.2),
                   ),
                   Text(
-                    'practiced in month',
+                    'burned in this month',
                     style: min_cap.copyWith(
                       color: active,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        SizedBox(width: 16), // Khoảng cách giữa hai Container
-        Expanded(
-          child: Container(
-            height: 60,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: stroke,
-                )),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Feb 14',
-                    style: h3.copyWith(
-                        color: theme.colorScheme.onPrimary, height: 1.2),
-                  ),
-                  Text(
-                    'begin of the streak',
-                    style: min_cap.copyWith(
-                      color: theme.colorScheme.onBackground,
                     ),
                   ),
                 ],

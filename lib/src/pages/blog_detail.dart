@@ -27,22 +27,19 @@ class _BlogDetailState extends State<BlogDetail> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: theme.colorScheme.background,
-        appBar: CustomAppBar(
-          onBackPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => Blog()),
-            );
-          },
-          postActions: [_buildLikeButton(), _buildDislikeButton()],
-        ),
-        body: _buildBody(context),
-        bottomNavigationBar: CustomBottomBar(),
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      appBar: CustomAppBar(
+        onBackPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => Blog()),
+          );
+        },
+        postActions: [_buildDislikeButton(), _buildLikeButton()],
       ),
+      body: _buildBody(context),
+      bottomNavigationBar: CustomBottomBar(),
     );
   }
 
@@ -68,11 +65,12 @@ class _BlogDetailState extends State<BlogDetail> {
   Widget _buildDislikeButton() {
     final theme = Theme.of(context);
     return IconButton(
-        onPressed: onPressed,
-        icon: Icon(
-          Icons.thumb_down_outlined,
-          color: theme.colorScheme.onBackground,
-        ));
+      icon: Icon(
+        Icons.thumb_down_outlined,
+        color: theme.colorScheme.onBackground,
+      ),
+      onPressed: () {},
+    );
   }
 
   Widget _buildImage() {
@@ -117,8 +115,6 @@ class _BlogDetailState extends State<BlogDetail> {
     return Center(
       child: Container(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               'Ringo Island',
@@ -133,7 +129,8 @@ class _BlogDetailState extends State<BlogDetail> {
   Widget _buildDescription() {
     return Text(
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus',
-      style: min_cap.copyWith(color: active),
+      style: min_cap.copyWith(color: text),
+      textAlign: TextAlign.left,
     );
   }
 }
