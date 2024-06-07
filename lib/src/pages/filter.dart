@@ -12,45 +12,47 @@ class FilterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-        backgroundColor: theme.colorScheme.background,
-        appBar: CustomAppBar(
-          showBackButton: false,
-          title: 'Filter',
-          postActions: [
-            IconButton(
-              icon: Icon(Icons.close, color: theme.colorScheme.onBackground),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Category',
-                    style: h3.copyWith(color: theme.colorScheme.onPrimary)),
-                SizedBox(height: 8.0),
-                CustomDropdownFormField(
-                  controller: category,
-                  items: ['Hip', 'Chest', 'Other'],
-                  placeholder: 'Select category',
-                  onTap: () {
-                    // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết
-                  },
-                ),
-              ],
-            ),
+      backgroundColor: theme.colorScheme.background,
+      appBar: CustomAppBar(
+        showBackButton: false,
+        title: 'Filter',
+        postActions: [
+          IconButton(
+            icon: Icon(Icons.close, color: theme.colorScheme.onBackground),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Category',
+                  style: h3.copyWith(color: theme.colorScheme.onPrimary)),
+              SizedBox(height: 8.0),
+              CustomDropdownFormField(
+                controller: category,
+                items: ['Hip', 'Chest', 'Other'],
+                placeholder: 'Select category',
+                onTap: () {
+                  // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết
+                },
+              ),
+            ],
           ),
         ),
-        bottomNavigationBar: CustomBottomBar(
-          defaultStyle: false,
-          centerWidget: const [
-            BoxButton(title: "Apply", style: ButtonStyleType.Primary)
-          ],
-        ));
+      ),
+      bottomNavigationBar: CustomBottomBar(
+        defaultStyle: false,
+        buttonTitle: "Apply",
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
   }
 }
