@@ -15,7 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var jsonList;
   bool _isSearching = false;
   TextEditingController _searchController = TextEditingController();
 

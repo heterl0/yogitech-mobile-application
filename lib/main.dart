@@ -33,16 +33,23 @@ import 'dart:io';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
+  // Delay cho màn hình splash (chỉ dùng để demo, điều chỉnh tùy ý)
   await Future.delayed(const Duration(seconds: 10));
   FlutterNativeSplash.remove();
+  await checkToken();
+  runApp(const MyApp());
+}
 
-  Map<String, String?> loginInfo = await getLoginInfo();
-  String? savedEmail = loginInfo['email'];
-  String? savedPassword = loginInfo['password'];
+Future<void> checkToken() async {
+  // Lấy token từ SharedPreferences
+  final tokens = await getToken();
+  final accessToken = tokens['access'];
 
-  bool isLoggedIn = savedEmail != null && savedPassword != null;
-
-  runApp(MyApp(savedEmail: savedEmail, savedPassword: savedPassword));
+  if (accessToken != null) {
+    runApp(MyApp(savedEmail: null, savedPassword: null));
+  } else {
+    runApp(const MyApp());
+  }
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -80,7 +87,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: widget.savedEmail != null && widget.savedPassword != null
           ? AppRoutes.homepage
-          : AppRoutes.homepage,
+          : AppRoutes.login,
       routes: {
         AppRoutes.homepage: (context) => HomePage(
             savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
@@ -111,6 +118,7 @@ class _MyAppState extends State<MyApp> {
               caption: 'Event Caption',
               subtitle: 'Event Subtitle',
             ),
+        AppRoutes.friendProfile: (context) => FriendProfile(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == AppRoutes.settings) {
