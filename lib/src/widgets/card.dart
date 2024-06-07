@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/shared/app_colors.dart'; // Giả sử bạn đã có tệp này
-import 'package:yogi_application/src/shared/styles.dart'; // Giả sử bạn đã có tệp này
+import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:yogi_application/src/shared/styles.dart';
 
 class CustomCard extends StatelessWidget {
   final String title;

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/features/api_service.dart';
+import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/pages/personalized_exercise.dart';
@@ -18,6 +20,21 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final ApiService apiService = ApiService('https://api.yogitech.me');
+  Future<void> _logout() async {
+    try {
+      // Xóa token từ SharedPreferences khi người dùng logout
+      await clearToken();
+
+      // Chuyển hướng đến trang đăng nhập và xóa tất cả các route cũ
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          AppRoutes.login, (Route<dynamic> route) => false);
+    } catch (e) {
+      print('Logout error: $e');
+      // Xử lý lỗi khi logout
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -243,6 +260,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: InkWell(
                           onTap: () {
                             // Xử lý sự kiện khi nhấn vào nút "Đăng xuất"
+                            _logout();
                           },
                           borderRadius: BorderRadius.circular(44.0),
                           child: Center(

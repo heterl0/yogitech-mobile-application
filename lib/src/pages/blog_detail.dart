@@ -3,6 +3,7 @@ import 'package:yogi_application/src/pages/blog.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/custombar/appbar.dart';
 
 class BlogDetail extends StatefulWidget {
   final String title;
@@ -21,11 +22,24 @@ class BlogDetail extends StatefulWidget {
 }
 
 class _BlogDetailState extends State<BlogDetail> {
+  get onPressed => null;
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        backgroundColor: theme.colorScheme.background,
+        appBar: CustomAppBar(
+          onBackPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Blog()),
+            );
+          },
+          postActions: [_buildLikeButton(), _buildDislikeButton()],
+        ),
         body: _buildBody(context),
         bottomNavigationBar: CustomBottomBar(),
       ),
@@ -34,101 +48,31 @@ class _BlogDetailState extends State<BlogDetail> {
 
   Widget _buildBody(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: const BoxDecoration(color: Color(0xFF0A141C)),
       child: Stack(
-        children: [
-          _buildImage(),
-          _buildTopRoundedContainer(),
-          _buildTitleText(context),
-          _buildMainContent(context)
-        ],
+        children: [_buildImage(), _buildMainContent(context)],
       ),
-    );
-  }
-
-  Widget _buildTopRoundedContainer() {
-    return Positioned(
-      left: 0,
-      top: 0,
-      right: 0,
-      child: Container(
-        height: 150,
-        decoration: BoxDecoration(
-          color: Color(0xFF0D1F29),
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(24),
-            bottomRight: Radius.circular(24),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTitleText(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          left: 15,
-          top: 92,
-          child: _buildBackButton(context),
-        ),
-        Positioned(
-          right: 20, // Place like and dislike buttons on the right
-          top: 100,
-          child: Row(
-            children: [
-              _buildLikeButton(),
-              SizedBox(width: 20),
-              _buildDislikeButton(),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBackButton(BuildContext context) {
-    return IconButton(
-      icon: Image.asset(
-        'assets/icons/arrow_back.png',
-        color: Colors.white.withOpacity(1),
-        width: 30,
-        height: 30,
-      ),
-      onPressed: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Blog()),
-        );
-      },
     );
   }
 
   Widget _buildLikeButton() {
-    return Container(
-      width: 27,
-      height: 27,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/icons/thumb_down.png'),
-        ),
+    final theme = Theme.of(context);
+    return IconButton(
+      icon: Icon(
+        Icons.thumb_up_outlined,
+        color: theme.colorScheme.onBackground,
       ),
+      onPressed: () {},
     );
   }
 
   Widget _buildDislikeButton() {
-    return Container(
-      width: 27,
-      height: 27,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/icons/thumb_up.png'),
-        ),
-      ),
-    );
+    final theme = Theme.of(context);
+    return IconButton(
+        onPressed: onPressed,
+        icon: Icon(
+          Icons.thumb_down_outlined,
+          color: theme.colorScheme.onBackground,
+        ));
   }
 
   Widget _buildImage() {
@@ -137,7 +81,7 @@ class _BlogDetailState extends State<BlogDetail> {
       child: Container(
         width: double.infinity,
         height: 250,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/yoga.jpeg'),
             fit: BoxFit.cover,
@@ -178,7 +122,7 @@ class _BlogDetailState extends State<BlogDetail> {
           children: [
             Text(
               'Ringo Island',
-              style: h2.copyWith(color: theme.colorScheme.onBackground),
+              style: h2.copyWith(color: theme.colorScheme.onPrimary),
             ),
           ],
         ),

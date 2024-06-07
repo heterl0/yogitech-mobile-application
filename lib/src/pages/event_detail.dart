@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
@@ -20,6 +21,11 @@ class EventDetail extends StatelessWidget {
     final theme = Theme.of(context);
     return MaterialApp(
       home: Scaffold(
+        appBar: CustomAppBar(
+          isTransparent: true,
+          title: '',
+          postActions: [],
+        ),
         backgroundColor: theme.colorScheme.background,
         resizeToAvoidBottomInset: false,
         body: _buildBody(context),
@@ -39,7 +45,7 @@ class EventDetail extends StatelessWidget {
       child: Stack(
         children: [
           _buildImage(),
-          _buildTitleText(context),
+          // _buildTitleText(context),
           _buildMainContent(context),
           _buildNavigationBar(context),
         ],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class exerciseDetail extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

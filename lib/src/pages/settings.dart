@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/pages/reminder.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
@@ -21,54 +22,57 @@ class SettingsPage extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(100),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(24.0),
-            bottomRight: Radius.circular(24.0),
-          ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: theme.colorScheme.onSecondary,
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(0),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 12.0,
-                  right: 24.0,
-                  left: 24.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: theme.colorScheme.onBackground,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    Text('Setting',
-                        style:
-                            h2.copyWith(color: theme.colorScheme.onBackground)),
-                    Opacity(
-                      opacity: 0.0,
-                      child: IgnorePointer(
-                        child: IconButton(
-                          icon: Image.asset('assets/icons/settings.png'),
-                          onPressed: () {},
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+      // appBar: PreferredSize(
+      //   preferredSize: const Size.fromHeight(100),
+      //   child: ClipRRect(
+      //     borderRadius: const BorderRadius.only(
+      //       bottomLeft: Radius.circular(24.0),
+      //       bottomRight: Radius.circular(24.0),
+      //     ),
+      //     child: AppBar(
+      //       automaticallyImplyLeading: false,
+      //       backgroundColor: theme.colorScheme.onSecondary,
+      //       bottom: PreferredSize(
+      //         preferredSize: const Size.fromHeight(0),
+      //         child: Padding(
+      //           padding: const EdgeInsets.only(
+      //             bottom: 12.0,
+      //             right: 24.0,
+      //             left: 24.0,
+      //           ),
+      //           child: Row(
+      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //             children: [
+      //               IconButton(
+      //                 icon: Icon(
+      //                   Icons.arrow_back,
+      //                   color: theme.colorScheme.onBackground,
+      //                 ),
+      //                 onPressed: () {
+      //                   Navigator.pop(context);
+      //                 },
+      //               ),
+      //               Text('Setting',
+      //                   style:
+      //                       h2.copyWith(color: theme.colorScheme.onBackground)),
+      //               Opacity(
+      //                 opacity: 0.0,
+      //                 child: IgnorePointer(
+      //                   child: IconButton(
+      //                     icon: Image.asset('assets/icons/settings.png'),
+      //                     onPressed: () {},
+      //                   ),
+      //                 ),
+      //               )
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      appBar: CustomAppBar(
+        title: "Setting",
       ),
       body: SingleChildScrollView(
         child: Container(

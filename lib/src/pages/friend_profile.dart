@@ -3,8 +3,10 @@ import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/pages/friendlist.dart';
 import 'package:yogi_application/src/pages/personalized_exercise.dart';
 import 'package:yogi_application/src/pages/profile.dart';
+import 'package:yogi_application/src/pages/settings.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
+import 'package:yogi_application/src/widgets/box_button.dart';
 
 class FriendProfile extends StatefulWidget {
   const FriendProfile({super.key});
@@ -102,25 +104,13 @@ class _nameState extends State<FriendProfile> {
                       Row(
                         children: [
                           Expanded(
-                            child: Container(
-                              height: 50.0,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(44.0),
-                                border: Border.all(color: error, width: 2.0),
-                              ),
-                              child: Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: () {
-                                    // Xử lý sự kiện khi nhấn vào nút "Đăng xuất"
-                                  },
-                                  borderRadius: BorderRadius.circular(44.0),
-                                  child: Center(
-                                    child: Text('Follow',
-                                        style: h3.copyWith(color: primary)),
-                                  ),
-                                ),
-                              ),
+                            child: BoxButton(
+                              title: 'Following', // Set the button text
+                              style: ButtonStyleType
+                                  .Secondary, // Set the button style (optional)
+                              onPressed: () {
+                                // Handle change avatar action here
+                              },
                             ),
                           ),
                         ],
