@@ -32,9 +32,9 @@ class BoxButton extends StatelessWidget {
         case ButtonStyleType.Primary:
           return theme.primaryColor;
         case ButtonStyleType.Secondary:
-          return theme.colorScheme.surface;
+          return theme.colorScheme.background;
         case ButtonStyleType.Tertiary:
-          return Color(0xFFa4b8be).withOpacity(0);
+          return Colors.transparent;
       }
     }
 
@@ -87,8 +87,12 @@ class BoxButton extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(44),
               onTap: isDisabled ? null : onPressed,
-              splashColor: active.withOpacity(0.4),
-              highlightColor: active.withOpacity(0.4),
+              splashColor: style == ButtonStyleType.Primary
+                  ? active.withOpacity(0.2)
+                  : primary.withOpacity(0.2),
+              highlightColor: style == ButtonStyleType.Primary
+                  ? active.withOpacity(0.2)
+                  : primary.withOpacity(0.2),
               child: Center(
                 child: Text(
                   title,

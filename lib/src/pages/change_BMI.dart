@@ -4,7 +4,6 @@ import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
-import 'package:yogi_application/src/widgets/dropdown_field.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
 
 class ChangeBMIPage extends StatefulWidget {

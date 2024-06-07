@@ -33,10 +33,11 @@ class _BlogDetailState extends State<BlogDetail> {
   }
 
   Widget _buildBody(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: const BoxDecoration(color: Color(0xFF0A141C)),
+      decoration: BoxDecoration(color: theme.colorScheme.background),
       child: Stack(
         children: [
           _buildImage(),
@@ -178,7 +179,7 @@ class _BlogDetailState extends State<BlogDetail> {
           children: [
             Text(
               'Ringo Island',
-              style: h2.copyWith(color: theme.colorScheme.onBackground),
+              style: h2.copyWith(color: theme.colorScheme.onPrimary),
             ),
           ],
         ),

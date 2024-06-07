@@ -241,6 +241,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Old password', style: h3.copyWith(color: active)),
               SizedBox(height: 16.0),
@@ -262,9 +263,9 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 controller: confirmNewPassword,
                 password: true,
               ),
-              SizedBox(height: 24.0),
+              SizedBox(height: 32.0),
               BoxButton(
-                title: 'save',
+                title: 'Save',
                 style: ButtonStyleType.Primary,
                 state: ButtonState
                     .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
