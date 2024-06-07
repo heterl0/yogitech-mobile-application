@@ -36,7 +36,7 @@ class _BlogDetailState extends State<BlogDetail> {
             MaterialPageRoute(builder: (context) => Blog()),
           );
         },
-        postActions: [_buildLikeButton(), _buildDislikeButton()],
+        postActions: [_buildDislikeButton(), _buildLikeButton()],
       ),
       body: _buildBody(context),
       bottomNavigationBar: CustomBottomBar(),
@@ -65,11 +65,12 @@ class _BlogDetailState extends State<BlogDetail> {
   Widget _buildDislikeButton() {
     final theme = Theme.of(context);
     return IconButton(
-        onPressed: onPressed,
-        icon: Icon(
-          Icons.thumb_down_outlined,
-          color: theme.colorScheme.onBackground,
-        ));
+      icon: Icon(
+        Icons.thumb_down_outlined,
+        color: theme.colorScheme.onBackground,
+      ),
+      onPressed: () {},
+    );
   }
 
   Widget _buildImage() {
@@ -93,7 +94,7 @@ class _BlogDetailState extends State<BlogDetail> {
       padding: const EdgeInsets.only(top: 350),
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -114,8 +115,6 @@ class _BlogDetailState extends State<BlogDetail> {
     return Center(
       child: Container(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               'Ringo Island',
