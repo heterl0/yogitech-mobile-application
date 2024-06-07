@@ -179,10 +179,9 @@ class _LoginPageState extends State<LoginPage> {
         );
 
         if (response.statusCode == 200) {
-          final responseBody = response.data;
-          final String authTokenResponse = responseBody['auth_token'];
+          final responseBody = response.data['auth_token'];
           // Xử lý authTokenResponse (lưu trữ, chuyển trang, v.v.)
-          print('Auth Token: $authTokenResponse');
+          print('Auth Token: $responseBody');
           Navigator.pushReplacementNamed(context, AppRoutes.homepage);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
