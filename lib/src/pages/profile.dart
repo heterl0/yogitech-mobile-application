@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/features/api_service.dart';
+import 'package:yogi_application/src/pages/calorie.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
@@ -134,7 +135,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           subtitle: 'Your total of calories',
                           iconPath: 'assets/icons/info.png',
                           onTap: () {
-                            print('Calorie info pressed');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Calorie(),
+                              ),
+                            );
                           },
                         ),
                         const SizedBox(height: 6),

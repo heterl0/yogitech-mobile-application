@@ -27,22 +27,19 @@ class _BlogDetailState extends State<BlogDetail> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: theme.colorScheme.background,
-        appBar: CustomAppBar(
-          onBackPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => Blog()),
-            );
-          },
-          postActions: [_buildLikeButton(), _buildDislikeButton()],
-        ),
-        body: _buildBody(context),
-        bottomNavigationBar: CustomBottomBar(),
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      appBar: CustomAppBar(
+        onBackPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => Blog()),
+          );
+        },
+        postActions: [_buildLikeButton(), _buildDislikeButton()],
       ),
+      body: _buildBody(context),
+      bottomNavigationBar: CustomBottomBar(),
     );
   }
 
@@ -96,7 +93,7 @@ class _BlogDetailState extends State<BlogDetail> {
       padding: const EdgeInsets.only(top: 350),
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -133,7 +130,8 @@ class _BlogDetailState extends State<BlogDetail> {
   Widget _buildDescription() {
     return Text(
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus',
-      style: min_cap.copyWith(color: active),
+      style: min_cap.copyWith(color: text),
+      textAlign: TextAlign.left,
     );
   }
 }
