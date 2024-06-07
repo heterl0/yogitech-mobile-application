@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:yogi_application/src/pages/reminder.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
@@ -105,6 +106,16 @@ class SettingsPage extends StatelessWidget {
                 title: 'Reminder',
                 description: 'Reminds you of exercise time',
                 icon: Icons.alarm, // Biểu tượng cho mục này
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ReminderPage(
+                          isDarkMode: theme == ThemeMode.dark,
+                          onThemeChanged: onThemeChanged),
+                    ),
+                  );
+                },
               ),
               SettingItem(
                 title: 'Notifications',
