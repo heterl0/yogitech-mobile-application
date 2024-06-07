@@ -87,7 +87,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: widget.savedEmail != null && widget.savedPassword != null
           ? AppRoutes.homepage
-          : AppRoutes.login,
+          : AppRoutes.homepage,
       routes: {
         AppRoutes.homepage: (context) => HomePage(
             savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
@@ -118,10 +118,7 @@ class _MyAppState extends State<MyApp> {
               caption: 'Event Caption',
               subtitle: 'Event Subtitle',
             ),
-        AppRoutes.reminder: (context) => ReminderPage(
-              isDarkMode: _themeMode == ThemeMode.dark,
-              onThemeChanged: _toggleTheme,
-            ),
+        AppRoutes.reminder: (context) => ReminderPage(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == AppRoutes.settings) {

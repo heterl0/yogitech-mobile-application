@@ -110,9 +110,7 @@ class SettingsPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ReminderPage(
-                          isDarkMode: theme == ThemeMode.dark,
-                          onThemeChanged: onThemeChanged),
+                      builder: (context) => ReminderPage(),
                     ),
                   );
                 },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/pages/filter.dart';
 import 'package:yogi_application/src/pages/streak.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
@@ -70,7 +71,14 @@ class _HomePageState extends State<HomePage> {
                 IconButton(
                   icon: Icon(Icons.tune_outlined,
                       color: theme.colorScheme.onBackground),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FilterPage(),
+                      ),
+                    );
+                  },
                 ),
               ],
               largeTitle: true,

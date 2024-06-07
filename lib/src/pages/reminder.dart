@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
@@ -6,13 +7,13 @@ import 'package:yogi_application/src/widgets/switch.dart'; // Assuming this is C
 import 'package:yogi_application/src/widgets/box_button.dart';
 
 class ReminderPage extends StatefulWidget {
-  final bool isDarkMode;
-  final ValueChanged<bool> onThemeChanged;
+  final bool reminderOn;
+  // final ValueChanged<bool> areRemindersEnabled;
 
   const ReminderPage({
     Key? key,
-    required this.isDarkMode,
-    required this.onThemeChanged,
+    this.reminderOn = true,
+    // this.areRemindersEnabled,
   }) : super(key: key);
 
   @override
@@ -105,75 +106,21 @@ class _ReminderPageState extends State<ReminderPage> {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(100),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(24.0),
-            bottomRight: Radius.circular(24.0),
-          ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: theme.colorScheme.onSecondary,
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(0),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 12.0,
-                  right: 24.0,
-                  left: 24.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: theme.colorScheme.onBackground,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    Text('Reminder',
-                        style:
-                            h2.copyWith(color: theme.colorScheme.onBackground)),
-                    Opacity(
-                      opacity: 0.0,
-                      child: IgnorePointer(
-                        child: IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {},
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+      appBar: CustomAppBar(
+        title: "Reminder",
       ),
       body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(16.0),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
               CustomSwitch(
                 title: 'Reminder',
-                value: widget.isDarkMode,
-                onChanged: widget.onThemeChanged,
+                value: widget.reminderOn,
+                onChanged: null,
               ),
-              Container(
-                width: 380,
-                decoration: ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                      strokeAlign: BorderSide.strokeAlignCenter,
-                      color: Color(0xFF8D8E99),
-                    ),
-                  ),
-                ),
+              Divider(
+                color: stroke,
               ),
               Column(
                 children: _selectedTimes
@@ -201,29 +148,36 @@ class _ReminderPageState extends State<ReminderPage> {
         ),
       ),
       bottomNavigationBar: CustomBottomBar(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showSetupReminderPage(context, isNew: true);
-        },
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        child: Ink(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: gradient,
-          ),
-          child: Container(
-            width: 60,
-            height: 60,
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.add,
-              size: 24,
-              color: active,
-            ),
+      floatingActionButton: _buildFloatingActionButton(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
+  }
+
+  Widget _buildFloatingActionButton(BuildContext context) {
+    return FloatingActionButton(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      child: Ink(
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: gradient, // Gradient từ app_colors.dart
+        ),
+        width: 60,
+        height: 60,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(30),
+          onTap: () {
+            _showSetupReminderPage(context, isNew: true);
+          },
+          child: const Icon(
+            Icons.add,
+            color: active,
+            size: 24,
           ),
         ),
       ),
+      onPressed: () {}, // Cái này nhấn không có tác dụng
     );
   }
 }
@@ -263,6 +217,7 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

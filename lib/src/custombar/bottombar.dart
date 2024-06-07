@@ -4,6 +4,11 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 
 class CustomBottomBar extends StatefulWidget {
+  final List<Widget> centerWidget;
+  final bool defaultStyle;
+
+  CustomBottomBar({this.centerWidget = const [], this.defaultStyle = true});
+
   @override
   _CustomBottomBarState createState() => _CustomBottomBarState();
 }
@@ -21,23 +26,30 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
         color: theme.colorScheme.onSecondary,
         height: 90,
         padding: const EdgeInsets.only(bottom: 20),
-        child: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              buildNavItem(
-                  context, Icons.grid_view, 'Home', AppRoutes.homepage),
-              buildNavItem(
-                  context, Icons.newspaper_outlined, 'Blog', AppRoutes.blog),
-              buildNavItem(context, Icons.directions_run, 'Activities',
-                  AppRoutes.activities),
-              buildNavItem(context, Icons.self_improvement, 'Meditate',
-                  AppRoutes.meditate),
-              buildNavItem(context, Icons.account_circle_outlined, 'Profile',
-                  AppRoutes.Profile),
-            ],
-          ),
-        ),
+        child: widget.defaultStyle
+            ? Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    buildNavItem(
+                        context, Icons.grid_view, 'Home', AppRoutes.homepage),
+                    buildNavItem(context, Icons.newspaper_outlined, 'Blog',
+                        AppRoutes.blog),
+                    buildNavItem(context, Icons.directions_run, 'Activities',
+                        AppRoutes.activities),
+                    buildNavItem(context, Icons.self_improvement, 'Meditate',
+                        AppRoutes.meditate),
+                    buildNavItem(context, Icons.account_circle_outlined,
+                        'Profile', AppRoutes.Profile),
+                  ],
+                ),
+              )
+            : Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: widget.centerWidget,
+                ),
+              ),
       ),
     );
   }

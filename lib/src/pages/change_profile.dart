@@ -32,55 +32,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      // appBar: PreferredSize(
-      //   preferredSize: Size.fromHeight(100),
-      //   child: ClipRRect(
-      //     borderRadius: BorderRadius.only(
-      //       bottomLeft: Radius.circular(24.0),
-      //       bottomRight: Radius.circular(24.0),
-      //     ),
-      //     child: AppBar(
-      //       automaticallyImplyLeading: false,
-      //       backgroundColor: theme.colorScheme.onSecondary,
-      //       bottom: PreferredSize(
-      //         preferredSize: Size.fromHeight(0),
-      //         child: Padding(
-      //           padding: const EdgeInsets.only(
-      //             bottom: 12.0,
-      //             right: 20.0,
-      //             left: 20.0,
-      //           ),
-      //           child: Row(
-      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //             children: [
-      //               IconButton(
-      //                 icon: Icon(
-      //                   Icons.arrow_back,
-      //                   color: theme.colorScheme.onBackground,
-      //                 ), // Sử dụng icon "back" có sẵn
-      //                 onPressed: () {
-      //                   Navigator.pop(context); // Thêm sự kiện quay lại
-      //                 },
-      //               ),
-      //               Text('Edit Profile',
-      //                   style:
-      //                       h2.copyWith(color: theme.colorScheme.onBackground)),
-      //               Opacity(
-      //                 opacity: 0.0,
-      //                 child: IgnorePointer(
-      //                   child: IconButton(
-      //                     icon: Image.asset('assets/icons/settings.png'),
-      //                     onPressed: () {},
-      //                   ),
-      //                 ),
-      //               ) // Ẩn icon đi
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // ),
       appBar: CustomAppBar(title: 'Edit Profile'),
       body: SingleChildScrollView(
         child: Container(
@@ -193,8 +144,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   style: ButtonStyleType
                       .Tertiary, // Set the button style (optional)
                   onPressed: () {
-                    _showChangePasswordDrawer(
-                        context); // Handle change avatar action here
+                    // _showChangePasswordDrawer(context);
+                    _changePasswordBottomSheet(context);
                   },
                 ),
                 SizedBox(height: 0.0),
@@ -220,19 +171,14 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     );
   }
 
-  void _showChangePasswordDrawer(BuildContext context) {
+  Future<void> _changePasswordBottomSheet(BuildContext context) {
     final theme = Theme.of(context);
     final TextEditingController currentPassword = TextEditingController();
     final TextEditingController newPassword = TextEditingController();
     final TextEditingController confirmNewPassword = TextEditingController();
-
-    showModalBottomSheet(
+    return showModalBottomSheet<void>(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: theme.colorScheme.background,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
-      ),
+      backgroundColor: theme.colorScheme.onSecondary,
       builder: (BuildContext context) {
         return Padding(
           padding: EdgeInsets.only(
@@ -245,21 +191,24 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Old password', style: h3.copyWith(color: active)),
+              Text('Old password',
+                  style: h3.copyWith(color: theme.colorScheme.onBackground)),
               SizedBox(height: 16.0),
               BoxInputField(
                 controller: currentPassword,
                 password: true,
               ),
               SizedBox(height: 16.0),
-              Text('New password', style: h3.copyWith(color: active)),
+              Text('New password',
+                  style: h3.copyWith(color: theme.colorScheme.onBackground)),
               SizedBox(height: 16.0),
               BoxInputField(
                 controller: newPassword,
                 password: true,
               ),
               SizedBox(height: 16.0),
-              Text('Confirm password', style: h3.copyWith(color: active)),
+              Text('Confirm password',
+                  style: h3.copyWith(color: theme.colorScheme.onBackground)),
               SizedBox(height: 16.0),
               BoxInputField(
                 controller: confirmNewPassword,
@@ -271,7 +220,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 style: ButtonStyleType.Primary,
                 state: ButtonState
                     .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
-                onPressed: () {},
+                onPressed: () => Navigator.pop(context),
               ),
             ],
           ),

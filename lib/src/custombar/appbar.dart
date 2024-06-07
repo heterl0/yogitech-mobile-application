@@ -23,7 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconWidth = largeTitle ? 2 : 4;
+    final iconWidth = largeTitle ? 2 : 5;
 
     final theme = Theme.of(context);
     return Container(
@@ -104,7 +104,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ],
             )),
         backgroundColor: theme.colorScheme.onSecondary,
-        elevation: 0,
       ),
     );
   }
