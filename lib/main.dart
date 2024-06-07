@@ -79,8 +79,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: widget.savedEmail != null && widget.savedPassword != null
-          ? AppRoutes.homepage
-          : AppRoutes.homepage,
+          ? AppRoutes.exercisedetail
+          : AppRoutes.exercisedetail,
       routes: {
         AppRoutes.homepage: (context) => HomePage(
             savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),

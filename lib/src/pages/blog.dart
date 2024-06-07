@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
@@ -14,72 +15,60 @@ class Blog extends StatefulWidget {
 }
 
 class BlogState extends State<Blog> {
-  bool _isSearching = false;
+  bool _isSearching = true;
   TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(_isSearching ? 100 : 100),
-        // Increase height when searching
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(24.0),
-            bottomRight: Radius.circular(24.0),
-          ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: theme.colorScheme.onSecondary,
-            bottom: _isSearching
-                ? PreferredSize(
-                    preferredSize: const Size.fromHeight(0),
-                    child: _buildSearchBar(),
-                  )
-                : PreferredSize(
-                    preferredSize: const Size.fromHeight(0),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 8.0,
-                        right: 24.0,
-                        left: 24.0,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Opacity(
-                            opacity: 0.0,
-                            child: IgnorePointer(
-                              child: IconButton(
-                                icon: Image.asset('assets/icons/settings.png'),
-                                onPressed: () {},
-                              ),
-                            ),
-                          ), // Ẩn icon đi
-                          Center(
-                            child: Text(
-                              'Blog',
-                              style: h2.copyWith(
-                                  color: theme.colorScheme.onBackground),
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.search,
-                                color: theme.colorScheme.onBackground),
-                            onPressed: () {
-                              setState(() {
-                                _isSearching = true;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-          ),
-        ),
-      ),
+      appBar: _isSearching
+          ? CustomAppBar(
+              showBackButton: false,
+              title: 'Blog',
+              postActions: [
+                IconButton(
+                  icon:
+                      Icon(Icons.search, color: theme.colorScheme.onBackground),
+                  onPressed: () {
+                    setState(() {
+                      _isSearching = false;
+                    });
+                  },
+                ),
+              ],
+            )
+          : CustomAppBar(
+              onBackPressed: () {
+                // Xử lý khi nút back được nhấn
+
+                setState(() {
+                  _isSearching = true;
+                });
+              },
+              largeTitle: true,
+              titleWidget: BoxInputField(
+                controller: _searchController,
+                placeholder: 'Search...',
+                trailing: Icon(Icons.search),
+                keyboardType: TextInputType.text,
+                inputFormatters: [],
+                onTap: () {
+                  // Xử lý khi input field được nhấn
+                },
+              ),
+              postActions: [
+                IconButton(
+                  icon:
+                      Icon(Icons.close, color: theme.colorScheme.onBackground),
+                  onPressed: () {
+                    setState(() {
+                      _isSearching = true;
+                    });
+                  },
+                ),
+              ],
+            ),
       body: _buildBody(context),
       bottomNavigationBar: CustomBottomBar(),
     );

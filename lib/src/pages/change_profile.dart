@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
@@ -31,55 +32,56 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(24.0),
-            bottomRight: Radius.circular(24.0),
-          ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: theme.colorScheme.onSecondary,
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(0),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 12.0,
-                  right: 20.0,
-                  left: 20.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: theme.colorScheme.onBackground,
-                      ), // Sử dụng icon "back" có sẵn
-                      onPressed: () {
-                        Navigator.pop(context); // Thêm sự kiện quay lại
-                      },
-                    ),
-                    Text('Edit Profile',
-                        style:
-                            h2.copyWith(color: theme.colorScheme.onBackground)),
-                    Opacity(
-                      opacity: 0.0,
-                      child: IgnorePointer(
-                        child: IconButton(
-                          icon: Image.asset('assets/icons/settings.png'),
-                          onPressed: () {},
-                        ),
-                      ),
-                    ) // Ẩn icon đi
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+      // appBar: PreferredSize(
+      //   preferredSize: Size.fromHeight(100),
+      //   child: ClipRRect(
+      //     borderRadius: BorderRadius.only(
+      //       bottomLeft: Radius.circular(24.0),
+      //       bottomRight: Radius.circular(24.0),
+      //     ),
+      //     child: AppBar(
+      //       automaticallyImplyLeading: false,
+      //       backgroundColor: theme.colorScheme.onSecondary,
+      //       bottom: PreferredSize(
+      //         preferredSize: Size.fromHeight(0),
+      //         child: Padding(
+      //           padding: const EdgeInsets.only(
+      //             bottom: 12.0,
+      //             right: 20.0,
+      //             left: 20.0,
+      //           ),
+      //           child: Row(
+      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //             children: [
+      //               IconButton(
+      //                 icon: Icon(
+      //                   Icons.arrow_back,
+      //                   color: theme.colorScheme.onBackground,
+      //                 ), // Sử dụng icon "back" có sẵn
+      //                 onPressed: () {
+      //                   Navigator.pop(context); // Thêm sự kiện quay lại
+      //                 },
+      //               ),
+      //               Text('Edit Profile',
+      //                   style:
+      //                       h2.copyWith(color: theme.colorScheme.onBackground)),
+      //               Opacity(
+      //                 opacity: 0.0,
+      //                 child: IgnorePointer(
+      //                   child: IconButton(
+      //                     icon: Image.asset('assets/icons/settings.png'),
+      //                     onPressed: () {},
+      //                   ),
+      //                 ),
+      //               ) // Ẩn icon đi
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      appBar: CustomAppBar(title: 'Edit Profile'),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(24.0),

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/pages/streak.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,7 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var jsonList;
-  bool _isSearching = false;
+  bool _isSearching = true;
   TextEditingController _searchController = TextEditingController();
 
   @override
@@ -24,77 +27,75 @@ class _HomePageState extends State<HomePage> {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(_isSearching ? 100 : 100),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(24.0),
-            bottomRight: Radius.circular(24.0),
-          ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: theme.colorScheme.onSecondary,
-            title: _isSearching ? _buildSearchBar() : _buildDefaultAppBar(),
-            bottom: _isSearching
-                ? null
-                : PreferredSize(
-                    preferredSize: const Size.fromHeight(0),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 12.0,
-                        right: 24.0,
-                        left: 24.0,
+      appBar: _isSearching
+          ? CustomAppBar(
+              showBackButton: false,
+              preActions: [
+                GestureDetector(
+                  onTap: () {
+                    // Chuyển sang trang mới khi nhấn vào
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 50,
+                        child: Image.asset('assets/images/Emerald.png'),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              // Xử lý khi nhấn vào nút
-                            },
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 40,
-                                  height: 50,
-                                  child:
-                                      Image.asset('assets/images/Emerald.png'),
-                                ),
-                                const SizedBox(width: 0),
-                                Text(
-                                  '5',
-                                  style: h3.copyWith(
-                                      color: theme.colorScheme.onBackground),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Streak',
-                                style: min_cap.copyWith(color: text),
-                              ),
-                              const StreakValue('7777777'),
-                            ],
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.search,
-                                color: theme.colorScheme.onBackground),
-                            onPressed: () {
-                              setState(() {
-                                _isSearching = true;
-                              });
-                            },
-                          ),
-                        ],
+                      Text(
+                        '5',
+                        style:
+                            h3.copyWith(color: theme.colorScheme.onBackground),
                       ),
-                    ),
+                    ],
                   ),
-          ),
-        ),
-      ),
+                ),
+              ],
+              titleWidget: const StreakValue('0000'),
+              postActions: [
+                IconButton(
+                  icon:
+                      Icon(Icons.search, color: theme.colorScheme.onBackground),
+                  onPressed: () {
+                    setState(() {
+                      _isSearching = false;
+                    });
+                  },
+                ),
+              ],
+            )
+          : CustomAppBar(
+              showBackButton: false,
+              preActions: [
+                IconButton(
+                  icon: Icon(Icons.tune_outlined,
+                      color: theme.colorScheme.onBackground),
+                  onPressed: () {},
+                ),
+              ],
+              largeTitle: true,
+              titleWidget: BoxInputField(
+                controller: _searchController,
+                placeholder: 'Search...',
+                trailing: Icon(Icons.search),
+                keyboardType: TextInputType.text,
+                inputFormatters: [],
+                onTap: () {
+                  // Xử lý khi input field được nhấn
+                },
+              ),
+              postActions: [
+                IconButton(
+                  icon:
+                      Icon(Icons.close, color: theme.colorScheme.onBackground),
+                  onPressed: () {
+                    setState(() {
+                      _isSearching = true;
+                    });
+                  },
+                ),
+              ],
+            ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -284,19 +285,46 @@ class _HomePageState extends State<HomePage> {
 
 // Phải tạo Widget riêng chỉ nhằm mục đích áp dụng màu Gradient
 class StreakValue extends StatelessWidget {
-  final String text;
+  final String streakValue;
 
-  const StreakValue(this.text, {super.key});
+  const StreakValue(this.streakValue, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (bounds) {
-        return gradient.createShader(bounds); // Sử dụng gradient từ styles.dart
-      },
-      child: Text(
-        text,
-        style: h2.copyWith(color: Colors.white), // hoặc màu chữ mong muốn
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          // Chuyển sang trang mới khi nhấn vào
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Streak(),
+            ),
+          );
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Streak',
+              style: min_cap.copyWith(
+                color: text,
+              ),
+            ),
+            Container(
+              height: 32,
+              child: ShaderMask(
+                shaderCallback: (bounds) {
+                  return gradient.createShader(bounds);
+                },
+                child: Text(
+                  streakValue,
+                  style: h2.copyWith(color: Colors.white, height: 1),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
