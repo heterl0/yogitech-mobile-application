@@ -21,10 +21,8 @@ class performMeditate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: MeditateCountdownTimer(initialDuration: selectedDuration),
-      ),
+    return Scaffold(
+      body: MeditateCountdownTimer(initialDuration: selectedDuration),
     );
   }
 }
