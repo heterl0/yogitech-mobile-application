@@ -9,6 +9,7 @@ import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/forgot_password.dart';
 import 'package:yogi_application/src/pages/friend_profile.dart';
+import 'package:yogi_application/src/pages/notifications.dart';
 import 'package:yogi_application/src/pages/payment_history.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
 import 'package:yogi_application/src/pages/meditate.dart';
@@ -119,6 +120,7 @@ class _MyAppState extends State<MyApp> {
               subtitle: 'Event Subtitle',
             ),
         AppRoutes.reminder: (context) => ReminderPage(),
+        AppRoutes.notifications: (context) => NotificationsPage(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == AppRoutes.settings) {
