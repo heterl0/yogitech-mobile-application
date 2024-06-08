@@ -26,11 +26,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconWidth = (style == widthStyle.Small || title == '')
-        ? 4
-        : (style == widthStyle.Medium)
-            ? 2
-            : 1;
+    final iconWidth = (style == widthStyle.Large)
+        ? 1
+        : (style == widthStyle.Small || title == '')
+            ? 4
+            : 2;
 
     final theme = Theme.of(context);
     return Container(
