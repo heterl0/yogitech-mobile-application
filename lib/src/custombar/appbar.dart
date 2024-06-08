@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 
+enum widthStyle { Small, Medium, Large }
+
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? titleWidget;
   final String title;
-  final bool showBackButton, largeTitle, isTransparent;
+  final bool showBackButton, isTransparent;
   final List<Widget> preActions, postActions;
   final double height;
   final VoidCallback? onBackPressed;
+  final widthStyle style;
 
   CustomAppBar({
     this.titleWidget,
@@ -17,13 +20,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.postActions = const [],
     this.height = 120.0,
     this.onBackPressed,
-    this.largeTitle = false,
     this.isTransparent = false,
+    this.style = widthStyle.Small,
   });
 
   @override
   Widget build(BuildContext context) {
-    final iconWidth = largeTitle ? 2 : 5;
+    final iconWidth = (style == widthStyle.Small || title == '')
+        ? 4
+        : (style == widthStyle.Medium)
+            ? 2
+            : 1;
 
     final theme = Theme.of(context);
     return Container(
