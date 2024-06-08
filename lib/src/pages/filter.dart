@@ -36,7 +36,7 @@ class FilterPage extends StatelessWidget {
               SizedBox(height: 8.0),
               CustomDropdownFormField(
                 controller: category,
-                items: ['Hip', 'Chest', 'Other'],
+                itemsValue: ['Hip', 'Chest', 'Other'],
                 placeholder: 'Select category',
                 onTap: () {
                   // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết

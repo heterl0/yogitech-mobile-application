@@ -73,7 +73,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
                 Expanded(
-                  flex: 4,
+                  flex: 10,
                   child: Container(
                     color: Colors.blue,
                     height: 50,

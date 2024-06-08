@@ -4,18 +4,20 @@ import 'package:yogi_application/src/shared/styles.dart';
 
 class CustomDropdownFormField extends StatefulWidget {
   final String placeholder;
-  final List<String> items;
+  final List<String> itemsValue;
   final TextEditingController controller;
   final bool readOnly;
   final VoidCallback? onTap;
+  final String initialDropdownValue;
 
   CustomDropdownFormField({
     Key? key,
     required this.controller,
-    required this.items,
+    required this.itemsValue,
     this.placeholder = '',
     this.readOnly = false,
     this.onTap,
+    this.initialDropdownValue = '',
   }) : super(key: key);
 
   @override
@@ -24,104 +26,70 @@ class CustomDropdownFormField extends StatefulWidget {
 }
 
 class _CustomDropdownFormFieldState extends State<CustomDropdownFormField> {
-  bool _isFocused = false;
-  bool _hasError = false;
-  FocusNode _focusNode = FocusNode();
-  final LayerLink _layerLink = LayerLink();
+  late String dropdownValue;
 
   @override
   void initState() {
     super.initState();
-    _focusNode.addListener(() {
-      setState(() {
-        _isFocused = _focusNode.hasFocus;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  OutlineInputBorder get circleBorder => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(44),
-      );
-
-  Color getBorderColor(BuildContext context) {
-    final theme = Theme.of(context);
-    if (_hasError) {
-      return theme.colorScheme.error;
-    } else if (_isFocused) {
-      return theme.primaryColor;
-    } else {
-      return theme.colorScheme.secondary;
-    }
+    dropdownValue = widget.initialDropdownValue.isNotEmpty
+        ? widget.initialDropdownValue
+        : (widget.itemsValue.isNotEmpty ? widget.itemsValue.first : '');
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: DropdownButtonFormField<String>(
-        focusNode: _focusNode,
-        decoration: InputDecoration(
-          hintText: widget.placeholder,
-          hintStyle: TextStyle(
-            fontFamily: 'ReadexPro',
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: theme.colorScheme.onSurface.withOpacity(0.6),
-          ),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-          filled: true,
-          fillColor: theme.colorScheme.background,
-          border: circleBorder.copyWith(
-            borderSide: BorderSide(color: theme.colorScheme.secondary),
-          ),
-          focusedBorder: circleBorder.copyWith(
-            borderSide: BorderSide(color: theme.primaryColor),
-          ),
-          errorBorder: circleBorder.copyWith(
-            borderSide: BorderSide(color: theme.colorScheme.error),
-          ),
-          enabledBorder: circleBorder.copyWith(
-            borderSide: BorderSide(color: theme.colorScheme.secondary),
-          ),
-          errorStyle: TextStyle(
-            fontFamily: 'ReadexPro',
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: theme.colorScheme.error,
-          ),
-        ),
-        hint: Text(
-          widget.placeholder,
-          style: TextStyle(
-            fontFamily: 'ReadexPro',
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: theme.colorScheme.onSurface.withOpacity(0.6),
-          ),
-        ),
-        items: widget.items
-            .map((label) => DropdownMenuItem(
-                  child: Text(label, style: bd_text.copyWith(color: text)),
-                  value: label,
-                ))
-            .toList(),
-        onChanged: widget.readOnly
-            ? null
-            : (value) {
-                setState(() {
-                  widget.controller.text = value!;
-                });
-              },
+    return DropdownMenu<String>(
+      controller: widget.controller, // Thêm controller vào DropdownMenu
+      inputDecorationTheme: InputDecorationTheme(
+          // Sử dụng InputDecorationTheme để thiết lập border
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: primary),
+              borderRadius: BorderRadius.circular(44)),
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: stroke),
+              borderRadius: BorderRadius.circular(44))),
+
+      textStyle: TextStyle(
+        fontFamily: 'ReadexPro',
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: theme.colorScheme.onSurface.withOpacity(0.6),
       ),
+      trailingIcon: const Icon(
+        Icons.keyboard_arrow_down,
+        color: text,
+      ),
+      selectedTrailingIcon: const Icon(
+        Icons.keyboard_arrow_up,
+        color: primary,
+      ),
+      initialSelection: dropdownValue,
+      onSelected: widget.readOnly
+          ? null
+          : (String? value) {
+              setState(() {
+                dropdownValue = value!;
+                widget.controller.text = value;
+              });
+            },
+      dropdownMenuEntries:
+          widget.itemsValue.map<DropdownMenuEntry<String>>((String value) {
+        return DropdownMenuEntry<String>(
+          value: value,
+          label: value,
+          style: MenuItemButton.styleFrom(
+            foregroundColor: text,
+            textStyle: TextStyle(
+              fontFamily: 'ReadexPro',
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }
