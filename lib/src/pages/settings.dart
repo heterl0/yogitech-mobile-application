@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:yogi_application/src/pages/notifications.dart';
 import 'package:yogi_application/src/pages/reminder.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
@@ -120,6 +121,14 @@ class SettingsPage extends StatelessWidget {
                 description: 'Application notifications',
                 icon: Icons
                     .notifications_active_outlined, // Biểu tượng cho mục này
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NotificationsPage(),
+                    ),
+                  );
+                },
               ),
             ],
           ),
