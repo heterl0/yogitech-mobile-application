@@ -52,17 +52,7 @@ class _SubscriptionState extends State<Subscription> {
       bottomNavigationBar: CustomBottomBar(
         defaultStyle: false,
         buttonTitle: "Subscription",
-        child: GestureDetector(
-          onTap: () {
-            // _showChangePasswordDrawer(context);
-            _subscriptionBottomSheet(context); // Changed here
-          },
-          child: Text(
-            'Unsubscription',
-            textAlign: TextAlign.center,
-            style: h3.copyWith(color: Colors.white),
-          ),
-        ),
+        onPressed: () => _subscriptionBottomSheet(context),
       ),
     );
   }
@@ -251,7 +241,10 @@ class _SubscriptionState extends State<Subscription> {
             padding: const EdgeInsets.all(36),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.onSecondary,
-              borderRadius: BorderRadius.circular(24), // Bo tròn góc
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24),
+                topRight: Radius.circular(24),
+              ), // Bo tròn góc
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -351,11 +344,14 @@ class _SubscriptionState extends State<Subscription> {
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Container(
             width: 320,
-            height: 416,
+            height: 464,
             padding: const EdgeInsets.all(36),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.onSecondary,
-              borderRadius: BorderRadius.circular(24), // Bo tròn góc
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24),
+                topRight: Radius.circular(24),
+              ), // Bo tròn góc
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -363,11 +359,16 @@ class _SubscriptionState extends State<Subscription> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                    width: 120,
-                    height: 120,
+                  width: 120,
+                  height: 120,
+                  alignment: Alignment.center,
+                  child: Center(
+                    // Thêm widget Center
                     child: Image.asset(
                       'assets/images/Sun2.png',
-                    )),
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 12),
                 SizedBox(
                   width: double.infinity,
@@ -377,13 +378,13 @@ class _SubscriptionState extends State<Subscription> {
                     style: h2.copyWith(color: theme.colorScheme.onPrimary),
                   ),
                 ),
-                const SizedBox(height: 16),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   'Subscription by',
                   style: bd_text.copyWith(color: text),
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.start,
                 ),
+                const SizedBox(height: 12),
                 GestureDetector(
                   onTap: () {
                     // Handle unsubscription logic here
@@ -392,7 +393,7 @@ class _SubscriptionState extends State<Subscription> {
                     width: double.infinity,
                     height: 44,
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     decoration: ShapeDecoration(
                       gradient: LinearGradient(
                         begin: Alignment(-0.91, -0.41),
@@ -409,7 +410,7 @@ class _SubscriptionState extends State<Subscription> {
                     ),
                     child: Center(
                       child: Text(
-                        '4.999.000',
+                        '4.999.000đ',
                         textAlign: TextAlign.center,
                         style: h3.copyWith(color: Colors.white),
                       ),
@@ -422,7 +423,7 @@ class _SubscriptionState extends State<Subscription> {
                     width: double.infinity,
                     height: 44,
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     decoration: ShapeDecoration(
                       shape: RoundedRectangleBorder(
                         side: BorderSide(width: 2, color: Color(0xFF4094CF)),
@@ -440,6 +441,9 @@ class _SubscriptionState extends State<Subscription> {
                 ),
                 const SizedBox(height: 16),
                 GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                   child: Container(
                     width: double.infinity,
                     height: 44,
