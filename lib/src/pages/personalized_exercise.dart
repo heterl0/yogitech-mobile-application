@@ -21,10 +21,13 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: _isNotSearching
-          ? CustomAppBar(title: 'Your Exercise')
+          ? CustomAppBar(
+              title: 'Your Exercise',
+              style: widthStyle.Large,
+            )
           : CustomAppBar(
               showBackButton: false,
-              largeTitle: true,
+              style: widthStyle.Large,
               titleWidget: BoxInputField(
                 controller: _searchController,
                 placeholder: 'Search...',

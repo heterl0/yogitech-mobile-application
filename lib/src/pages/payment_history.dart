@@ -55,7 +55,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
       //   ),
       // ),
       appBar: CustomAppBar(
-        largeTitle: true,
+        style: widthStyle.Large,
         title: "Payment History",
       ),
       body: Padding(
