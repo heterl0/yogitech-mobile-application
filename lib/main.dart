@@ -101,7 +101,7 @@ class _MyAppState extends State<MyApp> {
         AppRoutes.meditate: (context) => Meditate(),
         AppRoutes.performMeditate: (context) => performMeditate(),
         AppRoutes.streak: (context) => Streak(),
-        AppRoutes.exercisedetail: (context) => exerciseDetail(),
+        AppRoutes.exercisedetail: (context) => ExerciseDetail(),
         AppRoutes.result: (context) => Result(),
         AppRoutes.subscription: (context) => Subscription(),
         AppRoutes.Profile: (context) => ProfilePage(

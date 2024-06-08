@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/filter.dart';
 import 'package:yogi_application/src/pages/streak.dart';
 import 'package:yogi_application/src/pages/subscription.dart';
@@ -170,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                 style: h3.copyWith(color: theme.colorScheme.onPrimary),
               ),
             ),
-            const SingleChildScrollView(
+            SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -180,6 +181,14 @@ class _HomePageState extends State<HomePage> {
                     title: 'Card with Image',
                     caption:
                         'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ExerciseDetail(),
+                        ),
+                      );
+                    },
                   ),
                   CustomCard(
                     title: 'Card with Image',

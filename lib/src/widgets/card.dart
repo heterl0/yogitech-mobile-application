@@ -10,13 +10,13 @@ class CustomCard extends StatelessWidget {
   final VoidCallback? onTap; // Thêm thuộc tính onTap
 
   const CustomCard({
-    Key? key,
+    super.key,
     required this.title,
     this.caption,
     this.subtitle,
     this.imageUrl,
     this.onTap, // Thêm thuộc tính onTap vào constructor
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class CustomCard extends StatelessWidget {
           color: theme.colorScheme.background, // Màu nền của Container
           borderRadius: BorderRadius.circular(16),
           boxShadow: [], // Không có bóng đổ
-          border: Border.all(color: text),
+          border: Border.all(color: stroke),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

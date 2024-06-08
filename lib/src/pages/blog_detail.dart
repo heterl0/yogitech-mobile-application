@@ -84,7 +84,7 @@ class _BlogDetailState extends State<BlogDetail> {
 
   Widget _buildImage() {
     return Padding(
-      padding: EdgeInsets.only(top: 60),
+      padding: const EdgeInsets.only(top: 60),
       child: Container(
         width: double.infinity,
         height: 360,
