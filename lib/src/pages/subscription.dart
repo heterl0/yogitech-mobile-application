@@ -141,53 +141,36 @@ class _SubscriptionState extends State<Subscription> {
                       children: [
                         Text(
                           'Once a month',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontFamily: 'Readex Pro',
-                            fontWeight: FontWeight.w400,
-                            height: 0.12,
-                          ),
+                          style: min_cap.copyWith(color: active),
                         ),
-                        const SizedBox(height: 12),
-                        Container(
-                          width: double.infinity,
-                          child: Row(
-                            children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 18,
-                                      height: 18,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/images/Emerald.png'),
-                                          fit: BoxFit.fill,
-                                        ),
+                        Row(
+                          children: [
+                            Container(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 18,
+                                    height: 18,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/Emerald.png'),
+                                        fit: BoxFit.fill,
                                       ),
                                     ),
-                                    const SizedBox(width: 4),
-                                    SizedBox(
-                                      width: 42,
-                                      child: Text(
-                                        '999',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontFamily: 'Readex Pro',
-                                          fontWeight: FontWeight.w600,
-                                          height: 0.06,
-                                        ),
-                                      ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  SizedBox(
+                                    width: 42,
+                                    child: Text(
+                                      '999',
+                                      style: h3.copyWith(color: active),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -232,101 +215,44 @@ class _SubscriptionState extends State<Subscription> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: theme.colorScheme.onSecondary,
       builder: (context) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Container(
-            width: 320,
-            height: 416,
-            padding: const EdgeInsets.all(36),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onSecondary,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(24),
-                topRight: Radius.circular(24),
-              ), // Bo tròn góc
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                    width: 120,
-                    height: 120,
-                    child: Image.asset(
-                      'assets/images/MoonPhase2.png',
-                    )),
-                const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    'Do you want to unsubscription?',
-                    textAlign: TextAlign.center,
-                    style: h2.copyWith(color: theme.colorScheme.onPrimary),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                GestureDetector(
-                  onTap: () {
-                    // Handle unsubscription logic here
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    height: 44,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: ShapeDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment(-0.91, -0.41),
-                        end: Alignment(0.91, -0.41),
-                        colors: [
-                          Color(0xFF3BE2B0),
-                          Color(0xFF4095D0),
-                          Color(0xFF5986CC)
-                        ],
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(44),
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Unsubscription',
-                        textAlign: TextAlign.center,
-                        style: h3.copyWith(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                GestureDetector(
-                  onTap: () {
+          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 36),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
+            ), // Bo tròn góc
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                  width: 120,
+                  height: 120,
+                  child: Image.asset(
+                    'assets/images/MoonPhase2.png',
+                  )),
+              const SizedBox(height: 12),
+              Text(
+                'Do you want to unsubscription?',
+                textAlign: TextAlign.center,
+                style: h2.copyWith(color: theme.colorScheme.onPrimary),
+              ),
+              const SizedBox(height: 16),
+              BoxButton(
+                  title: 'Unsubscription', style: ButtonStyleType.Primary),
+              const SizedBox(height: 16),
+              BoxButton(
+                  title: 'Cancel',
+                  style: ButtonStyleType.Tertiary,
+                  onPressed: () {
                     Navigator.pop(context);
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    height: 44,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 2, color: Color(0xFF4094CF)),
-                        borderRadius: BorderRadius.circular(44),
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Cancel',
-                        textAlign: TextAlign.center,
-                        style: h3.copyWith(color: primary),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                  }),
+            ],
           ),
         );
       },
@@ -495,29 +421,14 @@ class _SubscriptionState extends State<Subscription> {
                             ],
                           ),
                         ),
-                        const SizedBox(width: 8),
                         Text(
                           'or',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xFF8D8E99),
-                            fontSize: 10,
-                            fontFamily: 'Readex Pro',
-                            fontWeight: FontWeight.w400,
-                            height: 0.12,
-                          ),
+                          style: bd_text.copyWith(color: text),
                         ),
                         const SizedBox(width: 8),
                         Text(
                           '109,000đ',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xFF4094CF),
-                            fontSize: 16,
-                            fontFamily: 'Readex Pro',
-                            fontWeight: FontWeight.w600,
-                            height: 0.06,
-                          ),
+                          style: h3.copyWith(color: primary),
                         ),
                       ],
                     ),
