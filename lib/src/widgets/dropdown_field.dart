@@ -117,7 +117,7 @@ class _CustomDropdownFormFieldState extends State<CustomDropdownFormField> {
                 ))
             .toList(),
         borderRadius: BorderRadius.circular(16),
-        elevation: 0,
+        elevation: appElevation.toInt(),
         onChanged: widget.readOnly
             ? null
             : (value) {

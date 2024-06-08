@@ -11,11 +11,10 @@ class EventDetail extends StatelessWidget {
   final String remainingDays;
 
   EventDetail(
-      {Key? key,
+      {super.key,
       required this.title,
       required this.caption,
-      required this.remainingDays})
-      : super(key: key);
+      required this.remainingDays});
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +63,7 @@ class EventDetail extends StatelessWidget {
         ),
       ),
       leading: Padding(
-        padding: EdgeInsets.only(left: 16),
+        padding: const EdgeInsets.only(left: 16),
         child: IconButton(
           icon: Icon(
             Icons.arrow_back,
@@ -75,7 +74,8 @@ class EventDetail extends StatelessWidget {
           },
         ),
       ),
-      elevation: 0,
+      scrolledUnderElevation: appElevation,
+      elevation: appElevation,
       backgroundColor: theme.colorScheme.onSecondary,
       pinned: true,
       centerTitle: true,
@@ -106,19 +106,6 @@ class EventDetail extends StatelessWidget {
           const SizedBox(height: 16),
           _buildRankMainContent(context),
         ],
-      ),
-    );
-  }
-
-  Widget _buildImage() {
-    return Container(
-      width: double.infinity,
-      height: 360,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/yoga.jpeg'),
-          fit: BoxFit.cover,
-        ),
       ),
     );
   }

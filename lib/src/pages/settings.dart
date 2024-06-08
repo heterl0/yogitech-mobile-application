@@ -205,7 +205,7 @@ class SettingItem extends StatelessWidget {
                                 style: bd_text.copyWith(
                                     color: theme.colorScheme.onPrimary)),
                             const SizedBox(height: 4),
-                            Text('Calories: ${description ?? 'N/A'}',
+                            Text('${description ?? 'N/A'}',
                                 style: min_cap.copyWith(color: text)),
                           ],
                         ),

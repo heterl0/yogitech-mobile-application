@@ -110,189 +110,126 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: Container(
-                  height: 160, // Chiều cao của khung viền
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: primary, width: 2),
-                  ),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Try this exercise',
-                              textAlign: TextAlign.left,
-                              style: bd_text.copyWith(
-                                  color: theme.colorScheme.onPrimary),
-                            ),
-                            Text(
-                              'for beginner',
-                              textAlign: TextAlign.left,
-                              style: h3.copyWith(
-                                  color: theme.colorScheme.onPrimary),
-                            ),
-                            const Spacer(),
-                            Text(
-                              'Warrior 2 pose!',
-                              textAlign: TextAlign.left,
-                              style: h3.copyWith(color: primary),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: 160, // Độ rộng của nửa bên phải
-                        child: const Image(
-                            image: AssetImage(
-                                'assets/images/ads_exercise_for_beginner.png')),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              // Placeholder for ad content
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Text(
-                  'For You',
-                  style: h3.copyWith(color: theme.colorScheme.onPrimary),
-                ),
-              ),
-              const SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    // Replace these placeholders with your actual content
-                    CustomCard(
-                      title: 'Card with Image',
-                      caption:
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                    ),
-                    CustomCard(
-                      title: 'Card with Image',
-                      caption:
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                    ),
-                    CustomCard(
-                      title: 'Card with Image',
-                      caption:
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                    ),
-                    // Add more containers if needed
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Text(
-                  'Newest',
-                  style: h3.copyWith(color: theme.colorScheme.onPrimary),
-                ),
-              ),
-              const SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    // Similar to the "For You" section, add your content here
-                    CustomCard(
-                      title: 'Card with Image',
-                      caption:
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                    ),
-                    CustomCard(
-                      title: 'Card with Image',
-                      caption:
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                    ),
-                    CustomCard(
-                      title: 'Card with Image',
-                      caption:
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: CustomBottomBar(),
-    );
-  }
-
-  Widget _buildDefaultAppBar() {
-    return const Text('');
-  }
-
-  Widget _buildSearchBar() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
-        child: Row(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconButton(
-              icon: Image.asset('assets/icons/tune.png'),
-              onPressed: () {
-                // Handle filter button press
-              },
-            ),
-            Expanded(
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Container(
-                height: 44,
-                child: TextField(
-                  controller: _searchController,
-                  autofocus: true,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white.withOpacity(0.1),
-                    hintText: 'Search...',
-                    hintStyle: const TextStyle(color: Colors.white54),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(44.0),
-                      borderSide: const BorderSide(color: Color(0xFF8D8E99)),
+                height: 160, // Chiều cao của khung viền
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: primary, width: 2),
+                ),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Try this exercise',
+                            textAlign: TextAlign.left,
+                            style: bd_text.copyWith(
+                                color: theme.colorScheme.onPrimary),
+                          ),
+                          Text(
+                            'for beginner',
+                            textAlign: TextAlign.left,
+                            style:
+                                h3.copyWith(color: theme.colorScheme.onPrimary),
+                          ),
+                          const Spacer(),
+                          Text(
+                            'Warrior 2 pose!',
+                            textAlign: TextAlign.left,
+                            style: h3.copyWith(color: primary),
+                          ),
+                        ],
+                      ),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-                    suffixIcon: IconButton(
-                      icon: Image.asset('assets/icons/search.png'),
-                      onPressed: () {
-                        // Handle the send button press
-                      },
+                    Container(
+                      width: 160, // Độ rộng của nửa bên phải
+                      child: const Image(
+                          image: AssetImage(
+                              'assets/images/ads_exercise_for_beginner.png')),
                     ),
-                  ),
-                  cursorColor: Colors.white,
+                  ],
                 ),
               ),
             ),
-            IconButton(
-              icon: Image.asset('assets/icons/close.png'),
-              onPressed: () {
-                setState(() {
-                  _isnotSearching = false;
-                  _searchController.clear();
-                });
-              },
+            // Placeholder for ad content
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Text(
+                'For You',
+                style: h3.copyWith(color: theme.colorScheme.onPrimary),
+              ),
+            ),
+            const SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  // Replace these placeholders with your actual content
+                  CustomCard(
+                    title: 'Card with Image',
+                    caption:
+                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                  ),
+                  CustomCard(
+                    title: 'Card with Image',
+                    caption:
+                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                  ),
+                  CustomCard(
+                    title: 'Card with Image',
+                    caption:
+                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                  ),
+                  // Add more containers if needed
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Text(
+                'Newest',
+                style: h3.copyWith(color: theme.colorScheme.onPrimary),
+              ),
+            ),
+            const SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  // Similar to the "For You" section, add your content here
+                  CustomCard(
+                    title: 'Card with Image',
+                    caption:
+                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                  ),
+                  CustomCard(
+                    title: 'Card with Image',
+                    caption:
+                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                  ),
+                  CustomCard(
+                    title: 'Card with Image',
+                    caption:
+                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
+      bottomNavigationBar: const CustomBottomBar(),
     );
   }
 }
