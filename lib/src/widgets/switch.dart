@@ -47,9 +47,8 @@ class _CustomSwitchState extends State<CustomSwitch> {
             if (widget.subtitle != null) // Check if subtitle exists
               Text(
                 widget.title,
-                style: h2.copyWith(
-                  color: theme.colorScheme.onPrimary,
-                ),
+                style:
+                    h2.copyWith(color: theme.colorScheme.onPrimary, height: 1),
               ),
             if (widget.subtitle != null) // Check if subtitle exists
               Text(
@@ -59,9 +58,7 @@ class _CustomSwitchState extends State<CustomSwitch> {
             if (widget.subtitle == null) // Check if subtitle doesn't exist
               Text(
                 widget.title, // Display title if no subtitle
-                style: h3.copyWith(
-                  color: text,
-                ),
+                style: h3.copyWith(color: text, height: 1),
               ),
           ],
         ),

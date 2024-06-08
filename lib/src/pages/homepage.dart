@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/pages/filter.dart';
 import 'package:yogi_application/src/pages/streak.dart';
+import 'package:yogi_application/src/pages/subscription.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
@@ -19,7 +21,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var jsonList;
-  bool _isSearching = true;
+  bool _isnotSearching = true;
   TextEditingController _searchController = TextEditingController();
 
   @override
@@ -27,13 +29,18 @@ class _HomePageState extends State<HomePage> {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: _isSearching
+      appBar: _isnotSearching
           ? CustomAppBar(
               showBackButton: false,
               preActions: [
                 GestureDetector(
                   onTap: () {
-                    // Chuyển sang trang mới khi nhấn vào
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Subscription(),
+                      ),
+                    );
                   },
                   child: Row(
                     children: [
@@ -58,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                       Icon(Icons.search, color: theme.colorScheme.onBackground),
                   onPressed: () {
                     setState(() {
-                      _isSearching = false;
+                      _isnotSearching = false;
                     });
                   },
                 ),
@@ -70,7 +77,14 @@ class _HomePageState extends State<HomePage> {
                 IconButton(
                   icon: Icon(Icons.tune_outlined,
                       color: theme.colorScheme.onBackground),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FilterPage(),
+                      ),
+                    );
+                  },
                 ),
               ],
               largeTitle: true,
@@ -90,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                       Icon(Icons.close, color: theme.colorScheme.onBackground),
                   onPressed: () {
                     setState(() {
-                      _isSearching = true;
+                      _isnotSearching = true;
                     });
                   },
                 ),
@@ -271,7 +285,7 @@ class _HomePageState extends State<HomePage> {
               icon: Image.asset('assets/icons/close.png'),
               onPressed: () {
                 setState(() {
-                  _isSearching = false;
+                  _isnotSearching = false;
                   _searchController.clear();
                 });
               },
