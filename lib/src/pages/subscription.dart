@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/pages/payment_history.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:yogi_application/src/shared/styles.dart';
 
 class Subscription extends StatefulWidget {
   @override
@@ -12,162 +17,72 @@ class _SubscriptionState extends State<Subscription> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0A141C),
+    final theme = Theme.of(context);
+    return Scaffold(
+      appBar: CustomAppBar(
+        titleWidget: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 40,
+              height: 50,
+              child: Image.asset('assets/images/Emerald.png'),
+            ),
+            Text(
+              '5',
+              style: h3.copyWith(color: theme.colorScheme.onBackground),
+            ),
+          ],
+        ),
+        postActions: [
+          IconButton(
+            icon: Icon(Icons.history, color: theme.colorScheme.onBackground),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PaymentHistory(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
-      home: Scaffold(
-        body: _buildBody(context),
+      body: _buildBody(context),
+      bottomNavigationBar: CustomBottomBar(
+        defaultStyle: false,
+        buttonTitle: "Subscription",
+        onPressed: () {},
       ),
     );
   }
 
   Widget _buildBody(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: const BoxDecoration(color: Color(0xFF0A141C)),
-      child: Stack(
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTopRoundedContainer(),
-          _buildTitleText(context),
-          Positioned(
-            left: 24,
-            right: 24,
-            top: 150,
-            bottom: 0,
-            child: SingleChildScrollView(
-              padding: EdgeInsets.only(
-                  bottom:
-                      150), // Adding padding to ensure the button is visible
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 16),
-                  _buildCurrentPlanContainer(),
-                  const SizedBox(height: 16),
-                  _buildSubscriptionContainer(),
-                  const SizedBox(height: 16),
-                  _buildChoosePlanContainer(),
-                  const SizedBox(height: 16),
-                  _buildPlanOptionContainer(),
-                  const SizedBox(height: 16),
-                  _buildPlanOptionContainer2(),
-                  const SizedBox(height: 16),
-                  _buildPlanOptionContainer3(),
-                  const SizedBox(height: 16),
-                ],
-              ),
-            ),
-          ),
-          _buildNavigationBar(),
+          const SizedBox(height: 16),
+          _buildCurrentPlanContainer(),
+          const SizedBox(height: 16),
+          _buildSubscriptionContainer(),
+          const SizedBox(height: 16),
+          _buildChoosePlanContainer(),
+          const SizedBox(height: 16),
+          _buildPlanOptionContainer(),
+          // const SizedBox(height: 16),
+          // _buildPlanOptionContainer2(),
+          // const SizedBox(height: 16),
+          // _buildPlanOptionContainer3(),
+          // const SizedBox(height: 16),
         ],
       ),
     );
   }
 
-  Widget _buildTopRoundedContainer() {
-    return Positioned(
-      left: 0,
-      top: 0,
-      right: 0,
-      child: Container(
-        height: 150,
-        decoration: BoxDecoration(
-          color: Color(0xFF0D1F29),
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(24),
-            bottomRight: Radius.circular(24),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTitleText(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          left: 0,
-          right: 0,
-          top: 105,
-          child: Container(
-            width: 68,
-            height: 24,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment
-                  .center, // Centering the content horizontally
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/Emerald.png'),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                    width: 8), // Add some spacing between logo and text
-                Text(
-                  '1.000',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'Readex Pro',
-                    fontWeight: FontWeight.w600,
-                    height: 1.2,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          left: 15,
-          top: 92,
-          child: _buildBackButton(context),
-        ),
-        Positioned(
-          right: 15,
-          top: 92,
-          child: _buildResetButton(context),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBackButton(BuildContext context) {
-    return IconButton(
-      icon: Image.asset(
-        'assets/icons/arrow_back.png',
-        color: Colors.white.withOpacity(1),
-      ),
-      iconSize: 30,
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-  }
-
-  Widget _buildResetButton(BuildContext context) {
-    return IconButton(
-      icon: Image.asset(
-        'assets/icons/device_reset.png',
-        color: Colors.white.withOpacity(1),
-      ),
-      iconSize: 30,
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-  }
-
   Widget _buildCurrentPlanContainer() {
+    final theme = Theme.of(context);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0),
       child: Column(
@@ -176,21 +91,11 @@ class _SubscriptionState extends State<Subscription> {
         children: [
           Text(
             'Your current plan',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+            style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
           SizedBox(height: 8),
-          Text(
-            'You have to wait to end this plan to subscribe to another plan',
-            style: TextStyle(
-              color: Color(0xFF8D8E99),
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
+          Text('You have to wait to end this plan to subscribe to another plan',
+              style: bd_text.copyWith(color: text)),
         ],
       ),
     );
@@ -198,14 +103,9 @@ class _SubscriptionState extends State<Subscription> {
 
   Widget _buildSubscriptionContainer() {
     return Container(
-      height: 124,
       padding: const EdgeInsets.all(12),
       decoration: ShapeDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF3BE2B0), Color(0xFF4095D0), Color(0xFF5986CC)],
-        ),
+        gradient: gradient,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
@@ -327,6 +227,7 @@ class _SubscriptionState extends State<Subscription> {
   }
 
   Widget _buildChoosePlanContainer() {
+    final theme = Theme.of(context);
     return Container(
       height: 48,
       child: Column(
@@ -339,28 +240,16 @@ class _SubscriptionState extends State<Subscription> {
             child: Text(
               'Choose a plan',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontFamily: 'Readex Pro',
-                fontWeight: FontWeight.w600,
-              ),
+              style: h3.copyWith(color: theme.colorScheme.onPrimary),
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                'Unlock all premium exercises',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color(0xFF8D8E99),
-                  fontSize: 12,
-                  fontFamily: 'Readex Pro',
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
+              Text('Unlock all premium exercises',
+                  textAlign: TextAlign.center,
+                  style: bd_text.copyWith(color: text)),
             ],
           ),
         ],
@@ -369,12 +258,12 @@ class _SubscriptionState extends State<Subscription> {
   }
 
   Widget _buildPlanOptionContainer() {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: ShapeDecoration(
-        color: Color(0xFF09141C),
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1, color: Color(0x7FA4B7BD)),
+          side: BorderSide(width: 1, color: stroke),
           borderRadius: BorderRadius.circular(16),
         ),
       ),
@@ -403,13 +292,8 @@ class _SubscriptionState extends State<Subscription> {
                   Text(
                     'Once a week',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontFamily: 'Readex Pro',
-                      fontWeight: FontWeight.w400,
-                      height: 0.12,
-                    ),
+                    style:
+                        min_cap.copyWith(color: theme.colorScheme.onBackground),
                   ),
                   const SizedBox(height: 12),
                   Container(
@@ -440,13 +324,8 @@ class _SubscriptionState extends State<Subscription> {
                                 width: 42,
                                 child: Text(
                                   '199',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontFamily: 'Readex Pro',
-                                    fontWeight: FontWeight.w600,
-                                    height: 0.06,
-                                  ),
+                                  style: h3.copyWith(
+                                      color: theme.colorScheme.onPrimary),
                                 ),
                               ),
                             ],
