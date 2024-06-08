@@ -4,6 +4,7 @@ import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/pages/payment_history.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
+import 'package:yogi_application/src/widgets/box_button.dart';
 
 class Subscription extends StatefulWidget {
   @override
@@ -337,129 +338,52 @@ class _SubscriptionState extends State<Subscription> {
 
     return showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: theme.colorScheme.onSecondary,
       builder: (context) {
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Container(
-            width: 320,
-            height: 464,
-            padding: const EdgeInsets.all(36),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onSecondary,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(24),
-                topRight: Radius.circular(24),
-              ), // Bo tròn góc
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 120,
-                  height: 120,
-                  alignment: Alignment.center,
-                  child: Center(
-                    // Thêm widget Center
-                    child: Image.asset(
-                      'assets/images/Sun2.png',
-                    ),
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 36),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 120,
+                height: 120,
+                alignment: Alignment.center,
+                child: Center(
+                  // Thêm widget Center
+                  child: Image.asset(
+                    'assets/images/Sun2.png',
                   ),
                 ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    'Once a year',
-                    textAlign: TextAlign.center,
-                    style: h2.copyWith(color: theme.colorScheme.onPrimary),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Subscription by',
-                  style: bd_text.copyWith(color: text),
-                  textAlign: TextAlign.start,
-                ),
-                const SizedBox(height: 12),
-                GestureDetector(
-                  onTap: () {
-                    // Handle unsubscription logic here
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    height: 44,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                    decoration: ShapeDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment(-0.91, -0.41),
-                        end: Alignment(0.91, -0.41),
-                        colors: [
-                          Color(0xFF3BE2B0),
-                          Color(0xFF4095D0),
-                          Color(0xFF5986CC)
-                        ],
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(44),
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '4.999.000đ',
-                        textAlign: TextAlign.center,
-                        style: h3.copyWith(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                GestureDetector(
-                  child: Container(
-                    width: double.infinity,
-                    height: 44,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                    decoration: ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 2, color: Color(0xFF4094CF)),
-                        borderRadius: BorderRadius.circular(44),
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '9.999 gems',
-                        textAlign: TextAlign.center,
-                        style: h3.copyWith(color: primary),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    height: 44,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Center(
-                      child: Text(
-                        'Cancel',
-                        textAlign: TextAlign.center,
-                        style: h3.copyWith(color: primary),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Once a year',
+                textAlign: TextAlign.center,
+                style:
+                    h2.copyWith(color: theme.colorScheme.onPrimary, height: 1),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Subscription by',
+                style: bd_text.copyWith(color: text),
+                textAlign: TextAlign.start,
+              ),
+              const SizedBox(height: 16),
+              BoxButton(title: '4.999.999đ', style: ButtonStyleType.Primary),
+              const SizedBox(height: 16),
+              BoxButton(title: '9.999 gems', style: ButtonStyleType.Secondary),
+              const SizedBox(height: 16),
+              BoxButton(
+                title: 'Cancel',
+                style: ButtonStyleType.Tertiary,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
           ),
         );
       },
