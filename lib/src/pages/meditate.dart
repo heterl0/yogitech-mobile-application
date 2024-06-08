@@ -32,6 +32,7 @@ class _MeditateState extends State<Meditate> {
       appBar: CustomAppBar(
         showBackButton: false,
         title: "Meditate",
+        style: widthStyle.Medium,
       ),
       body: _buildBody(),
       bottomNavigationBar: CustomBottomBar(),

@@ -29,6 +29,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       backgroundColor: theme.colorScheme.background,
       appBar: CustomAppBar(
         title: "Notifications",
+        style: widthStyle.Large,
       ),
       body: SingleChildScrollView(
         child: Padding(

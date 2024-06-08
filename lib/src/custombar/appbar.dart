@@ -6,7 +6,7 @@ enum widthStyle { Small, Medium, Large }
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? titleWidget;
   final String title;
-  final bool showBackButton, isTransparent;
+  final bool showBackButton;
   final List<Widget> preActions, postActions;
   final double height;
   final VoidCallback? onBackPressed;
@@ -20,22 +20,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.postActions = const [],
     this.height = 120.0,
     this.onBackPressed,
-    this.isTransparent = false,
     this.style = widthStyle.Small,
   });
 
   @override
   Widget build(BuildContext context) {
     final iconWidth = (style == widthStyle.Large)
-        ? 1
+        ? 2
         : (style == widthStyle.Small || title == '')
-            ? 4
-            : 2;
+            ? 8
+            : 4;
 
     final theme = Theme.of(context);
     return Container(
       height: preferredSize.height,
       child: AppBar(
+        scrolledUnderElevation: 0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(24),
@@ -55,15 +55,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   flex: iconWidth,
                   child: Container(
                     alignment: Alignment.centerLeft,
-                    color: Colors.deepPurple,
+                    color: Colors.deepPurple.withOpacity(0.5),
                     height: 50,
                     child: showBackButton
                         ? IconButton(
                             icon: Icon(
                               Icons.arrow_back,
-                              color: isTransparent
-                                  ? Colors.transparent
-                                  : theme.colorScheme.onBackground,
+                              color: theme.colorScheme.onBackground,
                             ),
                             onPressed: () {
                               if (onBackPressed != null) {
@@ -80,9 +78,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
                 Expanded(
-                  flex: 4,
+                  flex: 10,
                   child: Container(
-                    color: Colors.blue,
+                    color: Colors.blue.withOpacity(0.5),
                     height: 50,
                     alignment: Alignment.center,
                     child: titleWidget ??
@@ -98,7 +96,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   flex: iconWidth,
                   child: Container(
                     alignment: Alignment.centerRight,
-                    color: Colors.green,
+                    color: Colors.green.withOpacity(0.5),
                     height: 50,
                     child: () {
                       return Row(
