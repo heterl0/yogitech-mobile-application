@@ -169,7 +169,7 @@ class BlogState extends State<Blog> {
         ),
         itemCount: 6,
         itemBuilder: (context, index) {
-          final title = 'Event ${index + 1}';
+          final title = 'Blog ${index + 1}';
           final caption = 'Caption ${index + 1}';
           final subtitle = '${5 - index} days left';
 
