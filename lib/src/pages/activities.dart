@@ -347,7 +347,7 @@ class _ActivitiesState extends State<Activities> {
                   builder: (context) => EventDetail(
                     title: title,
                     caption: caption,
-                    subtitle: subtitle,
+                    remainingDays: subtitle,
                   ),
                 ),
               );

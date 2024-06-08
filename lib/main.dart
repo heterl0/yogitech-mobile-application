@@ -111,7 +111,7 @@ class _MyAppState extends State<MyApp> {
         AppRoutes.eventDetail: (context) => EventDetail(
               title: 'Event Title',
               caption: 'Event Caption',
-              subtitle: 'Event Subtitle',
+              remainingDays: 'Event Subtitle',
             ),
         AppRoutes.blog: (context) => Blog(),
         AppRoutes.blogDetail: (context) => BlogDetail(

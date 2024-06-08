@@ -32,7 +32,10 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: CustomAppBar(title: 'Edit Profile'),
+      appBar: CustomAppBar(
+        title: 'Edit Profile',
+        style: widthStyle.Large,
+      ),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(24.0),
