@@ -52,7 +52,17 @@ class _SubscriptionState extends State<Subscription> {
       bottomNavigationBar: CustomBottomBar(
         defaultStyle: false,
         buttonTitle: "Subscription",
-        onPressed: () {},
+        child: GestureDetector(
+          onTap: () {
+            // _showChangePasswordDrawer(context);
+            _subscriptionBottomSheet(context); // Changed here
+          },
+          child: Text(
+            'Unsubscription',
+            textAlign: TextAlign.center,
+            style: h3.copyWith(color: Colors.white),
+          ),
+        ),
       ),
     );
   }
@@ -66,7 +76,7 @@ class _SubscriptionState extends State<Subscription> {
           const SizedBox(height: 16),
           _buildCurrentPlanContainer(),
           const SizedBox(height: 16),
-          _buildSubscriptionContainer(),
+          _buildUnSubscriptionContainer(),
           const SizedBox(height: 16),
           _buildChoosePlanContainer(),
           const SizedBox(height: 16),
@@ -94,14 +104,18 @@ class _SubscriptionState extends State<Subscription> {
             style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
           SizedBox(height: 8),
-          Text('You have to wait to end this plan to subscribe to another plan',
-              style: bd_text.copyWith(color: text)),
+          Text(
+            'You have to wait to end this plan to subscribe to another plan',
+            style: bd_text.copyWith(color: text),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildSubscriptionContainer() {
+  Widget _buildUnSubscriptionContainer() {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: ShapeDecoration(
@@ -194,35 +208,257 @@ class _SubscriptionState extends State<Subscription> {
           const SizedBox(height: 8),
           Container(
             width: double.infinity,
-            height: 44,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            height: 48,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
             decoration: ShapeDecoration(
               shape: RoundedRectangleBorder(
                 side: BorderSide(width: 2, color: Colors.white),
                 borderRadius: BorderRadius.circular(44),
               ),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
+            child: Center(
+              child: GestureDetector(
+                onTap: () {
+                  // _showChangePasswordDrawer(context);
+                  _unsubscriptionBottomSheet(context);
+                },
+                child: Text(
                   'Unsubscription',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'Readex Pro',
-                    fontWeight: FontWeight.w600,
-                    height: 0.06,
+                  style: h3.copyWith(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _unsubscriptionBottomSheet(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Container(
+            width: 320,
+            height: 416,
+            padding: const EdgeInsets.all(36),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.onSecondary,
+              borderRadius: BorderRadius.circular(24), // Bo tròn góc
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                    width: 120,
+                    height: 120,
+                    child: Image.asset(
+                      'assets/images/MoonPhase2.png',
+                    )),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    'Do you want to unsubscription?',
+                    textAlign: TextAlign.center,
+                    style: h2.copyWith(color: theme.colorScheme.onPrimary),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                GestureDetector(
+                  onTap: () {
+                    // Handle unsubscription logic here
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 44,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: ShapeDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment(-0.91, -0.41),
+                        end: Alignment(0.91, -0.41),
+                        colors: [
+                          Color(0xFF3BE2B0),
+                          Color(0xFF4095D0),
+                          Color(0xFF5986CC)
+                        ],
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(44),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Unsubscription',
+                        textAlign: TextAlign.center,
+                        style: h3.copyWith(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 44,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(width: 2, color: Color(0xFF4094CF)),
+                        borderRadius: BorderRadius.circular(44),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Cancel',
+                        textAlign: TextAlign.center,
+                        style: h3.copyWith(color: primary),
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        ],
-      ),
+        );
+      },
+    );
+  }
+
+  Future<void> _subscriptionBottomSheet(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Container(
+            width: 320,
+            height: 416,
+            padding: const EdgeInsets.all(36),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.onSecondary,
+              borderRadius: BorderRadius.circular(24), // Bo tròn góc
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                    width: 120,
+                    height: 120,
+                    child: Image.asset(
+                      'assets/images/Sun2.png',
+                    )),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    'Once a year',
+                    textAlign: TextAlign.center,
+                    style: h2.copyWith(color: theme.colorScheme.onPrimary),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(height: 8),
+                Text(
+                  'Subscription by',
+                  style: bd_text.copyWith(color: text),
+                  textAlign: TextAlign.center,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    // Handle unsubscription logic here
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 44,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: ShapeDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment(-0.91, -0.41),
+                        end: Alignment(0.91, -0.41),
+                        colors: [
+                          Color(0xFF3BE2B0),
+                          Color(0xFF4095D0),
+                          Color(0xFF5986CC)
+                        ],
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(44),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '4.999.000',
+                        textAlign: TextAlign.center,
+                        style: h3.copyWith(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                GestureDetector(
+                  child: Container(
+                    width: double.infinity,
+                    height: 44,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(width: 2, color: Color(0xFF4094CF)),
+                        borderRadius: BorderRadius.circular(44),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '9.999 gems',
+                        textAlign: TextAlign.center,
+                        style: h3.copyWith(color: primary),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                GestureDetector(
+                  child: Container(
+                    width: double.infinity,
+                    height: 44,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Center(
+                      child: Text(
+                        'Cancel',
+                        textAlign: TextAlign.center,
+                        style: h3.copyWith(color: primary),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -655,62 +891,6 @@ class _SubscriptionState extends State<Subscription> {
       checkColor: Color(0xFF4095D0), // Tick color when checked
       value: value,
       onChanged: onChanged,
-    );
-  }
-
-  Widget _buildNavigationBar() {
-    return Positioned(
-      left: 0,
-      bottom: 0,
-      right: 0,
-      child: Container(
-        height: 100,
-        decoration: BoxDecoration(
-          color: Color(0xFF0D1F29),
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(24),
-            topRight: Radius.circular(24),
-          ),
-        ),
-        child: Padding(
-          padding: EdgeInsets.only(bottom: 20),
-          child: Center(
-            child: _buildExerciseButton(),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildExerciseButton() {
-    return Container(
-      width: 324,
-      height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      decoration: ShapeDecoration(
-        gradient: LinearGradient(
-          begin: Alignment(0.91, -0.41),
-          end: Alignment(-0.91, 0.41),
-          colors: [Color(0xFF3BE2B0), Color(0xFF4095D0), Color(0xFF5986CC)],
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(44),
-        ),
-      ),
-      child: Center(
-        child: Text(
-          'Subscription',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontFamily: 'Readex Pro',
-            fontWeight: FontWeight.w600,
-            height: 0.06,
-          ),
-        ),
-      ),
     );
   }
 }
