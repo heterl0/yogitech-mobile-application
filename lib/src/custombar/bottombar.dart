@@ -8,14 +8,12 @@ class CustomBottomBar extends StatefulWidget {
   final bool defaultStyle;
   final String buttonTitle;
   final VoidCallback? onPressed;
-  final Widget child;
 
   const CustomBottomBar({
     Key? key,
     this.defaultStyle = true,
     this.buttonTitle = '',
     this.onPressed,
-    this.child = const SizedBox.shrink(),
   }) : super(key: key);
 
   @override
