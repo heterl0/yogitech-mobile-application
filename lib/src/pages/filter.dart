@@ -3,11 +3,16 @@ import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
-import 'package:yogi_application/src/widgets/dropdown_field.dart';
+import 'package:yogi_application/src/widgets/dropdown_field.dart'; // Import DropdownField
 
-class FilterPage extends StatelessWidget {
+class FilterPage extends StatefulWidget {
+  @override
+  _FilterPageState createState() => _FilterPageState();
+}
+
+class _FilterPageState extends State<FilterPage> {
   final TextEditingController category = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -35,9 +40,10 @@ class FilterPage extends StatelessWidget {
                   style: h3.copyWith(color: theme.colorScheme.onPrimary)),
               SizedBox(height: 8.0),
               CustomDropdownFormField(
+                // Sử dụng CustomDropdownFormField
                 controller: category,
-                itemsValue: ['Hip', 'Chest', 'Other'],
-                placeholder: 'Select category',
+                placeholder: "Choose category",
+                items: ['Hip', 'Chest', 'Other'],
                 onTap: () {
                   // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết
                 },

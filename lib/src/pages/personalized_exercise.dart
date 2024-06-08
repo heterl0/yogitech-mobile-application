@@ -3,14 +3,50 @@ import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/widgets/box_input_field.dart';
 
-class PersonalizedExercisePage extends StatelessWidget {
+class PersonalizedExercisePage extends StatefulWidget {
+  @override
+  _PersonalizedExercisePageState createState() =>
+      _PersonalizedExercisePageState();
+}
+
+class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
+  bool _isNotSearching = true;
+  TextEditingController _searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: CustomAppBar(title: 'Your Exercise'),
+      appBar: _isNotSearching
+          ? CustomAppBar(title: 'Your Exercise')
+          : CustomAppBar(
+              showBackButton: false,
+              largeTitle: true,
+              titleWidget: BoxInputField(
+                controller: _searchController,
+                placeholder: 'Search...',
+                trailing: Icon(Icons.search),
+                keyboardType: TextInputType.text,
+                inputFormatters: [],
+                onTap: () {
+                  // Xử lý khi input field được nhấn
+                },
+              ),
+              postActions: [
+                IconButton(
+                  icon:
+                      Icon(Icons.close, color: theme.colorScheme.onBackground),
+                  onPressed: () {
+                    setState(() {
+                      _isNotSearching = true;
+                    });
+                  },
+                ),
+              ],
+            ),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(16.0),
@@ -60,7 +96,9 @@ class PersonalizedExercisePage extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(30),
           onTap: () {
-            // Xử lý sự kiện khi nhấn nút
+            setState(() {
+              _isNotSearching = false;
+            });
           },
           child: const Icon(
             Icons.edit,

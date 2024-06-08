@@ -15,14 +15,14 @@ class Blog extends StatefulWidget {
 }
 
 class BlogState extends State<Blog> {
-  bool _isSearching = true;
+  bool _isNotSearching = true;
   TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: _isSearching
+      appBar: _isNotSearching
           ? CustomAppBar(
               showBackButton: false,
               title: 'Blog',
@@ -32,7 +32,7 @@ class BlogState extends State<Blog> {
                       Icon(Icons.search, color: theme.colorScheme.onBackground),
                   onPressed: () {
                     setState(() {
-                      _isSearching = false;
+                      _isNotSearching = false;
                     });
                   },
                 ),
@@ -43,7 +43,7 @@ class BlogState extends State<Blog> {
                 // Xử lý khi nút back được nhấn
 
                 setState(() {
-                  _isSearching = true;
+                  _isNotSearching = true;
                 });
               },
               largeTitle: true,
@@ -63,7 +63,7 @@ class BlogState extends State<Blog> {
                       Icon(Icons.close, color: theme.colorScheme.onBackground),
                   onPressed: () {
                     setState(() {
-                      _isSearching = true;
+                      _isNotSearching = true;
                     });
                   },
                 ),
@@ -95,7 +95,7 @@ class BlogState extends State<Blog> {
             ),
             onPressed: () {
               setState(() {
-                _isSearching = false;
+                _isNotSearching = false;
                 _searchController.clear();
               });
             },
@@ -125,7 +125,7 @@ class BlogState extends State<Blog> {
             ),
             onPressed: () {
               setState(() {
-                _isSearching = false;
+                _isNotSearching = false;
                 _searchController.clear();
               });
             },

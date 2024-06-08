@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var jsonList;
-  bool _isSearching = true;
+  bool _isNotSearching = true;
   TextEditingController _searchController = TextEditingController();
 
   @override
@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: _isSearching
+      appBar: _isNotSearching
           ? CustomAppBar(
               showBackButton: false,
               preActions: [
@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                       Icon(Icons.search, color: theme.colorScheme.onBackground),
                   onPressed: () {
                     setState(() {
-                      _isSearching = false;
+                      _isNotSearching = false;
                     });
                   },
                 ),
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                       Icon(Icons.close, color: theme.colorScheme.onBackground),
                   onPressed: () {
                     setState(() {
-                      _isSearching = true;
+                      _isNotSearching = true;
                     });
                   },
                 ),
@@ -279,7 +279,7 @@ class _HomePageState extends State<HomePage> {
               icon: Image.asset('assets/icons/close.png'),
               onPressed: () {
                 setState(() {
-                  _isSearching = false;
+                  _isNotSearching = false;
                   _searchController.clear();
                 });
               },

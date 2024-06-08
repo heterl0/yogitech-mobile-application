@@ -131,8 +131,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 // ),
                 CustomDropdownFormField(
                   controller: gender,
-                  initialDropdownValue: "Other",
-                  itemsValue: ['Male', 'Female', 'Other'],
+                  items: ['Male', 'Female', 'Other'],
                   placeholder: 'Select gender',
                   onTap: () {
                     // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết
