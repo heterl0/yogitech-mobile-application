@@ -30,6 +30,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
         topRight: Radius.circular(24.0),
       ),
       child: BottomAppBar(
+        elevation: appElevation,
         color: theme.colorScheme.onSecondary,
         height: 90,
         padding: const EdgeInsets.only(bottom: 20),

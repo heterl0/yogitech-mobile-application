@@ -35,7 +35,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Container(
       height: preferredSize.height,
       child: AppBar(
-        scrolledUnderElevation: 0,
+        scrolledUnderElevation: appElevation,
+        elevation: appElevation,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(24),

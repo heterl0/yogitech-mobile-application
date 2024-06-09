@@ -184,12 +184,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
       backgroundColor: theme.colorScheme.onSecondary,
       builder: (BuildContext context) {
         return Padding(
-          padding: EdgeInsets.only(
-            left: 24.0,
-            right: 24.0,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 24.0,
-            top: 24.0,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 36),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,

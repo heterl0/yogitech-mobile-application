@@ -169,11 +169,14 @@ class BlogState extends State<Blog> {
         ),
         itemCount: 6,
         itemBuilder: (context, index) {
-          final title = 'Event ${index + 1}';
+          final title = 'Blog ${index + 1}';
           final caption = 'Caption ${index + 1}';
           final subtitle = '${5 - index} days left';
 
-          return GestureDetector(
+          return CustomCard(
+            title: title,
+            caption: caption,
+            subtitle: subtitle,
             onTap: () {
               Navigator.push(
                 context,
@@ -186,11 +189,6 @@ class BlogState extends State<Blog> {
                 ),
               );
             },
-            child: CustomCard(
-              title: title,
-              caption: caption,
-              subtitle: subtitle,
-            ),
           );
         },
       ),
