@@ -124,8 +124,11 @@ class _LoginPageState extends State<LoginPage> {
                           fontSize: 20,
                           textColor: Color(0xff8D8E99),
                           buttonType: SocialLoginButtonType.google,
-                          onPressed: () {
-                            _handleGoogleSignIn();
+                          onPressed: () async {
+                            var user = await LoginGoogle.login();
+                            if (user != null) {
+                              print(user.displayName);
+                            }
                           },
                         ),
                       ),
@@ -155,51 +158,55 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> _handleGoogleSignIn() async {
-    setState(() {
-      _isLoading = true;
-    });
+  // Future<void> _handleGoogleSignIn() async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
 
-    try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        setState(() {
-          _isLoading = false;
-        });
-        return; // Người dùng đã hủy đăng nhập
-      }
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-      final String? authToken = googleAuth.idToken;
+  //   try {
+  //     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+  //     if (googleUser == null) {
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+  //       return; // Người dùng đã hủy đăng nhập
+  //     }
+  //     final GoogleSignInAuthentication googleAuth =
+  //         await googleUser.authentication;
+  //     final String? authToken = googleAuth.idToken;
 
-      if (authToken != null) {
-        final response = await Dio().post(
-          'https://api.yogitech.me/api/v1/auth/google/',
-          data: {'auth_token': authToken},
-        );
+  //     if (authToken != null) {
+  //       final response = await Dio().post(
+  //         'https://api.yogitech.me/api/v1/auth/google/',
+  //         data: {'auth_token': authToken},
+  //       );
 
-        if (response.statusCode == 200) {
-          final responseBody = response.data['auth_token'];
-          // Xử lý authTokenResponse (lưu trữ, chuyển trang, v.v.)
-          print('Auth Token: $responseBody');
-          Navigator.pushReplacementNamed(context, AppRoutes.homepage);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text('Error while calling API: ${response.data}')),
-          );
-        }
-      }
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to sign in: $error')),
-      );
-    }
+  //       if (response.statusCode == 200) {
+  //         final responseBody = response.data['auth_token'];
+  //         // Xử lý authTokenResponse (lưu trữ, chuyển trang, v.v.)
+  //         print('Auth Token: $responseBody');
+  //         Navigator.pushReplacementNamed(context, AppRoutes.homepage);
+  //       } else {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(
+  //               content: Text('Error while calling API: ${response.data}')),
+  //         );
+  //       }
+  //     }
+  //   } catch (error) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Failed to sign in: $error')),
+  //     );
+  //   }
 
-    setState(() {
-      _isLoading = false;
-    });
-  }
+  //   setState(() {
+  //     _isLoading = false;
+  //   });
+  // }
+
+  // Future SignIn() async {
+  //   await GoogleSignIn.login();
+  // }
 
   Future<void> _handleLogin(BuildContext context) async {
     String enteredEmail = emailController.text;

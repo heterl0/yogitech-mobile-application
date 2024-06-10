@@ -1,3 +1,4 @@
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -18,6 +19,7 @@ class ApiService {
       final api = '$baseUrl/api/v1/auth/login/';
       final data = {'email': email, 'password': password};
       Response response = await dio.post(api, data: data);
+
       if (response.statusCode == 200) {
         final accessToken = response.data['access'];
         final refreshToken = response.data['refresh'];
@@ -61,4 +63,10 @@ Future<dynamic> saveTokens(String accessToken, String refreshToken) async {
   final savedRefreshToken = prefs.getString('refreshToken');
   print('Saved access token: $savedAccessToken');
   print('Saved refresh token: $savedRefreshToken');
+}
+
+class LoginGoogle {
+  static final _googleSignin = GoogleSignIn();
+  static Future<GoogleSignInAccount?> login() => _googleSignin.signIn();
+  static Future signOut = _googleSignin.signOut();
 }
