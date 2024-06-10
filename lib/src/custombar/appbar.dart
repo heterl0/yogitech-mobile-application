@@ -56,7 +56,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   flex: iconWidth,
                   child: Container(
                     alignment: Alignment.centerLeft,
-                    color: Colors.deepPurple.withOpacity(0.5),
                     height: 50,
                     child: showBackButton
                         ? IconButton(
@@ -81,7 +80,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Expanded(
                   flex: 10,
                   child: Container(
-                    color: Colors.blue.withOpacity(0.5),
                     height: 50,
                     alignment: Alignment.center,
                     child: titleWidget ??
@@ -97,7 +95,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   flex: iconWidth,
                   child: Container(
                     alignment: Alignment.centerRight,
-                    color: Colors.green.withOpacity(0.5),
                     height: 50,
                     child: () {
                       return Row(
