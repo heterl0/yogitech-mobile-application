@@ -4,6 +4,7 @@ import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/calorie.dart';
+import 'package:yogi_application/src/pages/social.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
@@ -138,7 +139,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           subtitle: 'Your friends and more',
                           iconPath: 'assets/icons/diversity_2.png',
                           onTap: () {
-                            print('Social info pressed');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SocialPage(),
+                              ),
+                            );
                           },
                         ),
                         const SizedBox(height: 6),
