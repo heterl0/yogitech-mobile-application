@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
+import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 import 'package:yogi_application/src/pages/blog_detail.dart';
 
@@ -13,61 +15,60 @@ class Blog extends StatefulWidget {
 }
 
 class BlogState extends State<Blog> {
-  bool _isSearching = false;
+  bool _isNotSearching = true;
   TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(_isSearching ? 100 : 100),
-        // Increase height when searching
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(24.0),
-            bottomRight: Radius.circular(24.0),
-          ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: theme.colorScheme.onSecondary,
-            title: _isSearching ? _buildSearchBar() : _buildDefaultAppBar(),
-            bottom: _isSearching
-                ? null
-                : PreferredSize(
-                    preferredSize: const Size.fromHeight(0),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 8.0,
-                        right: 24.0,
-                        left: 24.0,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: Text(
-                              'Blog',
-                              style: h2.copyWith(
-                                  color: theme.colorScheme.onBackground),
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.search,
-                                color: theme.colorScheme.onBackground),
-                            onPressed: () {
-                              setState(() {
-                                _isSearching = true;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-          ),
-        ),
-      ),
+      appBar: _isNotSearching
+          ? CustomAppBar(
+              showBackButton: false,
+              title: 'Blog',
+              postActions: [
+                IconButton(
+                  icon:
+                      Icon(Icons.search, color: theme.colorScheme.onBackground),
+                  onPressed: () {
+                    setState(() {
+                      _isNotSearching = false;
+                    });
+                  },
+                ),
+              ],
+            )
+          : CustomAppBar(
+              onBackPressed: () {
+                // Xử lý khi nút back được nhấn
+
+                setState(() {
+                  _isNotSearching = true;
+                });
+              },
+              style: widthStyle.Large,
+              titleWidget: BoxInputField(
+                controller: _searchController,
+                placeholder: 'Search...',
+                trailing: Icon(Icons.search),
+                keyboardType: TextInputType.text,
+                inputFormatters: [],
+                onTap: () {
+                  // Xử lý khi input field được nhấn
+                },
+              ),
+              postActions: [
+                IconButton(
+                  icon:
+                      Icon(Icons.close, color: theme.colorScheme.onBackground),
+                  onPressed: () {
+                    setState(() {
+                      _isNotSearching = true;
+                    });
+                  },
+                ),
+              ],
+            ),
       body: _buildBody(context),
       bottomNavigationBar: CustomBottomBar(),
     );
@@ -78,49 +79,53 @@ class BlogState extends State<Blog> {
   }
 
   Widget _buildSearchBar() {
+    final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.only(top: 12.0),
+      padding: const EdgeInsets.only(
+        bottom: 8.0,
+        right: 24.0,
+        left: 24.0,
+      ),
       child: Row(
         children: [
           IconButton(
-            icon: Image.asset('assets/icons/tune.png'),
+            icon: Icon(
+              Icons.arrow_back,
+              color: theme.colorScheme.onBackground,
+            ),
             onPressed: () {
-              // Handle filter button press
+              setState(() {
+                _isNotSearching = false;
+                _searchController.clear();
+              });
             },
           ),
           Expanded(
-            child: Container(
-              height: 44,
-              child: TextField(
-                controller: _searchController,
-                autofocus: true,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white.withOpacity(0.1),
-                  hintText: 'Search...',
-                  hintStyle: const TextStyle(color: Colors.white54),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(44.0),
-                    borderSide: const BorderSide(color: Color(0xFF8D8E99)),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-                  suffixIcon: IconButton(
-                    icon: Image.asset('assets/icons/search.png'),
-                    onPressed: () {
-                      // Handle the send button press
-                    },
-                  ),
-                ),
-                cursorColor: Colors.white,
+            child: BoxInputField(
+              controller: _searchController,
+              placeholder: 'Search...',
+              leading: null,
+              trailing: Icon(
+                Icons.search,
               ),
+
+              // Handle the send button press
+
+              keyboardType: TextInputType.text,
+              inputFormatters: [],
+              onTap: () {
+                // Handle tap on input field
+              },
             ),
           ),
           IconButton(
-            icon: Image.asset('assets/icons/close.png'),
+            icon: Icon(
+              Icons.close,
+              color: theme.colorScheme.onBackground,
+            ),
             onPressed: () {
               setState(() {
-                _isSearching = false;
+                _isNotSearching = false;
                 _searchController.clear();
               });
             },
@@ -131,10 +136,11 @@ class BlogState extends State<Blog> {
   }
 
   Widget _buildBody(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: const BoxDecoration(color: Color(0xFF0A141C)),
+      decoration: BoxDecoration(color: theme.colorScheme.background),
       child: Stack(
         children: [
           Positioned.fill(
@@ -163,11 +169,14 @@ class BlogState extends State<Blog> {
         ),
         itemCount: 6,
         itemBuilder: (context, index) {
-          final title = 'Event ${index + 1}';
+          final title = 'Blog ${index + 1}';
           final caption = 'Caption ${index + 1}';
           final subtitle = '${5 - index} days left';
 
-          return GestureDetector(
+          return CustomCard(
+            title: title,
+            caption: caption,
+            subtitle: subtitle,
             onTap: () {
               Navigator.push(
                 context,
@@ -180,11 +189,6 @@ class BlogState extends State<Blog> {
                 ),
               );
             },
-            child: CustomCard(
-              title: title,
-              caption: caption,
-              subtitle: subtitle,
-            ),
           );
         },
       ),

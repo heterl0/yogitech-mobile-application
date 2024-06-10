@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/features/api_service.dart';
+import 'package:yogi_application/src/pages/change_profile.dart';
+import 'package:yogi_application/src/pages/calorie.dart';
+import 'package:yogi_application/src/pages/social.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
@@ -40,60 +44,36 @@ class _ProfilePageState extends State<ProfilePage> {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(100),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(24.0),
-            bottomRight: Radius.circular(24.0),
-          ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: theme.colorScheme.onSecondary,
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(0),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 12.0,
-                  right: 24.0,
-                  left: 24.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.ios_share,
-                        color: theme.colorScheme.onBackground,
-                      ),
-                      onPressed: () {},
-                    ),
-                    Text('Profile',
-                        style:
-                            h2.copyWith(color: theme.colorScheme.onBackground)),
-                    IconButton(
-                      icon: Icon(
-                        Icons.settings,
-                        color: theme.colorScheme.onBackground,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SettingsPage(
-                              isDarkMode: widget.isDarkMode,
-                              onThemeChanged: widget.onThemeChanged,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+      appBar: CustomAppBar(
+        showBackButton: false,
+        title: "Profile",
+        postActions: [
+          IconButton(
+              icon: Icon(
+                Icons.settings,
+                color: theme.colorScheme.onBackground,
               ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SettingsPage(
+                      isDarkMode: widget.isDarkMode,
+                      onThemeChanged: widget.onThemeChanged,
+                    ),
+                  ),
+                );
+              })
+        ],
+        preActions: [
+          IconButton(
+            icon: Icon(
+              Icons.ios_share,
+              color: theme.colorScheme.onBackground,
             ),
+            onPressed: () {},
           ),
-        ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -102,27 +82,38 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Row(
                 children: [
-                  Column(
-                    children: [
-                      Container(
-                        width: 144, // 2 * radius + 8 (border width) * 2
-                        height:
-                            144, // Đã sửa lại thành 144 cho khớp tỉ lệ so với Figma
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ChangeProfilePage()), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 144, // 2 * radius + 8 (border width) * 2
+                          height:
+                              144, // Đã sửa lại thành 144 cho khớp tỉ lệ so với Figma
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: const CircleAvatar(
+                            radius: 78,
+                            backgroundImage:
+                                AssetImage('assets/images/avatar.png'),
+                          ),
                         ),
-                        child: const CircleAvatar(
-                          radius: 78,
-                          backgroundImage:
-                              AssetImage('assets/images/avatar.png'),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Duy',
+                          style: h2.copyWith(
+                              color: Theme.of(context).colorScheme.onPrimary),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Duy',
-                        style: h2.copyWith(color: theme.colorScheme.onPrimary),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -134,7 +125,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           subtitle: 'Your total of calories',
                           iconPath: 'assets/icons/info.png',
                           onTap: () {
-                            print('Calorie info pressed');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Calorie(),
+                              ),
+                            );
                           },
                         ),
                         const SizedBox(height: 6),
@@ -143,7 +139,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           subtitle: 'Your friends and more',
                           iconPath: 'assets/icons/diversity_2.png',
                           onTap: () {
-                            print('Social info pressed');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SocialPage(),
+                              ),
+                            );
                           },
                         ),
                         const SizedBox(height: 6),

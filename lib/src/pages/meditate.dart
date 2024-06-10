@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/pages/perform_meditate.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
@@ -28,6 +29,11 @@ class _MeditateState extends State<Meditate> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
+      appBar: CustomAppBar(
+        showBackButton: false,
+        title: "Meditate",
+        style: widthStyle.Medium,
+      ),
       body: _buildBody(),
       bottomNavigationBar: CustomBottomBar(),
     );
@@ -41,8 +47,8 @@ class _MeditateState extends State<Meditate> {
       decoration: BoxDecoration(color: theme.colorScheme.background),
       child: Stack(
         children: [
-          _buildTopRoundedContainer(),
-          _buildTitleText(),
+          // _buildTopRoundedContainer(),
+          // _buildTitleText(),
           _buildMainContent(),
           _buildElevatedButton(context),
         ],

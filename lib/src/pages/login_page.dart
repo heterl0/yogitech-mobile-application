@@ -103,27 +103,26 @@ class _LoginPageState extends State<LoginPage> {
                             style: bd_text.copyWith(color: text),
                           ),
                         ),
-                        Expanded(child: Divider(color: text)),
+                        const Expanded(child: Divider(color: text)),
                       ]),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: Color(0xff131314),
+                          color: theme.scaffoldBackgroundColor,
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(
-                            color: Color(0xffA4B8BE),
+                            color: stroke,
                             width: 2, // Adjust the border width as needed
                           ),
                         ),
                         child: SocialLoginButton(
-                          backgroundColor: Color(0xff131314),
+                          backgroundColor: theme.scaffoldBackgroundColor,
                           height: 50,
-                          text: 'Sign in with Google',
                           borderRadius: 30,
                           fontSize: 20,
-                          textColor: Color(0xff8D8E99),
+                          textColor: theme.colorScheme.onPrimary,
                           buttonType: SocialLoginButtonType.google,
                           onPressed: () async {
                             var user = await LoginGoogle.login();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
@@ -11,48 +12,8 @@ class FriendsPage extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(24.0),
-            bottomRight: Radius.circular(24.0),
-          ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: theme.colorScheme.onSecondary,
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(0),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 12.0,
-                  right: 24.0,
-                  left: 24.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: theme.colorScheme.onBackground,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    Text('Friends',
-                        style:
-                            h2.copyWith(color: theme.colorScheme.onBackground)),
-                    SizedBox(
-                        width:
-                            48), // Thêm khoảng trống để cân đối với icon settings
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+      appBar: CustomAppBar(
+        title: 'Friends',
       ),
       body: SingleChildScrollView(
         controller: _controller, // Gán ScrollController
@@ -115,7 +76,7 @@ class FriendList extends StatelessWidget {
           itemBuilder: (context, index) {
             return FriendListItem(
               name: 'Friend Name $index',
-              avatarUrl: 'assets/images/avatar_placeholder.png',
+              avatarUrl: 'assets/images/gradient.jpg',
               exp: '10000',
               onTap: onTap != null
                   ? () => onTap!()

@@ -9,6 +9,7 @@ import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/forgot_password.dart';
 import 'package:yogi_application/src/pages/friend_profile.dart';
+import 'package:yogi_application/src/pages/notifications.dart';
 import 'package:yogi_application/src/pages/payment_history.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
 import 'package:yogi_application/src/pages/meditate.dart';
@@ -27,7 +28,7 @@ import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/pages/profile.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:dio/dio.dart';
-import 'package:yogi_application/src/pages/settings.dart'; // Import SettingsPage
+import 'package:yogi_application/src/pages/settings.dart';
 import 'dart:io';
 
 void main() async {
@@ -87,7 +88,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: widget.savedEmail != null && widget.savedPassword != null
           ? AppRoutes.homepage
-          : AppRoutes.login,
+          : AppRoutes.homepage,
       routes: {
         AppRoutes.homepage: (context) => HomePage(
             savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
@@ -100,7 +101,7 @@ class _MyAppState extends State<MyApp> {
         AppRoutes.meditate: (context) => Meditate(),
         AppRoutes.performMeditate: (context) => performMeditate(),
         AppRoutes.streak: (context) => Streak(),
-        AppRoutes.exercisedetail: (context) => exerciseDetail(),
+        AppRoutes.exercisedetail: (context) => ExerciseDetail(),
         AppRoutes.result: (context) => Result(),
         AppRoutes.subscription: (context) => Subscription(),
         AppRoutes.Profile: (context) => ProfilePage(
@@ -110,7 +111,7 @@ class _MyAppState extends State<MyApp> {
         AppRoutes.eventDetail: (context) => EventDetail(
               title: 'Event Title',
               caption: 'Event Caption',
-              subtitle: 'Event Subtitle',
+              remainingDays: 'Event Subtitle',
             ),
         AppRoutes.blog: (context) => Blog(),
         AppRoutes.blogDetail: (context) => BlogDetail(
@@ -118,7 +119,8 @@ class _MyAppState extends State<MyApp> {
               caption: 'Event Caption',
               subtitle: 'Event Subtitle',
             ),
-        AppRoutes.friendProfile: (context) => FriendProfile(),
+        AppRoutes.reminder: (context) => ReminderPage(),
+        AppRoutes.notifications: (context) => NotificationsPage(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == AppRoutes.settings) {

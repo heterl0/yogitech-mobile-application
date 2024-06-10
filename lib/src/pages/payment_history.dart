@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
@@ -14,44 +15,48 @@ class _PaymentHistoryState extends State<PaymentHistory> {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(24.0),
-            bottomRight: Radius.circular(24.0),
-          ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: theme.colorScheme.onSecondary,
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(0),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 12.0,
-                  right: 20.0,
-                  left: 20.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.white),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    Spacer(),
-                    Text('Payment History', style: h2.copyWith(color: active)),
-                    Spacer(
-                      flex: 2,
-                    ), // Adjust the flex value to center the title properly
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+      // appBar: PreferredSize(
+      //   preferredSize: Size.fromHeight(100),
+      //   child: ClipRRect(
+      //     borderRadius: BorderRadius.only(
+      //       bottomLeft: Radius.circular(24.0),
+      //       bottomRight: Radius.circular(24.0),
+      //     ),
+      //     child: AppBar(
+      //       automaticallyImplyLeading: false,
+      //       backgroundColor: theme.colorScheme.onSecondary,
+      //       bottom: PreferredSize(
+      //         preferredSize: Size.fromHeight(0),
+      //         child: Padding(
+      //           padding: const EdgeInsets.only(
+      //             bottom: 12.0,
+      //             right: 20.0,
+      //             left: 20.0,
+      //           ),
+      //           child: Row(
+      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //             children: [
+      //               IconButton(
+      //                 icon: Icon(Icons.arrow_back, color: Colors.white),
+      //                 onPressed: () {
+      //                   Navigator.of(context).pop();
+      //                 },
+      //               ),
+      //               Spacer(),
+      //               Text('Payment History', style: h2.copyWith(color: active)),
+      //               Spacer(
+      //                 flex: 2,
+      //               ), // Adjust the flex value to center the title properly
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      appBar: CustomAppBar(
+        style: widthStyle.Large,
+        title: "Payment History",
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -109,18 +114,12 @@ class _PaymentHistoryState extends State<PaymentHistory> {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: h3.copyWith(color: theme.colorScheme.onPrimary),
                 ),
                 Text(
                   date,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
+                  style:
+                      min_cap.copyWith(color: theme.colorScheme.onBackground),
                 ),
               ],
             ),
@@ -132,22 +131,14 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                 SizedBox(width: 4),
                 Text(
                   amount,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: h3.copyWith(color: theme.colorScheme.onPrimary),
                 ),
               ],
             )
           ] else ...[
             Text(
               amount,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: h3.copyWith(color: primary),
             ),
           ],
         ],

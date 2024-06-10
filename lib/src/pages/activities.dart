@@ -339,7 +339,10 @@ class _ActivitiesState extends State<Activities> {
           final caption = 'Caption ${index + 1}';
           final subtitle = '${5 - index} days left';
 
-          return GestureDetector(
+          return CustomCard(
+            title: title,
+            caption: caption,
+            subtitle: subtitle,
             onTap: () {
               Navigator.push(
                 context,
@@ -347,16 +350,11 @@ class _ActivitiesState extends State<Activities> {
                   builder: (context) => EventDetail(
                     title: title,
                     caption: caption,
-                    subtitle: subtitle,
+                    remainingDays: subtitle,
                   ),
                 ),
               );
             },
-            child: CustomCard(
-              title: title,
-              caption: caption,
-              subtitle: subtitle,
-            ),
           );
         },
       ),

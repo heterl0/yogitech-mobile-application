@@ -1,63 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/widgets/box_input_field.dart';
 
-class PersonalizedExercisePage extends StatelessWidget {
+class PersonalizedExercisePage extends StatefulWidget {
+  @override
+  _PersonalizedExercisePageState createState() =>
+      _PersonalizedExercisePageState();
+}
+
+class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
+  bool _isNotSearching = true;
+  TextEditingController _searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(24.0),
-            bottomRight: Radius.circular(24.0),
-          ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: theme.colorScheme.onSecondary,
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(0),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 12.0,
-                  right: 24.0,
-                  left: 24.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: theme.colorScheme.onBackground,
-                      ), // Sử dụng icon "back" có sẵn
-                      onPressed: () {
-                        Navigator.pop(context); // Thêm sự kiện quay lại
-                      },
-                    ),
-                    Text('Your Exercise',
-                        style:
-                            h2.copyWith(color: theme.colorScheme.onBackground)),
-                    Opacity(
-                      opacity: 0.0,
-                      child: IgnorePointer(
-                        child: IconButton(
-                          icon: Image.asset('assets/icons/settings.png'),
-                          onPressed: () {},
-                        ),
-                      ),
-                    ) // Ẩn icon đi
-                  ],
-                ),
+      appBar: _isNotSearching
+          ? CustomAppBar(
+              title: 'Your Exercise',
+              style: widthStyle.Large,
+            )
+          : CustomAppBar(
+              showBackButton: false,
+              style: widthStyle.Large,
+              titleWidget: BoxInputField(
+                controller: _searchController,
+                placeholder: 'Search...',
+                trailing: Icon(Icons.search),
+                keyboardType: TextInputType.text,
+                inputFormatters: [],
+                onTap: () {
+                  // Xử lý khi input field được nhấn
+                },
               ),
+              postActions: [
+                IconButton(
+                  icon:
+                      Icon(Icons.close, color: theme.colorScheme.onBackground),
+                  onPressed: () {
+                    setState(() {
+                      _isNotSearching = true;
+                    });
+                  },
+                ),
+              ],
             ),
-          ),
-        ),
-      ),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(16.0),
@@ -72,7 +64,7 @@ class PersonalizedExercisePage extends StatelessWidget {
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: 15, // Số phần tử trong danh sách đầu tiên
                     itemBuilder: (context, index) {
-                      return ListItem(
+                      return const ListItem(
                         difficulty: 'Beginner',
                         poseName: 'Hip',
                         calories: '100000',
@@ -94,24 +86,31 @@ class PersonalizedExercisePage extends StatelessWidget {
 
   Widget _buildFloatingActionButton(BuildContext context) {
     return FloatingActionButton(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       backgroundColor: Colors.transparent,
       elevation: 0,
-      onPressed: () {
-        // Xử lý sự kiện khi nhấn nút
-      },
-      child: Container(
+      child: Ink(
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: gradient, // Gradient từ app_colors.dart
+        ),
         width: 60,
         height: 60,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: gradient, // Áp dụng gradient từ app_colors.dart
-        ),
-        child: Icon(
-          Icons.edit,
-          color: active,
-          size: 24,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(30),
+          onTap: () {
+            setState(() {
+              _isNotSearching = false;
+            });
+          },
+          child: const Icon(
+            Icons.edit,
+            color: active,
+            size: 24,
+          ),
         ),
       ),
+      onPressed: () {}, // Cái này nhấn không có tác dụng
     );
   }
 }

@@ -67,6 +67,8 @@ class _CustomDropdownFormFieldState extends State<CustomDropdownFormField> {
     return CompositedTransformTarget(
       link: _layerLink,
       child: DropdownButtonFormField<String>(
+        dropdownColor: theme.colorScheme.onSecondary,
+        isExpanded: true,
         focusNode: _focusNode,
         decoration: InputDecoration(
           hintText: widget.placeholder,
@@ -101,19 +103,21 @@ class _CustomDropdownFormFieldState extends State<CustomDropdownFormField> {
         ),
         hint: Text(
           widget.placeholder,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'ReadexPro',
             fontSize: 16,
             fontWeight: FontWeight.w400,
-            color: theme.colorScheme.onSurface.withOpacity(0.6),
+            color: text,
           ),
         ),
         items: widget.items
             .map((label) => DropdownMenuItem(
-                  child: Text(label, style: bd_text.copyWith(color: text)),
                   value: label,
+                  child: Text(label, style: bd_text.copyWith(color: text)),
                 ))
             .toList(),
+        borderRadius: BorderRadius.circular(16),
+        elevation: appElevation.toInt(),
         onChanged: widget.readOnly
             ? null
             : (value) {
