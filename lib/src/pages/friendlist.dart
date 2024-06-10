@@ -76,7 +76,7 @@ class FriendList extends StatelessWidget {
           itemBuilder: (context, index) {
             return FriendListItem(
               name: 'Friend Name $index',
-              avatarUrl: 'assets/images/avatar_placeholder.png',
+              avatarUrl: 'assets/images/gradient.jpg',
               exp: '10000',
               onTap: onTap != null
                   ? () => onTap!()

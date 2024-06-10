@@ -75,7 +75,7 @@ class NewsFeed extends StatelessWidget {
           itemBuilder: (context, index) {
             return NewsListItem(
               name: 'Friend Name $index',
-              avatarUrl: 'assets/images/avatar_placeholder.png',
+              avatarUrl: 'assets/images/gradient.jpg',
               exp: '10000',
               onTap: onTap != null
                   ? () => onTap!()
