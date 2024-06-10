@@ -4,6 +4,8 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -50,6 +52,20 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+    signingConfigs {
+    release {
+        storeFile file("release.keystore")
+        storePassword "d0947478477"
+        keyAlias "duynguyen.jks"
+        keyPassword "d0947478477"
+    }
+}
+
+buildTypes {
+    release {
+        signingConfig signingConfigs.release
+    }
+}
 
     buildTypes {
         release {
@@ -64,4 +80,5 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+}

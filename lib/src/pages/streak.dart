@@ -3,8 +3,28 @@ import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
+import 'package:intl/intl.dart'; // Add this import
 
-class Streak extends StatelessWidget {
+class Streak extends StatefulWidget {
+  @override
+  _StreakState createState() => _StreakState();
+}
+
+class _StreakState extends State<Streak> {
+  DateTime _currentDate = DateTime.now(); // Initialize the current date
+
+  void _incrementMonth() {
+    setState(() {
+      _currentDate = DateTime(_currentDate.year, _currentDate.month + 1);
+    });
+  }
+
+  void _decrementMonth() {
+    setState(() {
+      _currentDate = DateTime(_currentDate.year, _currentDate.month - 1);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -28,8 +48,6 @@ class Streak extends StatelessWidget {
     );
   }
 
-
-
   Widget _buildMainContent(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
@@ -39,9 +57,6 @@ class Streak extends StatelessWidget {
           Container(
             width: double.infinity,
             child: Column(
-              // mainAxisSize: MainAxisSize.min,
-              // mainAxisAlignment: MainAxisAlignment.start,
-              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _buildStreakInfo(),
                 SizedBox(height: 16),
@@ -123,7 +138,8 @@ class Streak extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'May 2024',
+            DateFormat('MMMM yyyy')
+                .format(_currentDate), // Use DateFormat to format the date
             style: h2.copyWith(color: theme.colorScheme.onBackground),
           ),
           Row(
@@ -144,36 +160,18 @@ class Streak extends StatelessWidget {
         size: 36,
         color: stroke,
       ),
-      onPressed: () {},
+      onPressed: _decrementMonth,
     );
-    // return Container(
-    //   width: 27,
-    //   height: 27,
-    //   decoration: BoxDecoration(
-    //     image: DecorationImage(
-    //       image: AssetImage('assets/icons/arrow_back_ios.png'),
-    //     ),
-    //   ),
-    // );
   }
 
   Widget _buildMonthControlForward() {
-    // return Container(
-    //   width: 27,
-    //   height: 27,
-    //   decoration: BoxDecoration(
-    //     image: DecorationImage(
-    //       image: AssetImage('assets/icons/arrow_forward_ios.png'),
-    //     ),
-    //   ),
-    // );
     return IconButton(
       icon: Icon(
         Icons.chevron_right,
         size: 36,
         color: stroke,
       ),
-      onPressed: () {},
+      onPressed: _incrementMonth,
     );
   }
 
