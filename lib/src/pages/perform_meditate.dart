@@ -53,7 +53,7 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
   }
 
   void startTimer() {
-    const oneSec = Duration(seconds: 1);
+    const oneSec = Duration(minutes: 1);
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
@@ -132,7 +132,7 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
   @override
   void initState() {
     super.initState();
-    _start = widget.initialDuration.inSeconds;
+    _start = widget.initialDuration.inMinutes;
     _alertDialogRoute = RestorableRouteFuture<String>(
       onPresent: (navigator, arguments) {
         return navigator.restorablePush(_alertDialogDemoRoute);
@@ -198,7 +198,7 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
                         ),
                       ),
                       min: 0,
-                      max: 3600,
+                      max: 60,
                       initialValue: _start.toDouble(),
                       onChange: (double value) {
                         setState(() {
@@ -217,14 +217,14 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            // const Text(
-                            //   "seconds",
-                            //   style: TextStyle(
-                            //     fontSize: 18,
-                            //     color: Colors.white,
-                            //     fontWeight: FontWeight.w500,
-                            //   ),
-                            // ),
+                            const Text(
+                              "minutes",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ],
                         ),
                       ),
