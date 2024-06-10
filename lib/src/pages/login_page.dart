@@ -22,7 +22,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn =
+      GoogleSignIn(scopes: <String>['email', '']);
   bool _isLoading = false;
   final ApiService apiService = ApiService('https://api.yogitech.me');
 
