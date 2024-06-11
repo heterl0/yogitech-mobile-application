@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
-import 'package:yogi_application/src/features/api_service.dart';
+import 'package:yogi_application/src/services/api_service.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
@@ -44,27 +44,29 @@ class SignUp extends StatelessWidget {
                 textAlign: TextAlign.left,
               ),
               SizedBox(height: 16.0),
-              // TextField(
-              //   decoration: InputDecoration(
-              //     filled: true,
-              //     fillColor: Colors.white.withOpacity(0),
-              //     hintText: 'Username',
-              //     hintStyle: TextStyle(color: Color(0xFF8D8E99)),
-              //     border: OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(44.0),
-              //       borderSide: BorderSide(color: Color(0xFF8D8E99)),
-              //     ),
-              //   ),
-              //   style: TextStyle(color: Colors.white),
-              // ),
-
-              BoxInputField(
-                controller: emailController,
-                placeholder: 'Username',
+              TextField(
+                controller: usernameController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white.withOpacity(0),
+                  hintText: 'Username',
+                  hintStyle: TextStyle(color: Color(0xFF8D8E99)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(44.0),
+                    borderSide: BorderSide(color: Color(0xFF8D8E99)),
+                  ),
+                ),
+                style: TextStyle(color: Colors.white),
               ),
+
+              // BoxInputField(
+              //   controller: emailController,
+              //   placeholder: 'Username',
+              // ),
 
               SizedBox(height: 16.0),
               TextField(
+                controller: emailController,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white.withOpacity(0),
@@ -79,6 +81,7 @@ class SignUp extends StatelessWidget {
               ),
               SizedBox(height: 16.0),
               TextField(
+                controller: passwordController,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white.withOpacity(0),
@@ -96,6 +99,7 @@ class SignUp extends StatelessWidget {
               ),
               SizedBox(height: 16.0),
               TextField(
+                controller: confirmPasswordController,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white.withOpacity(0),
