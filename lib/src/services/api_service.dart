@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'package:yogi_application/src/models/user_models.dart';
-import 'package:yogi_application/src/models/user_models.dart';
+import 'package:yogi_application/src/models/exercise.dart'; // Import Exercise model
 
 class ApiService {
   final String baseUrl;
@@ -35,6 +35,29 @@ class ApiService {
     } catch (e) {
       print('Login error: $e');
       return null;
+    }
+  }
+
+  Future<List<Exercise>> getExerciseList() async {
+    try {
+      final api =
+          'https://api.yogitech.me/api/v1/exercises/'; // Đường dẫn API lấy danh sách bài tập
+      final response = await dio.get(api,);
+
+      if (response.statusCode == 200) {
+        // Chuyển đổi dữ liệu từ JSON sang danh sách các bài tập
+        final List<dynamic> data = response.data['exercises'];
+        final List<Exercise> exercises =
+            data.map((e) => Exercise.fromJson(e)).toList();
+        return exercises;
+      } else {
+        print(
+            'Failed to fetch exercises with status code: ${response.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      print('Error fetching exercises: $e');
+      return [];
     }
   }
 }
