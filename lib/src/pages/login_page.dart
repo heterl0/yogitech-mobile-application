@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   final GoogleSignIn _googleSignIn =
       GoogleSignIn(scopes: <String>['email', '']);
   bool _isLoading = false;
-  final ApiService apiService = ApiService('https://api.yogitech.me');
+  final ApiService apiService = ApiService();
 
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,7 @@
-
-
 class Following {
-  int id;
-  int follower;
-  int followed;
+  final int id;
+  final int follower;
+  final int followed;
 
   Following({
     required this.id,
@@ -18,4 +16,4 @@ class Following {
       followed: json['followed'],
     );
   }
-  }
+}
