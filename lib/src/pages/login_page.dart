@@ -5,7 +5,8 @@ import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 import 'package:yogi_application/main.dart';
-import 'package:yogi_application/src/features/api_service.dart';
+import 'package:yogi_application/src/services/api_service.dart';
+import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
@@ -125,10 +126,10 @@ class _LoginPageState extends State<LoginPage> {
                           textColor: theme.colorScheme.onPrimary,
                           buttonType: SocialLoginButtonType.google,
                           onPressed: () async {
-                            var user = await LoginGoogle.login();
-                            if (user != null) {
-                              print(user.displayName);
-                            }
+                            // var user = await LoginGoogle.login();
+                            // if (user != null) {
+                            //   print(user.displayName);
+                            // }
                           },
                         ),
                       ),
@@ -204,9 +205,15 @@ class _LoginPageState extends State<LoginPage> {
   //   });
   // }
 
-  // Future SignIn() async {
-  //   await GoogleSignIn.login();
-  // }
+  Future signIn() async {
+    String savedEmail = '';
+    String savedPassword = '';
+    final user = await LoginGoogle.login();
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) =>
+          HomePage(savedEmail: savedEmail, savedPassword: savedPassword),
+    ));
+  }
 
   Future<void> _handleLogin(BuildContext context) async {
     String enteredEmail = emailController.text;
