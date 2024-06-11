@@ -68,5 +68,5 @@ Future<dynamic> saveTokens(String accessToken, String refreshToken) async {
 class LoginGoogle {
   static final _googleSignin = GoogleSignIn();
   static Future<GoogleSignInAccount?> login() => _googleSignin.signIn();
-  static Future signOut = _googleSignin.signOut();
+  static Future signOut() => _googleSignin.disconnect();
 }
