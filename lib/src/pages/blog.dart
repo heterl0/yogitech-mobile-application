@@ -181,7 +181,7 @@ class BlogState extends State<Blog> {
       width: double.infinity,
       padding: const EdgeInsets.only(top: 24.0),
       child: GridView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 6.0),
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -190,7 +190,7 @@ class BlogState extends State<Blog> {
           mainAxisSpacing: 8.0,
           childAspectRatio: 3 / 2,
         ),
-        itemCount: 6,
+        itemCount: _blog.length,
         itemBuilder: (context, index) {
           final title = 'Blog ${index + 1}';
           final caption = 'Caption ${index + 1}';
