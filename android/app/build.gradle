@@ -54,10 +54,10 @@ android {
     }
     signingConfigs {
     release {
-        storeFile file("release.keystore")
-        storePassword "d0947478477"
-        keyAlias "duynguyen.jks"
-        keyPassword "d0947478477"
+        storeFile file("mykeystore.jks")
+        storePassword "123456"
+        keyAlias "mykeystore"
+        keyPassword "123456"
     }
 }
 
@@ -81,4 +81,5 @@ flutter {
 }
 
 dependencies {
+    
 }
