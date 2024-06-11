@@ -1,16 +1,13 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'package:yogi_application/src/models/user_models.dart';
-import 'package:yogi_application/src/models/user_models.dart';
+import 'package:yogi_application/src/pages/blog.dart';
 
 class ApiService {
-  final String baseUrl;
-
-  ApiService(this.baseUrl);
+  final String baseUrl = 'https://api.yogitech.me';
 
   var dio = Dio();
 
@@ -37,6 +34,66 @@ class ApiService {
       return null;
     }
   }
+
+  Future<String?> updateAccessToken(String refreshToken) async {
+    try {
+      final api = '$baseUrl/api/v1/auth/refresh/';
+      final data = {'refresh': refreshToken};
+      final Response response = await dio.post(api, data: data);
+
+      if (response.statusCode == 200) {
+        final newAccessToken = response.data['access'];
+        await saveTokens(newAccessToken, refreshToken);
+        await getToken();
+        return newAccessToken;
+      } else {
+        print('Failed to update access token: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Error updating access token: $e');
+      return null;
+    }
+  }
+
+  Future<List<Blog>> fetchBlogs() async {
+    try {
+      final tokens = await getToken();
+      final accessToken = tokens['access'];
+      final response = await dio.get(
+        '$baseUrl/api/v1/blogs/',
+        options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        final dynamic responseData = response.data;
+        print(responseData);
+
+        if (responseData is List) {
+          // Map dữ liệu phản hồi thành một danh sách các đối tượng Blog
+          final List<Blog> blogs = responseData
+              .map((blogData) {
+                return Blog.fromJson(blogData);
+              })
+              .toList()
+              .cast<Blog>(); // Chuyển đổi kiểu danh sách sang List<Blog>
+
+          return blogs;
+        } else {
+          // Trả về một danh sách trống nếu responseData không phải là một danh sách
+          return [];
+        }
+      } else {
+        print('${response.statusCode} : ${response.data.toString()}');
+        // Trả về một danh sách trống nếu có lỗi
+        return [];
+      }
+    } catch (e) {
+      print(e);
+      // Trả về một danh sách trống nếu có lỗi
+      return [];
+    }
+  }
 }
 
 Future<void> clearToken() async {
@@ -49,8 +106,7 @@ Future<Map<String, String?>> getToken() async {
   final prefs = await SharedPreferences.getInstance();
   final accessToken = prefs.getString('accessToken');
   final refreshToken = prefs.getString('refreshToken');
-  print('get access token: $accessToken');
-  print('get refresh token: $refreshToken');
+
   return {'access': accessToken, 'refresh': refreshToken};
 }
 
@@ -59,10 +115,6 @@ Future<dynamic> saveTokens(String accessToken, String refreshToken) async {
   await prefs.setString('refreshToken', refreshToken);
   await prefs.setString('accessToken', accessToken);
   // Kiểm tra xem tokens đã được lưu đúng chưa
-  final savedAccessToken = prefs.getString('accessToken');
-  final savedRefreshToken = prefs.getString('refreshToken');
-  print('Saved access token: $savedAccessToken');
-  print('Saved refresh token: $savedRefreshToken');
 }
 
 class LoginGoogle {

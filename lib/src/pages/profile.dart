@@ -24,7 +24,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final ApiService apiService = ApiService('https://api.yogitech.me');
+  final ApiService apiService = ApiService();
   Future<void> _logout() async {
     try {
       // Xóa token từ SharedPreferences khi người dùng logout
