@@ -24,13 +24,12 @@ import 'package:yogi_application/src/pages/login_page.dart';
 import 'package:yogi_application/src/pages/sign_up_page.dart';
 import 'package:yogi_application/src/pages/OTP_confirm_page.dart';
 import 'package:yogi_application/src/pages/reset_password_page.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/pages/profile.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:dio/dio.dart';
 import 'package:yogi_application/src/pages/settings.dart';
 import 'dart:io';
+import 'dart:async';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +37,7 @@ void main() async {
   // Delay cho màn hình splash (chỉ dùng để demo, điều chỉnh tùy ý)
   await Future.delayed(const Duration(seconds: 10));
   FlutterNativeSplash.remove();
+
   await checkToken();
 
   SystemChrome.setPreferredOrientations([
@@ -50,11 +50,13 @@ void main() async {
 
 Future<void> checkToken() async {
   // Lấy token từ SharedPreferences
-  final tokens = await getToken();
-  final accessToken = tokens['access'];
 
+  final tokens = await getToken();
+
+  final accessToken = tokens['access'];
+  final refreshToken = tokens['refresh'];
   if (accessToken != null) {
-    runApp(MyApp(savedEmail: null, savedPassword: null));
+    runApp(MyApp());
   } else {
     runApp(const MyApp());
   }
@@ -128,6 +130,7 @@ class _MyAppState extends State<MyApp> {
             ),
         AppRoutes.reminder: (context) => ReminderPage(),
         AppRoutes.notifications: (context) => NotificationsPage(),
+        AppRoutes.friendProfile: (context) => FriendProfile(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == AppRoutes.settings) {
