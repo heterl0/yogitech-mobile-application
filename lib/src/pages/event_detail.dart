@@ -54,7 +54,7 @@ class EventDetail extends StatelessWidget {
   Widget _buildCustomTopBar(BuildContext context) {
     final theme = Theme.of(context);
     return SliverAppBar(
-      toolbarHeight: 70,
+      toolbarHeight: 80,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(24),

@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 
 const double scaleFactor = 1.2; // Hệ số tỷ lệ
 
-const double appElevation = 0;
+const double appElevation = 1;
 
 const TextStyle h1 = TextStyle(
   fontFamily: 'ReadexPro',

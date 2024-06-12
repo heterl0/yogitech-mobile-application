@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
@@ -84,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
+                      pushWithoutNavBar(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
