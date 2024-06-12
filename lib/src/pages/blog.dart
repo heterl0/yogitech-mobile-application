@@ -63,8 +63,6 @@ class BlogState extends State<Blog> {
             )
           : CustomAppBar(
               onBackPressed: () {
-                // Xử lý khi nút back được nhấn
-
                 setState(() {
                   _isNotSearching = true;
                 });
@@ -76,9 +74,7 @@ class BlogState extends State<Blog> {
                 trailing: Icon(Icons.search),
                 keyboardType: TextInputType.text,
                 inputFormatters: [],
-                onTap: () {
-                  // Xử lý khi input field được nhấn
-                },
+                onTap: () {},
               ),
               postActions: [
                 IconButton(
@@ -96,81 +92,18 @@ class BlogState extends State<Blog> {
     );
   }
 
-  Widget _buildDefaultAppBar() {
-    return const Text('');
-  }
-
-  Widget _buildSearchBar() {
-    final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.only(
-        bottom: 8.0,
-        right: 24.0,
-        left: 24.0,
-      ),
-      child: Row(
-        children: [
-          IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: theme.colorScheme.onBackground,
-            ),
-            onPressed: () {
-              setState(() {
-                _isNotSearching = false;
-                _searchController.clear();
-              });
-            },
-          ),
-          Expanded(
-            child: BoxInputField(
-              controller: _searchController,
-              placeholder: 'Search...',
-              leading: null,
-              trailing: Icon(
-                Icons.search,
-              ),
-
-              // Handle the send button press
-
-              keyboardType: TextInputType.text,
-              inputFormatters: [],
-              onTap: () {
-                // Handle tap on input field
-              },
-            ),
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.close,
-              color: theme.colorScheme.onBackground,
-            ),
-            onPressed: () {
-              setState(() {
-                _isNotSearching = false;
-                _searchController.clear();
-              });
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(color: theme.colorScheme.background),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: SingleChildScrollView(
-              child: _buildBlogMainContent(),
-            ),
-          ),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildBlogMainContent(),
+          ],
+        ),
       ),
     );
   }
@@ -178,22 +111,21 @@ class BlogState extends State<Blog> {
   Widget _buildBlogMainContent() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.only(top: 24.0),
+      padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
       child: GridView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
         shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
+        physics: NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
           childAspectRatio: 3 / 2,
         ),
-        itemCount: 6,
+        itemCount: 15,
         itemBuilder: (context, index) {
           final title = 'Blog ${index + 1}';
           final caption = 'Caption ${index + 1}';
-          final subtitle = '${5 - index} days left';
+          final subtitle = '${10 - index} days left';
 
           return CustomCard(
             title: title,

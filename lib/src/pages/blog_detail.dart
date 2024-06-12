@@ -120,7 +120,7 @@ class _BlogDetailState extends State<BlogDetail> {
         child: Column(
           children: [
             Text(
-              'Ringo Island',
+              'Japan: Discovering the Land of the Rising Sun',
               style: h2.copyWith(color: theme.colorScheme.onPrimary),
             ),
           ],

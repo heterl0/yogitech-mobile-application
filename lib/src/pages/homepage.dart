@@ -10,6 +10,8 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
+import 'package:yogi_application/src/services/api_service.dart';
+import 'package:yogi_application/src/models/exercise.dart'; // Import Exercise model
 
 class HomePage extends StatefulWidget {
   final String? savedEmail;
@@ -25,6 +27,24 @@ class _HomePageState extends State<HomePage> {
   var jsonList;
   bool _isnotSearching = true;
   TextEditingController _searchController = TextEditingController();
+  final ApiService apiService = ApiService('http://api.yogitech.me');
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchExercises(); // Gọi phương thức _fetchExercises khi StatefulWidget được tạo ra
+  }
+
+  Future<void> _fetchExercises() async {
+    // Gọi API để lấy danh sách bài tập
+    // Đảm bảo rằng phương thức getListExercises đã được định nghĩa trong lớp ApiService
+    final List<Exercise> exercises = await apiService.getExerciseList();
+
+    // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
+    setState(() {
+      jsonList = exercises;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -175,31 +195,23 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  // Replace these placeholders with your actual content
-                  CustomCard(
-                    title: 'Card with Image',
-                    caption:
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                    onTap: () {
-                      pushWithoutNavBar(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ExerciseDetail(),
-                        ),
-                      );
-                    },
-                  ),
-                  CustomCard(
-                    title: 'Card with Image',
-                    caption:
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                  ),
-                  CustomCard(
-                    title: 'Card with Image',
-                    caption:
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                  ),
-                  // Add more containers if needed
+                  if (jsonList != null)
+                    for (final exercise in jsonList)
+                      CustomCard(
+                        title: exercise.title,
+                        caption:
+                            exercise.description ?? '', // Mô tả của bài tập
+                        imageUrl: exercise.imageUrl, // URL hình ảnh của bài tập
+                        onTap: () {
+                          // Chuyển sang trang chi tiết của bài tập khi thẻ được nhấn
+                          pushWithoutNavBar(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ExerciseDetail(),
+                            ),
+                          );
+                        },
+                      ),
                 ],
               ),
             ),
