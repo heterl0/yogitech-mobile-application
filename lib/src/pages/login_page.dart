@@ -1,19 +1,12 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
-import 'package:yogi_application/main.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
-import 'package:dio/dio.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -23,10 +16,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: <String>['email', 'profile'],
-    serverClientId: dotenv.get("GOOGLE_CLIENT_ID"),
-  );
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   bool _isLoading = false;
   final ApiService apiService = ApiService('https://api.yogitech.me');
 
