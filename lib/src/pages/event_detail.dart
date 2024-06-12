@@ -46,7 +46,6 @@ class EventDetail extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: const CustomBottomBar(
-        defaultStyle: false,
         buttonTitle: 'Join in',
       ),
     );

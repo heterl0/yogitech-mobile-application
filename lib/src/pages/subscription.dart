@@ -51,7 +51,6 @@ class _SubscriptionState extends State<Subscription> {
       ),
       body: _buildBody(context),
       bottomNavigationBar: CustomBottomBar(
-        defaultStyle: false,
         buttonTitle: "Subscription",
         onPressed: () => _subscriptionBottomSheet(context),
       ),

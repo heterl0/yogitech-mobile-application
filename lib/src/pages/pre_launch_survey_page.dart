@@ -161,7 +161,6 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
         ),
       ),
       bottomNavigationBar: CustomBottomBar(
-        defaultStyle: false,
         buttonTitle: "Let's go",
         onPressed: () {},
       ),

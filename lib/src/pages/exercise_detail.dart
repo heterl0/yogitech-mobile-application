@@ -21,7 +21,6 @@ class ExerciseDetail extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: _buildBody(context),
       bottomNavigationBar: CustomBottomBar(
-        defaultStyle: false,
         buttonTitle: 'Do exercise',
         onPressed: () {
           Navigator.push(

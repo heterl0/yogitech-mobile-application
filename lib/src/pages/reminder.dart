@@ -147,7 +147,6 @@ class _ReminderPageState extends State<ReminderPage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
       floatingActionButton: _buildFloatingActionButton(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );

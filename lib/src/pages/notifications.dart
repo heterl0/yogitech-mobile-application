@@ -55,7 +55,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }

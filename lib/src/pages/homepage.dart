@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
@@ -36,12 +37,10 @@ class _HomePageState extends State<HomePage> {
               preActions: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Subscription(),
-                      ),
-                    );
+                    pushWithoutNavBar(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Subscription()));
                   },
                   child: Row(
                     children: [
@@ -79,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                   icon: Icon(Icons.tune_outlined,
                       color: theme.colorScheme.onBackground),
                   onPressed: () {
-                    Navigator.push(
+                    pushWithoutNavBar(
                       context,
                       MaterialPageRoute(
                         builder: (context) => FilterPage(),
@@ -182,7 +181,7 @@ class _HomePageState extends State<HomePage> {
                     caption:
                         'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                     onTap: () {
-                      Navigator.push(
+                      pushWithoutNavBar(
                         context,
                         MaterialPageRoute(
                           builder: (context) => ExerciseDetail(),
@@ -238,7 +237,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      bottomNavigationBar: const CustomBottomBar(),
     );
   }
 }

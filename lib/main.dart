@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:yogi_application/src/pages/_firstscreen.dart';
 import 'package:yogi_application/src/services/api_service.dart';
 import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/pages/blog.dart';
@@ -94,9 +96,15 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: widget.savedEmail != null && widget.savedPassword != null
-          ? AppRoutes.homepage
-          : AppRoutes.login,
+          ? AppRoutes.firstScreen
+          : AppRoutes.firstScreen,
       routes: {
+        AppRoutes.firstScreen: (context) => PersistenBottomNavBarDemo(
+              savedEmail: widget.savedEmail,
+              savedPassword: widget.savedPassword,
+              isDarkMode: _themeMode == ThemeMode.dark,
+              onThemeChanged: _toggleTheme,
+            ),
         AppRoutes.homepage: (context) => HomePage(
             savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
         AppRoutes.login: (context) => LoginPage(),

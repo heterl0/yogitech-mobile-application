@@ -140,7 +140,6 @@ class _nameState extends State<FriendProfile> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 }

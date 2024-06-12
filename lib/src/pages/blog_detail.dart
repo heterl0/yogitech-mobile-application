@@ -33,7 +33,6 @@ class _BlogDetailState extends State<BlogDetail> {
         postActions: [_buildDislikeButton(), _buildLikeButton()],
       ),
       body: _buildBody(context),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 

@@ -53,7 +53,6 @@ class _FilterPageState extends State<FilterPage> {
         ),
       ),
       bottomNavigationBar: CustomBottomBar(
-        defaultStyle: false,
         buttonTitle: "Apply",
         onPressed: () {
           Navigator.pop(context);

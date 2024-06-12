@@ -19,7 +19,6 @@ class Calorie extends StatelessWidget {
         },
       ),
       body: _buildMainContent(context),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 

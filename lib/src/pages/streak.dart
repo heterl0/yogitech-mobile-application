@@ -44,7 +44,6 @@ class _StreakState extends State<Streak> {
         ],
       ),
       body: _buildMainContent(context),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 

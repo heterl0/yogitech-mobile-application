@@ -77,7 +77,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
+
       floatingActionButton: _buildFloatingActionButton(context), // Thêm nút nổi
       floatingActionButtonLocation:
           FloatingActionButtonLocation.endFloat, // Định vị nút nổi

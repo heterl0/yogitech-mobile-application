@@ -24,4 +24,5 @@ class AppRoutes {
   static const String blogDetail = '/blogdetail';
   static const String reminder = '/reminder';
   static const String notifications = '/notifications';
+  static const String firstScreen = '/firstScreen';
 }

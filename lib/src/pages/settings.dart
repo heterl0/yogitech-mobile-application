@@ -134,7 +134,6 @@ class SettingsPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 }

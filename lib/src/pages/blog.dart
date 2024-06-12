@@ -70,7 +70,6 @@ class BlogState extends State<Blog> {
               ],
             ),
       body: _buildBody(context),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 

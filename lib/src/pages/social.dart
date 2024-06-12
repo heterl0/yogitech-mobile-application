@@ -46,7 +46,6 @@ class _SocialPageState extends State<SocialPage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 }

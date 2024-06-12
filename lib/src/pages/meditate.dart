@@ -35,7 +35,8 @@ class _MeditateState extends State<Meditate> {
         style: widthStyle.Medium,
       ),
       body: _buildBody(),
-      bottomNavigationBar: CustomBottomBar(),
+      floatingActionButton: _buildElevatedButton(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
@@ -50,7 +51,6 @@ class _MeditateState extends State<Meditate> {
           // _buildTopRoundedContainer(),
           // _buildTitleText(),
           _buildMainContent(),
-          _buildElevatedButton(context),
         ],
       ),
     );

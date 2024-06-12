@@ -166,7 +166,6 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 }

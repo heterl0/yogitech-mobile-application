@@ -82,7 +82,6 @@ class _PaymentHistoryState extends State<PaymentHistory> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 
