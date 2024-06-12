@@ -159,7 +159,13 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       await _googleSignIn.signIn();
-      // final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(
+          'Failed to sign in: $googleUser',
+        )),
+      );
       // if (googleUser == null) {
       //   setState(() {
       //     _isLoading = false;
