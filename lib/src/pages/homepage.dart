@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
@@ -143,37 +145,39 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Try this exercise',
-                            textAlign: TextAlign.left,
-                            style: bd_text.copyWith(
-                                color: theme.colorScheme.onPrimary),
+                    Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding:
+                              EdgeInsets.only(left: 16, top: 16, bottom: 16),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Try this exercise',
+                                textAlign: TextAlign.left,
+                                style: bd_text.copyWith(
+                                    color: theme.colorScheme.onPrimary),
+                              ),
+                              Text(
+                                'for beginner',
+                                textAlign: TextAlign.left,
+                                style: h3.copyWith(
+                                    color: theme.colorScheme.onPrimary),
+                              ),
+                              const Spacer(),
+                              Text(
+                                'Warrior 2 pose!',
+                                textAlign: TextAlign.left,
+                                style: h3.copyWith(color: primary),
+                              ),
+                            ],
                           ),
-                          Text(
-                            'for beginner',
-                            textAlign: TextAlign.left,
-                            style:
-                                h3.copyWith(color: theme.colorScheme.onPrimary),
-                          ),
-                          const Spacer(),
-                          Text(
-                            'Warrior 2 pose!',
-                            textAlign: TextAlign.left,
-                            style: h3.copyWith(color: primary),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: 160, // Độ rộng của nửa bên phải
-                      child: const Image(
+                        )),
+                    const Expanded(
+                      flex: 2,
+                      child: Image(
                           image: AssetImage(
                               'assets/images/ads_exercise_for_beginner.png')),
                     ),
