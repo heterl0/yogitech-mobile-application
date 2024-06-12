@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:yogi_application/l10n/l10n.dart';
 import 'package:yogi_application/src/pages/_mainscreen.dart';
 import 'package:yogi_application/src/services/api_service.dart';
 import 'package:yogi_application/src/pages/activities.dart';
@@ -12,9 +14,9 @@ import 'package:yogi_application/src/pages/forgot_password.dart';
 import 'package:yogi_application/src/pages/friend_profile.dart';
 import 'package:yogi_application/src/pages/notifications.dart';
 import 'package:yogi_application/src/pages/payment_history.dart';
+import 'package:yogi_application/src/pages/perform_meditate.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
 import 'package:yogi_application/src/pages/meditate.dart';
-import 'package:yogi_application/src/pages/perform_meditate.dart';
 import 'package:yogi_application/src/pages/reminder.dart';
 import 'package:yogi_application/src/pages/result.dart';
 import 'package:yogi_application/src/pages/streak.dart';
@@ -28,6 +30,7 @@ import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/pages/profile.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/pages/settings.dart';
+
 import 'dart:io';
 import 'dart:async';
 
@@ -35,16 +38,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   await Future.delayed(const Duration(seconds: 10));
-  await checkToken();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]).then((_) {
-    runApp(MyApp());
-  });
-}
-
-Future<void> checkToken() async {
   final tokens = await getToken();
   final accessToken = tokens['access'];
   runApp(MyApp(isAuthenticated: accessToken != null));
@@ -64,12 +57,12 @@ class MyApp extends StatefulWidget {
   final String? savedEmail;
   final String? savedPassword;
 
-  const MyApp(
-      {Key? key,
-      this.isAuthenticated = false,
-      this.savedEmail,
-      this.savedPassword})
-      : super(key: key);
+  const MyApp({
+    Key? key,
+    this.isAuthenticated = false,
+    this.savedEmail,
+    this.savedPassword,
+  }) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -88,7 +81,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: widget.savedEmail != null && widget.savedPassword != null
+      initialRoute: widget.isAuthenticated
           ? AppRoutes.firstScreen
           : AppRoutes.firstScreen,
       routes: _buildRoutes(),
@@ -96,6 +89,13 @@ class _MyAppState extends State<MyApp> {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: _themeMode,
+      supportedLocales: L10n.all,
+      locale: const Locale('en'),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
     );
   }
 
@@ -160,9 +160,11 @@ class _MyAppState extends State<MyApp> {
         return MaterialPageRoute(builder: (context) => ChangeProfilePage());
       default:
         return MaterialPageRoute(
-            builder: (context) => HomePage(
-                savedEmail: widget.savedEmail,
-                savedPassword: widget.savedPassword));
+          builder: (context) => HomePage(
+            savedEmail: widget.savedEmail,
+            savedPassword: widget.savedPassword,
+          ),
+        );
     }
   }
 }

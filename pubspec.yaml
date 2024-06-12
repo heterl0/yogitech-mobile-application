@@ -44,7 +44,9 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.4.0
   social_login_buttons: ^1.0.7
-  intl: ^0.19.0
+  intl: ^0.18.1
+  flutter_localizations: 
+    sdk: flutter
 flutter_native_splash:
   android: true
   ios: true
@@ -52,9 +54,7 @@ flutter_native_splash:
 
   background_image: "assets/native_splash/splash.png"
 
-  intl: any
-  flutter_localizations: 
-    sdk: flutter
+
 
 dev_dependencies:
   flutter_test:

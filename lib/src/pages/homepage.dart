@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
@@ -155,7 +156,8 @@ class _HomePageState extends State<HomePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Try this exercise',
+                                AppLocalizations.of(context)?.tryThisExercise ??
+                                    'Try this exercise null',
                                 textAlign: TextAlign.left,
                                 style: bd_text.copyWith(
                                     color: theme.colorScheme.onPrimary),
