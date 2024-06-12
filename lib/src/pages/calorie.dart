@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 
@@ -170,7 +169,7 @@ class Calorie extends StatelessWidget {
   }
 
   Widget _buildAdditionalInfo(BuildContext context) {
-    final theme = Theme.of(context);
+    Theme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [

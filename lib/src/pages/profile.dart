@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/calorie.dart';
 import 'package:yogi_application/src/pages/social.dart';
@@ -357,7 +356,7 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    Theme.of(context);
 
     return InkWell(
       onTap: onTap,

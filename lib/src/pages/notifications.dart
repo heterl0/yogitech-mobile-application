@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/widgets/switch.dart'; // Assuming this is CustomSwitch
 
 class NotificationsPage extends StatefulWidget {

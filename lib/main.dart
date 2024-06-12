@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:yogi_application/src/pages/_firstscreen.dart';
+import 'package:yogi_application/src/pages/_mainscreen.dart';
 import 'package:yogi_application/src/services/api_service.dart';
 import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/pages/blog.dart';
@@ -101,7 +101,7 @@ class _MyAppState extends State<MyApp> {
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
-      AppRoutes.firstScreen: (context) => PersistenBottomNavBarDemo(
+      AppRoutes.firstScreen: (context) => MainScreen(
             savedEmail: widget.savedEmail,
             savedPassword: widget.savedPassword,
             isDarkMode: _themeMode == ThemeMode.dark,

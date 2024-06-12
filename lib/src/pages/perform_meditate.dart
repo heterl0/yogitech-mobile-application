@@ -3,10 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:yogi_application/src/pages/meditate.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
 
 void main() {
   runApp(const performMeditate());

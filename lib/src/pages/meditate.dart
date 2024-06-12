@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/pages/perform_meditate.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'dart:math';
@@ -27,7 +26,7 @@ class _MeditateState extends State<Meditate> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    Theme.of(context);
     return Scaffold(
       appBar: CustomAppBar(
         showBackButton: false,
@@ -52,26 +51,6 @@ class _MeditateState extends State<Meditate> {
           // _buildTitleText(),
           _buildMainContent(),
         ],
-      ),
-    );
-  }
-
-  Widget _buildTopRoundedContainer() {
-    final theme = Theme.of(context);
-    return Positioned(
-      left: 0,
-      top: 0,
-      right: 0,
-      child: Container(
-        height: 150,
-        decoration: BoxDecoration(
-          color: theme.colorScheme.onSecondary,
-          shape: BoxShape.rectangle,
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(24),
-            bottomRight: Radius.circular(24),
-          ),
-        ),
       ),
     );
   }
@@ -188,7 +167,7 @@ class _MeditateState extends State<Meditate> {
   }
 
   Widget _buildElevatedButton(BuildContext context) {
-    final theme = Theme.of(context);
+    Theme.of(context);
 
     return Positioned(
       right: 27,

@@ -105,7 +105,7 @@ class _SubscriptionState extends State<Subscription> {
   }
 
   Widget _buildUnSubscriptionContainer() {
-    final theme = Theme.of(context);
+    Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: ShapeDecoration(

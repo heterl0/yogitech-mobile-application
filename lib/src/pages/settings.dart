@@ -5,7 +5,6 @@ import 'package:yogi_application/src/pages/notifications.dart';
 import 'package:yogi_application/src/pages/reminder.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/widgets/switch.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 

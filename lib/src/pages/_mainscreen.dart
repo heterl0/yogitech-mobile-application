@@ -8,13 +8,13 @@ import 'package:yogi_application/src/pages/profile.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 
-class PersistenBottomNavBarDemo extends StatefulWidget {
+class MainScreen extends StatefulWidget {
   final String? savedEmail;
   final String? savedPassword;
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChanged;
 
-  const PersistenBottomNavBarDemo({
+  const MainScreen({
     Key? key,
     this.savedEmail,
     this.savedPassword,
@@ -23,11 +23,10 @@ class PersistenBottomNavBarDemo extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PersistenBottomNavBarDemoState createState() =>
-      _PersistenBottomNavBarDemoState();
+  _MainScreenState createState() => _MainScreenState();
 }
 
-class _PersistenBottomNavBarDemoState extends State<PersistenBottomNavBarDemo> {
+class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -41,7 +40,7 @@ class _PersistenBottomNavBarDemoState extends State<PersistenBottomNavBarDemo> {
               savedPassword: widget.savedPassword),
           item: ItemConfig(
             textStyle: min_cap,
-            icon: Icon(Icons.grid_view),
+            icon: const Icon(Icons.grid_view),
             title: "Home",
             activeForegroundColor: primary,
             inactiveForegroundColor: text,
@@ -51,7 +50,7 @@ class _PersistenBottomNavBarDemoState extends State<PersistenBottomNavBarDemo> {
           screen: Blog(),
           item: ItemConfig(
             textStyle: min_cap,
-            icon: Icon(Icons.newspaper_outlined),
+            icon: const Icon(Icons.newspaper_outlined),
             title: "Blog",
             activeForegroundColor: primary,
             inactiveForegroundColor: text,
@@ -61,7 +60,7 @@ class _PersistenBottomNavBarDemoState extends State<PersistenBottomNavBarDemo> {
           screen: Activities(),
           item: ItemConfig(
             textStyle: min_cap,
-            icon: Icon(Icons.directions_run),
+            icon: const Icon(Icons.directions_run),
             title: "Activities",
             activeForegroundColor: primary,
             inactiveForegroundColor: text,
@@ -71,7 +70,7 @@ class _PersistenBottomNavBarDemoState extends State<PersistenBottomNavBarDemo> {
           screen: Meditate(),
           item: ItemConfig(
             textStyle: min_cap,
-            icon: Icon(Icons.self_improvement),
+            icon: const Icon(Icons.self_improvement),
             title: "Meditate",
             activeForegroundColor: primary,
             inactiveForegroundColor: text,
@@ -83,7 +82,7 @@ class _PersistenBottomNavBarDemoState extends State<PersistenBottomNavBarDemo> {
               onThemeChanged: widget.onThemeChanged),
           item: ItemConfig(
             textStyle: min_cap,
-            icon: Icon(Icons.account_circle_outlined),
+            icon: const Icon(Icons.account_circle_outlined),
             title: "Profile",
             activeForegroundColor: primary,
             inactiveForegroundColor: text,
@@ -92,7 +91,7 @@ class _PersistenBottomNavBarDemoState extends State<PersistenBottomNavBarDemo> {
       ],
       navBarBuilder: (navBarConfig) => Style1BottomNavBar(
         navBarDecoration: NavBarDecoration(
-            padding: EdgeInsets.only(bottom: 32, top: 12),
+            padding: const EdgeInsets.only(bottom: 32, top: 12),
             color: theme.colorScheme.onSecondary,
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(24), topRight: Radius.circular(24))),

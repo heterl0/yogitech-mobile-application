@@ -16,7 +16,7 @@ class Blog extends StatefulWidget {
 
 class BlogState extends State<Blog> {
   bool _isNotSearching = true;
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   List<Blog> _blog = [];
 
   @override
@@ -68,7 +68,7 @@ class BlogState extends State<Blog> {
               titleWidget: BoxInputField(
                 controller: _searchController,
                 placeholder: 'Search...',
-                trailing: Icon(Icons.search),
+                trailing: const Icon(Icons.search),
                 keyboardType: TextInputType.text,
                 inputFormatters: [],
                 onTap: () {},
@@ -111,7 +111,7 @@ class BlogState extends State<Blog> {
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
       child: GridView.builder(
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 8.0,
