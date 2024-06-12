@@ -178,46 +178,50 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     final TextEditingController confirmNewPassword = TextEditingController();
     return showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
       backgroundColor: theme.colorScheme.onSecondary,
       builder: (BuildContext context) {
         return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 36),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Old password',
-                  style: h3.copyWith(color: theme.colorScheme.onBackground)),
-              SizedBox(height: 16.0),
-              BoxInputField(
-                controller: currentPassword,
-                password: true,
-              ),
-              SizedBox(height: 16.0),
-              Text('New password',
-                  style: h3.copyWith(color: theme.colorScheme.onBackground)),
-              SizedBox(height: 16.0),
-              BoxInputField(
-                controller: newPassword,
-                password: true,
-              ),
-              SizedBox(height: 16.0),
-              Text('Confirm password',
-                  style: h3.copyWith(color: theme.colorScheme.onBackground)),
-              SizedBox(height: 16.0),
-              BoxInputField(
-                controller: confirmNewPassword,
-                password: true,
-              ),
-              SizedBox(height: 32.0),
-              BoxButton(
-                title: 'Save',
-                style: ButtonStyleType.Primary,
-                state: ButtonState
-                    .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
+          padding: MediaQuery.of(context).viewInsets,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 36),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Old password',
+                    style: h3.copyWith(color: theme.colorScheme.onBackground)),
+                SizedBox(height: 16.0),
+                BoxInputField(
+                  controller: currentPassword,
+                  password: true,
+                ),
+                SizedBox(height: 16.0),
+                Text('New password',
+                    style: h3.copyWith(color: theme.colorScheme.onBackground)),
+                SizedBox(height: 16.0),
+                BoxInputField(
+                  controller: newPassword,
+                  password: true,
+                ),
+                SizedBox(height: 16.0),
+                Text('Confirm password',
+                    style: h3.copyWith(color: theme.colorScheme.onBackground)),
+                SizedBox(height: 16.0),
+                BoxInputField(
+                  controller: confirmNewPassword,
+                  password: true,
+                ),
+                SizedBox(height: 32.0),
+                BoxButton(
+                  title: 'Save',
+                  style: ButtonStyleType.Primary,
+                  state: ButtonState
+                      .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
           ),
         );
       },
