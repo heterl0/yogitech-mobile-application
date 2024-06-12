@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
   var jsonList;
   bool _isnotSearching = true;
   TextEditingController _searchController = TextEditingController();
-  final ApiService apiService = ApiService('http://api.yogitech.me');
+  final ApiService apiService = ApiService();
 
   @override
   void initState() {
