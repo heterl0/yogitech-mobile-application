@@ -30,7 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+      
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   persistent_bottom_nav_bar_v2: ^5.2.3
@@ -49,9 +49,12 @@ flutter_native_splash:
   android: true
   ios: true
   web: false
-  fullscreen: true
 
-  background_image: "assets/native_splash/Splash.png"
+  background_image: "assets/native_splash/splash.png"
+
+  intl: any
+  flutter_localizations: 
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +72,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
