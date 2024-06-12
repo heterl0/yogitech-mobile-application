@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "699165244055",
+    "project_id": "yogitech-423704",
+    "storage_bucket": "yogitech-423704.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:699165244055:android:b2cbe84c33cc0670c447d2",
+        "android_client_info": {
+          "package_name": "com.example.yogi_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "699165244055-dj5am5io0j60kjvq1m9esne0sag3ivnb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.yogi_application",
+            "certificate_hash": "346205a1b54f0137302fe1629b97089d6b2dda51"
+          }
+        },
+        {
+          "client_id": "699165244055-euk29fhf2vp21k511olljqkg6u9l4kng.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARq2PLn3v2eD2phqotLHM1FUaKHEKsz_0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "699165244055-euk29fhf2vp21k511olljqkg6u9l4kng.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

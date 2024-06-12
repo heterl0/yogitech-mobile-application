@@ -2,6 +2,7 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id 'com.google.gms.google-services'
 }
 
 
@@ -55,18 +56,18 @@ android {
     
     signingConfigs {
         release {
-            storeFile file("C:\\Users\\lehie\\yogitech-keystore.jks")
+            storeFile file("yogitech-keystore.jks")
             storePassword "android"
             keyAlias "upload"
             keyPassword "android"
         }
         
-        debug {
-           storeFile file("C:\\Users\\lehie\\yogitech-keystore.jks")
-            storePassword "android"
-            keyAlias "upload"
-            keyPassword "android"
-        }
+        // debug {
+        //    storeFile file("yogitech-keystore.jks")
+        //     storePassword "android"
+        //     keyAlias "upload"
+        //     keyPassword "android"
+        // }
     }
 
     buildTypes {
@@ -74,9 +75,9 @@ android {
             signingConfig signingConfigs.release
         }
 
-        debug {
-            signingConfig signingConfigs.debug
-        }
+        // debug {
+        //     signingConfig signingConfigs.debug
+        // }
     }
 
     // buildTypes {
@@ -93,4 +94,5 @@ flutter {
 }
 
 dependencies {
+    implementation platform('com.google.firebase:firebase-bom:33.1.0')
 }

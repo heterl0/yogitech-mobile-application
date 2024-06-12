@@ -26,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: <String>['email', 'profile'],
     serverClientId: dotenv.get("GOOGLE_CLIENT_ID"),
-    clientId: dotenv.get("GOOGLE_CLIENT_ID"),
   );
   bool _isLoading = false;
   final ApiService apiService = ApiService('https://api.yogitech.me');
