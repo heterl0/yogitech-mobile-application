@@ -156,8 +156,7 @@ class _HomePageState extends State<HomePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                AppLocalizations.of(context)?.tryThisExercise ??
-                                    'Try this exercise null',
+                                AppLocalizations.of(context)!.tryThisExercise,
                                 textAlign: TextAlign.left,
                                 style: bd_text.copyWith(
                                     color: theme.colorScheme.onPrimary),

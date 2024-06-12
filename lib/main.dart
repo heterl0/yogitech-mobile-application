@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yogi_application/l10n/l10n.dart';
 import 'package:yogi_application/src/pages/_mainscreen.dart';
 import 'package:yogi_application/src/services/api_service.dart';
@@ -90,8 +91,9 @@ class _MyAppState extends State<MyApp> {
       darkTheme: darkTheme,
       themeMode: _themeMode,
       supportedLocales: L10n.all,
-      locale: const Locale('en'),
+      locale: const Locale('vi'),
       localizationsDelegates: const [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
