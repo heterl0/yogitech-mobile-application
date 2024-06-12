@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/pages/activities.dart';
@@ -37,6 +38,7 @@ void main() async {
   // Delay cho màn hình splash (chỉ dùng để demo, điều chỉnh tùy ý)
   await Future.delayed(const Duration(seconds: 10));
   FlutterNativeSplash.remove();
+  await loadEnv();
   await checkToken();
   runApp(const MyApp());
 }
@@ -51,6 +53,13 @@ Future<void> checkToken() async {
   } else {
     runApp(const MyApp());
   }
+}
+
+Future<void> loadEnv() async {
+  // To load the .env file contents into dotenv.
+  // NOTE: fileName defaults to .env and can be omitted in this case.
+  // Ensure that the filename corresponds to the path in step 1 and 2.
+  await dotenv.load(fileName: ".env");
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -88,7 +97,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: widget.savedEmail != null && widget.savedPassword != null
           ? AppRoutes.homepage
-          : AppRoutes.homepage,
+          : AppRoutes.login,
       routes: {
         AppRoutes.homepage: (context) => HomePage(
             savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),

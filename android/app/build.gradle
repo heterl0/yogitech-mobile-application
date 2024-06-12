@@ -52,28 +52,40 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+    
     signingConfigs {
-    release {
-        storeFile file("release.keystore")
-        storePassword "d0947478477"
-        keyAlias "duynguyen.jks"
-        keyPassword "d0947478477"
+        release {
+            storeFile file("C:\\Users\\lehie\\yogitech-keystore.jks")
+            storePassword "android"
+            keyAlias "upload"
+            keyPassword "android"
+        }
+        
+        debug {
+           storeFile file("C:\\Users\\lehie\\yogitech-keystore.jks")
+            storePassword "android"
+            keyAlias "upload"
+            keyPassword "android"
+        }
     }
-}
-
-buildTypes {
-    release {
-        signingConfig signingConfigs.release
-    }
-}
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.release
+        }
+
+        debug {
             signingConfig signingConfigs.debug
         }
     }
+
+    // buildTypes {
+    //     release {
+    //         // TODO: Add your own signing config for the release build.
+    //         // Signing with the debug keys for now, so `flutter run --release` works.
+    //         signingConfig signingConfigs.debug
+    //     }
+    // }
 }
 
 flutter {
