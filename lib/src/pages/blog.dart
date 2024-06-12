@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/services/api_service.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
@@ -12,11 +13,33 @@ class Blog extends StatefulWidget {
 
   @override
   BlogState createState() => BlogState();
+
+  static fromJson(item) {}
 }
 
 class BlogState extends State<Blog> {
   bool _isNotSearching = true;
   TextEditingController _searchController = TextEditingController();
+  List<Blog> _blog = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchBlogs(); // Gọi hàm fetchBlogs khi trạng thái của widget được khởi tạo
+  }
+
+  Future<void> _fetchBlogs() async {
+    ApiService apiService = ApiService();
+    try {
+      List<Blog> blogs =
+          await apiService.fetchBlogs(); // Gọi hàm fetchBlogs từ service
+      setState(() {
+        _blog = blogs;
+      });
+    } catch (e) {
+      print('Error fetching blogs: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
