@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -38,7 +40,7 @@ void main() async {
   HttpOverrides.global = MyHttpOverrides();
   // Delay cho màn hình splash (chỉ dùng để demo, điều chỉnh tùy ý)
   await Future.delayed(const Duration(seconds: 10));
-  FlutterNativeSplash.remove();
+  // FlutterNativeSplash.remove();
 
   await checkToken();
 
