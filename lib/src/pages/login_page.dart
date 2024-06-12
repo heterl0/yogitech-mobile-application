@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 import 'package:yogi_application/src/features/api_service.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
@@ -16,7 +17,10 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: <String>[
+    'email',
+    'https://www.googleapis.com/auth/contacts.readonly',
+  ], serverClientId: dotenv.env['GOOGLE_CLIENT_ID']);
   bool _isLoading = false;
   final ApiService apiService = ApiService('https://api.yogitech.me');
 
@@ -166,6 +170,11 @@ class _LoginPageState extends State<LoginPage> {
           'Failed to sign in: $googleUser',
         )),
       );
+      GoogleSignInAuthentication googleSignInAuthentication =
+          await googleUser!.authentication;
+      String? serverAuthToken = googleUser.serverAuthCode;
+      print(googleSignInAuthentication.idToken);
+
       // if (googleUser == null) {
       //   setState(() {
       //     _isLoading = false;
