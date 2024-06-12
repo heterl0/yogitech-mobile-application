@@ -1,9 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/src/pages/_firstscreen.dart';
 import 'package:yogi_application/src/services/api_service.dart';
 import 'package:yogi_application/src/pages/activities.dart';
@@ -38,12 +34,8 @@ import 'dart:async';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
-  // Delay cho màn hình splash (chỉ dùng để demo, điều chỉnh tùy ý)
   await Future.delayed(const Duration(seconds: 10));
-  // FlutterNativeSplash.remove();
-
   await checkToken();
-
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -53,17 +45,9 @@ void main() async {
 }
 
 Future<void> checkToken() async {
-  // Lấy token từ SharedPreferences
-
   final tokens = await getToken();
-
   final accessToken = tokens['access'];
-  final refreshToken = tokens['refresh'];
-  if (accessToken != null) {
-    runApp(MyApp());
-  } else {
-    runApp(const MyApp());
-  }
+  runApp(MyApp(isAuthenticated: accessToken != null));
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -76,10 +60,15 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 class MyApp extends StatefulWidget {
+  final bool isAuthenticated;
   final String? savedEmail;
   final String? savedPassword;
 
-  const MyApp({Key? key, this.savedEmail, this.savedPassword})
+  const MyApp(
+      {Key? key,
+      this.isAuthenticated = false,
+      this.savedEmail,
+      this.savedPassword})
       : super(key: key);
 
   @override
@@ -87,7 +76,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = ThemeMode.dark; // Initialize with dark theme
+  ThemeMode _themeMode = ThemeMode.dark;
 
   void _toggleTheme(bool isDarkMode) {
     setState(() {
@@ -102,67 +91,78 @@ class _MyAppState extends State<MyApp> {
       initialRoute: widget.savedEmail != null && widget.savedPassword != null
           ? AppRoutes.firstScreen
           : AppRoutes.firstScreen,
-      routes: {
-        AppRoutes.firstScreen: (context) => PersistenBottomNavBarDemo(
-              savedEmail: widget.savedEmail,
-              savedPassword: widget.savedPassword,
-              isDarkMode: _themeMode == ThemeMode.dark,
-              onThemeChanged: _toggleTheme,
-            ),
-        AppRoutes.homepage: (context) => HomePage(
-            savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
-        AppRoutes.login: (context) => LoginPage(),
-        AppRoutes.signup: (context) => SignUp(),
-        AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
-        AppRoutes.OtpConfirm: (context) => OTP_Page(),
-        AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
-        AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
-        AppRoutes.meditate: (context) => Meditate(),
-        AppRoutes.performMeditate: (context) => performMeditate(),
-        AppRoutes.streak: (context) => Streak(),
-        AppRoutes.exercisedetail: (context) => ExerciseDetail(),
-        AppRoutes.result: (context) => Result(),
-        AppRoutes.subscription: (context) => Subscription(),
-        AppRoutes.Profile: (context) => ProfilePage(
+      routes: _buildRoutes(),
+      onGenerateRoute: _generateRoute,
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: _themeMode,
+    );
+  }
+
+  Map<String, WidgetBuilder> _buildRoutes() {
+    return {
+      AppRoutes.firstScreen: (context) => PersistenBottomNavBarDemo(
+            savedEmail: widget.savedEmail,
+            savedPassword: widget.savedPassword,
             isDarkMode: _themeMode == ThemeMode.dark,
-            onThemeChanged: _toggleTheme),
-        AppRoutes.activities: (context) => Activities(),
-        AppRoutes.eventDetail: (context) => EventDetail(
-              title: 'Event Title',
-              caption: 'Event Caption',
-              remainingDays: 'Event Subtitle',
-            ),
-        AppRoutes.blog: (context) => Blog(),
-        AppRoutes.blogDetail: (context) => BlogDetail(
-              title: 'Event Title',
-              caption: 'Event Caption',
-              subtitle: 'Event Subtitle',
-            ),
-        AppRoutes.reminder: (context) => ReminderPage(),
-        AppRoutes.notifications: (context) => NotificationsPage(),
-        AppRoutes.friendProfile: (context) => FriendProfile(),
-      },
-      onGenerateRoute: (settings) {
-        if (settings.name == AppRoutes.settings) {
-          return MaterialPageRoute(
-            builder: (context) => SettingsPage(
-              isDarkMode: _themeMode == ThemeMode.dark,
-              onThemeChanged: _toggleTheme,
-            ),
-          );
-        } else if (settings.name == AppRoutes.paymentHistory) {
-          return MaterialPageRoute(builder: (context) => PaymentHistory());
-        } else if (settings.name == AppRoutes.changeProfile) {
-          return MaterialPageRoute(builder: (context) => ChangeProfilePage());
-        }
+            onThemeChanged: _toggleTheme,
+          ),
+      AppRoutes.homepage: (context) => HomePage(
+            savedEmail: widget.savedEmail,
+            savedPassword: widget.savedPassword,
+          ),
+      AppRoutes.login: (context) => LoginPage(),
+      AppRoutes.signup: (context) => SignUp(),
+      AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
+      AppRoutes.OtpConfirm: (context) => OTP_Page(),
+      AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
+      AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
+      AppRoutes.meditate: (context) => Meditate(),
+      AppRoutes.performMeditate: (context) => performMeditate(),
+      AppRoutes.streak: (context) => Streak(),
+      AppRoutes.exercisedetail: (context) => ExerciseDetail(),
+      AppRoutes.result: (context) => Result(),
+      AppRoutes.subscription: (context) => Subscription(),
+      AppRoutes.Profile: (context) => ProfilePage(
+            isDarkMode: _themeMode == ThemeMode.dark,
+            onThemeChanged: _toggleTheme,
+          ),
+      AppRoutes.activities: (context) => Activities(),
+      AppRoutes.eventDetail: (context) => EventDetail(
+            title: 'Event Title',
+            caption: 'Event Caption',
+            remainingDays: 'Event Subtitle',
+          ),
+      AppRoutes.blog: (context) => Blog(),
+      AppRoutes.blogDetail: (context) => BlogDetail(
+            title: 'Event Title',
+            caption: 'Event Caption',
+            subtitle: 'Event Subtitle',
+          ),
+      AppRoutes.reminder: (context) => ReminderPage(),
+      AppRoutes.notifications: (context) => NotificationsPage(),
+      AppRoutes.friendProfile: (context) => FriendProfile(),
+    };
+  }
+
+  Route<dynamic>? _generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case AppRoutes.settings:
+        return MaterialPageRoute(
+          builder: (context) => SettingsPage(
+            isDarkMode: _themeMode == ThemeMode.dark,
+            onThemeChanged: _toggleTheme,
+          ),
+        );
+      case AppRoutes.paymentHistory:
+        return MaterialPageRoute(builder: (context) => PaymentHistory());
+      case AppRoutes.changeProfile:
+        return MaterialPageRoute(builder: (context) => ChangeProfilePage());
+      default:
         return MaterialPageRoute(
             builder: (context) => HomePage(
                 savedEmail: widget.savedEmail,
                 savedPassword: widget.savedPassword));
-      },
-      theme: lightTheme, // Apply the light theme
-      darkTheme: darkTheme, // Apply the dark theme
-      themeMode: _themeMode, // Use current theme mode
-    );
+    }
   }
 }
