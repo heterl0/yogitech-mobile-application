@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
     'https://www.googleapis.com/auth/contacts.readonly',
   ], serverClientId: dotenv.env['GOOGLE_CLIENT_ID']);
   bool _isLoading = false;
-  final ApiService apiService = ApiService(dotenv.get('API_BASE_URL'));
+  final ApiService apiService = ApiService();
 
   @override
   Widget build(BuildContext context) {

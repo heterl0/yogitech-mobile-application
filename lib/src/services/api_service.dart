@@ -6,9 +6,10 @@ import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:yogi_application/src/models/user_models.dart';
 import 'package:yogi_application/src/pages/blog.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiService {
-  final String baseUrl = 'https://api.yogitech.me';
+  final String baseUrl = dotenv.get('API_BASE_URL');
 
   var dio = Dio();
 
@@ -26,6 +27,31 @@ class ApiService {
 
         return UserModel(
             email: email, accessToken: accessToken, refreshToken: refreshToken);
+      } else {
+        print('Login failed with status code: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Login error: $e');
+      return null;
+    }
+  }
+
+  Future<UserModel?> loginGoogle(String authToken) async {
+    try {
+      final api = '$baseUrl/api/v1/auth/google/';
+      final data = {'auth_token': authToken};
+      Response response = await dio.post(api, data: data);
+      print(response.data);
+      if (response.statusCode == 200) {
+        final tokens = response.data['tokens'];
+        final accessToken = tokens['access'];
+        final refreshToken = tokens['refresh'];
+        await saveTokens(accessToken, refreshToken);
+        await getToken();
+
+        return UserModel(
+            email: '', accessToken: accessToken, refreshToken: refreshToken);
       } else {
         print('Login failed with status code: ${response.statusCode}');
         return null;
