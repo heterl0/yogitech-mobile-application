@@ -12,12 +12,17 @@ class Blog extends StatefulWidget {
   BlogState createState() => BlogState();
 
   static fromJson(item) {}
+
+  static fromMap(x) {}
+
+  toMap() {}
 }
 
 class BlogState extends State<Blog> {
+  late Future<Blog> blogs;
   bool _isNotSearching = true;
-  final TextEditingController _searchController = TextEditingController();
-  List<Blog> _blog = [];
+  TextEditingController _searchController = TextEditingController();
+  List<Blog> _blogs = [];
 
   @override
   void initState() {
@@ -31,7 +36,7 @@ class BlogState extends State<Blog> {
       List<Blog> blogs =
           await apiService.fetchBlogs(); // Gọi hàm fetchBlogs từ service
       setState(() {
-        _blog = blogs;
+        _blogs = blogs;
       });
     } catch (e) {
       print('Error fetching blogs: $e');
@@ -110,6 +115,7 @@ class BlogState extends State<Blog> {
       width: double.infinity,
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
       child: GridView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 6.0),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -118,9 +124,9 @@ class BlogState extends State<Blog> {
           mainAxisSpacing: 8.0,
           childAspectRatio: 3 / 2,
         ),
-        itemCount: 15,
+        itemCount: 6,
         itemBuilder: (context, index) {
-          final title = 'Blog ${index + 1}';
+          final title = 'title';
           final caption = 'Caption ${index + 1}';
           final subtitle = '${10 - index} days left';
 

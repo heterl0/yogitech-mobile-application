@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -40,9 +41,30 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   await Future.delayed(const Duration(seconds: 10));
+  FlutterNativeSplash.remove();
+  await checkToken();
+  await loadEnv();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(MyApp());
+  });
+}
+
+Future<void> checkToken() async {
+  // Lấy token từ SharedPreferences
+
   final tokens = await getToken();
   final accessToken = tokens['access'];
   runApp(MyApp(isAuthenticated: accessToken != null));
+}
+
+Future<void> loadEnv() async {
+  // To load the .env file contents into dotenv.
+  // NOTE: fileName defaults to .env and can be omitted in this case.
+  // Ensure that the filename corresponds to the path in step 1 and 2.
+  await dotenv.load(fileName: ".env");
 }
 
 class MyHttpOverrides extends HttpOverrides {

@@ -12,6 +12,8 @@
 .buildlog/
 .history
 .svn/
+migrate_working_dir/
+*.env
 
 # IntelliJ related
 *.iml
