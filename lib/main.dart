@@ -39,7 +39,7 @@ void main() async {
   await Future.delayed(const Duration(seconds: 10));
   FlutterNativeSplash.remove();
   await checkToken();
-
+  await loadEnv();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

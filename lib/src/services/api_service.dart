@@ -1,15 +1,16 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
-import 'dart:io';
 import 'package:yogi_application/src/models/user_models.dart';
 import 'package:yogi_application/src/pages/blog.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiService {
-  final String baseUrl = dotenv.get('API_BASE_URL');
+  String baseUrl = dotenv.get('API_BASE_URL');
+
+  // ApiService() {
+  //   // this.baseUrl = dotenv.get('API_BASE_URL');
+  // }
 
   var dio = Dio();
 
