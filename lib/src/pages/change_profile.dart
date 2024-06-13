@@ -8,6 +8,8 @@ import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/dropdown_field.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:yogi_application/src/pages/change_BMI.dart';
+import 'package:yogi_application/src/models/user_profile.dart'; // Import your UserProfile model
+import 'package:yogi_application/src/services/api_service.dart'; // Import your fetchUserProfiles function
 
 class ChangeProfilePage extends StatefulWidget {
   const ChangeProfilePage({super.key});
@@ -18,10 +20,13 @@ class ChangeProfilePage extends StatefulWidget {
 
 class _ChangeProfilePageState extends State<ChangeProfilePage> {
   final TextEditingController userName = TextEditingController();
+  final TextEditingController email = TextEditingController();
+
   final TextEditingController phone = TextEditingController();
   final TextEditingController birthday = TextEditingController();
   final TextEditingController gender = TextEditingController();
 
+  
   // Regular expression for Vietnamese phone numbers
   final RegExp phoneRegExp =
       RegExp(r'^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$');
@@ -75,9 +80,20 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   placeholder: 'User name',
                 ),
                 SizedBox(height: 16.0),
+
+                Text('Email',
+                    style: h3.copyWith(color: theme.colorScheme.onPrimary)),
+                SizedBox(height: 8.0),
+                BoxInputField(
+                  controller: email,
+                  placeholder: 'Email',
+                ),
+                SizedBox(height: 16.0),
+
                 Text('Phone',
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
                 SizedBox(height: 8.0),
+
                 BoxInputField(
                   controller: phone,
                   placeholder: 'Phone number',

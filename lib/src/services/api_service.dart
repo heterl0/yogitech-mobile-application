@@ -6,8 +6,9 @@ import 'dart:io';
 import 'package:yogi_application/src/models/user_models.dart';
 import 'package:yogi_application/src/pages/blog.dart';
 
+final String baseUrl = 'https://api.yogitech.me';
+
 class ApiService {
-  final String baseUrl = 'https://api.yogitech.me';
 
   var dio = Dio();
 

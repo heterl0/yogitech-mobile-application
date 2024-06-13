@@ -8,7 +8,7 @@ class UserProfile {
   final int point;
   final int exp;
   final int streak;
-  final String? avatar;
+  final String? avatar_url;
   final int gender;
   final DateTime? birthdate;
   final double? height;
@@ -27,7 +27,7 @@ class UserProfile {
     required this.point,
     required this.exp,
     required this.streak,
-    this.avatar,
+    this.avatar_url,
     required this.gender,
     this.birthdate,
     this.height,
@@ -48,7 +48,7 @@ class UserProfile {
       point: json['point'],
       exp: json['exp'],
       streak: json['streak'],
-      avatar: json['avatar'],
+      avatar_url: json['avatar_url'],
       gender: json['gender'],
       birthdate: json['birthdate'] != null ? DateTime.parse(json['birthdate']) : null,
       height: json['height']?.toDouble(),
@@ -70,7 +70,7 @@ class UserProfile {
       'point': point,
       'exp': exp,
       'streak': streak,
-      'avatar': avatar,
+      'avatar': avatar_url,
       'gender': gender,
       'birthdate': birthdate?.toIso8601String(),
       'height': height,
