@@ -81,9 +81,7 @@ class _MyAppState extends State<MyApp> {
 
   void _changeLanguage(bool isVietnamese) {
     setState(() {
-      _locale = _locale.languageCode == 'vi'
-          ? const Locale('vi')
-          : const Locale('en');
+      _locale = isVietnamese ? Locale('vi') : Locale('en');
     });
   }
 
@@ -100,7 +98,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: darkTheme,
       themeMode: _themeMode,
       supportedLocales: L10n.all,
-      locale: _locale,
+      locale: const Locale('vi'),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
