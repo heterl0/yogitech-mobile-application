@@ -1,10 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
-import 'package:yogi_application/main.dart';
 import 'package:yogi_application/src/services/api_service.dart';
 import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
@@ -12,7 +8,6 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
-import 'package:dio/dio.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
@@ -23,8 +18,10 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final GoogleSignIn _googleSignIn =
-      GoogleSignIn(scopes: <String>['email', '']);
+  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: <String>[
+    'email',
+    'https://www.googleapis.com/auth/contacts.readonly',
+  ], serverClientId: dotenv.env['GOOGLE_CLIENT_ID']);
   bool _isLoading = false;
   final ApiService apiService = ApiService();
 
@@ -130,6 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                             // if (user != null) {
                             //   print(user.displayName);
                             // }
+                            await _handleGoogleSignIn();
                           },
                         ),
                       ),
@@ -159,56 +157,60 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Future<void> _handleGoogleSignIn() async {
-  //   setState(() {
-  //     _isLoading = true;
-  //   });
+  Future<void> _handleGoogleSignIn() async {
+    setState(() {
+      _isLoading = true;
+    });
 
-  //   try {
-  //     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-  //     if (googleUser == null) {
-  //       setState(() {
-  //         _isLoading = false;
-  //       });
-  //       return; // Người dùng đã hủy đăng nhập
-  //     }
-  //     final GoogleSignInAuthentication googleAuth =
-  //         await googleUser.authentication;
-  //     final String? authToken = googleAuth.idToken;
+    try {
+      await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //       content: Text(
+      //     'Login: $googleUser',
+      //   )),
+      // );
+      GoogleSignInAuthentication googleSignInAuthentication =
+          await googleUser!.authentication;
+      try {
+        final user = await apiService
+            .loginGoogle(googleSignInAuthentication.idToken ?? "");
 
-  //     if (authToken != null) {
-  //       final response = await Dio().post(
-  //         'https://api.yogitech.me/api/v1/auth/google/',
-  //         data: {'auth_token': authToken},
-  //       );
+        if (user != null &&
+            user.accessToken.isNotEmpty &&
+            user.refreshToken.isNotEmpty) {
+          Navigator.pushReplacementNamed(context, AppRoutes.homepage);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text('An error occurred. Please try again later.')),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('An error occurred. Please try again later. $e')),
+        );
+      }
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(
+          'Failed to sign in: $error',
+        )),
+      );
+    }
 
-  //       if (response.statusCode == 200) {
-  //         final responseBody = response.data['auth_token'];
-  //         // Xử lý authTokenResponse (lưu trữ, chuyển trang, v.v.)
-  //         print('Auth Token: $responseBody');
-  //         Navigator.pushReplacementNamed(context, AppRoutes.homepage);
-  //       } else {
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           SnackBar(
-  //               content: Text('Error while calling API: ${response.data}')),
-  //         );
-  //       }
-  //     }
-  //   } catch (error) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Failed to sign in: $error')),
-  //     );
-  //   }
-
-  //   setState(() {
-  //     _isLoading = false;
-  //   });
-  // }
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   Future signIn() async {
     String savedEmail = '';
     String savedPassword = '';
-    final user = await LoginGoogle.login();
+
     Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (context) =>
           HomePage(savedEmail: savedEmail, savedPassword: savedPassword),

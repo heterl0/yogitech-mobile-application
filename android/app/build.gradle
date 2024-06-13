@@ -2,6 +2,7 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id 'com.google.gms.google-services'
 }
 
 
@@ -52,28 +53,40 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+    
     signingConfigs {
-    release {
-        storeFile file("mykeystore.jks")
-        storePassword "123456"
-        keyAlias "mykeystore"
-        keyPassword "123456"
+        release {
+            storeFile file("yogitech-keystore.jks")
+            storePassword "android"
+            keyAlias "upload"
+            keyPassword "android"
+        }
+        
+        // debug {
+        //    storeFile file("yogitech-keystore.jks")
+        //     storePassword "android"
+        //     keyAlias "upload"
+        //     keyPassword "android"
+        // }
     }
-}
-
-buildTypes {
-    release {
-        signingConfig signingConfigs.release
-    }
-}
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
+
+        // debug {
+        //     signingConfig signingConfigs.debug
+        // }
     }
+
+    // buildTypes {
+    //     release {
+    //         // TODO: Add your own signing config for the release build.
+    //         // Signing with the debug keys for now, so `flutter run --release` works.
+    //         signingConfig signingConfigs.debug
+    //     }
+    // }
 }
 
 flutter {
@@ -81,5 +94,5 @@ flutter {
 }
 
 dependencies {
-    
+    implementation platform('com.google.firebase:firebase-bom:33.1.0')
 }

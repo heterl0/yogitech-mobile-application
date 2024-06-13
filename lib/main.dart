@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:yogi_application/src/services/api_service.dart';
@@ -32,14 +33,13 @@ import 'dart:io';
 import 'dart:async';
 
 void main() async {
+  await loadEnv();
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   // Delay cho màn hình splash (chỉ dùng để demo, điều chỉnh tùy ý)
   await Future.delayed(const Duration(seconds: 10));
   FlutterNativeSplash.remove();
-
   await checkToken();
-
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -60,6 +60,13 @@ Future<void> checkToken() async {
   } else {
     runApp(const MyApp());
   }
+}
+
+Future<void> loadEnv() async {
+  // To load the .env file contents into dotenv.
+  // NOTE: fileName defaults to .env and can be omitted in this case.
+  // Ensure that the filename corresponds to the path in step 1 and 2.
+  await dotenv.load(fileName: ".env");
 }
 
 class MyHttpOverrides extends HttpOverrides {
