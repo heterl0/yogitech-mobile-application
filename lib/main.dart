@@ -41,8 +41,8 @@ void main() async {
   await loadEnv();
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
-  await Future.delayed(const Duration(seconds: 10));
-  FlutterNativeSplash.remove();
+  // await Future.delayed(const Duration(seconds: 10));
+  // FlutterNativeSplash.remove();
   await checkToken();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

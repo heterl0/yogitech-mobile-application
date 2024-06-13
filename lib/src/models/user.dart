@@ -1,6 +1,5 @@
-import 'user_profile.dart';
+import 'profile.dart';
 import 'following.dart';
-
 
 class User {
   int id;
@@ -12,7 +11,7 @@ class User {
   bool isPremium;
   int activeStatus;
   String authProvider;
-  UserProfile profile;
+  Profile profile;
   List<Following> following;
   DateTime createdAt;
 
@@ -42,8 +41,9 @@ class User {
       isPremium: json['is_premium'],
       activeStatus: json['active_status'],
       authProvider: json['auth_provider'],
-      profile: UserProfile.fromJson(json['profile']),
-      following: List<Following>.from(json['following'].map((x) => Following.fromJson(x))),
+      profile: Profile.fromJson(json['profile']),
+      following: List<Following>.from(
+          json['following'].map((x) => Following.fromJson(x))),
       createdAt: DateTime.parse(json['created_at']),
     );
   }
