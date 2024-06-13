@@ -4,6 +4,7 @@ import 'package:yogi_application/src/pages/event_detail.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Activities extends StatefulWidget {
   @override
@@ -57,6 +58,7 @@ class _ActivitiesState extends State<Activities> {
 
   Widget _buildTopRoundedContainer() {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     return Positioned(
       left: 0,
       top: 0,
@@ -66,7 +68,7 @@ class _ActivitiesState extends State<Activities> {
         decoration: BoxDecoration(
           color: theme.colorScheme.onSecondary,
           shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(24),
             bottomRight: Radius.circular(24),
           ),
@@ -94,7 +96,7 @@ class _ActivitiesState extends State<Activities> {
                     _showRankContent = false;
                   });
                 },
-                child: _buildTitleContainer('Event', !_showRankContent),
+                child: _buildTitleContainer(trans.event, !_showRankContent),
               ),
             ),
           ],
@@ -105,6 +107,7 @@ class _ActivitiesState extends State<Activities> {
 
   Widget _buildTitleContainer(String title, bool isSelected) {
     final theme = Theme.of(context);
+
     return Container(
       width: 185,
       height: 36,
@@ -129,7 +132,7 @@ class _ActivitiesState extends State<Activities> {
 
   Widget _buildRankMainTitle() {
     final theme = Theme.of(context);
-
+    final trans = AppLocalizations.of(context)!;
     return Center(
       child: Container(
         child: Column(
@@ -137,7 +140,7 @@ class _ActivitiesState extends State<Activities> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              '5 days left',
+              '5 ${trans.daysLeft}',
               style: h2.copyWith(color: theme.colorScheme.onBackground),
             ),
           ],
@@ -317,6 +320,7 @@ class _ActivitiesState extends State<Activities> {
   }
 
   Widget _buildEventMainContent() {
+    final trans = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding:
@@ -334,9 +338,9 @@ class _ActivitiesState extends State<Activities> {
         ),
         itemCount: 6, // Number of cards
         itemBuilder: (context, index) {
-          final title = 'Event ${index + 1}';
+          final title = '${trans.event} ${index + 1}';
           final caption = 'Caption ${index + 1}';
-          final subtitle = '${5 - index} days left';
+          final subtitle = '${5 - index} ${trans.daysLeft}';
 
           return CustomCard(
             title: title,

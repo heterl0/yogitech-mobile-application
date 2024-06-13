@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                                     color: theme.colorScheme.onPrimary),
                               ),
                               Text(
-                                'for beginner',
+                                trans.forBeginner,
                                 textAlign: TextAlign.left,
                                 style: h3.copyWith(
                                     color: theme.colorScheme.onPrimary),
@@ -191,7 +191,7 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
-                'For You',
+                trans.forYou,
                 style: h3.copyWith(color: theme.colorScheme.onPrimary),
               ),
             ),
@@ -223,7 +223,7 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
-                'Newest',
+                trans.newest,
                 style: h3.copyWith(color: theme.colorScheme.onPrimary),
               ),
             ),
@@ -266,6 +266,7 @@ class StreakValue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
     return Center(
       child: GestureDetector(
         onTap: () {
@@ -281,7 +282,7 @@ class StreakValue extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              'Streak',
+              trans.streak,
               style: min_cap.copyWith(
                 color: text,
               ),
@@ -294,7 +295,7 @@ class StreakValue extends StatelessWidget {
                 },
                 child: Text(
                   streakValue,
-                  style: h2.copyWith(color: Colors.white, height: 1),
+                  style: h2.copyWith(color: active, height: 1),
                 ),
               ),
             )
