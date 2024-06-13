@@ -2,6 +2,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:yogi_application/src/models/user_models.dart';
 import 'package:yogi_application/src/pages/blog.dart';
@@ -56,6 +57,44 @@ class ApiService {
     }
   }
 
+  // Future<List<Blog>> fetchBlogs() async {
+  //   try {
+  //     final tokens = await getToken();
+  //     final accessToken = tokens['access'];
+  //     final response = await dio.get(
+  //       '$baseUrl/api/v1/blogs/',
+  //       options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
+  //     );
+  //     print(response.statusCode);
+  //     if (response.statusCode == 200) {
+  //       final dynamic responseData = response.data;
+  //       print(responseData);
+
+  //       if (responseData is List) {
+  //         // Map dữ liệu phản hồi thành một danh sách các đối tượng Blog
+  //         final List<Blog> blogs = responseData
+  //             .map((blogData) {
+  //               return Blog.fromJson(blogData);
+  //             })
+  //             .toList()
+  //             .cast<Blog>(); // Chuyển đổi kiểu danh sách sang List<Blog>
+
+  //         return blogs;
+  //       } else {
+  //         // Trả về một danh sách trống nếu responseData không phải là một danh sách
+  //         return [];
+  //       }
+  //     } else {
+  //       print('${response.statusCode} : ${response.data.toString()}');
+  //       // Trả về một danh sách trống nếu có lỗi
+  //       return [];
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //     // Trả về một danh sách trống nếu có lỗi
+  //     return [];
+  //   }
+  // }
   Future<List<Blog>> fetchBlogs() async {
     try {
       final tokens = await getToken();
@@ -64,34 +103,29 @@ class ApiService {
         '$baseUrl/api/v1/blogs/',
         options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
       );
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        final dynamic responseData = response.data;
-        print(responseData);
 
-        if (responseData is List) {
-          // Map dữ liệu phản hồi thành một danh sách các đối tượng Blog
+      if (response.statusCode == 200) {
+        final model = Blog.fromMap(response.data);
+        final List<dynamic> responseData = response.data;
+        print(responseData);
+        if (response.data is List) {
+          // Chuyển đổi danh sách động thành danh sách Blog
           final List<Blog> blogs = responseData
               .map((blogData) {
-                return Blog.fromJson(blogData);
+                return Blog.fromJson(blogData as Map<String, dynamic>);
               })
               .toList()
-              .cast<Blog>(); // Chuyển đổi kiểu danh sách sang List<Blog>
-
+              .cast<Blog>();
+          print(blogs);
           return blogs;
         } else {
-          // Trả về một danh sách trống nếu responseData không phải là một danh sách
           return [];
         }
       } else {
-        print('${response.statusCode} : ${response.data.toString()}');
-        // Trả về một danh sách trống nếu có lỗi
         return [];
       }
     } catch (e) {
-      print(e);
-      // Trả về một danh sách trống nếu có lỗi
-      return [];
+      throw Exception(e);
     }
   }
 }

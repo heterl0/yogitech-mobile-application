@@ -15,12 +15,17 @@ class Blog extends StatefulWidget {
   BlogState createState() => BlogState();
 
   static fromJson(item) {}
+
+  static fromMap(x) {}
+
+  toMap() {}
 }
 
 class BlogState extends State<Blog> {
+  late Future<Blog> blogs;
   bool _isNotSearching = true;
   TextEditingController _searchController = TextEditingController();
-  List<Blog> _blog = [];
+  List<Blog> _blogs = [];
 
   @override
   void initState() {
@@ -34,7 +39,7 @@ class BlogState extends State<Blog> {
       List<Blog> blogs =
           await apiService.fetchBlogs(); // Gọi hàm fetchBlogs từ service
       setState(() {
-        _blog = blogs;
+        _blogs = blogs;
       });
     } catch (e) {
       print('Error fetching blogs: $e');
@@ -190,9 +195,9 @@ class BlogState extends State<Blog> {
           mainAxisSpacing: 8.0,
           childAspectRatio: 3 / 2,
         ),
-        itemCount: _blog.length,
+        itemCount: _blogs.length,
         itemBuilder: (context, index) {
-          final title = 'Blog ${index + 1}';
+          final title = 'title';
           final caption = 'Caption ${index + 1}';
           final subtitle = '${5 - index} days left';
 

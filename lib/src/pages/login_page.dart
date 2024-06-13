@@ -208,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
   Future signIn() async {
     String savedEmail = '';
     String savedPassword = '';
-    final user = await LoginGoogle.login();
+
     Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (context) =>
           HomePage(savedEmail: savedEmail, savedPassword: savedPassword),
