@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yogi_application/src/pages/notifications.dart';
 import 'package:yogi_application/src/pages/reminder.dart';
 import 'package:yogi_application/src/shared/styles.dart';
@@ -26,11 +27,12 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: CustomAppBar(
-        title: "Setting",
+        title: trans.setting,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -38,18 +40,18 @@ class SettingsPage extends StatelessWidget {
           child: Column(
             children: [
               CustomSwitch(
-                title: 'Dark mode',
+                title: trans.darkMode,
                 value: isDarkMode,
                 onChanged: onThemeChanged,
               ),
               CustomSwitch(
-                title: 'Vietnamese UI?',
+                title: trans.vietnameseUI,
                 value: isVietnamese,
                 onChanged: onLanguageChanged,
               ),
               SettingItem(
-                title: 'Profile',
-                description: 'Your information, avatar, and BMI',
+                title: trans.profile,
+                description: trans.yourInfo,
                 icon: Icons.account_circle_outlined, // Biểu tượng cho mục này
                 onTap: () {
                   pushWithoutNavBar(
@@ -61,8 +63,8 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
               SettingItem(
-                title: 'Reminder',
-                description: 'Reminds you of exercise time',
+                title: trans.reminder,
+                description: trans.exerciseReminder,
                 icon: Icons.alarm, // Biểu tượng cho mục này
                 onTap: () {
                   pushWithoutNavBar(
@@ -74,8 +76,8 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
               SettingItem(
-                title: 'Notifications',
-                description: 'Application notifications',
+                title: trans.notifications,
+                description: trans.appNotifications,
                 icon: Icons
                     .notifications_active_outlined, // Biểu tượng cho mục này
                 onTap: () {
