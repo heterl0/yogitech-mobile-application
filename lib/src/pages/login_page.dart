@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
     'https://www.googleapis.com/auth/contacts.readonly',
   ], serverClientId: dotenv.env['GOOGLE_CLIENT_ID']);
   bool _isLoading = false;
-  final ApiService apiService = ApiService('https://api.yogitech.me');
+  final ApiService apiService = ApiService(dotenv.get('API_BASE_URL'));
 
   @override
   Widget build(BuildContext context) {
@@ -164,46 +164,34 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await _googleSignIn.signIn();
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(
-          'Failed to sign in: $googleUser',
-        )),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //       content: Text(
+      //     'Login: $googleUser',
+      //   )),
+      // );
       GoogleSignInAuthentication googleSignInAuthentication =
           await googleUser!.authentication;
-      String? serverAuthToken = googleUser.serverAuthCode;
-      print(googleSignInAuthentication.idToken);
+      try {
+        final user = await apiService
+            .loginGoogle(googleSignInAuthentication.idToken ?? "");
 
-      // if (googleUser == null) {
-      //   setState(() {
-      //     _isLoading = false;
-      //   });
-      //   return; // Người dùng đã hủy đăng nhập
-      // }
-      // final GoogleSignInAuthentication googleAuth =
-      //     await googleUser.authentication;
-      // final String? authToken = googleAuth.idToken;
-      // print('Auth Token: $authToken');
-
-      // if (authToken != null) {
-      //   final response = await Dio().post(
-      //     'https://api.yogitech.me/api/v1/auth/google/',
-      //     data: {'auth_token': authToken},
-      //   );
-
-      //   if (response.statusCode == 200) {
-      //     final responseBody = response.data['auth_token'];
-      //     // Xử lý authTokenResponse (lưu trữ, chuyển trang, v.v.)
-      //     print('Auth Token: $responseBody');
-      //     Navigator.pushReplacementNamed(context, AppRoutes.homepage);
-      //   } else {
-      //     ScaffoldMessenger.of(context).showSnackBar(
-      //       SnackBar(
-      //           content: Text('Error while calling API: ${response.data}')),
-      //     );
-      //   }
-      // }
+        if (user != null &&
+            user.accessToken.isNotEmpty &&
+            user.refreshToken.isNotEmpty) {
+          Navigator.pushReplacementNamed(context, AppRoutes.homepage);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text('An error occurred. Please try again later.')),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('An error occurred. Please try again later. $e')),
+        );
+      }
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

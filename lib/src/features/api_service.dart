@@ -1,10 +1,6 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'dart:io';
-import 'package:yogi_application/src/models/user_models.dart';
 import 'package:yogi_application/src/models/user_models.dart';
 
 class ApiService {
@@ -28,6 +24,31 @@ class ApiService {
 
         return UserModel(
             email: email, accessToken: accessToken, refreshToken: refreshToken);
+      } else {
+        print('Login failed with status code: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Login error: $e');
+      return null;
+    }
+  }
+
+  Future<UserModel?> loginGoogle(String authToken) async {
+    try {
+      final api = '$baseUrl/api/v1/auth/google/';
+      final data = {'auth_token': authToken};
+      Response response = await dio.post(api, data: data);
+      print(response.data);
+      if (response.statusCode == 200) {
+        final tokens = response.data['tokens'];
+        final accessToken = tokens['access'];
+        final refreshToken = tokens['refresh'];
+        await saveTokens(accessToken, refreshToken);
+        await getToken();
+
+        return UserModel(
+            email: '', accessToken: accessToken, refreshToken: refreshToken);
       } else {
         print('Login failed with status code: ${response.statusCode}');
         return null;
