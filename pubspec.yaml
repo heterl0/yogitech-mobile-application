@@ -27,12 +27,14 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
+
 dependencies:
   flutter:
     sdk: flutter
       
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  rive_splash_screen: ^0.1.1
   persistent_bottom_nav_bar_v2: ^5.2.3
   http: ^1.2.1
   cupertino_icons: ^1.0.6
@@ -47,12 +49,12 @@ dependencies:
   intl: any
   flutter_localizations: 
     sdk: flutter
-flutter_native_splash:
-  android: true
-  ios: true
-  web: false
+# flutter_native_splash:
+#   android: true
+#   ios: true
+#   web: false
 
-  background_image: "assets/native_splash/splash.png"
+#   background_image: "assets/native_splash/splash.png"
 
 
 
@@ -82,7 +84,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/audios/
-    - assets/native_splash/splash.png
+    # - assets/native_splash/splash.png
 
     # fonts:
     # - family: ReadexPro

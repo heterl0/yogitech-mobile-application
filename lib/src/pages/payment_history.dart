@@ -96,6 +96,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
     return ElevatedButton(
       onPressed: () {},
       style: ElevatedButton.styleFrom(
+        elevation: 0,
         backgroundColor: theme.colorScheme.background,
         padding: EdgeInsets.all(18.0),
         shape: RoundedRectangleBorder(
