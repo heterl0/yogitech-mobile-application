@@ -98,7 +98,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: darkTheme,
       themeMode: _themeMode,
       supportedLocales: L10n.all,
-      locale: const Locale('vi'),
+      locale: _locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -111,6 +111,7 @@ class _MyAppState extends State<MyApp> {
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
       AppRoutes.firstScreen: (context) => MainScreen(
+            isVietnamese: _locale == Locale('vi'),
             savedEmail: widget.savedEmail,
             savedPassword: widget.savedPassword,
             isDarkMode: _themeMode == ThemeMode.dark,
@@ -135,6 +136,7 @@ class _MyAppState extends State<MyApp> {
       AppRoutes.result: (context) => Result(),
       AppRoutes.subscription: (context) => Subscription(),
       AppRoutes.Profile: (context) => ProfilePage(
+            isVietnamese: _locale == Locale('vi'),
             isDarkMode: _themeMode == ThemeMode.dark,
             onThemeChanged: _toggleTheme,
             locale: _locale,
@@ -163,6 +165,7 @@ class _MyAppState extends State<MyApp> {
       case AppRoutes.settings:
         return MaterialPageRoute(
           builder: (context) => SettingsPage(
+            isVietnamese: _locale == Locale('vi'),
             isDarkMode: _themeMode == ThemeMode.dark,
             onThemeChanged: _toggleTheme,
             locale: _locale,

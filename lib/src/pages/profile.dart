@@ -18,12 +18,14 @@ class ProfilePage extends StatefulWidget {
   final ValueChanged<bool> onThemeChanged;
   final Locale locale;
   final ValueChanged<bool> onLanguageChanged;
+  final bool isVietnamese;
 
   ProfilePage(
       {required this.isDarkMode,
       required this.onThemeChanged,
       required this.locale,
-      required this.onLanguageChanged});
+      required this.onLanguageChanged,
+      required this.isVietnamese});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -64,6 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => SettingsPage(
+                      isVietnamese: widget.isVietnamese,
                       isDarkMode: widget.isDarkMode,
                       onThemeChanged: widget.onThemeChanged,
                       locale: widget.locale,

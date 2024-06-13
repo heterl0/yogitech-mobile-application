@@ -12,6 +12,7 @@ class SettingsPage extends StatelessWidget {
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChanged;
   final Locale locale;
+  final bool isVietnamese;
   final ValueChanged<bool> onLanguageChanged;
 
   const SettingsPage({
@@ -20,11 +21,11 @@ class SettingsPage extends StatelessWidget {
     required this.onThemeChanged,
     required this.locale,
     required this.onLanguageChanged,
+    required this.isVietnamese,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final bool isVi = locale.languageCode == 'vi';
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
@@ -43,7 +44,7 @@ class SettingsPage extends StatelessWidget {
               ),
               CustomSwitch(
                 title: 'Vietnamese UI?',
-                value: isVi,
+                value: isVietnamese,
                 onChanged: onLanguageChanged,
               ),
               SettingItem(

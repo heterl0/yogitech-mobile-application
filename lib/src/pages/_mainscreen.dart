@@ -16,6 +16,7 @@ class MainScreen extends StatefulWidget {
   final ValueChanged<bool> onThemeChanged;
   final Locale locale;
   final ValueChanged<bool> onLanguageChanged;
+  final bool isVietnamese;
 
   const MainScreen({
     Key? key,
@@ -25,6 +26,7 @@ class MainScreen extends StatefulWidget {
     required this.onThemeChanged,
     required this.locale,
     required this.onLanguageChanged,
+    required this.isVietnamese,
   }) : super(key: key);
 
   @override
@@ -84,6 +86,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
         PersistentTabConfig(
           screen: ProfilePage(
+            isVietnamese: widget.isVietnamese,
             isDarkMode: widget.isDarkMode,
             onThemeChanged: widget.onThemeChanged,
             locale: widget.locale,
