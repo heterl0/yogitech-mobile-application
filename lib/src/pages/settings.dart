@@ -11,67 +11,23 @@ import 'package:yogi_application/src/pages/change_profile.dart';
 class SettingsPage extends StatelessWidget {
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChanged;
+  final Locale locale;
+  final ValueChanged<bool> onLanguageChanged;
 
   const SettingsPage({
     Key? key,
     required this.isDarkMode,
     required this.onThemeChanged,
+    required this.locale,
+    required this.onLanguageChanged,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final bool isVi = locale.languageCode == 'vi';
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      // appBar: PreferredSize(
-      //   preferredSize: const Size.fromHeight(100),
-      //   child: ClipRRect(
-      //     borderRadius: const BorderRadius.only(
-      //       bottomLeft: Radius.circular(24.0),
-      //       bottomRight: Radius.circular(24.0),
-      //     ),
-      //     child: AppBar(
-      //       automaticallyImplyLeading: false,
-      //       backgroundColor: theme.colorScheme.onSecondary,
-      //       bottom: PreferredSize(
-      //         preferredSize: const Size.fromHeight(0),
-      //         child: Padding(
-      //           padding: const EdgeInsets.only(
-      //             bottom: 12.0,
-      //             right: 24.0,
-      //             left: 24.0,
-      //           ),
-      //           child: Row(
-      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //             children: [
-      //               IconButton(
-      //                 icon: Icon(
-      //                   Icons.arrow_back,
-      //                   color: theme.colorScheme.onBackground,
-      //                 ),
-      //                 onPressed: () {
-      //                   Navigator.pop(context);
-      //                 },
-      //               ),
-      //               Text('Setting',
-      //                   style:
-      //                       h2.copyWith(color: theme.colorScheme.onBackground)),
-      //               Opacity(
-      //                 opacity: 0.0,
-      //                 child: IgnorePointer(
-      //                   child: IconButton(
-      //                     icon: Image.asset('assets/icons/settings.png'),
-      //                     onPressed: () {},
-      //                   ),
-      //                 ),
-      //               )
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // ),
       appBar: CustomAppBar(
         title: "Setting",
       ),
@@ -87,8 +43,8 @@ class SettingsPage extends StatelessWidget {
               ),
               CustomSwitch(
                 title: 'Vietnamese UI?',
-                value: false,
-                onChanged: (value) {},
+                value: isVi,
+                onChanged: onLanguageChanged,
               ),
               SettingItem(
                 title: 'Profile',

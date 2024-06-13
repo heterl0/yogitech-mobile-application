@@ -16,8 +16,14 @@ import 'package:yogi_application/src/services/api_service.dart';
 class ProfilePage extends StatefulWidget {
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChanged;
+  final Locale locale;
+  final ValueChanged<bool> onLanguageChanged;
 
-  ProfilePage({required this.isDarkMode, required this.onThemeChanged});
+  ProfilePage(
+      {required this.isDarkMode,
+      required this.onThemeChanged,
+      required this.locale,
+      required this.onLanguageChanged});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -60,6 +66,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     builder: (context) => SettingsPage(
                       isDarkMode: widget.isDarkMode,
                       onThemeChanged: widget.onThemeChanged,
+                      locale: widget.locale,
+                      onLanguageChanged: widget.onLanguageChanged,
                     ),
                   ),
                 );

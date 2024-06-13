@@ -50,6 +50,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!; // Bản dịch
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
@@ -112,7 +113,7 @@ class _HomePageState extends State<HomePage> {
               style: widthStyle.Large,
               titleWidget: BoxInputField(
                 controller: _searchController,
-                placeholder: 'Search...',
+                placeholder: trans.search,
                 trailing: Icon(Icons.search),
                 keyboardType: TextInputType.text,
                 inputFormatters: [],
@@ -156,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                AppLocalizations.of(context)!.tryThisExercise,
+                                trans.tryThisExercise,
                                 textAlign: TextAlign.left,
                                 style: bd_text.copyWith(
                                     color: theme.colorScheme.onPrimary),

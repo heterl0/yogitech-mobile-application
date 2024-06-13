@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/pages/blog.dart';
@@ -13,6 +14,8 @@ class MainScreen extends StatefulWidget {
   final String? savedPassword;
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChanged;
+  final Locale locale;
+  final ValueChanged<bool> onLanguageChanged;
 
   const MainScreen({
     Key? key,
@@ -20,6 +23,8 @@ class MainScreen extends StatefulWidget {
     this.savedPassword,
     required this.isDarkMode,
     required this.onThemeChanged,
+    required this.locale,
+    required this.onLanguageChanged,
   }) : super(key: key);
 
   @override
@@ -29,6 +34,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!; // Bản dịch
     final theme = Theme.of(context);
     return PersistentTabView(
       navBarHeight: 100,
@@ -41,7 +47,7 @@ class _MainScreenState extends State<MainScreen> {
           item: ItemConfig(
             textStyle: min_cap,
             icon: const Icon(Icons.grid_view),
-            title: "Home",
+            title: trans.home,
             activeForegroundColor: primary,
             inactiveForegroundColor: text,
           ),
@@ -51,7 +57,7 @@ class _MainScreenState extends State<MainScreen> {
           item: ItemConfig(
             textStyle: min_cap,
             icon: const Icon(Icons.newspaper_outlined),
-            title: "Blog",
+            title: trans.blog,
             activeForegroundColor: primary,
             inactiveForegroundColor: text,
           ),
@@ -61,7 +67,7 @@ class _MainScreenState extends State<MainScreen> {
           item: ItemConfig(
             textStyle: min_cap,
             icon: const Icon(Icons.directions_run),
-            title: "Activities",
+            title: trans.activities,
             activeForegroundColor: primary,
             inactiveForegroundColor: text,
           ),
@@ -71,19 +77,22 @@ class _MainScreenState extends State<MainScreen> {
           item: ItemConfig(
             textStyle: min_cap,
             icon: const Icon(Icons.self_improvement),
-            title: "Meditate",
+            title: trans.meditate,
             activeForegroundColor: primary,
             inactiveForegroundColor: text,
           ),
         ),
         PersistentTabConfig(
           screen: ProfilePage(
-              isDarkMode: widget.isDarkMode,
-              onThemeChanged: widget.onThemeChanged),
+            isDarkMode: widget.isDarkMode,
+            onThemeChanged: widget.onThemeChanged,
+            locale: widget.locale,
+            onLanguageChanged: widget.onLanguageChanged,
+          ),
           item: ItemConfig(
             textStyle: min_cap,
             icon: const Icon(Icons.account_circle_outlined),
-            title: "Profile",
+            title: trans.profile,
             activeForegroundColor: primary,
             inactiveForegroundColor: text,
           ),

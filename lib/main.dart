@@ -71,10 +71,19 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.dark;
+  Locale _locale = const Locale('vi');
 
   void _toggleTheme(bool isDarkMode) {
     setState(() {
       _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
+
+  void _changeLanguage(bool isVietnamese) {
+    setState(() {
+      _locale = _locale.languageCode == 'vi'
+          ? const Locale('vi')
+          : const Locale('en');
     });
   }
 
@@ -91,7 +100,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: darkTheme,
       themeMode: _themeMode,
       supportedLocales: L10n.all,
-      locale: const Locale('vi'),
+      locale: _locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -108,6 +117,8 @@ class _MyAppState extends State<MyApp> {
             savedPassword: widget.savedPassword,
             isDarkMode: _themeMode == ThemeMode.dark,
             onThemeChanged: _toggleTheme,
+            locale: _locale,
+            onLanguageChanged: _changeLanguage,
           ),
       AppRoutes.homepage: (context) => HomePage(
             savedEmail: widget.savedEmail,
@@ -128,6 +139,8 @@ class _MyAppState extends State<MyApp> {
       AppRoutes.Profile: (context) => ProfilePage(
             isDarkMode: _themeMode == ThemeMode.dark,
             onThemeChanged: _toggleTheme,
+            locale: _locale,
+            onLanguageChanged: _changeLanguage,
           ),
       AppRoutes.activities: (context) => Activities(),
       AppRoutes.eventDetail: (context) => EventDetail(
@@ -154,6 +167,8 @@ class _MyAppState extends State<MyApp> {
           builder: (context) => SettingsPage(
             isDarkMode: _themeMode == ThemeMode.dark,
             onThemeChanged: _toggleTheme,
+            locale: _locale,
+            onLanguageChanged: _changeLanguage,
           ),
         );
       case AppRoutes.paymentHistory:
