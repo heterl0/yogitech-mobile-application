@@ -85,6 +85,7 @@ flutter:
     - assets/icons/
     - assets/audios/
     # - assets/native_splash/splash.png
+    - assets/native_splash/logo.riv
 
     # fonts:
     # - family: ReadexPro
