@@ -33,6 +33,7 @@ import 'package:yogi_application/src/pages/profile.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/pages/settings.dart';
 import 'package:rive_splash_screen/rive_splash_screen.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'dart:io';
 import 'dart:async';
@@ -110,6 +111,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    FlutterNativeSplash.remove();
     return MaterialApp(
       home: SplashScreen.navigate(
         name: 'assets/native_splash/logo.riv',
@@ -124,7 +126,9 @@ class _MyAppState extends State<MyApp> {
         ),
         until: () => Future.delayed(const Duration(seconds: 3)),
         startAnimation: 'Landing',
+        endAnimation: '',
         backgroundColor: active,
+        fit: BoxFit.fill,
       ),
       debugShowCheckedModeBanner: false,
       initialRoute: widget.isAuthenticated

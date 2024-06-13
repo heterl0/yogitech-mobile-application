@@ -44,13 +44,13 @@ dependencies:
   audioplayers: ^6.0.0
   dio: ^5.4.3+1
   flutter_launcher_icons: ^0.13.1
-  flutter_native_splash: ^2.4.0
   social_login_buttons: ^1.0.7
   intl: any
   flutter_localizations: 
     sdk: flutter
 #   json_annotation: ^4.9.0
   flutter_dotenv: ^5.1.0
+  flutter_native_splash: ^2.4.0
 # flutter_native_splash:
 #   android: true
 #   ios: true
@@ -87,7 +87,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/audios/
-    # - assets/native_splash/splash.png
+    - assets/native_splash/logo.riv
     - .env
 
     # fonts:
