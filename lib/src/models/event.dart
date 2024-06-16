@@ -33,43 +33,6 @@ class Event {
     required this.created_at,
   });
 
-  // factory Event.fromJson(Map<String, dynamic> json) {
-  //   return Event(
-  //     id: json['id'],
-  //     title: json['title'],
-  //     image_url: json['image_url'],
-  //     status: json['status'],
-  //     start_date: json['start_date'],
-  //     expire_date: json['expire_date'],
-  //     description: json['description'],
-  //     active_status: json['active_status'],
-  //     exercises:
-  //         (json['exercises'] as List).map((e) => Exercise.fromJson(e)).toList(),
-  //     event_candidate: (json['event_candidate'] as List)
-  //         .map((e) => CandidateEvent.fromJson(e))
-  //         .toList(),
-  //     owner: Account.fromJson(json['owner']),
-  //     created_at: json['created_at'],
-  //   );
-  // }
-
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     'id': id,
-  //     'title': title,
-  //     'image_url': image_url,
-  //     'status': status,
-  //     'start_date': start_date,
-  //     'expire_date': expire_date,
-  //     'description': description,
-  //     'active_status': active_status,
-  //     'exercises': exercises.map((e) => e.toJson()).toList(),
-  //     'event_candidate': event_candidate.map((e) => e.toJson()).toList(),
-  //     'owner': owner.toJson(),
-  //     'created_at': created_at,
-  //   };
-  // }
-
   Event copyWith({
     int? id,
     String? title,
@@ -128,12 +91,12 @@ class Event {
       description: map['description'] as String,
       active_status: map['active_status'] as int,
       exercises: List<Exercise>.from(
-        (map['exercises'] as List<int>).map<Exercise>(
+        (map['exercises'] as List<dynamic>).map<Exercise>(
           (x) => Exercise.fromMap(x as Map<String, dynamic>),
         ),
       ),
       event_candidate: List<CandidateEvent>.from(
-        (map['event_candidate'] as List<int>).map<CandidateEvent>(
+        (map['event_candidate'] as List<dynamic>).map<CandidateEvent>(
           (x) => CandidateEvent.fromMap(x as Map<String, dynamic>),
         ),
       ),
@@ -205,30 +168,6 @@ class CandidateEvent {
     required this.updated_at,
     required this.event,
   });
-
-  // factory CandidateEvent.fromJson(Map<String, dynamic> json) {
-  //   return CandidateEvent(
-  //     id: json['id'],
-  //     user: Account.fromJson(json['user']),
-  //     event_point: json['event_point'],
-  //     active_status: json['active_status'],
-  //     join_at: json['join_at'],
-  //     updated_at: json['updated_at'],
-  //     event: json['event'],
-  //   );
-  // }
-
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     'id': id,
-  //     'user': user.toJson(),
-  //     'event_point': event_point,
-  //     'active_status': active_status,
-  //     'join_at': join_at,
-  //     'updated_at': updated_at,
-  //     'event': event,
-  //   };
-  // }
 
   CandidateEvent copyWith({
     int? id,

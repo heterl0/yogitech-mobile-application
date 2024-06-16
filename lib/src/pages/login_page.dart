@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/blog/blog_service.dart';
+import 'package:yogi_application/api/event/event_service.dart';
 import 'package:yogi_application/api/exercise/exercise_service.dart';
 import 'package:yogi_application/api/notification/notification_service.dart';
 import 'package:yogi_application/api/pose/pose_service.dart';
@@ -87,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                     state: ButtonState.Enabled,
                     onPressed: () async {
                       // _handleLogin(context);
-                      print(await getNotifications());
+                      print(await getEvents());
                     },
                   ),
                   SizedBox(height: 10.0),
