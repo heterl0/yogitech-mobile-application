@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:yogi_application/api/dioInstance.dart';
-import 'package:yogi_application/src/models/user_models.dart';
+import 'package:yogi_application/src/models/user.dart';
 import 'package:yogi_application/src/services/api_service.dart';
 import 'package:yogi_application/utils/formatting.dart';
 
