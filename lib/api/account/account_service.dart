@@ -20,11 +20,32 @@ Future<Account?> getUser() async {
   }
 }
 
+class PatchUserAccountRequest {
+  String? username;
+  String? phone;
+
+  PatchUserAccountRequest({
+    required this.username,
+    required this.phone,
+  });
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> data = {};
+    if (username != null) {
+      data['username'] = username;
+    }
+    if (phone != null) {
+      data['phone'] = phone;
+    }
+    return data;
+  }
+}
+
 /// Patch user account allow to username and phone
-Future<Account?> patchUserAccount(Map<String, dynamic> data) async {
+Future<Account?> patchUserAccount(PatchUserAccountRequest data) async {
   try {
     final url = formatApiUrl('/api/v1/users/me/');
-    final Response response = await DioInstance.patch(url, data: data);
+    final Response response = await DioInstance.patch(url, data: data.toMap());
     if (response.statusCode == 200) {
       return Account.fromMap(response.data);
     } else {
