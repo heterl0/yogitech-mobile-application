@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
-import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:yogi_application/src/models/account.dart';
+import 'package:yogi_application/src/models/pose.dart';
 
 class PoseWithTime {
   Pose pose;
@@ -455,31 +455,5 @@ class Comment {
         parent_comment.hashCode ^
         user.hashCode ^
         exercise.hashCode;
-  }
-}
-
-// Placeholder for Pose class. You need to replace this with the actual implementation.
-class Pose {
-  Pose();
-
-  factory Pose.fromMap(Map<String, dynamic> map) {
-    return Pose();
-  }
-
-  Map<String, dynamic> toMap() {
-    return {};
-  }
-}
-
-// Placeholder for Account class. You need to replace this with the actual implementation.
-class Account {
-  Account();
-
-  factory Account.fromMap(Map<String, dynamic> map) {
-    return Account();
-  }
-
-  Map<String, dynamic> toMap() {
-    return {};
   }
 }

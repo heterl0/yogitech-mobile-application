@@ -1,7 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
+import 'package:yogi_application/src/models/account.dart';
+import 'package:yogi_application/src/models/exercise.dart';
 
 class Event {
   int id;
@@ -32,42 +33,42 @@ class Event {
     required this.created_at,
   });
 
-  factory Event.fromJson(Map<String, dynamic> json) {
-    return Event(
-      id: json['id'],
-      title: json['title'],
-      image_url: json['image_url'],
-      status: json['status'],
-      start_date: json['start_date'],
-      expire_date: json['expire_date'],
-      description: json['description'],
-      active_status: json['active_status'],
-      exercises:
-          (json['exercises'] as List).map((e) => Exercise.fromJson(e)).toList(),
-      event_candidate: (json['event_candidate'] as List)
-          .map((e) => CandidateEvent.fromJson(e))
-          .toList(),
-      owner: Account.fromJson(json['owner']),
-      created_at: json['created_at'],
-    );
-  }
+  // factory Event.fromJson(Map<String, dynamic> json) {
+  //   return Event(
+  //     id: json['id'],
+  //     title: json['title'],
+  //     image_url: json['image_url'],
+  //     status: json['status'],
+  //     start_date: json['start_date'],
+  //     expire_date: json['expire_date'],
+  //     description: json['description'],
+  //     active_status: json['active_status'],
+  //     exercises:
+  //         (json['exercises'] as List).map((e) => Exercise.fromJson(e)).toList(),
+  //     event_candidate: (json['event_candidate'] as List)
+  //         .map((e) => CandidateEvent.fromJson(e))
+  //         .toList(),
+  //     owner: Account.fromJson(json['owner']),
+  //     created_at: json['created_at'],
+  //   );
+  // }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'image_url': image_url,
-      'status': status,
-      'start_date': start_date,
-      'expire_date': expire_date,
-      'description': description,
-      'active_status': active_status,
-      'exercises': exercises.map((e) => e.toJson()).toList(),
-      'event_candidate': event_candidate.map((e) => e.toJson()).toList(),
-      'owner': owner.toJson(),
-      'created_at': created_at,
-    };
-  }
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'id': id,
+  //     'title': title,
+  //     'image_url': image_url,
+  //     'status': status,
+  //     'start_date': start_date,
+  //     'expire_date': expire_date,
+  //     'description': description,
+  //     'active_status': active_status,
+  //     'exercises': exercises.map((e) => e.toJson()).toList(),
+  //     'event_candidate': event_candidate.map((e) => e.toJson()).toList(),
+  //     'owner': owner.toJson(),
+  //     'created_at': created_at,
+  //   };
+  // }
 
   Event copyWith({
     int? id,
@@ -205,29 +206,29 @@ class CandidateEvent {
     required this.event,
   });
 
-  factory CandidateEvent.fromJson(Map<String, dynamic> json) {
-    return CandidateEvent(
-      id: json['id'],
-      user: Account.fromJson(json['user']),
-      event_point: json['event_point'],
-      active_status: json['active_status'],
-      join_at: json['join_at'],
-      updated_at: json['updated_at'],
-      event: json['event'],
-    );
-  }
+  // factory CandidateEvent.fromJson(Map<String, dynamic> json) {
+  //   return CandidateEvent(
+  //     id: json['id'],
+  //     user: Account.fromJson(json['user']),
+  //     event_point: json['event_point'],
+  //     active_status: json['active_status'],
+  //     join_at: json['join_at'],
+  //     updated_at: json['updated_at'],
+  //     event: json['event'],
+  //   );
+  // }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'user': user.toJson(),
-      'event_point': event_point,
-      'active_status': active_status,
-      'join_at': join_at,
-      'updated_at': updated_at,
-      'event': event,
-    };
-  }
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'id': id,
+  //     'user': user.toJson(),
+  //     'event_point': event_point,
+  //     'active_status': active_status,
+  //     'join_at': join_at,
+  //     'updated_at': updated_at,
+  //     'event': event,
+  //   };
+  // }
 
   CandidateEvent copyWith({
     int? id,
@@ -305,31 +306,5 @@ class CandidateEvent {
         join_at.hashCode ^
         updated_at.hashCode ^
         event.hashCode;
-  }
-}
-
-// Placeholder for Exercise class. You need to replace this with the actual implementation.
-class Exercise {
-  Exercise();
-
-  factory Exercise.fromJson(Map<String, dynamic> json) {
-    return Exercise();
-  }
-
-  Map<String, dynamic> toJson() {
-    return {};
-  }
-}
-
-// Placeholder for Account class. You need to replace this with the actual implementation.
-class Account {
-  Account();
-
-  factory Account.fromJson(Map<String, dynamic> json) {
-    return Account();
-  }
-
-  Map<String, dynamic> toJson() {
-    return {};
   }
 }
