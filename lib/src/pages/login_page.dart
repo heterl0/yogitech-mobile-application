@@ -4,6 +4,7 @@ import 'package:social_login_buttons/social_login_buttons.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/blog/blog_service.dart';
 import 'package:yogi_application/api/exercise/exercise_service.dart';
+import 'package:yogi_application/api/notification/notification_service.dart';
 import 'package:yogi_application/api/pose/pose_service.dart';
 import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
@@ -86,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                     state: ButtonState.Enabled,
                     onPressed: () async {
                       // _handleLogin(context);
-                      print(await getExercises());
+                      print(await getNotifications());
                     },
                   ),
                   SizedBox(height: 10.0),
