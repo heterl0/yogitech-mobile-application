@@ -20,6 +20,23 @@ Future<Account?> getUser() async {
   }
 }
 
+Future<Profile?> getUserProfile() async {
+  try {
+    final url = formatApiUrl('/api/v1/users/me/');
+    final Response response = await DioInstance.get(url);
+    if (response.statusCode == 200) {
+      return Account.fromMap(response.data).profile;
+    } else {
+      print(
+          'Get account detail failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Get account detail error: $e');
+    return null;
+  }
+}
+
 class PatchUserAccountRequest {
   String? username;
   String? phone;
