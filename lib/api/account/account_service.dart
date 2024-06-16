@@ -61,7 +61,7 @@ class PasswordChangeRequest {
 Future<bool> changePassword(PasswordChangeRequest data) async {
   try {
     final url = formatApiUrl('/api/v1/users/set_password/');
-    final Response response = await DioInstance.patch(url, data: data.toMap());
+    final Response response = await DioInstance.post(url, data: data.toMap());
     if (response.statusCode == 204) {
       return true;
     } else {
