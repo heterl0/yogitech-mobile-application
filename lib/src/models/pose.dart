@@ -106,7 +106,8 @@ class Pose {
   String name;
   String image_url;
   int duration;
-  int calories;
+  // float but get string from API
+  String calories;
   String keypoint_url;
   String instruction;
   String created_at;
@@ -135,7 +136,7 @@ class Pose {
     String? name,
     String? image_url,
     int? duration,
-    int? calories,
+    String? calories,
     String? keypoint_url,
     String? instruction,
     String? created_at,
@@ -180,14 +181,14 @@ class Pose {
     return Pose(
       id: map['id'] as int,
       muscles: List<Muscle>.from(
-        (map['muscles'] as List<int>).map<Muscle>(
+        (map['muscles'] as List<dynamic>).map<Muscle>(
           (x) => Muscle.fromMap(x as Map<String, dynamic>),
         ),
       ),
       name: map['name'] as String,
       image_url: map['image_url'] as String,
       duration: map['duration'] as int,
-      calories: map['calories'] as int,
+      calories: map['calories'] as String,
       keypoint_url: map['keypoint_url'] as String,
       instruction: map['instruction'] as String,
       created_at: map['created_at'] as String,
