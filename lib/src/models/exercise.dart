@@ -69,7 +69,7 @@ class Exercise {
   String title;
   String image_url;
   String video_url;
-  int durations;
+  int? durations;
   int level;
   String benefit;
   String description;
@@ -176,7 +176,7 @@ class Exercise {
       title: map['title'] as String,
       image_url: map['image_url'] as String,
       video_url: map['video_url'] as String,
-      durations: map['durations'] as int,
+      durations: map['durations'] ?? 0,
       level: map['level'] as int,
       benefit: map['benefit'] as String,
       description: map['description'] as String,
@@ -189,12 +189,12 @@ class Exercise {
       owner: map['owner'] as dynamic,
       active_status: map['active_status'] as int,
       poses: List<PoseWithTime>.from(
-        (map['poses'] as List<int>).map<PoseWithTime>(
+        (map['poses'] as List<dynamic>).map<PoseWithTime>(
           (x) => PoseWithTime.fromMap(x as Map<String, dynamic>),
         ),
       ),
       comments: List<Comment>.from(
-        (map['comments'] as List<int>).map<Comment>(
+        (map['comments'] as List<dynamic>).map<Comment>(
           (x) => Comment.fromMap(x as Map<String, dynamic>),
         ),
       ),
