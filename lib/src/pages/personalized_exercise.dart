@@ -51,7 +51,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
             ),
       body: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.all(16.0),
+          margin: const EdgeInsets.all(24.0),
           child: Column(
             children: [
               // Danh sách đầu tiên

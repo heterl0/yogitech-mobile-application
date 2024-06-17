@@ -147,7 +147,7 @@ class _MyAppState extends State<MyApp> {
         ],
         routes: {
           AppRoutes.firstScreen: (context) => MainScreen(
-                isVietnamese: _locale == Locale('vi'),
+                isVietnamese: _locale == const Locale('vi'),
                 isDarkMode: _themeMode == ThemeMode.dark,
                 onThemeChanged: _toggleTheme,
                 locale: _locale,

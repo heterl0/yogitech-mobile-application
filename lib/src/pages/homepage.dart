@@ -195,15 +195,14 @@ class _HomePageState extends State<HomePage> {
             ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
                   if (jsonList != null)
                     for (final exercise in jsonList)
                       CustomCard(
                         title: exercise.title,
-                        caption:
-                            exercise.description ?? '', // Mô tả của bài tập
+                        // subtitle: exercise.durations ?? '0',
                         imageUrl:
                             exercise.image_url, // URL hình ảnh của bài tập
                         onTap: () {
