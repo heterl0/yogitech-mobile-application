@@ -82,8 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: ButtonStyleType.Primary,
                     state: ButtonState.Enabled,
                     onPressed: () async {
-                      // _handleLogin(context);
-                      print(await getExercises());
+                      _handleLogin(context);
                     },
                   ),
                   SizedBox(height: 10.0),
