@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
+import "package:yogi_application/src/shared/styles.dart";
 import 'package:yogi_application/src/custombar/appbar.dart';
 
 class BlogDetail extends StatefulWidget {
@@ -33,7 +32,6 @@ class _BlogDetailState extends State<BlogDetail> {
         postActions: [_buildDislikeButton(), _buildLikeButton()],
       ),
       body: _buildBody(context),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 
@@ -121,7 +119,7 @@ class _BlogDetailState extends State<BlogDetail> {
         child: Column(
           children: [
             Text(
-              'Ringo Island',
+              'Japan: Discovering the Land of the Rising Sun',
               style: h2.copyWith(color: theme.colorScheme.onPrimary),
             ),
           ],

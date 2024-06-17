@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/dropdown_field.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:yogi_application/src/pages/change_BMI.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChangeProfilePage extends StatefulWidget {
   const ChangeProfilePage({super.key});
@@ -32,11 +31,11 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: CustomAppBar(
-        title: 'Edit Profile',
+        title: trans.editProfile,
         style: widthStyle.Large,
       ),
       body: SingleChildScrollView(
@@ -62,7 +61,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 ),
                 SizedBox(height: 8),
                 BoxButton(
-                  title: 'Change avatar', // Set the button text
+                  title: trans.changeAvatar, // Set the button text
                   style: ButtonStyleType
                       .Tertiary, // Set the button style (optional)
                   onPressed: () {
@@ -70,12 +69,12 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   },
                 ),
                 SizedBox(height: 16),
-                Text('Username',
+                Text(trans.username,
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: userName,
-                  placeholder: 'User name',
+                  placeholder: trans.username,
                 ),
                 SizedBox(height: 16.0),
 
@@ -94,14 +93,14 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
 
                 BoxInputField(
                   controller: phone,
-                  placeholder: 'Phone number',
+                  placeholder: trans.phoneNumber,
                   keyboardType: TextInputType.phone,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   regExp: phoneRegExp, // Đảm bảo phoneRegExp được định nghĩa
                   errorText: "Invalid phone number",
                 ),
                 SizedBox(height: 16.0),
-                Text('Birthday',
+                Text(trans.birthday,
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
                 SizedBox(height: 8.0),
                 BoxInputField(
@@ -126,7 +125,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   },
                 ),
                 SizedBox(height: 16.0),
-                Text('Gender',
+                Text(trans.gender,
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
                 SizedBox(height: 8.0),
                 // DropdownButtonFormField<String>(
@@ -155,9 +154,17 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   },
                 ),
 
+                SizedBox(height: 40.0),
+                BoxButton(
+                  title: trans.save, // Set the button text
+                  style: ButtonStyleType
+                      .Primary, // Set the button style (optional)
+                  onPressed: () {},
+                ),
+
                 SizedBox(height: 16.0),
                 BoxButton(
-                  title: 'Change password', // Set the button text
+                  title: trans.changePassword, // Set the button text
                   style: ButtonStyleType
                       .Tertiary, // Set the button style (optional)
                   onPressed: () {
@@ -165,9 +172,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     _changePasswordBottomSheet(context);
                   },
                 ),
-                SizedBox(height: 0.0),
                 BoxButton(
-                  title: 'Change BMI', // Set the button text
+                  title: trans.changeBMI, // Set the button text
                   style: ButtonStyleType
                       .Tertiary, // Set the button style (optional)
                   onPressed: () {
@@ -184,57 +190,61 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 
   Future<void> _changePasswordBottomSheet(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     final TextEditingController currentPassword = TextEditingController();
     final TextEditingController newPassword = TextEditingController();
     final TextEditingController confirmNewPassword = TextEditingController();
     return showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
       backgroundColor: theme.colorScheme.onSecondary,
       builder: (BuildContext context) {
         return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 36),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Old password',
-                  style: h3.copyWith(color: theme.colorScheme.onBackground)),
-              SizedBox(height: 16.0),
-              BoxInputField(
-                controller: currentPassword,
-                password: true,
-              ),
-              SizedBox(height: 16.0),
-              Text('New password',
-                  style: h3.copyWith(color: theme.colorScheme.onBackground)),
-              SizedBox(height: 16.0),
-              BoxInputField(
-                controller: newPassword,
-                password: true,
-              ),
-              SizedBox(height: 16.0),
-              Text('Confirm password',
-                  style: h3.copyWith(color: theme.colorScheme.onBackground)),
-              SizedBox(height: 16.0),
-              BoxInputField(
-                controller: confirmNewPassword,
-                password: true,
-              ),
-              SizedBox(height: 32.0),
-              BoxButton(
-                title: 'Save',
-                style: ButtonStyleType.Primary,
-                state: ButtonState
-                    .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
+          padding: MediaQuery.of(context).viewInsets,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 36),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(trans.oldPassword,
+                    style: h3.copyWith(color: theme.colorScheme.onBackground)),
+                SizedBox(height: 16.0),
+                BoxInputField(
+                  controller: currentPassword,
+                  password: true,
+                ),
+                SizedBox(height: 16.0),
+                Text(trans.newPassword,
+                    style: h3.copyWith(color: theme.colorScheme.onBackground)),
+                SizedBox(height: 16.0),
+                BoxInputField(
+                  controller: newPassword,
+                  password: true,
+                ),
+                SizedBox(height: 16.0),
+                Text(trans.confirmNewPassword,
+                    style: h3.copyWith(color: theme.colorScheme.onBackground)),
+                SizedBox(height: 16.0),
+                BoxInputField(
+                  controller: confirmNewPassword,
+                  password: true,
+                ),
+                SizedBox(height: 32.0),
+                BoxButton(
+                  title: trans.save,
+                  style: ButtonStyleType.Primary,
+                  state: ButtonState
+                      .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
           ),
         );
       },

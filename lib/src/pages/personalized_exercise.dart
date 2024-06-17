@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 
 class PersonalizedExercisePage extends StatefulWidget {
@@ -77,7 +76,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
+
       floatingActionButton: _buildFloatingActionButton(context), // Thêm nút nổi
       floatingActionButtonLocation:
           FloatingActionButtonLocation.endFloat, // Định vị nút nổi

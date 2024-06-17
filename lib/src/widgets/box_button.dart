@@ -13,12 +13,12 @@ class BoxButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const BoxButton({
-    Key? key,
+    super.key,
     required this.title,
     required this.style,
     this.state = ButtonState.Enabled,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

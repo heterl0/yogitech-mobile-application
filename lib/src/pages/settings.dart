@@ -1,79 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yogi_application/src/pages/notifications.dart';
 import 'package:yogi_application/src/pages/reminder.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/widgets/switch.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 
 class SettingsPage extends StatelessWidget {
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChanged;
+  final Locale locale;
+  final bool isVietnamese;
+  final ValueChanged<bool> onLanguageChanged;
 
   const SettingsPage({
     Key? key,
     required this.isDarkMode,
     required this.onThemeChanged,
+    required this.locale,
+    required this.onLanguageChanged,
+    required this.isVietnamese,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      // appBar: PreferredSize(
-      //   preferredSize: const Size.fromHeight(100),
-      //   child: ClipRRect(
-      //     borderRadius: const BorderRadius.only(
-      //       bottomLeft: Radius.circular(24.0),
-      //       bottomRight: Radius.circular(24.0),
-      //     ),
-      //     child: AppBar(
-      //       automaticallyImplyLeading: false,
-      //       backgroundColor: theme.colorScheme.onSecondary,
-      //       bottom: PreferredSize(
-      //         preferredSize: const Size.fromHeight(0),
-      //         child: Padding(
-      //           padding: const EdgeInsets.only(
-      //             bottom: 12.0,
-      //             right: 24.0,
-      //             left: 24.0,
-      //           ),
-      //           child: Row(
-      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //             children: [
-      //               IconButton(
-      //                 icon: Icon(
-      //                   Icons.arrow_back,
-      //                   color: theme.colorScheme.onBackground,
-      //                 ),
-      //                 onPressed: () {
-      //                   Navigator.pop(context);
-      //                 },
-      //               ),
-      //               Text('Setting',
-      //                   style:
-      //                       h2.copyWith(color: theme.colorScheme.onBackground)),
-      //               Opacity(
-      //                 opacity: 0.0,
-      //                 child: IgnorePointer(
-      //                   child: IconButton(
-      //                     icon: Image.asset('assets/icons/settings.png'),
-      //                     onPressed: () {},
-      //                   ),
-      //                 ),
-      //               )
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // ),
       appBar: CustomAppBar(
-        title: "Setting",
+        title: trans.setting,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -81,21 +40,21 @@ class SettingsPage extends StatelessWidget {
           child: Column(
             children: [
               CustomSwitch(
-                title: 'Dark mode',
+                title: trans.darkMode,
                 value: isDarkMode,
                 onChanged: onThemeChanged,
               ),
               CustomSwitch(
-                title: 'Vietnamese UI?',
-                value: false,
-                onChanged: (value) {},
+                title: trans.vietnameseUI,
+                value: isVietnamese,
+                onChanged: onLanguageChanged,
               ),
               SettingItem(
-                title: 'Profile',
-                description: 'Your information, avatar, and BMI',
+                title: trans.profile,
+                description: trans.yourInfo,
                 icon: Icons.account_circle_outlined, // Biểu tượng cho mục này
                 onTap: () {
-                  Navigator.push(
+                  pushWithoutNavBar(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ChangeProfilePage(),
@@ -104,11 +63,11 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
               SettingItem(
-                title: 'Reminder',
-                description: 'Reminds you of exercise time',
+                title: trans.reminder,
+                description: trans.exerciseReminder,
                 icon: Icons.alarm, // Biểu tượng cho mục này
                 onTap: () {
-                  Navigator.push(
+                  pushWithoutNavBar(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ReminderPage(),
@@ -117,8 +76,8 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
               SettingItem(
-                title: 'Notifications',
-                description: 'Application notifications',
+                title: trans.notifications,
+                description: trans.appNotifications,
                 icon: Icons
                     .notifications_active_outlined, // Biểu tượng cho mục này
                 onTap: () {
@@ -134,7 +93,6 @@ class SettingsPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 }
