@@ -223,30 +223,27 @@ class _HomePageState extends State<HomePage> {
                 style: h3.copyWith(color: theme.colorScheme.onPrimary),
               ),
             ),
-            const SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  // Similar to the "For You" section, add your content here
-                  CustomCard(
-                    title: 'Card with Image',
-                    caption:
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                  ),
-                  CustomCard(
-                    title: 'Card with Image',
-                    caption:
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                  ),
-                  CustomCard(
-                    title: 'Card with Image',
-                    caption:
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                  ),
-                ],
-              ),
+           SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: List.generate(5, (index) {
+                return CustomCard(
+                  title: 'Card with Image',
+                  caption: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                  onTap: () {
+                    // Navigate to the detail page when the card is tapped
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ExerciseDetail(),
+                      ),
+                    );
+                  },
+                );
+              }),
             ),
+          ),
           ],
         ),
       ),

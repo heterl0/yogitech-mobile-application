@@ -48,6 +48,7 @@
   "beginOfTheStreak": "Begin of the streak",
   "exerciseDetail": "Exercise detail",
   "poses": "Poses",
+  "pose": "Pose",
   "comment": "Comment",
   "yourComment": "Your comment",
   "doExercise": "Do exercise",
@@ -134,4 +135,6 @@
   "burnedInMonth": "burned in this month",
   "yourExercise": "Your Exercise",
   "beginner": "Beginner"
+  
+  
 }
