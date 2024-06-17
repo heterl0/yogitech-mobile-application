@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/dioInstance.dart';
+import 'package:yogi_application/src/pages/_mainscreen.dart';
 import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/pages/blog.dart';
 import 'package:yogi_application/src/pages/blog_detail.dart';
@@ -128,15 +129,16 @@ class _MyAppState extends State<MyApp> {
         // ),
         debugShowCheckedModeBanner: false,
         initialRoute:
-            widget.access != null ? AppRoutes.homepage : AppRoutes.login,
+            widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
         routes: {
-          AppRoutes.homepage: (context) => HomePage(
+          AppRoutes.firstScreen: (context) => MainScreen(
                 isVietnamese: _locale == Locale('vi'),
                 isDarkMode: _themeMode == ThemeMode.dark,
                 onThemeChanged: _toggleTheme,
                 locale: _locale,
                 onLanguageChanged: _changeLanguage,
               ),
+          AppRoutes.homepage: (context) => HomePage(),
           AppRoutes.login: (context) => LoginPage(),
           AppRoutes.signup: (context) => SignUp(),
           AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
