@@ -57,7 +57,6 @@ Future<void> checkToken() async {
 
   final accessToken = tokens['access'];
   DioInstance.setAccessToken(accessToken ?? "");
-  final refreshToken = tokens['refresh'];
   if (accessToken != null) {
     runApp(MyApp());
   } else {
