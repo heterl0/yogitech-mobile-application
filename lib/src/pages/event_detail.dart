@@ -3,6 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class EventDetail extends StatelessWidget {
   final String title;
@@ -18,6 +20,7 @@ class EventDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -34,7 +37,7 @@ class EventDetail extends StatelessWidget {
       //     ),
       //   ],
       // ),
-      backgroundColor: theme.colorScheme.background,
+    backgroundColor: theme.colorScheme.background,
       // body: _buildBody(context),
       body: CustomScrollView(
         slivers: [
@@ -44,8 +47,8 @@ class EventDetail extends StatelessWidget {
           )
         ],
       ),
-      bottomNavigationBar: const CustomBottomBar(
-        buttonTitle: 'Join in',
+      bottomNavigationBar: CustomBottomBar(
+        buttonTitle: trans.joinIn,
       ),
     );
   }
@@ -128,6 +131,8 @@ class EventDetail extends StatelessWidget {
 
   Widget _buildTitle2(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
 
     return Container(
       alignment: Alignment.centerLeft, // Aligns the ch // Add padding if needed
@@ -137,7 +142,7 @@ class EventDetail extends StatelessWidget {
             CrossAxisAlignment.start, // Aligns the children to the start
         children: [
           Text(
-            'Leaderboard',
+            trans.leaderboard,
             style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
         ],

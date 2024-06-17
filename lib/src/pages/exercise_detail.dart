@@ -6,12 +6,14 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ExerciseDetail extends StatelessWidget {
   final TextEditingController commentController = TextEditingController();
-
+  
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
