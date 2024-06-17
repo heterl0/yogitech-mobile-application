@@ -95,9 +95,7 @@ class _ActivitiesState extends State<Activities> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => EventDetail(
-                    title: _events[index].title,
-                    caption: _events[index].id.toString(),
-                    remainingDays: _events[index].expire_date,
+                    event: _events[index],
                   ),
                 ),
               );
