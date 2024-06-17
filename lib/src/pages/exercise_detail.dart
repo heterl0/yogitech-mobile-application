@@ -6,22 +6,25 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ExerciseDetail extends StatelessWidget {
   final TextEditingController commentController = TextEditingController();
-
+  
   @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
-        title: 'Exercise Detail',
+        title: trans.exerciseDetail,
         style: widthStyle.Large,
       ),
       resizeToAvoidBottomInset: false,
       body: _buildBody(context),
       bottomNavigationBar: CustomBottomBar(
-        buttonTitle: 'Do exercise',
+        buttonTitle: trans.doExercise,
         onPressed: () {
           Navigator.push(
             context,
@@ -62,6 +65,8 @@ class ExerciseDetail extends StatelessWidget {
   }
 
   Widget _buildMainContent(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -70,17 +75,17 @@ class ExerciseDetail extends StatelessWidget {
           const SizedBox(height: 16),
           _buildTitle(context),
           const SizedBox(height: 16),
-          _buildRowWithText(),
+          _buildRowWithText(trans),
           const SizedBox(height: 16),
           _buildDescription(),
           const SizedBox(height: 16),
-          _buildTitle2(context, 'Poses'),
+          _buildTitle2(context, trans.poses),
           const SizedBox(height: 16),
-          _buildPoses(),
+          _buildPoses(trans),
           const SizedBox(height: 16),
-          _buildTitle2(context, 'Comment'),
+          _buildTitle2(context, trans.comment),
           const SizedBox(height: 16),
-          _buildCommentSection(),
+          _buildCommentSection(trans),
           const SizedBox(height: 16),
           _buildComment(context),
           const SizedBox(height: 36),
@@ -105,19 +110,20 @@ class ExerciseDetail extends StatelessWidget {
     );
   }
 
-  Widget _buildRowWithText() {
+  Widget _buildRowWithText(AppLocalizations trans) {
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '10 mins',
+          '10 ' + trans.minutes,
           style: bd_text.copyWith(color: text),
         ),
         const SizedBox(width: 16),
         Expanded(
           child: Text(
-            'Beginner',
+            trans.beginner,
             style: bd_text.copyWith(color: primary),
           ),
         ),
@@ -132,7 +138,7 @@ class ExerciseDetail extends StatelessWidget {
     );
   }
 
-  Widget _buildPoses() {
+  Widget _buildPoses(AppLocalizations trans) {
     return GridView.builder(
       shrinkWrap: true,
       padding: const EdgeInsets.all(0),
@@ -145,8 +151,8 @@ class ExerciseDetail extends StatelessWidget {
       ),
       itemCount: 6,
       itemBuilder: (context, index) {
-        final title = 'Pose ${index + 1}';
-        final subtitle = '${5 - index} minutes';
+        final title = trans.pose+' ${index + 1}';
+        final subtitle = '${5 - index} ' + trans.minutes;
 
         return CustomCard(
           title: title,
@@ -157,13 +163,13 @@ class ExerciseDetail extends StatelessWidget {
     );
   }
 
-  Widget _buildCommentSection() {
+  Widget _buildCommentSection(AppLocalizations trans) {
     return Row(
       children: [
         Expanded(
           child: BoxInputField(
             controller: commentController,
-            placeholder: 'Your comment',
+            placeholder: trans.yourComment,
           ),
         ),
         IconButton(

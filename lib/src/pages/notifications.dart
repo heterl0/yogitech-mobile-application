@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/widgets/switch.dart'; // Assuming this is CustomSwitch
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class NotificationsPage extends StatefulWidget {
   final bool streakSaverOn;
@@ -24,6 +26,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: CustomAppBar(

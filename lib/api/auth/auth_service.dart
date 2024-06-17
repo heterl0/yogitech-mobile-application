@@ -1,10 +1,13 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yogi_application/api/account/account_service.dart';
 import 'package:yogi_application/api/dioInstance.dart';
-import 'package:yogi_application/src/models/user.dart';
+import 'package:yogi_application/src/models/account.dart';
 import 'package:yogi_application/utils/formatting.dart';
 
-Future<UserModel?> login(String email, String password) async {
+Future<dynamic> login(String email, String password) async {
   try {
     final url = formatApiUrl('/api/v1/auth/login/');
     final data = {'email': email, 'password': password};
@@ -14,10 +17,10 @@ Future<UserModel?> login(String email, String password) async {
       final accessToken = response.data['access'];
       final refreshToken = response.data['refresh'];
       await saveTokens(accessToken, refreshToken);
-      await getToken();
-
-      return UserModel(
-          email: email, accessToken: accessToken, refreshToken: refreshToken);
+      DioInstance.setAccessToken(accessToken);
+      Account? account = await getUser();
+      storeAccount(account!);
+      return {accessToken: accessToken, refreshToken: refreshToken};
     } else {
       print('Login failed with status code: ${response.statusCode}');
       return null;
@@ -28,7 +31,7 @@ Future<UserModel?> login(String email, String password) async {
   }
 }
 
-Future<UserModel?> loginGoogle(String authToken) async {
+Future<dynamic> loginGoogle(String authToken) async {
   try {
     final url = formatApiUrl('/api/v1/auth/google/');
     final data = {'auth_token': authToken};
@@ -39,10 +42,10 @@ Future<UserModel?> loginGoogle(String authToken) async {
       final accessToken = tokens['access'];
       final refreshToken = tokens['refresh'];
       await saveTokens(accessToken, refreshToken);
-      await getToken();
-
-      return UserModel(
-          email: '', accessToken: accessToken, refreshToken: refreshToken);
+      DioInstance.setAccessToken(accessToken);
+      Account? account = await getUser();
+      storeAccount(account!);
+      return {accessToken: accessToken, refreshToken: refreshToken};
     } else {
       print('Login failed with status code: ${response.statusCode}');
       return null;
@@ -122,4 +125,21 @@ Future<dynamic> saveTokens(String accessToken, String refreshToken) async {
   await prefs.setString('refreshToken', refreshToken);
   await prefs.setString('accessToken', accessToken);
   // Kiểm tra xem tokens đã được lưu đúng chưa
+}
+
+Future<void> storeAccount(Account account) async {
+  final prefs = await SharedPreferences.getInstance();
+  final accountJson = jsonEncode(account.toMap());
+  await prefs.setString("_accountKey", accountJson);
+}
+
+Future<Account?> retrieveAccount() async {
+  final prefs = await SharedPreferences.getInstance();
+  final accountJson = prefs.getString("_accountKey");
+  if (accountJson != null) {
+    final accountMap = jsonDecode(accountJson);
+    return Account.fromMap(accountMap);
+  } else {
+    return null;
+  }
 }

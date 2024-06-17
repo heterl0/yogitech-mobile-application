@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:yogi_application/src/pages/meditate.dart';
 import 'package:yogi_application/src/shared/styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 void main() {
   runApp(const performMeditate());
@@ -18,6 +20,7 @@ class performMeditate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       body: MeditateCountdownTimer(initialDuration: selectedDuration),
     );

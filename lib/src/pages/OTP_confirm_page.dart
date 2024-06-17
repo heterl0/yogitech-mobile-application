@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class OTP_Page extends StatelessWidget {
   final TextEditingController OTPcontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: const Color(0xFF0d1f29),
       body: Container(
