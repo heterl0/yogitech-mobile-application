@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/widgets/dropdown_field.dart'; // Import DropdownField
 
@@ -53,7 +52,6 @@ class _FilterPageState extends State<FilterPage> {
         ),
       ),
       bottomNavigationBar: CustomBottomBar(
-        defaultStyle: false,
         buttonTitle: "Apply",
         onPressed: () {
           Navigator.pop(context);

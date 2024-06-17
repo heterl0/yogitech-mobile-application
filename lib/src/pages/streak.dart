@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
+import "package:yogi_application/src/custombar/appbar.dart";
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:intl/intl.dart'; // Add this import
@@ -25,6 +24,17 @@ class _StreakState extends State<Streak> {
     });
   }
 
+  int _getDaysInMonth(int year, int month) {
+    if (month == DateTime.february) {
+      if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+        return 29; // Leap year
+      } else {
+        return 28;
+      }
+    }
+    return [4, 6, 9, 11].contains(month) ? 30 : 31;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -44,7 +54,6 @@ class _StreakState extends State<Streak> {
         ],
       ),
       body: _buildMainContent(context),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 
@@ -177,6 +186,8 @@ class _StreakState extends State<Streak> {
 
   Widget _buildAdditionalInfo(BuildContext context) {
     final theme = Theme.of(context);
+    int daysInMonth = _getDaysInMonth(_currentDate.year, _currentDate.month);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -194,11 +205,11 @@ class _StreakState extends State<Streak> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '30 days',
+                    '$daysInMonth days',
                     style: h3.copyWith(color: active, height: 1.2),
                   ),
                   Text(
-                    'practiced in month',
+                    'in this month',
                     style: min_cap.copyWith(
                       color: active,
                     ),
@@ -213,10 +224,11 @@ class _StreakState extends State<Streak> {
           child: Container(
             height: 60,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: stroke,
-                )),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: stroke,
+              ),
+            ),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Column(

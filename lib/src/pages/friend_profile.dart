@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
-import 'package:yogi_application/src/pages/friendlist.dart';
-import 'package:yogi_application/src/pages/personalized_exercise.dart';
-import 'package:yogi_application/src/pages/profile.dart';
-import 'package:yogi_application/src/pages/settings.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
@@ -140,7 +135,6 @@ class _nameState extends State<FriendProfile> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 }

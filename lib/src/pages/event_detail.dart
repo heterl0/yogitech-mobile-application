@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
@@ -46,7 +45,6 @@ class EventDetail extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: const CustomBottomBar(
-        defaultStyle: false,
         buttonTitle: 'Join in',
       ),
     );
@@ -55,7 +53,7 @@ class EventDetail extends StatelessWidget {
   Widget _buildCustomTopBar(BuildContext context) {
     final theme = Theme.of(context);
     return SliverAppBar(
-      toolbarHeight: 70,
+      toolbarHeight: 80,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(24),

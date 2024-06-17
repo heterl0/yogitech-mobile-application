@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/filter.dart';
 import 'package:yogi_application/src/pages/streak.dart';
@@ -9,6 +12,8 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
+import 'package:yogi_application/src/services/api_service.dart';
+import 'package:yogi_application/src/models/exercise.dart'; // Import Exercise model
 
 class HomePage extends StatefulWidget {
   HomePage();
@@ -21,9 +26,28 @@ class _HomePageState extends State<HomePage> {
   var jsonList;
   bool _isnotSearching = true;
   TextEditingController _searchController = TextEditingController();
+  final ApiService apiService = ApiService();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchExercises(); // Gọi phương thức _fetchExercises khi StatefulWidget được tạo ra
+  }
+
+  Future<void> _fetchExercises() async {
+    // Gọi API để lấy danh sách bài tập
+    // Đảm bảo rằng phương thức getListExercises đã được định nghĩa trong lớp ApiService
+    final List<Exercise> exercises = await apiService.getExerciseList();
+
+    // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
+    setState(() {
+      jsonList = exercises;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!; // Bản dịch
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
@@ -33,12 +57,10 @@ class _HomePageState extends State<HomePage> {
               preActions: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Subscription(),
-                      ),
-                    );
+                    pushWithoutNavBar(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Subscription()));
                   },
                   child: Row(
                     children: [
@@ -76,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                   icon: Icon(Icons.tune_outlined,
                       color: theme.colorScheme.onBackground),
                   onPressed: () {
-                    Navigator.push(
+                    pushWithoutNavBar(
                       context,
                       MaterialPageRoute(
                         builder: (context) => FilterPage(),
@@ -88,7 +110,7 @@ class _HomePageState extends State<HomePage> {
               style: widthStyle.Large,
               titleWidget: BoxInputField(
                 controller: _searchController,
-                placeholder: 'Search...',
+                placeholder: trans.search,
                 trailing: Icon(Icons.search),
                 keyboardType: TextInputType.text,
                 inputFormatters: [],
@@ -109,6 +131,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(vertical: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -122,37 +145,39 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Try this exercise',
-                            textAlign: TextAlign.left,
-                            style: bd_text.copyWith(
-                                color: theme.colorScheme.onPrimary),
+                    Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding:
+                              EdgeInsets.only(left: 16, top: 16, bottom: 16),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                trans.tryThisExercise,
+                                textAlign: TextAlign.left,
+                                style: bd_text.copyWith(
+                                    color: theme.colorScheme.onPrimary),
+                              ),
+                              Text(
+                                trans.forBeginner,
+                                textAlign: TextAlign.left,
+                                style: h3.copyWith(
+                                    color: theme.colorScheme.onPrimary),
+                              ),
+                              const Spacer(),
+                              Text(
+                                'Warrior 2 pose!',
+                                textAlign: TextAlign.left,
+                                style: h3.copyWith(color: primary),
+                              ),
+                            ],
                           ),
-                          Text(
-                            'for beginner',
-                            textAlign: TextAlign.left,
-                            style:
-                                h3.copyWith(color: theme.colorScheme.onPrimary),
-                          ),
-                          const Spacer(),
-                          Text(
-                            'Warrior 2 pose!',
-                            textAlign: TextAlign.left,
-                            style: h3.copyWith(color: primary),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: 160, // Độ rộng của nửa bên phải
-                      child: const Image(
+                        )),
+                    const Expanded(
+                      flex: 2,
+                      child: Image(
                           image: AssetImage(
                               'assets/images/ads_exercise_for_beginner.png')),
                     ),
@@ -164,7 +189,7 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
-                'For You',
+                trans.forYou,
                 style: h3.copyWith(color: theme.colorScheme.onPrimary),
               ),
             ),
@@ -173,38 +198,30 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  // Replace these placeholders with your actual content
-                  CustomCard(
-                    title: 'Card with Image',
-                    caption:
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ExerciseDetail(),
-                        ),
-                      );
-                    },
-                  ),
-                  CustomCard(
-                    title: 'Card with Image',
-                    caption:
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                  ),
-                  CustomCard(
-                    title: 'Card with Image',
-                    caption:
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                  ),
-                  // Add more containers if needed
+                  if (jsonList != null)
+                    for (final exercise in jsonList)
+                      CustomCard(
+                        title: exercise.title,
+                        caption:
+                            exercise.description ?? '', // Mô tả của bài tập
+                        imageUrl: exercise.imageUrl, // URL hình ảnh của bài tập
+                        onTap: () {
+                          // Chuyển sang trang chi tiết của bài tập khi thẻ được nhấn
+                          pushWithoutNavBar(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ExerciseDetail(),
+                            ),
+                          );
+                        },
+                      ),
                 ],
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
-                'Newest',
+                trans.newest,
                 style: h3.copyWith(color: theme.colorScheme.onPrimary),
               ),
             ),
@@ -235,7 +252,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      bottomNavigationBar: const CustomBottomBar(),
     );
   }
 }
@@ -248,6 +264,7 @@ class StreakValue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
     return Center(
       child: GestureDetector(
         onTap: () {
@@ -263,7 +280,7 @@ class StreakValue extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              'Streak',
+              trans.streak,
               style: min_cap.copyWith(
                 color: text,
               ),
@@ -276,7 +293,7 @@ class StreakValue extends StatelessWidget {
                 },
                 child: Text(
                   streakValue,
-                  style: h2.copyWith(color: Colors.white, height: 1),
+                  style: h2.copyWith(color: active, height: 1),
                 ),
               ),
             )

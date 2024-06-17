@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 
@@ -82,7 +81,6 @@ class _PaymentHistoryState extends State<PaymentHistory> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 
@@ -98,6 +96,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
     return ElevatedButton(
       onPressed: () {},
       style: ElevatedButton.styleFrom(
+        elevation: 0,
         backgroundColor: theme.colorScheme.background,
         padding: EdgeInsets.all(18.0),
         shape: RoundedRectangleBorder(

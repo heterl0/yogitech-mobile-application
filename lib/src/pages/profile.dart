@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/calorie.dart';
 import 'package:yogi_application/src/pages/social.dart';
@@ -16,8 +16,16 @@ import 'package:yogi_application/src/pages/change_BMI.dart';
 class ProfilePage extends StatefulWidget {
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChanged;
+  final Locale locale;
+  final ValueChanged<bool> onLanguageChanged;
+  final bool isVietnamese;
 
-  ProfilePage({required this.isDarkMode, required this.onThemeChanged});
+  ProfilePage(
+      {required this.isDarkMode,
+      required this.onThemeChanged,
+      required this.locale,
+      required this.onLanguageChanged,
+      required this.isVietnamese});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -49,7 +57,7 @@ class _ProfilePageState extends State<ProfilePage> {
         postActions: [
           IconButton(
               icon: Icon(
-                Icons.settings,
+                Icons.settings_outlined,
                 color: theme.colorScheme.onBackground,
               ),
               onPressed: () {
@@ -57,8 +65,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => SettingsPage(
+                      isVietnamese: widget.isVietnamese,
                       isDarkMode: widget.isDarkMode,
                       onThemeChanged: widget.onThemeChanged,
+                      locale: widget.locale,
+                      onLanguageChanged: widget.onLanguageChanged,
                     ),
                   ),
                 );
@@ -83,7 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
+                      pushWithoutNavBar(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
@@ -277,7 +288,6 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomBar(),
     );
   }
 }
@@ -356,7 +366,7 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    Theme.of(context);
 
     return InkWell(
       onTap: onTap,

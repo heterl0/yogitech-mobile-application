@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/dioInstance.dart';
 import 'package:yogi_application/src/pages/activities.dart';
@@ -14,9 +13,9 @@ import 'package:yogi_application/src/pages/forgot_password.dart';
 import 'package:yogi_application/src/pages/friend_profile.dart';
 import 'package:yogi_application/src/pages/notifications.dart';
 import 'package:yogi_application/src/pages/payment_history.dart';
+import 'package:yogi_application/src/pages/perform_meditate.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
 import 'package:yogi_application/src/pages/meditate.dart';
-import 'package:yogi_application/src/pages/perform_meditate.dart';
 import 'package:yogi_application/src/pages/reminder.dart';
 import 'package:yogi_application/src/pages/result.dart';
 import 'package:yogi_application/src/pages/streak.dart';
@@ -30,6 +29,9 @@ import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/pages/profile.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/pages/settings.dart';
+import 'package:rive_splash_screen/rive_splash_screen.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+
 import 'dart:io';
 import 'dart:async';
 
@@ -89,7 +91,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = ThemeMode.dark; // Initialize with dark theme
+  ThemeMode _themeMode = ThemeMode.dark;
+  Locale _locale = const Locale('vi');
 
   void _toggleTheme(bool isDarkMode) {
     setState(() {
@@ -97,63 +100,95 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _changeLanguage(bool isVietnamese) {
+    setState(() {
+      _locale = isVietnamese ? Locale('vi') : Locale('en');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    FlutterNativeSplash.remove();
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute:
-          widget.access != null ? AppRoutes.homepage : AppRoutes.login,
-      routes: {
-        AppRoutes.homepage: (context) => HomePage(),
-        AppRoutes.login: (context) => LoginPage(),
-        AppRoutes.signup: (context) => SignUp(),
-        AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
-        AppRoutes.OtpConfirm: (context) => OTP_Page(),
-        AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
-        AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
-        AppRoutes.meditate: (context) => Meditate(),
-        AppRoutes.performMeditate: (context) => performMeditate(),
-        AppRoutes.streak: (context) => Streak(),
-        AppRoutes.exercisedetail: (context) => ExerciseDetail(),
-        AppRoutes.result: (context) => Result(),
-        AppRoutes.subscription: (context) => Subscription(),
-        AppRoutes.Profile: (context) => ProfilePage(
+        // home: SplashScreen.navigate(
+        //   name: 'assets/native_splash/logo.riv',
+        //   next: (context) => MainScreen(
+        //     isVietnamese: _locale == Locale('vi'),
+        //     savedEmail: widget.savedEmail,
+        //     savedPassword: widget.savedPassword,
+        //     isDarkMode: _themeMode == ThemeMode.dark,
+        //     onThemeChanged: _toggleTheme,
+        //     locale: _locale,
+        //     onLanguageChanged: _changeLanguage,
+        //   ),
+        //   until: () => Future.delayed(const Duration(seconds: 1)),
+        //   startAnimation: '1',
+        //   endAnimation: '1',
+        //   backgroundColor: active,
+        //   fit: BoxFit.fill,
+        // ),
+        debugShowCheckedModeBanner: false,
+        initialRoute:
+            widget.access != null ? AppRoutes.homepage : AppRoutes.login,
+        routes: {
+          AppRoutes.homepage: (context) => HomePage(),
+          AppRoutes.login: (context) => LoginPage(),
+          AppRoutes.signup: (context) => SignUp(),
+          AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
+          AppRoutes.OtpConfirm: (context) => OTP_Page(),
+          AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
+          AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
+          AppRoutes.meditate: (context) => Meditate(),
+          AppRoutes.performMeditate: (context) => performMeditate(),
+          AppRoutes.streak: (context) => Streak(),
+          AppRoutes.exercisedetail: (context) => ExerciseDetail(),
+          AppRoutes.result: (context) => Result(),
+          AppRoutes.subscription: (context) => Subscription(),
+          AppRoutes.Profile: (context) => ProfilePage(
+                isDarkMode: _themeMode == ThemeMode.dark,
+                onThemeChanged: _toggleTheme,
+                locale: _locale,
+                onLanguageChanged: _changeLanguage,
+                isVietnamese: true,
+              ),
+          AppRoutes.activities: (context) => Activities(),
+          AppRoutes.eventDetail: (context) => EventDetail(
+                title: 'Event Title',
+                caption: 'Event Caption',
+                remainingDays: 'Event Subtitle',
+              ),
+          AppRoutes.blog: (context) => Blog(),
+          AppRoutes.blogDetail: (context) => BlogDetail(
+                title: 'Event Title',
+                caption: 'Event Caption',
+                subtitle: 'Event Subtitle',
+              ),
+          AppRoutes.reminder: (context) => ReminderPage(),
+          AppRoutes.notifications: (context) => NotificationsPage(),
+          AppRoutes.friendProfile: (context) => FriendProfile(),
+        });
+  }
+
+  Route<dynamic>? _generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case AppRoutes.settings:
+        return MaterialPageRoute(
+          builder: (context) => SettingsPage(
+            isVietnamese: _locale == Locale('vi'),
             isDarkMode: _themeMode == ThemeMode.dark,
-            onThemeChanged: _toggleTheme),
-        AppRoutes.activities: (context) => Activities(),
-        AppRoutes.eventDetail: (context) => EventDetail(
-              title: 'Event Title',
-              caption: 'Event Caption',
-              remainingDays: 'Event Subtitle',
-            ),
-        AppRoutes.blog: (context) => Blog(),
-        AppRoutes.blogDetail: (context) => BlogDetail(
-              title: 'Event Title',
-              caption: 'Event Caption',
-              subtitle: 'Event Subtitle',
-            ),
-        AppRoutes.reminder: (context) => ReminderPage(),
-        AppRoutes.notifications: (context) => NotificationsPage(),
-        AppRoutes.friendProfile: (context) => FriendProfile(),
-      },
-      onGenerateRoute: (settings) {
-        if (settings.name == AppRoutes.settings) {
-          return MaterialPageRoute(
-            builder: (context) => SettingsPage(
-              isDarkMode: _themeMode == ThemeMode.dark,
-              onThemeChanged: _toggleTheme,
-            ),
-          );
-        } else if (settings.name == AppRoutes.paymentHistory) {
-          return MaterialPageRoute(builder: (context) => PaymentHistory());
-        } else if (settings.name == AppRoutes.changeProfile) {
-          return MaterialPageRoute(builder: (context) => ChangeProfilePage());
-        }
-        return MaterialPageRoute(builder: (context) => HomePage());
-      },
-      theme: lightTheme, // Apply the light theme
-      darkTheme: darkTheme, // Apply the dark theme
-      themeMode: _themeMode, // Use current theme mode
-    );
+            onThemeChanged: _toggleTheme,
+            locale: _locale,
+            onLanguageChanged: _changeLanguage,
+          ),
+        );
+      case AppRoutes.paymentHistory:
+        return MaterialPageRoute(builder: (context) => PaymentHistory());
+      case AppRoutes.changeProfile:
+        return MaterialPageRoute(builder: (context) => ChangeProfilePage());
+      default:
+        return MaterialPageRoute(
+          builder: (context) => HomePage(),
+        );
+    }
   }
 }
