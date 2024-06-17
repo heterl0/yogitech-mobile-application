@@ -130,7 +130,13 @@ class _MyAppState extends State<MyApp> {
         initialRoute:
             widget.access != null ? AppRoutes.homepage : AppRoutes.login,
         routes: {
-          AppRoutes.homepage: (context) => HomePage(),
+          AppRoutes.homepage: (context) => HomePage(
+                isVietnamese: _locale == Locale('vi'),
+                isDarkMode: _themeMode == ThemeMode.dark,
+                onThemeChanged: _toggleTheme,
+                locale: _locale,
+                onLanguageChanged: _changeLanguage,
+              ),
           AppRoutes.login: (context) => LoginPage(),
           AppRoutes.signup: (context) => SignUp(),
           AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
