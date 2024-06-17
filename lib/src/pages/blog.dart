@@ -123,14 +123,14 @@ class BlogState extends State<Blog> {
           crossAxisCount: 2,
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
-          childAspectRatio: 3 / 2,
+          childAspectRatio: 4 / 5,
         ),
         itemCount: jsonList.length,
         itemBuilder: (context, index) {
           return CustomCard(
             title: jsonList.elementAt(index).title,
             caption: jsonList.elementAt(index).description,
-            subtitle: jsonList.elementAt(index).content,
+            imageUrl: jsonList.elementAt(index).image_url,
             onTap: () {
               Navigator.push(
                 context,
