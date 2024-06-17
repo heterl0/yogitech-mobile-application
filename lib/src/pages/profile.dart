@@ -90,6 +90,16 @@ class _ProfilePageState extends State<ProfilePage> {
           margin: const EdgeInsets.all(24.0),
           child: Column(
             children: [
+              ShaderMask(
+                shaderCallback: (bounds) {
+                  return gradient.createShader(bounds);
+                },
+                child: Text(
+                  'Duy',
+                  style: h2.copyWith(color: active),
+                ),
+              ),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   GestureDetector(
@@ -118,8 +128,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Duy',
-                          style: h2.copyWith(
+                          'Avatar',
+                          style: h3.copyWith(
                               color: Theme.of(context).colorScheme.onPrimary),
                         ),
                       ],

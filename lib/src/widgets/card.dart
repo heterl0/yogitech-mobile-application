@@ -26,9 +26,9 @@ class CustomCard extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.all(8),
         constraints: const BoxConstraints(
-          maxWidth: 150, // Kích thước tối thiểu ngang
-          minWidth: 150, // Kích thước tối thiểu ngang
-          minHeight: 120, // Kích thước tối thiểu dọc
+          maxWidth: 160, // Kích thước tối thiểu ngang
+          minWidth: 152, // Kích thước tối thiểu ngang
+          minHeight: 152, // Kích thước tối thiểu dọc
         ),
         decoration: BoxDecoration(
           color: theme.colorScheme.background, // Màu nền của Container
@@ -59,6 +59,8 @@ class CustomCard extends StatelessWidget {
                   Text(
                     title,
                     style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   if (caption != null && subtitle != null)
                     Row(
@@ -67,10 +69,14 @@ class CustomCard extends StatelessWidget {
                         Text(
                           caption!,
                           style: min_cap.copyWith(color: text),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         Text(
                           subtitle!,
                           style: min_cap.copyWith(color: primary),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
@@ -78,11 +84,15 @@ class CustomCard extends StatelessWidget {
                     Text(
                       caption!,
                       style: min_cap.copyWith(color: text),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   if (subtitle != null && caption == null)
                     Text(
                       subtitle!,
                       style: min_cap.copyWith(color: primary),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                 ],
               ),
