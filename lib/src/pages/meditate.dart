@@ -26,7 +26,6 @@ class _MeditateState extends State<Meditate> {
 
   @override
   Widget build(BuildContext context) {
-    Theme.of(context);
     return Scaffold(
       appBar: CustomAppBar(
         showBackButton: false,
@@ -71,14 +70,14 @@ class _MeditateState extends State<Meditate> {
     final theme = Theme.of(context);
     return Positioned(
       left: 24,
-      top: 150,
+      top: 24,
       right: 24,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            color: const Color.fromARGB(
-                255, 13, 33, 44), // Set background color directly
+            color:
+                theme.colorScheme.onSecondary, // Set background color directly
             child: CupertinoTimerPicker(
               mode: CupertinoTimerPickerMode.ms,
               initialTimerDuration: _selectedDuration,

@@ -134,6 +134,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(vertical: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

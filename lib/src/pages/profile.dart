@@ -58,7 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
         postActions: [
           IconButton(
               icon: Icon(
-                Icons.settings,
+                Icons.settings_outlined,
                 color: theme.colorScheme.onBackground,
               ),
               onPressed: () {
