@@ -10,8 +10,6 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 
 class MainScreen extends StatefulWidget {
-  final String? savedEmail;
-  final String? savedPassword;
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChanged;
   final Locale locale;
@@ -20,8 +18,6 @@ class MainScreen extends StatefulWidget {
 
   const MainScreen({
     Key? key,
-    this.savedEmail,
-    this.savedPassword,
     required this.isDarkMode,
     required this.onThemeChanged,
     required this.locale,

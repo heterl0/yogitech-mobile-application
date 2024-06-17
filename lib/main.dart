@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/dioInstance.dart';
+import 'package:yogi_application/src/pages/_mainscreen.dart';
 import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/pages/blog.dart';
 import 'package:yogi_application/src/pages/blog_detail.dart';
@@ -27,11 +28,12 @@ import 'package:yogi_application/src/pages/OTP_confirm_page.dart';
 import 'package:yogi_application/src/pages/reset_password_page.dart';
 import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/pages/profile.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/pages/settings.dart';
-import 'package:rive_splash_screen/rive_splash_screen.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:yogi_application/l10n/l10n.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
 import 'dart:io';
 import 'dart:async';
 
@@ -41,6 +43,7 @@ void main() async {
   FlutterNativeSplash.remove(); // Remove splash screen immediately
   await loadEnv();
   final accessToken = await checkToken();
+  print(accessToken);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -129,8 +132,27 @@ class _MyAppState extends State<MyApp> {
         // ),
         debugShowCheckedModeBanner: false,
         initialRoute:
-            widget.access != null ? AppRoutes.homepage : AppRoutes.login,
+            widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
+        onGenerateRoute: _generateRoute,
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: _themeMode,
+        supportedLocales: L10n.all,
+        locale: _locale,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
         routes: {
+          AppRoutes.firstScreen: (context) => MainScreen(
+                isVietnamese: _locale == Locale('vi'),
+                isDarkMode: _themeMode == ThemeMode.dark,
+                onThemeChanged: _toggleTheme,
+                locale: _locale,
+                onLanguageChanged: _changeLanguage,
+              ),
           AppRoutes.homepage: (context) => HomePage(),
           AppRoutes.login: (context) => LoginPage(),
           AppRoutes.signup: (context) => SignUp(),
@@ -149,7 +171,7 @@ class _MyAppState extends State<MyApp> {
                 onThemeChanged: _toggleTheme,
                 locale: _locale,
                 onLanguageChanged: _changeLanguage,
-                isVietnamese: true,
+                isVietnamese: _locale == Locale('vi'),
               ),
           AppRoutes.activities: (context) => Activities(),
           AppRoutes.eventDetail: (context) => EventDetail(
