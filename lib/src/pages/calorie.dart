@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Calorie extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
-        title: "Calorie",
+        title: trans.calorie,
         showBackButton: true,
         onBackPressed: () {
           Navigator.pop(context);
@@ -34,7 +36,7 @@ class Calorie extends StatelessWidget {
               // mainAxisAlignment: MainAxisAlignment.start,
               // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                _buildStreakInfo(),
+                _buildStreakInfo(context),
                 SizedBox(height: 16),
                 _buildMonthInfo(context),
                 SizedBox(height: 16),
@@ -49,7 +51,7 @@ class Calorie extends StatelessWidget {
     );
   }
 
-  Widget _buildStreakInfo() {
+  Widget _buildStreakInfo(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,13 +62,14 @@ class Calorie extends StatelessWidget {
         ),
         Expanded(
           flex: 2,
-          child: _buildStreakText(),
+          child: _buildStreakText(context),
         ),
       ],
     );
   }
 
-  Widget _buildStreakText() {
+  Widget _buildStreakText(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
     return Column(
       children: [
         ShaderMask(
@@ -85,7 +88,7 @@ class Calorie extends StatelessWidget {
           ),
         ),
         Text(
-          'calories burned',
+          trans.caloriesBurnedInMonth,
           textAlign: TextAlign.center,
           style: bd_text.copyWith(color: text),
         ),
@@ -169,7 +172,7 @@ class Calorie extends StatelessWidget {
   }
 
   Widget _buildAdditionalInfo(BuildContext context) {
-    Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -191,7 +194,7 @@ class Calorie extends StatelessWidget {
                     style: h3.copyWith(color: active, height: 1.2),
                   ),
                   Text(
-                    'burned in this month',
+                    trans.burnedInMonth,
                     style: min_cap.copyWith(
                       color: active,
                     ),

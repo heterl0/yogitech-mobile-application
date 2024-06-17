@@ -4,6 +4,7 @@ import 'package:yogi_application/src/services/api_service.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 import 'package:yogi_application/src/pages/blog_detail.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Blog extends StatefulWidget {
   const Blog({super.key});
@@ -46,11 +47,12 @@ class BlogState extends State<Blog> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: _isNotSearching
           ? CustomAppBar(
               showBackButton: false,
-              title: 'Blog',
+              title: trans.blog,
               postActions: [
                 IconButton(
                   icon:
@@ -72,7 +74,7 @@ class BlogState extends State<Blog> {
               style: widthStyle.Large,
               titleWidget: BoxInputField(
                 controller: _searchController,
-                placeholder: 'Search...',
+                placeholder: trans.search,
                 trailing: const Icon(Icons.search),
                 keyboardType: TextInputType.text,
                 inputFormatters: [],
@@ -111,6 +113,7 @@ class BlogState extends State<Blog> {
   }
 
   Widget _buildBlogMainContent() {
+    final trans = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
@@ -127,8 +130,8 @@ class BlogState extends State<Blog> {
         itemCount: 6,
         itemBuilder: (context, index) {
           final title = 'title';
-          final caption = 'Caption ${index + 1}';
-          final subtitle = '${10 - index} days left';
+          final caption = 'Caption';
+          final subtitle = '${6 - index} ${trans.daysLeft}';
 
           return CustomCard(
             title: title,

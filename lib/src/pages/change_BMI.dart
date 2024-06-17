@@ -5,6 +5,7 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChangeBMIPage extends StatefulWidget {
   const ChangeBMIPage({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
   String bmiComment = '';
 
   void calculateBMI() {
+    final trans = AppLocalizations.of(context)!;
     if (weightController.text.isNotEmpty && heightController.text.isNotEmpty) {
       double weight = double.parse(weightController.text);
       double height =
@@ -28,13 +30,13 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
       setState(() {
         bmiResult = bmi.toStringAsFixed(2); // Round BMI to 2 decimal places
         if (bmi < 18.5) {
-          bmiComment = 'Underweight';
+          bmiComment = trans.underweight;
         } else if (bmi >= 18.5 && bmi < 24.9) {
-          bmiComment = 'Normal weight';
+          bmiComment = trans.normalWeight;
         } else if (bmi >= 24.9 && bmi < 29.9) {
-          bmiComment = 'Overweight';
+          bmiComment = trans.overweight;
         } else {
-          bmiComment = 'Obesity';
+          bmiComment = trans.obesity;
         }
       });
     } else {
@@ -48,6 +50,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
@@ -100,7 +103,10 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
       //     ),
       //   ),
       // ),
-      appBar: CustomAppBar(title: 'Change BMI'),
+      appBar: CustomAppBar(
+        title: trans.changeBMI,
+        style: widthStyle.Large,
+      ),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(24.0),
@@ -135,29 +141,29 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'Weight (kg)',
+                  trans.weightKg,
                   style: h3.copyWith(color: theme.colorScheme.onPrimary),
                 ),
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: weightController,
-                  placeholder: 'Weight',
+                  placeholder: trans.weightKg,
                   keyboardType: TextInputType.number,
                 ),
                 SizedBox(height: 16.0),
                 Text(
-                  'Height (cm)',
+                  trans.heightCm,
                   style: h3.copyWith(color: theme.colorScheme.onPrimary),
                 ),
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: heightController,
-                  placeholder: 'Height',
+                  placeholder: trans.heightCm,
                   keyboardType: TextInputType.number,
                 ),
                 SizedBox(height: 48.0),
                 BoxButton(
-                    title: 'Recaculate',
+                    title: trans.recalculate,
                     onPressed: calculateBMI,
                     style: ButtonStyleType.Primary),
               ],
