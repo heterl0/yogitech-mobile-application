@@ -8,7 +8,6 @@ import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/dropdown_field.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:yogi_application/src/pages/change_BMI.dart';
-import 'package:yogi_application/src/services/api_service.dart'; // Import your fetchUserProfiles function
 
 class ChangeProfilePage extends StatefulWidget {
   const ChangeProfilePage({super.key});
