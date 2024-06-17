@@ -132,7 +132,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         initialRoute:
             widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
-        onGenerateRoute: _generateRoute,
+        // onGenerateRoute: _generateRoute,
         theme: lightTheme,
         darkTheme: darkTheme,
         themeMode: _themeMode,

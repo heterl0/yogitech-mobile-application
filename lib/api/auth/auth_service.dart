@@ -20,7 +20,7 @@ Future<dynamic> login(String email, String password) async {
       DioInstance.setAccessToken(accessToken);
       Account? account = await getUser();
       storeAccount(account!);
-      return {accessToken: accessToken, refreshToken: refreshToken};
+      return accessToken;
     } else {
       print('Login failed with status code: ${response.statusCode}');
       return null;
@@ -45,7 +45,7 @@ Future<dynamic> loginGoogle(String authToken) async {
       DioInstance.setAccessToken(accessToken);
       Account? account = await getUser();
       storeAccount(account!);
-      return {accessToken: accessToken, refreshToken: refreshToken};
+      return accessToken;
     } else {
       print('Login failed with status code: ${response.statusCode}');
       return null;
