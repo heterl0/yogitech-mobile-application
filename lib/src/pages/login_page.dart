@@ -9,6 +9,8 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -27,6 +29,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     final String imageAsset = theme.brightness == Brightness.dark
         ? 'assets/images/login-sign.png'
         : 'assets/images/login-sign_light.png';

@@ -3,6 +3,8 @@ import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class SignUp extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
@@ -13,6 +15,7 @@ class SignUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     // Kiểm tra giao diện hiện tại để chọn hình ảnh phù hợp
     final String imageAsset = theme.brightness == Brightness.dark
         ? 'assets/images/sign-up-bg.png'

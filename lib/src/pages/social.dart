@@ -3,6 +3,8 @@ import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/pages/friendlist.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class SocialPage extends StatefulWidget {
   @override
@@ -13,6 +15,7 @@ class _SocialPageState extends State<SocialPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: CustomAppBar(
