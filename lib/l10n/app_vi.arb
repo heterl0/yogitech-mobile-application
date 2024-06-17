@@ -138,5 +138,9 @@
   "burnedInMonth": "đã đốt cháy trong tháng này",
   "yourExercise": "Bài tập của bạn",
   "beginner": "Người mới bắt đầu",
-  "friendProfile":"Hồ sơ bạn bè"
+  "friendProfile":"Hồ sơ bạn bè",
+  "error":"Có lỗi xảy ra trong quá trình xử lý. Vui lòng thử lại sau.",
+  "loginMissing":"Vui lòng điền thông tin đăng nhập.",
+  "loginInvalid":"Tài khoản và mật khẩu không hợp lệ."
+
 }

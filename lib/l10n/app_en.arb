@@ -138,5 +138,9 @@
   "burnedInMonth": "burned in this month",
   "yourExercise": "Your Exercise",
   "beginner": "Beginner",
-  "friendProfile":"Friend Profile" 
+  "friendProfile":"Friend Profile" ,
+  "error":"An error occurred while processing your request. Please try again later.",
+  "loginMissing":"Please fill in all the login information.",
+  "loginInvalid":"Invalid email or password."
+
 }

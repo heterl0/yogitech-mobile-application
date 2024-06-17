@@ -51,19 +51,19 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Login',
+                    trans.login,
                     style: h1.copyWith(color: theme.colorScheme.onPrimary),
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: 16.0),
                   BoxInputField(
                     controller: emailController,
-                    placeholder: 'Email',
+                    placeholder: trans.email,
                   ),
                   SizedBox(height: 16.0),
                   BoxInputField(
                     controller: passwordController,
-                    placeholder: 'Password',
+                    placeholder: trans.password,
                     password: true,
                   ),
                   Align(
@@ -73,18 +73,18 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.pushNamed(context, AppRoutes.forgotpassword);
                       },
                       child: Text(
-                        'Forgot password?',
+                        trans.forgotPassword,
                         style: bd_text.copyWith(color: theme.primaryColor),
                       ),
                     ),
                   ),
                   SizedBox(height: 0.0),
                   BoxButton(
-                    title: 'Login',
+                    title: trans.login,
                     style: ButtonStyleType.Primary,
                     state: ButtonState.Enabled,
                     onPressed: () async {
-                      _handleLogin(context);
+                      _handleLogin(context,trans);
                       // print(await getExercises());
                     },
                   ),
@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(
-                            "Or sign in with",
+                            trans.orSignInWith,
                             style: bd_text.copyWith(color: text),
                           ),
                         ),
@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                             // if (user != null) {
                             //   print(user.displayName);
                             // }
-                            await _handleGoogleSignIn();
+                            await _handleGoogleSignIn(trans);
                           },
                         ),
                       ),
@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "You don't have an account? ",
+                            trans.dontHaveAccount,
                             style: bd_text.copyWith(color: text),
                           ),
                           TextButton(
@@ -145,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.pushNamed(context, AppRoutes.signup);
                             },
                             child: Text(
-                              'Sign up',
+                              trans.signUp,
                               style: h3.copyWith(color: primary),
                             ),
                           ),
@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> _handleGoogleSignIn() async {
+  Future<void> _handleGoogleSignIn(AppLocalizations trans) async {
     setState(() {
       _isLoading = true;
     });
@@ -184,20 +184,20 @@ class _LoginPageState extends State<LoginPage> {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                content: Text('An error occurred. Please try again later.')),
+                content: Text(trans.error)),
           );
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text('An error occurred. Please try again later. $e')),
+              content: Text(trans.error+'\n $e')),
         );
       }
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text(
-          'Failed to sign in: $error',
+         trans.error+'\n $error',
         )),
       );
     }
@@ -207,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  Future<void> _handleLogin(BuildContext context) async {
+  Future<void> _handleLogin(BuildContext context,AppLocalizations trans) async {
     String enteredEmail = emailController.text;
     String enteredPassword = passwordController.text;
 
@@ -217,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
     if (enteredEmail.isEmpty || enteredPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text('Please fill in both Email and Password fields')),
+            content: Text(trans.loginMissing)),
       );
       setState(() {
         _isLoading = false;
@@ -232,13 +232,13 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Invalid email or password')),
+          SnackBar(content: Text(trans.loginInvalid)),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text('An error occurred. Please try again later. $e')),
+            content: Text(trans.error+'\n $e')),
       );
     }
     setState(() {
