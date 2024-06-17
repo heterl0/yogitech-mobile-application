@@ -27,9 +27,7 @@ import 'package:yogi_application/src/pages/OTP_confirm_page.dart';
 import 'package:yogi_application/src/pages/reset_password_page.dart';
 import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/pages/profile.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/pages/settings.dart';
-import 'package:rive_splash_screen/rive_splash_screen.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'dart:io';
@@ -41,6 +39,7 @@ void main() async {
   FlutterNativeSplash.remove(); // Remove splash screen immediately
   await loadEnv();
   final accessToken = await checkToken();
+  print(accessToken);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -149,7 +148,7 @@ class _MyAppState extends State<MyApp> {
                 onThemeChanged: _toggleTheme,
                 locale: _locale,
                 onLanguageChanged: _changeLanguage,
-                isVietnamese: true,
+                isVietnamese: _locale == Locale('vi'),
               ),
           AppRoutes.activities: (context) => Activities(),
           AppRoutes.eventDetail: (context) => EventDetail(
