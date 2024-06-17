@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yogi_application/api/dioInstance.dart';
 import 'package:yogi_application/src/models/user.dart';
-import 'package:yogi_application/src/services/api_service.dart';
 import 'package:yogi_application/utils/formatting.dart';
 
 Future<UserModel?> login(String email, String password) async {
@@ -72,4 +72,54 @@ Future<String?> updateAccessToken(String refreshToken) async {
     print('Error updating access token: $e');
     return null;
   }
+}
+
+Future<bool> verifyToken(String? accessToken) async {
+  try {
+    final url = formatApiUrl('/api/v1/auth/verify/');
+    final data = {'token': accessToken};
+    final Response response = await DioInstance.post(url, data: data);
+    return response.statusCode == 200;
+  } catch (e) {
+    print('Error updating access token: $e');
+    return false;
+  }
+}
+
+Future<void> clearToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove('refreshToken');
+  await prefs.remove('accessToken');
+}
+
+Future<Map<String?, String?>> getToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  final accessToken = prefs.getString('accessToken');
+  final refreshToken = prefs.getString('refreshToken');
+  if (accessToken != null) {
+    if (await verifyToken(accessToken)) {
+      return {'access': accessToken, 'refresh': refreshToken};
+    } else {
+      if (refreshToken != null) {
+        final newAccessToken = await updateAccessToken(refreshToken);
+        if (newAccessToken != null) {
+          return {'access': newAccessToken, 'refresh': refreshToken};
+        } else {
+          await clearToken();
+          return {'access': null, 'refresh': null};
+        }
+      } else {
+        await clearToken();
+        return {'access': null, 'refresh': null};
+      }
+    }
+  }
+  return {'access': null, 'refresh': null};
+}
+
+Future<dynamic> saveTokens(String accessToken, String refreshToken) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('refreshToken', refreshToken);
+  await prefs.setString('accessToken', accessToken);
+  // Kiểm tra xem tokens đã được lưu đúng chưa
 }
