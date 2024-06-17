@@ -33,6 +33,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yogi_application/l10n/l10n.dart';
+import 'package:yogi_application/src/shared/app_colors.dart';
 import 'dart:io';
 import 'dart:async';
 
