@@ -17,10 +17,13 @@ class ChangeProfilePage extends StatefulWidget {
 
 class _ChangeProfilePageState extends State<ChangeProfilePage> {
   final TextEditingController userName = TextEditingController();
+  final TextEditingController email = TextEditingController();
+
   final TextEditingController phone = TextEditingController();
   final TextEditingController birthday = TextEditingController();
   final TextEditingController gender = TextEditingController();
 
+  
   // Regular expression for Vietnamese phone numbers
   final RegExp phoneRegExp =
       RegExp(r'^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$');
@@ -74,9 +77,20 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   placeholder: trans.username,
                 ),
                 SizedBox(height: 16.0),
-                Text(trans.phoneNumber,
+
+                Text('Email',
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
                 SizedBox(height: 8.0),
+                BoxInputField(
+                  controller: email,
+                  placeholder: 'Email',
+                ),
+                SizedBox(height: 16.0),
+
+                Text('Phone',
+                    style: h3.copyWith(color: theme.colorScheme.onPrimary)),
+                SizedBox(height: 8.0),
+
                 BoxInputField(
                   controller: phone,
                   placeholder: trans.phoneNumber,

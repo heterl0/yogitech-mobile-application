@@ -6,6 +6,8 @@ import 'package:yogi_application/src/pages/perform_meditate.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'dart:math';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class Meditate extends StatefulWidget {
   @override
@@ -26,6 +28,7 @@ class _MeditateState extends State<Meditate> {
 
   @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: CustomAppBar(
         showBackButton: false,

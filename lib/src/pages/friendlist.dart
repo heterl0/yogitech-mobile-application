@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class FriendsPage extends StatelessWidget {
   final ScrollController _controller = ScrollController(); // ScrollController
@@ -9,6 +11,8 @@ class FriendsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: CustomAppBar(
