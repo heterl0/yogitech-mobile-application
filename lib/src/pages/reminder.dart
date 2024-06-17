@@ -4,6 +4,8 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/switch.dart'; // Assuming this is CustomSwitch
 import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ReminderPage extends StatefulWidget {
   final bool reminderOn;
@@ -103,6 +105,7 @@ class _ReminderPageState extends State<ReminderPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: CustomAppBar(

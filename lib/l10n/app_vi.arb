@@ -42,12 +42,14 @@
   "minutes": "phút",
   "filter": "Lọc",
   "category": "Danh mục",
+  "choosecCategory": "Chọn danh mục",
   "apply": "Áp dụng",
   "dayStreak": "ngày chuỗi!",
   "practicedInMonth": "đã tập luyện trong tháng",
   "beginOfTheStreak": "Bắt đầu của chuỗi",
   "exerciseDetail": "Chi tiết bài tập",
-  "poses": "Tư thế",
+  "poses": "Các tư thế",
+  "pose": "Tư thế",
   "comment": "Bình luận",
   "yourComment": "Bình luận của bạn",
   "doExercise": "Thực hiện bài tập",
@@ -133,5 +135,5 @@
   "caloriesBurnedInMonth": "calo đã đốt cháy",
   "burnedInMonth": "đã đốt cháy trong tháng này",
   "yourExercise": "Bài tập của bạn",
-  "beginner": "Người mới bắt đầu"
+  "beginner": "Người mới bắt đầu",
 }

@@ -3,6 +3,8 @@ import "package:yogi_application/src/custombar/appbar.dart";
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:intl/intl.dart'; // Add this import
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class Streak extends StatefulWidget {
   @override
@@ -38,6 +40,7 @@ class _StreakState extends State<Streak> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       resizeToAvoidBottomInset: false,
