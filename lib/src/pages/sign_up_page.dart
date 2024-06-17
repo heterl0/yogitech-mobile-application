@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
-import 'package:yogi_application/src/services/api_service.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
 
 class SignUp extends StatelessWidget {
@@ -12,8 +10,6 @@ class SignUp extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
-  final ApiService apiService = ApiService();
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

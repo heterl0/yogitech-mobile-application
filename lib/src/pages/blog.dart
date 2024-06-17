@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
-import 'package:yogi_application/src/services/api_service.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 import 'package:yogi_application/src/pages/blog_detail.dart';
@@ -34,7 +31,6 @@ class BlogState extends State<Blog> {
   }
 
   Future<void> _fetchBlogs() async {
-    ApiService apiService = ApiService();
     try {
       // List<Blog> blogs =
       //     await apiService.fetchBlogs(); // Gọi hàm fetchBlogs từ service
