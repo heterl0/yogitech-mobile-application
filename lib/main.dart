@@ -34,34 +34,33 @@ import 'dart:io';
 import 'dart:async';
 
 void main() async {
-  await loadEnv();
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
-  // Delay cho màn hình splash (chỉ dùng để demo, điều chỉnh tùy ý)
-  await Future.delayed(const Duration(seconds: 10));
-  FlutterNativeSplash.remove();
-  await checkToken();
-
+  FlutterNativeSplash.remove(); // Remove splash screen immediately
+  await loadEnv();
+  final accessToken = await checkToken();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
-  ]).then((_) {
-    runApp(MyApp());
-  });
+  ]);
+
+  runApp(accessToken != null
+      ? MyApp(access: accessToken)
+      : MyApp()); // Conditional app start
 }
 
-Future<void> checkToken() async {
-  // Lấy token từ SharedPreferences
-
-  final tokens = await getToken();
-
-  final accessToken = tokens['access'];
-  DioInstance.setAccessToken(accessToken ?? "");
-  if (accessToken != null) {
-    runApp(MyApp());
-  } else {
-    runApp(const MyApp());
+Future<String?> checkToken() async {
+  try {
+    final tokens = await getToken();
+    final accessToken = tokens['access'];
+    DioInstance.setAccessToken(accessToken ?? "");
+    return accessToken;
+  } catch (error) {
+    // Handle error, e.g., log the error or show an error message.
+    print("Error fetching token: $error");
+    // You might want to redirect to a login screen or handle the error differently.
   }
+  return null;
 }
 
 Future<void> loadEnv() async {
@@ -81,11 +80,9 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 class MyApp extends StatefulWidget {
-  final String? savedEmail;
-  final String? savedPassword;
+  final String? access;
 
-  const MyApp({Key? key, this.savedEmail, this.savedPassword})
-      : super(key: key);
+  const MyApp({Key? key, this.access}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -104,12 +101,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: widget.savedEmail != null && widget.savedPassword != null
-          ? AppRoutes.homepage
-          : AppRoutes.login,
+      initialRoute:
+          widget.access != null ? AppRoutes.homepage : AppRoutes.login,
       routes: {
-        AppRoutes.homepage: (context) => HomePage(
-            savedEmail: widget.savedEmail, savedPassword: widget.savedPassword),
+        AppRoutes.homepage: (context) => HomePage(),
         AppRoutes.login: (context) => LoginPage(),
         AppRoutes.signup: (context) => SignUp(),
         AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
@@ -154,10 +149,7 @@ class _MyAppState extends State<MyApp> {
         } else if (settings.name == AppRoutes.changeProfile) {
           return MaterialPageRoute(builder: (context) => ChangeProfilePage());
         }
-        return MaterialPageRoute(
-            builder: (context) => HomePage(
-                savedEmail: widget.savedEmail,
-                savedPassword: widget.savedPassword));
+        return MaterialPageRoute(builder: (context) => HomePage());
       },
       theme: lightTheme, // Apply the light theme
       darkTheme: darkTheme, // Apply the dark theme

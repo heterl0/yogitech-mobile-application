@@ -73,3 +73,15 @@ Future<String?> updateAccessToken(String refreshToken) async {
     return null;
   }
 }
+
+Future<bool> verifyToken(String? accessToken) async {
+  try {
+    final url = formatApiUrl('/api/v1/auth/verify/');
+    final data = {'token': accessToken};
+    final Response response = await DioInstance.post(url, data: data);
+    return response.statusCode == 200;
+  } catch (e) {
+    print('Error updating access token: $e');
+    return false;
+  }
+}

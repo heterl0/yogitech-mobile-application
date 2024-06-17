@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
+import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/src/models/user.dart';
 import 'package:yogi_application/src/pages/blog.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -150,12 +151,29 @@ Future<void> clearToken() async {
   await prefs.remove('accessToken');
 }
 
-Future<Map<String, String?>> getToken() async {
+Future<Map<String?, String?>> getToken() async {
   final prefs = await SharedPreferences.getInstance();
   final accessToken = prefs.getString('accessToken');
   final refreshToken = prefs.getString('refreshToken');
-
-  return {'access': accessToken, 'refresh': refreshToken};
+  if (accessToken != null) {
+    if (await verifyToken(accessToken)) {
+      return {'access': accessToken, 'refresh': refreshToken};
+    } else {
+      if (refreshToken != null) {
+        final newAccessToken = await updateAccessToken(refreshToken);
+        if (newAccessToken != null) {
+          return {'access': newAccessToken, 'refresh': refreshToken};
+        } else {
+          await clearToken();
+          return {'access': null, 'refresh': null};
+        }
+      } else {
+        await clearToken();
+        return {'access': null, 'refresh': null};
+      }
+    }
+  }
+  return {'access': null, 'refresh': null};
 }
 
 Future<dynamic> saveTokens(String accessToken, String refreshToken) async {

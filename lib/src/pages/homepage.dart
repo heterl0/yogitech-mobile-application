@@ -11,10 +11,7 @@ import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 
 class HomePage extends StatefulWidget {
-  final String? savedEmail;
-  final String? savedPassword;
-
-  HomePage({required this.savedEmail, required this.savedPassword});
+  HomePage();
 
   @override
   _HomePageState createState() => _HomePageState();
