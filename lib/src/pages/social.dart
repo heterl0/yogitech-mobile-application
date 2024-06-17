@@ -30,7 +30,7 @@ class _SocialPageState extends State<SocialPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FriendsPage(),
+                      builder: (context) => FollowingPage(),
                     ));
               })
         ],

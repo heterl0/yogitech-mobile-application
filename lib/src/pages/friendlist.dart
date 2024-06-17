@@ -7,7 +7,7 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
-class FriendsPage extends StatelessWidget {
+class FollowingPage extends StatelessWidget {
   final ScrollController _controller = ScrollController(); // ScrollController
 
   @override
@@ -18,7 +18,8 @@ class FriendsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: CustomAppBar(
-        title: trans.friends,
+        style: widthStyle.Large,
+        title: trans.following,
       ),
       body: SingleChildScrollView(
         controller: _controller, // Gán ScrollController
@@ -37,10 +38,46 @@ class FriendsPage extends StatelessWidget {
                   );
                 },
               ),
-              SizedBox(height: 16),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class FollowerPage extends StatelessWidget {
+  final ScrollController _controller = ScrollController(); // ScrollController
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      appBar: CustomAppBar(
+        style: widthStyle.Large,
+
+        title: trans.follower,
+      ),
+      body: SingleChildScrollView(
+        controller: _controller, // Gán ScrollController
+        child: Container(
+          margin: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
               FriendList(
                 title: trans.follower,
-                itemCount: 8,
+                itemCount: 10,
+                onTap: () {
+                  _controller.animateTo(
+                    MediaQuery.of(context).size.height,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
               ),
             ],
           ),
@@ -49,6 +86,7 @@ class FriendsPage extends StatelessWidget {
     );
   }
 }
+
 
 class FriendList extends StatelessWidget {
   final String title;

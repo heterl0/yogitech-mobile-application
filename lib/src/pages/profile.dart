@@ -206,7 +206,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => FriendsPage(),
+                                    builder: (context) => FollowingPage(),
                                   ),
                                 );
                               },
@@ -219,7 +219,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => FriendsPage(),
+                                    builder: (context) => FollowerPage(),
                                   ),
                                 );
                               },
