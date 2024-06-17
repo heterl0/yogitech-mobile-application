@@ -78,12 +78,13 @@ class _ActivitiesState extends State<Activities> {
           crossAxisCount: 2, // 2 columns
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
-          childAspectRatio: 3 / 2, // Aspect ratio of each card
+          childAspectRatio: 14 / 16, // Aspect ratio of each card
         ),
         itemCount: _events.length, // Number of cards
 
         itemBuilder: (context, index) {
           return CustomCard(
+            imageUrl: _events[index].image_url,
             title: _events[index].title,
             caption:
                 "Number of participants: ${_events[index].event_candidate.length}",

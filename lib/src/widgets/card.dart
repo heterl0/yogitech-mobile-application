@@ -28,7 +28,7 @@ class CustomCard extends StatelessWidget {
         constraints: const BoxConstraints(
           maxWidth: 160, // Kích thước tối thiểu ngang
           minWidth: 152, // Kích thước tối thiểu ngang
-          minHeight: 152, // Kích thước tối thiểu dọc
+          minHeight: 120, // Kích thước tối thiểu dọc
         ),
         decoration: BoxDecoration(
           color: theme.colorScheme.background, // Màu nền của Container
@@ -40,15 +40,17 @@ class CustomCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (imageUrl != null)
-              ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(16)),
-                child: Image.network(
-                  imageUrl!,
-                  fit: BoxFit.cover,
-                  height: 90, // Chiều cao cố định của ảnh
-                  width:
-                      double.infinity, // Đảm bảo ảnh chiếm toàn bộ chiều ngang
+              Padding(
+                padding: EdgeInsets.only(top: 8, right: 8, left: 8),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  child: Image.network(
+                    imageUrl!,
+                    fit: BoxFit.cover,
+                    height: 90, // Chiều cao cố định của ảnh
+                    width: double
+                        .infinity, // Đảm bảo ảnh chiếm toàn bộ chiều ngang
+                  ),
                 ),
               ),
             Padding(
@@ -57,41 +59,25 @@ class CustomCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    title.endsWith('\n')
+                        ? '$title\n'
+                        : '$title\n', // Thêm một dòng trống nếu cần
                     style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  if (caption != null && subtitle != null)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          caption!,
-                          style: min_cap.copyWith(color: text),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          subtitle!,
-                          style: min_cap.copyWith(color: primary),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  if (caption != null && subtitle == null)
-                    Text(
-                      caption!,
-                      style: min_cap.copyWith(color: text),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  if (subtitle != null && caption == null)
+                  if (subtitle != null)
                     Text(
                       subtitle!,
                       style: min_cap.copyWith(color: primary),
                       maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  if (caption != null)
+                    Text(
+                      caption!,
+                      style: min_cap.copyWith(color: text),
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                 ],
