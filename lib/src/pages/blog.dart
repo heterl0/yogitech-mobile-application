@@ -33,10 +33,10 @@ class BlogState extends State<Blog> {
   Future<void> _fetchBlogs() async {
     ApiService apiService = ApiService();
     try {
-      List<Blog> blogs =
-          await apiService.fetchBlogs(); // Gọi hàm fetchBlogs từ service
+      // List<Blog> blogs =
+      //     await apiService.fetchBlogs(); // Gọi hàm fetchBlogs từ service
       setState(() {
-        _blogs = blogs;
+        // _blogs = blogs;
       });
     } catch (e) {
       print('Error fetching blogs: $e');

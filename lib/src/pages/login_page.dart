@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
-import 'package:yogi_application/src/services/api_service.dart';
+import 'package:yogi_application/api/account/account_service.dart';
+import 'package:yogi_application/api/auth/auth_service.dart';
+import 'package:yogi_application/api/blog/blog_service.dart';
+import 'package:yogi_application/api/event/event_service.dart';
+import 'package:yogi_application/api/exercise/exercise_service.dart';
+import 'package:yogi_application/api/notification/notification_service.dart';
+import 'package:yogi_application/api/pose/pose_service.dart';
 import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/styles.dart';
@@ -23,7 +29,6 @@ class _LoginPageState extends State<LoginPage> {
     'https://www.googleapis.com/auth/contacts.readonly',
   ], serverClientId: dotenv.env['GOOGLE_CLIENT_ID']);
   bool _isLoading = false;
-  final ApiService apiService = ApiService();
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +87,12 @@ class _LoginPageState extends State<LoginPage> {
                     title: 'Login',
                     style: ButtonStyleType.Primary,
                     state: ButtonState.Enabled,
-                    onPressed: () {
-                      _handleLogin(context);
+                    onPressed: () async {
+                      // _handleLogin(context);
+                      print(await changePassword(new PasswordChangeRequest(
+                          newPassword: "secret777",
+                          reNewPassword: "secret777",
+                          currentPassword: "secret777")));
                     },
                   ),
                   SizedBox(height: 10.0),
@@ -174,8 +183,8 @@ class _LoginPageState extends State<LoginPage> {
       GoogleSignInAuthentication googleSignInAuthentication =
           await googleUser!.authentication;
       try {
-        final user = await apiService
-            .loginGoogle(googleSignInAuthentication.idToken ?? "");
+        final user =
+            await loginGoogle(googleSignInAuthentication.idToken ?? "");
 
         if (user != null &&
             user.accessToken.isNotEmpty &&
@@ -236,7 +245,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     try {
-      final user = await apiService.login(enteredEmail, enteredPassword);
+      final user = await login(enteredEmail, enteredPassword);
 
       if (user != null &&
           user.accessToken.isNotEmpty &&
