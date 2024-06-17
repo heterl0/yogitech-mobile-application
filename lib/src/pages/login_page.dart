@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
-import 'package:yogi_application/api/account/account_service.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
-import 'package:yogi_application/api/blog/blog_service.dart';
-import 'package:yogi_application/api/event/event_service.dart';
-import 'package:yogi_application/api/exercise/exercise_service.dart';
-import 'package:yogi_application/api/notification/notification_service.dart';
-import 'package:yogi_application/api/pose/pose_service.dart';
-import 'package:yogi_application/src/pages/homepage.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
@@ -88,11 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: ButtonStyleType.Primary,
                     state: ButtonState.Enabled,
                     onPressed: () async {
-                      // _handleLogin(context);
-                      print(await changePassword(new PasswordChangeRequest(
-                          newPassword: "secret777",
-                          reNewPassword: "secret777",
-                          currentPassword: "secret777")));
+                      _handleLogin(context);
                     },
                   ),
                   SizedBox(height: 10.0),
@@ -214,16 +203,6 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _isLoading = false;
     });
-  }
-
-  Future signIn() async {
-    String savedEmail = '';
-    String savedPassword = '';
-
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) =>
-          HomePage(savedEmail: savedEmail, savedPassword: savedPassword),
-    ));
   }
 
   Future<void> _handleLogin(BuildContext context) async {

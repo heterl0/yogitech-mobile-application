@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/calorie.dart';
@@ -11,7 +12,6 @@ import 'package:yogi_application/src/pages/personalized_exercise.dart';
 import 'package:yogi_application/src/pages/settings.dart';
 import 'package:yogi_application/src/pages/friendlist.dart';
 import 'package:yogi_application/src/pages/change_BMI.dart';
-import 'package:yogi_application/src/services/api_service.dart';
 
 class ProfilePage extends StatefulWidget {
   final bool isDarkMode;
@@ -32,7 +32,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final ApiService apiService = ApiService();
   Future<void> _logout() async {
     try {
       // Xóa token từ SharedPreferences khi người dùng logout

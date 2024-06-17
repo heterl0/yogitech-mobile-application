@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:yogi_application/l10n/l10n.dart';
-import 'package:yogi_application/src/pages/_mainscreen.dart';
+import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/dioInstance.dart';
-import 'package:yogi_application/src/services/api_service.dart';
 import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/pages/blog.dart';
 import 'package:yogi_application/src/pages/blog_detail.dart';
@@ -40,32 +36,33 @@ import 'dart:io';
 import 'dart:async';
 
 void main() async {
-  await loadEnv();
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
-  // await Future.delayed(const Duration(seconds: 10));
-  // FlutterNativeSplash.remove();
-  await checkToken();
-
+  FlutterNativeSplash.remove(); // Remove splash screen immediately
+  await loadEnv();
+  final accessToken = await checkToken();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
-  ]).then((_) {
-    runApp(MyApp());
-  });
+  ]);
+
+  runApp(accessToken != null
+      ? MyApp(access: accessToken)
+      : MyApp()); // Conditional app start
 }
 
-Future<void> checkToken() async {
-  // Lấy token từ SharedPreferences
-
-  final tokens = await getToken();
-  final accessToken = tokens['access'];
-  DioInstance.setAccessToken(accessToken ?? "");
-  if (accessToken != null) {
-    runApp(MyApp());
-  } else {
-    runApp(const MyApp());
+Future<String?> checkToken() async {
+  try {
+    final tokens = await getToken();
+    final accessToken = tokens['access'];
+    DioInstance.setAccessToken(accessToken ?? "");
+    return accessToken;
+  } catch (error) {
+    // Handle error, e.g., log the error or show an error message.
+    print("Error fetching token: $error");
+    // You might want to redirect to a login screen or handle the error differently.
   }
+  return null;
 }
 
 Future<void> loadEnv() async {
@@ -85,16 +82,9 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 class MyApp extends StatefulWidget {
-  final bool isAuthenticated;
-  final String? savedEmail;
-  final String? savedPassword;
+  final String? access;
 
-  const MyApp({
-    Key? key,
-    this.isAuthenticated = false,
-    this.savedEmail,
-    this.savedPassword,
-  }) : super(key: key);
+  const MyApp({Key? key, this.access}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -120,93 +110,63 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
     return MaterialApp(
-      // home: SplashScreen.navigate(
-      //   name: 'assets/native_splash/logo.riv',
-      //   next: (context) => MainScreen(
-      //     isVietnamese: _locale == Locale('vi'),
-      //     savedEmail: widget.savedEmail,
-      //     savedPassword: widget.savedPassword,
-      //     isDarkMode: _themeMode == ThemeMode.dark,
-      //     onThemeChanged: _toggleTheme,
-      //     locale: _locale,
-      //     onLanguageChanged: _changeLanguage,
-      //   ),
-      //   until: () => Future.delayed(const Duration(seconds: 1)),
-      //   startAnimation: '1',
-      //   endAnimation: '1',
-      //   backgroundColor: active,
-      //   fit: BoxFit.fill,
-      // ),
-      debugShowCheckedModeBanner: false,
-      initialRoute: widget.isAuthenticated
-          ? AppRoutes.firstScreen
-          : AppRoutes.firstScreen,
-      routes: _buildRoutes(),
-      onGenerateRoute: _generateRoute,
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: _themeMode,
-      supportedLocales: L10n.all,
-      locale: _locale,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-    );
-  }
-
-  Map<String, WidgetBuilder> _buildRoutes() {
-    return {
-      AppRoutes.firstScreen: (context) => MainScreen(
-            isVietnamese: _locale == Locale('vi'),
-            savedEmail: widget.savedEmail,
-            savedPassword: widget.savedPassword,
-            isDarkMode: _themeMode == ThemeMode.dark,
-            onThemeChanged: _toggleTheme,
-            locale: _locale,
-            onLanguageChanged: _changeLanguage,
-          ),
-      AppRoutes.homepage: (context) => HomePage(
-            savedEmail: widget.savedEmail,
-            savedPassword: widget.savedPassword,
-          ),
-      AppRoutes.login: (context) => LoginPage(),
-      AppRoutes.signup: (context) => SignUp(),
-      AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
-      AppRoutes.OtpConfirm: (context) => OTP_Page(),
-      AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
-      AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
-      AppRoutes.meditate: (context) => Meditate(),
-      AppRoutes.performMeditate: (context) => performMeditate(),
-      AppRoutes.streak: (context) => Streak(),
-      AppRoutes.exercisedetail: (context) => ExerciseDetail(),
-      AppRoutes.result: (context) => Result(),
-      AppRoutes.subscription: (context) => Subscription(),
-      AppRoutes.Profile: (context) => ProfilePage(
-            isVietnamese: _locale == Locale('vi'),
-            isDarkMode: _themeMode == ThemeMode.dark,
-            onThemeChanged: _toggleTheme,
-            locale: _locale,
-            onLanguageChanged: _changeLanguage,
-          ),
-      AppRoutes.activities: (context) => Activities(),
-      AppRoutes.eventDetail: (context) => EventDetail(
-            title: 'Event Title',
-            caption: 'Event Caption',
-            remainingDays: 'Event Subtitle',
-          ),
-      AppRoutes.blog: (context) => Blog(),
-      AppRoutes.blogDetail: (context) => BlogDetail(
-            title: 'Event Title',
-            caption: 'Event Caption',
-            subtitle: 'Event Subtitle',
-          ),
-      AppRoutes.reminder: (context) => ReminderPage(),
-      AppRoutes.notifications: (context) => NotificationsPage(),
-      AppRoutes.friendProfile: (context) => FriendProfile(),
-    };
+        // home: SplashScreen.navigate(
+        //   name: 'assets/native_splash/logo.riv',
+        //   next: (context) => MainScreen(
+        //     isVietnamese: _locale == Locale('vi'),
+        //     savedEmail: widget.savedEmail,
+        //     savedPassword: widget.savedPassword,
+        //     isDarkMode: _themeMode == ThemeMode.dark,
+        //     onThemeChanged: _toggleTheme,
+        //     locale: _locale,
+        //     onLanguageChanged: _changeLanguage,
+        //   ),
+        //   until: () => Future.delayed(const Duration(seconds: 1)),
+        //   startAnimation: '1',
+        //   endAnimation: '1',
+        //   backgroundColor: active,
+        //   fit: BoxFit.fill,
+        // ),
+        debugShowCheckedModeBanner: false,
+        initialRoute:
+            widget.access != null ? AppRoutes.homepage : AppRoutes.login,
+        routes: {
+          AppRoutes.homepage: (context) => HomePage(),
+          AppRoutes.login: (context) => LoginPage(),
+          AppRoutes.signup: (context) => SignUp(),
+          AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
+          AppRoutes.OtpConfirm: (context) => OTP_Page(),
+          AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
+          AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
+          AppRoutes.meditate: (context) => Meditate(),
+          AppRoutes.performMeditate: (context) => performMeditate(),
+          AppRoutes.streak: (context) => Streak(),
+          AppRoutes.exercisedetail: (context) => ExerciseDetail(),
+          AppRoutes.result: (context) => Result(),
+          AppRoutes.subscription: (context) => Subscription(),
+          AppRoutes.Profile: (context) => ProfilePage(
+                isDarkMode: _themeMode == ThemeMode.dark,
+                onThemeChanged: _toggleTheme,
+                locale: _locale,
+                onLanguageChanged: _changeLanguage,
+                isVietnamese: true,
+              ),
+          AppRoutes.activities: (context) => Activities(),
+          AppRoutes.eventDetail: (context) => EventDetail(
+                title: 'Event Title',
+                caption: 'Event Caption',
+                remainingDays: 'Event Subtitle',
+              ),
+          AppRoutes.blog: (context) => Blog(),
+          AppRoutes.blogDetail: (context) => BlogDetail(
+                title: 'Event Title',
+                caption: 'Event Caption',
+                subtitle: 'Event Subtitle',
+              ),
+          AppRoutes.reminder: (context) => ReminderPage(),
+          AppRoutes.notifications: (context) => NotificationsPage(),
+          AppRoutes.friendProfile: (context) => FriendProfile(),
+        });
   }
 
   Route<dynamic>? _generateRoute(RouteSettings settings) {
@@ -227,10 +187,7 @@ class _MyAppState extends State<MyApp> {
         return MaterialPageRoute(builder: (context) => ChangeProfilePage());
       default:
         return MaterialPageRoute(
-          builder: (context) => HomePage(
-            savedEmail: widget.savedEmail,
-            savedPassword: widget.savedPassword,
-          ),
+          builder: (context) => HomePage(),
         );
     }
   }

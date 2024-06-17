@@ -16,10 +16,7 @@ import 'package:yogi_application/src/services/api_service.dart';
 import 'package:yogi_application/src/models/exercise.dart'; // Import Exercise model
 
 class HomePage extends StatefulWidget {
-  final String? savedEmail;
-  final String? savedPassword;
-
-  HomePage({required this.savedEmail, required this.savedPassword});
+  HomePage();
 
   @override
   _HomePageState createState() => _HomePageState();
