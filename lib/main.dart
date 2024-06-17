@@ -43,7 +43,6 @@ void main() async {
   FlutterNativeSplash.remove(); // Remove splash screen immediately
   await loadEnv();
   final accessToken = await checkToken();
-  print(accessToken);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
