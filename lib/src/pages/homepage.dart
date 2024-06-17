@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/exercise/exercise_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:yogi_application/src/models/account.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/filter.dart';
 import 'package:yogi_application/src/pages/streak.dart';
@@ -25,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   var jsonList;
   bool _isnotSearching = true;
   TextEditingController _searchController = TextEditingController();
+  Account? account;
 
   @override
   void initState() {
@@ -36,10 +39,19 @@ class _HomePageState extends State<HomePage> {
     // Gọi API để lấy danh sách bài tập
     // Đảm bảo rằng phương thức getListExercises đã được định nghĩa trong lớp ApiService
     final List<dynamic> exercises = await getExercises();
-
     // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
     setState(() {
       jsonList = exercises;
+    });
+  }
+
+  Future<void> _fetchAccount() async {
+    // Gọi API để lấy danh sách bài tập
+    // Đảm bảo rằng phương thức getListExercises đã được định nghĩa trong lớp ApiService
+    final Account? _account = await retrieveAccount();
+    // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
+    setState(() {
+      account = _account;
     });
   }
 
@@ -68,7 +80,9 @@ class _HomePageState extends State<HomePage> {
                         child: Image.asset('assets/images/Emerald.png'),
                       ),
                       Text(
-                        '5',
+                        account != null
+                            ? account!.profile.point.toString()
+                            : '0',
                         style:
                             h3.copyWith(color: theme.colorScheme.onBackground),
                       ),
@@ -76,7 +90,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ],
-              titleWidget: const StreakValue('0000'),
+              titleWidget: StreakValue(
+                  account != null ? account!.profile.streak.toString() : '0'),
               postActions: [
                 IconButton(
                   icon:
@@ -193,16 +208,16 @@ class _HomePageState extends State<HomePage> {
             ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
                   if (jsonList != null)
                     for (final exercise in jsonList)
                       CustomCard(
                         title: exercise.title,
-                        caption:
-                            exercise.description ?? '', // Mô tả của bài tập
-                        imageUrl: exercise.imageUrl, // URL hình ảnh của bài tập
+                        // subtitle: exercise.durations ?? '0',
+                        imageUrl:
+                            exercise.image_url, // URL hình ảnh của bài tập
                         onTap: () {
                           // Chuyển sang trang chi tiết của bài tập khi thẻ được nhấn
                           pushWithoutNavBar(

@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/models/event.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
+import 'package:yogi_application/utils/formatting.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class EventDetail extends StatelessWidget {
-  final String title;
-  final String caption;
-  final String remainingDays;
+  final Event? event;
 
-  EventDetail(
-      {super.key,
-      required this.title,
-      required this.caption,
-      required this.remainingDays});
+  EventDetail({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -80,12 +76,12 @@ class EventDetail extends StatelessWidget {
       backgroundColor: theme.colorScheme.onSecondary,
       pinned: true,
       centerTitle: true,
-      title: Text(remainingDays,
+      title: Text(checkDateExpired(event!.start_date, event!.expire_date),
           style: h2.copyWith(color: theme.colorScheme.onBackground)),
       expandedHeight: 320,
       flexibleSpace: FlexibleSpaceBar(
-        background: Image.asset(
-          'assets/images/yoga.jpeg',
+        background: Image.network(
+          event!.image_url,
           fit: BoxFit.cover,
         ),
       ),
@@ -116,7 +112,7 @@ class EventDetail extends StatelessWidget {
 
     return Center(
       child: Text(
-        title,
+        event!.title,
         style: h2.copyWith(color: theme.colorScheme.onPrimary),
       ),
     );
@@ -124,7 +120,7 @@ class EventDetail extends StatelessWidget {
 
   Widget _buildDescription() {
     return Text(
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncusLorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus',
+      event!.description,
       style: bd_text.copyWith(color: text),
     );
   }

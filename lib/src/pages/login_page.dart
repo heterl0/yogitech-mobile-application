@@ -87,6 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                     state: ButtonState.Enabled,
                     onPressed: () async {
                       _handleLogin(context);
+                      // print(await getExercises());
                     },
                   ),
                   SizedBox(height: 10.0),
@@ -183,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
         if (user != null &&
             user.accessToken.isNotEmpty &&
             user.refreshToken.isNotEmpty) {
-          Navigator.pushReplacementNamed(context, AppRoutes.homepage);
+          Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -234,7 +235,7 @@ class _LoginPageState extends State<LoginPage> {
       if (user != null &&
           user.accessToken.isNotEmpty &&
           user.refreshToken.isNotEmpty) {
-        Navigator.pushReplacementNamed(context, AppRoutes.homepage);
+        Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Invalid email or password')),
