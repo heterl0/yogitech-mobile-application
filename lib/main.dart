@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:yogi_application/api/dioInstance.dart';
 import 'package:yogi_application/src/services/api_service.dart';
 import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/pages/blog.dart';
@@ -40,6 +41,7 @@ void main() async {
   await Future.delayed(const Duration(seconds: 10));
   FlutterNativeSplash.remove();
   await checkToken();
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -54,6 +56,7 @@ Future<void> checkToken() async {
   final tokens = await getToken();
 
   final accessToken = tokens['access'];
+  DioInstance.setAccessToken(accessToken ?? "");
   final refreshToken = tokens['refresh'];
   if (accessToken != null) {
     runApp(MyApp());
