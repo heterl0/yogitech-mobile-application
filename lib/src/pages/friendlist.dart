@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:yogi_application/src/pages/friend_profile.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,7 +18,7 @@ class FriendsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: CustomAppBar(
-        title: 'Friends',
+        title: trans.friends,
       ),
       body: SingleChildScrollView(
         controller: _controller, // Gán ScrollController
@@ -25,7 +27,7 @@ class FriendsPage extends StatelessWidget {
           child: Column(
             children: [
               FriendList(
-                title: 'Following',
+                title: trans.following,
                 itemCount: 10,
                 onTap: () {
                   _controller.animateTo(
@@ -37,7 +39,7 @@ class FriendsPage extends StatelessWidget {
               ),
               SizedBox(height: 16),
               FriendList(
-                title: 'Follower',
+                title: trans.follower,
                 itemCount: 8,
               ),
             ],
@@ -80,9 +82,14 @@ class FriendList extends StatelessWidget {
               name: 'Friend Name $index',
               avatarUrl: 'assets/images/gradient.jpg',
               exp: '10000',
-              onTap: onTap != null
-                  ? () => onTap!()
-                  : () {}, // Sử dụng hàm mặc định khi onTap là null
+              onTap: (){
+                     pushWithoutNavBar(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FriendProfile(),
+                            ),
+                          );
+                  }, // Sử dụng hàm mặc định khi onTap là null
             );
           },
         ),

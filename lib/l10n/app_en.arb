@@ -88,6 +88,8 @@
   "customizeExercise": "Your customize exercise",
   "following": "following",
   "follower": "follower",
+  "unfollow": "unfollow",
+  "follow": "Follow",
   "logout": "Logout",
   "setting": "Setting",
   "darkMode": "Dark mode",
@@ -135,7 +137,6 @@
   "caloriesBurnedInMonth": "calories burned",
   "burnedInMonth": "burned in this month",
   "yourExercise": "Your Exercise",
-  "beginner": "Beginner"
-  
-  
+  "beginner": "Beginner",
+  "friendProfile":"Friend Profile" 
 }
