@@ -77,8 +77,8 @@ class EventDetail extends StatelessWidget {
           style: h2.copyWith(color: theme.colorScheme.onBackground)),
       expandedHeight: 320,
       flexibleSpace: FlexibleSpaceBar(
-        background: Image.asset(
-          'assets/images/yoga.jpeg',
+        background: Image.network(
+          event!.image_url,
           fit: BoxFit.cover,
         ),
       ),
