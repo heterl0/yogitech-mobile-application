@@ -3,12 +3,13 @@ import 'package:yogi_application/api/dioInstance.dart';
 import 'package:yogi_application/src/models/exercise.dart';
 import 'package:yogi_application/utils/formatting.dart';
 
-Future<List<Exercise>> getExercises() async {
+Future<List<dynamic>> getExercises() async {
   try {
     final url = formatApiUrl('/api/v1/exercises/');
     final Response response = await DioInstance.get(url);
     if (response.statusCode == 200) {
-      List<Exercise> data = response.data.map((e) => Exercise.fromMap(e));
+      List<dynamic> data =
+          response.data.map((e) => Exercise.fromMap(e)).toList();
       return data;
     } else {
       print('Get exercises failed with status code: ${response.statusCode}');
