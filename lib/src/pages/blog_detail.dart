@@ -36,12 +36,14 @@ class _BlogDetailState extends State<BlogDetail> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          _buildImage(),
-          _buildMainContent(context),
-        ],
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildImage(),
+            _buildMainContent(context),
+          ],
+        ),
       ),
     );
   }
@@ -82,7 +84,7 @@ class _BlogDetailState extends State<BlogDetail> {
 
   Widget _buildImage() {
     return Padding(
-      padding: const EdgeInsets.only(top: 60),
+      padding: const EdgeInsets.only(top: 20),
       child: Container(
         width: double.infinity,
         height: 360,
@@ -106,20 +108,29 @@ class _BlogDetailState extends State<BlogDetail> {
           _buildTitle(context),
           const SizedBox(height: 16),
           _buildDescription(),
+          const SizedBox(height: 16),
+          _buildSubtitle(),
         ],
       ),
     );
   }
 
+  Widget _buildSubtitle() {
+    return Text(
+      widget.subtitle,
+      style: min_cap.copyWith(color: text),
+      textAlign: TextAlign.left,
+    );
+  }
+
   Widget _buildTitle(BuildContext context) {
     final theme = Theme.of(context);
-
     return Center(
       child: Container(
         child: Column(
           children: [
             Text(
-              'Japan: Discovering the Land of the Rising Sun',
+              widget.title,
               style: h2.copyWith(color: theme.colorScheme.onPrimary),
             ),
           ],
@@ -130,7 +141,7 @@ class _BlogDetailState extends State<BlogDetail> {
 
   Widget _buildDescription() {
     return Text(
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus',
+      widget.caption,
       style: min_cap.copyWith(color: text),
       textAlign: TextAlign.left,
     );

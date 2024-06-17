@@ -43,7 +43,6 @@ void main() async {
   FlutterNativeSplash.remove(); // Remove splash screen immediately
   await loadEnv();
   final accessToken = await checkToken();
-  print(accessToken);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -133,7 +132,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         initialRoute:
             widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
-        onGenerateRoute: _generateRoute,
+        // onGenerateRoute: _generateRoute,
         theme: lightTheme,
         darkTheme: darkTheme,
         themeMode: _themeMode,
