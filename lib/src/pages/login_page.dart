@@ -84,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: ButtonStyleType.Primary,
                     state: ButtonState.Enabled,
                     onPressed: () async {
-                      _handleLogin(context,trans);
+                      _handleLogin(context);
                       // print(await getExercises());
                     },
                   ),
@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                             // if (user != null) {
                             //   print(user.displayName);
                             // }
-                            await _handleGoogleSignIn(trans);
+                            await _handleGoogleSignIn();
                           },
                         ),
                       ),
@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            trans.dontHaveAccount,
+                            "You don't have an account? ",
                             style: bd_text.copyWith(color: text),
                           ),
                           TextButton(
@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> _handleGoogleSignIn(AppLocalizations trans) async {
+  Future<void> _handleGoogleSignIn() async {
     setState(() {
       _isLoading = true;
     });
@@ -184,20 +184,20 @@ class _LoginPageState extends State<LoginPage> {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                content: Text(trans.error)),
+                content: Text('An error occurred. Please try again later.')),
           );
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(trans.error+'\n $e')),
+              content: Text('An error occurred. Please try again later. $e')),
         );
       }
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text(
-         trans.error+'\n $error',
+          'Failed to sign in: $error',
         )),
       );
     }
@@ -207,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  Future<void> _handleLogin(BuildContext context,AppLocalizations trans) async {
+  Future<void> _handleLogin(BuildContext context) async {
     String enteredEmail = emailController.text;
     String enteredPassword = passwordController.text;
 
@@ -217,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
     if (enteredEmail.isEmpty || enteredPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text(trans.loginMissing)),
+            content: Text('Please fill in both Email and Password fields')),
       );
       setState(() {
         _isLoading = false;
@@ -232,13 +232,13 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(trans.loginInvalid)),
+          SnackBar(content: Text('Invalid email or password')),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text(trans.error+'\n $e')),
+            content: Text('An error occurred. Please try again later. $e')),
       );
     }
     setState(() {
