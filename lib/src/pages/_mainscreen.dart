@@ -43,9 +43,7 @@ class _MainScreenState extends State<MainScreen> {
       backgroundColor: theme.colorScheme.onSecondary,
       tabs: [
         PersistentTabConfig(
-          screen: HomePage(
-              savedEmail: widget.savedEmail,
-              savedPassword: widget.savedPassword),
+          screen: HomePage(),
           item: ItemConfig(
             textStyle: min_cap,
             icon: const Icon(Icons.grid_view),

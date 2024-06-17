@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:yogi_application/api/exercise/exercise_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/filter.dart';
@@ -12,8 +13,6 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
-import 'package:yogi_application/src/services/api_service.dart';
-import 'package:yogi_application/src/models/exercise.dart'; // Import Exercise model
 
 class HomePage extends StatefulWidget {
   HomePage();
@@ -26,7 +25,6 @@ class _HomePageState extends State<HomePage> {
   var jsonList;
   bool _isnotSearching = true;
   TextEditingController _searchController = TextEditingController();
-  final ApiService apiService = ApiService();
 
   @override
   void initState() {
@@ -37,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _fetchExercises() async {
     // Gọi API để lấy danh sách bài tập
     // Đảm bảo rằng phương thức getListExercises đã được định nghĩa trong lớp ApiService
-    final List<Exercise> exercises = await apiService.getExerciseList();
+    final List<dynamic> exercises = await getExercises();
 
     // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
     setState(() {
