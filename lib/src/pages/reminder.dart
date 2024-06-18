@@ -6,7 +6,6 @@ import 'package:yogi_application/src/widgets/switch.dart'; // Assuming this is C
 import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class ReminderPage extends StatefulWidget {
   final bool reminderOn;
   // final ValueChanged<bool> areRemindersEnabled;
@@ -27,35 +26,37 @@ class _ReminderPageState extends State<ReminderPage> {
   Set<int> _selectedDays = {};
   List<Map<String, dynamic>> _selectedTimes = [];
 
-  String _getDayDescription(Set<int> days) {
-    if (days.isEmpty) return 'No days selected';
-    if (days.length == 7) return 'Every day';
+  String _getDayDescription(Set<int> days, AppLocalizations trans) {
+    String local = trans.locale;
+    if (days.isEmpty)
+      return local == "en" ? 'No days selected.' : 'Không có ngày được chọn.';
+    if (days.length == 7) return trans.everyday;
 
     if (days.containsAll([2, 3, 4, 5, 6])) {
-      if (days.length == 5) return 'Weekdays';
+      if (days.length == 5) return trans.dayInWeek;
     }
 
     if (days.containsAll([6, 7])) {
-      if (days.length == 2) return 'Weekend';
+      if (days.length == 2) return trans.dayWeeken;
     }
 
     List<int> sortedDays = days.toList()..sort();
     List<String> dayNames = sortedDays.map((day) {
       switch (day) {
         case 1:
-          return 'Mon';
+          return local == "en" ? 'Mon' : 'Thứ 2';
         case 2:
-          return 'Tue';
+          return local == "en" ? 'Tue' : 'Thứ 3';
         case 3:
-          return 'Wed';
+          return local == "en" ? 'Wed' : 'Thứ 4';
         case 4:
-          return 'Thu';
+          return local == "en" ? 'Thu' : 'Thứ 5';
         case 5:
-          return 'Fri';
+          return local == "en" ? 'Fri' : 'Thứ 6';
         case 6:
-          return 'Sat';
+          return local == "en" ? 'Sat' : 'Thứ 7';
         case 7:
-          return 'Sun';
+          return local == "en" ? 'Sun' : 'Chủ nhật';
         default:
           return '';
       }
@@ -86,19 +87,28 @@ class _ReminderPageState extends State<ReminderPage> {
       },
     );
 
-    if (result != null &&
-        result.containsKey('time') &&
-        result.containsKey('days')) {
-      setState(() {
-        if (isNew) {
-          _selectedTimes.add({'time': result['time'], 'days': result['days']});
-        } else {
-          _selectedTimes[index!] = {
-            'time': result['time'],
-            'days': result['days']
-          };
+    if (result != null) {
+      if (result.containsKey('delete')) {
+        if (index != null) {
+          setState(() {
+            _selectedTimes.removeAt(index);
+          });
         }
-      });
+      } else if (result.containsKey('time') && result.containsKey('days')) {
+        if (isNew) {
+          setState(() {
+            _selectedTimes
+                .add({'time': result['time'], 'days': result['days']});
+          });
+        } else {
+          setState(() {
+            _selectedTimes[index!] = {
+              'time': result['time'],
+              'days': result['days']
+            };
+          });
+        }
+      }
     }
   }
 
@@ -109,7 +119,7 @@ class _ReminderPageState extends State<ReminderPage> {
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: CustomAppBar(
-        title: "Reminder",
+        title: trans.reminder,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -117,7 +127,7 @@ class _ReminderPageState extends State<ReminderPage> {
           child: Column(
             children: [
               CustomSwitch(
-                title: 'Reminder',
+                title: trans.reminder,
                 value: widget.reminderOn,
                 onChanged: null,
               ),
@@ -134,7 +144,8 @@ class _ReminderPageState extends State<ReminderPage> {
                           },
                           child: CustomSwitch(
                             title: '${entry.value['time'].format(context)}',
-                            subtitle: _getDayDescription(entry.value['days']),
+                            subtitle:
+                                _getDayDescription(entry.value['days'], trans),
                             value: _isReminderEnabled,
                             onChanged: (value) {
                               setState(() {
@@ -216,6 +227,9 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
+    String local = trans.locale;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -227,18 +241,18 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
                 Navigator.pop(context);
               },
               child: Text(
-                'Cancel',
+                trans.cancel,
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            Text('Setup Reminder', style: h3.copyWith(color: Colors.white)),
+            Text(trans.setReminder, style: h3.copyWith(color: Colors.white)),
             TextButton(
               onPressed: () {
                 Navigator.pop(
                     context, {'time': _selectedTime, 'days': _selectedDays});
               },
               child: Text(
-                'Save',
+                trans.save,
                 style: h3.copyWith(color: Colors.white),
               ),
             ),
@@ -253,7 +267,7 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
           children: [
             SizedBox(height: 20),
             ListTile(
-              title: Text('Reminder Time'),
+              title: Text(trans.reTime),
               trailing: InkWell(
                 onTap: () async {
                   final timeOfDay = await showTimePicker(
@@ -274,7 +288,7 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
             ),
             SizedBox(height: 20),
             SwitchListTile(
-              title: Text('Loop Reminder'),
+              title: Text(trans.loop),
               value: _loopEnabled,
               onChanged: (value) {
                 setState(() {
@@ -295,15 +309,25 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
                     final isSelected = _selectedDays.contains(dayIndex);
                     return ChoiceChip(
                       label: Text(
-                        [
-                          'Mon',
-                          'Tue',
-                          'Wed',
-                          'Thu',
-                          'Fri',
-                          'Sat',
-                          'Sun'
-                        ][index],
+                        local == "en"
+                            ? [
+                                'Mon',
+                                'Tue',
+                                'Wed',
+                                'Thu',
+                                'Fri',
+                                'Sat',
+                                'Sun'
+                              ][index]
+                            : [
+                                'Thứ 2',
+                                'Thứ 3',
+                                'Thứ 4',
+                                'Thứ 5',
+                                'Thứ 6',
+                                'Thứ 7',
+                                'Chủ nhật'
+                              ][index],
                       ),
                       selected: isSelected,
                       onSelected: (selected) {
@@ -322,7 +346,7 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
             if (widget.showDeleteButton)
               Center(
                 child: BoxButton(
-                  title: 'Delete Reminder',
+                  title: trans.deleteReminder,
                   style: ButtonStyleType.Secondary,
                   state: ButtonState.Enabled,
                   onPressed: () {

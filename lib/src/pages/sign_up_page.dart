@@ -38,7 +38,7 @@ class SignUp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Sign up',
+                trans.signUp,
                 style: h1.copyWith(color: theme.colorScheme.onPrimary),
                 textAlign: TextAlign.left,
               ),
@@ -48,7 +48,7 @@ class SignUp extends StatelessWidget {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white.withOpacity(0),
-                  hintText: 'Username',
+                  hintText: trans.username,
                   hintStyle: TextStyle(color: Color(0xFF8D8E99)),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(44.0),
@@ -69,7 +69,7 @@ class SignUp extends StatelessWidget {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white.withOpacity(0),
-                  hintText: 'Email',
+                  hintText: trans.email,
                   hintStyle: TextStyle(color: Color(0xFF8D8E99)),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(44.0),
@@ -84,7 +84,7 @@ class SignUp extends StatelessWidget {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white.withOpacity(0),
-                  hintText: 'Password',
+                  hintText: trans.password,
                   hintStyle: TextStyle(
                     color: Color(0xFF8D8E99),
                   ),
@@ -102,7 +102,7 @@ class SignUp extends StatelessWidget {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white.withOpacity(0),
-                  hintText: 'Confirm password',
+                  hintText: trans.confirmPassword,
                   hintStyle: TextStyle(
                     color: Color(0xFF8D8E99),
                   ),
@@ -117,7 +117,7 @@ class SignUp extends StatelessWidget {
 
               SizedBox(height: 10.0),
               BoxButton(
-                title: 'Sign up',
+                title: trans.signUp,
                 style: ButtonStyleType.Primary,
                 state: ButtonState
                     .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
@@ -134,7 +134,7 @@ class SignUp extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
-                    "Or sign in with",
+                    trans.orSignInWith,
                     style: bd_text.copyWith(color: text),
                   ),
                 ),
@@ -146,7 +146,7 @@ class SignUp extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "You have an account? ",
+                    trans.haveAccount,
                     style: bd_text.copyWith(color: text),
                   ),
                   TextButton(
@@ -156,7 +156,7 @@ class SignUp extends StatelessWidget {
                       Navigator.pushNamed(context, AppRoutes.login);
                     },
                     child: Text(
-                      'Sign in',
+                      trans.signIn,
                       style: h3.copyWith(color: primary),
                     ),
                   ),

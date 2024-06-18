@@ -30,7 +30,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: CustomAppBar(
-        title: "Notifications",
+        title: trans.notifications,
         style: widthStyle.Large,
       ),
       body: SingleChildScrollView(
@@ -39,17 +39,17 @@ class _NotificationsPageState extends State<NotificationsPage> {
           child: Column(
             children: [
               CustomSwitch(
-                title: 'Streak saver',
+                title: trans.streakSaver,
                 value: widget.streakSaverOn,
                 onChanged: null,
               ),
               CustomSwitch(
-                title: 'Friends activities',
+                title: trans.friendsActivities,
                 value: widget.friendAactivitiesOn,
                 onChanged: null,
               ),
               CustomSwitch(
-                title: 'New event',
+                title: trans.newEvent,
                 value: widget.newEventOn,
                 onChanged: null,
               ),

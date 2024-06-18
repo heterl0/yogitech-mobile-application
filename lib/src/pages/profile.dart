@@ -14,7 +14,6 @@ import 'package:yogi_application/src/pages/friendlist.dart';
 import 'package:yogi_application/src/pages/change_BMI.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class ProfilePage extends StatefulWidget {
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChanged;
@@ -40,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
       await clearToken();
 
       // Chuyển hướng đến trang đăng nhập và xóa tất cả các route cũ
-      Navigator.of(context).pushNamedAndRemoveUntil(
+      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
           AppRoutes.login, (Route<dynamic> route) => false);
     } catch (e) {
       print('Logout error: $e');
@@ -56,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: theme.colorScheme.background,
         appBar: CustomAppBar(
           showBackButton: false,
-          title: "Profile",
+          title: trans.profile,
           postActions: [
             IconButton(
                 icon: Icon(
@@ -132,7 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Avatar',
+                              trans.avatar,
                               style: h3.copyWith(
                                   color:
                                       Theme.of(context).colorScheme.onPrimary),
@@ -147,7 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           children: [
                             InfoCard(
                               title: 'Calorie',
-                              subtitle: 'Your total of calories',
+                              subtitle: trans.totalCalories,
                               iconPath: 'assets/icons/info.png',
                               onTap: () {
                                 Navigator.push(
@@ -160,8 +159,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             const SizedBox(height: 6),
                             InfoCard(
-                              title: 'Social',
-                              subtitle: 'Your friends and more',
+                              title: trans.social,
+                              subtitle: trans.yourFriends,
                               iconPath: 'assets/icons/diversity_2.png',
                               onTap: () {
                                 Navigator.push(
@@ -174,8 +173,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             const SizedBox(height: 6),
                             InfoCard(
-                              title: 'Personalized Exercise',
-                              subtitle: 'Your customize exercise',
+                              title: trans.personalizedExercise,
+                              subtitle: trans.customizeExercise,
                               iconPath: 'assets/icons/tune_setting.png',
                               onTap: () {
                                 Navigator.push(
@@ -199,27 +198,27 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Column(
                           children: [
                             StatCard(
-                              title: 'Following',
+                              title: trans.following,
                               value: '6', // Replace with API data
                               valueColor: theme.colorScheme.onPrimary,
                               onTap: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => FriendsPage(),
+                                    builder: (context) => FollowingPage(),
                                   ),
                                 );
                               },
                             ),
                             StatCard(
-                              title: 'Follower',
+                              title: trans.follower,
                               value: '7', // Replace with API data
                               valueColor: theme.colorScheme.onPrimary,
                               onTap: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => FriendsPage(),
+                                    builder: (context) => FollowerPage(),
                                   ),
                                 );
                               },
@@ -290,7 +289,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               },
                               borderRadius: BorderRadius.circular(44.0),
                               child: Center(
-                                child: Text('Logout',
+                                child: Text(trans.logout,
                                     style: h3.copyWith(color: error)),
                               ),
                             ),

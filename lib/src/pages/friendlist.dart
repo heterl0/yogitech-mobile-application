@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:yogi_application/src/pages/friend_profile.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
-class FriendsPage extends StatelessWidget {
+class FollowingPage extends StatelessWidget {
   final ScrollController _controller = ScrollController(); // ScrollController
 
   @override
@@ -16,7 +18,8 @@ class FriendsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: CustomAppBar(
-        title: 'Friends',
+        style: widthStyle.Large,
+        title: trans.following,
       ),
       body: SingleChildScrollView(
         controller: _controller, // Gán ScrollController
@@ -25,7 +28,7 @@ class FriendsPage extends StatelessWidget {
           child: Column(
             children: [
               FriendList(
-                title: 'Following',
+                title: trans.following,
                 itemCount: 10,
                 onTap: () {
                   _controller.animateTo(
@@ -35,10 +38,46 @@ class FriendsPage extends StatelessWidget {
                   );
                 },
               ),
-              SizedBox(height: 16),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class FollowerPage extends StatelessWidget {
+  final ScrollController _controller = ScrollController(); // ScrollController
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      appBar: CustomAppBar(
+        style: widthStyle.Large,
+
+        title: trans.follower,
+      ),
+      body: SingleChildScrollView(
+        controller: _controller, // Gán ScrollController
+        child: Container(
+          margin: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
               FriendList(
-                title: 'Follower',
-                itemCount: 8,
+                title: trans.follower,
+                itemCount: 10,
+                onTap: () {
+                  _controller.animateTo(
+                    MediaQuery.of(context).size.height,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
               ),
             ],
           ),
@@ -47,6 +86,7 @@ class FriendsPage extends StatelessWidget {
     );
   }
 }
+
 
 class FriendList extends StatelessWidget {
   final String title;
@@ -80,9 +120,14 @@ class FriendList extends StatelessWidget {
               name: 'Friend Name $index',
               avatarUrl: 'assets/images/gradient.jpg',
               exp: '10000',
-              onTap: onTap != null
-                  ? () => onTap!()
-                  : () {}, // Sử dụng hàm mặc định khi onTap là null
+              onTap: (){
+                     pushWithoutNavBar(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FriendProfile(),
+                            ),
+                          );
+                  }, // Sử dụng hàm mặc định khi onTap là null
             );
           },
         ),

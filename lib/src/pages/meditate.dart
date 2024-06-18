@@ -32,7 +32,7 @@ class _MeditateState extends State<Meditate> {
     return Scaffold(
       appBar: CustomAppBar(
         showBackButton: false,
-        title: "Meditate",
+        title: trans.meditate,
         style: widthStyle.Medium,
       ),
       body: _buildBody(),
@@ -59,11 +59,13 @@ class _MeditateState extends State<Meditate> {
 
   Widget _buildTitleText() {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     return Positioned(
       left: 0,
       right: 0,
       top: 100,
-      child: Text('Meditate',
+      child: Text(trans.meditate,
           textAlign: TextAlign.center,
           style: h2.copyWith(color: theme.colorScheme.onBackground)),
     );
@@ -71,6 +73,8 @@ class _MeditateState extends State<Meditate> {
 
   Widget _buildMainContent() {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+    
     return Positioned(
       left: 24,
       top: 24,
@@ -96,13 +100,13 @@ class _MeditateState extends State<Meditate> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Sounds',
+            trans.sounds,
             style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
           const SizedBox(height: 16),
           _buildCheckboxItem(
-            title: 'Sound of rain',
-            subtitle: 'Deep sound on rainy days',
+            title: trans.soundRain,
+            subtitle:trans.soundRain=='Sound of rain'?  'Deep sound on rainy days.':'Âm thanh sâu lắng trong những ngày mưa.',
             value: _isChecked1,
             onChanged: (value) {
               setState(() {
@@ -113,8 +117,8 @@ class _MeditateState extends State<Meditate> {
           ),
           const SizedBox(height: 16),
           _buildCheckboxItem(
-            title: 'The sound of the stream flowing',
-            subtitle: 'Immersing yourself in the refreshing nature',
+            title: trans.soundStream,
+            subtitle:trans.soundStream=='The sound of the stream flowing'? 'Immersing yourself in the refreshing nature.':"Âm thanh suối chảy hòa mình vào thiên nhiên trong lành.",
             value: _isChecked2,
             onChanged: (value) {
               setState(() {

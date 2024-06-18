@@ -38,7 +38,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Welcome to ',
+                      trans.welcomeToYogi.replaceFirst(" Yogi", ""),
                       style: h1.copyWith(
                           color: theme.colorScheme.onPrimary, height: 1),
                     ),
@@ -49,33 +49,33 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                 Container(
                   alignment: Alignment.center,
                   child: Text(
-                    'Please fill in information here to optimize your experience',
+                    trans.fillInformation,
                     style: min_cap.copyWith(color: text),
                   ),
                 ),
                 SizedBox(height: 16.0),
                 // First Name
-                Text('First Name', style: h3.copyWith(color: active)),
+                Text(trans.firstName, style: h3.copyWith(color: active)),
                 SizedBox(height: 16.0),
                 BoxInputField(
                   controller: firstName,
-                  placeholder: 'First name',
+                  placeholder: trans.firstName,
                 ),
                 SizedBox(height: 16.0),
                 // Last Name
-                Text('Last Name', style: h3.copyWith(color: active)),
+                Text(trans.lastName, style: h3.copyWith(color: active)),
                 SizedBox(height: 16.0),
                 BoxInputField(
                   controller: lastName,
-                  placeholder: 'Last name',
+                  placeholder: trans.lastName,
                 ),
                 SizedBox(height: 16.0),
                 // Birthday
-                Text('Birthday', style: h3.copyWith(color: active)),
+                Text(trans.birthday, style: h3.copyWith(color: active)),
                 SizedBox(height: 16.0),
                 BoxInputField(
                   controller: birthday,
-                  placeholder: 'Select your birthday',
+                  placeholder: trans.birthday=="Birthday"? "Sellect your birthday":"Chọn ngày sinh của bạn",
                   trailing: Icon(
                     Icons.calendar_today,
                   ), // Thay đổi icon
@@ -96,7 +96,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                 ),
                 SizedBox(height: 16.0),
                 // Height
-                Text('Height(cm)', style: h3.copyWith(color: active)),
+                Text(trans.heightCm, style: h3.copyWith(color: active)),
                 SizedBox(height: 16.0),
 
                 // TextField(
@@ -129,7 +129,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
 
                 SizedBox(height: 16.0),
                 // Weight
-                Text('Weight(kg)', style: h3.copyWith(color: active)),
+                Text(trans.weightKg, style: h3.copyWith(color: active)),
                 SizedBox(height: 16.0),
 
                 // TextField(
@@ -164,7 +164,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
         ),
       ),
       bottomNavigationBar: CustomBottomBar(
-        buttonTitle: "Let's go",
+        buttonTitle: trans.letsGo,
         onPressed: () {},
       ),
     );
