@@ -139,6 +139,8 @@
   "burnedInMonth": "burned in this month",
   "yourExercise": "Your Exercise",
   "beginner": "Beginner",
+  "advance":"Advance",
+  "professional":"Professional",
   "friendProfile":"Friend Profile" ,
   "error":"An error occurred while processing your request. Please try again later.",
   "loginMissing":"Please fill in all the login information.",

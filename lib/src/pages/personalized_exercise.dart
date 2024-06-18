@@ -24,7 +24,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
       backgroundColor: theme.colorScheme.background,
       appBar: _isNotSearching
           ? CustomAppBar(
-              title: 'Your Exercise',
+              title:trans.yourExercise,
               style: widthStyle.Large,
             )
           : CustomAppBar(
@@ -32,7 +32,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
               style: widthStyle.Large,
               titleWidget: BoxInputField(
                 controller: _searchController,
-                placeholder: 'Search...',
+                placeholder: trans.search+"...",
                 trailing: Icon(Icons.search),
                 keyboardType: TextInputType.text,
                 inputFormatters: [],
@@ -66,8 +66,8 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: 15, // Số phần tử trong danh sách đầu tiên
                     itemBuilder: (context, index) {
-                      return const ListItem(
-                        difficulty: 'Beginner',
+                      return ListItem(
+                        difficulty: (index%2)==0? trans.advance:(index%3)==0? trans.professional:trans.beginner,
                         poseName: 'Hip',
                         calories: '100000',
                       );
