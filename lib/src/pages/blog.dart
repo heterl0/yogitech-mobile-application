@@ -57,6 +57,7 @@ class BlogState extends State<Blog> {
               ],
             )
           : CustomAppBar(
+              showBackButton: false,
               onBackPressed: () {
                 setState(() {
                   _isNotSearching = true;
@@ -114,14 +115,11 @@ class BlogState extends State<Blog> {
       width: double.infinity,
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
       child: GridView.builder(
-        // padding: const EdgeInsets.symmetric(horizontal: 6.0),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          // crossAxisSpacing: 8.0,
-          // mainAxisSpacing: 8.0,
-          childAspectRatio: 5 / 6,
+          childAspectRatio: 4 / 5,
         ),
         itemCount: jsonList.length,
         itemBuilder: (context, index) {
