@@ -144,6 +144,7 @@
   "loginMissing":"Vui lòng điền thông tin đăng nhập.",
   "loginInvalid":"Tài khoản và mật khẩu không hợp lệ.",
   "soundRain":"Tiếng mưa rơi",
-  "soundStream":"Tiếng suối chảy"
+  "soundStream":"Tiếng suối chảy",
+  "endTimer":"Kết thúc đếm ngược!"
 
 }

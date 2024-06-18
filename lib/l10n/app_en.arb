@@ -144,6 +144,7 @@
   "loginMissing":"Please fill in all the login information.",
   "loginInvalid":"Invalid email or password.",
   "soundRain":"Sound of rain",
-  "soundStream":"The sound of the stream flowing"
+  "soundStream":"The sound of the stream flowing",
+  "endTimer":"The countdown timer has ended!"
 
 }
