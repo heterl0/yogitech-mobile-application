@@ -64,6 +64,7 @@ class _ActivitiesState extends State<Activities> {
   }
 
   Widget _buildEventMainContent() {
+    final trans = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
@@ -81,7 +82,8 @@ class _ActivitiesState extends State<Activities> {
           return CustomCard(
             imageUrl: _events[index].image_url,
             title: _events[index].title,
-            caption: "Participants: ${_events[index].event_candidate.length}",
+            caption:
+                "${trans.participants}: ${_events[index].event_candidate.length}",
             subtitle: checkDateExpired(
                 _events[index].start_date, _events[index].expire_date),
             onTap: () {
