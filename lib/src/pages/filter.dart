@@ -5,7 +5,6 @@ import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/widgets/dropdown_field.dart'; // Import DropdownField
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class FilterPage extends StatefulWidget {
   @override
   _FilterPageState createState() => _FilterPageState();
@@ -44,7 +43,7 @@ class _FilterPageState extends State<FilterPage> {
               CustomDropdownFormField(
                 // Sử dụng CustomDropdownFormField
                 controller: category,
-                placeholder:trans.choosecCategory,
+                placeholder: trans.choosecCategory,
                 items: ['Hip', 'Chest', 'Other'],
                 onTap: () {
                   // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết

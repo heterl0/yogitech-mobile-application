@@ -211,4 +211,12 @@ class Blog {
         updated_at.hashCode ^
         active_status.hashCode;
   }
+
+  bool containsQuery(String query) {
+    final titleLower = title.toLowerCase();
+    final descriptionLower = description.toLowerCase();
+    final searchLower = query.toLowerCase();
+    return titleLower.contains(searchLower) ||
+        descriptionLower.contains(searchLower);
+  }
 }

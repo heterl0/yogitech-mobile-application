@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class OTP_Page extends StatelessWidget {
   final TextEditingController OTPcontroller = TextEditingController();
 
@@ -24,7 +23,7 @@ class OTP_Page extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'OTP confirm',
+              trans.otpConfirm,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 40.0,
@@ -55,7 +54,7 @@ class OTP_Page extends StatelessWidget {
                   // resend new OTP
                 },
                 child: Text(
-                  'Resend a new OTP',
+                  trans.resendOTP,
                   style: TextStyle(
                     color: Colors.blue,
                     fontSize: 15.0,
@@ -90,7 +89,7 @@ class OTP_Page extends StatelessWidget {
                   borderRadius: BorderRadius.circular(44.0),
                   child: Center(
                     child: Text(
-                      'Confirm',
+                      trans.confirm,
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -109,10 +108,12 @@ class OTP_Page extends StatelessWidget {
   }
 
   void _handleSendOTP(BuildContext context, String email) {
+    final trans = AppLocalizations.of(context)!;
+
     // Xử lý sự kiện gửi OTP
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('OTP sent to $email'),
+        content: Text(trans.sendOTP+' $email'),
       ),
     );
   }

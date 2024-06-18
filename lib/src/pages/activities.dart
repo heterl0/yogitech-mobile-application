@@ -86,8 +86,7 @@ class _ActivitiesState extends State<Activities> {
           return CustomCard(
             imageUrl: _events[index].image_url,
             title: _events[index].title,
-            caption:
-                "Number of participants: ${_events[index].event_candidate.length}",
+            caption: "Participants: ${_events[index].event_candidate.length}",
             subtitle: checkDateExpired(
                 _events[index].start_date, _events[index].expire_date),
             onTap: () {

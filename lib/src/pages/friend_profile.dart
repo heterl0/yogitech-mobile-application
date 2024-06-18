@@ -13,6 +13,9 @@ class FriendProfile extends StatefulWidget {
 }
 
 class _nameState extends State<FriendProfile> {
+  bool follow = true; // Khai báo biến ở đây
+
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -48,7 +51,7 @@ class _nameState extends State<FriendProfile> {
                       },
                     ),
                     Spacer(),
-                    Text('Friend Profile', style: h2.copyWith(color: active)),
+                    Text(trans.friendProfile, style: h2.copyWith(color: active)),
                     Spacer(
                       flex: 2,
                     ),
@@ -100,20 +103,46 @@ class _nameState extends State<FriendProfile> {
                         style: h1.copyWith(color: primary),
                       ),
                       SizedBox(height: 36), // Khoảng cách giữa các phần tử
-                      Row(
-                        children: [
-                          Expanded(
-                            child: BoxButton(
-                              title: 'Following', // Set the button text
-                              style: ButtonStyleType
-                                  .Secondary, // Set the button style (optional)
-                              onPressed: () {
-                                // Handle change avatar action here
-                              },
-                            ),
-                          ),
-                        ],
+                      // Row(
+                      //   children: [
+                      //     Expanded(
+                      //       child: BoxButton(
+                      //         // title: trans.unfollow, // Set the button text
+                      //         title: trans.follow, // Set the button text
+
+                      //         style: ButtonStyleType
+                      //             .Secondary, // Set the button style (optional)
+                      //         onPressed: () {
+                      //           // Handle change avatar action here
+                      //         },
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+
+                  Row(
+                    children: [
+                      Expanded(
+                         child: BoxButton(
+                              title: follow ? trans.unfollow : trans.follow,
+                              backgroundColor: Colors.transparent,
+                              foregroundColor: follow ? Colors.red : Colors.blue,
+                              padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                              textStyle: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(color: follow ? Colors.red : Colors.blue, width: 2.0),
+                                borderRadius: BorderRadius.circular(44.0),
+                              ),
+                          onPressed: () {
+                            // Handle button press action here
+                            setState(() {
+                                  follow = !follow; // Thay đổi trạng thái
+                                });
+                          },
+                        ),
                       ),
+                    ],
+                  ),
                     ],
                   ),
                 ),
@@ -142,3 +171,49 @@ class _nameState extends State<FriendProfile> {
     );
   }
 }
+
+class BoxButton extends StatelessWidget {
+  final String title;
+  final Color backgroundColor;
+  final Color foregroundColor;
+  final EdgeInsets padding;
+  final TextStyle textStyle;
+  final ShapeBorder shape;
+  final VoidCallback onPressed;
+  final Color? borderColor; // Add this line
+
+  BoxButton({
+    required this.title,
+    required this.backgroundColor,
+    required this.foregroundColor,
+    required this.padding,
+    required this.textStyle,
+    required this.shape,
+    required this.onPressed,
+    this.borderColor, // Add this line
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Modify shape to include borderColor if provided
+    final buttonShape = borderColor != null
+        ? RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            side: BorderSide(color: borderColor!),
+          )
+        : shape;
+
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(backgroundColor),
+        foregroundColor: MaterialStateProperty.all(foregroundColor),
+        padding: MaterialStateProperty.all(padding),
+        textStyle: MaterialStateProperty.all(textStyle),
+        shape: MaterialStateProperty.all(buttonShape as OutlinedBorder?),
+      ),
+      onPressed: onPressed,
+      child: Text(title),
+    );
+  }
+}
+

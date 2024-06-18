@@ -80,32 +80,32 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
       ),
     );
   }
-
   static Route<String> _alertDialogDemoRoute(
     BuildContext context,
     Object? arguments,
   ) {
+      final trans = AppLocalizations.of(context)!;
     return DialogRoute<String>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text(
-            'Completed',
+          title:  Text(
+            trans.finish,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
           ),
-          content: const Text(
-            'The countdown timer has ended!',
+          content: Text(
+            trans.endTimer,
             style: TextStyle(
               fontSize: 16,
             ),
           ),
           actions: [
             TextButton(
-              child: const Text(
-                'OK',
+              child:  Text(
+                trans.confirm,
                 style: TextStyle(
                   color: Colors.blue,
                   fontWeight: FontWeight.bold,
@@ -150,6 +150,8 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -217,8 +219,8 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const Text(
-                              "minutes",
+                             Text(
+                              trans.minutes,
                               style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.white,
@@ -266,7 +268,7 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Text(
-                      _isTimerOn ? 'Stop' : 'Start',
+                      _isTimerOn ? trans.endTimer : trans.start,
                       style: TextStyle(
                         fontSize: 24,
                         color: _isTimerOn ? Colors.white : Colors.black,
@@ -315,12 +317,14 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
 
   Widget _buildHeader() {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     return Positioned(
       left: 0,
       right: 0,
       top: 100,
       child: Text(
-        'Meditate',
+        trans.meditate,
         textAlign: TextAlign.center,
         style: h2.copyWith(color: theme.colorScheme.onBackground),
       ),

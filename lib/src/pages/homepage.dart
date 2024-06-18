@@ -249,7 +249,7 @@ class _HomePageState extends State<HomePage> {
                         'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                     onTap: () {
                       // Navigate to the detail page when the card is tapped
-                      Navigator.push(
+                      pushWithoutNavBar(
                         context,
                         MaterialPageRoute(
                           builder: (context) => ExerciseDetail(),
@@ -280,7 +280,7 @@ class StreakValue extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           // Chuyển sang trang mới khi nhấn vào
-          Navigator.push(
+          pushWithoutNavBar(
             context,
             MaterialPageRoute(
               builder: (context) => Streak(),
