@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/pages/result.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ExerciseDetail extends StatelessWidget {
   final TextEditingController commentController = TextEditingController();
-  
+
   @override
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
@@ -111,7 +112,6 @@ class ExerciseDetail extends StatelessWidget {
   }
 
   Widget _buildRowWithText(AppLocalizations trans) {
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,9 +132,9 @@ class ExerciseDetail extends StatelessWidget {
   }
 
   Widget _buildDescription() {
-    return Text(
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncusLorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus',
-      style: bd_text.copyWith(color: text),
+    return HtmlWidget(
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus',
+      textStyle: TextStyle(fontFamily: 'ReadexPro'),
     );
   }
 
@@ -151,7 +151,7 @@ class ExerciseDetail extends StatelessWidget {
       ),
       itemCount: 6,
       itemBuilder: (context, index) {
-        final title = trans.pose+' ${index + 1}';
+        final title = trans.pose + ' ${index + 1}';
         final subtitle = '${5 - index} ' + trans.minutes;
 
         return CustomCard(

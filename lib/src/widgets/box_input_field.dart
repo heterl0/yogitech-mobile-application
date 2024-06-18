@@ -13,6 +13,7 @@ class BoxInputField extends StatefulWidget {
   final String? errorText;
   final RegExp? regExp;
   final VoidCallback? onTap;
+  final ValueChanged<String>? onChanged; // Updated
 
   BoxInputField({
     Key? key,
@@ -26,6 +27,7 @@ class BoxInputField extends StatefulWidget {
     this.inputFormatters,
     this.regExp,
     this.onTap,
+    this.onChanged, // Updated
     this.errorText = 'Invalid input',
   }) : super(key: key);
 
@@ -95,6 +97,7 @@ class _BoxInputFieldState extends State<BoxInputField> {
       obscureText: widget.password && !_showPassword,
       keyboardType: widget.keyboardType,
       inputFormatters: widget.inputFormatters,
+      onChanged: widget.onChanged, // Updated
       decoration: InputDecoration(
         hintText: widget.placeholder,
         hintStyle: TextStyle(

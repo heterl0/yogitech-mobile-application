@@ -177,11 +177,6 @@ class _MyAppState extends State<MyApp> {
                 event: null,
               ),
           AppRoutes.blog: (context) => Blog(),
-          AppRoutes.blogDetail: (context) => BlogDetail(
-                title: 'Event Title',
-                caption: 'Event Caption',
-                subtitle: 'Event Subtitle',
-              ),
           AppRoutes.reminder: (context) => ReminderPage(),
           AppRoutes.notifications: (context) => NotificationsPage(),
           AppRoutes.friendProfile: (context) => FriendProfile(),
