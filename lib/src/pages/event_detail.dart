@@ -6,7 +6,7 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/utils/formatting.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class EventDetail extends StatelessWidget {
   final Event? event;
@@ -33,7 +33,7 @@ class EventDetail extends StatelessWidget {
       //     ),
       //   ],
       // ),
-    backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.background,
       // body: _buildBody(context),
       body: CustomScrollView(
         slivers: [
@@ -119,16 +119,19 @@ class EventDetail extends StatelessWidget {
   }
 
   Widget _buildDescription() {
-    return Text(
+    // return Text(
+    //   event!.description,
+    //   style: bd_text.copyWith(color: text),
+    // );
+    return HtmlWidget(
       event!.description,
-      style: bd_text.copyWith(color: text),
+      textStyle: TextStyle(fontFamily: 'ReadexPro'),
     );
   }
 
   Widget _buildTitle2(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
-
 
     return Container(
       alignment: Alignment.centerLeft, // Aligns the ch // Add padding if needed

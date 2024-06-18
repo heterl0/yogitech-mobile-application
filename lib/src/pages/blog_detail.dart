@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import "package:yogi_application/src/shared/styles.dart";
 import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class BlogDetail extends StatefulWidget {
   final String title;
@@ -118,10 +119,14 @@ class _BlogDetailState extends State<BlogDetail> {
   }
 
   Widget _buildSubtitle() {
-    return Text(
+    // return Text(
+    //   widget.subtitle,
+    //   style: min_cap.copyWith(color: text),
+    //   textAlign: TextAlign.left,
+    // );
+    return HtmlWidget(
       widget.subtitle,
-      style: min_cap.copyWith(color: text),
-      textAlign: TextAlign.left,
+      textStyle: TextStyle(fontFamily: 'ReadexPro'),
     );
   }
 
@@ -142,10 +147,14 @@ class _BlogDetailState extends State<BlogDetail> {
   }
 
   Widget _buildDescription() {
-    return Text(
+    // return Text(
+    //   widget.caption,
+    //   style: min_cap.copyWith(color: text),
+    //   textAlign: TextAlign.left,
+    // );
+    return HtmlWidget(
       widget.caption,
-      style: min_cap.copyWith(color: text),
-      textAlign: TextAlign.left,
+      textStyle: TextStyle(fontFamily: 'ReadexPro'),
     );
   }
 }
