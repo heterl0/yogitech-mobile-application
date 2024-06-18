@@ -51,6 +51,7 @@ dependencies:
 #   json_annotation: ^4.9.0
   flutter_dotenv: ^5.1.0
   flutter_native_splash: ^2.4.0
+  flutter_widget_from_html: ^2.2.1
 # flutter_native_splash:
 #   android: true
 #   ios: true
@@ -64,6 +65,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   json_serializable: ^6.8.0
+  
   build_runner: ^2.4.9
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
