@@ -6,7 +6,6 @@ import 'package:yogi_application/src/widgets/switch.dart'; // Assuming this is C
 import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class ReminderPage extends StatefulWidget {
   final bool reminderOn;
   // final ValueChanged<bool> areRemindersEnabled;
@@ -27,13 +26,14 @@ class _ReminderPageState extends State<ReminderPage> {
   Set<int> _selectedDays = {};
   List<Map<String, dynamic>> _selectedTimes = [];
 
-  String _getDayDescription(Set<int> days,AppLocalizations trans) {
+  String _getDayDescription(Set<int> days, AppLocalizations trans) {
     String local = trans.locale;
-    if (days.isEmpty) return local=="en"? 'No days selected.':'Không có ngày được chọn.';
+    if (days.isEmpty)
+      return local == "en" ? 'No days selected.' : 'Không có ngày được chọn.';
     if (days.length == 7) return trans.everyday;
 
     if (days.containsAll([2, 3, 4, 5, 6])) {
-      if (days.length == 5) return  trans.dayInWeek;
+      if (days.length == 5) return trans.dayInWeek;
     }
 
     if (days.containsAll([6, 7])) {
@@ -44,19 +44,19 @@ class _ReminderPageState extends State<ReminderPage> {
     List<String> dayNames = sortedDays.map((day) {
       switch (day) {
         case 1:
-          return local=="en"? 'Mon':'Thứ 2';
+          return local == "en" ? 'Mon' : 'Thứ 2';
         case 2:
-          return local=="en"? 'Tue':'Thứ 3';
+          return local == "en" ? 'Tue' : 'Thứ 3';
         case 3:
-          return local=="en"? 'Wed':'Thứ 4';
+          return local == "en" ? 'Wed' : 'Thứ 4';
         case 4:
-          return local=="en"? 'Thu':'Thứ 5';
+          return local == "en" ? 'Thu' : 'Thứ 5';
         case 5:
-          return local=="en"? 'Fri':'Thứ 6';
+          return local == "en" ? 'Fri' : 'Thứ 6';
         case 6:
-          return local=="en"? 'Sat':'Thứ 7';
+          return local == "en" ? 'Sat' : 'Thứ 7';
         case 7:
-          return local=="en"? 'Sun':'Chủ nhật';
+          return local == "en" ? 'Sun' : 'Chủ nhật';
         default:
           return '';
       }
@@ -87,27 +87,26 @@ class _ReminderPageState extends State<ReminderPage> {
       },
     );
 
-  if (result!= null) {
+    if (result != null) {
       if (result.containsKey('delete')) {
-        if (index!= null) {
+        if (index != null) {
           setState(() {
             _selectedTimes.removeAt(index);
           });
         }
       } else if (result.containsKey('time') && result.containsKey('days')) {
         if (isNew) {
-           setState(() {
-            _selectedTimes.add({'time': result['time'], 'days': result['days']});
+          setState(() {
+            _selectedTimes
+                .add({'time': result['time'], 'days': result['days']});
           });
-          
         } else {
-           setState(() {
-             _selectedTimes[index!] = {
-            'time': result['time'],
-            'days': result['days']
+          setState(() {
+            _selectedTimes[index!] = {
+              'time': result['time'],
+              'days': result['days']
             };
           });
-         
         }
       }
     }
@@ -145,7 +144,8 @@ class _ReminderPageState extends State<ReminderPage> {
                           },
                           child: CustomSwitch(
                             title: '${entry.value['time'].format(context)}',
-                            subtitle: _getDayDescription(entry.value['days'],trans),
+                            subtitle:
+                                _getDayDescription(entry.value['days'], trans),
                             value: _isReminderEnabled,
                             onChanged: (value) {
                               setState(() {
@@ -309,25 +309,25 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
                     final isSelected = _selectedDays.contains(dayIndex);
                     return ChoiceChip(
                       label: Text(
-                        local=="en"?
-                        [
-                          'Mon',
-                          'Tue',
-                          'Wed',
-                          'Thu',
-                          'Fri',
-                          'Sat',
-                          'Sun'
-                        ][index]:
-                         [
-                          'Thứ 2',
-                          'Thứ 3',
-                          'Thứ 4',
-                          'Thứ 5',
-                          'Thứ 6',
-                          'Thứ 7',
-                          'Chủ nhật'
-                        ][index],
+                        local == "en"
+                            ? [
+                                'Mon',
+                                'Tue',
+                                'Wed',
+                                'Thu',
+                                'Fri',
+                                'Sat',
+                                'Sun'
+                              ][index]
+                            : [
+                                'Thứ 2',
+                                'Thứ 3',
+                                'Thứ 4',
+                                'Thứ 5',
+                                'Thứ 6',
+                                'Thứ 7',
+                                'Chủ nhật'
+                              ][index],
                       ),
                       selected: isSelected,
                       onSelected: (selected) {
