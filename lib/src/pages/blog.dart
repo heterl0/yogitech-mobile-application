@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/api/blog/blog_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 import 'package:yogi_application/src/pages/blog_detail.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:yogi_application/api/blog/blog_service.dart';
 
 class Blog extends StatefulWidget {
   const Blog({super.key});
@@ -20,7 +20,7 @@ class Blog extends StatefulWidget {
 }
 
 class BlogState extends State<Blog> {
-  var jsonList;
+  List<dynamic> jsonList = [];
   bool _isNotSearching = true;
   TextEditingController _searchController = TextEditingController();
 
@@ -34,8 +34,6 @@ class BlogState extends State<Blog> {
     // Gọi API để lấy danh sách bài tập
     // Đảm bảo rằng phương thức getListExercises đã được định nghĩa trong lớp ApiService
     final List<dynamic> blog = await getBlogs();
-    print(blog);
-
     // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
     setState(() {
       jsonList = blog;
@@ -125,20 +123,20 @@ class BlogState extends State<Blog> {
           mainAxisSpacing: 8.0,
           childAspectRatio: 4 / 5,
         ),
-        itemCount: jsonList.length,
+        itemCount: jsonList!.length,
         itemBuilder: (context, index) {
           return CustomCard(
-            title: jsonList.elementAt(index).title,
-            caption: jsonList.elementAt(index).description,
-            imageUrl: jsonList.elementAt(index).image_url,
+            title: jsonList!.elementAt(index).title,
+            caption: jsonList!.elementAt(index).description,
+            imageUrl: jsonList!.elementAt(index).image_url,
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => BlogDetail(
-                    title: jsonList.elementAt(index).title,
-                    caption: jsonList.elementAt(index).description,
-                    subtitle: jsonList.elementAt(index).content,
+                    title: jsonList!.elementAt(index).title,
+                    caption: jsonList!.elementAt(index).description,
+                    subtitle: jsonList!.elementAt(index).content,
                   ),
                 ),
               );
