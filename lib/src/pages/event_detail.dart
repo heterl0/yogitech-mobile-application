@@ -7,16 +7,17 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/utils/formatting.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:intl/intl.dart';
 
 class EventDetail extends StatelessWidget {
   final Event? event;
 
   EventDetail({super.key, required this.event});
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+     print(event);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -89,6 +90,8 @@ class EventDetail extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -96,6 +99,8 @@ class EventDetail extends StatelessWidget {
         children: [
           const SizedBox(height: 16),
           _buildTitle(context),
+          const SizedBox(height: 16),
+          _buildRowWithText(context, trans),
           const SizedBox(height: 16),
           _buildDescription(),
           const SizedBox(height: 16),
@@ -117,6 +122,35 @@ class EventDetail extends StatelessWidget {
       ),
     );
   }
+
+   Widget _buildRowWithText(BuildContext context,AppLocalizations trans) {
+    final theme = Theme.of(context);
+    final local= Localizations.localeOf(context);
+    print(local);
+
+    String startDay = DateFormat.yMMMd(local.languageCode).add_Hms().format(DateTime.parse(event!.start_date));
+    return Container(
+      alignment: Alignment.centerLeft, // Aligns the ch // Add padding if needed
+      child:Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        
+        Column(
+          children:[ 
+            Text(
+              trans.start +': '+startDay,
+              style: bd_text.copyWith(color: primary),),
+            Text(
+              trans.start +': '+startDay,
+              style: bd_text.copyWith(color: primary),),
+            ]
+        ),
+      ],)
+    );
+  }
+
 
   Widget _buildDescription() {
     // return Text(
