@@ -141,6 +141,8 @@
   "friendProfile":"Hồ sơ bạn bè",
   "error":"Có lỗi xảy ra trong quá trình xử lý. Vui lòng thử lại sau.",
   "loginMissing":"Vui lòng điền thông tin đăng nhập.",
-  "loginInvalid":"Tài khoản và mật khẩu không hợp lệ."
+  "loginInvalid":"Tài khoản và mật khẩu không hợp lệ.",
+  "soundRain":"Tiếng mưa rơi",
+  "soundStream":"Tiếng suối chảy"
 
 }

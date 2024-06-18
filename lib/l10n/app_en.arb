@@ -141,6 +141,8 @@
   "friendProfile":"Friend Profile" ,
   "error":"An error occurred while processing your request. Please try again later.",
   "loginMissing":"Please fill in all the login information.",
-  "loginInvalid":"Invalid email or password."
+  "loginInvalid":"Invalid email or password.",
+  "soundRain":"Sound of rain",
+  "soundStream":"The sound of the stream flowing"
 
 }
