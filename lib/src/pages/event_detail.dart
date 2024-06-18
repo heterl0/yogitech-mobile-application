@@ -126,27 +126,74 @@ class EventDetail extends StatelessWidget {
    Widget _buildRowWithText(BuildContext context,AppLocalizations trans) {
     final theme = Theme.of(context);
     final local= Localizations.localeOf(context);
-    print(local);
+    String startDay = DateFormat.yMMMd(local.languageCode).add_Hm().format(DateTime.parse(event!.start_date));
+    String endDay = DateFormat.yMMMd(local.languageCode).add_Hm().format(DateTime.parse(event!.expire_date));
 
-    String startDay = DateFormat.yMMMd(local.languageCode).add_Hms().format(DateTime.parse(event!.start_date));
     return Container(
       alignment: Alignment.centerLeft, // Aligns the ch // Add padding if needed
       child:Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        
         Column(
-          children:[ 
-            Text(
-              trans.start +': '+startDay,
-              style: bd_text.copyWith(color: primary),),
-            Text(
-              trans.start +': '+startDay,
-              style: bd_text.copyWith(color: primary),),
-            ]
-        ),
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children:
+            [Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[ 
+                Text(
+                  trans.start +":" ,
+                  style: bd_text.copyWith(color: Colors.white),),
+                Text(
+                  ' ${startDay}',
+                  style: bd_text.copyWith(color: primary,)),
+                ]),
+                Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[ 
+                Text(
+                  trans.end+":" ,
+                  style: bd_text.copyWith(color: Colors.white),),
+                Text(
+                  ' ${endDay}',
+                  style: bd_text.copyWith(color: primary,))
+                ]),
+              ]
+          ),
+        const SizedBox(width: 12),
+
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children:
+            [Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[ 
+                Text(
+                  trans.numOfExercise,
+                  style: bd_text.copyWith(color: Colors.white),),
+                Text(
+                  ' ${event!.exercises.length}',
+                  style: bd_text.copyWith(color: primary),),
+                ]),
+                Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[ 
+                Text(
+                  trans.numOfCandidate,
+                  style: bd_text.copyWith(color: Colors.white),),
+                Text(
+                  ' ${event!.event_candidate.length}',
+                  style: bd_text.copyWith(color: primary),),
+                ]),
+              ]
+          ),
+          
       ],)
     );
   }
