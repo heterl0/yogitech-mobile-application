@@ -8,12 +8,14 @@ class BlogDetail extends StatefulWidget {
   final String title;
   final String caption;
   final String subtitle;
+  final String imageUrl;
 
   const BlogDetail({
     Key? key,
     required this.title,
     required this.caption,
     required this.subtitle,
+    required this.imageUrl,
   }) : super(key: key);
 
   @override
@@ -89,9 +91,9 @@ class _BlogDetailState extends State<BlogDetail> {
       child: Container(
         width: double.infinity,
         height: 360,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/yoga.jpeg'),
+            image: NetworkImage(widget.imageUrl),
             fit: BoxFit.cover,
           ),
         ),
