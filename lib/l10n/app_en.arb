@@ -12,6 +12,7 @@
   "signIn": "Sign in",
   "forgotPasswordTitle": "Forgot Password",
   "sendOTP": "Send OTP",
+  "sendedOTP": "Sended OTP for",
   "otpConfirm": "OTP confirm",
   "otp": "OTP",
   "resendOTP": "Resend a new OTP",
