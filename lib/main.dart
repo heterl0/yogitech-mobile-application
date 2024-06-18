@@ -6,7 +6,6 @@ import 'package:yogi_application/api/dioInstance.dart';
 import 'package:yogi_application/src/pages/_mainscreen.dart';
 import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/pages/blog.dart';
-import 'package:yogi_application/src/pages/blog_detail.dart';
 import 'package:yogi_application/src/pages/event_detail.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
