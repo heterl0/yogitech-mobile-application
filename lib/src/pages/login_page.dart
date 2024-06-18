@@ -146,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             child: Text(
                               trans.signUp,
-                              style: h3.copyWith(color: primary),
+                              style: h3.copyWith(color: Colors.lightBlueAccent),
                             ),
                           ),
                         ],
