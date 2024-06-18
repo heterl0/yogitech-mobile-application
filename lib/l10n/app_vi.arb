@@ -46,7 +46,7 @@
   "category": "Danh mục",
   "choosecCategory": "Chọn danh mục",
   "apply": "Áp dụng",
-  "dayStreak": "ngày chuỗi!",
+  "dayStreak": "Chuỗi ngày!",
   "practicedInMonth": "đã tập luyện trong tháng",
   "beginOfTheStreak": "Bắt đầu của chuỗi",
   "exerciseDetail": "Chi tiết bài tập",
@@ -154,5 +154,6 @@
   "dayInWeek":"Ngày trong tuần",
   "dayWeeken":"Cuối tuần",
   "reTime":"Thời gian nhắc nhở",
-  "duration":"Thời lượng"
+  "duration":"Thời lượng",
+  "days":"Ngày"
 }

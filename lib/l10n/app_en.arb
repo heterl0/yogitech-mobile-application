@@ -154,5 +154,6 @@
   "dayInWeek":"Weekdays",
   "dayWeeken":"Weekend",
   "reTime":"Reminder time",
-  "duration":"Duration"
+  "duration":"Duration",
+  "days":"Days"
 }

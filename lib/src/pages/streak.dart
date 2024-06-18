@@ -45,7 +45,7 @@ class _StreakState extends State<Streak> {
       backgroundColor: theme.colorScheme.background,
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
-        title: "Streak",
+        title: trans.streak,
         showBackButton: false,
         postActions: [
           IconButton(
@@ -61,6 +61,8 @@ class _StreakState extends State<Streak> {
   }
 
   Widget _buildMainContent(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
       child: Column(
@@ -70,7 +72,7 @@ class _StreakState extends State<Streak> {
             width: double.infinity,
             child: Column(
               children: [
-                _buildStreakInfo(),
+                _buildStreakInfo(trans),
                 SizedBox(height: 16),
                 _buildMonthInfo(context),
                 SizedBox(height: 16),
@@ -85,14 +87,14 @@ class _StreakState extends State<Streak> {
     );
   }
 
-  Widget _buildStreakInfo() {
+  Widget _buildStreakInfo(AppLocalizations trans) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
           flex: 2,
-          child: _buildStreakText(),
+          child: _buildStreakText(trans),
         ),
         Expanded(
           flex: 1,
@@ -102,7 +104,7 @@ class _StreakState extends State<Streak> {
     );
   }
 
-  Widget _buildStreakText() {
+  Widget _buildStreakText(AppLocalizations trans) {
     return Column(
       children: [
         ShaderMask(
@@ -121,7 +123,7 @@ class _StreakState extends State<Streak> {
           ),
         ),
         Text(
-          'day streak!',
+          trans.dayStreak,
           textAlign: TextAlign.center,
           style: bd_text.copyWith(color: text),
         ),
@@ -189,6 +191,8 @@ class _StreakState extends State<Streak> {
 
   Widget _buildAdditionalInfo(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     int daysInMonth = _getDaysInMonth(_currentDate.year, _currentDate.month);
 
     return Row(
@@ -208,11 +212,11 @@ class _StreakState extends State<Streak> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '$daysInMonth days',
+                    '$daysInMonth ' +((daysInMonth==1)&& (trans.locale=="en")? "day":trans.days),
                     style: h3.copyWith(color: active, height: 1.2),
                   ),
                   Text(
-                    'in this month',
+                    trans.locale=="en"?'in this month.':'trong tháng này.',
                     style: min_cap.copyWith(
                       color: active,
                     ),
@@ -244,7 +248,7 @@ class _StreakState extends State<Streak> {
                         color: theme.colorScheme.onPrimary, height: 1.2),
                   ),
                   Text(
-                    'begin of the streak',
+                    trans.beginOfTheStreak,
                     style: min_cap.copyWith(
                       color: theme.colorScheme.onBackground,
                     ),
