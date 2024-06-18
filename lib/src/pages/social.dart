@@ -19,7 +19,7 @@ class _SocialPageState extends State<SocialPage> {
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: CustomAppBar(
-        title: "Social",
+        title: trans.social,
         postActions: [
           IconButton(
               icon: Icon(
@@ -65,6 +65,8 @@ class NewsFeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -75,7 +77,7 @@ class NewsFeed extends StatelessWidget {
           itemCount: itemCount,
           itemBuilder: (context, index) {
             return NewsListItem(
-              name: 'Friend Name $index',
+              name: trans.firstName+' $index',
               avatarUrl: 'assets/images/gradient.jpg',
               exp: '10000',
               onTap: onTap != null
@@ -106,6 +108,8 @@ class NewsListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(8),
@@ -143,7 +147,7 @@ class NewsListItem extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'Archivement',
+                        trans.achievement,
                         textAlign: TextAlign.start,
                         style: min_cap.copyWith(color: primary),
                       ),
