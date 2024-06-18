@@ -5,7 +5,6 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/pages/friendlist.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class SocialPage extends StatefulWidget {
   @override
   State<SocialPage> createState() => _SocialPageState();
@@ -20,6 +19,7 @@ class _SocialPageState extends State<SocialPage> {
       backgroundColor: theme.colorScheme.background,
       appBar: CustomAppBar(
         title: trans.social,
+        style: widthStyle.Large,
         postActions: [
           IconButton(
               icon: Icon(
@@ -77,7 +77,7 @@ class NewsFeed extends StatelessWidget {
           itemCount: itemCount,
           itemBuilder: (context, index) {
             return NewsListItem(
-              name: trans.firstName+' $index',
+              name: trans.firstName + ' $index',
               avatarUrl: 'assets/images/gradient.jpg',
               exp: '10000',
               onTap: onTap != null

@@ -21,9 +21,7 @@ class ReminderPage extends StatefulWidget {
 }
 
 class _ReminderPageState extends State<ReminderPage> {
-  TimeOfDay _selectedTime = TimeOfDay(hour: 5, minute: 20);
   bool _isReminderEnabled = false;
-  Set<int> _selectedDays = {};
   List<Map<String, dynamic>> _selectedTimes = [];
 
   String _getDayDescription(Set<int> days, AppLocalizations trans) {

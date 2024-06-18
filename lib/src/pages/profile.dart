@@ -209,9 +209,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             const SizedBox(height: 8),
                             Text(
                               trans.avatar,
-                              style: h3.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
+                              style: bd_text.copyWith(color: text),
                             ),
                           ],
                         ),
@@ -222,7 +220,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             InfoCard(
-                              title: 'Calorie',
+                              title: trans.calorie,
                               subtitle: trans.totalCalories,
                               iconPath: 'assets/icons/info.png',
                               onTap: () {
