@@ -74,7 +74,7 @@ class _ActivitiesState extends State<Activities> {
           crossAxisCount: 2, // 2 columns
           // crossAxisSpacing: 8.0,
           // mainAxisSpacing: 8.0,
-          childAspectRatio: 10 / 12, // Aspect ratio of each card
+          childAspectRatio: 5 / 6, // Aspect ratio of each card
         ),
         itemCount: _events.length, // Number of cards
 
