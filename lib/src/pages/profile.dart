@@ -190,8 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   child: Text(
                                                     (_account?.username ?? '')
                                                             .isNotEmpty
-                                                        ? (_account!
-                                                            .username![0]
+                                                        ? (_account!.username[0]
                                                             .toUpperCase())
                                                         : '',
                                                     style: TextStyle(
