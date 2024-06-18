@@ -37,9 +37,8 @@ class _HomePageState extends State<HomePage> {
     // Gọi API để lấy danh sách bài tập
     // Đảm bảo rằng phương thức getListExercises đã được định nghĩa trong lớp ApiService
     final List<dynamic> exercises = await getExercises();
-    print(exercises);
+    // print(exercises);
 
-    // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
     setState(() {
       jsonList = exercises;
     });

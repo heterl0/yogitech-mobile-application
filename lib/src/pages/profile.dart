@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:yogi_application/api/account/account_service.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:yogi_application/src/models/account.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/calorie.dart';
 import 'package:yogi_application/src/pages/social.dart';
@@ -32,6 +34,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  Profile? _profile;
+  Account? _account;
   Future<void> _logout() async {
     try {
       // Xóa token từ SharedPreferences khi người dùng logout
@@ -44,6 +48,24 @@ class _ProfilePageState extends State<ProfilePage> {
       print('Logout error: $e');
       // Xử lý lỗi khi logout
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserProfile();
+  }
+
+  Future<void> _fetchUserProfile() async {
+    Profile? profile = await getUserProfile();
+    print(profile);
+    Account? account = await getUser();
+    print(account);
+    // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
+    setState(() {
+      _profile = profile;
+      _account = account;
+    });
   }
 
   @override
@@ -85,209 +107,220 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(24.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      pushWithoutNavBar(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ChangeProfilePage()), // Thay NewPage() bằng trang bạn muốn chuyển tới
-                      );
-                    },
-                    child: Column(
+      body: _profile == null && _account == null
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.all(24.0),
+                child: Column(
+                  children: [
+                    Row(
                       children: [
-                        Container(
-                          width: 144, // 2 * radius + 8 (border width) * 2
-                          height:
-                              144, // Đã sửa lại thành 144 cho khớp tỉ lệ so với Figma
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: const CircleAvatar(
-                            radius: 78,
-                            backgroundImage:
-                                AssetImage('assets/images/avatar.png'),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Duy',
-                          style: h2.copyWith(
-                              color: Theme.of(context).colorScheme.onPrimary),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        InfoCard(
-                          title: 'Calorie',
-                          subtitle: 'Your total of calories',
-                          iconPath: 'assets/icons/info.png',
+                        GestureDetector(
                           onTap: () {
-                            Navigator.push(
+                            pushWithoutNavBar(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Calorie(),
-                              ),
+                                  builder: (context) => ChangeProfilePage()),
                             );
                           },
-                        ),
-                        const SizedBox(height: 6),
-                        InfoCard(
-                          title: 'Social',
-                          subtitle: 'Your friends and more',
-                          iconPath: 'assets/icons/diversity_2.png',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SocialPage(),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: 144, // 2 * radius + 8 (border width) * 2
+                                height:
+                                    144, // Đã sửa lại thành 144 cho khớp tỉ lệ so với Figma
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const CircleAvatar(
+                                  radius: 78,
+                                  backgroundImage: const AssetImage(
+                                      'assets/images/avatar.png'),
+                                ),
                               ),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 6),
-                        InfoCard(
-                          title: 'Personalized Exercise',
-                          subtitle: 'Your customize exercise',
-                          iconPath: 'assets/icons/tune_setting.png',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    PersonalizedExercisePage(),
+                              const SizedBox(height: 8),
+                              Text(
+                                (_profile?.last_name ?? '') +
+                                    ' ' +
+                                    (_profile?.first_name ?? ''),
+                                style: h2.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary),
                               ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16.0),
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        StatCard(
-                          title: 'Following',
-                          value: '6', // Replace with API data
-                          valueColor: theme.colorScheme.onPrimary,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => FriendsPage(),
-                              ),
-                            );
-                          },
-                        ),
-                        StatCard(
-                          title: 'Follower',
-                          value: '7', // Replace with API data
-                          valueColor: theme.colorScheme.onPrimary,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => FriendsPage(),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        StatCard(
-                          title: 'EXP',
-                          value: '999', // Replace with API data
-                          valueColor: primary,
-                          isTitleFirst: true,
-                        ),
-                        StatCard(
-                          title: 'BMI',
-                          value: '18.5', // Replace with API data
-                          valueColor: theme.colorScheme.onPrimary,
-                          isTitleFirst: true,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ChangeBMIPage(),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20.0),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.all(0.0),
-                      height: 160,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: const Color(0xFF8D8E99)),
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20.0), // Added space for better layout
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(44.0),
-                        border: Border.all(color: error, width: 2.0),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () {
-                            // Xử lý sự kiện khi nhấn vào nút "Đăng xuất"
-                            _logout();
-                          },
-                          borderRadius: BorderRadius.circular(44.0),
-                          child: Center(
-                            child: Text('Logout',
-                                style: h3.copyWith(color: error)),
+                            ],
                           ),
                         ),
-                      ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              InfoCard(
+                                title: 'Calorie',
+                                subtitle: 'Your total of calories',
+                                iconPath: 'assets/icons/info.png',
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Calorie(),
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 6),
+                              InfoCard(
+                                title: 'Social',
+                                subtitle: 'Your friends and more',
+                                iconPath: 'assets/icons/diversity_2.png',
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SocialPage(),
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 6),
+                              InfoCard(
+                                title: 'Personalized Exercise',
+                                subtitle: 'Your customize exercise',
+                                iconPath: 'assets/icons/tune_setting.png',
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          PersonalizedExercisePage(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 16.0),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              StatCard(
+                                title: 'Following',
+                                value: '0', // Replace with API data
+                                valueColor: theme.colorScheme.onPrimary,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => FriendsPage(),
+                                    ),
+                                  );
+                                },
+                              ),
+                              StatCard(
+                                title: 'Follower',
+                                value: '6', // Replace with API data
+                                valueColor: theme.colorScheme.onPrimary,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => FriendsPage(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              StatCard(
+                                title: 'EXP',
+                                value: _profile?.exp.toString() ??
+                                    '', // Replace with API data
+                                valueColor: primary,
+                                isTitleFirst: true,
+                              ),
+                              StatCard(
+                                title: 'BMI',
+                                value: (_profile?.bmi?.toString() ??
+                                    '0'), // Replace with API data
+                                valueColor: theme.colorScheme.onPrimary,
+                                isTitleFirst: true,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ChangeBMIPage(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20.0),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.all(0.0),
+                            height: 160,
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: const Color(0xFF8D8E99)),
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                        height: 20.0), // Added space for better layout
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 50.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(44.0),
+                              border: Border.all(color: error, width: 2.0),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  // Xử lý sự kiện khi nhấn vào nút "Đăng xuất"
+                                  _logout();
+                                },
+                                borderRadius: BorderRadius.circular(44.0),
+                                child: Center(
+                                  child: Text('Logout',
+                                      style: h3.copyWith(color: error)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
