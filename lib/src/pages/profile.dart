@@ -67,11 +67,6 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       _profile = profile;
       _account = account;
-      String _avatarText =
-          (_profile?.last_name ?? '') + (_profile?.first_name ?? '');
-      if (_profile!.avatar_url == null || _profile!.avatar_url!.isEmpty) {
-        _avatarText = _profile!.first_name!.substring(0, 1).toUpperCase();
-      }
     });
   }
 
@@ -289,7 +284,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             StatCard(
                               title: trans.follower,
                               value: _account?.following.length.toString() ??
-                                  '', // Replace with API data
+                                  '0', // Replace with API data
                               valueColor: theme.colorScheme.onPrimary,
                               onTap: () {
                                 Navigator.push(
