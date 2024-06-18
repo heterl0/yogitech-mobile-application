@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import "package:yogi_application/src/shared/styles.dart";
 import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class BlogDetail extends StatefulWidget {
   final String title;
   final String caption;
   final String subtitle;
+  final String imageUrl;
 
   const BlogDetail({
     Key? key,
     required this.title,
     required this.caption,
     required this.subtitle,
+    required this.imageUrl,
   }) : super(key: key);
 
   @override
@@ -88,9 +91,9 @@ class _BlogDetailState extends State<BlogDetail> {
       child: Container(
         width: double.infinity,
         height: 360,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/yoga.jpeg'),
+            image: NetworkImage(widget.imageUrl),
             fit: BoxFit.cover,
           ),
         ),
@@ -116,10 +119,14 @@ class _BlogDetailState extends State<BlogDetail> {
   }
 
   Widget _buildSubtitle() {
-    return Text(
+    // return Text(
+    //   widget.subtitle,
+    //   style: min_cap.copyWith(color: text),
+    //   textAlign: TextAlign.left,
+    // );
+    return HtmlWidget(
       widget.subtitle,
-      style: min_cap.copyWith(color: text),
-      textAlign: TextAlign.left,
+      textStyle: TextStyle(fontFamily: 'ReadexPro'),
     );
   }
 
@@ -140,10 +147,14 @@ class _BlogDetailState extends State<BlogDetail> {
   }
 
   Widget _buildDescription() {
-    return Text(
+    // return Text(
+    //   widget.caption,
+    //   style: min_cap.copyWith(color: text),
+    //   textAlign: TextAlign.left,
+    // );
+    return HtmlWidget(
       widget.caption,
-      style: min_cap.copyWith(color: text),
-      textAlign: TextAlign.left,
+      textStyle: TextStyle(fontFamily: 'ReadexPro'),
     );
   }
 }
