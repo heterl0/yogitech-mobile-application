@@ -148,6 +148,9 @@
   "loginInvalid":"Invalid email or password.",
   "soundRain":"Sound of rain",
   "soundStream":"The sound of the stream flowing",
-  "endTimer":"The countdown timer has ended!"
-
+  "endTimer":"The countdown timer has ended!",
+  "locale":"en",
+  "dayInWeek":"Weekdays",
+  "dayWeeken":"Weekend",
+  "reTime":"Reminder time"
 }

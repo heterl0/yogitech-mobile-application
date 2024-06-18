@@ -148,6 +148,9 @@
   "loginInvalid":"Tài khoản và mật khẩu không hợp lệ.",
   "soundRain":"Tiếng mưa rơi",
   "soundStream":"Tiếng suối chảy",
-  "endTimer":"Kết thúc đếm ngược!"
-
+  "endTimer":"Kết thúc đếm ngược!",
+  "locale":"vi",
+  "dayInWeek":"Ngày trong tuần",
+  "dayWeeken":"Cuối tuần",
+  "reTime":"Thời gian nhắc nhở"
 }
