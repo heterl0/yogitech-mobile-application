@@ -7,16 +7,10 @@ import 'package:yogi_application/src/pages/blog_detail.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Blog extends StatefulWidget {
-  const Blog({super.key});
+  const Blog({Key? key}) : super(key: key);
 
   @override
   BlogState createState() => BlogState();
-
-  static fromJson(item) {}
-
-  static fromMap(x) {}
-
-  toMap() {}
 }
 
 class BlogState extends State<Blog> {
@@ -30,14 +24,14 @@ class BlogState extends State<Blog> {
     _fetchBlogs(); // Gọi hàm fetchBlogs khi trạng thái của widget được khởi tạo
   }
 
-  Future<void> _fetchBlogs() async {
-    // Gọi API để lấy danh sách bài tập
-    // Đảm bảo rằng phương thức getListExercises đã được định nghĩa trong lớp ApiService
-    final List<dynamic> blog = await getBlogs();
-    print(blog);
-    // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
+  Future<void> _fetchBlogs([String query = '']) async {
+    final List<dynamic> blogs = await getBlogs();
     setState(() {
-      jsonList = blog;
+      if (query.isNotEmpty) {
+        jsonList = blogs.where((blog) => blog.containsQuery(query)).toList();
+      } else {
+        jsonList = blogs;
+      }
     });
   }
 
@@ -72,9 +66,13 @@ class BlogState extends State<Blog> {
               titleWidget: BoxInputField(
                 controller: _searchController,
                 placeholder: trans.search,
-                trailing: const Icon(Icons.search),
+                trailing:
+                    Icon(Icons.search, color: theme.colorScheme.onBackground),
                 keyboardType: TextInputType.text,
                 inputFormatters: [],
+                onChanged: (value) {
+                  _fetchBlogs(value);
+                },
                 onTap: () {},
               ),
               postActions: [
@@ -82,6 +80,8 @@ class BlogState extends State<Blog> {
                   icon:
                       Icon(Icons.close, color: theme.colorScheme.onBackground),
                   onPressed: () {
+                    _searchController.clear();
+                    _fetchBlogs(); // Fetch all blogs again
                     setState(() {
                       _isNotSearching = true;
                     });
@@ -124,21 +124,22 @@ class BlogState extends State<Blog> {
           mainAxisSpacing: 8.0,
           childAspectRatio: 4 / 5,
         ),
-        itemCount: jsonList!.length,
+        itemCount: jsonList.length,
         itemBuilder: (context, index) {
+          final blog = jsonList[index];
           return CustomCard(
-            title: jsonList!.elementAt(index).title,
-            caption: jsonList!.elementAt(index).description,
-            imageUrl: jsonList!.elementAt(index).image_url,
+            title: blog.title,
+            caption: blog.description,
+            imageUrl: blog.image_url,
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => BlogDetail(
-                    title: jsonList!.elementAt(index).title,
-                    caption: jsonList!.elementAt(index).description,
-                    subtitle: jsonList!.elementAt(index).content,
-                    imageUrl: jsonList!.elementAt(index).image_url,
+                    title: blog.title,
+                    caption: blog.description,
+                    subtitle: blog.content,
+                    imageUrl: blog.image_url,
                   ),
                 ),
               );
