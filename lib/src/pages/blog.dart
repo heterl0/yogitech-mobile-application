@@ -137,6 +137,7 @@ class BlogState extends State<Blog> {
                     title: jsonList!.elementAt(index).title,
                     caption: jsonList!.elementAt(index).description,
                     subtitle: jsonList!.elementAt(index).content,
+                    imageUrl: jsonList!.elementAt(index).image_url,
                   ),
                 ),
               );
