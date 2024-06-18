@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
-import 'package:yogi_application/api/exercise/exercise_service.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -27,6 +27,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     final String imageAsset = theme.brightness == Brightness.dark
         ? 'assets/images/login-sign.png'
         : 'assets/images/login-sign_light.png';
@@ -174,12 +176,10 @@ class _LoginPageState extends State<LoginPage> {
       GoogleSignInAuthentication googleSignInAuthentication =
           await googleUser!.authentication;
       try {
-        final user =
+        final accessToken =
             await loginGoogle(googleSignInAuthentication.idToken ?? "");
 
-        if (user != null &&
-            user.accessToken.isNotEmpty &&
-            user.refreshToken.isNotEmpty) {
+        if (accessToken != null) {
           Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -226,11 +226,9 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     try {
-      final user = await login(enteredEmail, enteredPassword);
+      final accessToken = await login(enteredEmail, enteredPassword);
 
-      if (user != null &&
-          user.accessToken.isNotEmpty &&
-          user.refreshToken.isNotEmpty) {
+      if (accessToken != null) {
         Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

@@ -4,13 +4,16 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ForgotPasswordPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
-
+  
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     // Kiểm tra giao diện hiện tại để chọn hình ảnh phù hợp
     final String imageAsset = theme.brightness == Brightness.dark
         ? 'assets/images/login-sign.png'
@@ -31,14 +34,14 @@ class ForgotPasswordPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Forgot Password',
+              trans.forgotPasswordTitle,
               style: h1.copyWith(color: theme.colorScheme.onPrimary),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 16.0),
             BoxInputField(
               controller: emailController,
-              placeholder: 'Email',
+              placeholder: trans.email,
             ),
             SizedBox(height: 20.0),
             // Container(
@@ -79,7 +82,7 @@ class ForgotPasswordPage extends StatelessWidget {
             // ),
 
             BoxButton(
-              title: 'Send OTP',
+              title: trans.sendOTP,
               style: ButtonStyleType.Primary,
               state: ButtonState
                   .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
@@ -97,7 +100,7 @@ class ForgotPasswordPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
-                  "Or sign in with",
+                  trans.orSignInWith,
                   style: bd_text.copyWith(color: text),
                 ),
               ),
@@ -107,7 +110,7 @@ class ForgotPasswordPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "You don't have an account? ",
+                  trans.dontHaveAccount,
                   style: bd_text.copyWith(color: text),
                 ),
                 TextButton(
@@ -117,7 +120,7 @@ class ForgotPasswordPage extends StatelessWidget {
                     Navigator.pushNamed(context, AppRoutes.signup);
                   },
                   child: Text(
-                    'Sign up',
+                    trans.signUp,
                     style: h3.copyWith(color: primary),
                   ),
                 ),
@@ -130,10 +133,11 @@ class ForgotPasswordPage extends StatelessWidget {
   }
 
   void _handleSendOTP(BuildContext context, String email) {
+    final trans = AppLocalizations.of(context)!;
     // Xử lý sự kiện gửi OTP
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('OTP sent to $email'),
+        content: Text(trans.sendOTP+' $email'),
       ),
     );
   }

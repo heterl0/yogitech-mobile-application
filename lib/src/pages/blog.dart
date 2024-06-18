@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/api/blog/blog_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
@@ -19,10 +20,9 @@ class Blog extends StatefulWidget {
 }
 
 class BlogState extends State<Blog> {
-  late Future<Blog> blogs;
+  List<dynamic> jsonList = [];
   bool _isNotSearching = true;
   TextEditingController _searchController = TextEditingController();
-  List<Blog> _blogs = [];
 
   @override
   void initState() {
@@ -31,15 +31,13 @@ class BlogState extends State<Blog> {
   }
 
   Future<void> _fetchBlogs() async {
-    try {
-      // List<Blog> blogs =
-      //     await apiService.fetchBlogs(); // Gọi hàm fetchBlogs từ service
-      setState(() {
-        // _blogs = blogs;
-      });
-    } catch (e) {
-      print('Error fetching blogs: $e');
-    }
+    // Gọi API để lấy danh sách bài tập
+    // Đảm bảo rằng phương thức getListExercises đã được định nghĩa trong lớp ApiService
+    final List<dynamic> blog = await getBlogs();
+    // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
+    setState(() {
+      jsonList = blog;
+    });
   }
 
   @override
@@ -123,26 +121,22 @@ class BlogState extends State<Blog> {
           crossAxisCount: 2,
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
-          childAspectRatio: 3 / 2,
+          childAspectRatio: 4 / 5,
         ),
-        itemCount: 6,
+        itemCount: jsonList!.length,
         itemBuilder: (context, index) {
-          final title = 'title';
-          final caption = 'Caption';
-          final subtitle = '${6 - index} ${trans.daysLeft}';
-
           return CustomCard(
-            title: title,
-            caption: caption,
-            subtitle: subtitle,
+            title: jsonList!.elementAt(index).title,
+            caption: jsonList!.elementAt(index).description,
+            imageUrl: jsonList!.elementAt(index).image_url,
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => BlogDetail(
-                    title: title,
-                    caption: caption,
-                    subtitle: subtitle,
+                    title: jsonList!.elementAt(index).title,
+                    caption: jsonList!.elementAt(index).description,
+                    subtitle: jsonList!.elementAt(index).content,
                   ),
                 ),
               );

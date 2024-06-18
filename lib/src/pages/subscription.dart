@@ -5,6 +5,8 @@ import 'package:yogi_application/src/pages/payment_history.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class Subscription extends StatefulWidget {
   @override
@@ -19,6 +21,7 @@ class _SubscriptionState extends State<Subscription> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: CustomAppBar(
         titleWidget: Row(
