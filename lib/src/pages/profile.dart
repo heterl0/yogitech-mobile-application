@@ -14,7 +14,6 @@ import 'package:yogi_application/src/pages/friendlist.dart';
 import 'package:yogi_application/src/pages/change_BMI.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class ProfilePage extends StatefulWidget {
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChanged;
@@ -40,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
       await clearToken();
 
       // Chuyển hướng đến trang đăng nhập và xóa tất cả các route cũ
-      Navigator.of(context).pushNamedAndRemoveUntil(
+      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
           AppRoutes.login, (Route<dynamic> route) => false);
     } catch (e) {
       print('Logout error: $e');
