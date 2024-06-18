@@ -51,19 +51,19 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Login',
+                    trans.login,
                     style: h1.copyWith(color: theme.colorScheme.onPrimary),
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: 16.0),
                   BoxInputField(
                     controller: emailController,
-                    placeholder: 'Email',
+                    placeholder: trans.email,
                   ),
                   SizedBox(height: 16.0),
                   BoxInputField(
                     controller: passwordController,
-                    placeholder: 'Password',
+                    placeholder: trans.password,
                     password: true,
                   ),
                   Align(
@@ -73,14 +73,14 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.pushNamed(context, AppRoutes.forgotpassword);
                       },
                       child: Text(
-                        'Forgot password?',
+                        trans.forgotPassword,
                         style: bd_text.copyWith(color: theme.primaryColor),
                       ),
                     ),
                   ),
                   SizedBox(height: 0.0),
                   BoxButton(
-                    title: 'Login',
+                    title: trans.login,
                     style: ButtonStyleType.Primary,
                     state: ButtonState.Enabled,
                     onPressed: () async {
@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(
-                            "Or sign in with",
+                            trans.orSignInWith,
                             style: bd_text.copyWith(color: text),
                           ),
                         ),
@@ -145,8 +145,8 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.pushNamed(context, AppRoutes.signup);
                             },
                             child: Text(
-                              'Sign up',
-                              style: h3.copyWith(color: primary),
+                              trans.signUp,
+                              style: h3.copyWith(color: Colors.lightBlueAccent),
                             ),
                           ),
                         ],

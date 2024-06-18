@@ -35,7 +35,7 @@ class ResultAfterPractice extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'Good job!',
+            trans.goodJob,
             textAlign: TextAlign.center,
             style: h1.copyWith(color: theme.colorScheme.onPrimary),
           ),
@@ -56,7 +56,7 @@ class ResultAfterPractice extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'Accuracy: 90%',
+            trans.accuracy+' 90%',
             textAlign: TextAlign.center,
             style: h2.copyWith(color: primary),
           ),
@@ -100,13 +100,13 @@ class ResultAfterPractice extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Calories burned: 9000',
+                  trans.caloriesBurned+' 9000',
                   style:
                       bd_text.copyWith(color: theme.colorScheme.onBackground),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Duration: 1m30s',
+                  trans.duration+': '+"20"+trans.minutes+"70"+trans.seconds,
                   style:
                       bd_text.copyWith(color: theme.colorScheme.onBackground),
                 ),
@@ -115,7 +115,7 @@ class ResultAfterPractice extends StatelessWidget {
           ),
           const SizedBox(height: 24), // Adjust spacing
           BoxButton(
-            title: 'Finish',
+            title: trans.finish,
             style: ButtonStyleType.Primary,
             onPressed: () {
               Navigator.pop(context);

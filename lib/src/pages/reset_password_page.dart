@@ -25,7 +25,7 @@ class ResetPasswordPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Reset Password',
+              trans.resetPassword,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 40.0,
@@ -39,7 +39,7 @@ class ResetPasswordPage extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white.withOpacity(0),
-                hintText: 'New password',
+                hintText: trans.newPassword,
                 hintStyle: TextStyle(color: Color(0xFF8D8E99)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(44.0),
@@ -54,7 +54,7 @@ class ResetPasswordPage extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white.withOpacity(0),
-                hintText: 'Confirm new password',
+                hintText: trans.confirmNewPassword,
                 hintStyle: TextStyle(color: Color(0xFF8D8E99)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(44.0),
@@ -90,7 +90,7 @@ class ResetPasswordPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(44.0),
                   child: Center(
                     child: Text(
-                      'Reset',
+                      trans.reset,
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -107,11 +107,11 @@ class ResetPasswordPage extends StatelessWidget {
     );
   }
 
-  void _handleSendOTP(BuildContext context, String email) {
+  void _handleSendOTP(BuildContext context, String email,AppLocalizations trans) {
     // Xử lý sự kiện gửi OTP
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('OTP sent to $email'),
+        content: Text(trans.sendOTP+' $email'),
       ),
     );
   }

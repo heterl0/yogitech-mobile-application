@@ -54,7 +54,7 @@ class _SubscriptionState extends State<Subscription> {
       ),
       body: _buildBody(context),
       bottomNavigationBar: CustomBottomBar(
-        buttonTitle: "Subscription",
+        buttonTitle: trans.subscription,
         onPressed: () => _subscriptionBottomSheet(context),
       ),
     );
@@ -86,6 +86,8 @@ class _SubscriptionState extends State<Subscription> {
 
   Widget _buildCurrentPlanContainer() {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0),
       child: Column(
@@ -93,12 +95,12 @@ class _SubscriptionState extends State<Subscription> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'Your current plan',
+            trans.currentPlan,
             style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
           SizedBox(height: 8),
           Text(
-            'You have to wait to end this plan to subscribe to another plan',
+            trans.waitToEndPlan,
             style: bd_text.copyWith(color: text),
             textAlign: TextAlign.center,
           ),
@@ -109,6 +111,8 @@ class _SubscriptionState extends State<Subscription> {
 
   Widget _buildUnSubscriptionContainer() {
     Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: ShapeDecoration(
@@ -142,7 +146,7 @@ class _SubscriptionState extends State<Subscription> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Once a month',
+                          trans.onceAMonth,
                           style: min_cap.copyWith(color: active),
                         ),
                         Row(
@@ -199,7 +203,7 @@ class _SubscriptionState extends State<Subscription> {
                   _unsubscriptionBottomSheet(context);
                 },
                 child: Text(
-                  'Unsubscription',
+                  trans.unsubscription,
                   textAlign: TextAlign.center,
                   style: h3.copyWith(color: Colors.white),
                 ),
@@ -213,6 +217,7 @@ class _SubscriptionState extends State<Subscription> {
 
   Future<void> _unsubscriptionBottomSheet(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
 
     return showModalBottomSheet(
       context: context,
@@ -240,16 +245,16 @@ class _SubscriptionState extends State<Subscription> {
                   )),
               const SizedBox(height: 12),
               Text(
-                'Do you want to unsubscription?',
+                trans.wantToUnsubscribe,
                 textAlign: TextAlign.center,
                 style: h2.copyWith(color: theme.colorScheme.onPrimary),
               ),
               const SizedBox(height: 16),
               BoxButton(
-                  title: 'Unsubscription', style: ButtonStyleType.Primary),
+                  title: trans.unsubscription, style: ButtonStyleType.Primary),
               const SizedBox(height: 16),
               BoxButton(
-                  title: 'Cancel',
+                  title: trans.cancel,
                   style: ButtonStyleType.Tertiary,
                   onPressed: () {
                     Navigator.pop(context);
@@ -263,10 +268,12 @@ class _SubscriptionState extends State<Subscription> {
 
   Future<void> _subscriptionBottomSheet(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
 
     return showModalBottomSheet(
       context: context,
       backgroundColor: theme.colorScheme.onSecondary,
+      
       builder: (context) {
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 40, vertical: 36),
@@ -288,14 +295,14 @@ class _SubscriptionState extends State<Subscription> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Once a year',
+                trans.onceAYear,
                 textAlign: TextAlign.center,
                 style:
                     h2.copyWith(color: theme.colorScheme.onPrimary, height: 1),
               ),
               const SizedBox(height: 16),
               Text(
-                'Subscription by',
+                trans.subscriptionBy,
                 style: bd_text.copyWith(color: text),
                 textAlign: TextAlign.start,
               ),
@@ -305,7 +312,7 @@ class _SubscriptionState extends State<Subscription> {
               BoxButton(title: '9.999 gems', style: ButtonStyleType.Secondary),
               const SizedBox(height: 16),
               BoxButton(
-                title: 'Cancel',
+                title: trans.cancel,
                 style: ButtonStyleType.Tertiary,
                 onPressed: () {
                   Navigator.pop(context);
@@ -320,6 +327,8 @@ class _SubscriptionState extends State<Subscription> {
 
   Widget _buildChoosePlanContainer() {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     return Container(
       height: 48,
       child: Column(
@@ -330,7 +339,7 @@ class _SubscriptionState extends State<Subscription> {
           SizedBox(
             width: double.infinity,
             child: Text(
-              'Choose a plan',
+              trans.choosePlan,
               textAlign: TextAlign.center,
               style: h3.copyWith(color: theme.colorScheme.onPrimary),
             ),
@@ -339,7 +348,7 @@ class _SubscriptionState extends State<Subscription> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Unlock all premium exercises',
+              Text(trans.unlockPremium,
                   textAlign: TextAlign.center,
                   style: bd_text.copyWith(color: text)),
             ],
@@ -351,6 +360,8 @@ class _SubscriptionState extends State<Subscription> {
 
   Widget _buildPlanOptionContainer() {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: ShapeDecoration(
@@ -382,7 +393,7 @@ class _SubscriptionState extends State<Subscription> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Once a week',
+                    trans.onceAWeek,
                     textAlign: TextAlign.center,
                     style:
                         min_cap.copyWith(color: theme.colorScheme.onBackground),
@@ -424,7 +435,7 @@ class _SubscriptionState extends State<Subscription> {
                           ),
                         ),
                         Text(
-                          'or',
+                          trans.locale == "en"? "or":"hoặc",
                           style: bd_text.copyWith(color: text),
                         ),
                         const SizedBox(width: 8),
