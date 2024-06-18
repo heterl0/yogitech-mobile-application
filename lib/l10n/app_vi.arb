@@ -41,6 +41,7 @@
   "meditate": "Thiền",
   "profile": "Hồ sơ",
   "minutes": "phút",
+  "seconds":"giây",
   "filter": "Lọc",
   "category": "Danh mục",
   "choosecCategory": "Chọn danh mục",
@@ -152,5 +153,6 @@
   "locale":"vi",
   "dayInWeek":"Ngày trong tuần",
   "dayWeeken":"Cuối tuần",
-  "reTime":"Thời gian nhắc nhở"
+  "reTime":"Thời gian nhắc nhở",
+  "duration":"Thời lượng"
 }

@@ -41,6 +41,7 @@
   "meditate": "Meditate",
   "profile": "Profile",
   "minutes": "minutes",
+  "seconds":"seconds",
   "filter": "Filter",
   "category": "Category",
   "choosecCategory": "Choose category",
@@ -152,5 +153,6 @@
   "locale":"en",
   "dayInWeek":"Weekdays",
   "dayWeeken":"Weekend",
-  "reTime":"Reminder time"
+  "reTime":"Reminder time",
+  "duration":"Duration"
 }
