@@ -107,7 +107,7 @@ class ExerciseDetail extends StatelessWidget {
     final theme = Theme.of(context);
     return Text(
       'Ringo Island',
-      style: h2.copyWith(color: theme.colorScheme.onPrimary),
+      style: h2.copyWith(color: theme.colorScheme.onPrimary, height: 1.2),
     );
   }
 
@@ -134,7 +134,7 @@ class ExerciseDetail extends StatelessWidget {
   Widget _buildDescription() {
     return HtmlWidget(
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus',
-      textStyle: TextStyle(fontFamily: 'ReadexPro'),
+      textStyle: TextStyle(fontFamily: 'ReadexPro', fontSize: 16, height: 1.2),
     );
   }
 

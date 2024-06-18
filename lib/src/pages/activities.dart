@@ -72,9 +72,8 @@ class _ActivitiesState extends State<Activities> {
         physics: const BouncingScrollPhysics(), // Enable scrolling
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, // 2 columns
-          crossAxisSpacing: 8.0,
-          mainAxisSpacing: 8.0,
-          childAspectRatio: 3 / 4, // Aspect ratio of each card
+
+          childAspectRatio: 5 / 6, // Aspect ratio of each card
         ),
         itemCount: _events.length, // Number of cards
 

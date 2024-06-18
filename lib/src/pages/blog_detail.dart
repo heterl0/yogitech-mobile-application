@@ -126,7 +126,7 @@ class _BlogDetailState extends State<BlogDetail> {
     // );
     return HtmlWidget(
       widget.subtitle,
-      textStyle: TextStyle(fontFamily: 'ReadexPro'),
+      textStyle: TextStyle(fontFamily: 'ReadexPro', fontSize: 16, height: 1.2),
     );
   }
 
@@ -138,7 +138,8 @@ class _BlogDetailState extends State<BlogDetail> {
           children: [
             Text(
               widget.title,
-              style: h2.copyWith(color: theme.colorScheme.onPrimary),
+              style:
+                  h2.copyWith(color: theme.colorScheme.onPrimary, height: 1.2),
             ),
           ],
         ),
@@ -154,7 +155,7 @@ class _BlogDetailState extends State<BlogDetail> {
     // );
     return HtmlWidget(
       widget.caption,
-      textStyle: TextStyle(fontFamily: 'ReadexPro'),
+      textStyle: TextStyle(fontFamily: 'ReadexPro', fontSize: 20, height: 1.2),
     );
   }
 }
