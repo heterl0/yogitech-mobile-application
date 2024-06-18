@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:yogi_application/api/account/account_service.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:yogi_application/src/models/account.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/calorie.dart';
 import 'package:yogi_application/src/pages/social.dart';
@@ -33,18 +35,39 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  Profile? _profile;
+  Account? _account;
+
   Future<void> _logout() async {
     try {
       // Xóa token từ SharedPreferences khi người dùng logout
       await clearToken();
 
       // Chuyển hướng đến trang đăng nhập và xóa tất cả các route cũ
-      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+      Navigator.of(context).pushNamedAndRemoveUntil(
           AppRoutes.login, (Route<dynamic> route) => false);
     } catch (e) {
       print('Logout error: $e');
       // Xử lý lỗi khi logout
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserProfile();
+  }
+
+  Future<void> _fetchUserProfile() async {
+    Profile? profile = await getUserProfile();
+    print(profile);
+    Account? account = await retrieveAccount();
+    print(account);
+    // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
+    setState(() {
+      _profile = profile;
+      _account = account;
+    });
   }
 
   @override
@@ -98,7 +121,15 @@ class _ProfilePageState extends State<ProfilePage> {
                       return gradient.createShader(bounds);
                     },
                     child: Text(
-                      'Nghi Thiên Tán Thánh Từ Dụ Bác Huệ Trai Túc Tuệ Đạt Thọ Đức Nhân Công Chương hoàng hậu (Từ Dụ thái hậu)',
+                      [
+                        (_profile?.last_name ?? ''),
+                        (_profile?.first_name ?? '')
+                      ].where((s) => s.isNotEmpty).join(' ').isEmpty
+                          ? 'Name'
+                          : [
+                              (_profile?.last_name ?? ''),
+                              (_profile?.first_name ?? '')
+                            ].where((s) => s.isNotEmpty).join(' '),
                       style: h2.copyWith(color: active),
                     ),
                   ),
@@ -123,11 +154,52 @@ class _ProfilePageState extends State<ProfilePage> {
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                               ),
-                              child: const CircleAvatar(
-                                radius: 78,
-                                backgroundImage:
-                                    AssetImage('assets/images/avatar.png'),
-                              ),
+                              child: _profile != null &&
+                                      (_profile!.avatar_url != null &&
+                                          _profile!.avatar_url!.isNotEmpty)
+                                  ? CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage:
+                                          NetworkImage(_profile!.avatar_url!),
+                                    )
+                                  : Center(
+                                      child: _profile != null &&
+                                              (_profile!.avatar_url != null &&
+                                                  _profile!
+                                                      .avatar_url!.isNotEmpty)
+                                          ? CircleAvatar(
+                                              radius: 50,
+                                              backgroundImage: NetworkImage(
+                                                  _profile!.avatar_url!),
+                                            )
+                                          : Center(
+                                              child: Container(
+                                                width: 144,
+                                                height: 144,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors
+                                                      .grey, // Màu nền của hình tròn
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    (_account?.username ?? '')
+                                                            .isNotEmpty
+                                                        ? (_account!.username[0]
+                                                            .toUpperCase())
+                                                        : '',
+                                                    style: TextStyle(
+                                                      fontSize: 40,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors
+                                                          .white, // Màu chữ
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                    ),
                             ),
                             const SizedBox(height: 8),
                             Text(
@@ -197,7 +269,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           children: [
                             StatCard(
                               title: trans.following,
-                              value: '6', // Replace with API data
+                              value: _account?.following.length.toString() ??
+                                  '0', // Replace with API data
                               valueColor: theme.colorScheme.onPrimary,
                               onTap: () {
                                 Navigator.push(
@@ -210,7 +283,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             StatCard(
                               title: trans.follower,
-                              value: '7', // Replace with API data
+                              value: _account?.following.length.toString() ??
+                                  '0', // Replace with API data
                               valueColor: theme.colorScheme.onPrimary,
                               onTap: () {
                                 Navigator.push(
@@ -230,13 +304,15 @@ class _ProfilePageState extends State<ProfilePage> {
                           children: [
                             StatCard(
                               title: 'EXP',
-                              value: '999', // Replace with API data
+                              value: _profile?.exp.toString() ?? '',
+// Replace with API data
                               valueColor: primary,
                               isTitleFirst: true,
                             ),
                             StatCard(
                               title: 'BMI',
-                              value: '18.5', // Replace with API data
+                              value: _profile?.bmi?.toString() ??
+                                  '0', // Replace with API data
                               valueColor: theme.colorScheme.onPrimary,
                               isTitleFirst: true,
                               onTap: () {
