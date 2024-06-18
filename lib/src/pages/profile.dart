@@ -44,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
       await clearToken();
 
       // Chuyển hướng đến trang đăng nhập và xóa tất cả các route cũ
-      Navigator.of(context).pushNamedAndRemoveUntil(
+      Navigator.of(context, rootNavigator: false).pushNamedAndRemoveUntil(
           AppRoutes.login, (Route<dynamic> route) => false);
     } catch (e) {
       print('Logout error: $e');
@@ -291,7 +291,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             StatCard(
                               title: 'Follower',
-                              value: '5', // Replace with API data
+                              value: _account?.following.length.toString() ??
+                                  '', // Replace with API data
                               valueColor: theme.colorScheme.onPrimary,
                               onTap: () {
                                 Navigator.push(
