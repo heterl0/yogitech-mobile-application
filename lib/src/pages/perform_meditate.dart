@@ -6,7 +6,6 @@ import 'package:yogi_application/src/pages/meditate.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 void main() {
   runApp(const performMeditate());
 }
@@ -20,7 +19,6 @@ class performMeditate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       body: MeditateCountdownTimer(initialDuration: selectedDuration),
     );
@@ -80,16 +78,17 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
       ),
     );
   }
+
   static Route<String> _alertDialogDemoRoute(
     BuildContext context,
     Object? arguments,
   ) {
-      final trans = AppLocalizations.of(context)!;
+    final trans = AppLocalizations.of(context)!;
     return DialogRoute<String>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title:  Text(
+          title: Text(
             trans.finish,
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -104,7 +103,7 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
           ),
           actions: [
             TextButton(
-              child:  Text(
+              child: Text(
                 trans.confirm,
                 style: TextStyle(
                   color: Colors.blue,
@@ -219,7 +218,7 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                             Text(
+                            Text(
                               trans.minutes,
                               style: TextStyle(
                                 fontSize: 18,

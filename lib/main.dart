@@ -3,10 +3,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/dioInstance.dart';
+import 'package:yogi_application/api/event/event_service.dart';
 import 'package:yogi_application/src/pages/_mainscreen.dart';
 import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/pages/blog.dart';
-import 'package:yogi_application/src/pages/blog_detail.dart';
 import 'package:yogi_application/src/pages/event_detail.dart';
 import 'package:yogi_application/src/pages/change_profile.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
@@ -48,7 +48,6 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
   runApp(accessToken != null
       ? MyApp(access: accessToken)
       : MyApp()); // Conditional app start
@@ -58,7 +57,9 @@ Future<String?> checkToken() async {
   try {
     final tokens = await getToken();
     final accessToken = tokens['access'];
-    DioInstance.setAccessToken(accessToken ?? "");
+    if (accessToken != null) {
+      DioInstance.setAccessToken(accessToken);
+    }
     return accessToken;
   } catch (error) {
     // Handle error, e.g., log the error or show an error message.

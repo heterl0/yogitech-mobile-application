@@ -5,8 +5,8 @@ import 'package:collection/collection.dart';
 class Profile {
   final int id;
   final String user;
-  final String first_name;
-  final String last_name;
+  final String? first_name;
+  final String? last_name;
   final int point;
   final int exp;
   final int streak;
@@ -106,8 +106,8 @@ class Profile {
     return Profile(
       map['id'] as int,
       map['user'] as String,
-      map['first_name'] as String,
-      map['last_name'] as String,
+      map['first_name'] != null ? map['first_name'] as String : null,
+      map['last_name'] != null ? map['last_name'] as String : null,
       map['point'] as int,
       map['exp'] as int,
       map['streak'] as int,
@@ -244,7 +244,7 @@ class Account {
   final int id;
   final String username;
   final String email;
-  final String phone;
+  final String? phone;
   final bool? is_active;
   final bool? is_staff;
   final bool? is_premium;
@@ -325,7 +325,7 @@ class Account {
       map['id'] as int,
       map['username'] as String,
       map['email'] as String,
-      map['phone'] as String,
+      map['phone'] as String?,
       map['is_active'] as bool?,
       map['is_staff'] as bool?,
       map['is_premium'] as bool?,
