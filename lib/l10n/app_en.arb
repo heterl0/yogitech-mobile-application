@@ -159,5 +159,13 @@
   "dayWeeken":"Weekend",
   "reTime":"Reminder time",
   "duration":"Duration",
-  "days":"Days"
+  "days":"Days",
+  "numOfExercise":"Number of exercise:",
+  "numOfCandidate":"Number of candidate:",
+  "point":"Point",
+  "giveUp":"Give up",
+  "eventNotStart":"The event is not start.",
+  "eventPassed":"The date has passed.",
+  "eventRemain":"days remaining.",
+  "end":"End"
 }
