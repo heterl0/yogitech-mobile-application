@@ -15,6 +15,7 @@ import 'package:yogi_application/src/pages/settings.dart';
 import 'package:yogi_application/src/pages/friendlist.dart';
 import 'package:yogi_application/src/pages/change_BMI.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_charts/flutter_charts.dart' as charts;
 
 class ProfilePage extends StatefulWidget {
   final bool isDarkMode;
