@@ -15,6 +15,7 @@ import 'package:yogi_application/src/pages/settings.dart';
 import 'package:yogi_application/src/pages/friendlist.dart';
 import 'package:yogi_application/src/pages/change_BMI.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_charts/flutter_charts.dart' as charts;
 
 class ProfilePage extends StatefulWidget {
   final bool isDarkMode;
@@ -133,6 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       style: h2.copyWith(color: active),
                     ),
                   ),
+
                   const SizedBox(height: 16),
                   Row(
                     children: [
@@ -161,6 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       radius: 50,
                                       backgroundImage:
                                           NetworkImage(_profile!.avatar_url!),
+                                      backgroundColor: Colors.transparent,
                                     )
                                   : Center(
                                       child: _profile != null &&
@@ -171,6 +174,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                               radius: 50,
                                               backgroundImage: NetworkImage(
                                                   _profile!.avatar_url!),
+                                              backgroundColor:
+                                                  Colors.transparent,
                                             )
                                           : Center(
                                               child: Container(
@@ -178,8 +183,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 height: 144,
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
-                                                  color: Colors
-                                                      .grey, // Màu nền của hình tròn
+                                                  color: Colors.transparent,
                                                 ),
                                                 child: Center(
                                                   child: Text(
@@ -193,7 +197,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: Colors
-                                                          .white, // Màu chữ
+                                                          .transparent, // Màu chữ
                                                     ),
                                                   ),
                                                 ),
@@ -276,7 +280,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => FollowingPage(),
+                                    builder: (context) => FriendListPage(
+                                      initialTabIndex: 0,
+                                    ),
                                   ),
                                 );
                               },
@@ -290,7 +296,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => FollowerPage(),
+                                    builder: (context) => FriendListPage(
+                                      initialTabIndex: 1,
+                                    ),
                                   ),
                                 );
                               },
