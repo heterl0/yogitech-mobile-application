@@ -160,5 +160,6 @@
   "numOfExercise":"Number of exercise:",
   "numOfCandidate":"Number of candidate:",
   "point":"Point",
+  "giveUp":"Give up",
   "end":"End"
 }

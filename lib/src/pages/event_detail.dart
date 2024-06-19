@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:yogi_application/api/auth/auth_service.dart';
+import 'package:yogi_application/api/event/event_service.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/models/account.dart';
 import 'package:yogi_application/src/models/event.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
@@ -9,47 +11,131 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:intl/intl.dart';
 
-class EventDetail extends StatelessWidget {
+class EventDetail extends StatefulWidget {
   final Event? event;
-
   EventDetail({super.key, required this.event});
+
+  @override
+  _EventDetailState createState() => _EventDetailState();
+}
+
+class _EventDetailState extends State<EventDetail> {
+  late Event? _event;
+  late Account? _account;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUsers();
+    _event = widget.event;
+  }
+
+  Future<void> fetchUsers() async {
+    setState(() {
+      isLoading = true; // Start loading
+    });
+    Account? account = await retrieveAccount();
+    setState(() {
+      _account = account;
+      isLoading = false;
+    });
+  }
+
+  Future<void> handleJoinEvent() async {
+    if (_event != null) {
+      setState(() {
+        isLoading = true; // Start loading
+      });
+      final joinResult = await joinEvent(_event!.id);
+      if (joinResult is CandidateEvent) {
+        fetchEventDetails();
+      } else {
+        print('Error joining event: $joinResult');
+        setState(() {
+          isLoading = false; // Stop loading on error
+        });
+      }
+    }
+  }
+
+  Future<void> handleGiveUpEvent(int candidateId) async {
+    if (candidateId != -1) {
+       setState(() {
+        isLoading = true; // Start loading
+      });
+      final bool? giveUpResult = await giveUpEvent(candidateId);
+      if (giveUpResult != null && giveUpResult) {
+        fetchEventDetails();
+      } else {
+        print('Error giving up event: $giveUpResult');
+        setState(() {
+          isLoading = false; // Stop loading on error
+        });
+      }
+    }
+  }
+
+  Future<void> fetchEventDetails() async {
+    setState(() {
+      isLoading = true; // Start loading
+    });
+    Event? updatedEvent = await getEvent(_event!.id);
+     setState(() {
+      _event = updatedEvent;
+      isLoading = false; // Stop loading
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
-     print(event);
+
+    // Find the candidate ID by matching the user ID in the candidates list
+    int candidateId = _event!.event_candidate
+        .map((candidate) => candidate.id)
+        .firstWhere(
+          (id) => _event!.event_candidate.any((candidate) => candidate.user.id == _account!.id && candidate.id == id),
+          orElse: () => -1,
+        );
+    bool isJoin = (candidateId != -1);
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      // appBar: CustomAppBar(
-      //   title: remainingDays,
-      //   style: widthStyle.Large,
-      //   isTransparent: true,
-      //   postActions: [
-      //     IconButton(
-      //       icon: Icon(Icons.close, color: theme.colorScheme.onBackground),
-      //       onPressed: () {
-      //         Navigator.pop(context);
-      //       },
-      //     ),
-      //   ],
-      // ),
+     extendBodyBehindAppBar: true,
       backgroundColor: theme.colorScheme.background,
-      // body: _buildBody(context),
-      body: CustomScrollView(
-        slivers: [
-          _buildCustomTopBar(context),
-          SliverToBoxAdapter(
-            child: _buildBody(context),
-          )
+      body: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              _buildCustomTopBar(context),
+              SliverToBoxAdapter(
+                child: _buildBody(context),
+              )
+            ],
+          ),
+          if (isLoading) // Show spinner conditionally
+            Container(
+              color: Colors.black54,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
         ],
       ),
       bottomNavigationBar: CustomBottomBar(
-        buttonTitle: trans.joinIn,
+        buttonTitle: isJoin ? trans.giveUp : trans.joinIn,
+        onPressed: () {
+          if (!isJoin) {
+            handleJoinEvent();
+          } else {
+            handleGiveUpEvent(candidateId);
+          }
+        },
       ),
     );
   }
-
+  
   Widget _buildCustomTopBar(BuildContext context) {
     final theme = Theme.of(context);
     return SliverAppBar(
@@ -77,12 +163,12 @@ class EventDetail extends StatelessWidget {
       backgroundColor: theme.colorScheme.onSecondary,
       pinned: true,
       centerTitle: true,
-      title: Text(checkDateExpired(event!.start_date, event!.expire_date),
+      title: Text(checkDateExpired(_event!.start_date, _event!.expire_date),
           style: h2.copyWith(color: theme.colorScheme.onBackground)),
       expandedHeight: 320,
       flexibleSpace: FlexibleSpaceBar(
         background: Image.network(
-          event!.image_url,
+          _event!.image_url,
           fit: BoxFit.cover,
         ),
       ),
@@ -117,95 +203,101 @@ class EventDetail extends StatelessWidget {
 
     return Center(
       child: Text(
-        event!.title,
+        _event!.title,
         style: h2.copyWith(color: theme.colorScheme.onPrimary),
       ),
     );
   }
 
-   Widget _buildRowWithText(BuildContext context,AppLocalizations trans) {
+  Widget _buildRowWithText(BuildContext context, AppLocalizations trans) {
     final theme = Theme.of(context);
-    final local= Localizations.localeOf(context);
-    String startDay = DateFormat.yMMMd(local.languageCode).add_Hm().format(DateTime.parse(event!.start_date));
-    String endDay = DateFormat.yMMMd(local.languageCode).add_Hm().format(DateTime.parse(event!.expire_date));
+    final local = Localizations.localeOf(context);
+    String startDay = DateFormat.yMMMd(local.languageCode).add_Hm().format(DateTime.parse(_event!.start_date));
+    String endDay = DateFormat.yMMMd(local.languageCode).add_Hm().format(DateTime.parse(_event!.expire_date));
 
     return Container(
-      alignment: Alignment.centerLeft, // Aligns the ch // Add padding if needed
-      child:Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:
-            [Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:[ 
-                Text(
-                  trans.start +":" ,
-                  style: bd_text.copyWith(color: Colors.white),),
-                Text(
-                  ' ${startDay}',
-                  style: bd_text.copyWith(color: primary,)),
-                ]),
-                Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:[ 
-                Text(
-                  trans.end+":" ,
-                  style: bd_text.copyWith(color: Colors.white),),
-                Text(
-                  ' ${endDay}',
-                  style: bd_text.copyWith(color: primary,))
-                ]),
-              ]
+      alignment: Alignment.centerLeft,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    trans.start + ":",
+                    style: bd_text.copyWith(color: Colors.white),
+                  ),
+                  Text(
+                    ' $startDay',
+                    style: bd_text.copyWith(color: primary),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    trans.end + ":",
+                    style: bd_text.copyWith(color: Colors.white),
+                  ),
+                  Text(
+                    ' $endDay',
+                    style: bd_text.copyWith(color: primary),
+                  )
+                ],
+              ),
+            ],
           ),
-        const SizedBox(width: 12),
-
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:
-            [Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:[ 
-                Text(
-                  trans.numOfExercise,
-                  style: bd_text.copyWith(color: Colors.white),),
-                Text(
-                  ' ${event!.exercises.length}',
-                  style: bd_text.copyWith(color: primary),),
-                ]),
-                Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:[ 
-                Text(
-                  trans.numOfCandidate,
-                  style: bd_text.copyWith(color: Colors.white),),
-                Text(
-                  ' ${event!.event_candidate.length}',
-                  style: bd_text.copyWith(color: primary),),
-                ]),
-              ]
+          const SizedBox(width: 12),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    trans.numOfExercise,
+                    style: bd_text.copyWith(color: Colors.white),
+                  ),
+                  Text(
+                    ' ${_event!.exercises.length}',
+                    style: bd_text.copyWith(color: primary),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    trans.numOfCandidate,
+                    style: bd_text.copyWith(color: Colors.white),
+                  ),
+                  Text(
+                    ' ${_event!.event_candidate.length}',
+                    style: bd_text.copyWith(color: primary),
+                  ),
+                ],
+              ),
+            ],
           ),
-          
-      ],)
+        ],
+      ),
     );
   }
 
-
   Widget _buildDescription() {
-    // return Text(
-    //   event!.description,
-    //   style: bd_text.copyWith(color: text),
-    // );
     return HtmlWidget(
-      event!.description,
+      _event!.description,
       textStyle: TextStyle(fontFamily: 'ReadexPro'),
     );
   }
@@ -215,11 +307,10 @@ class EventDetail extends StatelessWidget {
     final trans = AppLocalizations.of(context)!;
 
     return Container(
-      alignment: Alignment.centerLeft, // Aligns the ch // Add padding if needed
+      alignment: Alignment.centerLeft,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment:
-            CrossAxisAlignment.start, // Aligns the children to the start
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             trans.leaderboard,
@@ -236,7 +327,7 @@ class EventDetail extends StatelessWidget {
     final trans = AppLocalizations.of(context)!;
 
 
-    List<dynamic> candidates=event!.event_candidate;
+    List<dynamic> candidates=_event!.event_candidate;
     candidates.sort((a, b) => a.event_point.compareTo(b.event_point));
     return SizedBox(
       width: double.infinity,
@@ -303,5 +394,6 @@ class EventDetail extends StatelessWidget {
       ),
     );
   }
+
 }
 
