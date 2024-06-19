@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class FriendProfile extends StatefulWidget {
   const FriendProfile({super.key});
@@ -15,7 +14,6 @@ class FriendProfile extends StatefulWidget {
 class _nameState extends State<FriendProfile> {
   bool follow = true; // Khai báo biến ở đây
 
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -23,44 +21,49 @@ class _nameState extends State<FriendProfile> {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(24.0),
-            bottomRight: Radius.circular(24.0),
-          ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: theme.colorScheme.onSecondary,
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(0),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 12.0,
-                  right: 20.0,
-                  left: 20.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.white),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    Spacer(),
-                    Text(trans.friendProfile, style: h2.copyWith(color: active)),
-                    Spacer(
-                      flex: 2,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+      // appBar: PreferredSize(
+      //   preferredSize: Size.fromHeight(100),
+      //   child: ClipRRect(
+      //     borderRadius: BorderRadius.only(
+      //       bottomLeft: Radius.circular(24.0),
+      //       bottomRight: Radius.circular(24.0),
+      //     ),
+      //     child: AppBar(
+      //       automaticallyImplyLeading: false,
+      //       backgroundColor: theme.colorScheme.onSecondary,
+      //       bottom: PreferredSize(
+      //         preferredSize: Size.fromHeight(0),
+      //         child: Padding(
+      //           padding: const EdgeInsets.only(
+      //             bottom: 12.0,
+      //             right: 20.0,
+      //             left: 20.0,
+      //           ),
+      //           child: Row(
+      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //             children: [
+      //               IconButton(
+      //                 icon: Icon(Icons.arrow_back, color: Colors.white),
+      //                 onPressed: () {
+      //                   Navigator.of(context).pop();
+      //                 },
+      //               ),
+      //               Spacer(),
+      //               Text(trans.friendProfile, style: h2.copyWith(color: active)),
+      //               Spacer(
+      //                 flex: 2,
+      //               ),
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
+
+      appBar: CustomAppBar(
+        title: trans.friendProfile,
+        style: widthStyle.Large,
       ),
       body: Container(
         margin: const EdgeInsets.all(24.0),
@@ -120,29 +123,34 @@ class _nameState extends State<FriendProfile> {
                       //   ],
                       // ),
 
-                  Row(
-                    children: [
-                      Expanded(
-                         child: BoxButton(
+                      Row(
+                        children: [
+                          Expanded(
+                            child: BoxButton(
                               title: follow ? trans.unfollow : trans.follow,
                               backgroundColor: Colors.transparent,
-                              foregroundColor: follow ? Colors.red : Colors.blue,
-                              padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-                              textStyle: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                              foregroundColor:
+                                  follow ? Colors.red : Colors.blue,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 16.0, horizontal: 24.0),
+                              textStyle: TextStyle(
+                                  fontSize: 18.0, fontWeight: FontWeight.bold),
                               shape: RoundedRectangleBorder(
-                                side: BorderSide(color: follow ? Colors.red : Colors.blue, width: 2.0),
+                                side: BorderSide(
+                                    color: follow ? Colors.red : Colors.blue,
+                                    width: 2.0),
                                 borderRadius: BorderRadius.circular(44.0),
                               ),
-                          onPressed: () {
-                            // Handle button press action here
-                            setState(() {
+                              onPressed: () {
+                                // Handle button press action here
+                                setState(() {
                                   follow = !follow; // Thay đổi trạng thái
                                 });
-                          },
-                        ),
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
                     ],
                   ),
                 ),
@@ -216,4 +224,3 @@ class BoxButton extends StatelessWidget {
     );
   }
 }
-

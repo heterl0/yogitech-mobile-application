@@ -57,6 +57,7 @@ class BlogState extends State<Blog> {
               ],
             )
           : CustomAppBar(
+              showBackButton: false,
               onBackPressed: () {
                 setState(() {
                   _isNotSearching = true;
@@ -66,7 +67,8 @@ class BlogState extends State<Blog> {
               titleWidget: BoxInputField(
                 controller: _searchController,
                 placeholder: trans.search,
-                trailing: Icon(Icons.close),
+                trailing:
+                    Icon(Icons.search, color: theme.colorScheme.onBackground),
                 keyboardType: TextInputType.text,
                 inputFormatters: [],
                 onChanged: (value) {
@@ -109,18 +111,14 @@ class BlogState extends State<Blog> {
   }
 
   Widget _buildBlogMainContent() {
-    final trans = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
       child: GridView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 6.0),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 8.0,
-          mainAxisSpacing: 8.0,
           childAspectRatio: 4 / 5,
         ),
         itemCount: jsonList.length,

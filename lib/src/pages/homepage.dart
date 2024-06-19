@@ -60,166 +60,198 @@ class _HomePageState extends State<HomePage> {
     final trans = AppLocalizations.of(context)!; // Bản dịch
     final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
-      appBar: _isnotSearching
-          ? CustomAppBar(
-              showBackButton: false,
-              preActions: [
-                GestureDetector(
-                  onTap: () {
-                    pushWithoutNavBar(
+        backgroundColor: theme.colorScheme.background,
+        appBar: _isnotSearching
+            ? CustomAppBar(
+                showBackButton: false,
+                preActions: [
+                  GestureDetector(
+                    onTap: () {
+                      pushWithoutNavBar(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Subscription()));
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 50,
+                          child: Image.asset('assets/images/Emerald.png'),
+                        ),
+                        Text(
+                          account != null
+                              ? account!.profile.point.toString()
+                              : '0',
+                          style: h3.copyWith(
+                              color: theme.colorScheme.onBackground),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                titleWidget: StreakValue(
+                    account != null ? account!.profile.streak.toString() : '0'),
+                postActions: [
+                  IconButton(
+                    icon: Icon(Icons.search,
+                        color: theme.colorScheme.onBackground),
+                    onPressed: () {
+                      setState(() {
+                        _isnotSearching = false;
+                      });
+                    },
+                  ),
+                ],
+              )
+            : CustomAppBar(
+                showBackButton: false,
+                preActions: [
+                  IconButton(
+                    icon: Icon(Icons.tune_outlined,
+                        color: theme.colorScheme.onBackground),
+                    onPressed: () {
+                      pushWithoutNavBar(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Subscription()));
+                          builder: (context) => FilterPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+                style: widthStyle.Large,
+                titleWidget: BoxInputField(
+                  controller: _searchController,
+                  placeholder: trans.search,
+                  trailing: Icon(Icons.search),
+                  keyboardType: TextInputType.text,
+                  inputFormatters: [],
+                  onTap: () {
+                    // Xử lý khi input field được nhấn
                   },
+                ),
+                postActions: [
+                  IconButton(
+                    icon: Icon(Icons.close,
+                        color: theme.colorScheme.onBackground),
+                    onPressed: () {
+                      setState(() {
+                        _isnotSearching = true;
+                      });
+                    },
+                  ),
+                ],
+              ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(vertical: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  child: Container(
+                    height: 160, // Chiều cao của khung viền
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: primary, width: 2),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: 16, top: 16, bottom: 16),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    trans.tryThisExercise,
+                                    textAlign: TextAlign.left,
+                                    style: bd_text.copyWith(
+                                        color: theme.colorScheme.onPrimary),
+                                  ),
+                                  Text(
+                                    trans.forBeginner,
+                                    textAlign: TextAlign.left,
+                                    style: h3.copyWith(
+                                        color: theme.colorScheme.onPrimary),
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                    'Warrior 2 pose!',
+                                    textAlign: TextAlign.left,
+                                    style: h3.copyWith(color: primary),
+                                  ),
+                                ],
+                              ),
+                            )),
+                        const Expanded(
+                          flex: 2,
+                          child: Image(
+                              image: AssetImage(
+                                  'assets/images/ads_exercise_for_beginner.png')),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                // Placeholder for ad content
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Text(
+                    trans.forYou,
+                    style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                  ),
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     children: [
-                      Container(
-                        width: 40,
-                        height: 50,
-                        child: Image.asset('assets/images/Emerald.png'),
-                      ),
-                      Text(
-                        account != null
-                            ? account!.profile.point.toString()
-                            : '0',
-                        style:
-                            h3.copyWith(color: theme.colorScheme.onBackground),
-                      ),
+                      if (jsonList != null)
+                        for (final exercise in jsonList)
+                          CustomCard(
+                            title: exercise.title,
+                            // subtitle: exercise.durations ?? '0',
+                            imageUrl:
+                                exercise.image_url, // URL hình ảnh của bài tập
+                            onTap: () {
+                              // Chuyển sang trang chi tiết của bài tập khi thẻ được nhấn
+                              pushWithoutNavBar(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ExerciseDetail(),
+                                ),
+                              );
+                            },
+                          ),
                     ],
                   ),
                 ),
-              ],
-              titleWidget: StreakValue(
-                  account != null ? account!.profile.streak.toString() : '0'),
-              postActions: [
-                IconButton(
-                  icon:
-                      Icon(Icons.search, color: theme.colorScheme.onBackground),
-                  onPressed: () {
-                    setState(() {
-                      _isnotSearching = false;
-                    });
-                  },
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Text(
+                    trans.newest,
+                    style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                  ),
                 ),
-              ],
-            )
-          : CustomAppBar(
-              showBackButton: false,
-              preActions: [
-                IconButton(
-                  icon: Icon(Icons.tune_outlined,
-                      color: theme.colorScheme.onBackground),
-                  onPressed: () {
-                    pushWithoutNavBar(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FilterPage(),
-                      ),
-                    );
-                  },
-                ),
-              ],
-              style: widthStyle.Large,
-              titleWidget: BoxInputField(
-                controller: _searchController,
-                placeholder: trans.search,
-                trailing: Icon(Icons.search),
-                keyboardType: TextInputType.text,
-                inputFormatters: [],
-                onTap: () {
-                  // Xử lý khi input field được nhấn
-                },
-              ),
-              postActions: [
-                IconButton(
-                  icon:
-                      Icon(Icons.close, color: theme.colorScheme.onBackground),
-                  onPressed: () {
-                    setState(() {
-                      _isnotSearching = true;
-                    });
-                  },
-                ),
-              ],
-            ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Container(
-                height: 160, // Chiều cao của khung viền
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: primary, width: 2),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                        flex: 2,
-                        child: Padding(
-                          padding:
-                              EdgeInsets.only(left: 16, top: 16, bottom: 16),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                trans.tryThisExercise,
-                                textAlign: TextAlign.left,
-                                style: bd_text.copyWith(
-                                    color: theme.colorScheme.onPrimary),
-                              ),
-                              Text(
-                                trans.forBeginner,
-                                textAlign: TextAlign.left,
-                                style: h3.copyWith(
-                                    color: theme.colorScheme.onPrimary),
-                              ),
-                              const Spacer(),
-                              Text(
-                                'Warrior 2 pose!',
-                                textAlign: TextAlign.left,
-                                style: h3.copyWith(color: primary),
-                              ),
-                            ],
-                          ),
-                        )),
-                    const Expanded(
-                      flex: 2,
-                      child: Image(
-                          image: AssetImage(
-                              'assets/images/ads_exercise_for_beginner.png')),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            // Placeholder for ad content
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Text(
-                trans.forYou,
-                style: h3.copyWith(color: theme.colorScheme.onPrimary),
-              ),
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  if (jsonList != null)
-                    for (final exercise in jsonList)
-                      CustomCard(
-                        title: exercise.title,
-                        // subtitle: exercise.durations ?? '0',
-                        imageUrl:
-                            exercise.image_url, // URL hình ảnh của bài tập
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Row(
+                    children: List.generate(5, (index) {
+                      return CustomCard(
+                        title: 'Card with Image',
+                        caption:
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                         onTap: () {
-                          // Chuyển sang trang chi tiết của bài tập khi thẻ được nhấn
+                          // Navigate to the detail page when the card is tapped
                           pushWithoutNavBar(
                             context,
                             MaterialPageRoute(
@@ -227,43 +259,14 @@ class _HomePageState extends State<HomePage> {
                             ),
                           );
                         },
-                      ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Text(
-                trans.newest,
-                style: h3.copyWith(color: theme.colorScheme.onPrimary),
-              ),
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Row(
-                children: List.generate(5, (index) {
-                  return CustomCard(
-                    title: 'Card with Image',
-                    caption:
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                    onTap: () {
-                      // Navigate to the detail page when the card is tapped
-                      pushWithoutNavBar(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ExerciseDetail(),
-                        ),
                       );
-                    },
-                  );
-                }),
-              ),
+                    }),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/api/event/event_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/models/event.dart';
 import 'package:yogi_application/src/pages/event_detail.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -70,15 +69,12 @@ class _ActivitiesState extends State<Activities> {
       width: double.infinity,
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
       child: GridView.builder(
-        padding: const EdgeInsets.symmetric(
-            horizontal: 4.0), // Add horizontal padding if needed
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(), // Enable scrolling
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, // 2 columns
-          crossAxisSpacing: 8.0,
-          mainAxisSpacing: 8.0,
-          childAspectRatio: 14 / 16, // Aspect ratio of each card
+
+          childAspectRatio: 5 / 6, // Aspect ratio of each card
         ),
         itemCount: _events.length, // Number of cards
 
@@ -86,7 +82,8 @@ class _ActivitiesState extends State<Activities> {
           return CustomCard(
             imageUrl: _events[index].image_url,
             title: _events[index].title,
-            caption: "Participants: ${_events[index].event_candidate.length}",
+            caption:
+                "${trans.participants}: ${_events[index].event_candidate.length}",
             subtitle: checkDateExpired(
                 _events[index].start_date, _events[index].expire_date),
             onTap: () {

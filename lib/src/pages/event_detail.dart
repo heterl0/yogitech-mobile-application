@@ -118,7 +118,7 @@ class EventDetail extends StatelessWidget {
     return Center(
       child: Text(
         event!.title,
-        style: h2.copyWith(color: theme.colorScheme.onPrimary),
+        style: h2.copyWith(color: theme.colorScheme.onPrimary, height: 1.2),
       ),
     );
   }
@@ -159,7 +159,7 @@ class EventDetail extends StatelessWidget {
     // );
     return HtmlWidget(
       event!.description,
-      textStyle: TextStyle(fontFamily: 'ReadexPro'),
+      textStyle: TextStyle(fontFamily: 'ReadexPro', fontSize: 16, height: 1.2),
     );
   }
 
