@@ -118,7 +118,7 @@ class EventDetail extends StatelessWidget {
     return Center(
       child: Text(
         event!.title,
-        style: h2.copyWith(color: theme.colorScheme.onPrimary, height: 1.2),
+        style: h2.copyWith(color: theme.colorScheme.onPrimary),
       ),
     );
   }
@@ -126,27 +126,74 @@ class EventDetail extends StatelessWidget {
    Widget _buildRowWithText(BuildContext context,AppLocalizations trans) {
     final theme = Theme.of(context);
     final local= Localizations.localeOf(context);
-    print(local);
+    String startDay = DateFormat.yMMMd(local.languageCode).add_Hm().format(DateTime.parse(event!.start_date));
+    String endDay = DateFormat.yMMMd(local.languageCode).add_Hm().format(DateTime.parse(event!.expire_date));
 
-    String startDay = DateFormat.yMMMd(local.languageCode).add_Hms().format(DateTime.parse(event!.start_date));
     return Container(
       alignment: Alignment.centerLeft, // Aligns the ch // Add padding if needed
       child:Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        
         Column(
-          children:[ 
-            Text(
-              trans.start +': '+startDay,
-              style: bd_text.copyWith(color: primary),),
-            Text(
-              trans.start +': '+startDay,
-              style: bd_text.copyWith(color: primary),),
-            ]
-        ),
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children:
+            [Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[ 
+                Text(
+                  trans.start +":" ,
+                  style: bd_text.copyWith(color: Colors.white),),
+                Text(
+                  ' ${startDay}',
+                  style: bd_text.copyWith(color: primary,)),
+                ]),
+                Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[ 
+                Text(
+                  trans.end+":" ,
+                  style: bd_text.copyWith(color: Colors.white),),
+                Text(
+                  ' ${endDay}',
+                  style: bd_text.copyWith(color: primary,))
+                ]),
+              ]
+          ),
+        const SizedBox(width: 12),
+
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children:
+            [Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[ 
+                Text(
+                  trans.numOfExercise,
+                  style: bd_text.copyWith(color: Colors.white),),
+                Text(
+                  ' ${event!.exercises.length}',
+                  style: bd_text.copyWith(color: primary),),
+                ]),
+                Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[ 
+                Text(
+                  trans.numOfCandidate,
+                  style: bd_text.copyWith(color: Colors.white),),
+                Text(
+                  ' ${event!.event_candidate.length}',
+                  style: bd_text.copyWith(color: primary),),
+                ]),
+              ]
+          ),
+          
       ],)
     );
   }
@@ -159,7 +206,7 @@ class EventDetail extends StatelessWidget {
     // );
     return HtmlWidget(
       event!.description,
-      textStyle: TextStyle(fontFamily: 'ReadexPro', fontSize: 16, height: 1.2),
+      textStyle: TextStyle(fontFamily: 'ReadexPro'),
     );
   }
 
@@ -183,33 +230,23 @@ class EventDetail extends StatelessWidget {
     );
   }
 
-  final List<RankItem> rankItems = [
-    RankItem(title: '3 chân 4 cẳng', gems: '20 gems'),
-    RankItem(title: '3 chân 4 cẳng', gems: '19 gems'),
-    RankItem(title: '3 chân 4 cẳng', gems: '1 gem'),
-    RankItem(title: '3 chân 4 cẳng', gems: '20 gems'),
-    RankItem(title: '3 chân 4 cẳng', gems: '19 gems'),
-    RankItem(title: '3 chân 4 cẳng', gems: '1 gem'),
-    RankItem(title: '3 chân 4 cẳng', gems: '20 gems'),
-    RankItem(title: '3 chân 4 cẳng', gems: '19 gems'),
-    RankItem(title: '3 chân 4 cẳng', gems: '1 gem'),
-    RankItem(title: '3 chân 4 cẳng', gems: '20 gems'),
-    RankItem(title: '3 chân 4 cẳng', gems: '19 gems'),
-    RankItem(title: '3 chân 4 cẳng', gems: '1 gem'),
-  ];
 
   Widget _buildRankMainContent(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
 
+
+    List<dynamic> candidates=event!.event_candidate;
+    candidates.sort((a, b) => a.event_point.compareTo(b.event_point));
     return SizedBox(
       width: double.infinity,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: rankItems.asMap().entries.map((entry) {
+        children: candidates.asMap().entries.map((entry) {
           int index = entry.key;
-          RankItem item = entry.value;
+          CandidateEvent item = entry.value as CandidateEvent;
           return Padding(
             padding: const EdgeInsets.only(bottom: 12.0),
             child: SizedBox(
@@ -246,18 +283,18 @@ class EventDetail extends StatelessWidget {
                   Expanded(
                     child: SizedBox(
                       child: Text(
-                        item.title,
+                        item.user.username,
                         style:
                             h3.copyWith(color: theme.colorScheme.onBackground),
                       ),
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    item.gems,
-                    textAlign: TextAlign.right,
-                    style: h3.copyWith(color: primary),
-                  ),
+                    Text(
+                      '${item.event_point.toStringAsFixed(1)} ${trans.point}',
+                      textAlign: TextAlign.right,
+                      style: h3.copyWith(color: primary),
+                    ),
                 ],
               ),
             ),
@@ -268,12 +305,3 @@ class EventDetail extends StatelessWidget {
   }
 }
 
-class RankItem {
-  final String title;
-  final String gems;
-
-  RankItem({
-    required this.title,
-    required this.gems,
-  });
-}

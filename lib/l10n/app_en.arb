@@ -156,5 +156,9 @@
   "dayWeeken":"Weekend",
   "reTime":"Reminder time",
   "duration":"Duration",
-  "days":"Days"
+  "days":"Days",
+  "numOfExercise":"Number of exercise:",
+  "numOfCandidate":"Number of candidate:",
+  "point":"Point",
+  "end":"End"
 }

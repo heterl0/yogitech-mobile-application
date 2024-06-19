@@ -156,5 +156,9 @@
   "dayWeeken":"Cuối tuần",
   "reTime":"Thời gian nhắc nhở",
   "duration":"Thời lượng",
-  "days":"Ngày"
+  "days":"Ngày",
+  "numOfExercise":"Số lượng bài tập:",
+  "numOfCandidate":"Người tham gia:",
+  "point":"Điểm",
+  "end":"Kết thúc"
 }
