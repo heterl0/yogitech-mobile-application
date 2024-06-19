@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "You don't have an account? ",
+                            trans.dontHaveAccount,
                             style: bd_text.copyWith(color: text),
                           ),
                           TextButton(

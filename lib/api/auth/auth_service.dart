@@ -31,6 +31,41 @@ Future<dynamic> login(String email, String password) async {
   }
 }
 
+class RegisterRequest {
+  String email;
+  String password;
+  String username;
+  String re_password;
+
+  RegisterRequest(
+      {required this.email,
+      required this.password,
+      required this.username,
+      required this.re_password});
+}
+
+Future<dynamic> register(RegisterRequest data) async {
+  try {
+    final url = formatApiUrl('/api/v1/users/');
+    final bodyData = {
+      'email': data.email,
+      'password': data.password,
+      'username': data.username,
+      're_password': data.re_password
+    };
+    Response response = await DioInstance.post(url, data: bodyData);
+
+    if (response.statusCode == 201) {
+      return {'status': response.statusCode, 'message': response.data};
+    }
+  } catch (e) {
+    if (e is DioException) {
+      return {'status': e.response!.statusCode, 'message': e.response!.data};
+    }
+    print('Login error: $e');
+  }
+}
+
 Future<dynamic> loginGoogle(String authToken) async {
   try {
     final url = formatApiUrl('/api/v1/auth/google/');
