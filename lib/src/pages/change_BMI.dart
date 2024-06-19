@@ -22,12 +22,23 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
   String bmiResult = '';
   String bmiComment = '';
   Profile? _profile;
+
   void calculateBMI() {
     final trans = AppLocalizations.of(context)!;
-    if (weightController.text.isNotEmpty && heightController.text.isNotEmpty) {
-      double weight = double.parse(weightController.text);
-      double height =
-          double.parse(heightController.text) / 100; // Convert cm to meters
+    double? weight = weightController.text.isNotEmpty
+        ? double.tryParse(weightController.text)
+        : _profile?.weight != null
+            ? double.tryParse(_profile!.weight!)
+            : null;
+
+    double? height = heightController.text.isNotEmpty
+        ? double.tryParse(heightController.text)
+        : _profile?.height != null
+            ? double.tryParse(_profile!.height!)
+            : null;
+
+    if (weight != null && height != null) {
+      height = height / 100; // Convert cm to meters
       double bmi = weight / (height * height);
       setState(() {
         bmiResult = bmi.toStringAsFixed(2); // Round BMI to 2 decimal places
@@ -55,6 +66,63 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
     _fetchUserProfile();
   }
 
+  Future<void> _recalculateBMI() async {
+    final trans = AppLocalizations.of(context)!;
+    double? weight = weightController.text.isNotEmpty
+        ? double.tryParse(weightController.text)
+        : _profile?.weight != null
+            ? double.tryParse(_profile!.weight!)
+            : null;
+
+    double? height = heightController.text.isNotEmpty
+        ? double.tryParse(heightController.text)
+        : _profile?.height != null
+            ? double.tryParse(_profile!.height!)
+            : null;
+
+    if (weight != null && height != null) {
+      height = height / 100; // Convert cm to meters
+      double bmi = weight / (height * height);
+      setState(() {
+        bmiResult = bmi.toStringAsFixed(2); // Round BMI to 2 decimal places
+        if (bmi < 18.5) {
+          bmiComment = trans.underweight;
+        } else if (bmi >= 18.5 && bmi < 24.9) {
+          bmiComment = trans.normalWeight;
+        } else if (bmi >= 24.9 && bmi < 29.9) {
+          bmiComment = trans.overweight;
+        } else {
+          bmiComment = trans.obesity;
+        }
+      });
+
+      // Gửi yêu cầu PATCH đến API để cập nhật BMI
+
+      try {
+        final Profile? updatedProfile = await patchBMI(new PatchBMIRequest(
+          weight: weight,
+          height: height,
+          bmi: bmi,
+        ));
+        if (updatedProfile != null) {
+          // Xử lý sau khi cập nhật thành công
+          print('BMI updated successfully');
+        } else {
+          // Xử lý khi không thành công
+          print('Failed to update BMI');
+        }
+      } catch (e) {
+        print('Error updating BMI: $e');
+        // Xử lý lỗi khi gọi API
+      }
+    } else {
+      setState(() {
+        bmiResult = '';
+        bmiComment = '';
+      });
+    }
+  }
+
   Future<void> _fetchUserProfile() async {
     Profile? profile = await getUserProfile();
     print(profile);
@@ -69,58 +137,10 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+    calculateBMI();
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      // appBar: PreferredSize(
-      //   preferredSize: Size.fromHeight(100),
-      //   child: ClipRRect(
-      //     borderRadius: BorderRadius.only(
-      //       bottomLeft: Radius.circular(24.0),
-      //       bottomRight: Radius.circular(24.0),
-      //     ),
-      //     child: AppBar(
-      //       automaticallyImplyLeading: false,
-      //       backgroundColor: theme.colorScheme.onSecondary,
-      //       bottom: PreferredSize(
-      //         preferredSize: Size.fromHeight(0),
-      //         child: Padding(
-      //           padding: const EdgeInsets.only(
-      //             bottom: 12.0,
-      //             right: 20.0,
-      //             left: 20.0,
-      //           ),
-      //           child: Row(
-      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //             children: [
-      //               IconButton(
-      //                 icon: Icon(
-      //                   Icons.arrow_back,
-      //                   color: theme.colorScheme.onBackground,
-      //                 ), // Sử dụng icon "back" có sẵn
-      //                 onPressed: () {
-      //                   Navigator.pop(context); // Thêm sự kiện quay lại
-      //                 },
-      //               ),
-      //               Text('Change BMI',
-      //                   style:
-      //                       h2.copyWith(color: theme.colorScheme.onBackground)),
-      //               Opacity(
-      //                 opacity: 0.0,
-      //                 child: IgnorePointer(
-      //                   child: IconButton(
-      //                     icon: Image.asset('assets/icons/settings.png'),
-      //                     onPressed: () {},
-      //                   ),
-      //                 ),
-      //               ) // Ẩn icon đi
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // ),
       appBar: CustomAppBar(
         title: trans.changeBMI,
         style: widthStyle.Large,
@@ -142,7 +162,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                         border: Border.all(color: stroke, width: 2),
                       ),
                       child: ShaderMask(
-                        shaderCallback: (Rect bounds) {
+                        shaderCallback: (bounds) {
                           return gradient.createShader(bounds);
                         },
                         child: Center(
@@ -184,7 +204,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                 SizedBox(height: 48.0),
                 BoxButton(
                     title: trans.recalculate,
-                    onPressed: calculateBMI,
+                    onPressed: _recalculateBMI,
                     style: ButtonStyleType.Primary),
               ],
             ),

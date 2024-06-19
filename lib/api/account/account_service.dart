@@ -140,7 +140,7 @@ class PatchBMIRequest {
 }
 
 /// Patch user account allow to username and phone
-Future<Profile?> patchBMI(PatchUserAccountRequest data) async {
+Future<Profile?> patchBMI(PatchBMIRequest data) async {
   try {
     final Account? currentUser = await retrieveAccount();
     final int profileId = currentUser!.profile.id;
@@ -154,7 +154,10 @@ Future<Profile?> patchBMI(PatchUserAccountRequest data) async {
       return null;
     }
   } catch (e) {
-    print('Patch profile detail error: $e');
+    if (e is DioException) {
+      final message = e.message;
+      print('Patch profile detail error: $message');
+    }
     return null;
   }
 }
