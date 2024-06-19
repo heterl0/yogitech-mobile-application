@@ -5,7 +5,6 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class SignUp extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -123,6 +122,7 @@ class SignUp extends StatelessWidget {
                     .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
                 onPressed: () {
                   _handleSignUp(context);
+                  Navigator.pushNamed(context, AppRoutes.verifyEmail);
                 },
               ),
               SizedBox(height: 10.0),

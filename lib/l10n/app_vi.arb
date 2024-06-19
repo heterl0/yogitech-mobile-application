@@ -1,5 +1,6 @@
 {
   "login": "Đăng nhập",
+  "returnLogin": "Trở lại đăng nhập"
   "email": "Email",
   "password": "Mật khẩu",
   "forgotPassword": "Quên mật khẩu?",
