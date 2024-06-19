@@ -85,17 +85,24 @@ class _MeditateState extends State<Meditate> {
           Container(
             color:
                 theme.colorScheme.onSecondary, // Set background color directly
-            child: CupertinoTimerPicker(
-              mode: CupertinoTimerPickerMode.ms,
-              initialTimerDuration: _selectedDuration,
-              onTimerDurationChanged: (Duration newDuration) {
-                setState(() {
-                  _selectedDuration = Duration(
-                    minutes: min(newDuration.inMinutes, 60),
-                    seconds: min(newDuration.inSeconds % 60, 60),
-                  );
-                });
-              },
+            child: CupertinoTheme(
+              data: CupertinoThemeData(
+                textTheme: CupertinoTextThemeData(
+                  dateTimePickerTextStyle: TextStyle(fontFamily: 'ReadexPro'),
+                ),
+              ),
+              child: CupertinoTimerPicker(
+                mode: CupertinoTimerPickerMode.ms,
+                initialTimerDuration: _selectedDuration,
+                onTimerDurationChanged: (Duration newDuration) {
+                  setState(() {
+                    _selectedDuration = Duration(
+                      minutes: min(newDuration.inMinutes, 60),
+                      seconds: min(newDuration.inSeconds % 60, 60),
+                    );
+                  });
+                },
+              ),
             ),
           ),
           const SizedBox(height: 16),

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/dioInstance.dart';
 import 'package:yogi_application/src/models/account.dart';
 import 'package:yogi_application/utils/formatting.dart';
@@ -109,5 +110,51 @@ Future<bool> changePassword(PasswordChangeRequest data) async {
   } catch (e) {
     print('Change password error: $e');
     return false;
+  }
+}
+
+class PatchBMIRequest {
+  double? weight;
+  double? height;
+  double? bmi;
+
+  PatchBMIRequest({
+    required this.weight,
+    required this.height,
+    required this.bmi,
+  });
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> data = {};
+    if (weight != null) {
+      data['weight'] = weight;
+    }
+    if (height != null) {
+      data['height'] = height;
+    }
+    if (bmi != null) {
+      data['bmi'] = bmi;
+    }
+    return data;
+  }
+}
+
+/// Patch user account allow to username and phone
+Future<Profile?> patchBMI(PatchUserAccountRequest data) async {
+  try {
+    final Account? currentUser = await retrieveAccount();
+    final int profileId = currentUser!.profile.id;
+    final url = formatApiUrl('/api/v1/user-profiles/$profileId/');
+    final Response response = await DioInstance.patch(url, data: data.toMap());
+    if (response.statusCode == 200) {
+      return Profile.fromMap(response.data);
+    } else {
+      print(
+          'Patch profile detail failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Patch profile detail error: $e');
+    return null;
   }
 }

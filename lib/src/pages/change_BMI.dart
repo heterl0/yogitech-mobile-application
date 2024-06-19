@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:yogi_application/api/account/account_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:yogi_application/src/models/account.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
@@ -19,7 +21,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
   final TextEditingController heightController = TextEditingController();
   String bmiResult = '';
   String bmiComment = '';
-
+  Profile? _profile;
   void calculateBMI() {
     final trans = AppLocalizations.of(context)!;
     if (weightController.text.isNotEmpty && heightController.text.isNotEmpty) {
@@ -45,6 +47,22 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
         bmiComment = '';
       });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserProfile();
+  }
+
+  Future<void> _fetchUserProfile() async {
+    Profile? profile = await getUserProfile();
+    print(profile);
+
+    // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
+    setState(() {
+      _profile = profile;
+    });
   }
 
   @override
@@ -129,7 +147,9 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                         },
                         child: Center(
                           child: Text(
-                            bmiResult.isNotEmpty ? bmiResult : 'BMI',
+                            bmiResult.isNotEmpty
+                                ? bmiResult
+                                : _profile?.bmi.toString() ?? 'BMI',
                             style: h1.copyWith(color: primary),
                           ),
                         ),
@@ -147,7 +167,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: weightController,
-                  placeholder: trans.weightKg,
+                  placeholder: _profile?.weight.toString() ?? trans.weightKg,
                   keyboardType: TextInputType.number,
                 ),
                 SizedBox(height: 16.0),
@@ -158,7 +178,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: heightController,
-                  placeholder: trans.heightCm,
+                  placeholder: _profile?.height.toString() ?? trans.heightCm,
                   keyboardType: TextInputType.number,
                 ),
                 SizedBox(height: 48.0),

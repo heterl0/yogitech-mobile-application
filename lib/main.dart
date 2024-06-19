@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/dioInstance.dart';
+import 'package:yogi_application/api/event/event_service.dart';
 import 'package:yogi_application/src/pages/_mainscreen.dart';
 import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/pages/blog.dart';
@@ -20,6 +21,7 @@ import 'package:yogi_application/src/pages/reminder.dart';
 import 'package:yogi_application/src/pages/result.dart';
 import 'package:yogi_application/src/pages/streak.dart';
 import 'package:yogi_application/src/pages/subscription.dart';
+import 'package:yogi_application/src/pages/verify_email.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/pages/login_page.dart';
 import 'package:yogi_application/src/pages/sign_up_page.dart';
@@ -46,7 +48,6 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
   runApp(accessToken != null
       ? MyApp(access: accessToken)
       : MyApp()); // Conditional app start
@@ -56,7 +57,9 @@ Future<String?> checkToken() async {
   try {
     final tokens = await getToken();
     final accessToken = tokens['access'];
-    DioInstance.setAccessToken(accessToken ?? "");
+    if (accessToken != null) {
+      DioInstance.setAccessToken(accessToken);
+    }
     return accessToken;
   } catch (error) {
     // Handle error, e.g., log the error or show an error message.
@@ -129,8 +132,9 @@ class _MyAppState extends State<MyApp> {
         //   fit: BoxFit.fill,
         // ),
         debugShowCheckedModeBanner: false,
-        initialRoute:
-            widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
+        initialRoute: widget.access != null
+            ? AppRoutes.verifyEmail
+            : AppRoutes.verifyEmail,
         // onGenerateRoute: _generateRoute,
         theme: lightTheme,
         darkTheme: darkTheme,
@@ -154,6 +158,9 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.homepage: (context) => HomePage(),
           AppRoutes.login: (context) => LoginPage(),
           AppRoutes.signup: (context) => SignUp(),
+
+          AppRoutes.verifyEmail: (context) => VerifyEmail(),
+          
           AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
           AppRoutes.OtpConfirm: (context) => OTP_Page(),
           AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
