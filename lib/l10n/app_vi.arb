@@ -161,5 +161,8 @@
   "numOfCandidate":"Người tham gia:",
   "point":"Điểm",
   "giveUp":"Hủy đăng ký",
+  "eventNotStart":"Sự kiện chưa diễn ra.",
+  "eventPassed":"Sự kiện đã kết thúc",
+  "eventRemain":"ngày còn lại.",
   "end":"Kết thúc"
 }

@@ -135,9 +135,11 @@ class _EventDetailState extends State<EventDetail> {
       ),
     );
   }
-  
+
   Widget _buildCustomTopBar(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     return SliverAppBar(
       toolbarHeight: 80,
       shape: const RoundedRectangleBorder(
@@ -163,7 +165,7 @@ class _EventDetailState extends State<EventDetail> {
       backgroundColor: theme.colorScheme.onSecondary,
       pinned: true,
       centerTitle: true,
-      title: Text(checkDateExpired(_event!.start_date, _event!.expire_date),
+      title: Text(checkDateExpired(_event!.start_date, _event!.expire_date,trans),
           style: h2.copyWith(color: theme.colorScheme.onBackground)),
       expandedHeight: 320,
       flexibleSpace: FlexibleSpaceBar(
