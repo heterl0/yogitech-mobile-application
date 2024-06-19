@@ -56,6 +56,7 @@ Future<dynamic> register(RegisterRequest data) async {
     Response response = await DioInstance.post(url, data: bodyData);
 
     if (response.statusCode == 201) {
+      print(123);
       return {'status': response.statusCode, 'message': response.data};
     }
   } catch (e) {

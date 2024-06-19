@@ -161,7 +161,7 @@ class SignUp extends StatelessWidget {
           password: enteredPassword,
           username: enteredUsername,
           re_password: enteredConfirmPassword));
-
+      print(response);
       if (response['status'] == 201) {
         ScaffoldMessenger.of(context)
             .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại

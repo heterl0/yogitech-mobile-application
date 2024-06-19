@@ -1,6 +1,6 @@
 {
   "login": "Login",
-  "returnLogin": "Return Login"
+  "returnLogin": "Return Login",
   "email": "Email",
   "password": "Password",
   "forgotPassword": "Forgot password?",
