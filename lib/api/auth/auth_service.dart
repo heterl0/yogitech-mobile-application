@@ -56,13 +56,7 @@ Future<dynamic> register(RegisterRequest data) async {
     Response response = await DioInstance.post(url, data: bodyData);
 
     if (response.statusCode == 201) {
-      // final accessToken = response.data['access'];
-      // final refreshToken = response.data['refresh'];
-      // await saveTokens(accessToken, refreshToken);
-      // DioInstance.setAccessToken(accessToken);
-      // Account? account = await getUser();
-      // storeAccount(account!);
-      // return accessToken;
+      return {'status': response.statusCode, 'message': response.data};
     }
   } catch (e) {
     if (e is DioException) {

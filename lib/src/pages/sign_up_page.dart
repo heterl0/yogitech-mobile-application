@@ -171,7 +171,7 @@ class SignUp extends StatelessWidget {
           ),
         );
 
-        Navigator.pushReplacementNamed(context, AppRoutes.homepage);
+        Navigator.pushReplacementNamed(context, AppRoutes.verifyEmail);
       } else {
         final errorMessages = response['message'];
 
