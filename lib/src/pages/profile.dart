@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:yogi_application/api/account/account_service.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
@@ -107,7 +108,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 Icons.ios_share,
                 color: theme.colorScheme.onBackground,
               ),
-              onPressed: () {},
+              onPressed: () async {
+                await Share.share(
+                    'check out my website https://www.yogitech.me',
+                    subject: 'Look what I made!');
+              },
             ),
           ],
         ),

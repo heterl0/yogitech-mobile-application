@@ -85,7 +85,7 @@ class _ActivitiesState extends State<Activities> {
             caption:
                 "${trans.participants}: ${_events[index].event_candidate.length}",
             subtitle: checkDateExpired(
-                _events[index].start_date, _events[index].expire_date),
+                _events[index].start_date, _events[index].expire_date,trans),
             onTap: () {
               pushWithoutNavBar(
                 context,
