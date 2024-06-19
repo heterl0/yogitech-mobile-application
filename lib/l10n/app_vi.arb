@@ -1,6 +1,8 @@
 {
   "login": "Đăng nhập",
   "returnLogin": "Trở lại đăng nhập",
+  "verifyEmail": "Xác nhận Email của bạn",
+  "checkYourEmail": "Vui lòng kiểm tra email của bạn để nhận liên kết kích hoạt tài khoản mới.",
   "email": "Email",
   "password": "Mật khẩu",
   "forgotPassword": "Quên mật khẩu?",
