@@ -5,6 +5,7 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:yogi_application/src/widgets/box_input_field.dart';
 
 class SignUp extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
@@ -42,19 +43,9 @@ class SignUp extends StatelessWidget {
               textAlign: TextAlign.left,
             ),
             SizedBox(height: 16.0),
-            TextField(
+            BoxInputField(
               controller: usernameController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white.withOpacity(0),
-                hintText: trans.username,
-                hintStyle: TextStyle(color: Color(0xFF8D8E99)),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(44.0),
-                  borderSide: BorderSide(color: Color(0xFF8D8E99)),
-                ),
-              ),
-              style: TextStyle(color: Colors.white),
+              placeholder: trans.username,
             ),
 
             // BoxInputField(
@@ -63,55 +54,21 @@ class SignUp extends StatelessWidget {
             // ),
 
             SizedBox(height: 16.0),
-            TextField(
+            BoxInputField(
               controller: emailController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white.withOpacity(0),
-                hintText: trans.email,
-                hintStyle: TextStyle(color: Color(0xFF8D8E99)),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(44.0),
-                  borderSide: BorderSide(color: Color(0xFF8D8E99)),
-                ),
-              ),
-              style: TextStyle(color: Colors.white),
+              placeholder: trans.email,
             ),
             SizedBox(height: 16.0),
-            TextField(
+            BoxInputField(
               controller: passwordController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white.withOpacity(0),
-                hintText: trans.password,
-                hintStyle: TextStyle(
-                  color: Color(0xFF8D8E99),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(44.0),
-                  borderSide: BorderSide(color: Color(0xFF8D8E99)),
-                ),
-              ),
-              obscureText: true,
-              style: TextStyle(color: Colors.white),
+              placeholder: trans.password,
+              password: true,
             ),
             SizedBox(height: 16.0),
-            TextField(
+            BoxInputField(
               controller: confirmPasswordController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white.withOpacity(0),
-                hintText: trans.confirmPassword,
-                hintStyle: TextStyle(
-                  color: Color(0xFF8D8E99),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(44.0),
-                  borderSide: BorderSide(color: Color(0xFF8D8E99)),
-                ),
-              ),
-              obscureText: true,
-              style: TextStyle(color: Colors.white),
+              placeholder: trans.confirmPassword,
+              password: true,
             ),
 
             SizedBox(height: 10.0),
@@ -217,7 +174,6 @@ class SignUp extends StatelessWidget {
         Navigator.pushReplacementNamed(context, AppRoutes.homepage);
       } else {
         final errorMessages = response['message'];
-        print(errorMessages);
 
         ScaffoldMessenger.of(context).hideCurrentSnackBar(); //
 
