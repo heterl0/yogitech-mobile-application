@@ -44,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
       await clearToken();
 
       // Chuyển hướng đến trang đăng nhập và xóa tất cả các route cũ
-      Navigator.of(context).pushNamedAndRemoveUntil(
+      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
           AppRoutes.login, (Route<dynamic> route) => false);
     } catch (e) {
       print('Logout error: $e');
