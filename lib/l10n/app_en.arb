@@ -1,6 +1,8 @@
 {
   "login": "Login",
-  "returnLogin": "Return Login"
+  "returnLogin": "Return Login",
+  "verifyEmail": "Verify your Email address",
+  "checkYourEmail": "Check your email to get a link to active the new account, please",
   "email": "Email",
   "password": "Password",
   "forgotPassword": "Forgot password?",
