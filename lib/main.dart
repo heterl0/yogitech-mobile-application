@@ -56,7 +56,9 @@ Future<String?> checkToken() async {
   try {
     final tokens = await getToken();
     final accessToken = tokens['access'];
-    DioInstance.setAccessToken(accessToken ?? "");
+    if (accessToken != null) {
+      DioInstance.setAccessToken(accessToken);
+    }
     return accessToken;
   } catch (error) {
     // Handle error, e.g., log the error or show an error message.
