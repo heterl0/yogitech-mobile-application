@@ -6,9 +6,30 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+class FriendListPage extends StatefulWidget {
+  final int initialTabIndex;
+  FriendListPage({Key? key, required this.initialTabIndex}) : super(key: key);
 
-class FollowingPage extends StatelessWidget {
-  final ScrollController _controller = ScrollController(); // ScrollController
+  @override
+  _FriendListPageState createState() => _FriendListPageState();
+}
+
+class _FriendListPageState extends State<FriendListPage>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+        length: 2, vsync: this, initialIndex: widget.initialTabIndex);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,119 +40,95 @@ class FollowingPage extends StatelessWidget {
       backgroundColor: theme.colorScheme.background,
       appBar: CustomAppBar(
         style: widthStyle.Large,
-        title: trans.following,
+        title: trans.friends,
       ),
-      body: SingleChildScrollView(
-        controller: _controller, // Gán ScrollController
-        child: Container(
-          margin: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              FriendList(
-                title: trans.following,
-                itemCount: 10,
-                onTap: () {
-                  _controller.animateTo(
-                    MediaQuery.of(context).size.height,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  );
-                },
+      body: Column(
+        children: [
+          TabBar(
+            controller: _tabController,
+            indicator: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: primary, // Màu sắc của đường gạch chân tab được chọn
+                  width: 2.0, // Độ dày của đường gạch chân tab được chọn
+                ),
+              ),
+            ),
+            unselectedLabelColor: text,
+            padding: EdgeInsets.only(left: 24, right: 24, top: 16),
+            tabs: [
+              Tab(
+                child: Text(
+                  trans.following,
+                  style: h3,
+                ),
+              ),
+              Tab(
+                child: Text(
+                  trans.follower,
+                  style: h3,
+                ),
               ),
             ],
           ),
-        ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                FriendList(
+                  itemCount: 10,
+                ),
+                FriendList(
+                  itemCount: 10,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 }
-
-
-class FollowerPage extends StatelessWidget {
-  final ScrollController _controller = ScrollController(); // ScrollController
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final trans = AppLocalizations.of(context)!;
-
-    return Scaffold(
-      backgroundColor: theme.colorScheme.background,
-      appBar: CustomAppBar(
-        style: widthStyle.Large,
-
-        title: trans.follower,
-      ),
-      body: SingleChildScrollView(
-        controller: _controller, // Gán ScrollController
-        child: Container(
-          margin: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              FriendList(
-                title: trans.follower,
-                itemCount: 10,
-                onTap: () {
-                  _controller.animateTo(
-                    MediaQuery.of(context).size.height,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 
 class FriendList extends StatelessWidget {
-  final String title;
   final int itemCount;
-  final Function()? onTap;
 
   const FriendList({
     Key? key,
-    required this.title,
     required this.itemCount,
-    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: h2.copyWith(color: theme.colorScheme.onBackground),
-        ),
-        SizedBox(height: 8),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: itemCount,
-          itemBuilder: (context, index) {
-            return FriendListItem(
-              name: 'Friend Name $index',
-              avatarUrl: 'assets/images/gradient.jpg',
-              exp: '10000',
-              onTap: (){
-                     pushWithoutNavBar(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => FriendProfile(),
-                            ),
-                          );
-                  }, // Sử dụng hàm mặc định khi onTap là null
-            );
-          },
-        ),
-      ],
+    Theme.of(context);
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 8),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: itemCount,
+            itemBuilder: (context, index) {
+              return FriendListItem(
+                name: 'Friend Name $index',
+                avatarUrl: 'assets/images/gradient.jpg',
+                exp: '10000',
+                onTap: () {
+                  pushWithoutNavBar(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FriendProfile(),
+                    ),
+                  );
+                }, // Sử dụng hàm mặc định khi onTap là null
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

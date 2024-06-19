@@ -161,6 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       radius: 50,
                                       backgroundImage:
                                           NetworkImage(_profile!.avatar_url!),
+                                      backgroundColor: Colors.transparent,
                                     )
                                   : Center(
                                       child: _profile != null &&
@@ -171,6 +172,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                               radius: 50,
                                               backgroundImage: NetworkImage(
                                                   _profile!.avatar_url!),
+                                              backgroundColor:
+                                                  Colors.transparent,
                                             )
                                           : Center(
                                               child: Container(
@@ -178,8 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 height: 144,
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
-                                                  color: Colors
-                                                      .grey, // Màu nền của hình tròn
+                                                  color: Colors.transparent,
                                                 ),
                                                 child: Center(
                                                   child: Text(
@@ -193,7 +195,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: Colors
-                                                          .white, // Màu chữ
+                                                          .transparent, // Màu chữ
                                                     ),
                                                   ),
                                                 ),
@@ -276,7 +278,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => FollowingPage(),
+                                    builder: (context) => FriendListPage(
+                                      initialTabIndex: 0,
+                                    ),
                                   ),
                                 );
                               },
@@ -290,7 +294,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => FollowerPage(),
+                                    builder: (context) => FriendListPage(
+                                      initialTabIndex: 1,
+                                    ),
                                   ),
                                 );
                               },
