@@ -133,6 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       style: h2.copyWith(color: active),
                     ),
                   ),
+
                   const SizedBox(height: 16),
                   Row(
                     children: [

@@ -8,7 +8,6 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'dart:math';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class Meditate extends StatefulWidget {
   @override
   _MeditateState createState() => _MeditateState();
@@ -74,7 +73,7 @@ class _MeditateState extends State<Meditate> {
   Widget _buildMainContent() {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
-    
+
     return Positioned(
       left: 24,
       top: 24,
@@ -85,17 +84,24 @@ class _MeditateState extends State<Meditate> {
           Container(
             color:
                 theme.colorScheme.onSecondary, // Set background color directly
-            child: CupertinoTimerPicker(
-              mode: CupertinoTimerPickerMode.ms,
-              initialTimerDuration: _selectedDuration,
-              onTimerDurationChanged: (Duration newDuration) {
-                setState(() {
-                  _selectedDuration = Duration(
-                    minutes: min(newDuration.inMinutes, 60),
-                    seconds: min(newDuration.inSeconds % 60, 60),
-                  );
-                });
-              },
+            child: CupertinoTheme(
+              data: CupertinoThemeData(
+                textTheme: CupertinoTextThemeData(
+                  dateTimePickerTextStyle: TextStyle(fontFamily: 'ReadexPro'),
+                ),
+              ),
+              child: CupertinoTimerPicker(
+                mode: CupertinoTimerPickerMode.ms,
+                initialTimerDuration: _selectedDuration,
+                onTimerDurationChanged: (Duration newDuration) {
+                  setState(() {
+                    _selectedDuration = Duration(
+                      minutes: min(newDuration.inMinutes, 60),
+                      seconds: min(newDuration.inSeconds % 60, 60),
+                    );
+                  });
+                },
+              ),
             ),
           ),
           const SizedBox(height: 16),
@@ -106,7 +112,9 @@ class _MeditateState extends State<Meditate> {
           const SizedBox(height: 16),
           _buildCheckboxItem(
             title: trans.soundRain,
-            subtitle:trans.soundRain=='Sound of rain'?  'Deep sound on rainy days.':'Âm thanh sâu lắng trong những ngày mưa.',
+            subtitle: trans.soundRain == 'Sound of rain'
+                ? 'Deep sound on rainy days.'
+                : 'Âm thanh sâu lắng trong những ngày mưa.',
             value: _isChecked1,
             onChanged: (value) {
               setState(() {
@@ -118,7 +126,9 @@ class _MeditateState extends State<Meditate> {
           const SizedBox(height: 16),
           _buildCheckboxItem(
             title: trans.soundStream,
-            subtitle:trans.soundStream=='The sound of the stream flowing'? 'Immersing yourself in the refreshing nature.':"Âm thanh suối chảy hòa mình vào thiên nhiên trong lành.",
+            subtitle: trans.soundStream == 'The sound of the stream flowing'
+                ? 'Immersing yourself in the refreshing nature.'
+                : "Âm thanh suối chảy hòa mình vào thiên nhiên trong lành.",
             value: _isChecked2,
             onChanged: (value) {
               setState(() {
