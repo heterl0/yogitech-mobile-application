@@ -132,9 +132,8 @@ class _MyAppState extends State<MyApp> {
         //   fit: BoxFit.fill,
         // ),
         debugShowCheckedModeBanner: false,
-        initialRoute: widget.access != null
-            ? AppRoutes.verifyEmail
-            : AppRoutes.verifyEmail,
+        initialRoute:
+            widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
         // onGenerateRoute: _generateRoute,
         theme: lightTheme,
         darkTheme: darkTheme,
@@ -158,9 +157,7 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.homepage: (context) => HomePage(),
           AppRoutes.login: (context) => LoginPage(),
           AppRoutes.signup: (context) => SignUp(),
-
           AppRoutes.verifyEmail: (context) => VerifyEmail(),
-          
           AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
           AppRoutes.OtpConfirm: (context) => OTP_Page(),
           AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
