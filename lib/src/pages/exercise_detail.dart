@@ -4,12 +4,14 @@ import 'package:yogi_application/api/exercise/exercise_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/models/exercise.dart';
+import 'package:yogi_application/src/models/pose.dart';
 import 'package:yogi_application/src/pages/result.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:yogi_application/utils/formatting.dart';
 
 class ExerciseDetail extends StatefulWidget {
   final int? id;
@@ -120,14 +122,14 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           const SizedBox(height: 16),
           _buildTitle2(context, trans.poses),
           const SizedBox(height: 16),
-          _buildPoses(trans),
+          _buildPoses(trans, context),
           const SizedBox(height: 16),
           _buildTitle2(context, trans.comment),
           const SizedBox(height: 16),
           _buildCommentSection(trans),
           const SizedBox(height: 16),
-          _buildComment(context),
-          const SizedBox(height: 36),
+          ..._exercise!.comments
+              .map((comment) => _buildComment(context, comment)),
         ],
       ),
     );
@@ -184,7 +186,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
     );
   }
 
-  Widget _buildPoses(AppLocalizations trans) {
+  Widget _buildPoses(AppLocalizations trans, BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
       padding: const EdgeInsets.all(0),
@@ -193,16 +195,20 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         crossAxisCount: 2,
         crossAxisSpacing: 2.0,
         mainAxisSpacing: 2.0,
-        childAspectRatio: 5 / 4,
+        childAspectRatio: 8 / 9,
       ),
-      itemCount: 6,
+      itemCount: _exercise?.poses.length ?? 0,
       itemBuilder: (context, index) {
-        final title = trans.pose + ' ${index + 1}';
-        final subtitle = '${5 - index} ' + trans.minutes;
+        final PoseWithTime pose = _exercise!.poses[index];
+        final Pose poseDetail = pose.pose;
+        final title = poseDetail.name;
+        // final title = trans.pose + ' ${index + 1}';
+        final subtitle = '${pose.duration} ' + trans.seconds;
 
         return CustomCard(
           title: title,
           subtitle: subtitle,
+          imageUrl: poseDetail.image_url,
           onTap: () {},
         );
       },
@@ -230,8 +236,12 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
     );
   }
 
-  Widget _buildComment(BuildContext context) {
+  Widget _buildComment(BuildContext context, Comment comment) {
     bool like = false; // Define a variable to keep track of like state
+    Locale locale = Localizations.localeOf(context);
+    final name = comment.user.profile.first_name != null
+        ? "${comment.user.profile.last_name} ${comment.user.profile.first_name}"
+        : comment.user.username;
     final theme = Theme.of(context);
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
@@ -252,7 +262,11 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                 width: 44,
                 height: 44,
                 decoration: ShapeDecoration(
-                  gradient: gradient,
+                  image: DecorationImage(
+                    image: NetworkImage(comment.user.profile.avatar_url ?? ''),
+                    fit: BoxFit.cover,
+                  ),
+                  // gradient: gradient,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(80),
                   ),
@@ -271,14 +285,15 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                       children: [
                         Expanded(
                           child: Text(
-                            'Chinhphu',
+                            name,
                             textAlign: TextAlign.start,
                             style: min_cap.copyWith(color: primary),
                           ),
                         ),
                         Expanded(
                           child: Text(
-                            'Feb 30 2024',
+                            formatDateTime(
+                                comment.created_at, locale.languageCode),
                             textAlign: TextAlign.end,
                             style: min_cap.copyWith(color: text),
                           ),
@@ -286,7 +301,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                       ],
                     ),
                     Text(
-                      'This exercise is too hard to doooooooooooo!!!!!',
+                      comment.text,
                       style:
                           bd_text.copyWith(color: theme.colorScheme.onPrimary),
                     ),
