@@ -37,3 +37,45 @@ Future<Exercise?> getExercise(int id) async {
     return null;
   }
 }
+
+class PostCommentRequest {
+  String? text;
+  int? exercise;
+  int? parentComment;
+
+  PostCommentRequest({
+    required this.text,
+    required this.exercise,
+    this.parentComment,
+  });
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> data = {};
+    if (text != null) {
+      data['text'] = text;
+    }
+    if (exercise != null) {
+      data['exercise'] = exercise;
+    }
+    if (parentComment != null) {
+      data['parent_comment'] = parentComment;
+    }
+    return data;
+  }
+}
+
+Future<Comment?> postComment(PostCommentRequest data) async {
+  try {
+    final url = formatApiUrl('/api/v1/exercise-comments/');
+    final Response response = await DioInstance.post(url, data: data.toMap());
+    if (response.statusCode == 201) {
+      return Comment.fromMap(response.data);
+    } else {
+      print('Post comment failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Post comment error: $e');
+    return null;
+  }
+}
