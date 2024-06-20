@@ -330,11 +330,13 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                       await deleteVote(vote.id);
                       setState(() {
                         comment.votes.remove(vote);
+                        isLike = false;
                       });
                     }
                   } else {
                     Vote? vote = await postVote(comment.id);
                     setState(() {
+                      isLike = vote != null;
                       comment.votes.add(vote!);
                     });
                   }
