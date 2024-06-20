@@ -53,8 +53,8 @@ dependencies:
   flutter_dotenv: ^5.1.0
   flutter_native_splash: ^2.4.0
   flutter_widget_from_html: ^0.15.1
-  flutter_charts: ^0.5.2
   share_plus: ^9.0.0
+  fl_chart: ^0.68.0
 # flutter_native_splash:
 #   android: true
 #   ios: true

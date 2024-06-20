@@ -16,7 +16,7 @@ import 'package:yogi_application/src/pages/settings.dart';
 import 'package:yogi_application/src/pages/friendlist.dart';
 import 'package:yogi_application/src/pages/change_BMI.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_charts/flutter_charts.dart' as charts;
+import 'package:fl_chart/fl_chart.dart';
 
 class ProfilePage extends StatefulWidget {
   final bool isDarkMode;
@@ -39,6 +39,24 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   Profile? _profile;
   Account? _account;
+
+  List<FlSpot> sampleDataPoints = [
+    FlSpot(0, 1000), // x = thời gian (ví dụ: ngày), y = điểm
+    FlSpot(1, 1200),
+    FlSpot(2, 1400),
+    FlSpot(3, 1600),
+    FlSpot(4, 1800),
+    FlSpot(5, 2000),
+  ];
+
+  List<FlSpot> sampleDataExp = [
+    FlSpot(0, 2000), // x = thời gian (ví dụ: ngày), y = kinh nghiệm
+    FlSpot(1, 2200),
+    FlSpot(2, 2400),
+    FlSpot(3, 2600),
+    FlSpot(4, 2800),
+    FlSpot(5, 3000),
+  ];
 
   void refreshProfile() {
     // Gọi API để lấy lại dữ liệu hồ sơ sau khi cập nhật BMI
@@ -349,20 +367,66 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                   const SizedBox(height: 20.0),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          margin: const EdgeInsets.all(0.0),
-                          height: 160,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: const Color(0xFF8D8E99)),
-                            borderRadius: BorderRadius.circular(20.0),
+                  AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: LineChart(LineChartData(
+                        minX: 0,
+                        maxX: 5,
+                        minY: 1000,
+                        maxY: 3000,
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: sampleDataPoints,
+                            isCurved: true,
+                            color: green,
+                            barWidth: 4,
                           ),
-                        ),
-                      ),
-                    ],
+                          LineChartBarData(
+                            spots: sampleDataExp,
+                            isCurved: true,
+                            gradient: gradient,
+                            barWidth: 4,
+                          ),
+                        ],
+                        titlesData: FlTitlesData(
+                          leftTitles: AxisTitles(
+                            axisNameWidget: Text(
+                              trans.value,
+                              style: min_cap.copyWith(color: text),
+                            ),
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                            ),
+                          ),
+                          bottomTitles: AxisTitles(
+                            axisNameWidget: Text(
+                              trans.days,
+                              style: min_cap.copyWith(color: text),
+                            ),
+                            sideTitles: SideTitles(showTitles: true),
+                          ),
+                          topTitles: AxisTitles(),
+                          rightTitles: AxisTitles(),
+                        ))),
                   ),
+                  // Row(
+                  //   children: [
+                  //     Text(
+                  //       "Charts",
+                  //       style: h3.copyWith(color: primary),
+                  //     ),
+                  //     Expanded(
+                  //       child: Container(
+                  //         margin: const EdgeInsets.all(0.0),
+                  //         height: 160,
+                  //         decoration: BoxDecoration(
+                  //           border: Border.all(color: const Color(0xFF8D8E99)),
+                  //           borderRadius: BorderRadius.circular(20.0),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                   const SizedBox(height: 20.0), // Added space for better layout
                   Row(
                     children: [

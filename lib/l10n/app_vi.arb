@@ -167,5 +167,6 @@
   "eventNotStart":"Sự kiện chưa diễn ra.",
   "eventPassed":"Sự kiện đã kết thúc",
   "eventRemain":"ngày còn lại.",
-  "end":"Kết thúc"
+  "end":"Kết thúc",
+  "value": "Giá trị"
 }

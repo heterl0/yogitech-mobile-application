@@ -167,5 +167,6 @@
   "eventNotStart":"The event is not start.",
   "eventPassed":"The date has passed.",
   "eventRemain":"days remaining.",
-  "end":"End"
+  "end":"End",
+  "value": "Value"
 }
