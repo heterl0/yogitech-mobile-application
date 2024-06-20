@@ -79,3 +79,38 @@ Future<Comment?> postComment(PostCommentRequest data) async {
     return null;
   }
 }
+
+Future<Vote?> postVote(int commentId) async {
+  try {
+    final url = formatApiUrl('/api/v1/exercise-votes/');
+    final Response response = await DioInstance.post(url, data: {
+      'comment': commentId,
+      'vote_value': 1,
+    });
+    if (response.statusCode == 201) {
+      return Vote.fromMap(response.data);
+    } else {
+      print('Post vote failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Post vote error: $e');
+    return null;
+  }
+}
+
+Future<bool> deleteVote(int voteId) async {
+  try {
+    final url = formatApiUrl('/api/v1/exercise-votes/$voteId/');
+    final Response response = await DioInstance.delete(url);
+    if (response.statusCode == 204) {
+      return true;
+    } else {
+      print('Delete vote failed with status code: ${response.statusCode}');
+      return false;
+    }
+  } catch (e) {
+    print('Delete vote error: $e');
+    return false;
+  }
+}

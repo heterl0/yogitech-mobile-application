@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/exercise/exercise_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
@@ -25,6 +26,7 @@ class ExerciseDetail extends StatefulWidget {
 class _ExerciseDetailState extends State<ExerciseDetail> {
   late Exercise? _exercise;
   late bool _isLoading = false;
+  late int user_id = -1;
   final TextEditingController commentController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -72,9 +74,11 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
     });
 
     final exercise = await getExercise(widget.id ?? 0);
+    final user = await retrieveAccount();
     setState(() {
       _exercise = exercise;
       _isLoading = false;
+      user_id = user!.id;
     });
   }
 
@@ -246,7 +250,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
   }
 
   Widget _buildComment(BuildContext context, Comment comment) {
-    bool like = false; // Define a variable to keep track of like state
+    bool isLike = comment.hasUserVoted(user_id);
     Locale locale = Localizations.localeOf(context);
     final name = comment.user.profile.first_name != null
         ? "${comment.user.profile.last_name} ${comment.user.profile.first_name}"
@@ -319,12 +323,23 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                 ),
               ),
               IconButton(
-                onPressed: () {
-                  setState(() {
-                    like = !like; // Toggle the like state
-                  });
+                onPressed: () async {
+                  if (isLike) {
+                    Vote? vote = comment.getUserVote(user_id);
+                    if (vote != null) {
+                      await deleteVote(vote.id);
+                      setState(() {
+                        comment.votes.remove(vote);
+                      });
+                    }
+                  } else {
+                    Vote? vote = await postVote(comment.id);
+                    setState(() {
+                      comment.votes.add(vote!);
+                    });
+                  }
                 },
-                icon: like
+                icon: isLike
                     ? const Icon(
                         Icons.favorite,
                         color: primary,

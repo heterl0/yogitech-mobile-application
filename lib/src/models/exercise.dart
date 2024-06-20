@@ -261,7 +261,7 @@ class Exercise {
 class Vote {
   int id;
   String user;
-  String user_id;
+  int user_id;
   int vote_value;
   int comment;
 
@@ -276,7 +276,7 @@ class Vote {
   Vote copyWith({
     int? id,
     String? user,
-    String? user_id,
+    int? user_id,
     int? vote_value,
     int? comment,
   }) {
@@ -303,7 +303,7 @@ class Vote {
     return Vote(
       id: map['id'] as int,
       user: map['user'] as String,
-      user_id: map['user_id'] as String,
+      user_id: map['user_id'] as int,
       vote_value: map['vote_value'] as int,
       comment: map['comment'] as int,
     );
@@ -415,7 +415,8 @@ class Comment {
       created_at: map['created_at'] as String,
       updated_at: map['updated_at'] as String,
       active_status: map['active_status'] as int,
-      parent_comment: map['parent_comment'] != null ? map['parent_comment'] as int : null,
+      parent_comment:
+          map['parent_comment'] != null ? map['parent_comment'] as int : null,
       user: Account.fromMap(map['user'] as Map<String, dynamic>),
       exercise: map['exercise'] as int,
     );
@@ -457,5 +458,23 @@ class Comment {
         parent_comment.hashCode ^
         user.hashCode ^
         exercise.hashCode;
+  }
+
+  bool hasUserVoted(int user_id) {
+    for (Vote vote in votes) {
+      if (vote.user_id == user_id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Vote? getUserVote(int user_id) {
+    for (Vote vote in votes) {
+      if (vote.user_id == user_id) {
+        return vote;
+      }
+    }
+    return null;
   }
 }
