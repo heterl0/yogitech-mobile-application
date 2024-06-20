@@ -30,6 +30,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
   @override
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -37,10 +38,10 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         title: trans.exerciseDetail,
         style: widthStyle.Large,
       ),
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: _isLoading
           ? Container(
-              color: Colors.black54,
+              color: theme.colorScheme.background,
               child: Center(
                 child: CircularProgressIndicator(),
               ),
@@ -160,7 +161,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '$minute ' + trans.minutes,
+          '$minute ${trans.minutes}',
           style: bd_text.copyWith(color: text),
         ),
         const SizedBox(width: 16),
@@ -216,23 +217,26 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
   }
 
   Widget _buildCommentSection(AppLocalizations trans) {
-    return Row(
-      children: [
-        Expanded(
-          child: BoxInputField(
-            controller: commentController,
-            placeholder: trans.yourComment,
+    return Padding(
+      padding: MediaQuery.of(context).viewInsets,
+      child: Row(
+        children: [
+          Expanded(
+            child: BoxInputField(
+              controller: commentController,
+              placeholder: trans.yourComment,
+            ),
           ),
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.send_outlined,
-            size: 36,
-            color: text,
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.send_outlined,
+              size: 36,
+              color: text,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

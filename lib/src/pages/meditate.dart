@@ -56,20 +56,6 @@ class _MeditateState extends State<Meditate> {
     );
   }
 
-  Widget _buildTitleText() {
-    final theme = Theme.of(context);
-    final trans = AppLocalizations.of(context)!;
-
-    return Positioned(
-      left: 0,
-      right: 0,
-      top: 100,
-      child: Text(trans.meditate,
-          textAlign: TextAlign.center,
-          style: h2.copyWith(color: theme.colorScheme.onBackground)),
-    );
-  }
-
   Widget _buildMainContent() {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
@@ -84,24 +70,17 @@ class _MeditateState extends State<Meditate> {
           Container(
             color:
                 theme.colorScheme.onSecondary, // Set background color directly
-            child: CupertinoTheme(
-              data: CupertinoThemeData(
-                textTheme: CupertinoTextThemeData(
-                  dateTimePickerTextStyle: TextStyle(fontFamily: 'ReadexPro'),
-                ),
-              ),
-              child: CupertinoTimerPicker(
-                mode: CupertinoTimerPickerMode.ms,
-                initialTimerDuration: _selectedDuration,
-                onTimerDurationChanged: (Duration newDuration) {
-                  setState(() {
-                    _selectedDuration = Duration(
-                      minutes: min(newDuration.inMinutes, 60),
-                      seconds: min(newDuration.inSeconds % 60, 60),
-                    );
-                  });
-                },
-              ),
+            child: CupertinoTimerPicker(
+              mode: CupertinoTimerPickerMode.ms,
+              initialTimerDuration: _selectedDuration,
+              onTimerDurationChanged: (Duration newDuration) {
+                setState(() {
+                  _selectedDuration = Duration(
+                    minutes: min(newDuration.inMinutes, 60),
+                    seconds: min(newDuration.inSeconds % 60, 60),
+                  );
+                });
+              },
             ),
           ),
           const SizedBox(height: 16),

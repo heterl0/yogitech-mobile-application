@@ -40,6 +40,11 @@ class _ProfilePageState extends State<ProfilePage> {
   Profile? _profile;
   Account? _account;
 
+  void refreshProfile() {
+    // Gọi API để lấy lại dữ liệu hồ sơ sau khi cập nhật BMI
+    _fetchUserProfile();
+  }
+
   Future<void> _logout() async {
     try {
       // Xóa token từ SharedPreferences khi người dùng logout
@@ -332,7 +337,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ChangeBMIPage(),
+                                    builder: (context) => ChangeBMIPage(
+                                        onBMIUpdated: refreshProfile),
                                   ),
                                 );
                               },
