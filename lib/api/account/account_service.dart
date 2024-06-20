@@ -162,3 +162,52 @@ Future<Profile?> patchBMI(PatchBMIRequest data) async {
     return null;
   }
 }
+
+class PatchProfileRequest {
+  String? phone;
+  DateTime? birthdate;
+  int? gender;
+
+  PatchProfileRequest({
+    required this.phone,
+    required this.birthdate,
+    required this.gender,
+  });
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> data = {};
+    if (phone != null) {
+      data['phone'] = phone;
+    }
+    if (birthdate != null) {
+      data['birthdate'] = birthdate?.toIso8601String();
+    }
+    if (gender != null) {
+      data['gender'] = gender;
+    }
+    return data;
+  }
+}
+
+// Update profile
+Future<Profile?> patchProfile(PatchProfileRequest data) async {
+  try {
+    final Account? currentUser = await retrieveAccount();
+    final int profileId = currentUser!.profile.id;
+    final url = formatApiUrl('/api/v1/user-profiles/$profileId/');
+    final response = await DioInstance.patch(url, data: data.toMap());
+    final accountRes = await DioInstance.patch(
+        formatApiUrl('/api/v1/users/me/'),
+        data: data.toMap());
+    if (response.statusCode == 200 && accountRes.statusCode == 200) {
+      return Profile.fromMap(response.data);
+    } else {
+      print(
+          'Patch profile detail failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Patch profile detail error: $e');
+    return null;
+  }
+}

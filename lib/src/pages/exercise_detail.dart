@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:yogi_application/api/exercise/exercise_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
+import 'package:yogi_application/src/models/exercise.dart';
 import 'package:yogi_application/src/pages/result.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
@@ -9,7 +11,18 @@ import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class ExerciseDetail extends StatelessWidget {
+class ExerciseDetail extends StatefulWidget {
+  final int? id;
+
+  ExerciseDetail({Key? key, this.id}) : super(key: key);
+
+  @override
+  _ExerciseDetailState createState() => _ExerciseDetailState();
+}
+
+class _ExerciseDetailState extends State<ExerciseDetail> {
+  late Exercise? _exercise;
+  late bool _isLoading = false;
   final TextEditingController commentController = TextEditingController();
 
   @override
@@ -23,7 +36,14 @@ class ExerciseDetail extends StatelessWidget {
         style: widthStyle.Large,
       ),
       resizeToAvoidBottomInset: false,
-      body: _buildBody(context),
+      body: _isLoading
+          ? Container(
+              color: Colors.black54,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : _buildBody(context),
       bottomNavigationBar: CustomBottomBar(
         buttonTitle: trans.doExercise,
         onPressed: () {
@@ -38,26 +58,44 @@ class ExerciseDetail extends StatelessWidget {
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+    fetchExercise();
+  }
+
+  Future<void> fetchExercise() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final exercise = await getExercise(widget.id ?? 0);
+    setState(() {
+      _exercise = exercise;
+      _isLoading = false;
+    });
+  }
+
   Widget _buildBody(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          _buildImage(),
+          _buildImage(context),
           _buildMainContent(context),
         ],
       ),
     );
   }
 
-  Widget _buildImage() {
+  Widget _buildImage(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 60),
       child: Container(
         width: double.infinity,
         height: 360,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/yoga.jpeg'),
+            image: NetworkImage(_exercise!.image_url), // ! for null safety
             fit: BoxFit.cover,
           ),
         ),
@@ -76,9 +114,9 @@ class ExerciseDetail extends StatelessWidget {
           const SizedBox(height: 16),
           _buildTitle(context),
           const SizedBox(height: 16),
-          _buildRowWithText(trans),
+          _buildRowWithText(trans, context),
           const SizedBox(height: 16),
-          _buildDescription(),
+          _buildDescription(context),
           const SizedBox(height: 16),
           _buildTitle2(context, trans.poses),
           const SizedBox(height: 16),
@@ -106,24 +144,31 @@ class ExerciseDetail extends StatelessWidget {
   Widget _buildTitle(BuildContext context) {
     final theme = Theme.of(context);
     return Text(
-      'Ringo Island',
+      _exercise?.title ?? "Ringo Island",
       style: h2.copyWith(color: theme.colorScheme.onPrimary, height: 1.2),
     );
   }
 
-  Widget _buildRowWithText(AppLocalizations trans) {
+  Widget _buildRowWithText(AppLocalizations trans, BuildContext context) {
+    final durations = _exercise?.durations ?? 0;
+    final minute = durations ~/ 60;
+    final int level = _exercise?.level ?? 1;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '10 ' + trans.minutes,
+          '$minute ' + trans.minutes,
           style: bd_text.copyWith(color: text),
         ),
         const SizedBox(width: 16),
         Expanded(
           child: Text(
-            trans.beginner,
+            level == 1
+                ? trans.beginner
+                : level == 2
+                    ? trans.advance
+                    : trans.professional,
             style: bd_text.copyWith(color: primary),
           ),
         ),
@@ -131,9 +176,10 @@ class ExerciseDetail extends StatelessWidget {
     );
   }
 
-  Widget _buildDescription() {
+  Widget _buildDescription(BuildContext context) {
     return HtmlWidget(
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus',
+      _exercise?.description ??
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus',
       textStyle: TextStyle(fontFamily: 'ReadexPro', fontSize: 16, height: 1.2),
     );
   }
