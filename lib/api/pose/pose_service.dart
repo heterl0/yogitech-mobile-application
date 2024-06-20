@@ -35,3 +35,20 @@ Future<Pose?> getPose(int id) async {
     return null;
   }
 }
+
+Future<List<dynamic>> getMuscles() async {
+  try {
+    final url = formatApiUrl('/api/v1/muscles/');
+    final Response response = await DioInstance.get(url);
+    if (response.statusCode == 200) {
+      List<dynamic> data = response.data.map((e) => Muscle.fromMap(e)).toList();
+      return data;
+    } else {
+      print('Get muscles failed with status code: ${response.statusCode}');
+      return [];
+    }
+  } catch (e) {
+    print('Get muscles error: $e');
+    return [];
+  }
+}
