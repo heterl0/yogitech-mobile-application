@@ -26,7 +26,6 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
   late Exercise? _exercise;
   late bool _isLoading = false;
   final TextEditingController commentController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
@@ -129,8 +128,9 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           const SizedBox(height: 16),
           _buildCommentSection(trans),
           const SizedBox(height: 16),
-          ..._exercise!.comments
-              .map((comment) => _buildComment(context, comment)),
+          ..._exercise!.comments.map(
+            (comment) => _buildComment(context, comment),
+          ),
         ],
       ),
     );
@@ -225,10 +225,15 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
             child: BoxInputField(
               controller: commentController,
               placeholder: trans.yourComment,
+              onSubmitted: (value) async {
+                await postAComment();
+              },
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await postAComment();
+            },
             icon: const Icon(
               Icons.send_outlined,
               size: 36,
@@ -250,6 +255,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return Container(
+          margin: const EdgeInsets.only(bottom: 16),
           width: double.infinity,
           padding: const EdgeInsets.all(8),
           decoration: ShapeDecoration(
@@ -333,5 +339,26 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         );
       },
     );
+  }
+
+  Future<void> postAComment() async {
+    final text = commentController.text;
+    final exercise = widget.id;
+    if (text.isEmpty) {
+      return;
+    } else if (exercise == null) {
+      return;
+    }
+    final request = PostCommentRequest(text: text, exercise: exercise);
+    final comment = await postComment(request);
+    if (comment != null) {
+      commentController.clear();
+      setState(() {
+        _exercise!.comments.add(comment);
+      });
+    } else {
+      print('Failed to post comment');
+    }
+    // await postComment(request);
   }
 }
