@@ -226,7 +226,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   title: trans.save, // Set the button text
                   style: ButtonStyleType
                       .Primary, // Set the button style (optional)
-                  onPressed: () {},
+                  onPressed: () async {},
                 ),
                 SizedBox(height: 16.0),
                 BoxButton(
