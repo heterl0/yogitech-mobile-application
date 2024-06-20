@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/exercise/exercise_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
@@ -25,8 +26,8 @@ class ExerciseDetail extends StatefulWidget {
 class _ExerciseDetailState extends State<ExerciseDetail> {
   late Exercise? _exercise;
   late bool _isLoading = false;
+  late int user_id = -1;
   final TextEditingController commentController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
@@ -73,9 +74,11 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
     });
 
     final exercise = await getExercise(widget.id ?? 0);
+    final user = await retrieveAccount();
     setState(() {
       _exercise = exercise;
       _isLoading = false;
+      user_id = user!.id;
     });
   }
 
@@ -129,8 +132,9 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           const SizedBox(height: 16),
           _buildCommentSection(trans),
           const SizedBox(height: 16),
-          ..._exercise!.comments
-              .map((comment) => _buildComment(context, comment)),
+          ..._exercise!.comments.map(
+            (comment) => _buildComment(context, comment),
+          ),
         ],
       ),
     );
@@ -223,10 +227,15 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           child: BoxInputField(
             controller: commentController,
             placeholder: trans.yourComment,
+            onSubmitted: (value) async {
+              await postAComment();
+            },
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () async {
+            await postAComment();
+          },
           icon: const Icon(
             Icons.send_outlined,
             size: 36,
@@ -238,7 +247,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
   }
 
   Widget _buildComment(BuildContext context, Comment comment) {
-    bool like = false; // Define a variable to keep track of like state
+    bool isLike = comment.hasUserVoted(user_id);
     Locale locale = Localizations.localeOf(context);
     final name = comment.user.profile.first_name != null
         ? "${comment.user.profile.last_name} ${comment.user.profile.first_name}"
@@ -247,6 +256,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return Container(
+          margin: const EdgeInsets.only(bottom: 16),
           width: double.infinity,
           padding: const EdgeInsets.all(8),
           decoration: ShapeDecoration(
@@ -310,12 +320,25 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                 ),
               ),
               IconButton(
-                onPressed: () {
-                  setState(() {
-                    like = !like; // Toggle the like state
-                  });
+                onPressed: () async {
+                  if (isLike) {
+                    Vote? vote = comment.getUserVote(user_id);
+                    if (vote != null) {
+                      await deleteVote(vote.id);
+                      setState(() {
+                        comment.votes.remove(vote);
+                        isLike = false;
+                      });
+                    }
+                  } else {
+                    Vote? vote = await postVote(comment.id);
+                    setState(() {
+                      isLike = vote != null;
+                      comment.votes.add(vote!);
+                    });
+                  }
                 },
-                icon: like
+                icon: isLike
                     ? const Icon(
                         Icons.favorite,
                         color: primary,
@@ -330,5 +353,26 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         );
       },
     );
+  }
+
+  Future<void> postAComment() async {
+    final text = commentController.text;
+    final exercise = widget.id;
+    if (text.isEmpty) {
+      return;
+    } else if (exercise == null) {
+      return;
+    }
+    final request = PostCommentRequest(text: text, exercise: exercise);
+    final comment = await postComment(request);
+    if (comment != null) {
+      commentController.clear();
+      setState(() {
+        _exercise!.comments.add(comment);
+      });
+    } else {
+      print('Failed to post comment');
+    }
+    // await postComment(request);
   }
 }

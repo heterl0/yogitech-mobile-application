@@ -14,22 +14,24 @@ class BoxInputField extends StatefulWidget {
   final RegExp? regExp;
   final VoidCallback? onTap;
   final ValueChanged<String>? onChanged; // Updated
+  final ValueChanged<String>? onSubmitted;
 
-  BoxInputField({
-    Key? key,
-    required this.controller,
-    this.placeholder = '',
-    this.leading,
-    this.trailing,
-    this.password = false,
-    this.readOnly = false,
-    this.keyboardType,
-    this.inputFormatters,
-    this.regExp,
-    this.onTap,
-    this.onChanged, // Updated
-    this.errorText = 'Invalid input',
-  }) : super(key: key);
+  BoxInputField(
+      {Key? key,
+      required this.controller,
+      this.placeholder = '',
+      this.leading,
+      this.trailing,
+      this.password = false,
+      this.readOnly = false,
+      this.keyboardType,
+      this.inputFormatters,
+      this.regExp,
+      this.onTap,
+      this.onChanged, // Updated
+      this.errorText = 'Invalid input',
+      this.onSubmitted})
+      : super(key: key);
 
   @override
   _BoxInputFieldState createState() => _BoxInputFieldState();
@@ -98,6 +100,7 @@ class _BoxInputFieldState extends State<BoxInputField> {
       keyboardType: widget.keyboardType,
       inputFormatters: widget.inputFormatters,
       onChanged: widget.onChanged, // Updated
+      onSubmitted: widget.onSubmitted,
       decoration: InputDecoration(
         hintText: widget.placeholder,
         hintStyle: TextStyle(
