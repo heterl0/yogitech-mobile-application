@@ -226,7 +226,8 @@ class _HomePageState extends State<HomePage> {
                               pushWithoutNavBar(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ExerciseDetail(),
+                                  builder: (context) =>
+                                      ExerciseDetail(id: exercise.id),
                                 ),
                               );
                             },

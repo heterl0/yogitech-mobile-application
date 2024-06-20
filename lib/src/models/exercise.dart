@@ -347,7 +347,7 @@ class Comment {
   String created_at;
   String updated_at;
   int active_status;
-  int parent_comment;
+  int? parent_comment;
   Account user;
   int exercise;
 
@@ -404,16 +404,18 @@ class Comment {
   factory Comment.fromMap(Map<String, dynamic> map) {
     return Comment(
       id: map['id'] as int,
-      votes: List<Vote>.from(
-        (map['votes'] as List<int>).map<Vote>(
-          (x) => Vote.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+      votes: map['votes'] != null
+          ? List<Vote>.from(
+              (map['votes'] as List<dynamic>).map<Vote>(
+                (x) => Vote.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : [],
       text: map['text'] as String,
       created_at: map['created_at'] as String,
       updated_at: map['updated_at'] as String,
       active_status: map['active_status'] as int,
-      parent_comment: map['parent_comment'] as int,
+      parent_comment: map['parent_comment'] != null ? map['parent_comment'] as int : null,
       user: Account.fromMap(map['user'] as Map<String, dynamic>),
       exercise: map['exercise'] as int,
     );
