@@ -39,15 +39,19 @@ class SettingsPage extends StatelessWidget {
           margin: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              CustomSwitch(
-                title: trans.darkMode,
-                value: isDarkMode,
-                onChanged: onThemeChanged,
+              SizedBox(
+                child: CustomSwitch(
+                  title: trans.darkMode,
+                  value: isDarkMode,
+                  onChanged: onThemeChanged,
+                ),
               ),
-              CustomSwitch(
-                title: trans.vietnameseUI,
-                value: isVietnamese,
-                onChanged: onLanguageChanged,
+              SizedBox(
+                child: CustomSwitch(
+                  title: trans.vietnameseUI,
+                  value: isVietnamese,
+                  onChanged: onLanguageChanged,
+                ),
               ),
               SettingItem(
                 title: trans.profile,

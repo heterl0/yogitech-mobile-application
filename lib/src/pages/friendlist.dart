@@ -79,7 +79,7 @@ class _FriendListPageState extends State<FriendListPage>
                   itemCount: 10,
                 ),
                 FriendList(
-                  itemCount: 10,
+                  itemCount: 12,
                 ),
               ],
             ),
