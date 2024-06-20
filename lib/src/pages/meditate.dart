@@ -7,6 +7,7 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'dart:math';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:yogi_application/src/widgets/checkbox.dart';
 
 class Meditate extends StatefulWidget {
   @override
@@ -48,8 +49,6 @@ class _MeditateState extends State<Meditate> {
       decoration: BoxDecoration(color: theme.colorScheme.background),
       child: Stack(
         children: [
-          // _buildTopRoundedContainer(),
-          // _buildTitleText(),
           _buildMainContent(),
         ],
       ),
@@ -68,8 +67,7 @@ class _MeditateState extends State<Meditate> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            color:
-                theme.colorScheme.onSecondary, // Set background color directly
+            color: theme.colorScheme.onSecondary,
             child: CupertinoTimerPicker(
               mode: CupertinoTimerPickerMode.ms,
               initialTimerDuration: _selectedDuration,
@@ -89,26 +87,26 @@ class _MeditateState extends State<Meditate> {
             style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
           const SizedBox(height: 16),
-          _buildCheckboxItem(
-            title: trans.soundRain,
-            subtitle: trans.soundRain == 'Sound of rain'
-                ? 'Deep sound on rainy days.'
-                : 'Âm thanh sâu lắng trong những ngày mưa.',
-            value: _isChecked1,
-            onChanged: (value) {
-              setState(() {
-                _isChecked1 = value!;
-                if (value) _isChecked2 = false;
-              });
-            },
-          ),
-          const SizedBox(height: 16),
-          _buildCheckboxItem(
+          // CheckBoxListTile(
+          //   title: trans.soundRain,
+          //   subtitle: trans.soundRain == 'Sound of rain'
+          //       ? 'Deep sound on rainy days.'
+          //       : 'Âm thanh sâu lắng trong những ngày mưa.',
+          //   state: _isChecked1 ? CheckState.Checked : CheckState.Unchecked,
+          //   onChanged: (value) {
+          //     setState(() {
+          //       _isChecked1 = value!;
+          //       if (value) _isChecked2 = false;
+          //     });
+          //   },
+          // ),
+          // const SizedBox(height: 16),
+          CheckBoxListTile(
             title: trans.soundStream,
             subtitle: trans.soundStream == 'The sound of the stream flowing'
                 ? 'Immersing yourself in the refreshing nature.'
                 : "Âm thanh suối chảy hòa mình vào thiên nhiên trong lành.",
-            value: _isChecked2,
+            state: _isChecked2 ? CheckState.Checked : CheckState.Unchecked,
             onChanged: (value) {
               setState(() {
                 _isChecked2 = value!;
@@ -121,49 +119,7 @@ class _MeditateState extends State<Meditate> {
     );
   }
 
-  Widget _buildCheckboxItem({
-    required String title,
-    required String subtitle,
-    required bool value,
-    required ValueChanged<bool?> onChanged,
-  }) {
-    final theme = Theme.of(context);
-    return Container(
-      child: Row(
-        children: [
-          Checkbox(
-            value: value,
-            onChanged: onChanged,
-            activeColor: Colors.transparent,
-            checkColor: Colors.white,
-            side: MaterialStateBorderSide.resolveWith(
-              (states) => const BorderSide(
-                color: Colors.white, // Outline color
-                width: 2,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: h3.copyWith(color: theme.colorScheme.onPrimary),
-                ),
-                Text(subtitle, style: min_cap.copyWith(color: text)),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildElevatedButton(BuildContext context) {
-    Theme.of(context);
-
     return Positioned(
       right: 27,
       bottom: 20,
@@ -191,7 +147,7 @@ class _MeditateState extends State<Meditate> {
         child: Ink(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            gradient: gradient, // Áp dụng gradient từ app_colors.dart
+            gradient: gradient,
           ),
           child: Container(
             width: 60,
