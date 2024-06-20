@@ -41,12 +41,13 @@ class _FilterPageState extends State<FilterPage> {
                   style: h3.copyWith(color: theme.colorScheme.onPrimary)),
               SizedBox(height: 8.0),
               CustomDropdownFormField(
-                // Sử dụng CustomDropdownFormField
                 controller: category,
                 placeholder: trans.choosecCategory,
                 items: ['Hip', 'Chest', 'Other'],
-                onTap: () {
-                  // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết
+                onTap: () {},
+                onChanged: (value) {
+                  // Handle the selected value
+                  print('Selected value: $value');
                 },
               ),
             ],
