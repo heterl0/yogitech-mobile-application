@@ -167,5 +167,8 @@
   "eventNotStart":"The event is not start.",
   "eventPassed":"The date has passed.",
   "eventRemain":"days remaining.",
-  "end":"End"
+  "end":"End",
+  "passwordChangedSuccessfully":"Change password successful",
+  "passwordsDoNotMatch":"New password and confirm password not match",
+  "passwordChangeFailed" : "Change password failed!"
 }

@@ -167,5 +167,8 @@
   "eventNotStart":"Sự kiện chưa diễn ra.",
   "eventPassed":"Sự kiện đã kết thúc",
   "eventRemain":"ngày còn lại.",
-  "end":"Kết thúc"
+  "end":"Kết thúc",
+  "passwordChangedSuccessfully":"Đổi mật khẩu thành công",
+  "passwordsDoNotMatch" :"Mật khẩu mới và xác nhận mật khẩu không khớp",
+  "passwordChangeFailed" :"đổi mật khẩu thất bại"
 }
