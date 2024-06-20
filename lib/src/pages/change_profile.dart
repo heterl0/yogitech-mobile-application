@@ -5,6 +5,7 @@ import 'package:yogi_application/api/account/account_service.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/models/account.dart';
+import 'package:yogi_application/src/models/account.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/dropdown_field.dart';
@@ -22,7 +23,6 @@ class ChangeProfilePage extends StatefulWidget {
 class _ChangeProfilePageState extends State<ChangeProfilePage> {
   final TextEditingController userName = TextEditingController();
   final TextEditingController email = TextEditingController();
-
   final TextEditingController phone = TextEditingController();
   final TextEditingController birthday = TextEditingController();
   final TextEditingController gender = TextEditingController();
@@ -144,9 +144,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 ),
                 SizedBox(height: 8),
                 BoxButton(
-                  title: trans.changeAvatar, // Set the button text
-                  style: ButtonStyleType
-                      .Tertiary, // Set the button style (optional)
+                  title: trans.changeAvatar,
+                  style: ButtonStyleType.Tertiary,
                   onPressed: () {
                     // Handle change avatar action here
                   },
@@ -176,7 +175,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   placeholder: _account?.phone ?? '',
                   keyboardType: TextInputType.phone,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  regExp: phoneRegExp, // Đảm bảo phoneRegExp được định nghĩa
+                  regExp: phoneRegExp,
                   errorText: "Invalid phone number",
                 ),
                 SizedBox(height: 16.0),
@@ -230,23 +229,21 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 ),
                 SizedBox(height: 16.0),
                 BoxButton(
-                  title: trans.changePassword, // Set the button text
-                  style: ButtonStyleType
-                      .Tertiary, // Set the button style (optional)
+                  title: trans.changePassword,
+                  style: ButtonStyleType.Tertiary,
                   onPressed: () {
-                    // _showChangePasswordDrawer(context);
                     _changePasswordBottomSheet(context);
                   },
                 ),
                 BoxButton(
-                  title: trans.changeBMI, // Set the button text
-                  style: ButtonStyleType
-                      .Tertiary, // Set the button style (optional)
+                  title: trans.changeBMI,
+                  style: ButtonStyleType.Tertiary,
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ChangeBMIPage(),
+                        builder: (context) =>
+                            ChangeBMIPage(onBMIUpdated: refreshProfile),
                       ),
                     );
                   },
@@ -349,6 +346,42 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
           ),
         );
       },
+    );
+  }
+}
+
+// Mock implementation for CustomDropdownFormField if not defined
+class CustomDropdownFormField extends StatelessWidget {
+  final TextEditingController controller;
+  final List<String> items;
+  final String placeholder;
+  final VoidCallback onTap;
+
+  const CustomDropdownFormField({
+    Key? key,
+    required this.controller,
+    required this.items,
+    required this.placeholder,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField<String>(
+      value: controller.text.isEmpty ? null : controller.text,
+      decoration: InputDecoration(
+        hintText: placeholder,
+      ),
+      items: items.map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      onChanged: (String? newValue) {
+        controller.text = newValue!;
+      },
+      onTap: onTap,
     );
   }
 }

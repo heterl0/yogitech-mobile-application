@@ -10,7 +10,9 @@ import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChangeBMIPage extends StatefulWidget {
-  const ChangeBMIPage({Key? key}) : super(key: key);
+  final VoidCallback onBMIUpdated;
+
+  const ChangeBMIPage({Key? key, required this.onBMIUpdated}) : super(key: key);
 
   @override
   State<ChangeBMIPage> createState() => _ChangeBMIPageState();
@@ -22,12 +24,36 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
   String bmiResult = '';
   String bmiComment = '';
   Profile? _profile;
-  void calculateBMI() {
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserProfile();
+  }
+
+  Future<void> _fetchUserProfile() async {
+    Profile? profile = await getUserProfile();
+    setState(() {
+      _profile = profile;
+      if (_profile != null) {
+        weightController.text = _profile!.weight ?? '';
+        heightController.text = _profile!.height ?? '';
+        _calculateBMI();
+      }
+    });
+  }
+
+  void _calculateBMI() {
     final trans = AppLocalizations.of(context)!;
-    if (weightController.text.isNotEmpty && heightController.text.isNotEmpty) {
-      double weight = double.parse(weightController.text);
-      double height =
-          double.parse(heightController.text) / 100; // Convert cm to meters
+    double? weight = weightController.text.isNotEmpty
+        ? double.tryParse(weightController.text)
+        : null;
+    double? height = heightController.text.isNotEmpty
+        ? double.tryParse(heightController.text)
+        : null;
+
+    if (weight != null && height != null) {
+      height = height / 100; // Convert cm to meters
       double bmi = weight / (height * height);
       setState(() {
         bmiResult = bmi.toStringAsFixed(2); // Round BMI to 2 decimal places
@@ -49,20 +75,36 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _fetchUserProfile();
-  }
+  Future<void> _recalculateBMI() async {
+    _calculateBMI();
 
-  Future<void> _fetchUserProfile() async {
-    Profile? profile = await getUserProfile();
-    print(profile);
+    double? weight = weightController.text.isNotEmpty
+        ? double.tryParse(weightController.text)
+        : null;
+    double? height = heightController.text.isNotEmpty
+        ? double.tryParse(heightController.text)
+        : null;
 
-    // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
-    setState(() {
-      _profile = profile;
-    });
+    if (weight != null && height != null) {
+      height = height / 100; // Convert cm to meters
+      double bmi = weight / (height * height);
+
+      try {
+        final Profile? updatedProfile = await patchBMI(new PatchBMIRequest(
+          weight: weight,
+          height: height * 100,
+          bmi: double.parse(bmi.toStringAsFixed(2)),
+        ));
+        if (updatedProfile != null) {
+          widget.onBMIUpdated();
+          print('BMI updated successfully');
+        } else {
+          print('Failed to update BMI');
+        }
+      } catch (e) {
+        print('Error updating BMI: $e');
+      }
+    }
   }
 
   @override
@@ -72,55 +114,6 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      // appBar: PreferredSize(
-      //   preferredSize: Size.fromHeight(100),
-      //   child: ClipRRect(
-      //     borderRadius: BorderRadius.only(
-      //       bottomLeft: Radius.circular(24.0),
-      //       bottomRight: Radius.circular(24.0),
-      //     ),
-      //     child: AppBar(
-      //       automaticallyImplyLeading: false,
-      //       backgroundColor: theme.colorScheme.onSecondary,
-      //       bottom: PreferredSize(
-      //         preferredSize: Size.fromHeight(0),
-      //         child: Padding(
-      //           padding: const EdgeInsets.only(
-      //             bottom: 12.0,
-      //             right: 20.0,
-      //             left: 20.0,
-      //           ),
-      //           child: Row(
-      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //             children: [
-      //               IconButton(
-      //                 icon: Icon(
-      //                   Icons.arrow_back,
-      //                   color: theme.colorScheme.onBackground,
-      //                 ), // Sử dụng icon "back" có sẵn
-      //                 onPressed: () {
-      //                   Navigator.pop(context); // Thêm sự kiện quay lại
-      //                 },
-      //               ),
-      //               Text('Change BMI',
-      //                   style:
-      //                       h2.copyWith(color: theme.colorScheme.onBackground)),
-      //               Opacity(
-      //                 opacity: 0.0,
-      //                 child: IgnorePointer(
-      //                   child: IconButton(
-      //                     icon: Image.asset('assets/icons/settings.png'),
-      //                     onPressed: () {},
-      //                   ),
-      //                 ),
-      //               ) // Ẩn icon đi
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // ),
       appBar: CustomAppBar(
         title: trans.changeBMI,
         style: widthStyle.Large,
@@ -142,7 +135,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                         border: Border.all(color: stroke, width: 2),
                       ),
                       child: ShaderMask(
-                        shaderCallback: (Rect bounds) {
+                        shaderCallback: (bounds) {
                           return gradient.createShader(bounds);
                         },
                         child: Center(
@@ -167,7 +160,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: weightController,
-                  placeholder: _profile?.weight.toString() ?? trans.weightKg,
+                  placeholder: trans.weightKg,
                   keyboardType: TextInputType.number,
                 ),
                 SizedBox(height: 16.0),
@@ -178,13 +171,13 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: heightController,
-                  placeholder: _profile?.height.toString() ?? trans.heightCm,
+                  placeholder: trans.heightCm,
                   keyboardType: TextInputType.number,
                 ),
                 SizedBox(height: 48.0),
                 BoxButton(
                     title: trans.recalculate,
-                    onPressed: calculateBMI,
+                    onPressed: _recalculateBMI,
                     style: ButtonStyleType.Primary),
               ],
             ),

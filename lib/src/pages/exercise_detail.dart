@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/exercise/exercise_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
 import 'package:yogi_application/src/models/exercise.dart';
+import 'package:yogi_application/src/models/pose.dart';
 import 'package:yogi_application/src/pages/result.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:yogi_application/utils/formatting.dart';
 
 class ExerciseDetail extends StatefulWidget {
   final int? id;
@@ -23,11 +26,12 @@ class ExerciseDetail extends StatefulWidget {
 class _ExerciseDetailState extends State<ExerciseDetail> {
   late Exercise? _exercise;
   late bool _isLoading = false;
+  late int user_id = -1;
   final TextEditingController commentController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -35,10 +39,10 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         title: trans.exerciseDetail,
         style: widthStyle.Large,
       ),
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: _isLoading
           ? Container(
-              color: Colors.black54,
+              color: theme.colorScheme.background,
               child: Center(
                 child: CircularProgressIndicator(),
               ),
@@ -70,9 +74,11 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
     });
 
     final exercise = await getExercise(widget.id ?? 0);
+    final user = await retrieveAccount();
     setState(() {
       _exercise = exercise;
       _isLoading = false;
+      user_id = user!.id;
     });
   }
 
@@ -120,14 +126,15 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           const SizedBox(height: 16),
           _buildTitle2(context, trans.poses),
           const SizedBox(height: 16),
-          _buildPoses(trans),
+          _buildPoses(trans, context),
           const SizedBox(height: 16),
           _buildTitle2(context, trans.comment),
           const SizedBox(height: 16),
           _buildCommentSection(trans),
           const SizedBox(height: 16),
-          _buildComment(context),
-          const SizedBox(height: 36),
+          ..._exercise!.comments.map(
+            (comment) => _buildComment(context, comment),
+          ),
         ],
       ),
     );
@@ -158,7 +165,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '$minute ' + trans.minutes,
+          '$minute ${trans.minutes}',
           style: bd_text.copyWith(color: text),
         ),
         const SizedBox(width: 16),
@@ -184,7 +191,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
     );
   }
 
-  Widget _buildPoses(AppLocalizations trans) {
+  Widget _buildPoses(AppLocalizations trans, BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
       padding: const EdgeInsets.all(0),
@@ -193,16 +200,20 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         crossAxisCount: 2,
         crossAxisSpacing: 2.0,
         mainAxisSpacing: 2.0,
-        childAspectRatio: 5 / 4,
+        childAspectRatio: 8 / 9,
       ),
-      itemCount: 6,
+      itemCount: _exercise?.poses.length ?? 0,
       itemBuilder: (context, index) {
-        final title = trans.pose + ' ${index + 1}';
-        final subtitle = '${5 - index} ' + trans.minutes;
+        final PoseWithTime pose = _exercise!.poses[index];
+        final Pose poseDetail = pose.pose;
+        final title = poseDetail.name;
+        // final title = trans.pose + ' ${index + 1}';
+        final subtitle = '${pose.duration} ' + trans.seconds;
 
         return CustomCard(
           title: title,
           subtitle: subtitle,
+          imageUrl: poseDetail.image_url,
           onTap: () {},
         );
       },
@@ -210,32 +221,45 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
   }
 
   Widget _buildCommentSection(AppLocalizations trans) {
-    return Row(
-      children: [
-        Expanded(
-          child: BoxInputField(
-            controller: commentController,
-            placeholder: trans.yourComment,
+    return Padding(
+      padding: MediaQuery.of(context).viewInsets,
+      child: Row(
+        children: [
+          Expanded(
+            child: BoxInputField(
+              controller: commentController,
+              placeholder: trans.yourComment,
+              onSubmitted: (value) async {
+                await postAComment();
+              },
+            ),
           ),
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.send_outlined,
-            size: 36,
-            color: text,
+          IconButton(
+            onPressed: () async {
+              await postAComment();
+            },
+            icon: const Icon(
+              Icons.send_outlined,
+              size: 36,
+              color: text,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  Widget _buildComment(BuildContext context) {
-    bool like = false; // Define a variable to keep track of like state
+  Widget _buildComment(BuildContext context, Comment comment) {
+    bool isLike = comment.hasUserVoted(user_id);
+    Locale locale = Localizations.localeOf(context);
+    final name = comment.user.profile.first_name != null
+        ? "${comment.user.profile.last_name} ${comment.user.profile.first_name}"
+        : comment.user.username;
     final theme = Theme.of(context);
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return Container(
+          margin: const EdgeInsets.only(bottom: 16),
           width: double.infinity,
           padding: const EdgeInsets.all(8),
           decoration: ShapeDecoration(
@@ -252,7 +276,11 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                 width: 44,
                 height: 44,
                 decoration: ShapeDecoration(
-                  gradient: gradient,
+                  image: DecorationImage(
+                    image: NetworkImage(comment.user.profile.avatar_url ?? ''),
+                    fit: BoxFit.cover,
+                  ),
+                  // gradient: gradient,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(80),
                   ),
@@ -271,14 +299,15 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                       children: [
                         Expanded(
                           child: Text(
-                            'Chinhphu',
+                            name,
                             textAlign: TextAlign.start,
                             style: min_cap.copyWith(color: primary),
                           ),
                         ),
                         Expanded(
                           child: Text(
-                            'Feb 30 2024',
+                            formatDateTime(
+                                comment.created_at, locale.languageCode),
                             textAlign: TextAlign.end,
                             style: min_cap.copyWith(color: text),
                           ),
@@ -286,7 +315,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                       ],
                     ),
                     Text(
-                      'This exercise is too hard to doooooooooooo!!!!!',
+                      comment.text,
                       style:
                           bd_text.copyWith(color: theme.colorScheme.onPrimary),
                     ),
@@ -294,12 +323,25 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                 ),
               ),
               IconButton(
-                onPressed: () {
-                  setState(() {
-                    like = !like; // Toggle the like state
-                  });
+                onPressed: () async {
+                  if (isLike) {
+                    Vote? vote = comment.getUserVote(user_id);
+                    if (vote != null) {
+                      await deleteVote(vote.id);
+                      setState(() {
+                        comment.votes.remove(vote);
+                        isLike = false;
+                      });
+                    }
+                  } else {
+                    Vote? vote = await postVote(comment.id);
+                    setState(() {
+                      isLike = vote != null;
+                      comment.votes.add(vote!);
+                    });
+                  }
                 },
-                icon: like
+                icon: isLike
                     ? const Icon(
                         Icons.favorite,
                         color: primary,
@@ -314,5 +356,26 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         );
       },
     );
+  }
+
+  Future<void> postAComment() async {
+    final text = commentController.text;
+    final exercise = widget.id;
+    if (text.isEmpty) {
+      return;
+    } else if (exercise == null) {
+      return;
+    }
+    final request = PostCommentRequest(text: text, exercise: exercise);
+    final comment = await postComment(request);
+    if (comment != null) {
+      commentController.clear();
+      setState(() {
+        _exercise!.comments.add(comment);
+      });
+    } else {
+      print('Failed to post comment');
+    }
+    // await postComment(request);
   }
 }
