@@ -10,7 +10,9 @@ import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChangeBMIPage extends StatefulWidget {
-  const ChangeBMIPage({Key? key}) : super(key: key);
+  final VoidCallback onBMIUpdated;
+
+  const ChangeBMIPage({Key? key, required this.onBMIUpdated}) : super(key: key);
 
   @override
   State<ChangeBMIPage> createState() => _ChangeBMIPageState();
@@ -23,62 +25,32 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
   String bmiComment = '';
   Profile? _profile;
 
-  void calculateBMI() {
-    final trans = AppLocalizations.of(context)!;
-    double? weight = weightController.text.isNotEmpty
-        ? double.tryParse(weightController.text)
-        : _profile?.weight != null
-            ? double.tryParse(_profile!.weight!)
-            : null;
-
-    double? height = heightController.text.isNotEmpty
-        ? double.tryParse(heightController.text)
-        : _profile?.height != null
-            ? double.tryParse(_profile!.height!)
-            : null;
-
-    if (weight != null && height != null) {
-      height = height / 100; // Convert cm to meters
-      double bmi = weight / (height * height);
-      setState(() {
-        bmiResult = bmi.toStringAsFixed(2); // Round BMI to 2 decimal places
-        if (bmi < 18.5) {
-          bmiComment = trans.underweight;
-        } else if (bmi >= 18.5 && bmi < 24.9) {
-          bmiComment = trans.normalWeight;
-        } else if (bmi >= 24.9 && bmi < 29.9) {
-          bmiComment = trans.overweight;
-        } else {
-          bmiComment = trans.obesity;
-        }
-      });
-    } else {
-      setState(() {
-        bmiResult = '';
-        bmiComment = '';
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
     _fetchUserProfile();
   }
 
-  Future<void> _recalculateBMI() async {
+  Future<void> _fetchUserProfile() async {
+    Profile? profile = await getUserProfile();
+    setState(() {
+      _profile = profile;
+      if (_profile != null) {
+        weightController.text = _profile!.weight ?? '';
+        heightController.text = _profile!.height ?? '';
+        _calculateBMI();
+      }
+    });
+  }
+
+  void _calculateBMI() {
     final trans = AppLocalizations.of(context)!;
     double? weight = weightController.text.isNotEmpty
         ? double.tryParse(weightController.text)
-        : _profile?.weight != null
-            ? double.tryParse(_profile!.weight!)
-            : null;
-
+        : null;
     double? height = heightController.text.isNotEmpty
         ? double.tryParse(heightController.text)
-        : _profile?.height != null
-            ? double.tryParse(_profile!.height!)
-            : null;
+        : null;
 
     if (weight != null && height != null) {
       height = height / 100; // Convert cm to meters
@@ -95,26 +67,6 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
           bmiComment = trans.obesity;
         }
       });
-
-      // Gửi yêu cầu PATCH đến API để cập nhật BMI
-
-      try {
-        final Profile? updatedProfile = await patchBMI(new PatchBMIRequest(
-          weight: weight,
-          height: height,
-          bmi: bmi,
-        ));
-        if (updatedProfile != null) {
-          // Xử lý sau khi cập nhật thành công
-          print('BMI updated successfully');
-        } else {
-          // Xử lý khi không thành công
-          print('Failed to update BMI');
-        }
-      } catch (e) {
-        print('Error updating BMI: $e');
-        // Xử lý lỗi khi gọi API
-      }
     } else {
       setState(() {
         bmiResult = '';
@@ -123,21 +75,42 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
     }
   }
 
-  Future<void> _fetchUserProfile() async {
-    Profile? profile = await getUserProfile();
-    print(profile);
+  Future<void> _recalculateBMI() async {
+    _calculateBMI();
 
-    // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
-    setState(() {
-      _profile = profile;
-    });
+    double? weight = weightController.text.isNotEmpty
+        ? double.tryParse(weightController.text)
+        : null;
+    double? height = heightController.text.isNotEmpty
+        ? double.tryParse(heightController.text)
+        : null;
+
+    if (weight != null && height != null) {
+      height = height / 100; // Convert cm to meters
+      double bmi = weight / (height * height);
+
+      try {
+        final Profile? updatedProfile = await patchBMI(new PatchBMIRequest(
+          weight: weight,
+          height: height * 100,
+          bmi: double.parse(bmi.toStringAsFixed(2)),
+        ));
+        if (updatedProfile != null) {
+          widget.onBMIUpdated();
+          print('BMI updated successfully');
+        } else {
+          print('Failed to update BMI');
+        }
+      } catch (e) {
+        print('Error updating BMI: $e');
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
-    calculateBMI();
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
@@ -187,7 +160,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: weightController,
-                  placeholder: _profile?.weight.toString() ?? trans.weightKg,
+                  placeholder: trans.weightKg,
                   keyboardType: TextInputType.number,
                 ),
                 SizedBox(height: 16.0),
@@ -198,7 +171,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: heightController,
-                  placeholder: _profile?.height.toString() ?? trans.heightCm,
+                  placeholder: trans.heightCm,
                   keyboardType: TextInputType.number,
                 ),
                 SizedBox(height: 48.0),

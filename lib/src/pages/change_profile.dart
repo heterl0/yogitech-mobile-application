@@ -11,6 +11,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ChangeProfilePage extends StatefulWidget {
   const ChangeProfilePage({super.key});
 
+  // void refreshProfile() {
+  //   // Gọi API để lấy lại dữ liệu hồ sơ sau khi cập nhật BMI
+  //   _fetchUserProfile();
+  // }
+
   @override
   State<ChangeProfilePage> createState() => _ChangeProfilePageState();
 }
@@ -23,7 +28,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   final TextEditingController birthday = TextEditingController();
   final TextEditingController gender = TextEditingController();
 
-  
   // Regular expression for Vietnamese phone numbers
   final RegExp phoneRegExp =
       RegExp(r'^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$');
@@ -177,12 +181,12 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   style: ButtonStyleType
                       .Tertiary, // Set the button style (optional)
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChangeBMIPage(),
-                      ),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => ChangeBMIPage(onBMIUpdated: refreshProfile),
+                    //   ),
+                    // );
                   },
                 ),
               ],
