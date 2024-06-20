@@ -412,19 +412,23 @@ class _EventDetailState extends State<EventDetail>
   }
 
   Widget _buildListExerciseContent(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
     return Expanded(
         child: GridView.builder(
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 4 / 5,
+        childAspectRatio: 19 / 20,
       ),
       padding: EdgeInsets.all(0),
-      itemCount: 10,
+      itemCount: _event!.exercises.length,
       itemBuilder: (context, index) {
+        final exercise = _event!.exercises[index];
         return CustomCard(
-          title: "Excercise",
-          caption: "Excercise",
+          title: exercise.title,
+          subtitle:
+              '${exercise.calories} ${trans.calorie} / ${exercise.durations} ${trans.seconds}',
+          imageUrl: exercise.image_url,
           onTap: () {},
         );
       },
