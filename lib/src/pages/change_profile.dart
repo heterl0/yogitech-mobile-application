@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:yogi_application/api/account/account_service.dart';
+import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:yogi_application/src/models/account.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/dropdown_field.dart';
@@ -18,15 +21,34 @@ class ChangeProfilePage extends StatefulWidget {
 class _ChangeProfilePageState extends State<ChangeProfilePage> {
   final TextEditingController userName = TextEditingController();
   final TextEditingController email = TextEditingController();
-
   final TextEditingController phone = TextEditingController();
   final TextEditingController birthday = TextEditingController();
   final TextEditingController gender = TextEditingController();
 
-  
-  // Regular expression for Vietnamese phone numbers
   final RegExp phoneRegExp =
       RegExp(r'^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$');
+
+  Profile? _profile;
+  Account? _account;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserProfile();
+  }
+
+  Future<void> _fetchUserProfile() async {
+    Profile? profile = await getUserProfile();
+    Account? account = await retrieveAccount();
+    setState(() {
+      _profile = profile;
+      _account = account;
+    });
+  }
+
+  void refreshProfile() {
+    _fetchUserProfile();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +83,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 ),
                 SizedBox(height: 8),
                 BoxButton(
-                  title: trans.changeAvatar, // Set the button text
-                  style: ButtonStyleType
-                      .Tertiary, // Set the button style (optional)
+                  title: trans.changeAvatar,
+                  style: ButtonStyleType.Tertiary,
                   onPressed: () {
                     // Handle change avatar action here
                   },
@@ -77,7 +98,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   placeholder: trans.username,
                 ),
                 SizedBox(height: 16.0),
-
                 Text('Email',
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
                 SizedBox(height: 8.0),
@@ -86,17 +106,15 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   placeholder: 'Email',
                 ),
                 SizedBox(height: 16.0),
-
                 Text('Phone',
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
                 SizedBox(height: 8.0),
-
                 BoxInputField(
                   controller: phone,
                   placeholder: trans.phoneNumber,
                   keyboardType: TextInputType.phone,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  regExp: phoneRegExp, // Đảm bảo phoneRegExp được định nghĩa
+                  regExp: phoneRegExp,
                   errorText: "Invalid phone number",
                 ),
                 SizedBox(height: 16.0),
@@ -106,10 +124,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 BoxInputField(
                   controller: birthday,
                   placeholder: 'Select your birthday',
-                  trailing: Icon(
-                    Icons.calendar_today,
-                  ), // Thay đổi icon
-                  readOnly: true, // Đặt readOnly thành true
+                  trailing: Icon(Icons.calendar_today),
+                  readOnly: true,
                   onTap: () async {
                     DateTime? pickedDate = await showDatePicker(
                       context: context,
@@ -128,59 +144,35 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 Text(trans.gender,
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
                 SizedBox(height: 8.0),
-                // DropdownButtonFormField<String>(
-                //   decoration: inputDecoration,
-                //   hint: Text('Select gender',
-                //       style: TextStyle(color: Color(0xFF8D8E99))),
-                //   items: ['Male', 'Female', 'Other']
-                //       .map((label) => DropdownMenuItem(
-                //             child: Text(label,
-                //                 style: TextStyle(color: Color(0xFF8D8E99))),
-                //             value: label,
-                //           ))
-                //       .toList(),
-                //   onChanged: (value) {
-                //     setState(() {
-                //       gender.text = value!;
-                //     });
-                //   },
-                // ),
                 CustomDropdownFormField(
                   controller: gender,
                   items: ['Male', 'Female', 'Other'],
                   placeholder: 'Select gender',
-                  onTap: () {
-                    // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết
-                  },
+                  onTap: () {},
                 ),
-
                 SizedBox(height: 40.0),
                 BoxButton(
-                  title: trans.save, // Set the button text
-                  style: ButtonStyleType
-                      .Primary, // Set the button style (optional)
+                  title: trans.save,
+                  style: ButtonStyleType.Primary,
                   onPressed: () {},
                 ),
-
                 SizedBox(height: 16.0),
                 BoxButton(
-                  title: trans.changePassword, // Set the button text
-                  style: ButtonStyleType
-                      .Tertiary, // Set the button style (optional)
+                  title: trans.changePassword,
+                  style: ButtonStyleType.Tertiary,
                   onPressed: () {
-                    // _showChangePasswordDrawer(context);
                     _changePasswordBottomSheet(context);
                   },
                 ),
                 BoxButton(
-                  title: trans.changeBMI, // Set the button text
-                  style: ButtonStyleType
-                      .Tertiary, // Set the button style (optional)
+                  title: trans.changeBMI,
+                  style: ButtonStyleType.Tertiary,
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ChangeBMIPage(),
+                        builder: (context) =>
+                            ChangeBMIPage(onBMIUpdated: refreshProfile),
                       ),
                     );
                   },
@@ -239,8 +231,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 BoxButton(
                   title: trans.save,
                   style: ButtonStyleType.Primary,
-                  state: ButtonState
-                      .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
+                  state: ButtonState.Enabled,
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
@@ -248,6 +239,42 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
           ),
         );
       },
+    );
+  }
+}
+
+// Mock implementation for CustomDropdownFormField if not defined
+class CustomDropdownFormField extends StatelessWidget {
+  final TextEditingController controller;
+  final List<String> items;
+  final String placeholder;
+  final VoidCallback onTap;
+
+  const CustomDropdownFormField({
+    Key? key,
+    required this.controller,
+    required this.items,
+    required this.placeholder,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField<String>(
+      value: controller.text.isEmpty ? null : controller.text,
+      decoration: InputDecoration(
+        hintText: placeholder,
+      ),
+      items: items.map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      onChanged: (String? newValue) {
+        controller.text = newValue!;
+      },
+      onTap: onTap,
     );
   }
 }
