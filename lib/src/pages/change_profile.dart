@@ -5,7 +5,6 @@ import 'package:yogi_application/api/account/account_service.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/models/account.dart';
-import 'package:yogi_application/src/models/account.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/dropdown_field.dart';
@@ -29,6 +28,11 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
 
   Profile? _profile;
   Account? _account;
+
+  void refreshProfile() {
+    // Gọi API để lấy lại dữ liệu hồ sơ sau khi cập nhật BMI
+    _fetchUserProfile();
+  }
 
   // Regular expression for Vietnamese phone numbers
   final RegExp phoneRegExp =

@@ -170,5 +170,6 @@
   "end":"End",
   "passwordChangedSuccessfully":"Change password successful",
   "passwordsDoNotMatch":"New password and confirm password not match",
-  "passwordChangeFailed" : "Change password failed!"
+  "passwordChangeFailed" : "Change password failed!",
+  "seeall" : "see all"
 }
