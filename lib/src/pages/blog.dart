@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/api/blog/blog_service.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/widgets/box_input_field.dart';
-import 'package:yogi_application/src/widgets/card.dart';
-import 'package:yogi_application/src/pages/blog_detail.dart';
+import 'package:YogiTech/api/blog/blog_service.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/widgets/box_input_field.dart';
+import 'package:YogiTech/src/widgets/card.dart';
+import 'package:YogiTech/src/pages/blog_detail.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Blog extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/routing/app_routes.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:YogiTech/src/routing/app_routes.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VerifyEmail extends StatelessWidget {

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/api/pose/pose_service.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/models/pose.dart';
-import 'package:yogi_application/src/pages/all_exercise.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
-import 'package:yogi_application/src/widgets/dropdown_field.dart'; // Import DropdownField
+import 'package:YogiTech/api/pose/pose_service.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/models/pose.dart';
+import 'package:YogiTech/src/pages/all_exercise.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/custombar/bottombar.dart';
+import 'package:YogiTech/src/widgets/dropdown_field.dart'; // Import DropdownField
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FilterPage extends StatefulWidget {
@@ -124,17 +124,19 @@ class _FilterPageState extends State<FilterPage> {
         onPressed: () {
           Navigator.pop(context);
           print(selectedMuscle);
-          List<dynamic>? mus= _muscles.where((mus) => mus.name == selectedMuscle).toList();
-          if (mus.isNotEmpty){
+          List<dynamic>? mus =
+              _muscles.where((mus) => mus.name == selectedMuscle).toList();
+          if (mus.isNotEmpty) {
             setState(() {
-            Muscle? muscle= mus[0];
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      AllExercise(selectedMuscle: muscle)), // Thay NewPage() bằng trang bạn muốn chuyển tới
-            );
-          });
+              Muscle? muscle = mus[0];
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AllExercise(
+                        selectedMuscle:
+                            muscle)), // Thay NewPage() bằng trang bạn muốn chuyển tới
+              );
+            });
           }
         },
       ),
@@ -147,7 +149,8 @@ class MuscleInfoWidget extends StatelessWidget {
   final List<dynamic> muscles;
   final Map<String, String> muscleMap;
 
-  const MuscleInfoWidget({super.key, 
+  const MuscleInfoWidget({
+    super.key,
     required this.muscleName,
     required this.muscles,
     required this.muscleMap,

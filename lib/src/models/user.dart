@@ -1,4 +1,4 @@
-import 'package:yogi_application/src/models/account.dart';
+import 'package:YogiTech/src/models/account.dart';
 
 class UserModel {
   final Account account;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/pages/friend_profile.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/pages/friend_profile.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FriendListPage extends StatefulWidget {

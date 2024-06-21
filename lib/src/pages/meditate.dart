@@ -8,7 +8,7 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'dart:math';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:yogi_application/src/widgets/checkbox.dart';
+import 'package:YogiTech/src/widgets/checkbox.dart';
 
 class Meditate extends StatefulWidget {
   const Meditate({super.key});

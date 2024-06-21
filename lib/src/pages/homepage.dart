@@ -78,6 +78,8 @@ class _HomePageState extends State<HomePage> {
                               : '0',
                           style:
                               h3.copyWith(color: theme.colorScheme.onSurface),
+                          style:
+                              h3.copyWith(color: theme.colorScheme.onSurface),
                         ),
                       ],
                     ),
@@ -125,6 +127,9 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
+                            builder: (context) => AllExercise(
+                                searchString:
+                                    searchValue)), // Thay NewPage() bằng trang bạn muốn chuyển tới
                             builder: (context) => AllExercise(
                                 searchString:
                                     searchValue)), // Thay NewPage() bằng trang bạn muốn chuyển tới

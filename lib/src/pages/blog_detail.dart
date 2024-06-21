@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:yogi_application/api/auth/auth_service.dart';
-import 'package:yogi_application/api/blog/blog_service.dart';
-import 'package:yogi_application/src/models/account.dart';
-import 'package:yogi_application/src/models/blog.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import "package:yogi_application/src/shared/styles.dart";
-import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:YogiTech/api/auth/auth_service.dart';
+import 'package:YogiTech/api/blog/blog_service.dart';
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/models/blog.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import "package:YogiTech/src/shared/styles.dart";
+import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class BlogDetail extends StatefulWidget {
