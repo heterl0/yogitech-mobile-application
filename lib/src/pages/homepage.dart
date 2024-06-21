@@ -241,21 +241,34 @@ class _HomePageState extends State<HomePage> {
                         style: h3.copyWith(color: theme.colorScheme.onPrimary),
                       ),
                       Spacer(),
-                      SizedBox(
-                        width: 130, // Điều chỉnh kích thước nút nếu cần
-                        child: BoxButton(
-                          title: trans.seeall,
-                          style: ButtonStyleType.Tertiary,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      AllExercise()), // Thay NewPage() bằng trang bạn muốn chuyển tới
-                            );
-                          },
+                      InkWell(
+                        borderRadius: BorderRadius.all(Radius.circular(16)),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            trans.seeall,
+                            style: bd_text.copyWith(color: primary),
+                          ),
                         ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    AllExercise()), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                          );
+                        },
                       ),
+                      // SizedBox(
+                      //   width: 130, // Điều chỉnh kích thước nút nếu cần
+                      //   child: BoxButton(
+                      //     title: trans.seeall,
+                      //     style: ButtonStyleType.Tertiary,
+                      //     onPressed: () {
+
+                      //     },
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

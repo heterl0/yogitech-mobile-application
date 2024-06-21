@@ -86,6 +86,7 @@
   "leaderboard": "Leaderboard",
   "listOfExercises":"List of Exercises",
   "joinIn": "Join in",
+  "meditationStreak":"Meditation streak",
   "sounds": "Sounds",
   "start": "Start",
   "calorie": "Calorie",
@@ -176,5 +177,5 @@
   "passwordChangedSuccessfully":"Change password successful",
   "passwordsDoNotMatch":"New password and confirm password not match",
   "passwordChangeFailed" : "Change password failed!",
-  "seeall" : "see all"
+  "seeall" : "See all"
 }
