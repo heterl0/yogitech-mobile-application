@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/pages/perform_meditate.dart';
@@ -11,6 +10,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yogi_application/src/widgets/checkbox.dart';
 
 class Meditate extends StatefulWidget {
+  const Meditate({super.key});
+
   @override
   _MeditateState createState() => _MeditateState();
 }
@@ -43,7 +44,7 @@ class _MeditateState extends State<Meditate> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(color: theme.colorScheme.background),
+      decoration: BoxDecoration(color: theme.colorScheme.surface),
       child: _buildMainContent(),
     );
   }
@@ -101,7 +102,7 @@ class _MeditateState extends State<Meditate> {
                     : CheckState.Unchecked,
                 onChanged: (value) {
                   setState(() {
-                    if (value!) {
+                    if (value) {
                       _selectedTrackIndex = index;
                     } else {
                       _selectedTrackIndex = null;
@@ -119,10 +120,10 @@ class _MeditateState extends State<Meditate> {
   Widget _buildElevatedButton(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(Colors.transparent),
-        shadowColor: MaterialStateProperty.all(Colors.transparent),
-        padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-        shape: MaterialStateProperty.all(const CircleBorder()),
+        backgroundColor: WidgetStateProperty.all(Colors.transparent),
+        shadowColor: WidgetStateProperty.all(Colors.transparent),
+        padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
+        shape: WidgetStateProperty.all(const CircleBorder()),
       ),
       onPressed: () {
         _selectedTrackIndex != null

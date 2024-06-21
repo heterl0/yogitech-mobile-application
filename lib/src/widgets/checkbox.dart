@@ -12,12 +12,12 @@ class CheckBoxListTile extends StatefulWidget {
   final ValueChanged<bool>? onChanged; // Use ValueChanged for state updates
 
   const CheckBoxListTile({
-    Key? key,
+    super.key,
     this.title = '',
     this.subtitle = '', // Added subtitle
     this.state = CheckState.Unchecked,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   _CheckBoxListTileState createState() => _CheckBoxListTileState();
@@ -56,7 +56,7 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
                 ?.call(value); // Notify parent widget of state change
           });
         },
-        fillColor: MaterialStateColor.resolveWith((states) {
+        fillColor: WidgetStateColor.resolveWith((states) {
           final ThemeData theme = Theme.of(context);
           return theme.brightness == Brightness.light
               ? elevationLight

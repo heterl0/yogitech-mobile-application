@@ -8,6 +8,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 
 class SignUp extends StatefulWidget {
+  const SignUp({super.key});
+
   @override
   _SignUpState createState() => _SignUpState();
 }
@@ -174,7 +176,7 @@ class _SignUpState extends State<SignUp> {
     }
 
     try {
-      final response = await register(new RegisterRequest(
+      final response = await register(RegisterRequest(
           email: enteredEmail,
           password: enteredPassword,
           username: enteredUsername,

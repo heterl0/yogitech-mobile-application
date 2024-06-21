@@ -6,6 +6,8 @@ import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VerifyEmail extends StatelessWidget {
+  const VerifyEmail({super.key});
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -73,7 +75,7 @@ class VerifyEmail extends StatelessWidget {
     // Xử lý sự kiện gửi OTP
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(trans.returnLogin + ' $login'),
+        content: Text('${trans.returnLogin} $login'),
       ),
     );
   }

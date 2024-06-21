@@ -8,6 +8,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yogi_application/utils/formatting.dart';
 
 class Activities extends StatefulWidget {
+  const Activities({super.key});
+
   @override
   State<Activities> createState() => _ActivitiesState();
 }
@@ -52,7 +54,7 @@ class _ActivitiesState extends State<Activities> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(color: theme.colorScheme.background),
+      decoration: BoxDecoration(color: theme.colorScheme.surface),
       child: SingleChildScrollView(
         child: Column(
           children: [

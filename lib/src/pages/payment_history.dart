@@ -5,6 +5,8 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PaymentHistory extends StatefulWidget {
+  const PaymentHistory({super.key});
+
   @override
   _PaymentHistoryState createState() => _PaymentHistoryState();
 }
@@ -15,7 +17,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       // appBar: PreferredSize(
       //   preferredSize: Size.fromHeight(100),
       //   child: ClipRRect(
@@ -99,7 +101,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
       onPressed: () {},
       style: ElevatedButton.styleFrom(
         elevation: 0,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         padding: EdgeInsets.all(18.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
@@ -120,7 +122,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                 Text(
                   date,
                   style:
-                      min_cap.copyWith(color: theme.colorScheme.onBackground),
+                      min_cap.copyWith(color: theme.colorScheme.onSurface),
                 ),
               ],
             ),

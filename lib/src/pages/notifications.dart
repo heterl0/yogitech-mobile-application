@@ -11,12 +11,12 @@ class NotificationsPage extends StatefulWidget {
   // final ValueChanged<bool> areRemindersEnabled;
 
   const NotificationsPage({
-    Key? key,
+    super.key,
     this.streakSaverOn = true,
     this.friendAactivitiesOn = true,
     this.newEventOn = true,
     // this.areRemindersEnabled,
-  }) : super(key: key);
+  });
 
   @override
   _NotificationsPageState createState() => _NotificationsPageState();
@@ -28,7 +28,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.notifications,
         style: widthStyle.Large,
