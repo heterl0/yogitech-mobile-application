@@ -20,8 +20,8 @@ class ChangeProfilePage extends StatefulWidget {
 }
 
 class _ChangeProfilePageState extends State<ChangeProfilePage> {
-  final TextEditingController userName = TextEditingController();
-  final TextEditingController email = TextEditingController();
+  final TextEditingController lastName = TextEditingController();
+  final TextEditingController firstName = TextEditingController();
   final TextEditingController phone = TextEditingController();
   final TextEditingController birthday = TextEditingController();
   final TextEditingController gender = TextEditingController();
@@ -57,12 +57,18 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     setState(() {
       _profile = profile;
       _account = account;
-      if (_profile?.gender != null) {
-        gender.text = genderMap[_profile!.gender] ?? '';
+      if (_profile != null) {
+        lastName.text = _profile!.last_name ?? '';
+        firstName.text = _profile!.first_name ?? '';
+        if (_profile!.gender != null) {
+          gender.text = genderMap[_profile!.gender] ?? '';
+        }
+        if (_profile!.birthdate != null) {
+          birthday.text = _formatDate(_profile!.birthdate ?? '');
+        }
       }
-
-      if (_profile?.birthdate != null) {
-        birthday.text = _formatDate(_profile?.birthdate ?? '');
+      if (_account != null) {
+        phone.text = _account!.phone ?? '';
       }
     });
   }
@@ -159,16 +165,16 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
                 SizedBox(height: 8.0),
                 BoxInputField(
-                  controller: userName,
-                  placeholder: _profile?.last_name ?? '',
+                  controller: lastName,
+                  placeholder: 'Enter your last name',
                 ),
                 SizedBox(height: 16.0),
                 Text(trans.firstName,
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
                 SizedBox(height: 8.0),
                 BoxInputField(
-                  controller: email,
-                  placeholder: _profile?.first_name ?? '',
+                  controller: firstName,
+                  placeholder: "trans.yourFistName",
                 ),
                 SizedBox(height: 16.0),
                 Text(trans.phoneNumber,
@@ -229,7 +235,9 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   title: trans.save, // Set the button text
                   style: ButtonStyleType
                       .Primary, // Set the button style (optional)
-                  onPressed: () async {},
+                  onPressed: () async {
+                    _changgeProfile(context);
+                  },
                 ),
                 SizedBox(height: 16.0),
                 BoxButton(
@@ -258,6 +266,31 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         ),
       ),
     );
+  }
+
+  Future<void> _changgeProfile(BuildContext context) async {
+    DateTime? birthdate = birthday.text.isNotEmpty
+        ? DateFormat('dd-MM-yyyy').parse(birthday.text)
+        : null;
+    int? genderValue = gender.text.isNotEmpty
+        ? genderMap.entries
+            .firstWhere((entry) => entry.value == gender.text)
+            .key
+        : null;
+    PatchProfileRequest request = PatchProfileRequest(
+        lastName: lastName.text,
+        firstName: firstName.text,
+        phone: phone.text,
+        birthdate: birthdate,
+        gender: genderValue);
+
+    final Profile? profile = await patchProfile(request);
+    if (profile != null) {
+      final account = await retrieveAccount();
+      setState(() {
+        _account = account;
+      });
+    }
   }
 
   Future<void> _changePasswordBottomSheet(BuildContext context) {
@@ -350,42 +383,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
           ),
         );
       },
-    );
-  }
-}
-
-// Mock implementation for CustomDropdownFormField if not defined
-class CustomDropdownFormField extends StatelessWidget {
-  final TextEditingController controller;
-  final List<String> items;
-  final String placeholder;
-  final VoidCallback onTap;
-
-  const CustomDropdownFormField({
-    Key? key,
-    required this.controller,
-    required this.items,
-    required this.placeholder,
-    required this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      value: controller.text.isEmpty ? null : controller.text,
-      decoration: InputDecoration(
-        hintText: placeholder,
-      ),
-      items: items.map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-      onChanged: (String? newValue) {
-        controller.text = newValue!;
-      },
-      onTap: onTap,
     );
   }
 }
