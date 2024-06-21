@@ -172,6 +172,6 @@
   "passwordsDoNotMatch" :"Mật khẩu mới và xác nhận mật khẩu không khớp",
   "passwordChangeFailed" :"đổi mật khẩu thất bại",
   "seeall" : "xem tất cả",
-  "yourFistName" :"Nhập vào tên của bạn"
-
+  "yourFistName" :"Nhập vào tên của bạn",
+  "yourLastName" : "Nhập vào họ của bạn"
 }

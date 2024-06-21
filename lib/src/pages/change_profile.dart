@@ -166,7 +166,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: lastName,
-                  placeholder: 'Enter your last name',
+                  placeholder: trans.yourLastName,
                 ),
                 SizedBox(height: 16.0),
                 Text(trans.firstName,
@@ -174,7 +174,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: firstName,
-                  placeholder: "trans.yourFistName",
+                  placeholder: trans.yourFistName,
                 ),
                 SizedBox(height: 16.0),
                 Text(trans.phoneNumber,

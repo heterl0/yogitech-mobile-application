@@ -172,6 +172,7 @@
   "passwordsDoNotMatch":"New password and confirm password not match",
   "passwordChangeFailed" : "Change password failed!",
   "seeall" : "see all",
-  "yourFistName" : "Enter your first name"
+  "yourFistName" : "Enter your first name",
+  "yourLastName" : "Enter your last name"
 
 }
