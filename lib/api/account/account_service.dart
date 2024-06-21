@@ -21,6 +21,25 @@ Future<Account?> getUser() async {
   }
 }
 
+Future<List<Account>> getUserProfiles([String query = '']) async {
+  try {
+    final url = formatApiUrl('/api/v1/user_profiles/');
+    final Response response =
+        await DioInstance.get(url, params: {'query': query});
+    if (response.statusCode == 200) {
+      return (response.data as List)
+          .map((data) => Account.fromMap(data))
+          .toList();
+    } else {
+      print('Failed to get user profiles: ${response.statusCode}');
+      return [];
+    }
+  } catch (e) {
+    print('Error getting user profiles: $e');
+    return [];
+  }
+}
+
 Future<Profile?> getUserProfile() async {
   try {
     final url = formatApiUrl('/api/v1/users/me/');

@@ -45,6 +45,7 @@ class BlogState extends State<AllExercise> {
       appBar: _isNotSearching
           ? CustomAppBar(
               showBackButton: true,
+              style: widthStyle.Large,
               title: trans.exercise,
               postActions: [
                 IconButton(
