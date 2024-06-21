@@ -69,7 +69,7 @@ Future<bool?> removeVoteBlog(int idVote) async {
 
 Future<BlogVote?> updateVoteBlog(int idVote, int value) async {
   try {
-    final url = formatApiUrl('/api/v1/votes/');
+    final url = formatApiUrl('/api/v1/votes/$idVote/');
     final data = {
       'vote_value': value,
     };
