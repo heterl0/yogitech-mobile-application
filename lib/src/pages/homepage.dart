@@ -1,8 +1,5 @@
-import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
@@ -21,7 +18,7 @@ import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage();
+  const HomePage({super.key});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -30,7 +27,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var jsonList;
   bool _isnotSearching = true;
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   Account? account;
 
   @override
@@ -58,7 +55,7 @@ class _HomePageState extends State<HomePage> {
     final trans = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return Scaffold(
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         appBar: _isnotSearching
             ? CustomAppBar(
                 showBackButton: false,
@@ -72,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: Row(
                       children: [
-                        Container(
+                        SizedBox(
                           width: 40,
                           height: 50,
                           child: Image.asset('assets/images/Emerald.png'),
@@ -82,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                               ? account!.profile.point.toString()
                               : '0',
                           style: h3.copyWith(
-                              color: theme.colorScheme.onBackground),
+                              color: theme.colorScheme.onSurface),
                         ),
                       ],
                     ),
@@ -93,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                 postActions: [
                   IconButton(
                     icon: Icon(Icons.search,
-                        color: theme.colorScheme.onBackground),
+                        color: theme.colorScheme.onSurface),
                     onPressed: () {
                       setState(() {
                         _isnotSearching = false;
@@ -123,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                   placeholder: trans.search,
                   trailing: Icon(Icons.search),
                   keyboardType: TextInputType.text,
-                  inputFormatters: [],
+                  inputFormatters: const [],
                   onSubmitted: (value) {
                     setState(() {
                       String searchValue = value.trim();
@@ -327,7 +324,7 @@ class StreakValue extends StatelessWidget {
                 color: text,
               ),
             ),
-            Container(
+            SizedBox(
               height: 32,
               child: ShaderMask(
                 shaderCallback: (bounds) {

@@ -8,7 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FriendListPage extends StatefulWidget {
   final int initialTabIndex;
-  FriendListPage({Key? key, required this.initialTabIndex}) : super(key: key);
+  const FriendListPage({super.key, required this.initialTabIndex});
 
   @override
   _FriendListPageState createState() => _FriendListPageState();
@@ -37,7 +37,7 @@ class _FriendListPageState extends State<FriendListPage>
     final trans = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         style: widthStyle.Large,
         title: trans.friends,
@@ -74,7 +74,7 @@ class _FriendListPageState extends State<FriendListPage>
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [
+              children: const [
                 FriendList(
                   itemCount: 10,
                 ),
@@ -94,9 +94,9 @@ class FriendList extends StatelessWidget {
   final int itemCount;
 
   const FriendList({
-    Key? key,
+    super.key,
     required this.itemCount,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -140,12 +140,12 @@ class FriendListItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const FriendListItem({
-    Key? key,
+    super.key,
     required this.name,
     required this.avatarUrl,
     required this.onTap,
     required this.exp,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

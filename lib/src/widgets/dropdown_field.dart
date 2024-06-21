@@ -12,14 +12,14 @@ class CustomDropdownFormField extends StatefulWidget {
   final ValueChanged<String?>? onChanged; // Add callback for value change
 
   const CustomDropdownFormField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.items,
     this.placeholder = '',
     this.readOnly = false,
     this.onTap,
     this.onChanged, // Add callback for value change
-  }) : super(key: key);
+  });
 
   @override
   _CustomDropdownFormFieldState createState() =>

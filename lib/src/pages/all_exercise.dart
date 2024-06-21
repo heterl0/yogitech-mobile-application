@@ -18,7 +18,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class AllExercise extends StatefulWidget {
   final String? searchString;
   final Muscle? selectedMuscle;
-  const AllExercise({Key? key, this.searchString, this.selectedMuscle}) : super(key: key);
+  const AllExercise({super.key, this.searchString, this.selectedMuscle});
 
   @override
   BlogState createState() => BlogState();
@@ -28,7 +28,7 @@ class BlogState extends State<AllExercise> {
   List<dynamic> _exercises = [];
   bool _isNotSearching = true;
   bool _isLoading = false;
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   Account? account;
 
   @override
@@ -84,7 +84,7 @@ class BlogState extends State<AllExercise> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: _isNotSearching
           ? CustomAppBar(
               showBackButton: false,
@@ -95,14 +95,14 @@ class BlogState extends State<AllExercise> {
                   },
                   child: Row(
                     children: [
-                      Container(
+                      SizedBox(
                         width: 40,
                         height: 50,
                         child: Image.asset('assets/images/Emerald.png'),
                       ),
                       Text(
                         account != null ? account!.profile.point.toString() : '0',
-                        style: h3.copyWith(color: theme.colorScheme.onBackground),
+                        style: h3.copyWith(color: theme.colorScheme.onSurface),
                       ),
                     ],
                   ),
@@ -111,7 +111,7 @@ class BlogState extends State<AllExercise> {
               titleWidget: StreakValue(account != null ? account!.profile.streak.toString() : '0'),
               postActions: [
                 IconButton(
-                  icon: Icon(Icons.search, color: theme.colorScheme.onBackground),
+                  icon: Icon(Icons.search, color: theme.colorScheme.onSurface),
                   onPressed: () {
                     setState(() {
                       _isNotSearching = false;
@@ -124,7 +124,7 @@ class BlogState extends State<AllExercise> {
               showBackButton: false,
               preActions: [
                 IconButton(
-                  icon: Icon(Icons.tune_outlined, color: theme.colorScheme.onBackground),
+                  icon: Icon(Icons.tune_outlined, color: theme.colorScheme.onSurface),
                   onPressed: () {
                     pushWithoutNavBar(context, MaterialPageRoute(builder: (context) => FilterPage()));
                   },
@@ -133,10 +133,10 @@ class BlogState extends State<AllExercise> {
               style: widthStyle.Medium,
               titleWidget: BoxInputField(
                 controller: _searchController,
-                placeholder: widget.searchString != null ? widget.searchString! + "" : trans.search,
+                placeholder: widget.searchString != null ? widget.searchString! : trans.search,
                 trailing: Icon(Icons.search),
                 keyboardType: TextInputType.text,
-                inputFormatters: [],
+                inputFormatters: const [],
                 onTap: () {
                   // Handle input field tap if needed
                 },
@@ -149,7 +149,7 @@ class BlogState extends State<AllExercise> {
               ),
               postActions: [
                 IconButton(
-                  icon: Icon(Icons.close, color: theme.colorScheme.onBackground),
+                  icon: Icon(Icons.close, color: theme.colorScheme.onSurface),
                   onPressed: () {
                     setState(() {
                       _isNotSearching = true;
@@ -169,7 +169,7 @@ class BlogState extends State<AllExercise> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(color: theme.colorScheme.background),
+      decoration: BoxDecoration(color: theme.colorScheme.surface),
       child: _isLoading
           ? Center(child: CircularProgressIndicator()) // Show spinner when loading
           : SingleChildScrollView(

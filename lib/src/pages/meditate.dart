@@ -11,6 +11,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yogi_application/src/widgets/checkbox.dart';
 
 class Meditate extends StatefulWidget {
+  const Meditate({super.key});
+
   @override
   _MeditateState createState() => _MeditateState();
 }
@@ -49,7 +51,7 @@ class _MeditateState extends State<Meditate> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(color: theme.colorScheme.background),
+      decoration: BoxDecoration(color: theme.colorScheme.surface),
       child: _buildMainContent(),
     );
   }
@@ -57,7 +59,7 @@ class _MeditateState extends State<Meditate> {
   Widget _buildMainContent() {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
-    final List<Map<String, dynamic>> _tracks = [
+    final List<Map<String, dynamic>> tracks = [
       {
         'title': trans.soundRain,
         'subtitle': trans.soundRainDescription,
@@ -96,10 +98,10 @@ class _MeditateState extends State<Meditate> {
             style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
           const SizedBox(height: 16),
-          for (int i = 0; i < _tracks.length; i++)
+          for (int i = 0; i < tracks.length; i++)
             CheckBoxListTile(
-              title: _tracks[i]['title'],
-              subtitle: _tracks[i]['subtitle'],
+              title: tracks[i]['title'],
+              subtitle: tracks[i]['subtitle'],
               state: _selectedTrackIndex == i
                   ? CheckState.Checked
                   : CheckState.Unchecked,
@@ -121,10 +123,10 @@ class _MeditateState extends State<Meditate> {
   Widget _buildElevatedButton(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(Colors.transparent),
-        shadowColor: MaterialStateProperty.all(Colors.transparent),
-        padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-        shape: MaterialStateProperty.all(const CircleBorder()),
+        backgroundColor: WidgetStateProperty.all(Colors.transparent),
+        shadowColor: WidgetStateProperty.all(Colors.transparent),
+        padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
+        shape: WidgetStateProperty.all(const CircleBorder()),
       ),
       onPressed: () {
         if (_selectedTrackIndex == 1) {

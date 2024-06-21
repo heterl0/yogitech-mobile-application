@@ -36,9 +36,8 @@ final ColorScheme lightColorScheme = ColorScheme.light(
   secondary: stroke,
   onSecondary: elevationLight,
   error: error,
-  background: lightbg,
   surface: elevationLight,
-  onBackground: text,
+  onSurface: text,
 );
 
 final ColorScheme darkColorScheme = ColorScheme.dark(
@@ -47,9 +46,8 @@ final ColorScheme darkColorScheme = ColorScheme.dark(
   secondary: stroke,
   onSecondary: elevationDark,
   error: error,
-  background: darkbg,
   surface: elevationDark,
-  onBackground: active,
+  onSurface: active,
 );
 
 // Themes (light and dark)
@@ -62,7 +60,7 @@ final ThemeData lightTheme = ThemeData(
     bodyMedium: TextStyle(color: text),
   ),
   hintColor: text,
-  colorScheme: lightColorScheme.copyWith(background: lightbg),
+  colorScheme: lightColorScheme.copyWith(surface: lightbg),
 );
 
 final ThemeData darkTheme = ThemeData(
@@ -74,10 +72,10 @@ final ThemeData darkTheme = ThemeData(
     bodyMedium: TextStyle(color: text),
   ),
   hintColor: text,
-  colorScheme: darkColorScheme.copyWith(background: darkbg),
+  colorScheme: darkColorScheme.copyWith(surface: darkbg),
 );
 
 // Function to get custom color based on theme
 Color getCustomColor(BuildContext context) {
-  return Theme.of(context).colorScheme.onBackground;
+  return Theme.of(context).colorScheme.onSurface;
 }

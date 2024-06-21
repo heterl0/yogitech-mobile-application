@@ -14,8 +14,7 @@ class performMeditate extends StatelessWidget {
   final Duration selectedDuration;
 
   const performMeditate(
-      {Key? key, this.selectedDuration = const Duration(minutes: 5)})
-      : super(key: key);
+      {super.key, this.selectedDuration = const Duration(minutes: 5)});
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +27,7 @@ class performMeditate extends StatelessWidget {
 class MeditateCountdownTimer extends StatefulWidget {
   final Duration initialDuration;
 
-  const MeditateCountdownTimer({Key? key, required this.initialDuration})
-      : super(key: key);
+  const MeditateCountdownTimer({super.key, required this.initialDuration});
   @override
   _MeditateCountdownTimerState createState() => _MeditateCountdownTimerState();
 }
@@ -214,7 +212,7 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
                               '${_start.round()}',
                               style: const TextStyle(
                                 fontSize: 120,
-                                color: Color(0xfff24FFCC),
+                                color: Color(0xfff24ffcc),
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -254,7 +252,7 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
                     decoration: BoxDecoration(
                       color: _isTimerOn
                           ? Colors.redAccent
-                          : const Color(0xfff24FFCC),
+                          : const Color(0xfff24ffcc),
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: const [
                         BoxShadow(
@@ -325,7 +323,7 @@ class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
       child: Text(
         trans.meditate,
         textAlign: TextAlign.center,
-        style: h2.copyWith(color: theme.colorScheme.onBackground),
+        style: h2.copyWith(color: theme.colorScheme.onSurface),
       ),
     );
   }

@@ -125,7 +125,7 @@ class _FilterPageState extends State<FilterPage> {
           Navigator.pop(context);
           print(selectedMuscle);
           List<dynamic>? mus= _muscles.where((mus) => mus.name == selectedMuscle).toList();
-          if (mus.length!=0){
+          if (mus.isNotEmpty){
             setState(() {
             Muscle? muscle= mus[0];
             Navigator.push(
@@ -147,7 +147,7 @@ class MuscleInfoWidget extends StatelessWidget {
   final List<dynamic> muscles;
   final Map<String, String> muscleMap;
 
-  const MuscleInfoWidget({
+  const MuscleInfoWidget({super.key, 
     required this.muscleName,
     required this.muscles,
     required this.muscleMap,
@@ -195,7 +195,7 @@ class MuscleInfoWidget extends StatelessWidget {
                             ),
                             Text(
                               (trans.locale != "en"
-                                  ? muscleMap[muscleName]! + ''
+                                  ? muscleMap[muscleName]!
                                   : muscleName),
                               textAlign: TextAlign.left,
                               style: h3.copyWith(
@@ -203,7 +203,7 @@ class MuscleInfoWidget extends StatelessWidget {
                             ),
                             Text(
                               (trans.locale != "en"
-                                  ? detail[muscleName]! + ''
+                                  ? detail[muscleName]!
                                   : mus.description),
                               textAlign: TextAlign.left,
                               style: h3.copyWith(color: primary),
@@ -212,7 +212,7 @@ class MuscleInfoWidget extends StatelessWidget {
                               flex: 2,
                               child: Center(
                                 child: Image.network(
-                                  mus.image!,
+                                  mus.image,
                                   fit: BoxFit.cover,
                                 ),
                               ),

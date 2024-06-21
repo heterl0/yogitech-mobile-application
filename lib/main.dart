@@ -3,7 +3,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/dioInstance.dart';
-import 'package:yogi_application/api/event/event_service.dart';
 import 'package:yogi_application/src/pages/_mainscreen.dart';
 import 'package:yogi_application/src/pages/activities.dart';
 import 'package:yogi_application/src/pages/blog.dart';
@@ -88,7 +87,7 @@ class MyHttpOverrides extends HttpOverrides {
 class MyApp extends StatefulWidget {
   final String? access;
 
-  const MyApp({Key? key, this.access}) : super(key: key);
+  const MyApp({super.key, this.access});
 
   @override
   _MyAppState createState() => _MyAppState();

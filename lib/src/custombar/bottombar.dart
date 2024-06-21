@@ -7,10 +7,10 @@ class CustomBottomBar extends StatefulWidget {
   final VoidCallback? onPressed;
 
   const CustomBottomBar({
-    Key? key,
+    super.key,
     this.buttonTitle = '',
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   _CustomBottomBarState createState() => _CustomBottomBarState();

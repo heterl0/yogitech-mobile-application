@@ -9,6 +9,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class Subscription extends StatefulWidget {
+  const Subscription({super.key});
+
   @override
   _SubscriptionState createState() => _SubscriptionState();
 }
@@ -27,20 +29,20 @@ class _SubscriptionState extends State<Subscription> {
         titleWidget: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
               width: 40,
               height: 50,
               child: Image.asset('assets/images/Emerald.png'),
             ),
             Text(
               '5',
-              style: h3.copyWith(color: theme.colorScheme.onBackground),
+              style: h3.copyWith(color: theme.colorScheme.onSurface),
             ),
           ],
         ),
         postActions: [
           IconButton(
-            icon: Icon(Icons.history, color: theme.colorScheme.onBackground),
+            icon: Icon(Icons.history, color: theme.colorScheme.onSurface),
             onPressed: () {
               Navigator.push(
                 context,
@@ -123,7 +125,7 @@ class _SubscriptionState extends State<Subscription> {
       ),
       child: Column(
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
             child: Row(
               children: [
@@ -237,7 +239,7 @@ class _SubscriptionState extends State<Subscription> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
+              SizedBox(
                   width: 120,
                   height: 120,
                   child: Image.asset(
@@ -329,7 +331,7 @@ class _SubscriptionState extends State<Subscription> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
-    return Container(
+    return SizedBox(
       height: 48,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -396,10 +398,10 @@ class _SubscriptionState extends State<Subscription> {
                     trans.onceAWeek,
                     textAlign: TextAlign.center,
                     style:
-                        min_cap.copyWith(color: theme.colorScheme.onBackground),
+                        min_cap.copyWith(color: theme.colorScheme.onSurface),
                   ),
                   const SizedBox(height: 12),
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -512,7 +514,7 @@ class _SubscriptionState extends State<Subscription> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -645,7 +647,7 @@ class _SubscriptionState extends State<Subscription> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,

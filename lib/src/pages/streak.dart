@@ -7,6 +7,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class Streak extends StatefulWidget {
+  const Streak({super.key});
+
   @override
   _StreakState createState() => _StreakState();
 }
@@ -42,14 +44,14 @@ class _StreakState extends State<Streak> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         title: trans.streak,
         showBackButton: false,
         postActions: [
           IconButton(
-            icon: Icon(Icons.close, color: theme.colorScheme.onBackground),
+            icon: Icon(Icons.close, color: theme.colorScheme.onSurface),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -68,7 +70,7 @@ class _StreakState extends State<Streak> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
             child: Column(
               children: [
@@ -154,7 +156,7 @@ class _StreakState extends State<Streak> {
           Text(
             DateFormat('MMMM yyyy')
                 .format(_currentDate), // Use DateFormat to format the date
-            style: h2.copyWith(color: theme.colorScheme.onBackground),
+            style: h2.copyWith(color: theme.colorScheme.onSurface),
           ),
           Row(
             children: [
@@ -212,7 +214,7 @@ class _StreakState extends State<Streak> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '$daysInMonth ' +((daysInMonth==1)&& (trans.locale=="en")? "day":trans.days),
+                    '$daysInMonth ${(daysInMonth==1)&& (trans.locale=="en")? "day":trans.days}',
                     style: h3.copyWith(color: active, height: 1.2),
                   ),
                   Text(
@@ -250,7 +252,7 @@ class _StreakState extends State<Streak> {
                   Text(
                     trans.beginOfTheStreak,
                     style: min_cap.copyWith(
-                      color: theme.colorScheme.onBackground,
+                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                 ],
