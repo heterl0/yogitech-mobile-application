@@ -43,6 +43,12 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     1: 'Male',
     2: 'Other',
   };
+
+  final Map<String, String> transMap = {
+    'Female': 'Nam',
+    'Male': 'Nữ',
+    'Other': 'Khác',
+  };
   @override
   void initState() {
     super.initState();
@@ -164,7 +170,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: lastName,
-                  placeholder: 'Enter your last name',
+                  placeholder: trans.lastName,
                 ),
                 SizedBox(height: 16.0),
                 Text(trans.firstName,
@@ -172,7 +178,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: firstName,
-                  placeholder: "trans.yourFistName",
+                  placeholder: trans.lastName,
                 ),
                 SizedBox(height: 16.0),
                 Text(trans.phoneNumber,
@@ -204,7 +210,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                             controller: birthday,
                             placeholder: (_profile?.birthdate != null)
                                 ? _formatDate(_profile!.birthdate ?? '')
-                                : 'Select your birthday',
+                                : trans.birthday,
                             trailing: Icon(Icons.calendar_today),
                             readOnly: true,
                             onTap: () async {
@@ -240,7 +246,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                             controller: gender,
                             items: ['Male', 'Female', 'Other'],
                             placeholder: gender.text.isEmpty
-                                ? 'Select gender'
+                                ? trans.sellectGender
                                 : gender.text,
                             onTap: () {
                               // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết
