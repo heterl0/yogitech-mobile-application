@@ -171,5 +171,7 @@
   "passwordChangedSuccessfully":"Change password successful",
   "passwordsDoNotMatch":"New password and confirm password not match",
   "passwordChangeFailed" : "Change password failed!",
-  "seeall" : "see all"
+  "seeall" : "see all",
+  "yourFistName" : "Enter your first name"
+
 }
