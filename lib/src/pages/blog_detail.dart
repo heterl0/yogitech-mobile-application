@@ -29,6 +29,12 @@ class _BlogDetailState extends State<BlogDetail> {
   late BlogVote? blogVote = null;
 
   @override
+  void initState() {
+    super.initState();
+    fetchBlog();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
