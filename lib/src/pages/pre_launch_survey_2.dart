@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
-import 'package:yogi_application/src/pages/homepage.dart';
+import 'package:yogi_application/src/pages/_mainscreen.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
@@ -90,7 +90,17 @@ class _PrelaunchSurvey2State extends State<PrelaunchSurvey2> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(),
+              builder: (context) => MainScreen(
+                isDarkMode: false, // Set the appropriate value
+                onThemeChanged: (bool value) {
+                  // Define the theme change logic
+                },
+                locale: Locale('en'), // Set the appropriate locale
+                onLanguageChanged: (bool value) {
+                  // Define the language change logic
+                },
+                isVietnamese: false, // Set the appropriate value
+              ),
             ),
           );
         },
