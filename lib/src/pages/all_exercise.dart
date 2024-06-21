@@ -54,7 +54,7 @@ class BlogState extends State<AllExercise> {
       final List<dynamic> exercises = await getExercises(); // Assuming getExercises() returns a List<Exercise>
       List<dynamic> filteredExercises = exercises;
       if (query != null && query.isNotEmpty) {
-        filteredExercises = exercises.where((exercise) => exercise.title.toLowerCase().contains(query.toLowerCase())).toList();
+        filteredExercises = exercises.where((exercise) => (exercise.title.toString().replaceAll(" ", "").toLowerCase()).contains(query.toLowerCase().replaceAll(" ", ""))).toList();
       }
       if (mus != null) {
         for (var i = 0; i < filteredExercises.length; i++) {
