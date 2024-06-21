@@ -16,7 +16,10 @@ class Meditate extends StatefulWidget {
 }
 
 class _MeditateState extends State<Meditate> {
-  int? _selectedTrack;
+  // Data for track options
+
+  int? _selectedTrackIndex; // Index of the currently selected track
+
   final AudioPlayer _audioPlayer = AudioPlayer();
   Duration _selectedDuration = const Duration();
 
@@ -54,6 +57,18 @@ class _MeditateState extends State<Meditate> {
   Widget _buildMainContent() {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+    final List<Map<String, dynamic>> _tracks = [
+      {
+        'title': trans.soundRain,
+        'subtitle': trans.soundRainDescription,
+        'asset': 'assets/audios/rain.mp3'
+      },
+      {
+        'title': trans.soundStream,
+        'subtitle': trans.soundStreamDescription,
+        'asset': 'assets/audios/tieng_suoi.mp3'
+      },
+    ];
 
     return Padding(
       padding: const EdgeInsets.all(24.0),
@@ -81,55 +96,25 @@ class _MeditateState extends State<Meditate> {
             style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
           const SizedBox(height: 16),
-          _buildCheckBoxTile(
-            title: trans.soundRain,
-            subtitle: trans.soundRain == 'Sound of rain'
-                ? 'Deep sound on rainy days.'
-                : 'Âm thanh sâu lắng trong những ngày mưa.',
-            isChecked: _selectedTrack == 1,
-            onChanged: (value) {
-              setState(() {
-                if (value!) {
-                  _selectedTrack = 1;
-                } else {
-                  _selectedTrack = null;
-                }
-              });
-            },
-          ),
-          const SizedBox(height: 16),
-          _buildCheckBoxTile(
-            title: trans.soundStream,
-            subtitle: trans.soundStream == 'The sound of the stream flowing'
-                ? 'Immersing yourself in the refreshing nature.'
-                : "Âm thanh suối chảy hòa mình vào thiên nhiên trong lành.",
-            isChecked: _selectedTrack == 2,
-            onChanged: (value) {
-              setState(() {
-                if (value!) {
-                  _selectedTrack = 2;
-                } else {
-                  _selectedTrack = null;
-                }
-              });
-            },
-          ),
+          for (int i = 0; i < _tracks.length; i++)
+            CheckBoxListTile(
+              title: _tracks[i]['title'],
+              subtitle: _tracks[i]['subtitle'],
+              state: _selectedTrackIndex == i
+                  ? CheckState.Checked
+                  : CheckState.Unchecked,
+              onChanged: (value) {
+                // setState(() {
+                //   if (value!) {
+                //     _selectedTrackIndex = i;
+                //   } else {
+                //     _selectedTrackIndex = null;
+                //   }
+                // });
+              },
+            ),
         ],
       ),
-    );
-  }
-
-  Widget _buildCheckBoxTile({
-    required String title,
-    required String subtitle,
-    required bool isChecked,
-    required ValueChanged<bool?> onChanged,
-  }) {
-    return CheckBoxListTile(
-      title: title,
-      subtitle: subtitle,
-      state: isChecked ? CheckState.Checked : CheckState.Unchecked,
-      onChanged: onChanged,
     );
   }
 
@@ -142,9 +127,9 @@ class _MeditateState extends State<Meditate> {
         shape: MaterialStateProperty.all(const CircleBorder()),
       ),
       onPressed: () {
-        if (_selectedTrack == 1) {
+        if (_selectedTrackIndex == 1) {
           _audioPlayer.play(AssetSource('assets/audios/rain.mp3'));
-        } else if (_selectedTrack == 2) {
+        } else if (_selectedTrackIndex == 2) {
           _audioPlayer.play(AssetSource('assets/audios/tieng_suoi.mp3'));
         }
         pushWithoutNavBar(
