@@ -126,19 +126,21 @@ class BlogState extends State<AllExercise> {
         itemCount: jsonList.length,
         itemBuilder: (context, index) {
           final blog = jsonList[index];
-          return CustomCard(
-            title: blog.title,
-            caption: blog.description,
-            imageUrl: blog.image_url,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ExerciseDetail(),
-                ),
+          if (jsonList != null)
+            for (final exercise in jsonList)
+              return CustomCard(
+                title: blog.title,
+                caption: blog.description,
+                imageUrl: blog.image_url,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ExerciseDetail(id: exercise.id),
+                    ),
+                  );
+                },
               );
-            },
-          );
         },
       ),
     );
