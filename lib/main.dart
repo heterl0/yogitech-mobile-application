@@ -163,7 +163,7 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
           AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
           AppRoutes.meditate: (context) => Meditate(),
-          AppRoutes.performMeditate: (context) => performMeditate(),
+          AppRoutes.performMeditate: (context) => PerformMeditate(),
           AppRoutes.streak: (context) => Streak(),
           AppRoutes.exercisedetail: (context) => ExerciseDetail(),
           AppRoutes.result: (context) => Result(),
