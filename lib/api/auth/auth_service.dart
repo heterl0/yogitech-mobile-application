@@ -23,7 +23,7 @@ Future<dynamic> login(String email, String password) async {
       return accessToken;
     } else {
       print('Login failed with status code: ${response.statusCode}');
-      return null;
+      return response.statusCode;
     }
   } catch (e) {
     print('Login error: $e');

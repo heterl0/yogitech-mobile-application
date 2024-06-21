@@ -173,6 +173,8 @@
   "passwordChangeFailed" : "Change password failed!",
   "seeall" : "see all",
   "yourFistName" : "Enter your first name",
-  "yourLastName" : "Enter your last name"
-
+  "yourLastName" : "Enter your last name",
+  "sendResetPasswordTo": "Forget password request email has been sent to",
+  "request" : "Send request"
+  
 }

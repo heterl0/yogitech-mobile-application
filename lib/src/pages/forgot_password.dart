@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:yogi_application/api/account/account_service.dart';
+import 'package:yogi_application/src/pages/login_page.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
@@ -6,10 +8,9 @@ import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class ForgotPasswordPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
-  
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -44,53 +45,15 @@ class ForgotPasswordPage extends StatelessWidget {
               placeholder: trans.email,
             ),
             SizedBox(height: 20.0),
-            // Container(
-            //   height: 50.0,
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(44.0),
-            //     gradient: LinearGradient(
-            //       colors: [
-            //         Color(0xFF3BE2B0),
-            //         Color(0xFF4095D0),
-            //         Color(0xFF5986CC),
-            //       ],
-            //       begin: Alignment.topLeft,
-            //       end: Alignment.bottomRight,
-            //       stops: [0.0, 0.5, 1.0],
-            //     ),
-            //   ),
-            //   child: Material(
-            //     color: Colors.transparent,
-            //     child: InkWell(
-            //       onTap: () {
-            //         // Xử lý sự kiện khi nhấn vào nút "Send OTP"
-            //         _handleSendOTP(context, emailController.text);
-            //       },
-            //       borderRadius: BorderRadius.circular(44.0),
-            //       child: Center(
-            //         child: Text(
-            //           'Send OTP',
-            //           style: TextStyle(
-            //             color: Colors.white,
-            //             fontWeight: FontWeight.bold,
-            //             fontSize: 18.0,
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-
             BoxButton(
-              title: trans.sendOTP,
+              title: trans.request,
               style: ButtonStyleType.Primary,
               state: ButtonState
                   .Enabled, // hoặc ButtonState.Disabled để test trạng thái disabled
               onPressed: () {
-                _handleSendOTP(context, emailController.text);
+                _handleResetPassword(context, emailController.text);
               },
             ),
-
             SizedBox(height: 10.0),
             Row(children: <Widget>[
               Expanded(
@@ -132,13 +95,28 @@ class ForgotPasswordPage extends StatelessWidget {
     );
   }
 
-  void _handleSendOTP(BuildContext context, String email) {
+  Future<void> _handleResetPassword(BuildContext context, String email) async {
     final trans = AppLocalizations.of(context)!;
-    // Xử lý sự kiện gửi OTP
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(trans.sendOTP+' $email'),
-      ),
-    );
+
+    try {
+      await resetPassword(email);
+      // Hiển thị thông báo thành công và chuyển trang
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(trans.sendResetPasswordTo + ' $email'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+          AppRoutes.login, (Route<dynamic> route) => false);
+    } catch (e) {
+      // Hiển thị thông báo lỗi
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Error: ${e.toString()}"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }

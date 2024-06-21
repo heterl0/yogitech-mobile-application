@@ -173,5 +173,7 @@
   "passwordChangeFailed" :"đổi mật khẩu thất bại",
   "seeall" : "xem tất cả",
   "yourFistName" :"Nhập vào tên của bạn",
-  "yourLastName" : "Nhập vào họ của bạn"
+  "yourLastName" : "Nhập vào họ của bạn",
+  "sendResetPasswordTo" : "Yêu cầu quên mật khẩu đã được gửi đến email của bạn",
+  "request" : "Gửi yêu cầu"
 }
