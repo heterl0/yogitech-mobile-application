@@ -20,8 +20,8 @@ class ChangeProfilePage extends StatefulWidget {
 }
 
 class _ChangeProfilePageState extends State<ChangeProfilePage> {
-  final TextEditingController userName = TextEditingController();
-  final TextEditingController email = TextEditingController();
+  final TextEditingController lastName = TextEditingController();
+  final TextEditingController firstName = TextEditingController();
   final TextEditingController phone = TextEditingController();
   final TextEditingController birthday = TextEditingController();
   final TextEditingController gender = TextEditingController();
@@ -159,7 +159,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
                 SizedBox(height: 8.0),
                 BoxInputField(
-                  controller: userName,
+                  controller: lastName,
                   placeholder: _profile?.last_name ?? '',
                 ),
                 SizedBox(height: 16.0),
@@ -167,7 +167,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
                 SizedBox(height: 8.0),
                 BoxInputField(
-                  controller: email,
+                  controller: firstName,
                   placeholder: _profile?.first_name ?? '',
                 ),
                 SizedBox(height: 16.0),
@@ -229,7 +229,9 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   title: trans.save, // Set the button text
                   style: ButtonStyleType
                       .Primary, // Set the button style (optional)
-                  onPressed: () async {},
+                  onPressed: () async {
+                    _changgeProfile(context);
+                  },
                 ),
                 SizedBox(height: 16.0),
                 BoxButton(
@@ -258,6 +260,31 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         ),
       ),
     );
+  }
+
+  Future<void> _changgeProfile(BuildContext context) async {
+    DateTime? birthdate = birthday.text.isNotEmpty
+        ? DateFormat('dd-MM-yyyy').parse(birthday.text)
+        : null;
+    int? genderValue = gender.text.isNotEmpty
+        ? genderMap.entries
+            .firstWhere((entry) => entry.value == gender.text)
+            .key
+        : null;
+    PatchProfileRequest request = PatchProfileRequest(
+        lastName: lastName.text,
+        firstName: firstName.text,
+        phone: phone.text,
+        birthdate: birthdate,
+        gender: genderValue);
+
+    final Profile? profile = await patchProfile(request);
+    if (profile != null) {
+      final account = await retrieveAccount();
+      setState(() {
+        _account = account;
+      });
+    }
   }
 
   Future<void> _changePasswordBottomSheet(BuildContext context) {
