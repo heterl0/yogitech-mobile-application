@@ -96,6 +96,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: Container(
                     alignment: Alignment.centerRight,
                     height: 50,
+                    
                     child: () {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.end,

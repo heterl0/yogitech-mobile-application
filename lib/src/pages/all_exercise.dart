@@ -1,40 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/exercise/exercise_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:yogi_application/src/models/account.dart';
+import 'package:yogi_application/src/models/exercise.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
+import 'package:yogi_application/src/pages/filter.dart';
+import 'package:yogi_application/src/pages/homepage.dart';
+import 'package:yogi_application/src/pages/subscription.dart';
+import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AllExercise extends StatefulWidget {
-  const AllExercise({Key? key}) : super(key: key);
+  final String? searchString;
+  const AllExercise({Key? key, this.searchString}) : super(key: key);
 
   @override
   BlogState createState() => BlogState();
 }
 
 class BlogState extends State<AllExercise> {
-  List<dynamic> jsonList = [];
+  List<dynamic> _exercises = [];
   bool _isNotSearching = true;
   TextEditingController _searchController = TextEditingController();
+  Account? account;
 
   @override
   void initState() {
     super.initState();
-    _fetchExercise(); // Gọi hàm fetchBlogs khi trạng thái của widget được khởi tạo
+    _fetchExercise(widget.searchString);
+    _fetchAccount();
+    _searchController.text = widget.searchString ?? '';
   }
 
-  Future<void> _fetchExercise([String query = '']) async {
-    final List<dynamic> exercises = await getExercises();
+  Future<void> _fetchAccount() async {
+    final Account? _account = await retrieveAccount();
     setState(() {
-      if (query.isNotEmpty) {
-        jsonList = exercises
-            .where((exercise) => exercise.containsQuery(query))
-            .toList();
-      } else {
-        jsonList = exercises;
-      }
+      account = _account;
     });
+  }
+
+  Future<void> _fetchExercise([String? query = '']) async {
+    try {
+      final List<dynamic> exercises = await getExercises();
+      final List<dynamic> filteredExercises = query != null && query.isNotEmpty
+          ? exercises.where((exercise) => exercise.title.toLowerCase().contains(query.toLowerCase())).toList()
+          : exercises;
+
+      setState(() {
+        _exercises = filteredExercises;
+      });
+    } catch (e) {
+      // Handle errors, e.g., show a snackbar or error message
+      print('Error loading exercises: $e');
+    }
   }
 
   @override
@@ -42,14 +64,42 @@ class BlogState extends State<AllExercise> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
+      backgroundColor: theme.colorScheme.background,
       appBar: _isNotSearching
           ? CustomAppBar(
-              showBackButton: true,
-              title: trans.exercise,
+              showBackButton: false,
+              preActions: [
+                GestureDetector(
+                  onTap: () {
+                    pushWithoutNavBar(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Subscription()));
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 50,
+                        child: Image.asset('assets/images/Emerald.png'),
+                      ),
+                      Text(
+                        account != null
+                            ? account!.profile.point.toString()
+                            : '0',
+                        style: h3.copyWith(
+                            color: theme.colorScheme.onBackground),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              titleWidget: StreakValue(
+                  account != null ? account!.profile.streak.toString() : '0'),
               postActions: [
                 IconButton(
-                  icon:
-                      Icon(Icons.search, color: theme.colorScheme.onBackground),
+                  icon: Icon(Icons.search,
+                      color: theme.colorScheme.onBackground),
                   onPressed: () {
                     setState(() {
                       _isNotSearching = false;
@@ -60,33 +110,46 @@ class BlogState extends State<AllExercise> {
             )
           : CustomAppBar(
               showBackButton: false,
-              onBackPressed: () {
-                setState(() {
-                  _isNotSearching = true;
-                });
-              },
-              style: widthStyle.Large,
+              preActions: [
+                IconButton(
+                  icon: Icon(Icons.tune_outlined,
+                      color: theme.colorScheme.onBackground),
+                  onPressed: () {
+                    pushWithoutNavBar(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FilterPage(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+              style: widthStyle.Medium,
               titleWidget: BoxInputField(
                 controller: _searchController,
                 placeholder: trans.search,
-                trailing:
-                    Icon(Icons.search, color: theme.colorScheme.onBackground),
+                trailing: Icon(Icons.search),
                 keyboardType: TextInputType.text,
                 inputFormatters: [],
-                onChanged: (value) {
-                  _fetchExercise(value);
+                onTap: () {
+                  // Handle input field tap if needed
                 },
-                onTap: () {},
+                onSubmitted: (value) {
+                  setState(() {
+                    _fetchExercise(value.trim());
+                    _isNotSearching = true;
+                  });
+                },
               ),
               postActions: [
                 IconButton(
-                  icon:
-                      Icon(Icons.close, color: theme.colorScheme.onBackground),
+                  icon: Icon(Icons.close,
+                      color: theme.colorScheme.onBackground),
                   onPressed: () {
-                    _searchController.clear();
-                    _fetchExercise(); // Fetch all blogs again
                     setState(() {
                       _isNotSearching = true;
+                      _fetchExercise('');
+                      _searchController.clear();
                     });
                   },
                 ),
@@ -123,24 +186,22 @@ class BlogState extends State<AllExercise> {
           crossAxisCount: 2,
           childAspectRatio: 4 / 5,
         ),
-        itemCount: jsonList.length,
+        itemCount: _exercises.length,
         itemBuilder: (context, index) {
-          final blog = jsonList[index];
-          if (jsonList != null)
-            for (final exercise in jsonList)
-              return CustomCard(
-                title: blog.title,
-                caption: blog.description,
-                imageUrl: blog.image_url,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ExerciseDetail(id: exercise.id),
-                    ),
-                  );
-                },
+          final blog = _exercises[index];
+          return CustomCard(
+            title: blog.title,
+            caption: blog.description,
+            imageUrl: blog.image_url,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ExerciseDetail(id: blog.id),
+                ),
               );
+            },
+          );
         },
       ),
     );

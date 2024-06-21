@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -104,8 +106,7 @@ class _HomePageState extends State<HomePage> {
                 showBackButton: false,
                 preActions: [
                   IconButton(
-                    icon: Icon(Icons.tune_outlined,
-                        color: theme.colorScheme.onBackground),
+                    icon: Icon(Icons.tune_outlined),
                     onPressed: () {
                       pushWithoutNavBar(
                         context,
@@ -116,23 +117,32 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                 ],
-                style: widthStyle.Large,
+                style: widthStyle.Medium,
                 titleWidget: BoxInputField(
                   controller: _searchController,
                   placeholder: trans.search,
                   trailing: Icon(Icons.search),
                   keyboardType: TextInputType.text,
                   inputFormatters: [],
-                  onTap: () {
-                    // Xử lý khi input field được nhấn
+                  onSubmitted: (value) {
+                    setState(() {
+                      String searchValue = value.trim();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                AllExercise(searchString: searchValue)), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                      );
+                      // Use the value here after the user submits
+                    });
                   },
                 ),
                 postActions: [
                   IconButton(
-                    icon: Icon(Icons.close,
-                        color: theme.colorScheme.onBackground),
+                    icon: Icon(Icons.close),
                     onPressed: () {
                       setState(() {
+                        _searchController.clear(); // Clear the search text
                         _isnotSearching = true;
                       });
                     },
