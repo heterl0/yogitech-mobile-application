@@ -62,8 +62,8 @@ class _MainScreenState extends State<MainScreen> {
           screen: Activities(),
           item: ItemConfig(
             textStyle: min_cap,
-            icon: const Icon(Icons.directions_run),
-            title: trans.activities,
+            icon: const Icon(Icons.celebration),
+            title: trans.event,
             activeForegroundColor: primary,
             inactiveForegroundColor: text,
           ),

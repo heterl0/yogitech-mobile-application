@@ -7,12 +7,14 @@ enum CheckState { Checked, Unchecked }
 
 class CheckBoxListTile extends StatefulWidget {
   final String title;
+  final String subtitle; // Added subtitle
   final CheckState state;
   final ValueChanged<bool>? onChanged; // Use ValueChanged for state updates
 
   const CheckBoxListTile({
     Key? key,
     this.title = '',
+    this.subtitle = '', // Added subtitle
     this.state = CheckState.Unchecked,
     this.onChanged,
   }) : super(key: key);
@@ -37,9 +39,13 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
     return ListTile(
       title: Text(
         widget.title,
-        style: bd_text.copyWith(
-          color: text,
+        style: h3.copyWith(
+          color: theme.colorScheme.onPrimary,
         ),
+      ),
+      subtitle: Text(
+        widget.subtitle,
+        style: min_cap.copyWith(color: text),
       ),
       leading: Checkbox(
         value: _isChecked,
@@ -56,7 +62,6 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
               ? elevationLight
               : elevationDark;
         }),
-
         checkColor: primary, // Color of the checkmark
         materialTapTargetSize:
             MaterialTapTargetSize.shrinkWrap, // Prevent button-like behavior

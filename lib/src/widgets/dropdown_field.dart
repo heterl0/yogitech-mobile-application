@@ -8,6 +8,7 @@ class CustomDropdownFormField extends StatefulWidget {
   final TextEditingController controller;
   final bool readOnly;
   final VoidCallback? onTap;
+  final ValueChanged<String?>? onChanged; // Add callback for value change
 
   CustomDropdownFormField({
     Key? key,
@@ -16,6 +17,7 @@ class CustomDropdownFormField extends StatefulWidget {
     this.placeholder = '',
     this.readOnly = false,
     this.onTap,
+    this.onChanged, // Add callback for value change
   }) : super(key: key);
 
   @override
@@ -124,6 +126,10 @@ class _CustomDropdownFormFieldState extends State<CustomDropdownFormField> {
                 setState(() {
                   widget.controller.text = value!;
                 });
+                if (widget.onChanged != null) {
+                  widget.onChanged!(
+                      value); // Call the callback with the selected value
+                }
               },
       ),
     );

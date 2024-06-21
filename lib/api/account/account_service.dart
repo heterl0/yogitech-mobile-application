@@ -200,10 +200,10 @@ class PatchProfileRequest {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> data = {};
     if (lastName != null) {
-      data['last_name'] = phone;
+      data['last_name'] = lastName;
     }
     if (firstName != null) {
-      data['first_name'] = phone;
+      data['first_name'] = firstName;
     }
     if (phone != null) {
       data['phone'] = phone;
@@ -229,6 +229,7 @@ Future<Profile?> patchProfile(PatchProfileRequest data) async {
         formatApiUrl('/api/v1/users/me/'),
         data: data.toMap());
     if (response.statusCode == 200 && accountRes.statusCode == 200) {
+      await storeAccount(Account.fromMap(accountRes.data));
       return Profile.fromMap(response.data);
     } else {
       print(

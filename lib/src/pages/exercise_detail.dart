@@ -221,31 +221,28 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
   }
 
   Widget _buildCommentSection(AppLocalizations trans) {
-    return Padding(
-      padding: MediaQuery.of(context).viewInsets,
-      child: Row(
-        children: [
-          Expanded(
-            child: BoxInputField(
-              controller: commentController,
-              placeholder: trans.yourComment,
-              onSubmitted: (value) async {
-                await postAComment();
-              },
-            ),
-          ),
-          IconButton(
-            onPressed: () async {
+    return Row(
+      children: [
+        Expanded(
+          child: BoxInputField(
+            controller: commentController,
+            placeholder: trans.yourComment,
+            onSubmitted: (value) async {
               await postAComment();
             },
-            icon: const Icon(
-              Icons.send_outlined,
-              size: 36,
-              color: text,
-            ),
           ),
-        ],
-      ),
+        ),
+        IconButton(
+          onPressed: () async {
+            await postAComment();
+          },
+          icon: const Icon(
+            Icons.send_outlined,
+            size: 36,
+            color: text,
+          ),
+        ),
+      ],
     );
   }
 
