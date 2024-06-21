@@ -25,8 +25,8 @@ class ProfilePage extends StatefulWidget {
   final ValueChanged<bool> onLanguageChanged;
   final bool isVietnamese;
 
-  ProfilePage(
-      {required this.isDarkMode,
+  const ProfilePage(
+      {super.key, required this.isDarkMode,
       required this.onThemeChanged,
       required this.locale,
       required this.onLanguageChanged,
@@ -100,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         appBar: CustomAppBar(
           showBackButton: false,
           title: trans.profile,
@@ -108,7 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
             IconButton(
                 icon: Icon(
                   Icons.settings_outlined,
-                  color: theme.colorScheme.onBackground,
+                  color: theme.colorScheme.onSurface,
                 ),
                 onPressed: () {
                   Navigator.push(
@@ -129,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
             IconButton(
               icon: Icon(
                 Icons.ios_share,
-                color: theme.colorScheme.onBackground,
+                color: theme.colorScheme.onSurface,
               ),
               onPressed: () async {
                 await Share.share(
@@ -476,7 +476,7 @@ class InfoCard extends StatelessWidget {
   final String iconPath;
   final VoidCallback onTap;
 
-  InfoCard({
+  const InfoCard({super.key, 
     required this.title,
     required this.subtitle,
     required this.iconPath,
@@ -533,7 +533,7 @@ class StatCard extends StatelessWidget {
   final bool isTitleFirst;
   final VoidCallback? onTap;
 
-  StatCard({
+  const StatCard({super.key, 
     required this.title,
     required this.value,
     required this.valueColor,

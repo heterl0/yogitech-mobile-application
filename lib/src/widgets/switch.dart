@@ -10,13 +10,13 @@ class CustomSwitch extends StatefulWidget {
   final bool enabled; // Add enabled property
 
   const CustomSwitch({
-    Key? key,
+    super.key,
     required this.title,
     this.subtitle, // Make subtitle nullable
     required this.value,
     this.onChanged,
     this.enabled = true, // Set default value to true
-  }) : super(key: key);
+  });
 
   @override
   _CustomSwitchState createState() => _CustomSwitchState();
@@ -80,7 +80,7 @@ class _CustomSwitchState extends State<CustomSwitch> {
           activeTrackColor: primary,
           inactiveThumbColor: theme.scaffoldBackgroundColor,
           inactiveTrackColor: text,
-          trackOutlineColor: MaterialStateColor.resolveWith(
+          trackOutlineColor: WidgetStateColor.resolveWith(
               (states) => theme.scaffoldBackgroundColor),
         ),
       ),

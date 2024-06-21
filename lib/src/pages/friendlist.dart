@@ -11,7 +11,7 @@ import 'package:yogi_application/src/widgets/box_input_field.dart';
 
 class FriendListPage extends StatefulWidget {
   final int initialTabIndex;
-  FriendListPage({Key? key, required this.initialTabIndex}) : super(key: key);
+  const FriendListPage({super.key, required this.initialTabIndex});
 
   @override
   _FriendListPageState createState() => _FriendListPageState();
@@ -55,7 +55,7 @@ class _FriendListPageState extends State<FriendListPage>
     final trans = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: _isNotSearching
           ? CustomAppBar(
               title: trans.friends,
@@ -248,12 +248,12 @@ class FriendListItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const FriendListItem({
-    Key? key,
+    super.key,
     required this.name,
     required this.avatarUrl,
     required this.onTap,
     required this.exp,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

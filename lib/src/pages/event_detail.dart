@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/event/event_service.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
@@ -17,7 +14,7 @@ import 'package:intl/intl.dart';
 
 class EventDetail extends StatefulWidget {
   final Event? event;
-  EventDetail({super.key, required this.event});
+  const EventDetail({super.key, required this.event});
 
   @override
   _EventDetailState createState() => _EventDetailState();
@@ -119,7 +116,7 @@ class _EventDetailState extends State<EventDetail>
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       body: CustomScrollView(
         slivers: [
           _buildCustomTopBar(context),
@@ -168,7 +165,7 @@ class _EventDetailState extends State<EventDetail>
         child: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: theme.colorScheme.onBackground,
+            color: theme.colorScheme.onSurface,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -182,7 +179,7 @@ class _EventDetailState extends State<EventDetail>
       centerTitle: true,
       title: Text(
           checkDateExpired(_event!.start_date, _event!.expire_date, trans),
-          style: h2.copyWith(color: theme.colorScheme.onBackground)),
+          style: h2.copyWith(color: theme.colorScheme.onSurface)),
       expandedHeight: 320,
       flexibleSpace: FlexibleSpaceBar(
         background: Image.network(
@@ -267,7 +264,7 @@ class _EventDetailState extends State<EventDetail>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    trans.start + ":",
+                    "${trans.start}:",
                     style: bd_text.copyWith(color: Colors.white),
                   ),
                   Text(
@@ -281,7 +278,7 @@ class _EventDetailState extends State<EventDetail>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    trans.end + ":",
+                    "${trans.end}:",
                     style: bd_text.copyWith(color: Colors.white),
                   ),
                   Text(
@@ -373,7 +370,7 @@ class _EventDetailState extends State<EventDetail>
                               (index + 1).toString(),
                               textAlign: TextAlign.center,
                               style: h3.copyWith(
-                                  color: theme.colorScheme.onBackground),
+                                  color: theme.colorScheme.onSurface),
                             ),
                           ),
                   ),
@@ -390,7 +387,7 @@ class _EventDetailState extends State<EventDetail>
                   Expanded(
                     child: Text(
                       item.user.username,
-                      style: h3.copyWith(color: theme.colorScheme.onBackground),
+                      style: h3.copyWith(color: theme.colorScheme.onSurface),
                       maxLines: 1, // Đảm bảo tên người dùng không quá dài
                       overflow:
                           TextOverflow.ellipsis, // Xử lý trường hợp tràn bản

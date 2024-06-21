@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/pages/perform_meditate.dart';
@@ -11,32 +10,28 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yogi_application/src/widgets/checkbox.dart';
 
 class Meditate extends StatefulWidget {
+  const Meditate({super.key});
+
   @override
   _MeditateState createState() => _MeditateState();
 }
 
-class _MeditateState extends State<Meditate> {
-  // Data for track options
+final List<Map<String, dynamic>> theTracks = [
+  {'asset': 'assets/audios/rain.mp3'},
+  {'asset': 'assets/audios/tieng_suoi.mp3'},
+];
 
+class _MeditateState extends State<Meditate> {
   int? _selectedTrackIndex; // Index of the currently selected track
 
-  final AudioPlayer _audioPlayer = AudioPlayer();
   Duration _selectedDuration = const Duration();
 
   @override
-  void dispose() {
-    _audioPlayer.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: CustomAppBar(
         showBackButton: false,
-        title: trans.meditate,
-        style: widthStyle.Medium,
+        titleWidget: StreakValue('0'),
       ),
       body: _buildBody(),
       floatingActionButton: _buildElevatedButton(context),
@@ -49,7 +44,7 @@ class _MeditateState extends State<Meditate> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(color: theme.colorScheme.background),
+      decoration: BoxDecoration(color: theme.colorScheme.surface),
       child: _buildMainContent(),
     );
   }
@@ -61,12 +56,10 @@ class _MeditateState extends State<Meditate> {
       {
         'title': trans.soundRain,
         'subtitle': trans.soundRainDescription,
-        'asset': 'assets/audios/rain.mp3'
       },
       {
         'title': trans.soundStream,
         'subtitle': trans.soundStreamDescription,
-        'asset': 'assets/audios/tieng_suoi.mp3'
       },
     ];
 
@@ -96,23 +89,29 @@ class _MeditateState extends State<Meditate> {
             style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
           const SizedBox(height: 16),
-          for (int i = 0; i < _tracks.length; i++)
-            CheckBoxListTile(
-              title: _tracks[i]['title'],
-              subtitle: _tracks[i]['subtitle'],
-              state: _selectedTrackIndex == i
-                  ? CheckState.Checked
-                  : CheckState.Unchecked,
-              onChanged: (value) {
-                // setState(() {
-                //   if (value!) {
-                //     _selectedTrackIndex = i;
-                //   } else {
-                //     _selectedTrackIndex = null;
-                //   }
-                // });
-              },
-            ),
+          ListView.builder(
+            key: UniqueKey(),
+            shrinkWrap: true,
+            itemCount: _tracks.length,
+            itemBuilder: (context, index) {
+              return CheckBoxListTile(
+                title: _tracks[index]['title'],
+                subtitle: _tracks[index]['subtitle'],
+                state: _selectedTrackIndex == index
+                    ? CheckState.Checked
+                    : CheckState.Unchecked,
+                onChanged: (value) {
+                  setState(() {
+                    if (value) {
+                      _selectedTrackIndex = index;
+                    } else {
+                      _selectedTrackIndex = null;
+                    }
+                  });
+                },
+              );
+            },
+          ),
         ],
       ),
     );
@@ -121,24 +120,31 @@ class _MeditateState extends State<Meditate> {
   Widget _buildElevatedButton(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(Colors.transparent),
-        shadowColor: MaterialStateProperty.all(Colors.transparent),
-        padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-        shape: MaterialStateProperty.all(const CircleBorder()),
+        backgroundColor: WidgetStateProperty.all(Colors.transparent),
+        shadowColor: WidgetStateProperty.all(Colors.transparent),
+        padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
+        shape: WidgetStateProperty.all(const CircleBorder()),
       ),
       onPressed: () {
-        if (_selectedTrackIndex == 1) {
-          _audioPlayer.play(AssetSource('assets/audios/rain.mp3'));
-        } else if (_selectedTrackIndex == 2) {
-          _audioPlayer.play(AssetSource('assets/audios/tieng_suoi.mp3'));
-        }
-        pushWithoutNavBar(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                performMeditate(selectedDuration: _selectedDuration),
-          ),
-        );
+        _selectedTrackIndex != null
+            ? pushWithoutNavBar(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PerformMeditate(
+                    selectedDuration: _selectedDuration,
+                    audioPath: theTracks[_selectedTrackIndex!]['asset'],
+                  ),
+                ),
+              )
+            : pushWithoutNavBar(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PerformMeditate(
+                    selectedDuration: _selectedDuration,
+                    audioPath: '',
+                  ),
+                ),
+              );
       },
       child: Ink(
         decoration: BoxDecoration(
@@ -156,6 +162,42 @@ class _MeditateState extends State<Meditate> {
             color: active,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class StreakValue extends StatelessWidget {
+  final String streakValue;
+
+  const StreakValue(this.streakValue, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            trans.meditationStreak,
+            style: min_cap.copyWith(
+              color: text,
+            ),
+          ),
+          SizedBox(
+            height: 32,
+            child: ShaderMask(
+              shaderCallback: (bounds) {
+                return gradient.createShader(bounds);
+              },
+              child: Text(
+                streakValue,
+                style: h2.copyWith(color: active, height: 1),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

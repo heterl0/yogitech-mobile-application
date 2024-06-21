@@ -8,6 +8,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_2.dart';
 
 class PrelaunchSurveyPage extends StatefulWidget {
+  const PrelaunchSurveyPage({super.key});
+
   @override
   _PrelaunchSurveyPageState createState() => _PrelaunchSurveyPageState();
 }
@@ -24,7 +26,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       body: Center(
         child: SingleChildScrollView(
           child: Container(

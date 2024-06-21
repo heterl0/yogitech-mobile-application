@@ -97,6 +97,7 @@
   "leaderboard": "Bảng xếp hạng",
   "listOfExercises":"Các bài tập",
   "joinIn": "Tham gia",
+  "meditationStreak":"Chuỗi ngày thiền",
   "sounds": "Âm thanh",
   "start": "Bắt đầu",
   "calorie": "Calo",
@@ -182,12 +183,13 @@
   "eventNotStart":"Sự kiện chưa diễn ra.",
   "eventPassed":"Sự kiện đã kết thúc",
   "eventRemain":"ngày còn lại.",
+  "muscles":"Nhóm cơ",
   "end":"Kết thúc",
   "value": "Giá trị",
   "passwordChangedSuccessfully":"Đổi mật khẩu thành công",
   "passwordsDoNotMatch" :"Mật khẩu mới và xác nhận mật khẩu không khớp",
   "passwordChangeFailed" :"đổi mật khẩu thất bại",
-  "seeall" : "xem tất cả",
+  "seeall" : "Xem tất cả",
   "yourFistName" :"Nhập vào tên của bạn"
 
 }

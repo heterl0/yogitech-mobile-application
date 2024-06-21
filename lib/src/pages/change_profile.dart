@@ -60,9 +60,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
       if (_profile != null) {
         lastName.text = _profile!.last_name ?? '';
         firstName.text = _profile!.first_name ?? '';
-        if (_profile!.gender != null) {
-          gender.text = genderMap[_profile!.gender] ?? '';
-        }
+        gender.text = genderMap[_profile!.gender] ?? '';
         if (_profile!.birthdate != null) {
           birthday.text = _formatDate(_profile!.birthdate ?? '');
         }
@@ -83,7 +81,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.editProfile,
         style: widthStyle.Large,
@@ -189,46 +187,69 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   errorText: "Invalid phone number",
                 ),
                 SizedBox(height: 16.0),
-                Text(trans.birthday,
-                    style: h3.copyWith(color: theme.colorScheme.onPrimary)),
-                SizedBox(height: 8.0),
-                BoxInputField(
-                  controller: birthday,
-                  placeholder: (_profile?.birthdate != null)
-                      ? _formatDate(_profile!.birthdate ?? '')
-                      : 'Select your birthday',
-                  trailing: Icon(
-                    Icons.calendar_today,
-                  ), // Thay đổi icon
-                  readOnly: true, // Đặt readOnly thành true
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2100),
-                    );
-                    if (pickedDate != null) {
-                      setState(() {
-                        birthday.text = "${pickedDate.toLocal()}".split(' ')[0];
-                        birthday.text =
-                            DateFormat('dd-MM-yyyy').format(pickedDate);
-                      });
-                    }
-                  },
-                ),
-                SizedBox(height: 16.0),
-                Text(trans.gender,
-                    style: h3.copyWith(color: theme.colorScheme.onPrimary)),
-                SizedBox(height: 8.0),
-                CustomDropdownFormField(
-                  controller: gender,
-                  items: ['Male', 'Female', 'Other'],
-                  placeholder:
-                      gender.text.isEmpty ? 'Select gender' : gender.text,
-                  onTap: () {
-                    // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            trans.birthday,
+                            style:
+                                h3.copyWith(color: theme.colorScheme.onPrimary),
+                          ),
+                          SizedBox(height: 8.0),
+                          BoxInputField(
+                            controller: birthday,
+                            placeholder: (_profile?.birthdate != null)
+                                ? _formatDate(_profile!.birthdate ?? '')
+                                : 'Select your birthday',
+                            trailing: Icon(Icons.calendar_today),
+                            readOnly: true,
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2100),
+                              );
+                              if (pickedDate != null) {
+                                setState(() {
+                                  birthday.text = DateFormat('dd-MM-yyyy')
+                                      .format(pickedDate);
+                                });
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 16.0), // Khoảng cách giữa hai Expanded
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            trans.gender,
+                            style:
+                                h3.copyWith(color: theme.colorScheme.onPrimary),
+                          ),
+                          SizedBox(height: 8.0),
+                          CustomDropdownFormField(
+                            controller: gender,
+                            items: ['Male', 'Female', 'Other'],
+                            placeholder: gender.text.isEmpty
+                                ? 'Select gender'
+                                : gender.text,
+                            onTap: () {
+                              // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 40.0),
                 BoxButton(
@@ -313,7 +334,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(trans.oldPassword,
-                    style: h3.copyWith(color: theme.colorScheme.onBackground)),
+                    style: h3.copyWith(color: theme.colorScheme.onSurface)),
                 SizedBox(height: 16.0),
                 BoxInputField(
                   controller: currentPassword,
@@ -321,7 +342,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 ),
                 SizedBox(height: 16.0),
                 Text(trans.newPassword,
-                    style: h3.copyWith(color: theme.colorScheme.onBackground)),
+                    style: h3.copyWith(color: theme.colorScheme.onSurface)),
                 SizedBox(height: 16.0),
                 BoxInputField(
                   controller: newPassword,
@@ -329,7 +350,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 ),
                 SizedBox(height: 16.0),
                 Text(trans.confirmNewPassword,
-                    style: h3.copyWith(color: theme.colorScheme.onBackground)),
+                    style: h3.copyWith(color: theme.colorScheme.onSurface)),
                 SizedBox(height: 16.0),
                 BoxInputField(
                   controller: confirmNewPassword,

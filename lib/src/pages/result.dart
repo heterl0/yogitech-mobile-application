@@ -6,6 +6,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class Result extends StatelessWidget {
+  const Result({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,6 +23,8 @@ class Result extends StatelessWidget {
 }
 
 class ResultAfterPractice extends StatelessWidget {
+  const ResultAfterPractice({super.key});
+
   @override
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
@@ -40,7 +44,7 @@ class ResultAfterPractice extends StatelessWidget {
             style: h1.copyWith(color: theme.colorScheme.onPrimary),
           ),
           const SizedBox(height: 12),
-          Container(
+          SizedBox(
             width: 110,
             height: 110,
             child: Container(
@@ -56,14 +60,14 @@ class ResultAfterPractice extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            trans.accuracy+' 90%',
+            '${trans.accuracy} 90%',
             textAlign: TextAlign.center,
             style: h2.copyWith(color: primary),
           ),
           const SizedBox(height: 12),
           Text(
             '+ 300 EXP',
-            style: h3.copyWith(color: theme.colorScheme.onBackground),
+            style: h3.copyWith(color: theme.colorScheme.onSurface),
           ),
           const SizedBox(height: 12),
           Row(
@@ -73,10 +77,10 @@ class ResultAfterPractice extends StatelessWidget {
             children: [
               Text(
                 '+',
-                style: h3.copyWith(color: theme.colorScheme.onBackground),
+                style: h3.copyWith(color: theme.colorScheme.onSurface),
               ),
               const SizedBox(width: 4),
-              Container(
+              SizedBox(
                 width: 16,
                 height: 16,
                 child: Image.asset(
@@ -86,7 +90,7 @@ class ResultAfterPractice extends StatelessWidget {
               const SizedBox(width: 2),
               Text(
                 '100',
-                style: h3.copyWith(color: theme.colorScheme.onBackground),
+                style: h3.copyWith(color: theme.colorScheme.onSurface),
               ),
             ],
           ),
@@ -100,15 +104,15 @@ class ResultAfterPractice extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  trans.caloriesBurned+' 9000',
+                  '${trans.caloriesBurned} 9000',
                   style:
-                      bd_text.copyWith(color: theme.colorScheme.onBackground),
+                      bd_text.copyWith(color: theme.colorScheme.onSurface),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   trans.duration+': '+"20"+trans.minutes+"70"+trans.seconds,
                   style:
-                      bd_text.copyWith(color: theme.colorScheme.onBackground),
+                      bd_text.copyWith(color: theme.colorScheme.onSurface),
                 ),
               ],
             ),

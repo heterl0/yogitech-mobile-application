@@ -16,8 +16,8 @@ class BoxInputField extends StatefulWidget {
   final ValueChanged<String>? onChanged; // Updated
   final ValueChanged<String>? onSubmitted;
 
-  BoxInputField(
-      {Key? key,
+  const BoxInputField(
+      {super.key,
       required this.controller,
       this.placeholder = '',
       this.leading,
@@ -30,8 +30,7 @@ class BoxInputField extends StatefulWidget {
       this.onTap,
       this.onChanged, // Updated
       this.errorText = 'Invalid input',
-      this.onSubmitted})
-      : super(key: key);
+      this.onSubmitted});
 
   @override
   _BoxInputFieldState createState() => _BoxInputFieldState();
@@ -41,7 +40,7 @@ class _BoxInputFieldState extends State<BoxInputField> {
   bool _showPassword = false;
   bool _isFocused = false;
   bool _hasError = false;
-  FocusNode _focusNode = FocusNode();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -112,7 +111,7 @@ class _BoxInputFieldState extends State<BoxInputField> {
         contentPadding:
             const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
         filled: true,
-        fillColor: theme.colorScheme.background,
+        fillColor: theme.colorScheme.surface,
         prefixIcon: widget.leading != null
             ? SizedBox(
                 width: 24,

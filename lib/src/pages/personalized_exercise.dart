@@ -7,6 +7,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class PersonalizedExercisePage extends StatefulWidget {
+  const PersonalizedExercisePage({super.key});
+
   @override
   _PersonalizedExercisePageState createState() =>
       _PersonalizedExercisePageState();
@@ -14,14 +16,14 @@ class PersonalizedExercisePage extends StatefulWidget {
 
 class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
   bool _isNotSearching = true;
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: _isNotSearching
           ? CustomAppBar(
               title:trans.yourExercise,
@@ -32,10 +34,10 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
               style: widthStyle.Large,
               titleWidget: BoxInputField(
                 controller: _searchController,
-                placeholder: trans.search+"...",
+                placeholder: "${trans.search}...",
                 trailing: Icon(Icons.search),
                 keyboardType: TextInputType.text,
-                inputFormatters: [],
+                inputFormatters: const [],
                 onTap: () {
                   // Xử lý khi input field được nhấn
                 },
@@ -43,7 +45,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
               postActions: [
                 IconButton(
                   icon:
-                      Icon(Icons.close, color: theme.colorScheme.onBackground),
+                      Icon(Icons.close, color: theme.colorScheme.onSurface),
                   onPressed: () {
                     setState(() {
                       _isNotSearching = true;
@@ -123,11 +125,11 @@ class ListItem extends StatelessWidget {
   final String? calories;
 
   const ListItem({
-    Key? key,
+    super.key,
     this.difficulty,
     this.poseName,
     this.calories,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +142,7 @@ class ListItem extends StatelessWidget {
         minHeight: 80,
       ),
       decoration: BoxDecoration(
-        color: theme.colorScheme.background,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: stroke),
       ),

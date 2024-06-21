@@ -9,6 +9,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
+
+  ForgotPasswordPage({super.key});
   
   @override
   Widget build(BuildContext context) {
@@ -137,7 +139,7 @@ class ForgotPasswordPage extends StatelessWidget {
     // Xử lý sự kiện gửi OTP
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(trans.sendOTP+' $email'),
+        content: Text('${trans.sendOTP} $email'),
       ),
     );
   }

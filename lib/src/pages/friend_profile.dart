@@ -22,7 +22,7 @@ class _nameState extends State<FriendProfile> {
     final trans = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.friendProfile,
         style: widthStyle.Large,
@@ -150,7 +150,7 @@ class BoxButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Color? borderColor; // Add this line
 
-  BoxButton({
+  const BoxButton({super.key, 
     required this.title,
     required this.backgroundColor,
     required this.foregroundColor,
@@ -173,11 +173,11 @@ class BoxButton extends StatelessWidget {
 
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(backgroundColor),
-        foregroundColor: MaterialStateProperty.all(foregroundColor),
-        padding: MaterialStateProperty.all(padding),
-        textStyle: MaterialStateProperty.all(textStyle),
-        shape: MaterialStateProperty.all(buttonShape as OutlinedBorder?),
+        backgroundColor: WidgetStateProperty.all(backgroundColor),
+        foregroundColor: WidgetStateProperty.all(foregroundColor),
+        padding: WidgetStateProperty.all(padding),
+        textStyle: WidgetStateProperty.all(textStyle),
+        shape: WidgetStateProperty.all(buttonShape as OutlinedBorder?),
       ),
       onPressed: onPressed,
       child: Text(title),
