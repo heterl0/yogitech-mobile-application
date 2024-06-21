@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:yogi_application/api/auth/auth_service.dart';
-import 'package:yogi_application/api/exercise/exercise_service.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
-import 'package:yogi_application/src/models/exercise.dart';
-import 'package:yogi_application/src/models/pose.dart';
-import 'package:yogi_application/src/pages/result.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/widgets/box_input_field.dart';
-import 'package:yogi_application/src/widgets/card.dart';
+import 'package:YogiTech/api/auth/auth_service.dart';
+import 'package:YogiTech/api/exercise/exercise_service.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/custombar/bottombar.dart';
+import 'package:YogiTech/src/models/exercise.dart';
+import 'package:YogiTech/src/models/pose.dart';
+import 'package:YogiTech/src/pages/result.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/widgets/box_input_field.dart';
+import 'package:YogiTech/src/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:yogi_application/utils/formatting.dart';
+import 'package:YogiTech/utils/formatting.dart';
 
 class ExerciseDetail extends StatefulWidget {
   final int? id;

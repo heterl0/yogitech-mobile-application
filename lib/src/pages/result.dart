@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class Result extends StatelessWidget {
   const Result({super.key});
@@ -105,14 +104,17 @@ class ResultAfterPractice extends StatelessWidget {
               children: [
                 Text(
                   '${trans.caloriesBurned} 9000',
-                  style:
-                      bd_text.copyWith(color: theme.colorScheme.onSurface),
+                  style: bd_text.copyWith(color: theme.colorScheme.onSurface),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  trans.duration+': '+"20"+trans.minutes+"70"+trans.seconds,
-                  style:
-                      bd_text.copyWith(color: theme.colorScheme.onSurface),
+                  trans.duration +
+                      ': ' +
+                      "20" +
+                      trans.minutes +
+                      "70" +
+                      trans.seconds,
+                  style: bd_text.copyWith(color: theme.colorScheme.onSurface),
                 ),
               ],
             ),

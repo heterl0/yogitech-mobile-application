@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
 
 class CustomBottomBar extends StatefulWidget {
   final String buttonTitle;

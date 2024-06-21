@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:yogi_application/api/event/event_service.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/pages/event_detail.dart';
-import 'package:yogi_application/src/widgets/card.dart';
+import 'package:YogiTech/api/event/event_service.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/pages/event_detail.dart';
+import 'package:YogiTech/src/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:yogi_application/utils/formatting.dart';
+import 'package:YogiTech/utils/formatting.dart';
 
 class Activities extends StatefulWidget {
   const Activities({super.key});
@@ -87,7 +87,7 @@ class _ActivitiesState extends State<Activities> {
             caption:
                 "${trans.participants}: ${_events[index].event_candidate.length}",
             subtitle: checkDateExpired(
-                _events[index].start_date, _events[index].expire_date,trans),
+                _events[index].start_date, _events[index].expire_date, trans),
             onTap: () {
               pushWithoutNavBar(
                 context,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PerformMeditate extends StatefulWidget {

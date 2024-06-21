@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'package:YogiTech/src/models/account.dart';
 import 'package:collection/collection.dart';
-import 'package:yogi_application/src/models/account.dart';
 
 class BlogVote {
   final int id;

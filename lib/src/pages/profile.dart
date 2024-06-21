@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:yogi_application/api/account/account_service.dart';
-import 'package:yogi_application/api/auth/auth_service.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/models/account.dart';
-import 'package:yogi_application/src/pages/change_profile.dart';
-import 'package:yogi_application/src/pages/calorie.dart';
-import 'package:yogi_application/src/pages/social.dart';
-import 'package:yogi_application/src/routing/app_routes.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/pages/personalized_exercise.dart';
-import 'package:yogi_application/src/pages/settings.dart';
-import 'package:yogi_application/src/pages/friendlist.dart';
-import 'package:yogi_application/src/pages/change_BMI.dart';
+import 'package:YogiTech/api/account/account_service.dart';
+import 'package:YogiTech/api/auth/auth_service.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/pages/change_profile.dart';
+import 'package:YogiTech/src/pages/calorie.dart';
+import 'package:YogiTech/src/pages/social.dart';
+import 'package:YogiTech/src/routing/app_routes.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/pages/personalized_exercise.dart';
+import 'package:YogiTech/src/pages/settings.dart';
+import 'package:YogiTech/src/pages/friendlist.dart';
+import 'package:YogiTech/src/pages/change_BMI.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fl_chart/fl_chart.dart';
 
@@ -26,7 +26,8 @@ class ProfilePage extends StatefulWidget {
   final bool isVietnamese;
 
   const ProfilePage(
-      {super.key, required this.isDarkMode,
+      {super.key,
+      required this.isDarkMode,
       required this.onThemeChanged,
       required this.locale,
       required this.onLanguageChanged,
@@ -476,7 +477,8 @@ class InfoCard extends StatelessWidget {
   final String iconPath;
   final VoidCallback onTap;
 
-  const InfoCard({super.key, 
+  const InfoCard({
+    super.key,
     required this.title,
     required this.subtitle,
     required this.iconPath,
@@ -533,7 +535,8 @@ class StatCard extends StatelessWidget {
   final bool isTitleFirst;
   final VoidCallback? onTap;
 
-  const StatCard({super.key, 
+  const StatCard({
+    super.key,
     required this.title,
     required this.value,
     required this.valueColor,

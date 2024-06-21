@@ -1,21 +1,20 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:yogi_application/api/auth/auth_service.dart';
-import 'package:yogi_application/api/exercise/exercise_service.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/models/account.dart';
-import 'package:yogi_application/src/pages/all_exercise.dart';
-import 'package:yogi_application/src/pages/exercise_detail.dart';
-import 'package:yogi_application/src/pages/filter.dart';
-import 'package:yogi_application/src/pages/streak.dart';
-import 'package:yogi_application/src/pages/subscription.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
-import 'package:yogi_application/src/widgets/box_input_field.dart';
-import 'package:yogi_application/src/widgets/card.dart';
+import 'package:YogiTech/api/auth/auth_service.dart';
+import 'package:YogiTech/api/exercise/exercise_service.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/pages/all_exercise.dart';
+import 'package:YogiTech/src/pages/exercise_detail.dart';
+import 'package:YogiTech/src/pages/filter.dart';
+import 'package:YogiTech/src/pages/streak.dart';
+import 'package:YogiTech/src/pages/subscription.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
+import 'package:YogiTech/src/widgets/box_input_field.dart';
+import 'package:YogiTech/src/widgets/card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -78,8 +77,8 @@ class _HomePageState extends State<HomePage> {
                           account != null
                               ? account!.profile.point.toString()
                               : '0',
-                          style: h3.copyWith(
-                              color: theme.colorScheme.onSurface),
+                          style:
+                              h3.copyWith(color: theme.colorScheme.onSurface),
                         ),
                       ],
                     ),
@@ -89,8 +88,8 @@ class _HomePageState extends State<HomePage> {
                     account != null ? account!.profile.streak.toString() : '0'),
                 postActions: [
                   IconButton(
-                    icon: Icon(Icons.search,
-                        color: theme.colorScheme.onSurface),
+                    icon:
+                        Icon(Icons.search, color: theme.colorScheme.onSurface),
                     onPressed: () {
                       setState(() {
                         _isnotSearching = false;
@@ -127,8 +126,9 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                AllExercise(searchString: searchValue)), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                            builder: (context) => AllExercise(
+                                searchString:
+                                    searchValue)), // Thay NewPage() bằng trang bạn muốn chuyển tới
                       );
                       // Use the value here after the user submits
                     });
