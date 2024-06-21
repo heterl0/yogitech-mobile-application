@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/appbar.dart'; // Đoạn này bạn cần thay đổi tên package theo project của bạn
+import 'package:YogiTech/src/custombar/appbar.dart'; // Đoạn này bạn cần thay đổi tên package theo project của bạn
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:audioplayers/audioplayers.dart';
 
