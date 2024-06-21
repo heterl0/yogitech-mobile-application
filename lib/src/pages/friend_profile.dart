@@ -148,7 +148,8 @@ class BoxButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Color? borderColor; // Add this line
 
-  const BoxButton({super.key, 
+  const BoxButton({
+    super.key,
     required this.title,
     required this.backgroundColor,
     required this.foregroundColor,
@@ -171,11 +172,11 @@ class BoxButton extends StatelessWidget {
 
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(backgroundColor),
-        foregroundColor: WidgetStateProperty.all(foregroundColor),
-        padding: WidgetStateProperty.all(padding),
-        textStyle: WidgetStateProperty.all(textStyle),
-        shape: WidgetStateProperty.all(buttonShape as OutlinedBorder?),
+        backgroundColor: MaterialStateProperty.all(backgroundColor),
+        foregroundColor: MaterialStateProperty.all(foregroundColor),
+        padding: MaterialStateProperty.all(padding),
+        textStyle: MaterialStateProperty.all(textStyle),
+        shape: MaterialStateProperty.all(buttonShape as OutlinedBorder?),
       ),
       onPressed: onPressed,
       child: Text(title),

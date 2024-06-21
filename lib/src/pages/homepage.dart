@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -13,7 +12,6 @@ import 'package:yogi_application/src/pages/streak.dart';
 import 'package:yogi_application/src/pages/subscription.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 
@@ -78,8 +76,8 @@ class _HomePageState extends State<HomePage> {
                           account != null
                               ? account!.profile.point.toString()
                               : '0',
-                          style: h3.copyWith(
-                              color: theme.colorScheme.onSurface),
+                          style:
+                              h3.copyWith(color: theme.colorScheme.onSurface),
                         ),
                       ],
                     ),
@@ -89,8 +87,8 @@ class _HomePageState extends State<HomePage> {
                     account != null ? account!.profile.streak.toString() : '0'),
                 postActions: [
                   IconButton(
-                    icon: Icon(Icons.search,
-                        color: theme.colorScheme.onSurface),
+                    icon:
+                        Icon(Icons.search, color: theme.colorScheme.onSurface),
                     onPressed: () {
                       setState(() {
                         _isnotSearching = false;
@@ -114,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                 ],
-                style: widthStyle.Medium,
+                style: widthStyle.Large,
                 titleWidget: BoxInputField(
                   controller: _searchController,
                   placeholder: trans.search,
@@ -127,8 +125,9 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                AllExercise(searchString: searchValue)), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                            builder: (context) => AllExercise(
+                                searchString:
+                                    searchValue)), // Thay NewPage() bằng trang bạn muốn chuyển tới
                       );
                       // Use the value here after the user submits
                     });
