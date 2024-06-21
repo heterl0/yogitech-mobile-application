@@ -1,94 +1,98 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/exercise/exercise_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/models/account.dart';
-import 'package:yogi_application/src/models/exercise.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
-import 'package:yogi_application/src/pages/filter.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AllExercise extends StatefulWidget {
   const AllExercise({Key? key}) : super(key: key);
+
   @override
-  State<AllExercise> createState() => _AllExercies();
+  BlogState createState() => BlogState();
 }
 
-var jsonList;
-
-class _AllExercies extends State<AllExercise> {
+class BlogState extends State<AllExercise> {
   List<dynamic> jsonList = [];
+  bool _isNotSearching = true;
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _fetchExercises();
+    _fetchExercise(); // Gọi hàm fetchBlogs khi trạng thái của widget được khởi tạo
   }
 
-  Future<void> _fetchExercises([String query = '']) async {
+  Future<void> _fetchExercise([String query = '']) async {
     final List<dynamic> exercises = await getExercises();
     setState(() {
       if (query.isNotEmpty) {
         jsonList = exercises
             .where((exercise) => exercise.containsQuery(query))
             .toList();
-        print(exercises);
       } else {
         jsonList = exercises;
       }
     });
   }
 
-  TextEditingController _searchController = TextEditingController();
-  Account? account;
-  bool isSearching = true;
   @override
   Widget build(BuildContext context) {
-    final trans = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: CustomAppBar(
-        showBackButton: false,
-        preActions: [
-          IconButton(
-            icon: Icon(Icons.tune_outlined,
-                color: theme.colorScheme.onBackground),
-            onPressed: () {
-              pushWithoutNavBar(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => FilterPage(),
+      appBar: _isNotSearching
+          ? CustomAppBar(
+              showBackButton: true,
+              title: trans.exercise,
+              postActions: [
+                IconButton(
+                  icon:
+                      Icon(Icons.search, color: theme.colorScheme.onBackground),
+                  onPressed: () {
+                    setState(() {
+                      _isNotSearching = false;
+                    });
+                  },
                 ),
-              );
-            },
-          ),
-        ],
-        style: widthStyle.Large,
-        titleWidget: BoxInputField(
-          controller: _searchController,
-          placeholder: trans.search,
-          trailing: Icon(Icons.search),
-          keyboardType: TextInputType.text,
-          inputFormatters: [],
-          onTap: () {
-            // Xử lý khi input field được nhấn
-          },
-        ),
-        postActions: [
-          IconButton(
-            icon: Icon(Icons.close, color: theme.colorScheme.onBackground),
-            onPressed: () {
-              setState(() {
-                isSearching = false;
-                FocusScope.of(context).unfocus();
-              });
-            },
-          ),
-        ],
-      ),
+              ],
+            )
+          : CustomAppBar(
+              showBackButton: false,
+              onBackPressed: () {
+                setState(() {
+                  _isNotSearching = true;
+                });
+              },
+              style: widthStyle.Large,
+              titleWidget: BoxInputField(
+                controller: _searchController,
+                placeholder: trans.search,
+                trailing:
+                    Icon(Icons.search, color: theme.colorScheme.onBackground),
+                keyboardType: TextInputType.text,
+                inputFormatters: [],
+                onChanged: (value) {
+                  _fetchExercise(value);
+                },
+                onTap: () {},
+              ),
+              postActions: [
+                IconButton(
+                  icon:
+                      Icon(Icons.close, color: theme.colorScheme.onBackground),
+                  onPressed: () {
+                    _searchController.clear();
+                    _fetchExercise(); // Fetch all blogs again
+                    setState(() {
+                      _isNotSearching = true;
+                    });
+                  },
+                ),
+              ],
+            ),
+      body: _buildBody(context),
     );
   }
 
@@ -101,14 +105,14 @@ class _AllExercies extends State<AllExercise> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            _buildExMainContent(),
+            _buildBlogMainContent(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildExMainContent() {
+  Widget _buildBlogMainContent() {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
@@ -121,11 +125,11 @@ class _AllExercies extends State<AllExercise> {
         ),
         itemCount: jsonList.length,
         itemBuilder: (context, index) {
-          final exercise = jsonList[index];
+          final blog = jsonList[index];
           return CustomCard(
-            title: exercise.title,
-            caption: exercise.description,
-            imageUrl: exercise.image_url,
+            title: blog.title,
+            caption: blog.description,
+            imageUrl: blog.image_url,
             onTap: () {
               Navigator.push(
                 context,
