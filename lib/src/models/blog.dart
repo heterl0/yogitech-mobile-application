@@ -6,7 +6,7 @@ import 'package:yogi_application/src/models/account.dart';
 class BlogVote {
   final int id;
   final String user;
-  final String user_id;
+  final int user_id;
   final String blog;
   final int vote_value;
 
@@ -15,7 +15,7 @@ class BlogVote {
   BlogVote copyWith({
     int? id,
     String? user,
-    String? user_id,
+    int? user_id,
     String? blog,
     int? vote_value,
   }) {
@@ -42,7 +42,7 @@ class BlogVote {
     return BlogVote(
       map['id'] as int,
       map['user'] as String,
-      map['user_id'] as String,
+      map['user_id'] as int,
       map['blog'] as String,
       map['vote_value'] as int,
     );
@@ -218,5 +218,13 @@ class Blog {
     final searchLower = query.toLowerCase();
     return titleLower.contains(searchLower) ||
         descriptionLower.contains(searchLower);
+  }
+
+  bool hasUserVoted(int userId) {
+    return votes.any((element) => element.user_id == userId);
+  }
+
+  BlogVote? getUserVote(int userId) {
+    return votes.firstWhereOrNull((element) => element.user_id == userId);
   }
 }

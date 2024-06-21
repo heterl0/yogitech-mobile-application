@@ -1,4 +1,5 @@
 {
+  "exercise": "Các bài tập",
   "login": "Đăng nhập",
   "returnLogin": "Trở lại đăng nhập",
   "verifyEmail": "Xác nhận Email của bạn",
@@ -169,4 +170,9 @@
   "eventRemain":"ngày còn lại.",
   "muscles":"Nhóm cơ",
   "end":"Kết thúc"
+  "end":"Kết thúc",
+  "passwordChangedSuccessfully":"Đổi mật khẩu thành công",
+  "passwordsDoNotMatch" :"Mật khẩu mới và xác nhận mật khẩu không khớp",
+  "passwordChangeFailed" :"đổi mật khẩu thất bại",
+  "seeall" : "xem tất cả"
 }
