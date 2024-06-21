@@ -15,6 +15,7 @@ import 'package:yogi_application/src/pages/friend_profile.dart';
 import 'package:yogi_application/src/pages/notifications.dart';
 import 'package:yogi_application/src/pages/payment_history.dart';
 import 'package:yogi_application/src/pages/perform_meditate.dart';
+import 'package:yogi_application/src/pages/pre_launch_survey_2.dart';
 import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
 import 'package:yogi_application/src/pages/meditate.dart';
 import 'package:yogi_application/src/pages/reminder.dart';
@@ -133,7 +134,7 @@ class _MyAppState extends State<MyApp> {
         // ),
         debugShowCheckedModeBanner: false,
         initialRoute:
-            widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
+            widget.access != null ? AppRoutes.homepage : AppRoutes.login,
         // onGenerateRoute: _generateRoute,
         theme: lightTheme,
         darkTheme: darkTheme,
@@ -162,6 +163,7 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.OtpConfirm: (context) => OTP_Page(),
           AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
           AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
+          AppRoutes.preLaunchSurvey2: (context) => PrelaunchSurvey2(),
           AppRoutes.meditate: (context) => Meditate(),
           AppRoutes.performMeditate: (context) => performMeditate(),
           AppRoutes.streak: (context) => Streak(),

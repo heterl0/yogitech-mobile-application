@@ -5,7 +5,7 @@ import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:yogi_application/src/pages/pre_launch_survey_2.dart';
 
 class PrelaunchSurveyPage extends StatefulWidget {
   @override
@@ -75,7 +75,9 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                 SizedBox(height: 16.0),
                 BoxInputField(
                   controller: birthday,
-                  placeholder: trans.birthday=="Birthday"? "Sellect your birthday":"Chọn ngày sinh của bạn",
+                  placeholder: trans.birthday == "Birthday"
+                      ? "Sellect your birthday"
+                      : "Chọn ngày sinh của bạn",
                   trailing: Icon(
                     Icons.calendar_today,
                   ), // Thay đổi icon
@@ -164,8 +166,15 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
         ),
       ),
       bottomNavigationBar: CustomBottomBar(
-        buttonTitle: trans.letsGo,
-        onPressed: () {},
+        buttonTitle: trans.next,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PrelaunchSurvey2(),
+            ),
+          );
+        },
       ),
     );
   }
