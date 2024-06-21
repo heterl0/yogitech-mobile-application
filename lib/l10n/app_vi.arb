@@ -172,5 +172,7 @@
   "passwordChangedSuccessfully":"Đổi mật khẩu thành công",
   "passwordsDoNotMatch" :"Mật khẩu mới và xác nhận mật khẩu không khớp",
   "passwordChangeFailed" :"đổi mật khẩu thất bại",
-  "seeall" : "xem tất cả"
+  "seeall" : "xem tất cả",
+  "yourFistName" :"Nhập vào tên của bạn"
+
 }
