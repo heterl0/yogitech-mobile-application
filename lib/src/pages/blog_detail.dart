@@ -84,10 +84,11 @@ class _BlogDetailState extends State<BlogDetail> {
           Icons.thumb_up_outlined,
           color: theme.colorScheme.onBackground,
         ),
-        onPressed: () {
+        onPressed: () async {
+          // Khi người dùng nhấn like, cập nhật userFeedback và gọi setState để rebuild UI
+          final BlogVote? blogVote = await voteBlog(widget.id, 1);
           setState(() {
-            // Khi người dùng nhấn like, cập nhật userFeedback và gọi setState để rebuild UI
-            // userFeedback = userFeedback != 1 ? 1 : 0;
+            this.blogVote = blogVote;
           });
         },
       );
@@ -98,10 +99,10 @@ class _BlogDetailState extends State<BlogDetail> {
           Icons.thumb_up_outlined,
           color: theme.colorScheme.onBackground,
         ),
-        onPressed: () {
+        onPressed: () async {
+          final BlogVote? blogVote = await updateVoteBlog(this.blogVote!.id, 1);
           setState(() {
-            // Khi người dùng nhấn like, cập nhật userFeedback và gọi setState để rebuild UI
-            // userFeedback = userFeedback != 1 ? 1 : 0;
+            this.blogVote = blogVote;
           });
         },
       );
@@ -111,11 +112,13 @@ class _BlogDetailState extends State<BlogDetail> {
           Icons.thumb_up_rounded,
           color: primary,
         ),
-        onPressed: () {
-          setState(() {
-            // Khi người dùng nhấn like, cập nhật userFeedback và gọi setState để rebuild UI
-            // userFeedback = userFeedback != 1 ? 1 : 0;
-          });
+        onPressed: () async {
+          final bool? result = await removeVoteBlog(this.blogVote!.id);
+          if (result == true) {
+            setState(() {
+              this.blogVote = null;
+            });
+          }
         },
       );
     }
@@ -129,10 +132,11 @@ class _BlogDetailState extends State<BlogDetail> {
           Icons.thumb_down_outlined,
           color: theme.colorScheme.onBackground,
         ),
-        onPressed: () {
+        onPressed: () async {
+          // Khi người dùng nhấn dislike, cập nhật userFeedback và gọi setState để rebuild UI
+          final BlogVote? blogVote = await voteBlog(widget.id, -1);
           setState(() {
-            // Khi người dùng nhấn dislike, cập nhật userFeedback và gọi setState để rebuild UI
-            // userFeedback = userFeedback != 2 ? 2 : 0;
+            this.blogVote = blogVote;
           });
         },
       );
@@ -143,10 +147,11 @@ class _BlogDetailState extends State<BlogDetail> {
           Icons.thumb_down_outlined,
           color: theme.colorScheme.onBackground,
         ),
-        onPressed: () {
+        onPressed: () async {
+          final BlogVote? blogVote =
+              await updateVoteBlog(this.blogVote!.id, -1);
           setState(() {
-            // Khi người dùng nhấn dislike, cập nhật userFeedback và gọi setState để rebuild UI
-            // userFeedback = userFeedback != 2 ? 2 : 0;
+            this.blogVote = blogVote;
           });
         },
       );
@@ -156,11 +161,13 @@ class _BlogDetailState extends State<BlogDetail> {
           Icons.thumb_down_alt_rounded,
           color: error,
         ),
-        onPressed: () {
-          setState(() {
-            // Khi người dùng nhấn dislike, cập nhật userFeedback và gọi setState để rebuild UI
-            // userFeedback = userFeedback != 2 ? 2 : 0;
-          });
+        onPressed: () async {
+          final bool? result = await removeVoteBlog(this.blogVote!.id);
+          if (result == true) {
+            setState(() {
+              this.blogVote = null;
+            });
+          }
         },
       );
     }
