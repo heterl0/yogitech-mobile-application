@@ -133,10 +133,7 @@ class BlogState extends State<Blog> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => BlogDetail(
-                    title: blog.title,
-                    caption: blog.description,
-                    subtitle: blog.content,
-                    imageUrl: blog.image_url,
+                    id: blog.id,
                   ),
                 ),
               );
