@@ -46,8 +46,7 @@ class BlogState extends State<Blog> {
               title: trans.blog,
               postActions: [
                 IconButton(
-                  icon:
-                      Icon(Icons.search, color: theme.colorScheme.onSurface),
+                  icon: Icon(Icons.search, color: theme.colorScheme.onSurface),
                   onPressed: () {
                     setState(() {
                       _isNotSearching = false;
@@ -78,8 +77,7 @@ class BlogState extends State<Blog> {
               ),
               postActions: [
                 IconButton(
-                  icon:
-                      Icon(Icons.close, color: theme.colorScheme.onSurface),
+                  icon: Icon(Icons.close, color: theme.colorScheme.onSurface),
                   onPressed: () {
                     _searchController.clear();
                     _fetchBlogs(); // Fetch all blogs again

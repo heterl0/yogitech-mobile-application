@@ -26,7 +26,7 @@ class _BlogDetailState extends State<BlogDetail> {
   late Blog? blog; // 0: không có ý kiến, 1: like, 2: dislike
   late int? userId;
   late bool isLoading = false;
-  late BlogVote? blogVote;
+  late BlogVote? blogVote = null;
 
   @override
   void initState() {
