@@ -53,7 +53,7 @@ class _MeditateState extends State<Meditate> {
   Widget _buildMainContent() {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
-    final List<Map<String, dynamic>> tracks = [
+    final List<Map<String, dynamic>> _tracks = [
       {
         'title': trans.soundRain,
         'subtitle': trans.soundRainDescription,
