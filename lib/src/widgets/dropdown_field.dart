@@ -19,7 +19,7 @@ class CustomDropdownFormField extends StatefulWidget {
     this.readOnly = false,
     this.onTap,
     this.onChanged, // Add callback for value change
-  });
+  }) : super(key: key);
 
   @override
   _CustomDropdownFormFieldState createState() =>

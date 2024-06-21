@@ -13,6 +13,7 @@ const Color elevationLight = Color(0xFFf4f4f4); // Màu độ cao sáng
 
 // Other colors
 const Color primary = Color(0xFF4095d0); // Màu chính
+const Color green = Color(0xFF3BE2B0);
 const Color error = Color(0xFFff5858); // Màu lỗi
 
 // Derived colors
