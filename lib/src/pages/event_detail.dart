@@ -413,8 +413,7 @@ class _EventDetailState extends State<EventDetail>
 
   Widget _buildListExerciseContent(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
-    return Expanded(
-        child: GridView.builder(
+    return GridView.builder(
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -432,6 +431,6 @@ class _EventDetailState extends State<EventDetail>
           onTap: () {},
         );
       },
-    ));
+    );
   }
 }

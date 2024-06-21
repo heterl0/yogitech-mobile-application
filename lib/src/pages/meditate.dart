@@ -16,8 +16,7 @@ class Meditate extends StatefulWidget {
 }
 
 class _MeditateState extends State<Meditate> {
-  bool _isChecked1 = false;
-  bool _isChecked2 = false;
+  int? _selectedTrack;
   final AudioPlayer _audioPlayer = AudioPlayer();
   Duration _selectedDuration = const Duration();
 
@@ -48,11 +47,7 @@ class _MeditateState extends State<Meditate> {
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(color: theme.colorScheme.background),
-      child: Stack(
-        children: [
-          _buildMainContent(),
-        ],
-      ),
+      child: _buildMainContent(),
     );
   }
 
@@ -60,10 +55,8 @@ class _MeditateState extends State<Meditate> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
-    return Positioned(
-      left: 24,
-      top: 24,
-      right: 24,
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -88,30 +81,36 @@ class _MeditateState extends State<Meditate> {
             style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
           const SizedBox(height: 16),
-          // CheckBoxListTile(
-          //   title: trans.soundRain,
-          //   subtitle: trans.soundRain == 'Sound of rain'
-          //       ? 'Deep sound on rainy days.'
-          //       : 'Âm thanh sâu lắng trong những ngày mưa.',
-          //   state: _isChecked1 ? CheckState.Checked : CheckState.Unchecked,
-          //   onChanged: (value) {
-          //     setState(() {
-          //       _isChecked1 = value!;
-          //       if (value) _isChecked2 = false;
-          //     });
-          //   },
-          // ),
-          // const SizedBox(height: 16),
-          CheckBoxListTile(
+          _buildCheckBoxTile(
+            title: trans.soundRain,
+            subtitle: trans.soundRain == 'Sound of rain'
+                ? 'Deep sound on rainy days.'
+                : 'Âm thanh sâu lắng trong những ngày mưa.',
+            isChecked: _selectedTrack == 1,
+            onChanged: (value) {
+              setState(() {
+                if (value!) {
+                  _selectedTrack = 1;
+                } else {
+                  _selectedTrack = null;
+                }
+              });
+            },
+          ),
+          const SizedBox(height: 16),
+          _buildCheckBoxTile(
             title: trans.soundStream,
             subtitle: trans.soundStream == 'The sound of the stream flowing'
                 ? 'Immersing yourself in the refreshing nature.'
                 : "Âm thanh suối chảy hòa mình vào thiên nhiên trong lành.",
-            state: _isChecked2 ? CheckState.Checked : CheckState.Unchecked,
+            isChecked: _selectedTrack == 2,
             onChanged: (value) {
               setState(() {
-                _isChecked2 = value!;
-                if (value) _isChecked1 = false;
+                if (value!) {
+                  _selectedTrack = 2;
+                } else {
+                  _selectedTrack = null;
+                }
               });
             },
           ),
@@ -120,46 +119,56 @@ class _MeditateState extends State<Meditate> {
     );
   }
 
+  Widget _buildCheckBoxTile({
+    required String title,
+    required String subtitle,
+    required bool isChecked,
+    required ValueChanged<bool?> onChanged,
+  }) {
+    return CheckBoxListTile(
+      title: title,
+      subtitle: subtitle,
+      state: isChecked ? CheckState.Checked : CheckState.Unchecked,
+      onChanged: onChanged,
+    );
+  }
+
   Widget _buildElevatedButton(BuildContext context) {
-    return Positioned(
-      right: 27,
-      bottom: 20,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.transparent),
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-          shape: MaterialStateProperty.all(const CircleBorder()),
-        ),
-        onPressed: () {
-          if (_isChecked1) {
-            _audioPlayer.play(AssetSource('assets/audios/rain.mp3'));
-          } else if (_isChecked2) {
-            _audioPlayer.play(AssetSource('assets/audios/tieng_suoi.mp3'));
-          }
-          pushWithoutNavBar(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  performMeditate(selectedDuration: _selectedDuration),
-            ),
-          );
-        },
-        child: Ink(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: gradient,
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+        shadowColor: MaterialStateProperty.all(Colors.transparent),
+        padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+        shape: MaterialStateProperty.all(const CircleBorder()),
+      ),
+      onPressed: () {
+        if (_selectedTrack == 1) {
+          _audioPlayer.play(AssetSource('assets/audios/rain.mp3'));
+        } else if (_selectedTrack == 2) {
+          _audioPlayer.play(AssetSource('assets/audios/tieng_suoi.mp3'));
+        }
+        pushWithoutNavBar(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                performMeditate(selectedDuration: _selectedDuration),
           ),
-          child: Container(
-            width: 60,
-            height: 60,
-            alignment: Alignment.center,
-            child: Image.asset(
-              'assets/icons/play_arrow.png',
-              width: 24,
-              height: 24,
-              color: active,
-            ),
+        );
+      },
+      child: Ink(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: gradient,
+        ),
+        child: Container(
+          width: 60,
+          height: 60,
+          alignment: Alignment.center,
+          child: Image.asset(
+            'assets/icons/play_arrow.png',
+            width: 24,
+            height: 24,
+            color: active,
           ),
         ),
       ),

@@ -39,24 +39,20 @@ class SettingsPage extends StatelessWidget {
           margin: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              SizedBox(
-                child: CustomSwitch(
-                  title: trans.darkMode,
-                  value: isDarkMode,
-                  onChanged: onThemeChanged,
-                ),
+              CustomSwitch(
+                title: trans.darkMode,
+                value: isDarkMode,
+                onChanged: onThemeChanged,
               ),
-              SizedBox(
-                child: CustomSwitch(
-                  title: trans.vietnameseUI,
-                  value: isVietnamese,
-                  onChanged: onLanguageChanged,
-                ),
+              CustomSwitch(
+                title: trans.vietnameseUI,
+                value: isVietnamese,
+                onChanged: onLanguageChanged,
               ),
               SettingItem(
                 title: trans.profile,
                 description: trans.yourInfo,
-                icon: Icons.account_circle_outlined, // Biểu tượng cho mục này
+                icon: Icons.account_circle_outlined,
                 onTap: () {
                   pushWithoutNavBar(
                     context,
@@ -69,7 +65,7 @@ class SettingsPage extends StatelessWidget {
               SettingItem(
                 title: trans.reminder,
                 description: trans.exerciseReminder,
-                icon: Icons.alarm, // Biểu tượng cho mục này
+                icon: Icons.alarm,
                 onTap: () {
                   pushWithoutNavBar(
                     context,
@@ -82,8 +78,7 @@ class SettingsPage extends StatelessWidget {
               SettingItem(
                 title: trans.notifications,
                 description: trans.appNotifications,
-                icon: Icons
-                    .notifications_active_outlined, // Biểu tượng cho mục này
+                icon: Icons.notifications_active_outlined,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -105,14 +100,14 @@ class SettingItem extends StatelessWidget {
   final String? title;
   final String? description;
   final IconData? icon;
-  final VoidCallback? onTap; // Thêm thuộc tính onTap
+  final VoidCallback? onTap;
 
   const SettingItem({
     Key? key,
     this.title,
     this.description,
     this.icon,
-    this.onTap, // Thêm onTap vào constructor
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -120,60 +115,58 @@ class SettingItem extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-        margin: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
+      margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: stroke),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: stroke),
-        ),
-        child: Material(
-            // Thêm Material để đảm bảo hiệu ứng ripple hoạt động đúng
-            color: Colors.transparent,
-            child: InkWell(
-                onTap: onTap,
-                borderRadius:
-                    BorderRadius.circular(16), // Thêm borderRadius cho InkWell
-                child: Padding(
-                  // Dùng Padding thay vì margin & padding riêng biệt
-                  padding: const EdgeInsets.all(8),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return gradient.createShader(bounds);
+                    },
+                    child: Icon(
+                      icon,
+                      color: Colors.white,
+                      size: 36,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: ShaderMask(
-                          shaderCallback: (Rect bounds) {
-                            return gradient
-                                .createShader(bounds); // Tạo shader từ gradient
-                          },
-                          child: Icon(
-                            icon, // Sử dụng IconData được truyền vào từ bên ngoài
-                            color: Colors.white,
-                            size:
-                                36, // Màu icon không quan trọng vì sẽ được thay thế bởi gradient
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(title ?? 'N/A',
-                                style: bd_text.copyWith(
-                                    color: theme.colorScheme.onPrimary)),
-                            const SizedBox(height: 4),
-                            Text('${description ?? 'N/A'}',
-                                style: min_cap.copyWith(color: text)),
-                          ],
-                        ),
-                      ),
+                      Text(title ?? 'N/A',
+                          style: bd_text.copyWith(
+                              color: theme.colorScheme.onPrimary)),
+                      const SizedBox(height: 4),
+                      Text(description ?? 'N/A',
+                          style: min_cap.copyWith(color: text)),
                     ],
                   ),
-                ))));
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
