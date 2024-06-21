@@ -120,7 +120,7 @@ class Exercise {
     bool? is_premium,
     String? created_at,
     String? updated_at,
-    dynamic? owner,
+    dynamic owner,
     int? active_status,
     List<PoseWithTime>? poses,
     List<Comment>? comments,
@@ -460,18 +460,18 @@ class Comment {
         exercise.hashCode;
   }
 
-  bool hasUserVoted(int user_id) {
+  bool hasUserVoted(int userId) {
     for (Vote vote in votes) {
-      if (vote.user_id == user_id) {
+      if (vote.user_id == userId) {
         return true;
       }
     }
     return false;
   }
 
-  Vote? getUserVote(int user_id) {
+  Vote? getUserVote(int userId) {
     for (Vote vote in votes) {
-      if (vote.user_id == user_id) {
+      if (vote.user_id == userId) {
         return vote;
       }
     }

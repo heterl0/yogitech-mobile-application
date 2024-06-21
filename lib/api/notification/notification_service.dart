@@ -57,7 +57,7 @@ class PostNotificationRequest {
       data['body'] = body;
     }
     data['is_admin'] = false;
-    data['time'] = new DateTime.now().toIso8601String();
+    data['time'] = DateTime.now().toIso8601String();
     return data;
   }
 }

@@ -7,7 +7,7 @@ import 'package:yogi_application/src/pages/blog_detail.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Blog extends StatefulWidget {
-  const Blog({Key? key}) : super(key: key);
+  const Blog({super.key});
 
   @override
   BlogState createState() => BlogState();
@@ -16,7 +16,7 @@ class Blog extends StatefulWidget {
 class BlogState extends State<Blog> {
   List<dynamic> jsonList = [];
   bool _isNotSearching = true;
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class BlogState extends State<Blog> {
               postActions: [
                 IconButton(
                   icon:
-                      Icon(Icons.search, color: theme.colorScheme.onBackground),
+                      Icon(Icons.search, color: theme.colorScheme.onSurface),
                   onPressed: () {
                     setState(() {
                       _isNotSearching = false;
@@ -68,9 +68,9 @@ class BlogState extends State<Blog> {
                 controller: _searchController,
                 placeholder: trans.search,
                 trailing:
-                    Icon(Icons.search, color: theme.colorScheme.onBackground),
+                    Icon(Icons.search, color: theme.colorScheme.onSurface),
                 keyboardType: TextInputType.text,
-                inputFormatters: [],
+                inputFormatters: const [],
                 onChanged: (value) {
                   _fetchBlogs(value);
                 },
@@ -79,7 +79,7 @@ class BlogState extends State<Blog> {
               postActions: [
                 IconButton(
                   icon:
-                      Icon(Icons.close, color: theme.colorScheme.onBackground),
+                      Icon(Icons.close, color: theme.colorScheme.onSurface),
                   onPressed: () {
                     _searchController.clear();
                     _fetchBlogs(); // Fetch all blogs again
@@ -99,7 +99,7 @@ class BlogState extends State<Blog> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(color: theme.colorScheme.background),
+      decoration: BoxDecoration(color: theme.colorScheme.surface),
       child: SingleChildScrollView(
         child: Column(
           children: [

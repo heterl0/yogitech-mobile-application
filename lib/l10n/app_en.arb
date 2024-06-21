@@ -172,6 +172,7 @@
   "eventNotStart": "The event is not start.",
   "eventPassed": "The date has passed.",
   "eventRemain": "days remaining.",
+  "muscles": "Muscles",
   "end": "End",
   "value": "Value",
   "passwordChangedSuccessfully": "Change password successful",

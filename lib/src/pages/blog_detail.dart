@@ -14,9 +14,9 @@ class BlogDetail extends StatefulWidget {
   final int id;
 
   const BlogDetail({
-    Key? key,
+    super.key,
     required this.id,
-  }) : super(key: key);
+  });
 
   @override
   _BlogDetailState createState() => _BlogDetailState();
@@ -26,7 +26,7 @@ class _BlogDetailState extends State<BlogDetail> {
   late Blog? blog; // 0: không có ý kiến, 1: like, 2: dislike
   late int? userId;
   late bool isLoading = false;
-  late BlogVote? blogVote = null;
+  late BlogVote? blogVote;
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class _BlogDetailState extends State<BlogDetail> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
         postActions: [_buildDislikeButton(), _buildLikeButton()],
@@ -57,7 +57,7 @@ class _BlogDetailState extends State<BlogDetail> {
     final Account? account = await retrieveAccount();
     setState(() {
       this.blog = blog;
-      this.userId = account?.id;
+      userId = account?.id;
       isLoading = false;
     });
 
@@ -88,7 +88,7 @@ class _BlogDetailState extends State<BlogDetail> {
       return IconButton(
         icon: Icon(
           Icons.thumb_up_outlined,
-          color: theme.colorScheme.onBackground,
+          color: theme.colorScheme.onSurface,
         ),
         onPressed: () async {
           // Khi người dùng nhấn like, cập nhật userFeedback và gọi setState để rebuild UI
@@ -103,7 +103,7 @@ class _BlogDetailState extends State<BlogDetail> {
       return IconButton(
         icon: Icon(
           Icons.thumb_up_outlined,
-          color: theme.colorScheme.onBackground,
+          color: theme.colorScheme.onSurface,
         ),
         onPressed: () async {
           final BlogVote? blogVote = await updateVoteBlog(this.blogVote!.id, 1);
@@ -119,10 +119,10 @@ class _BlogDetailState extends State<BlogDetail> {
           color: primary,
         ),
         onPressed: () async {
-          final bool? result = await removeVoteBlog(this.blogVote!.id);
+          final bool? result = await removeVoteBlog(blogVote!.id);
           if (result == true) {
             setState(() {
-              this.blogVote = null;
+              blogVote = null;
             });
           }
         },
@@ -136,7 +136,7 @@ class _BlogDetailState extends State<BlogDetail> {
       return IconButton(
         icon: Icon(
           Icons.thumb_down_outlined,
-          color: theme.colorScheme.onBackground,
+          color: theme.colorScheme.onSurface,
         ),
         onPressed: () async {
           // Khi người dùng nhấn dislike, cập nhật userFeedback và gọi setState để rebuild UI
@@ -151,7 +151,7 @@ class _BlogDetailState extends State<BlogDetail> {
       return IconButton(
         icon: Icon(
           Icons.thumb_down_outlined,
-          color: theme.colorScheme.onBackground,
+          color: theme.colorScheme.onSurface,
         ),
         onPressed: () async {
           final BlogVote? blogVote =
@@ -168,10 +168,10 @@ class _BlogDetailState extends State<BlogDetail> {
           color: error,
         ),
         onPressed: () async {
-          final bool? result = await removeVoteBlog(this.blogVote!.id);
+          final bool? result = await removeVoteBlog(blogVote!.id);
           if (result == true) {
             setState(() {
-              this.blogVote = null;
+              blogVote = null;
             });
           }
         },

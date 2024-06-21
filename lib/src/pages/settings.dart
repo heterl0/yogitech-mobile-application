@@ -17,20 +17,20 @@ class SettingsPage extends StatelessWidget {
   final ValueChanged<bool> onLanguageChanged;
 
   const SettingsPage({
-    Key? key,
+    super.key,
     required this.isDarkMode,
     required this.onThemeChanged,
     required this.locale,
     required this.onLanguageChanged,
     required this.isVietnamese,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.setting,
       ),
@@ -103,12 +103,12 @@ class SettingItem extends StatelessWidget {
   final VoidCallback? onTap;
 
   const SettingItem({
-    Key? key,
+    super.key,
     this.title,
     this.description,
     this.icon,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

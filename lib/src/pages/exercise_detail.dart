@@ -17,7 +17,7 @@ import 'package:yogi_application/utils/formatting.dart';
 class ExerciseDetail extends StatefulWidget {
   final int? id;
 
-  ExerciseDetail({Key? key, this.id}) : super(key: key);
+  const ExerciseDetail({super.key, this.id});
 
   @override
   _ExerciseDetailState createState() => _ExerciseDetailState();
@@ -42,7 +42,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       resizeToAvoidBottomInset: true,
       body: _isLoading
           ? Container(
-              color: theme.colorScheme.background,
+              color: theme.colorScheme.surface,
               child: Center(
                 child: CircularProgressIndicator(),
               ),
@@ -208,7 +208,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         final Pose poseDetail = pose.pose;
         final title = poseDetail.name;
         // final title = trans.pose + ' ${index + 1}';
-        final subtitle = '${pose.duration} ' + trans.seconds;
+        final subtitle = '${pose.duration} ${trans.seconds}';
 
         return CustomCard(
           title: title,

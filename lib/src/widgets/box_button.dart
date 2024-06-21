@@ -32,7 +32,7 @@ class BoxButton extends StatelessWidget {
         case ButtonStyleType.Primary:
           return theme.primaryColor;
         case ButtonStyleType.Secondary:
-          return theme.colorScheme.background;
+          return theme.colorScheme.surface;
         case ButtonStyleType.Tertiary:
           return Colors.transparent;
       }

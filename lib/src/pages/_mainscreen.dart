@@ -17,13 +17,13 @@ class MainScreen extends StatefulWidget {
   final bool isVietnamese;
 
   const MainScreen({
-    Key? key,
+    super.key,
     required this.isDarkMode,
     required this.onThemeChanged,
     required this.locale,
     required this.onLanguageChanged,
     required this.isVietnamese,
-  }) : super(key: key);
+  });
 
   @override
   _MainScreenState createState() => _MainScreenState();
