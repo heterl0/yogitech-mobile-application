@@ -5,7 +5,7 @@ import 'package:yogi_application/src/models/account.dart';
 
 class BlogVote {
   final int id;
-  final String user;
+  final String? user;
   final int user_id;
   final String blog;
   final int vote_value;
@@ -41,7 +41,7 @@ class BlogVote {
   factory BlogVote.fromMap(Map<String, dynamic> map) {
     return BlogVote(
       map['id'] as int,
-      map['user'] as String,
+      map['user'] != null ? map['user'] as String : null,
       map['user_id'] as int,
       map['blog'] as String,
       map['vote_value'] as int,
