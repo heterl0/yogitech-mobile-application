@@ -1,4 +1,5 @@
 {
+  "exercise": "Các bài tập",
   "login": "Đăng nhập",
   "returnLogin": "Trở lại đăng nhập",
   "verifyEmail": "Xác nhận Email của bạn",
@@ -167,5 +168,9 @@
   "eventNotStart":"Sự kiện chưa diễn ra.",
   "eventPassed":"Sự kiện đã kết thúc",
   "eventRemain":"ngày còn lại.",
-  "end":"Kết thúc"
+  "end":"Kết thúc",
+  "passwordChangedSuccessfully":"Đổi mật khẩu thành công",
+  "passwordsDoNotMatch" :"Mật khẩu mới và xác nhận mật khẩu không khớp",
+  "passwordChangeFailed" :"đổi mật khẩu thất bại",
+  "seeall" : "xem tất cả"
 }
