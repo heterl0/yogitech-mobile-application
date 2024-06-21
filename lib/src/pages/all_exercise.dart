@@ -27,13 +27,14 @@ class AllExercise extends StatefulWidget {
 class BlogState extends State<AllExercise> {
   List<dynamic> _exercises = [];
   bool _isNotSearching = true;
+  bool _isLoading = false;
   TextEditingController _searchController = TextEditingController();
   Account? account;
 
   @override
   void initState() {
     super.initState();
-    _fetchExercise(widget.searchString,widget.selectedMuscle);
+    _fetchExercise(widget.searchString, widget.selectedMuscle);
     _fetchAccount();
     _searchController.text = widget.searchString ?? '';
   }
@@ -46,22 +47,35 @@ class BlogState extends State<AllExercise> {
   }
 
   Future<void> _fetchExercise([String? query = '', Muscle? mus]) async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
-      print(mus);
-      final List<dynamic> exercises = await getExercises();
-      List<dynamic> filteredExercises = query != null && query.isNotEmpty
-          ? exercises.where((exercise) => exercise.title.toLowerCase().contains(query.toLowerCase())).toList()
-          : exercises;
-
-      filteredExercises = query != null && query.isNotEmpty
-          ? exercises.where((exercise) => exercise.title.toLowerCase().contains(query.toLowerCase())).toList()
-          : exercises;
-        setState(() {
+      final List<dynamic> exercises = await getExercises(); // Assuming getExercises() returns a List<Exercise>
+      List<dynamic> filteredExercises = exercises;
+      if (query != null && query.isNotEmpty) {
+        filteredExercises = exercises.where((exercise) => exercise.title.toLowerCase().contains(query.toLowerCase())).toList();
+      }
+      if (mus != null) {
+        for (var i = 0; i < filteredExercises.length; i++) {
+          List<PoseWithTime> poses = filteredExercises[i].poses;
+          for (var p = 0; p < poses.length; p++) {
+            if (!poses[p].pose.muscles.any((muscle) => muscle == mus)) {
+              filteredExercises.removeAt(i);
+            }
+          }
+        }
+      }
+      setState(() {
         _exercises = filteredExercises;
+        _isLoading = false;
       });
     } catch (e) {
       // Handle errors, e.g., show a snackbar or error message
       print('Error loading exercises: $e');
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -77,10 +91,7 @@ class BlogState extends State<AllExercise> {
               preActions: [
                 GestureDetector(
                   onTap: () {
-                    pushWithoutNavBar(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Subscription()));
+                    pushWithoutNavBar(context, MaterialPageRoute(builder: (context) => Subscription()));
                   },
                   child: Row(
                     children: [
@@ -90,22 +101,17 @@ class BlogState extends State<AllExercise> {
                         child: Image.asset('assets/images/Emerald.png'),
                       ),
                       Text(
-                        account != null
-                            ? account!.profile.point.toString()
-                            : '0',
-                        style: h3.copyWith(
-                            color: theme.colorScheme.onBackground),
+                        account != null ? account!.profile.point.toString() : '0',
+                        style: h3.copyWith(color: theme.colorScheme.onBackground),
                       ),
                     ],
                   ),
                 ),
               ],
-              titleWidget: StreakValue(
-                  account != null ? account!.profile.streak.toString() : '0'),
+              titleWidget: StreakValue(account != null ? account!.profile.streak.toString() : '0'),
               postActions: [
                 IconButton(
-                  icon: Icon(Icons.search,
-                      color: theme.colorScheme.onBackground),
+                  icon: Icon(Icons.search, color: theme.colorScheme.onBackground),
                   onPressed: () {
                     setState(() {
                       _isNotSearching = false;
@@ -118,22 +124,16 @@ class BlogState extends State<AllExercise> {
               showBackButton: false,
               preActions: [
                 IconButton(
-                  icon: Icon(Icons.tune_outlined,
-                      color: theme.colorScheme.onBackground),
+                  icon: Icon(Icons.tune_outlined, color: theme.colorScheme.onBackground),
                   onPressed: () {
-                    pushWithoutNavBar(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FilterPage(),
-                      ),
-                    );
+                    pushWithoutNavBar(context, MaterialPageRoute(builder: (context) => FilterPage()));
                   },
                 ),
               ],
               style: widthStyle.Medium,
               titleWidget: BoxInputField(
                 controller: _searchController,
-                placeholder: trans.search,
+                placeholder: widget.searchString != null ? widget.searchString! + "" : trans.search,
                 trailing: Icon(Icons.search),
                 keyboardType: TextInputType.text,
                 inputFormatters: [],
@@ -149,8 +149,7 @@ class BlogState extends State<AllExercise> {
               ),
               postActions: [
                 IconButton(
-                  icon: Icon(Icons.close,
-                      color: theme.colorScheme.onBackground),
+                  icon: Icon(Icons.close, color: theme.colorScheme.onBackground),
                   onPressed: () {
                     setState(() {
                       _isNotSearching = true;
@@ -171,13 +170,15 @@ class BlogState extends State<AllExercise> {
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(color: theme.colorScheme.background),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildBlogMainContent(),
-          ],
-        ),
-      ),
+      child: _isLoading
+          ? Center(child: CircularProgressIndicator()) // Show spinner when loading
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  _buildBlogMainContent(),
+                ],
+              ),
+            ),
     );
   }
 
@@ -212,5 +213,4 @@ class BlogState extends State<AllExercise> {
       ),
     );
   }
-
 }
