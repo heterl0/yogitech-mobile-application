@@ -164,11 +164,15 @@ Future<Profile?> patchBMI(PatchBMIRequest data) async {
 }
 
 class PatchProfileRequest {
+  String? lastName;
+  String? firstName;
   String? phone;
   DateTime? birthdate;
   int? gender;
 
   PatchProfileRequest({
+    required this.lastName,
+    required this.firstName,
     required this.phone,
     required this.birthdate,
     required this.gender,
@@ -176,6 +180,12 @@ class PatchProfileRequest {
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> data = {};
+    if (lastName != null) {
+      data['last_name'] = phone;
+    }
+    if (firstName != null) {
+      data['first_name'] = phone;
+    }
     if (phone != null) {
       data['phone'] = phone;
     }

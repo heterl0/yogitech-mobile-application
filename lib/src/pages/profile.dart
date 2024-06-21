@@ -212,6 +212,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: Colors.transparent,
+                                                  border: Border.all(
+                                                    color: Colors
+                                                        .blue, // Màu của border
+                                                    width:
+                                                        3.0, // Độ rộng của border
+                                                  ),
                                                 ),
                                                 child: Center(
                                                   child: Text(
@@ -225,7 +231,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: Colors
-                                                          .transparent, // Màu chữ
+                                                          .white, // Màu chữ
                                                     ),
                                                   ),
                                                 ),

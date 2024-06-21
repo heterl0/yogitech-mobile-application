@@ -7,12 +7,14 @@ import 'package:yogi_application/api/auth/auth_service.dart';
 import 'package:yogi_application/api/exercise/exercise_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/models/account.dart';
+import 'package:yogi_application/src/pages/all_exercise.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/filter.dart';
 import 'package:yogi_application/src/pages/streak.dart';
 import 'package:yogi_application/src/pages/subscription.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:yogi_application/src/widgets/box_button.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
 
@@ -32,24 +34,18 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _fetchExercises(); // Gọi phương thức _fetchExercises khi StatefulWidget được tạo ra
+    _fetchExercises();
   }
 
   Future<void> _fetchExercises() async {
-    // Gọi API để lấy danh sách bài tập
-    // Đảm bảo rằng phương thức getListExercises đã được định nghĩa trong lớp ApiService
     final List<dynamic> exercises = await getExercises();
-    // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
     setState(() {
       jsonList = exercises;
     });
   }
 
   Future<void> _fetchAccount() async {
-    // Gọi API để lấy danh sách bài tập
-    // Đảm bảo rằng phương thức getListExercises đã được định nghĩa trong lớp ApiService
     final Account? _account = await retrieveAccount();
-    // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
     setState(() {
       account = _account;
     });
@@ -57,7 +53,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final trans = AppLocalizations.of(context)!; // Bản dịch
+    final trans = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return Scaffold(
         backgroundColor: theme.colorScheme.background,
@@ -237,9 +233,30 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Text(
-                    trans.newest,
-                    style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        trans.newest,
+                        style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                      ),
+                      Spacer(),
+                      SizedBox(
+                        width: 130, // Điều chỉnh kích thước nút nếu cần
+                        child: BoxButton(
+                          title: trans.seeall,
+                          style: ButtonStyleType.Tertiary,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      AllExercise()), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SingleChildScrollView(

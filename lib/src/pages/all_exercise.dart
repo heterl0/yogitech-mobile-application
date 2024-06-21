@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/api/blog/blog_service.dart';
+import 'package:yogi_application/api/exercise/exercise_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/widgets/box_input_field.dart';
 import 'package:yogi_application/src/widgets/card.dart';
-import 'package:yogi_application/src/pages/blog_detail.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class Blog extends StatefulWidget {
-  const Blog({Key? key}) : super(key: key);
+class AllExercise extends StatefulWidget {
+  const AllExercise({Key? key}) : super(key: key);
 
   @override
   BlogState createState() => BlogState();
 }
 
-class BlogState extends State<Blog> {
+class BlogState extends State<AllExercise> {
   List<dynamic> jsonList = [];
   bool _isNotSearching = true;
   TextEditingController _searchController = TextEditingController();
@@ -21,16 +21,18 @@ class BlogState extends State<Blog> {
   @override
   void initState() {
     super.initState();
-    _fetchBlogs(); // Gọi hàm fetchBlogs khi trạng thái của widget được khởi tạo
+    _fetchExercise(); // Gọi hàm fetchBlogs khi trạng thái của widget được khởi tạo
   }
 
-  Future<void> _fetchBlogs([String query = '']) async {
-    final List<dynamic> blogs = await getBlogs();
+  Future<void> _fetchExercise([String query = '']) async {
+    final List<dynamic> exercises = await getExercises();
     setState(() {
       if (query.isNotEmpty) {
-        jsonList = blogs.where((blog) => blog.containsQuery(query)).toList();
+        jsonList = exercises
+            .where((exercise) => exercise.containsQuery(query))
+            .toList();
       } else {
-        jsonList = blogs;
+        jsonList = exercises;
       }
     });
   }
@@ -42,8 +44,8 @@ class BlogState extends State<Blog> {
     return Scaffold(
       appBar: _isNotSearching
           ? CustomAppBar(
-              showBackButton: false,
-              title: trans.blog,
+              showBackButton: true,
+              title: trans.exercise,
               postActions: [
                 IconButton(
                   icon:
@@ -72,7 +74,7 @@ class BlogState extends State<Blog> {
                 keyboardType: TextInputType.text,
                 inputFormatters: [],
                 onChanged: (value) {
-                  _fetchBlogs(value);
+                  _fetchExercise(value);
                 },
                 onTap: () {},
               ),
@@ -82,7 +84,7 @@ class BlogState extends State<Blog> {
                       Icon(Icons.close, color: theme.colorScheme.onBackground),
                   onPressed: () {
                     _searchController.clear();
-                    _fetchBlogs(); // Fetch all blogs again
+                    _fetchExercise(); // Fetch all blogs again
                     setState(() {
                       _isNotSearching = true;
                     });
@@ -124,21 +126,21 @@ class BlogState extends State<Blog> {
         itemCount: jsonList.length,
         itemBuilder: (context, index) {
           final blog = jsonList[index];
-          return CustomCard(
-            title: blog.title,
-            caption: blog.description,
-            imageUrl: blog.image_url,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BlogDetail(
-                    id: blog.id,
-                  ),
-                ),
+          if (jsonList != null)
+            for (final exercise in jsonList)
+              return CustomCard(
+                title: blog.title,
+                caption: blog.description,
+                imageUrl: blog.image_url,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ExerciseDetail(id: exercise.id),
+                    ),
+                  );
+                },
               );
-            },
-          );
         },
       ),
     );

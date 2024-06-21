@@ -1,4 +1,5 @@
 {
+  "exercise": "Exercises",
   "login": "Login",
   "returnLogin": "Return Login",
   "verifyEmail": "Verify your Email address",
@@ -169,5 +170,9 @@
   "eventPassed":"The date has passed.",
   "eventRemain":"days remaining.",
   "end":"End",
-  "value": "Value"
+  "value": "Value",
+  "passwordChangedSuccessfully":"Change password successful",
+  "passwordsDoNotMatch":"New password and confirm password not match",
+  "passwordChangeFailed" : "Change password failed!",
+  "seeall" : "see all"
 }

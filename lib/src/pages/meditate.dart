@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/pages/perform_meditate.dart';
 import 'package:yogi_application/src/shared/styles.dart';
@@ -136,7 +137,7 @@ class _MeditateState extends State<Meditate> {
           } else if (_isChecked2) {
             _audioPlayer.play(AssetSource('assets/audios/tieng_suoi.mp3'));
           }
-          Navigator.push(
+          pushWithoutNavBar(
             context,
             MaterialPageRoute(
               builder: (context) =>
