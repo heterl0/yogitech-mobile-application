@@ -5,6 +5,7 @@ import 'package:yogi_application/api/exercise/exercise_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/models/account.dart';
 import 'package:yogi_application/src/models/exercise.dart';
+import 'package:yogi_application/src/models/pose.dart';
 import 'package:yogi_application/src/pages/exercise_detail.dart';
 import 'package:yogi_application/src/pages/filter.dart';
 import 'package:yogi_application/src/pages/homepage.dart';
@@ -16,7 +17,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AllExercise extends StatefulWidget {
   final String? searchString;
-  const AllExercise({Key? key, this.searchString}) : super(key: key);
+  final Muscle? selectedMuscle;
+  const AllExercise({Key? key, this.searchString, this.selectedMuscle}) : super(key: key);
 
   @override
   BlogState createState() => BlogState();
@@ -31,7 +33,7 @@ class BlogState extends State<AllExercise> {
   @override
   void initState() {
     super.initState();
-    _fetchExercise(widget.searchString);
+    _fetchExercise(widget.searchString,widget.selectedMuscle);
     _fetchAccount();
     _searchController.text = widget.searchString ?? '';
   }
@@ -43,14 +45,18 @@ class BlogState extends State<AllExercise> {
     });
   }
 
-  Future<void> _fetchExercise([String? query = '']) async {
+  Future<void> _fetchExercise([String? query = '', Muscle? mus]) async {
     try {
+      print(mus);
       final List<dynamic> exercises = await getExercises();
-      final List<dynamic> filteredExercises = query != null && query.isNotEmpty
+      List<dynamic> filteredExercises = query != null && query.isNotEmpty
           ? exercises.where((exercise) => exercise.title.toLowerCase().contains(query.toLowerCase())).toList()
           : exercises;
 
-      setState(() {
+      filteredExercises = query != null && query.isNotEmpty
+          ? exercises.where((exercise) => exercise.title.toLowerCase().contains(query.toLowerCase())).toList()
+          : exercises;
+        setState(() {
         _exercises = filteredExercises;
       });
     } catch (e) {
@@ -206,4 +212,5 @@ class BlogState extends State<AllExercise> {
       ),
     );
   }
+
 }

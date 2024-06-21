@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yogi_application/api/pose/pose_service.dart';
 import 'package:yogi_application/src/custombar/appbar.dart';
 import 'package:yogi_application/src/models/pose.dart';
+import 'package:yogi_application/src/pages/all_exercise.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/custombar/bottombar.dart';
@@ -123,6 +124,19 @@ class _FilterPageState extends State<FilterPage> {
         buttonTitle: trans.apply,
         onPressed: () {
           Navigator.pop(context);
+          print(selectedMuscle);
+          List<dynamic>? mus= _muscles.where((mus) => mus.name == selectedMuscle).toList();
+          if (mus.length!=0){
+            setState(() {
+            Muscle? muscle= mus[0];
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      AllExercise(selectedMuscle: muscle)), // Thay NewPage() bằng trang bạn muốn chuyển tới
+            );
+          });
+          }
         },
       ),
     );
@@ -198,7 +212,7 @@ class MuscleInfoWidget extends StatelessWidget {
                             Expanded(
                               flex: 2,
                               child: Center(
-                                child:Image.network(
+                                child: Image.network(
                                   mus.image!,
                                   fit: BoxFit.cover,
                                 ),
