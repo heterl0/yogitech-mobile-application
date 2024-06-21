@@ -8,6 +8,7 @@ import 'package:yogi_application/src/shared/styles.dart';
 import 'package:yogi_application/src/shared/app_colors.dart';
 import 'dart:math';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:yogi_application/src/widgets/checkbox.dart';
 
 class Meditate extends StatefulWidget {
   @override
@@ -15,8 +16,10 @@ class Meditate extends StatefulWidget {
 }
 
 class _MeditateState extends State<Meditate> {
-  bool _isChecked1 = false;
-  bool _isChecked2 = false;
+  // Data for track options
+
+  int? _selectedTrackIndex; // Index of the currently selected track
+
   final AudioPlayer _audioPlayer = AudioPlayer();
   Duration _selectedDuration = const Duration();
 
@@ -47,30 +50,33 @@ class _MeditateState extends State<Meditate> {
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(color: theme.colorScheme.background),
-      child: Stack(
-        children: [
-          // _buildTopRoundedContainer(),
-          // _buildTitleText(),
-          _buildMainContent(),
-        ],
-      ),
+      child: _buildMainContent(),
     );
   }
 
   Widget _buildMainContent() {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+    final List<Map<String, dynamic>> _tracks = [
+      {
+        'title': trans.soundRain,
+        'subtitle': trans.soundRainDescription,
+        'asset': 'assets/audios/rain.mp3'
+      },
+      {
+        'title': trans.soundStream,
+        'subtitle': trans.soundStreamDescription,
+        'asset': 'assets/audios/tieng_suoi.mp3'
+      },
+    ];
 
-    return Positioned(
-      left: 24,
-      top: 24,
-      right: 24,
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            color:
-                theme.colorScheme.onSecondary, // Set background color directly
+            color: theme.colorScheme.onSecondary,
             child: CupertinoTimerPicker(
               mode: CupertinoTimerPickerMode.ms,
               initialTimerDuration: _selectedDuration,
@@ -90,120 +96,64 @@ class _MeditateState extends State<Meditate> {
             style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
           const SizedBox(height: 16),
-          _buildCheckboxItem(
-            title: trans.soundRain,
-            subtitle: trans.soundRain == 'Sound of rain'
-                ? 'Deep sound on rainy days.'
-                : 'Âm thanh sâu lắng trong những ngày mưa.',
-            value: _isChecked1,
-            onChanged: (value) {
-              setState(() {
-                _isChecked1 = value!;
-                if (value) _isChecked2 = false;
-              });
-            },
-          ),
-          const SizedBox(height: 16),
-          _buildCheckboxItem(
-            title: trans.soundStream,
-            subtitle: trans.soundStream == 'The sound of the stream flowing'
-                ? 'Immersing yourself in the refreshing nature.'
-                : "Âm thanh suối chảy hòa mình vào thiên nhiên trong lành.",
-            value: _isChecked2,
-            onChanged: (value) {
-              setState(() {
-                _isChecked2 = value!;
-                if (value) _isChecked1 = false;
-              });
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCheckboxItem({
-    required String title,
-    required String subtitle,
-    required bool value,
-    required ValueChanged<bool?> onChanged,
-  }) {
-    final theme = Theme.of(context);
-    return Container(
-      child: Row(
-        children: [
-          Checkbox(
-            value: value,
-            onChanged: onChanged,
-            activeColor: Colors.transparent,
-            checkColor: Colors.white,
-            side: MaterialStateBorderSide.resolveWith(
-              (states) => const BorderSide(
-                color: Colors.white, // Outline color
-                width: 2,
-              ),
+          for (int i = 0; i < _tracks.length; i++)
+            CheckBoxListTile(
+              title: _tracks[i]['title'],
+              subtitle: _tracks[i]['subtitle'],
+              state: _selectedTrackIndex == i
+                  ? CheckState.Checked
+                  : CheckState.Unchecked,
+              onChanged: (value) {
+                // setState(() {
+                //   if (value!) {
+                //     _selectedTrackIndex = i;
+                //   } else {
+                //     _selectedTrackIndex = null;
+                //   }
+                // });
+              },
             ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: h3.copyWith(color: theme.colorScheme.onPrimary),
-                ),
-                Text(subtitle, style: min_cap.copyWith(color: text)),
-              ],
-            ),
-          ),
         ],
       ),
     );
   }
 
   Widget _buildElevatedButton(BuildContext context) {
-    Theme.of(context);
-
-    return Positioned(
-      right: 27,
-      bottom: 20,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.transparent),
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-          shape: MaterialStateProperty.all(const CircleBorder()),
-        ),
-        onPressed: () {
-          if (_isChecked1) {
-            _audioPlayer.play(AssetSource('assets/audios/rain.mp3'));
-          } else if (_isChecked2) {
-            _audioPlayer.play(AssetSource('assets/audios/tieng_suoi.mp3'));
-          }
-          pushWithoutNavBar(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  performMeditate(selectedDuration: _selectedDuration),
-            ),
-          );
-        },
-        child: Ink(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: gradient, // Áp dụng gradient từ app_colors.dart
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+        shadowColor: MaterialStateProperty.all(Colors.transparent),
+        padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+        shape: MaterialStateProperty.all(const CircleBorder()),
+      ),
+      onPressed: () {
+        if (_selectedTrackIndex == 1) {
+          _audioPlayer.play(AssetSource('assets/audios/rain.mp3'));
+        } else if (_selectedTrackIndex == 2) {
+          _audioPlayer.play(AssetSource('assets/audios/tieng_suoi.mp3'));
+        }
+        pushWithoutNavBar(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                performMeditate(selectedDuration: _selectedDuration),
           ),
-          child: Container(
-            width: 60,
-            height: 60,
-            alignment: Alignment.center,
-            child: Image.asset(
-              'assets/icons/play_arrow.png',
-              width: 24,
-              height: 24,
-              color: active,
-            ),
+        );
+      },
+      child: Ink(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: gradient,
+        ),
+        child: Container(
+          width: 60,
+          height: 60,
+          alignment: Alignment.center,
+          child: Image.asset(
+            'assets/icons/play_arrow.png',
+            width: 24,
+            height: 24,
+            color: active,
           ),
         ),
       ),
