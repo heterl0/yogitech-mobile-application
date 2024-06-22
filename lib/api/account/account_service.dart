@@ -239,9 +239,12 @@ Future<Profile?> patchAvatar(Uint8List binaryImage) async {
 
     // Include the timestamp in the filename
     final filename = 'avatar_$timestamp.jpg';
-    final response = await DioInstance.patch(url, data: {
+
+    final formData = FormData.fromMap({
       'avatar': MultipartFile.fromBytes(binaryImage, filename: filename),
     });
+
+    final response = await Dio().patch(url, data: formData);
     if (response.statusCode == 200) {
       return Profile.fromMap(response.data);
     } else {

@@ -33,13 +33,13 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   final TextEditingController gender = TextEditingController();
 
   File? _image;
-  String? _base64Image;
+  Uint8List? _imageBytes;
 
   Profile? _profile;
   Account? _account;
 
   void refreshProfile() {
-    // Gọi API để lấy lại dữ liệu hồ sơ sau khi cập nhật BMI
+    // Gọi API để lấy lại dữ liệu hồ sơ sau khi cập nhật
     _fetchUserProfile();
   }
 
@@ -58,6 +58,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     'Male': 'Nữ',
     'Other': 'Khác',
   };
+
   @override
   void initState() {
     super.initState();
@@ -72,7 +73,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     setState(() {
       _profile = profile;
       _account = account;
-     if (_profile != null) {
+      if (_profile != null) {
         lastName.text = _profile!.last_name ?? '';
         firstName.text = _profile!.first_name ?? '';
         gender.text = genderMap[_profile!.gender] ?? '';
@@ -80,12 +81,12 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
           birthday.text = _formatDate(_profile!.birthdate ?? '');
         }
 
-        // Fetch the avatar image as a Base64 string and update the _base64Image variable
+        // Fetch the avatar image as a Uint8List and update the _imageBytes variable
         if (_profile!.avatar_url != null && _profile!.avatar_url!.isNotEmpty) {
-          getImageBase64FromUrl(_profile!.avatar_url!).then((base64Image) {
+          getImageBytesFromUrl(_profile!.avatar_url!).then((imageBytes) {
             setState(() {
-              _base64Image = base64Image;
-              print(_base64Image);
+              _imageBytes = imageBytes;
+              print(_imageBytes);
             });
           }).catchError((error) {
             print('Failed to load image: $error');
@@ -96,32 +97,28 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         phone.text = _account!.phone ?? '';
       }
     });
-
   }
 
-    Future<String> getImageBase64FromUrl(String url) async {
+  Future<Uint8List> getImageBytesFromUrl(String url) async {
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
-      return base64Encode(response.bodyBytes);
+      return response.bodyBytes;
     } else {
       throw Exception('Failed to load image');
     }
   }
 
-
   Future<void> _pickImage() async {
-    print('asdhja');
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
-        _base64Image = base64Encode(_image!.readAsBytesSync());
+        _imageBytes = _image!.readAsBytesSync();
       });
     }
   }
-
 
   String _formatDate(String date) {
     DateTime parsedDate = DateTime.parse(date);
@@ -155,11 +152,11 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     ),
                     child:Center(
                         child: _profile != null &&
-                                (_base64Image != null)
+                                (_imageBytes != null)
                             ? CircleAvatar(
                                 radius: 50,
                                 backgroundImage:
-                                     MemoryImage(base64Decode(_base64Image!)),
+                                    MemoryImage(_imageBytes!),
                                 backgroundColor: Colors.transparent,
                               )
                             : CircleAvatar(
@@ -281,7 +278,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   style: ButtonStyleType
                       .Primary, // Set the button style (optional)
                   onPressed: () async {
-                    _changgeProfile(context);
+                    // _changgeProfile(context);
+                    _changgeAvatar(context);
                   },
                 ),
                 SizedBox(height: 16.0),
@@ -335,6 +333,19 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
       setState(() {
         _account = account;
       });
+    }
+  }
+
+    Future<void> _changgeAvatar(BuildContext context) async {
+    if (_image != null && _imageBytes != null) {
+      final Profile? profile = await patchAvatar(_imageBytes!);
+      if (profile != null) {
+        final account = await retrieveAccount();
+        setState(() {
+          _profile = profile;
+          _account = account;
+        });
+      }
     }
   }
 
