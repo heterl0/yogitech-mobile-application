@@ -1,25 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:yogi_application/api/auth/auth_service.dart';
-import 'package:yogi_application/api/exercise/exercise_service.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/models/account.dart';
-import 'package:yogi_application/src/pages/all_exercise.dart';
-import 'package:yogi_application/src/pages/exercise_detail.dart';
-import 'package:yogi_application/src/pages/filter.dart';
-import 'package:yogi_application/src/pages/streak.dart';
-import 'package:yogi_application/src/pages/subscription.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
-import 'package:yogi_application/src/widgets/box_input_field.dart';
-import 'package:yogi_application/src/widgets/card.dart';
+import 'package:YogiTech/api/auth/auth_service.dart';
+import 'package:YogiTech/api/exercise/exercise_service.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/pages/all_exercise.dart';
+import 'package:YogiTech/src/pages/exercise_detail.dart';
+import 'package:YogiTech/src/pages/filter.dart';
+import 'package:YogiTech/src/pages/streak.dart';
+import 'package:YogiTech/src/pages/subscription.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/widgets/box_input_field.dart';
+import 'package:YogiTech/src/widgets/card.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage();
+  const HomePage({super.key});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -28,7 +25,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var jsonList;
   bool _isnotSearching = true;
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   Account? account;
 
   @override
@@ -56,7 +53,7 @@ class _HomePageState extends State<HomePage> {
     final trans = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return Scaffold(
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         appBar: _isnotSearching
             ? CustomAppBar(
                 showBackButton: false,
@@ -70,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: Row(
                       children: [
-                        Container(
+                        SizedBox(
                           width: 40,
                           height: 50,
                           child: Image.asset('assets/images/Emerald.png'),
@@ -79,8 +76,8 @@ class _HomePageState extends State<HomePage> {
                           account != null
                               ? account!.profile.point.toString()
                               : '0',
-                          style: h3.copyWith(
-                              color: theme.colorScheme.onBackground),
+                          style:
+                              h3.copyWith(color: theme.colorScheme.onSurface),
                         ),
                       ],
                     ),
@@ -90,8 +87,8 @@ class _HomePageState extends State<HomePage> {
                     account != null ? account!.profile.streak.toString() : '0'),
                 postActions: [
                   IconButton(
-                    icon: Icon(Icons.search,
-                        color: theme.colorScheme.onBackground),
+                    icon:
+                        Icon(Icons.search, color: theme.colorScheme.onSurface),
                     onPressed: () {
                       setState(() {
                         _isnotSearching = false;
@@ -104,8 +101,7 @@ class _HomePageState extends State<HomePage> {
                 showBackButton: false,
                 preActions: [
                   IconButton(
-                    icon: Icon(Icons.tune_outlined,
-                        color: theme.colorScheme.onBackground),
+                    icon: Icon(Icons.tune_outlined),
                     onPressed: () {
                       pushWithoutNavBar(
                         context,
@@ -122,17 +118,27 @@ class _HomePageState extends State<HomePage> {
                   placeholder: trans.search,
                   trailing: Icon(Icons.search),
                   keyboardType: TextInputType.text,
-                  inputFormatters: [],
-                  onTap: () {
-                    // Xử lý khi input field được nhấn
+                  inputFormatters: const [],
+                  onSubmitted: (value) {
+                    setState(() {
+                      String searchValue = value.trim();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AllExercise(
+                                searchString:
+                                    searchValue)), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                      );
+                      // Use the value here after the user submits
+                    });
                   },
                 ),
                 postActions: [
                   IconButton(
-                    icon: Icon(Icons.close,
-                        color: theme.colorScheme.onBackground),
+                    icon: Icon(Icons.close),
                     onPressed: () {
                       setState(() {
+                        _searchController.clear(); // Clear the search text
                         _isnotSearching = true;
                       });
                     },
@@ -241,21 +247,34 @@ class _HomePageState extends State<HomePage> {
                         style: h3.copyWith(color: theme.colorScheme.onPrimary),
                       ),
                       Spacer(),
-                      SizedBox(
-                        width: 130, // Điều chỉnh kích thước nút nếu cần
-                        child: BoxButton(
-                          title: trans.seeall,
-                          style: ButtonStyleType.Tertiary,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      AllExercise()), // Thay NewPage() bằng trang bạn muốn chuyển tới
-                            );
-                          },
+                      InkWell(
+                        borderRadius: BorderRadius.all(Radius.circular(16)),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            trans.seeall,
+                            style: bd_text.copyWith(color: primary),
+                          ),
                         ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    AllExercise()), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                          );
+                        },
                       ),
+                      // SizedBox(
+                      //   width: 130, // Điều chỉnh kích thước nút nếu cần
+                      //   child: BoxButton(
+                      //     title: trans.seeall,
+                      //     style: ButtonStyleType.Tertiary,
+                      //     onPressed: () {
+
+                      //     },
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -317,7 +336,7 @@ class StreakValue extends StatelessWidget {
                 color: text,
               ),
             ),
-            Container(
+            SizedBox(
               height: 32,
               child: ShaderMask(
                 shaderCallback: (bounds) {

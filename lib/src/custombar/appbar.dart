@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 
 enum widthStyle { Small, Medium, Large }
 
@@ -12,7 +12,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onBackPressed;
   final widthStyle style;
 
-  CustomAppBar({
+  const CustomAppBar({
+    super.key,
     this.titleWidget,
     this.title = '',
     this.showBackButton = true,
@@ -32,7 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             : 4;
 
     final theme = Theme.of(context);
-    return Container(
+    return SizedBox(
       height: preferredSize.height,
       child: AppBar(
         scrolledUnderElevation: appElevation,
@@ -61,7 +62,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         ? IconButton(
                             icon: Icon(
                               Icons.arrow_back,
-                              color: theme.colorScheme.onBackground,
+                              color: theme.colorScheme.onSurface,
                             ),
                             onPressed: () {
                               if (onBackPressed != null) {
@@ -86,8 +87,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         Text(
                           title,
                           textAlign: TextAlign.center,
-                          style: h2.copyWith(
-                              color: theme.colorScheme.onBackground),
+                          style:
+                              h2.copyWith(color: theme.colorScheme.onSurface),
                         ),
                   ),
                 ),

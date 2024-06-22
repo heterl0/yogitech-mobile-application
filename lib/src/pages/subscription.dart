@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
-import 'package:yogi_application/src/pages/payment_history.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/custombar/bottombar.dart';
+import 'package:YogiTech/src/pages/payment_history.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class Subscription extends StatefulWidget {
+  const Subscription({super.key});
+
   @override
   _SubscriptionState createState() => _SubscriptionState();
 }
@@ -27,20 +28,20 @@ class _SubscriptionState extends State<Subscription> {
         titleWidget: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
               width: 40,
               height: 50,
               child: Image.asset('assets/images/Emerald.png'),
             ),
             Text(
               '5',
-              style: h3.copyWith(color: theme.colorScheme.onBackground),
+              style: h3.copyWith(color: theme.colorScheme.onSurface),
             ),
           ],
         ),
         postActions: [
           IconButton(
-            icon: Icon(Icons.history, color: theme.colorScheme.onBackground),
+            icon: Icon(Icons.history, color: theme.colorScheme.onSurface),
             onPressed: () {
               Navigator.push(
                 context,
@@ -123,7 +124,7 @@ class _SubscriptionState extends State<Subscription> {
       ),
       child: Column(
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
             child: Row(
               children: [
@@ -237,7 +238,7 @@ class _SubscriptionState extends State<Subscription> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
+              SizedBox(
                   width: 120,
                   height: 120,
                   child: Image.asset(
@@ -273,7 +274,6 @@ class _SubscriptionState extends State<Subscription> {
     return showModalBottomSheet(
       context: context,
       backgroundColor: theme.colorScheme.onSecondary,
-      
       builder: (context) {
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 40, vertical: 36),
@@ -329,7 +329,7 @@ class _SubscriptionState extends State<Subscription> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
-    return Container(
+    return SizedBox(
       height: 48,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -395,11 +395,10 @@ class _SubscriptionState extends State<Subscription> {
                   Text(
                     trans.onceAWeek,
                     textAlign: TextAlign.center,
-                    style:
-                        min_cap.copyWith(color: theme.colorScheme.onBackground),
+                    style: min_cap.copyWith(color: theme.colorScheme.onSurface),
                   ),
                   const SizedBox(height: 12),
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -435,7 +434,7 @@ class _SubscriptionState extends State<Subscription> {
                           ),
                         ),
                         Text(
-                          trans.locale == "en"? "or":"hoặc",
+                          trans.locale == "en" ? "or" : "hoặc",
                           style: bd_text.copyWith(color: text),
                         ),
                         const SizedBox(width: 8),
@@ -512,7 +511,7 @@ class _SubscriptionState extends State<Subscription> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -645,7 +644,7 @@ class _SubscriptionState extends State<Subscription> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,

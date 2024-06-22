@@ -1,377 +1,137 @@
 import 'dart:async';
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
-import 'package:yogi_application/src/pages/meditate.dart';
-import 'package:yogi_application/src/shared/styles.dart';
+import 'package:YogiTech/src/custombar/appbar.dart'; // Đoạn này bạn cần thay đổi tên package theo project của bạn
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:audioplayers/audioplayers.dart';
 
-void main() {
-  runApp(const performMeditate());
-}
-
-class performMeditate extends StatelessWidget {
+class PerformMeditate extends StatefulWidget {
   final Duration selectedDuration;
+  final String audioPath;
 
-  const performMeditate(
-      {Key? key, this.selectedDuration = const Duration(minutes: 5)})
-      : super(key: key);
+  const PerformMeditate({
+    Key? key,
+    this.selectedDuration = const Duration(seconds: 5),
+    this.audioPath = '',
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: MeditateCountdownTimer(initialDuration: selectedDuration),
-    );
-  }
+  _PerformMeditateState createState() => _PerformMeditateState();
 }
 
-class MeditateCountdownTimer extends StatefulWidget {
-  final Duration initialDuration;
-
-  const MeditateCountdownTimer({Key? key, required this.initialDuration})
-      : super(key: key);
-  @override
-  _MeditateCountdownTimerState createState() => _MeditateCountdownTimerState();
-}
-
-class _MeditateCountdownTimerState extends State<MeditateCountdownTimer>
-    with RestorationMixin {
-  late Timer _timer;
-  int _start = 5;
-  var _isTimerOn = false;
-
-  late RestorableRouteFuture<String> _alertDialogRoute;
-
-  @override
-  String get restorationId => 'meditate_countdown_timer';
-
-  @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    registerForRestoration(_alertDialogRoute, 'alert_dialog_route');
-  }
-
-  void startTimer() {
-    const oneSec = Duration(minutes: 1);
-    _timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        if (_start == 0) {
-          setState(() {
-            _isTimerOn = false;
-            timer.cancel();
-          });
-          _alertDialogRoute.present();
-        } else {
-          setState(() {
-            _start--;
-          });
-        }
-      },
-    );
-  }
-
-  void _showInSnackBar(String value) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(value),
-      ),
-    );
-  }
-
-  static Route<String> _alertDialogDemoRoute(
-    BuildContext context,
-    Object? arguments,
-  ) {
-    final trans = AppLocalizations.of(context)!;
-    return DialogRoute<String>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            trans.finish,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-          ),
-          content: Text(
-            trans.endTimer,
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text(
-                trans.confirm,
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          backgroundColor: const Color(0xFF0A141C),
-          contentPadding: const EdgeInsets.symmetric(
-            vertical: 20,
-            horizontal: 24,
-          ),
-        );
-      },
-    );
-  }
+class _PerformMeditateState extends State<PerformMeditate> {
+  late Duration _remainingTime;
+  Timer? _timer;
+  bool _isPlaying = false;
+  late AudioPlayer
+      _audioPlayer; // Đã thêm biến _audioPlayer để quản lý player audio
 
   @override
   void initState() {
     super.initState();
-    _start = widget.initialDuration.inMinutes;
-    _alertDialogRoute = RestorableRouteFuture<String>(
-      onPresent: (navigator, arguments) {
-        return navigator.restorablePush(_alertDialogDemoRoute);
-      },
-      onComplete: _showInSnackBar,
-    );
+    _remainingTime = widget.selectedDuration;
+    _audioPlayer = AudioPlayer();
   }
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
+    _audioPlayer.dispose();
     super.dispose();
+  }
+
+  void _startTimer() {
+    if (_remainingTime.inSeconds > 0) {
+      _playAudio();
+      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        setState(() {
+          if (_remainingTime.inSeconds > 0) {
+            _remainingTime -= Duration(seconds: 1);
+          } else {
+            timer.cancel();
+            _isPlaying = false;
+            _stopAudio();
+          }
+        });
+      });
+      setState(() {
+        _isPlaying = true;
+      });
+    }
+  }
+
+  void _pauseTimer() {
+    _timer?.cancel();
+    setState(() {
+      _isPlaying = false;
+    });
+
+    if (_audioPlayer.state == PlayerState.playing) {
+      _audioPlayer.pause(); // Tạm dừng audio nếu đang phát
+    } else if (_audioPlayer.state == PlayerState.paused) {
+      _audioPlayer.resume(); // Tiếp tục audio nếu đang tạm dừng
+    }
+  }
+
+  Future<void> _playAudio() async {
+    try {
+      await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+      await _audioPlayer.play(AssetSource(widget.audioPath));
+    } catch (e) {
+      print("Error playing audio: $e"); // In ra thông tin lỗi cụ thể
+    }
+  }
+
+  void _stopAudio() {
+    _audioPlayer.stop();
+  }
+
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return '$minutes:$seconds';
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        color: theme.colorScheme.onSecondary,
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: trans.meditate,
       ),
-      child: Stack(
-        children: [
-          _buildTopRoundedContainer(),
-          _buildHeader(),
-          // _buildNavigationBar(),
-          _buildBackButton(context),
-          Center(
-            child: Column(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              _formatDuration(_remainingTime),
+              style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ShaderMask(
-                  shaderCallback: (Rect bounds) {
-                    return const LinearGradient(
-                      colors: [
-                        Color(0xFF3BE2B0),
-                        Color(0xFF4095D0),
-                        Color(0xFF5986CC),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ).createShader(bounds);
-                  },
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.85,
-                    height: MediaQuery.of(context).size.width * 0.85,
-                    child: SleekCircularSlider(
-                      appearance: CircularSliderAppearance(
-                        size: MediaQuery.of(context).size.width * 0.84,
-                        customColors: CustomSliderColors(
-                          trackColor: const Color(0xFF0D1F29),
-                          progressBarColor: Colors.white,
-                          dotColor: Colors.black,
-                        ),
-                        startAngle: 270,
-                        angleRange: 360,
-                        customWidths: CustomSliderWidths(
-                          trackWidth: 36,
-                          progressBarWidth: 22,
-                          handlerSize: 7,
-                        ),
-                      ),
-                      min: 0,
-                      max: 60,
-                      initialValue: _start.toDouble(),
-                      onChange: (double value) {
-                        setState(() {
-                          _start = value.round();
-                        });
-                      },
-                      innerWidget: (percentage) => Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${_start.round()}',
-                              style: const TextStyle(
-                                fontSize: 120,
-                                color: Color(0xfff24FFCC),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Text(
-                              trans.minutes,
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                ElevatedButton(
+                  onPressed: _isPlaying ? _pauseTimer : _startTimer,
+                  child: Text(_isPlaying ? trans.pause : trans.start),
                 ),
-                const SizedBox(
-                  height: 140,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    if (_isTimerOn) {
-                      _timer.cancel();
-                      setState(() {
-                        _isTimerOn = false;
-                        _start = 5;
-                      });
-                    } else {
-                      _isTimerOn = true;
-                      startTimer();
-                    }
+                SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _remainingTime = widget.selectedDuration;
+                      _isPlaying = false;
+                      _timer?.cancel();
+                      _stopAudio(); // Dừng phát audio khi reset
+                    });
                   },
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width * 0.65,
-                    decoration: BoxDecoration(
-                      color: _isTimerOn
-                          ? Colors.redAccent
-                          : const Color(0xfff24FFCC),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0xFF0D1F29),
-                          spreadRadius: 1,
-                          blurRadius: 2,
-                          offset: Offset(2, 4),
-                        ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Text(
-                      _isTimerOn ? trans.endTimer : trans.start,
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: _isTimerOn ? Colors.white : Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  // child: BoxButton(
-                  //   title: _isTimerOn ? 'Stop' : 'Start',
-                  //   style: ButtonStyleType.Primary,
-                  //   state: ButtonState.Enabled,
-                  //   onPressed: () {
-                  //     setState(() {
-                  //       _isTimerOn = !_isTimerOn;
-                  //     });
-                  //   },
-                  // ),
+                  child: Text(trans.reset),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTopRoundedContainer() {
-    final theme = Theme.of(context);
-    return Positioned(
-      left: 0,
-      top: 0,
-      right: 0,
-      child: Container(
-        height: 150,
-        decoration: BoxDecoration(
-          color: theme.colorScheme.onSecondary,
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(24),
-            bottomRight: Radius.circular(24),
-          ),
+          ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    final theme = Theme.of(context);
-    final trans = AppLocalizations.of(context)!;
-
-    return Positioned(
-      left: 0,
-      right: 0,
-      top: 100,
-      child: Text(
-        trans.meditate,
-        textAlign: TextAlign.center,
-        style: h2.copyWith(color: theme.colorScheme.onBackground),
-      ),
-    );
-  }
-
-  Widget _buildNavItem({
-    required String label,
-    required String icon,
-    required bool isSelected,
-  }) {
-    return GestureDetector(
-      onTap: () {
-        print('Navigated to $label');
-      },
-      child: Column(
-        children: [
-          Image.asset(
-            icon,
-            color: isSelected ? Colors.white : Colors.white.withOpacity(0.6),
-            width: 24,
-            height: 24,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: isSelected ? Colors.white : Colors.white.withOpacity(0.6),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBackButton(BuildContext context) {
-    return Positioned(
-      left: 10,
-      top: 70,
-      child: IconButton(
-        icon: Icon(Icons.arrow_back, color: Colors.white, size: 25),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Meditate()),
-          );
-        },
       ),
     );
   }

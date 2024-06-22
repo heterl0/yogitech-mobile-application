@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FriendProfile extends StatefulWidget {
@@ -20,7 +20,7 @@ class _nameState extends State<FriendProfile> {
     final trans = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.friendProfile,
         style: widthStyle.Large,
@@ -148,7 +148,8 @@ class BoxButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Color? borderColor; // Add this line
 
-  BoxButton({
+  const BoxButton({
+    super.key,
     required this.title,
     required this.backgroundColor,
     required this.foregroundColor,

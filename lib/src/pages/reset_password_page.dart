@@ -6,6 +6,8 @@ class ResetPasswordPage extends StatelessWidget {
   final TextEditingController newPassword = TextEditingController();
   final TextEditingController confirmNewPassword = TextEditingController();
 
+  ResetPasswordPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
@@ -71,14 +73,14 @@ class ResetPasswordPage extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(44.0),
                 gradient: LinearGradient(
-                  colors: [
+                  colors: const [
                     Color(0xFF3BE2B0),
                     Color(0xFF4095D0),
                     Color(0xFF5986CC),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  stops: [0.0, 0.5, 1.0],
+                  stops: const [0.0, 0.5, 1.0],
                 ),
               ),
               child: Material(
@@ -111,7 +113,7 @@ class ResetPasswordPage extends StatelessWidget {
     // Xử lý sự kiện gửi OTP
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(trans.sendOTP+' $email'),
+        content: Text('${trans.sendOTP} $email'),
       ),
     );
   }

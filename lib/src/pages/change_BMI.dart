@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:yogi_application/api/account/account_service.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/models/account.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/widgets/box_input_field.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:YogiTech/api/account/account_service.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/widgets/box_input_field.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChangeBMIPage extends StatefulWidget {
   final VoidCallback onBMIUpdated;
 
-  const ChangeBMIPage({Key? key, required this.onBMIUpdated}) : super(key: key);
+  const ChangeBMIPage({super.key, required this.onBMIUpdated});
 
   @override
   State<ChangeBMIPage> createState() => _ChangeBMIPageState();
@@ -90,7 +89,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
       double bmi = weight / (height * height);
 
       try {
-        final Profile? updatedProfile = await patchBMI(new PatchBMIRequest(
+        final Profile? updatedProfile = await patchBMI(PatchBMIRequest(
           weight: weight,
           height: height * 100,
           bmi: double.parse(bmi.toStringAsFixed(2)),
@@ -113,7 +112,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
     final trans = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.changeBMI,
         style: widthStyle.Large,

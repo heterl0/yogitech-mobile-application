@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Calorie extends StatelessWidget {
+  const Calorie({super.key});
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         title: trans.calorie,
@@ -29,7 +31,7 @@ class Calorie extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
             child: Column(
               // mainAxisSize: MainAxisSize.min,
@@ -118,7 +120,7 @@ class Calorie extends StatelessWidget {
         children: [
           Text(
             'May 2024',
-            style: h2.copyWith(color: theme.colorScheme.onBackground),
+            style: h2.copyWith(color: theme.colorScheme.onSurface),
           ),
           Row(
             children: [

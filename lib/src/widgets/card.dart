@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 
 class CustomCard extends StatelessWidget {
   final String title;
@@ -31,9 +31,9 @@ class CustomCard extends StatelessWidget {
           minHeight: 120, // Kích thước tối thiểu dọc
         ),
         decoration: BoxDecoration(
-          color: theme.colorScheme.background, // Màu nền của Container
+          color: theme.colorScheme.surface, // Màu nền của Container
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [], // Không có bóng đổ
+          boxShadow: const [], // Không có bóng đổ
           border: Border.all(color: stroke),
         ),
         child: Column(
