@@ -1,0 +1,124 @@
+import 'package:YogiTech/api/dioInstance.dart';
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/models/social.dart';
+import 'package:YogiTech/utils/formatting.dart';
+import 'package:dio/dio.dart';
+
+Future<Following?> followUser(int userId) async {
+  try {
+    final url = formatApiUrl('/api/v1/social/follow/');
+    final Response response =
+        await DioInstance.post(url, data: {'followed': userId});
+    if (response.statusCode == 200) {
+      return Following.fromMap(response.data);
+    } else {
+      print('Post follow user failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Post follow user error: $e');
+    return null;
+  }
+}
+
+Future<bool> unfollowUser(int userId) async {
+  try {
+    final url = formatApiUrl('/api/v1/social/unfollow/$userId/');
+    final Response response = await DioInstance.delete(url);
+    return response.statusCode == 204;
+  } catch (e) {
+    print('Unfollow user error: $e');
+    return false;
+  }
+}
+
+Future<List<dynamic>> getFollowersById(int userId) async {
+  try {
+    final url = formatApiUrl('/api/v1/social/followers/$userId/');
+    final Response response = await DioInstance.get(url);
+    if (response.statusCode == 200) {
+      List<dynamic> data =
+          response.data.map((e) => Account.fromMap(e)).toList();
+      return data;
+    } else {
+      print('Get followers failed with status code: ${response.statusCode}');
+      return [];
+    }
+  } catch (e) {
+    print('Get followers error: $e');
+    return [];
+  }
+}
+
+Future<List<dynamic>> getFollowingById(int userId) async {
+  try {
+    final url = formatApiUrl('/api/v1/social/following/$userId/');
+    final Response response = await DioInstance.get(url);
+    if (response.statusCode == 200) {
+      List<dynamic> data =
+          response.data.map((e) => Account.fromMap(e)).toList();
+      return data;
+    } else {
+      print('Get following failed with status code: ${response.statusCode}');
+      return [];
+    }
+  } catch (e) {
+    print('Get following error: $e');
+    return [];
+  }
+}
+
+Future<List<dynamic>> getFollowers() async {
+  try {
+    final url = formatApiUrl('/api/v1/social/followers/');
+    final Response response = await DioInstance.get(url);
+    if (response.statusCode == 200) {
+      List<dynamic> data =
+          response.data.map((e) => Account.fromMap(e)).toList();
+      return data;
+    } else {
+      print('Get followers failed with status code: ${response.statusCode}');
+      return [];
+    }
+  } catch (e) {
+    print('Get followers error: $e');
+    return [];
+  }
+}
+
+Future<List<dynamic>> getFollowing() async {
+  try {
+    final url = formatApiUrl('/api/v1/social/following/');
+    final Response response = await DioInstance.get(url);
+    if (response.statusCode == 200) {
+      List<dynamic> data =
+          response.data.map((e) => Account.fromMap(e)).toList();
+      return data;
+    } else {
+      print('Get following failed with status code: ${response.statusCode}');
+      return [];
+    }
+  } catch (e) {
+    print('Get following error: $e');
+    return [];
+  }
+}
+
+Future<List<dynamic>> searchSocialProfile(String? query) async {
+  try {
+    final url = formatApiUrl('/api/v1/social/search-profiles/?query=$query');
+    final Response response = await DioInstance.get(url);
+    if (response.statusCode == 200) {
+      List<dynamic> data =
+          response.data.map((e) => SocialProfile.fromMap(e)).toList();
+      return data;
+    } else {
+      print(
+          'Search social profile failed with status code: ${response.statusCode}');
+      return [];
+    }
+  } catch (e) {
+    print('Search social profile error: $e');
+    return [];
+  }
+}
