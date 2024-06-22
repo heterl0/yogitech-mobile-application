@@ -56,12 +56,13 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
                 ?.call(value); // Notify parent widget of state change
           });
         },
-        fillColor: WidgetStateColor.resolveWith((states) {
+        fillColor: MaterialStateColor.resolveWith((states) {
           final ThemeData theme = Theme.of(context);
           return theme.brightness == Brightness.light
               ? elevationLight
               : elevationDark;
         }),
+
         checkColor: primary, // Color of the checkmark
         materialTapTargetSize:
             MaterialTapTargetSize.shrinkWrap, // Prevent button-like behavior

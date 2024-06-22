@@ -214,7 +214,151 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           title: title,
           subtitle: subtitle,
           imageUrl: poseDetail.image_url,
-          onTap: () {},
+          onTap: () {
+            showDetailDialog(context, poseDetail);
+          },
+        );
+      },
+    );
+  }
+
+  void showDetailDialog(BuildContext context, Pose pose) {
+    final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          elevation: appElevation,
+          backgroundColor: theme.colorScheme.onSecondary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      pose.name,
+                      style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.close,
+                        color: text,
+                        size: 24,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+                ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  child: Image.network(
+                    pose.image_url,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '${trans.duration}: ${pose.duration}',
+                      style: bd_text.copyWith(color: primary),
+                    ),
+                    Text(
+                      '${trans.level}: ${pose.level}',
+                      style: bd_text.copyWith(color: primary),
+                    ),
+                    Text(
+                      '${trans.calorie}: ${pose.calories}',
+                      style: bd_text.copyWith(color: primary),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+                Text(trans.supMuscle, style: bd_text.copyWith(color: text)),
+                SizedBox(height: 8),
+                Wrap(
+                  spacing: 4.0,
+                  runSpacing: 4.0,
+                  children: pose.muscles.map((muscle) {
+                    return Material(
+                      elevation: appElevation,
+                      borderRadius: BorderRadius.circular(
+                          20.0), // Điều chỉnh bo góc nếu cần
+                      color: primary,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 4.0),
+                        child: Text(
+                          muscle.name,
+                          style: min_cap.copyWith(
+                            color: active,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                SizedBox(height: 16),
+                SizedBox(
+                  height: 240, // height limit for the instruction text
+                  child: Stack(
+                    children: [
+                      SingleChildScrollView(
+                        padding: EdgeInsets.only(bottom: 24),
+                        child: Text(
+                          pose.instruction,
+                          style: bd_text.copyWith(
+                              color: theme.colorScheme.onPrimary),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 20, // adjust the height of the fade effect
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                theme.colorScheme.onSecondary.withOpacity(0.0),
+                                theme.colorScheme.onSecondary.withOpacity(0.5),
+                                theme.colorScheme.onSecondary,
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      trans.close,
+                      style: h3.copyWith(color: primary),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );
