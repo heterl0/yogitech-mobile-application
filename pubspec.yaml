@@ -57,6 +57,7 @@ dependencies:
   fl_chart: ^0.68.0
   flutter_local_notifications: ^17.1.2
   timezone: ^0.9.3
+  pay: ^2.0.0
 # flutter_native_splash:
 #   android: true
 #   ios: true
@@ -88,12 +89,13 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  assets:    
+  assets:
     - assets/images/
     - assets/icons/
     - assets/audios/
     - assets/native_splash/logo.riv
     - .env
+    - assets/
 
     # fonts:
     # - family: ReadexPro
