@@ -19,17 +19,25 @@ class DioInstance {
     return _dio.get(url, queryParameters: params);
   }
 
-  static Future<Response> post(String url, {Map<String, dynamic>? data}) async {
-    return _dio.post(url, data: data);
+  static Future<Response> post(String url, {dynamic data}) async {
+    // Check if data is of type Map and convert to FormData if necessary
+    final sendData =
+        data is Map<String, dynamic> ? FormData.fromMap(data) : data;
+    return _dio.post(url, data: sendData);
   }
 
-  static Future<Response> put(String url, {Map<String, dynamic>? data}) async {
-    return _dio.put(url, data: data);
+  static Future<Response> put(String url, {dynamic data}) async {
+    // Check if data is of type Map and convert to FormData if necessary
+    final sendData =
+        data is Map<String, dynamic> ? FormData.fromMap(data) : data;
+    return _dio.put(url, data: sendData);
   }
 
-  static Future<Response> patch(String url,
-      {Map<String, dynamic>? data}) async {
-    return _dio.patch(url, data: data);
+  static Future<Response> patch(String url, {dynamic data}) async {
+    // Check if data is of type Map and convert to FormData if necessary
+    final sendData =
+        data is Map<String, dynamic> ? FormData.fromMap(data) : data;
+    return _dio.patch(url, data: sendData);
   }
 
   static Future<Response> delete(String url,
