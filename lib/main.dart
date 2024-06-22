@@ -133,8 +133,8 @@ class _MyAppState extends State<MyApp> {
         // ),
         debugShowCheckedModeBanner: false,
         initialRoute: widget.access != null
-            ? AppRoutes.preLaunchSurvey
-            : AppRoutes.preLaunchSurvey,
+            ? AppRoutes.firstScreen
+            : AppRoutes.firstScreen,
         // onGenerateRoute: _generateRoute,
         theme: lightTheme,
         darkTheme: darkTheme,
