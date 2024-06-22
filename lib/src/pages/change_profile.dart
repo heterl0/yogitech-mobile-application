@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:yogi_application/api/account/account_service.dart';
-import 'package:yogi_application/api/auth/auth_service.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/models/account.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/widgets/box_input_field.dart';
-import 'package:yogi_application/src/widgets/dropdown_field.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
-import 'package:yogi_application/src/pages/change_BMI.dart';
+import 'package:YogiTech/api/account/account_service.dart';
+import 'package:YogiTech/api/auth/auth_service.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/widgets/box_input_field.dart';
+import 'package:YogiTech/src/widgets/dropdown_field.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
+import 'package:YogiTech/src/pages/change_BMI.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChangeProfilePage extends StatefulWidget {
@@ -38,11 +38,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   final RegExp phoneRegExp =
       RegExp(r'^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$');
 
-  final Map<int, String> genderMap = {
-    0: 'Female',
-    1: 'Male',
-    2: 'Other',
-  };
   @override
   void initState() {
     super.initState();
@@ -52,7 +47,12 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   Future<void> _fetchUserProfile() async {
     Profile? profile = await getUserProfile();
     Account? account = await retrieveAccount();
-
+    final trans = AppLocalizations.of(context)!;
+    final Map<int, String> genderMap = {
+      0: trans.female,
+      1: trans.male,
+      2: trans.other,
+    };
     // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
     setState(() {
       _profile = profile;
@@ -164,7 +164,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: lastName,
-                  placeholder: 'Enter your last name',
+                  placeholder: trans.yourLastName,
                 ),
                 SizedBox(height: 16.0),
                 Text(trans.firstName,
@@ -172,7 +172,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: firstName,
-                  placeholder: "trans.yourFistName",
+                  placeholder: trans.yourFistName,
                 ),
                 SizedBox(height: 16.0),
                 Text(trans.phoneNumber,
@@ -238,9 +238,9 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                           SizedBox(height: 8.0),
                           CustomDropdownFormField(
                             controller: gender,
-                            items: ['Male', 'Female', 'Other'],
+                            items: [trans.male, trans.female, trans.other],
                             placeholder: gender.text.isEmpty
-                                ? 'Select gender'
+                                ? trans.sellectGender
                                 : gender.text,
                             onTap: () {
                               // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết
@@ -290,6 +290,13 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   }
 
   Future<void> _changgeProfile(BuildContext context) async {
+    final trans = AppLocalizations.of(context)!;
+    final Map<int, String> genderMap = {
+      0: trans.female,
+      1: trans.male,
+      2: trans.other,
+    };
+
     DateTime? birthdate = birthday.text.isNotEmpty
         ? DateFormat('dd-MM-yyyy').parse(birthday.text)
         : null;

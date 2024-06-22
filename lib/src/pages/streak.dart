@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import "package:yogi_application/src/custombar/appbar.dart";
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
+import "package:YogiTech/src/custombar/appbar.dart";
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 import 'package:intl/intl.dart'; // Add this import
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class Streak extends StatefulWidget {
   const Streak({super.key});
@@ -214,11 +213,13 @@ class _StreakState extends State<Streak> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '$daysInMonth ${(daysInMonth==1)&& (trans.locale=="en")? "day":trans.days}',
+                    '$daysInMonth ${(daysInMonth == 1) && (trans.locale == "en") ? "day" : trans.days}',
                     style: h3.copyWith(color: active, height: 1.2),
                   ),
                   Text(
-                    trans.locale=="en"?'in this month.':'trong tháng này.',
+                    trans.locale == "en"
+                        ? 'in this month.'
+                        : 'trong tháng này.',
                     style: min_cap.copyWith(
                       color: active,
                     ),

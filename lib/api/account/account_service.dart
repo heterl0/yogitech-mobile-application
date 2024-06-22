@@ -1,8 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
-import 'package:yogi_application/api/auth/auth_service.dart';
-import 'package:yogi_application/api/dioInstance.dart';
-import 'package:yogi_application/src/models/account.dart';
-import 'package:yogi_application/utils/formatting.dart';
+import 'package:YogiTech/api/auth/auth_service.dart';
+import 'package:YogiTech/api/dioInstance.dart';
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/utils/formatting.dart';
 
 Future<Account?> getUser() async {
   try {
@@ -190,11 +192,11 @@ class PatchProfileRequest {
   int? gender;
 
   PatchProfileRequest({
-    required this.lastName,
-    required this.firstName,
-    required this.phone,
-    required this.birthdate,
-    required this.gender,
+    this.lastName,
+    this.firstName,
+    this.phone,
+    this.birthdate,
+    this.gender,
   });
 
   Map<String, dynamic> toMap() {
@@ -230,6 +232,36 @@ Future<Profile?> patchProfile(PatchProfileRequest data) async {
         data: data.toMap());
     if (response.statusCode == 200 && accountRes.statusCode == 200) {
       await storeAccount(Account.fromMap(accountRes.data));
+      return Profile.fromMap(response.data);
+    } else {
+      print(
+          'Patch profile detail failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Patch profile detail error: $e');
+    return null;
+  }
+}
+
+Future<Profile?> patchAvatar(Uint8List binaryImage) async {
+  try {
+    final Account? currentUser = await retrieveAccount();
+    final int profileId = currentUser!.profile.id;
+    final url = formatApiUrl('/api/v1/user-profiles/$profileId/');
+    // Get the current date and time
+    final now = DateTime.now();
+
+    // Format the date and time as a string
+    final timestamp =
+        '${now.year}${now.month}${now.day}_${now.hour}${now.minute}${now.second}';
+
+    // Include the timestamp in the filename
+    final filename = 'avatar_$timestamp.jpg';
+    final response = await DioInstance.patch(url, data: {
+      'avatar': MultipartFile.fromBytes(binaryImage, filename: filename),
+    });
+    if (response.statusCode == 200) {
       return Profile.fromMap(response.data);
     } else {
       print(

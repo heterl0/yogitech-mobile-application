@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:yogi_application/api/auth/auth_service.dart';
-import 'package:yogi_application/api/exercise/exercise_service.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/models/account.dart';
-import 'package:yogi_application/src/models/exercise.dart';
-import 'package:yogi_application/src/models/pose.dart';
-import 'package:yogi_application/src/pages/exercise_detail.dart';
-import 'package:yogi_application/src/pages/filter.dart';
-import 'package:yogi_application/src/pages/homepage.dart';
-import 'package:yogi_application/src/pages/subscription.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/widgets/box_input_field.dart';
-import 'package:yogi_application/src/widgets/card.dart';
+import 'package:YogiTech/api/auth/auth_service.dart';
+import 'package:YogiTech/api/exercise/exercise_service.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/models/exercise.dart';
+import 'package:YogiTech/src/models/pose.dart';
+import 'package:YogiTech/src/pages/exercise_detail.dart';
+import 'package:YogiTech/src/pages/filter.dart';
+import 'package:YogiTech/src/pages/homepage.dart';
+import 'package:YogiTech/src/pages/subscription.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/widgets/box_input_field.dart';
+import 'package:YogiTech/src/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AllExercise extends StatefulWidget {
@@ -51,10 +51,15 @@ class BlogState extends State<AllExercise> {
       _isLoading = true;
     });
     try {
-      final List<dynamic> exercises = await getExercises(); // Assuming getExercises() returns a List<Exercise>
+      final List<dynamic> exercises =
+          await getExercises(); // Assuming getExercises() returns a List<Exercise>
       List<dynamic> filteredExercises = exercises;
       if (query != null && query.isNotEmpty) {
-        filteredExercises = exercises.where((exercise) => (exercise.title.toString().replaceAll(" ", "").toLowerCase()).contains(query.toLowerCase().replaceAll(" ", ""))).toList();
+        filteredExercises = exercises
+            .where((exercise) =>
+                (exercise.title.toString().replaceAll(" ", "").toLowerCase())
+                    .contains(query.toLowerCase().replaceAll(" ", "")))
+            .toList();
       }
       if (mus != null) {
         for (var i = 0; i < filteredExercises.length; i++) {
@@ -91,7 +96,10 @@ class BlogState extends State<AllExercise> {
               preActions: [
                 GestureDetector(
                   onTap: () {
-                    pushWithoutNavBar(context, MaterialPageRoute(builder: (context) => Subscription()));
+                    pushWithoutNavBar(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Subscription()));
                   },
                   child: Row(
                     children: [
@@ -101,14 +109,17 @@ class BlogState extends State<AllExercise> {
                         child: Image.asset('assets/images/Emerald.png'),
                       ),
                       Text(
-                        account != null ? account!.profile.point.toString() : '0',
+                        account != null
+                            ? account!.profile.point.toString()
+                            : '0',
                         style: h3.copyWith(color: theme.colorScheme.onSurface),
                       ),
                     ],
                   ),
                 ),
               ],
-              titleWidget: StreakValue(account != null ? account!.profile.streak.toString() : '0'),
+              titleWidget: StreakValue(
+                  account != null ? account!.profile.streak.toString() : '0'),
               postActions: [
                 IconButton(
                   icon: Icon(Icons.search, color: theme.colorScheme.onSurface),
@@ -124,16 +135,20 @@ class BlogState extends State<AllExercise> {
               showBackButton: false,
               preActions: [
                 IconButton(
-                  icon: Icon(Icons.tune_outlined, color: theme.colorScheme.onSurface),
+                  icon: Icon(Icons.tune_outlined,
+                      color: theme.colorScheme.onSurface),
                   onPressed: () {
-                    pushWithoutNavBar(context, MaterialPageRoute(builder: (context) => FilterPage()));
+                    pushWithoutNavBar(context,
+                        MaterialPageRoute(builder: (context) => FilterPage()));
                   },
                 ),
               ],
               style: widthStyle.Medium,
               titleWidget: BoxInputField(
                 controller: _searchController,
-                placeholder: widget.searchString != null ? widget.searchString! : trans.search,
+                placeholder: widget.searchString != null
+                    ? widget.searchString!
+                    : trans.search,
                 trailing: Icon(Icons.search),
                 keyboardType: TextInputType.text,
                 inputFormatters: const [],
@@ -171,7 +186,8 @@ class BlogState extends State<AllExercise> {
       height: double.infinity,
       decoration: BoxDecoration(color: theme.colorScheme.surface),
       child: _isLoading
-          ? Center(child: CircularProgressIndicator()) // Show spinner when loading
+          ? Center(
+              child: CircularProgressIndicator()) // Show spinner when loading
           : SingleChildScrollView(
               child: Column(
                 children: [

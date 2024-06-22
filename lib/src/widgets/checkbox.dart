@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 
 // Enum to represent more descriptive checkbox states
 enum CheckState { Checked, Unchecked }
@@ -56,12 +56,13 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
                 ?.call(value); // Notify parent widget of state change
           });
         },
-        fillColor: WidgetStateColor.resolveWith((states) {
+        fillColor: MaterialStateColor.resolveWith((states) {
           final ThemeData theme = Theme.of(context);
           return theme.brightness == Brightness.light
               ? elevationLight
               : elevationDark;
         }),
+
         checkColor: primary, // Color of the checkmark
         materialTapTargetSize:
             MaterialTapTargetSize.shrinkWrap, // Prevent button-like behavior

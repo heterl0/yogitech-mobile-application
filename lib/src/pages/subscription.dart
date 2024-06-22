@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
-import 'package:yogi_application/src/pages/payment_history.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/custombar/bottombar.dart';
+import 'package:YogiTech/src/pages/payment_history.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class Subscription extends StatefulWidget {
   const Subscription({super.key});
@@ -275,7 +274,6 @@ class _SubscriptionState extends State<Subscription> {
     return showModalBottomSheet(
       context: context,
       backgroundColor: theme.colorScheme.onSecondary,
-      
       builder: (context) {
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 40, vertical: 36),
@@ -397,8 +395,7 @@ class _SubscriptionState extends State<Subscription> {
                   Text(
                     trans.onceAWeek,
                     textAlign: TextAlign.center,
-                    style:
-                        min_cap.copyWith(color: theme.colorScheme.onSurface),
+                    style: min_cap.copyWith(color: theme.colorScheme.onSurface),
                   ),
                   const SizedBox(height: 12),
                   SizedBox(
@@ -437,7 +434,7 @@ class _SubscriptionState extends State<Subscription> {
                           ),
                         ),
                         Text(
-                          trans.locale == "en"? "or":"hoặc",
+                          trans.locale == "en" ? "or" : "hoặc",
                           style: bd_text.copyWith(color: text),
                         ),
                         const SizedBox(width: 8),

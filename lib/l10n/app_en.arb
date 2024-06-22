@@ -100,6 +100,7 @@
   "meditationStreak": "Meditation streak",
   "sounds": "Sounds",
   "start": "Start",
+  "pause": "Pause",
   "calorie": "Calorie",
   "totalCalories": "Your total of calories",
   "social": "Notification",
@@ -190,5 +191,9 @@
   "passwordsDoNotMatch": "New password and confirm password not match",
   "passwordChangeFailed": "Change password failed!",
   "seeall": "see all",
-  "yourFistName": "Enter your first name"
+  "yourFistName": "Enter your first name",
+  "yourLastName": "Enter your last name",
+  "supMuscle":"Supporting Muscles:",
+  "level":"Level",
+  "close":"Close"
 }

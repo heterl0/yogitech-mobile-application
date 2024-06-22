@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/widgets/box_input_field.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class PersonalizedExercisePage extends StatefulWidget {
   const PersonalizedExercisePage({super.key});
@@ -26,7 +25,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
       backgroundColor: theme.colorScheme.surface,
       appBar: _isNotSearching
           ? CustomAppBar(
-              title:trans.yourExercise,
+              title: trans.yourExercise,
               style: widthStyle.Large,
             )
           : CustomAppBar(
@@ -44,8 +43,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
               ),
               postActions: [
                 IconButton(
-                  icon:
-                      Icon(Icons.close, color: theme.colorScheme.onSurface),
+                  icon: Icon(Icons.close, color: theme.colorScheme.onSurface),
                   onPressed: () {
                     setState(() {
                       _isNotSearching = true;
@@ -69,7 +67,11 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
                     itemCount: 15, // Số phần tử trong danh sách đầu tiên
                     itemBuilder: (context, index) {
                       return ListItem(
-                        difficulty: (index%2)==0? trans.advance:(index%3)==0? trans.professional:trans.beginner,
+                        difficulty: (index % 2) == 0
+                            ? trans.advance
+                            : (index % 3) == 0
+                                ? trans.professional
+                                : trans.beginner,
                         poseName: 'Hip',
                         calories: '100000',
                       );

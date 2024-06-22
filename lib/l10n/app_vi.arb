@@ -100,6 +100,7 @@
   "meditationStreak":"Chuỗi ngày thiền",
   "sounds": "Âm thanh",
   "start": "Bắt đầu",
+  "pause": "Tạm dừng",
   "calorie": "Calo",
   "totalCalories": "Tổng số calo của bạn",
   "social": "Thông báo",
@@ -190,6 +191,9 @@
   "passwordsDoNotMatch" :"Mật khẩu mới và xác nhận mật khẩu không khớp",
   "passwordChangeFailed" :"đổi mật khẩu thất bại",
   "seeall" : "Xem tất cả",
-  "yourFistName" :"Nhập vào tên của bạn"
-
+  "yourFistName" :"Nhập tên của bạn",
+  "yourLastName": "Nhập họ của bạn",
+  "supMuscle":"Hỗ trợ các nhóm cơ:",
+  "level":"Độ khó",
+  "close":"Đóng"
 }

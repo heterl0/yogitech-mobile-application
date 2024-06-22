@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/widgets/switch.dart'; // Assuming this is CustomSwitch
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/widgets/switch.dart'; // Assuming this is CustomSwitch
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class NotificationsPage extends StatefulWidget {
   final bool streakSaverOn;

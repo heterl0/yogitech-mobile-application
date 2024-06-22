@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FriendProfile extends StatefulWidget {
@@ -150,7 +150,8 @@ class BoxButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Color? borderColor; // Add this line
 
-  const BoxButton({super.key, 
+  const BoxButton({
+    super.key,
     required this.title,
     required this.backgroundColor,
     required this.foregroundColor,
@@ -173,11 +174,11 @@ class BoxButton extends StatelessWidget {
 
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(backgroundColor),
-        foregroundColor: WidgetStateProperty.all(foregroundColor),
-        padding: WidgetStateProperty.all(padding),
-        textStyle: WidgetStateProperty.all(textStyle),
-        shape: WidgetStateProperty.all(buttonShape as OutlinedBorder?),
+        backgroundColor: MaterialStateProperty.all(backgroundColor),
+        foregroundColor: MaterialStateProperty.all(foregroundColor),
+        padding: MaterialStateProperty.all(padding),
+        textStyle: MaterialStateProperty.all(textStyle),
+        shape: MaterialStateProperty.all(buttonShape as OutlinedBorder?),
       ),
       onPressed: onPressed,
       child: Text(title),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/shared/app_colors.dart'; // Import your color definitions
-import 'package:yogi_application/src/shared/styles.dart'; // Import your text styles
+import 'package:YogiTech/src/shared/app_colors.dart'; // Import your color definitions
+import 'package:YogiTech/src/shared/styles.dart'; // Import your text styles
 
 class CustomSwitch extends StatefulWidget {
   final String title;
@@ -80,7 +80,7 @@ class _CustomSwitchState extends State<CustomSwitch> {
           activeTrackColor: primary,
           inactiveThumbColor: theme.scaffoldBackgroundColor,
           inactiveTrackColor: text,
-          trackOutlineColor: WidgetStateColor.resolveWith(
+          trackOutlineColor: MaterialStateColor.resolveWith(
               (states) => theme.scaffoldBackgroundColor),
         ),
       ),
