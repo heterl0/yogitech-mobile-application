@@ -291,9 +291,10 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   onPressed: () async {
                     setState(() {
                       _isLoading = true;
+                      _changgeProfile(context);
+                      _changgeAvatar(context);
                     });
-                    _changgeProfile(context);
-                    _changgeAvatar(context);
+                    
                   },
                 ),
                 SizedBox(height: 16.0),
@@ -349,16 +350,22 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
           _profile = profile;
           _account = account;
       });
+    }else{
+      setState(() {
+          _isLoading = false;
+      });
     }
   }
 
   Future<void> _changgeAvatar(BuildContext context) async {
     if (_image != null && _imageBytes != null) {
       final Profile? profile = await patchAvatar(_imageBytes!);
+      setState(() {          
+        _isLoading = false;
+      });
       if (profile != null) {
         final account = await retrieveAccount();
         setState(() {
-          _isLoading = false;
           _profile = profile;
           _account = account;
         });

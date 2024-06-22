@@ -215,6 +215,7 @@ Future<Profile?> patchProfile(PatchProfileRequest data) async {
       await storeAccount(Account.fromMap(accountRes.data));
       return Profile.fromMap(response.data);
     } else {
+      print(Profile.fromMap(response.data));
       print(
           'Patch profile detail failed with status code: ${response.statusCode}');
       return null;
