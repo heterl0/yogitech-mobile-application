@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 
+
+
 class Profile {
   final int id;
   final String user;
@@ -388,4 +390,5 @@ class Account {
         last_login.hashCode ^
         created_at.hashCode;
   }
+  
 }

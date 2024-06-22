@@ -5,6 +5,7 @@ import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:YogiTech/src/pages/pre_launch_survey_2.dart';
 
 class PrelaunchSurveyPage extends StatefulWidget {
   const PrelaunchSurveyPage({super.key});
@@ -167,8 +168,15 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
         ),
       ),
       bottomNavigationBar: CustomBottomBar(
-        buttonTitle: trans.letsGo,
-        onPressed: () {},
+        buttonTitle: trans.next,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PrelaunchSurvey2(),
+            ),
+          );
+        },
       ),
     );
   }
