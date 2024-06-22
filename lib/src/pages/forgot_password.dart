@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:YogiTech/api/account/account_service.dart';
-import 'package:YogiTech/src/pages/login_page.dart';
 import 'package:YogiTech/src/routing/app_routes.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
