@@ -104,7 +104,7 @@ class Calorie extends StatelessWidget {
       height: 96,
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/Union.png'),
+          image: AssetImage('assets/images/Muscle.png'),
         ),
       ),
     );
