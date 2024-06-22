@@ -220,6 +220,7 @@ class PatchProfileRequest {
   }
 }
 
+
 // Update profile
 Future<Profile?> patchProfile(PatchProfileRequest data) async {
   try {
