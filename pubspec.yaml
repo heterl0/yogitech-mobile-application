@@ -55,6 +55,7 @@ dependencies:
   flutter_widget_from_html: ^0.15.1
   share_plus: ^9.0.0
   fl_chart: ^0.68.0
+  pay: ^2.0.0
 # flutter_native_splash:
 #   android: true
 #   ios: true
@@ -86,12 +87,13 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  assets:    
+  assets:
     - assets/images/
     - assets/icons/
     - assets/audios/
     - assets/native_splash/logo.riv
     - .env
+    - assets/
 
     # fonts:
     # - family: ReadexPro
