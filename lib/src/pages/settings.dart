@@ -18,14 +18,14 @@ class SettingsPage extends StatelessWidget {
   final VoidCallback? onProfileUpdated;
 
   const SettingsPage({
-    super.key,
+    Key? key,
     required this.isDarkMode,
     required this.onThemeChanged,
     required this.locale,
     required this.onLanguageChanged,
     required this.isVietnamese,
     this.onProfileUpdated,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

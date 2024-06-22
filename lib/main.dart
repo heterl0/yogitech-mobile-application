@@ -132,9 +132,8 @@ class _MyAppState extends State<MyApp> {
         //   fit: BoxFit.fill,
         // ),
         debugShowCheckedModeBanner: false,
-        initialRoute: widget.access != null
-            ? AppRoutes.firstScreen
-            : AppRoutes.firstScreen,
+        initialRoute:
+            widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
         // onGenerateRoute: _generateRoute,
         theme: lightTheme,
         darkTheme: darkTheme,
