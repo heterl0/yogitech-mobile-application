@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/pages/friend_profile.dart';
 import 'package:YogiTech/src/shared/styles.dart';
@@ -8,7 +7,6 @@ import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:YogiTech/api/account/account_service.dart';
 import 'package:YogiTech/src/models/account.dart';
-import 'package:YogiTech/src/widgets/box_input_field.dart';
 
 class FriendListPage extends StatefulWidget {
   final int initialTabIndex;
