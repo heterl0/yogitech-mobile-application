@@ -26,7 +26,11 @@ Future<dynamic> login(String email, String password) async {
       return response.statusCode;
     }
   } catch (e) {
-    print('Login error: $e');
+    if (e is DioException) {
+      final message = e.message;
+      print('detail error: $message');
+    }
+
     return null;
   }
 }

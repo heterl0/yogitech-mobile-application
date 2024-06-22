@@ -227,18 +227,13 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       final accessToken = await login(enteredEmail, enteredPassword);
-
       if (accessToken != null) {
         Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Invalid email or password')),
-        );
       }
     } catch (e) {
+      print('sas+ $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text('An error occurred. Please try again later. $e')),
+        SnackBar(content: Text('$e')),
       );
     }
     setState(() {

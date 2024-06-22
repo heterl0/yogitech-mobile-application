@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:yogi_application/api/account/account_service.dart';
 import 'package:yogi_application/src/pages/login_page.dart';
 import 'package:yogi_application/src/routing/app_routes.dart';
@@ -97,9 +98,7 @@ class ForgotPasswordPage extends StatelessWidget {
 
   Future<void> _handleResetPassword(BuildContext context, String email) async {
     final trans = AppLocalizations.of(context)!;
-
     if (email.isEmpty) {
-      // Hiển thị thông báo lỗi khi email rỗng
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -107,28 +106,30 @@ class ForgotPasswordPage extends StatelessWidget {
           backgroundColor: Colors.red,
         ),
       );
-      return; // Dừng lại nếu email rỗng
+      return;
     }
 
-    try {
-      await resetPassword(email);
-      // Hiển thị thông báo thành công và chuyển trang
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(trans.sendResetPasswordTo + ' $email'),
-          backgroundColor: Colors.green,
-        ),
-      );
-      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-          AppRoutes.login, (Route<dynamic> route) => false);
-    } catch (e) {
-      // Hiển thị thông báo lỗi
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Error: ${e.toString()}"),
-          backgroundColor: Colors.red,
-        ),
-      );
+    if (email != null) {
+      try {
+        await resetPassword(email);
+        // Hiển thị thông báo thành công và chuyển trang
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(trans.sendResetPasswordTo + ' $email'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        pushWithNavBar(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
+      } catch (e) {
+        // Hiển thị thông báo lỗi
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error: ${e.toString()}"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 }

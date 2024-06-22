@@ -236,6 +236,10 @@ Future<void> resetPassword(final String email) async {
           'Failed to reset password. Status code: ${response.statusCode}');
     }
   } catch (e) {
-    print("Error: ${e.toString()}");
+    if (e is DioException) {
+      final message = e.message;
+      print('detail forget password error: $message');
+    }
+    return null;
   }
 }
