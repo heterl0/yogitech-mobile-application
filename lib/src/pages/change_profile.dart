@@ -19,6 +19,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 
 class ChangeProfilePage extends StatefulWidget {
+  
   const ChangeProfilePage({super.key});
 
   @override
@@ -347,8 +348,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
       final account = await retrieveAccount();
       setState(() {
           _isLoading = false;
-          _profile = profile;
-          _account = account;
+          _fetchUserProfile();
       });
     }else{
       setState(() {
@@ -359,15 +359,14 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
 
   Future<void> _changgeAvatar(BuildContext context) async {
     if (_image != null && _imageBytes != null) {
-      final Profile? profile = await patchAvatar(_imageBytes!);
+      Profile? profile = await patchAvatar(_imageBytes!);
       setState(() {          
         _isLoading = false;
       });
       if (profile != null) {
         final account = await retrieveAccount();
         setState(() {
-          _profile = profile;
-          _account = account;
+          _fetchUserProfile();
         });
          _showSnackBar(true);
       }else{
