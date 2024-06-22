@@ -244,7 +244,7 @@ Future<Profile?> patchAvatar(Uint8List binaryImage) async {
       'avatar': MultipartFile.fromBytes(binaryImage, filename: filename),
     });
 
-    final response = await Dio().patch(url, data: formData);
+    final response = await DioInstance.patch(url, data: formData);
     if (response.statusCode == 200) {
       return Profile.fromMap(response.data);
     } else {

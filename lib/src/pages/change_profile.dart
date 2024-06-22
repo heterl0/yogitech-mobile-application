@@ -17,7 +17,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 
-
 class ChangeProfilePage extends StatefulWidget {
   const ChangeProfilePage({super.key});
 
@@ -150,23 +149,19 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                     ),
-                    child:Center(
-                        child: _profile != null &&
-                                (_imageBytes != null)
+                    child: Center(
+                        child: _profile != null && (_imageBytes != null)
                             ? CircleAvatar(
                                 radius: 50,
-                                backgroundImage:
-                                    MemoryImage(_imageBytes!),
+                                backgroundImage: MemoryImage(_imageBytes!),
                                 backgroundColor: Colors.transparent,
                               )
                             : CircleAvatar(
                                 radius: 50,
-                                backgroundImage:
-                                      NetworkImage("https://storage.yogitech.me/cae3d36a-6b31-4086-a602-ca62eeb968a7.jpg"),
+                                backgroundImage: NetworkImage(
+                                    "https://storage.yogitech.me/cae3d36a-6b31-4086-a602-ca62eeb968a7.jpg"),
                                 backgroundColor: Colors.transparent,
-                              )
-                      ), 
-
+                              )),
                   ),
                 ),
                 SizedBox(height: 8),
@@ -176,7 +171,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   onPressed: () {
                     // Handle change avatar action here
                     _pickImage();
-
                   },
                 ),
                 SizedBox(height: 16),
@@ -336,7 +330,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     }
   }
 
-    Future<void> _changgeAvatar(BuildContext context) async {
+  Future<void> _changgeAvatar(BuildContext context) async {
     if (_image != null && _imageBytes != null) {
       final Profile? profile = await patchAvatar(_imageBytes!);
       if (profile != null) {
