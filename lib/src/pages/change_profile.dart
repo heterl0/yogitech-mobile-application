@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +13,10 @@ import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:YogiTech/src/widgets/dropdown_field.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:YogiTech/src/pages/change_BMI.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:http/http.dart' as http;
+
 
 class ChangeProfilePage extends StatefulWidget {
   const ChangeProfilePage({super.key});
@@ -25,6 +31,9 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   final TextEditingController phone = TextEditingController();
   final TextEditingController birthday = TextEditingController();
   final TextEditingController gender = TextEditingController();
+
+  File? _image;
+  String? _base64Image;
 
   Profile? _profile;
   Account? _account;
@@ -63,19 +72,56 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     setState(() {
       _profile = profile;
       _account = account;
-      if (_profile != null) {
+     if (_profile != null) {
         lastName.text = _profile!.last_name ?? '';
         firstName.text = _profile!.first_name ?? '';
         gender.text = genderMap[_profile!.gender] ?? '';
         if (_profile!.birthdate != null) {
           birthday.text = _formatDate(_profile!.birthdate ?? '');
         }
+
+        // Fetch the avatar image as a Base64 string and update the _base64Image variable
+        if (_profile!.avatar_url != null && _profile!.avatar_url!.isNotEmpty) {
+          getImageBase64FromUrl(_profile!.avatar_url!).then((base64Image) {
+            setState(() {
+              _base64Image = base64Image;
+              print(_base64Image);
+            });
+          }).catchError((error) {
+            print('Failed to load image: $error');
+          });
+        }
       }
       if (_account != null) {
         phone.text = _account!.phone ?? '';
       }
     });
+
   }
+
+    Future<String> getImageBase64FromUrl(String url) async {
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      return base64Encode(response.bodyBytes);
+    } else {
+      throw Exception('Failed to load image');
+    }
+  }
+
+
+  Future<void> _pickImage() async {
+    print('asdhja');
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+        _base64Image = base64Encode(_image!.readAsBytesSync());
+      });
+    }
+  }
+
 
   String _formatDate(String date) {
     DateTime parsedDate = DateTime.parse(date);
@@ -107,53 +153,23 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                     ),
-                    child: _profile != null &&
-                            (_profile!.avatar_url != null &&
-                                _profile!.avatar_url!.isNotEmpty)
-                        ? CircleAvatar(
-                            radius: 50,
-                            backgroundImage:
-                                NetworkImage(_profile!.avatar_url!),
-                            backgroundColor: Colors.transparent,
-                          )
-                        : Center(
-                            child: _profile != null &&
-                                    (_profile!.avatar_url != null &&
-                                        _profile!.avatar_url!.isNotEmpty)
-                                ? CircleAvatar(
-                                    radius: 50,
-                                    backgroundImage:
-                                        NetworkImage(_profile!.avatar_url!),
-                                    backgroundColor: Colors.transparent,
-                                  )
-                                : Center(
-                                    child: Container(
-                                      width: 144,
-                                      height: 144,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.transparent,
-                                        border: Border.all(
-                                          color: Colors.blue, // Màu của border
-                                          width: 3.0, // Độ rộng của border
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          (_account?.username ?? '').isNotEmpty
-                                              ? (_account!.username[0]
-                                                  .toUpperCase())
-                                              : '',
-                                          style: TextStyle(
-                                            fontSize: 40,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white, // Màu chữ
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                          ),
+                    child:Center(
+                        child: _profile != null &&
+                                (_base64Image != null)
+                            ? CircleAvatar(
+                                radius: 50,
+                                backgroundImage:
+                                     MemoryImage(base64Decode(_base64Image!)),
+                                backgroundColor: Colors.transparent,
+                              )
+                            : CircleAvatar(
+                                radius: 50,
+                                backgroundImage:
+                                      NetworkImage("https://storage.yogitech.me/cae3d36a-6b31-4086-a602-ca62eeb968a7.jpg"),
+                                backgroundColor: Colors.transparent,
+                              )
+                      ), 
+
                   ),
                 ),
                 SizedBox(height: 8),
@@ -162,6 +178,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   style: ButtonStyleType.Tertiary,
                   onPressed: () {
                     // Handle change avatar action here
+                    _pickImage();
+
                   },
                 ),
                 SizedBox(height: 16),
@@ -178,7 +196,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: firstName,
-                  placeholder: trans.lastName,
+                  placeholder: trans.firstName,
                 ),
                 SizedBox(height: 16.0),
                 Text(trans.phoneNumber,
