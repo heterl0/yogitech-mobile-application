@@ -24,6 +24,7 @@ class ProfilePage extends StatefulWidget {
   final Locale locale;
   final ValueChanged<bool> onLanguageChanged;
   final bool isVietnamese;
+  
 
   const ProfilePage(
       {super.key,
@@ -40,6 +41,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   Profile? _profile;
   Account? _account;
+  bool _isLoading = false;
+
 
   List<FlSpot> sampleDataPoints = [
     FlSpot(0, 1000), // x = thời gian (ví dụ: ngày), y = điểm
@@ -85,6 +88,9 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _fetchUserProfile() async {
+    setState(() {
+      _isLoading = true;
+    });
     Profile? profile = await getUserProfile();
     print(profile);
     Account? account = await retrieveAccount();
@@ -93,6 +99,8 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       _profile = profile;
       _account = account;
+      _isLoading = false;
+
     });
   }
 
@@ -141,7 +149,8 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ],
         ),
-        body: SafeArea(
+        body:  _isLoading // Check loading state
+          ? Center(child: CircularProgressIndicator()) :SafeArea(
           child: SingleChildScrollView(
             child: Container(
               margin: const EdgeInsets.all(24.0),

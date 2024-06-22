@@ -358,20 +358,23 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         gender: genderValue);
 
     final Profile? profile = await patchProfile(request);
-    if (profile != null) {
-      final account = await retrieveAccount();
+    //fix cai api xong sua lai
+    final account = await retrieveAccount();
       setState(() {
           _isLoading = false;
           _fetchUserProfile();
-          if (widget.onProfileUpdated != null) {
+          if (widget.onProfileUpdated != null && !(_image != null && _imageBytes != null)) {
             widget.onProfileUpdated!();
           }
       });
-    }else{
-      setState(() {
-          _isLoading = false;
-      });
-    }
+
+    // if (profile == null) {
+      
+    // }else{
+    //   setState(() {
+    //       _isLoading = false;
+    //   });
+    // }
   }
 
   Future<void> _changgeAvatar(BuildContext context) async {
@@ -380,8 +383,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
       setState(() {          
         _isLoading = false;
       });
-      if (profile != null) {
-        final account = await retrieveAccount();
+      final account = await retrieveAccount();
         setState(() {
           _fetchUserProfile();
           if (widget.onProfileUpdated != null) {
@@ -389,9 +391,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
           }
         });
          _showSnackBar(true);
-      }else{
-        _showSnackBar(false);
-      }
     }
   }
 
