@@ -228,9 +228,17 @@ class _LoginPageState extends State<LoginPage> {
     }
     try {
       final accessToken = await login(enteredEmail, enteredPassword);
+      print(accessToken);
       if (accessToken != null) {
-        Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
-        print(accessToken['status']);
+        if (accessToken['status'] == 200) {
+          Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
+        } else if (accessToken['status'] == 403) {
+          Navigator.pushReplacementNamed(context, AppRoutes.verifyEmail);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Account doesn\'t exist')),
+          );
+        }
       }
     } catch (e) {
       print('sas+ $e');

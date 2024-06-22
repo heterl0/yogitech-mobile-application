@@ -24,6 +24,7 @@ Future<dynamic> login(String email, String password) async {
     } else {
       print('Login failed with status code: ${response.statusCode}');
       return {'status': response.statusCode, 'message': response.data};
+      ;
     }
   } catch (e) {
     if (e is DioException) {
