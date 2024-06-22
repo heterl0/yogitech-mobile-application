@@ -13,7 +13,8 @@ import 'package:YogiTech/src/pages/change_BMI.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChangeProfilePage extends StatefulWidget {
-  const ChangeProfilePage({super.key});
+  final VoidCallback? onProfileUpdated;
+  const ChangeProfilePage({super.key, this.onProfileUpdated});
 
   @override
   State<ChangeProfilePage> createState() => _ChangeProfilePageState();
@@ -257,6 +258,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   style: ButtonStyleType
                       .Primary, // Set the button style (optional)
                   onPressed: () async {
+                    widget.onProfileUpdated;
                     _changgeProfile(context);
                   },
                 ),

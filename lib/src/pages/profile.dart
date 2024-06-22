@@ -105,6 +105,19 @@ class _ProfilePageState extends State<ProfilePage> {
         appBar: CustomAppBar(
           showBackButton: false,
           title: trans.profile,
+          preActions: [
+            IconButton(
+              icon: Icon(
+                Icons.ios_share,
+                color: theme.colorScheme.onSurface,
+              ),
+              onPressed: () async {
+                await Share.share(
+                    'check out my website https://www.yogitech.me',
+                    subject: 'Look what I made!');
+              },
+            ),
+          ],
           postActions: [
             IconButton(
                 icon: Icon(
@@ -121,23 +134,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         onThemeChanged: widget.onThemeChanged,
                         locale: widget.locale,
                         onLanguageChanged: widget.onLanguageChanged,
+                        onProfileUpdated: refreshProfile,
                       ),
                     ),
                   );
                 })
-          ],
-          preActions: [
-            IconButton(
-              icon: Icon(
-                Icons.ios_share,
-                color: theme.colorScheme.onSurface,
-              ),
-              onPressed: () async {
-                await Share.share(
-                    'check out my website https://www.yogitech.me',
-                    subject: 'Look what I made!');
-              },
-            ),
           ],
         ),
         body: SafeArea(
@@ -172,8 +173,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           pushWithoutNavBar(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    ChangeProfilePage()), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                                builder: (context) => ChangeProfilePage(
+                                      onProfileUpdated: refreshProfile,
+                                    )), // Thay NewPage() bằng trang bạn muốn chuyển tới
                           );
                         },
                         child: Column(
