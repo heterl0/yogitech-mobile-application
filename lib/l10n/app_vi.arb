@@ -195,5 +195,8 @@
   "yourLastName": "Nhập họ của bạn",
   "supMuscle":"Hỗ trợ các nhóm cơ:",
   "level":"Độ khó",
+  "beginner": "Người mới bắt đầu",
+  "intermediate": "Trung cấp",
+  "advanced": "Nâng cao",
   "close":"Đóng"
 }

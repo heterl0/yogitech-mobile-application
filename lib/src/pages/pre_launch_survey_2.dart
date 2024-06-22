@@ -17,7 +17,7 @@ class PrelaunchSurvey2 extends StatefulWidget {
 }
 
 class _PrelaunchSurvey2State extends State<PrelaunchSurvey2> {
-  final TextEditingController interested = TextEditingController();
+  final TextEditingController level = TextEditingController();
   final TextEditingController height = TextEditingController();
   final TextEditingController weight = TextEditingController();
 
@@ -35,26 +35,43 @@ class _PrelaunchSurvey2State extends State<PrelaunchSurvey2> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                // SizedBox(height: 16.0),
+                // Text(trans.interested,
+                //     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
+                // SizedBox(height: 12.0),
+                // CustomDropdownFormField(
+                //   controller: interested,
+                //   items: [
+                //     trans.fitness,
+                //     trans.nature,
+                //     trans.health,
+                //     trans.happy,
+                //     trans.sports,
+                //     trans.breath,
+                //     trans.mood,
+                //     trans.motivation
+                //   ],
+                //   placeholder:
+                //       interested.text.isEmpty ? trans.choose : interested.text,
+                //   onTap: () {
+                //     setState(() {});
+                //   },
+                // ),
+
                 SizedBox(height: 16.0),
-                Text(trans.interested,
+                Text(trans.level,
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
                 SizedBox(height: 12.0),
                 CustomDropdownFormField(
-                  controller: interested,
+                  controller: level,
                   items: [
-                    trans.fitness,
-                    trans.nature,
-                    trans.health,
-                    trans.happy,
-                    trans.sports,
-                    trans.breath,
-                    trans.mood,
-                    trans.motivation
+                    trans.beginner,
+                    trans.intermediate,
+                    trans.advanced,
                   ],
-                  placeholder:
-                      interested.text.isEmpty ? trans.choose : interested.text,
+                  placeholder: level.text.isEmpty ? trans.choose : level.text,
                   onTap: () {
-                    // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết
+                    setState(() {});
                   },
                 ),
 
