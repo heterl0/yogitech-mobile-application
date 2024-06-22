@@ -22,8 +22,12 @@ class _FriendListPageState extends State<FriendListPage>
   bool _isSearching = false;
   final TextEditingController _searchController = TextEditingController();
 
+  // Sample data for the friend list
   List<String> friends = List.generate(20, (index) => 'Friend Name $index');
   List<String> filteredFriends = [];
+
+  // Sample data for search results (new friends)
+  List<String> newFriends = List.generate(20, (index) => 'New Friend $index');
   List<String> searchResults = [];
 
   @override
@@ -39,7 +43,7 @@ class _FriendListPageState extends State<FriendListPage>
       if (query.isEmpty) {
         searchResults = [];
       } else {
-        searchResults = friends
+        searchResults = newFriends
             .where(
                 (friend) => friend.toLowerCase().contains(query.toLowerCase()))
             .toList();
