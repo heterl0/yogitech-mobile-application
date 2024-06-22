@@ -71,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
     try {
       // Xóa token từ SharedPreferences khi người dùng logout
       await clearToken();
-
+      await clearAccount();
       // Chuyển hướng đến trang đăng nhập và xóa tất cả các route cũ
       Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
           AppRoutes.login, (Route<dynamic> route) => false);
