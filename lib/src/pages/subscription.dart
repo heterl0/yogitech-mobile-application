@@ -6,6 +6,7 @@ import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pay/pay.dart';
 
 class Subscription extends StatefulWidget {
   const Subscription({super.key});
@@ -18,6 +19,45 @@ class _SubscriptionState extends State<Subscription> {
   bool _isChecked1 = false;
   bool _isChecked2 = false;
   bool _isChecked3 = false;
+  late final Future<PaymentConfiguration> _googlePayConfigFuture;
+  final _paymentItems = [
+    PaymentItem(
+      label: 'Weekly subscription',
+      amount: '0.01',
+      status: PaymentItemStatus.final_price,
+    ),
+    PaymentItem(
+      label: 'Monthly subscription',
+      amount: '0.1',
+      status: PaymentItemStatus.final_price,
+    ),
+    PaymentItem(
+      label: 'Yearly subscription',
+      amount: '1',
+      status: PaymentItemStatus.final_price,
+    ),
+  ];
+
+  late List<PaymentItem> _paymentSelected = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _googlePayConfigFuture =
+        PaymentConfiguration.fromAsset('default_google_pay_config.json');
+
+    // fetchData();
+  }
+
+  // Future<void> fetchData() async {
+  //   final data =
+  //       await PaymentConfiguration.fromAsset('default_google_pay_config.json');
+  //   print(data.toString());
+  // }
+
+  void onGooglePayResult(paymentResult) {
+    debugPrint(paymentResult.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,12 +114,31 @@ class _SubscriptionState extends State<Subscription> {
           const SizedBox(height: 16),
           _buildChoosePlanContainer(),
           const SizedBox(height: 16),
-          _buildPlanOptionContainer(),
+          ..._paymentItems.map((e) => _buildPlanOptionContainer(e)).toList(),
           // const SizedBox(height: 16),
           // _buildPlanOptionContainer2(),
           // const SizedBox(height: 16),
           // _buildPlanOptionContainer3(),
           // const SizedBox(height: 16),
+          FutureBuilder<PaymentConfiguration>(
+            future: _googlePayConfigFuture,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return GooglePayButton(
+                  paymentConfiguration: snapshot.data!,
+                  paymentItems: _paymentItems,
+                  type: GooglePayButtonType.buy,
+                  margin: const EdgeInsets.only(top: 15.0),
+                  onPaymentResult: onGooglePayResult,
+                  loadingIndicator: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
         ],
       ),
     );
@@ -358,112 +417,120 @@ class _SubscriptionState extends State<Subscription> {
     );
   }
 
-  Widget _buildPlanOptionContainer() {
+  Widget _buildPlanOptionContainer(PaymentItem item) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
-    return Container(
-      padding: const EdgeInsets.all(6),
-      decoration: ShapeDecoration(
-        shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1, color: stroke),
-          borderRadius: BorderRadius.circular(16),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/Universe.png'),
-                fit: BoxFit.fill,
-              ),
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(6),
+          decoration: ShapeDecoration(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(width: 1, color: stroke),
+              borderRadius: BorderRadius.circular(16),
             ),
           ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    trans.onceAWeek,
-                    textAlign: TextAlign.center,
-                    style: min_cap.copyWith(color: theme.colorScheme.onSurface),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/Universe.png'),
+                    fit: BoxFit.fill,
                   ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 18,
-                                height: 18,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image:
-                                        AssetImage('assets/images/Emerald.png'),
-                                    fit: BoxFit.fill,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Container(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        // trans.onceAWeek,
+                        item.label ?? "Label",
+                        textAlign: TextAlign.center,
+                        style: min_cap.copyWith(
+                            color: theme.colorScheme.onSurface),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 18,
+                                    height: 18,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/Emerald.png'),
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  const SizedBox(width: 4),
+                                  SizedBox(
+                                    width: 42,
+                                    child: Text(
+                                      '199',
+                                      style: h3.copyWith(
+                                          color: theme.colorScheme.onPrimary),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(width: 4),
-                              SizedBox(
-                                width: 42,
-                                child: Text(
-                                  '199',
-                                  style: h3.copyWith(
-                                      color: theme.colorScheme.onPrimary),
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                            Text(
+                              trans.locale == "en" ? "or" : "hoặc",
+                              style: bd_text.copyWith(color: text),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              // '109,000đ',
+                              item.amount,
+                              style: h3.copyWith(color: primary),
+                            ),
+                          ],
                         ),
-                        Text(
-                          trans.locale == "en" ? "or" : "hoặc",
-                          style: bd_text.copyWith(color: text),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '109,000đ',
-                          style: h3.copyWith(color: primary),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+              const SizedBox(width: 16),
+              _buildCheckboxItem(
+                value: _isChecked1,
+                onChanged: (value) {
+                  setState(() {
+                    _isChecked1 = value!;
+                    if (value) {
+                      _isChecked2 = false;
+                      _isChecked3 = false;
+                    }
+                  });
+                },
+              ),
+            ],
           ),
-          const SizedBox(width: 16),
-          _buildCheckboxItem(
-            value: _isChecked1,
-            onChanged: (value) {
-              setState(() {
-                _isChecked1 = value!;
-                if (value) {
-                  _isChecked2 = false;
-                  _isChecked3 = false;
-                }
-              });
-            },
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 16),
+      ],
     );
   }
 

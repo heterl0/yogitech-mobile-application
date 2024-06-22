@@ -74,7 +74,12 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
 
     Profile? profile = await getUserProfile();
     Account? account = await retrieveAccount();
-
+    final trans = AppLocalizations.of(context)!;
+    final Map<int, String> genderMap = {
+      0: trans.female,
+      1: trans.male,
+      2: trans.other,
+    };
     // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
     setState(() {
       _profile = profile;
@@ -197,7 +202,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: lastName,
-                  placeholder: trans.lastName,
+                  placeholder: trans.yourLastName,
                 ),
                 SizedBox(height: 16.0),
                 Text(trans.firstName,
@@ -205,7 +210,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                 SizedBox(height: 8.0),
                 BoxInputField(
                   controller: firstName,
-                  placeholder: trans.firstName,
+                  placeholder: trans.yourFistName,
                 ),
                 SizedBox(height: 16.0),
                 Text(trans.phoneNumber,
@@ -271,7 +276,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                           SizedBox(height: 8.0),
                           CustomDropdownFormField(
                             controller: gender,
-                            items: ['Male', 'Female', 'Other'],
+                            items: [trans.male, trans.female, trans.other],
                             placeholder: gender.text.isEmpty
                                 ? trans.sellectGender
                                 : gender.text,
@@ -328,6 +333,13 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   }
 
   Future<void> _changgeProfile(BuildContext context) async {
+    final trans = AppLocalizations.of(context)!;
+    final Map<int, String> genderMap = {
+      0: trans.female,
+      1: trans.male,
+      2: trans.other,
+    };
+
     DateTime? birthdate = birthday.text.isNotEmpty
         ? DateFormat('dd-MM-yyyy').parse(birthday.text)
         : null;

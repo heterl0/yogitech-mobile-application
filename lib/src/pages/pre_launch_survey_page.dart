@@ -5,11 +5,13 @@ import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:YogiTech/src/pages/pre_launch_survey_2.dart';
 
 class PrelaunchSurveyPage extends StatefulWidget {
   const PrelaunchSurveyPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _PrelaunchSurveyPageState createState() => _PrelaunchSurveyPageState();
 }
 
@@ -40,20 +42,34 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                   children: [
                     Text(
                       trans.welcomeToYogi.replaceFirst(" Yogi", ""),
-                      style: h1.copyWith(
-                          color: theme.colorScheme.onPrimary, height: 1),
+                      style: h2.copyWith(
+                        color: theme.colorScheme.onPrimary,
+                      ),
                     ),
-                    Text('Yogi', style: h1.copyWith(color: primary, height: 1)),
+                    Text(
+                      'Yogi',
+                      style: h2.copyWith(
+                        color: primary,
+                      ),
+                    ),
                   ],
                 ),
+
                 SizedBox(height: 16.0),
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    trans.fillInformation,
-                    style: min_cap.copyWith(color: text),
+                Center(
+                  child: Wrap(
+                    direction: Axis.horizontal,
+                    alignment:
+                        WrapAlignment.center, // Center text within each line
+                    children: [
+                      Text(
+                        trans.fillInformation,
+                        style: min_cap.copyWith(color: text),
+                      ),
+                    ],
                   ),
                 ),
+
                 SizedBox(height: 16.0),
                 // First Name
                 Text(trans.firstName, style: h3.copyWith(color: active)),
@@ -167,8 +183,15 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
         ),
       ),
       bottomNavigationBar: CustomBottomBar(
-        buttonTitle: trans.letsGo,
-        onPressed: () {},
+        buttonTitle: trans.next,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PrelaunchSurvey2(),
+            ),
+          );
+        },
       ),
     );
   }

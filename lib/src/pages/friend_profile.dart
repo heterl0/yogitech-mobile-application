@@ -5,7 +5,9 @@ import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FriendProfile extends StatefulWidget {
-  const FriendProfile({super.key});
+  final int? id;
+
+  FriendProfile({Key? key, this.id}) : super(key: key);
 
   @override
   State<FriendProfile> createState() => _nameState();
@@ -172,11 +174,11 @@ class BoxButton extends StatelessWidget {
 
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(backgroundColor),
-        foregroundColor: WidgetStateProperty.all(foregroundColor),
-        padding: WidgetStateProperty.all(padding),
-        textStyle: WidgetStateProperty.all(textStyle),
-        shape: WidgetStateProperty.all(buttonShape as OutlinedBorder?),
+        backgroundColor: MaterialStateProperty.all(backgroundColor),
+        foregroundColor: MaterialStateProperty.all(foregroundColor),
+        padding: MaterialStateProperty.all(padding),
+        textStyle: MaterialStateProperty.all(textStyle),
+        shape: MaterialStateProperty.all(buttonShape as OutlinedBorder?),
       ),
       onPressed: onPressed,
       child: Text(title),

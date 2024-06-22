@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/pages/perform_meditate.dart';
 import 'package:YogiTech/src/shared/styles.dart';
@@ -17,21 +18,99 @@ class Meditate extends StatefulWidget {
 }
 
 final List<Map<String, dynamic>> theTracks = [
-  {'asset': 'assets/audios/rain.mp3'},
-  {'asset': 'assets/audios/tieng_suoi.mp3'},
+  {'asset': 'audios/rain.mp3'},
+  {'asset': 'audios/water_cave.mp3'},
 ];
 
 class _MeditateState extends State<Meditate> {
-  int? _selectedTrackIndex; // Index of the currently selected track
+  int? _selectedTrackIndex;
+  int currentStreak = 0;
 
   Duration _selectedDuration = const Duration();
 
   @override
+  void initState() {
+    super.initState();
+    _loadStreakData();
+  }
+
+  Future<void> _loadStreakData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      currentStreak = prefs.getInt('currentStreak') ?? 0;
+    });
+  }
+
+  Future<void> _updateStreakData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    DateTime today = DateTime.now();
+    DateTime? lastMeditationDate =
+        DateTime.tryParse(prefs.getString('lastMeditationDate') ?? '');
+
+    int currentStreak = prefs.getInt('currentStreak') ?? 0;
+    int longestStreak = prefs.getInt('longestStreak') ?? 0;
+
+    // Kiểm tra xem đã từng thiền trước đó chưa
+    if (lastMeditationDate != null) {
+      // Xóa thông tin giờ, phút, giây để so sánh chỉ với ngày
+      DateTime normalizedToday = DateTime(today.year, today.month, today.day);
+      DateTime normalizedLastDate = DateTime(lastMeditationDate.year,
+          lastMeditationDate.month, lastMeditationDate.day);
+
+      // Tính khoảng cách giữa ngày thiền gần nhất và hôm nay (tính theo ngày)
+      int daysDifference =
+          normalizedToday.difference(normalizedLastDate).inDays;
+
+      // Nếu khoảng cách là 0 (cùng ngày) hoặc 1, tăng streak
+      if (daysDifference == 0 || daysDifference == 1) {
+        // Cần kiểm tra thời gian để đảm bảo đúng trong vòng 24 giờ
+        if (daysDifference == 0 && today.hour < lastMeditationDate.hour) {
+          currentStreak++;
+        } else if (daysDifference == 1) {
+          // Nếu khoảng cách là 1 ngày, reset streak nếu hôm nay thiền trước giờ thiền ngày hôm qua
+          if (today.hour < lastMeditationDate.hour) {
+            currentStreak = 1;
+          } else {
+            currentStreak++;
+          }
+        }
+      } else {
+        // Nếu không thiền trong vòng 24 giờ, reset streak
+        currentStreak = 1;
+      }
+    } else {
+      // Nếu chưa từng thiền, đây là lần đầu tiên, streak = 1
+      currentStreak = 1;
+    }
+
+    // Cập nhật longestStreak nếu cần
+    if (currentStreak > longestStreak) {
+      longestStreak = currentStreak;
+      await prefs.setInt('longestStreak', longestStreak);
+    }
+
+    // Lưu lại currentStreak và lastMeditationDate
+    await prefs.setInt('currentStreak', currentStreak);
+    await prefs.setString('lastMeditationDate', today.toString());
+    await _loadStreakData();
+  }
+
+  Future<void> _resetStreakData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('currentStreak');
+    await prefs.remove('lastMeditationDate');
+    setState(() {
+      currentStreak = 0;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: CustomAppBar(
         showBackButton: false,
-        titleWidget: StreakValue('0'),
+        title: trans.meditate,
       ),
       body: _buildBody(),
       floatingActionButton: _buildElevatedButton(context),
@@ -41,6 +120,7 @@ class _MeditateState extends State<Meditate> {
 
   Widget _buildBody() {
     final theme = Theme.of(context);
+
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -68,6 +148,9 @@ class _MeditateState extends State<Meditate> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _buildStreakInfo(context),
+
+          SizedBox(height: 16),
           Container(
             color: theme.colorScheme.onSecondary,
             child: CupertinoTimerPicker(
@@ -112,39 +195,93 @@ class _MeditateState extends State<Meditate> {
               );
             },
           ),
+          // ElevatedButton(
+          //   onPressed: _resetStreakData,
+          //   child: Text('Reset Streak'),
+          // ),
         ],
       ),
+    );
+  }
+
+  Widget _buildStreakInfo(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          flex: 1,
+          child: _buildStreakImage(),
+        ),
+        Expanded(
+          flex: 2,
+          child: _buildStreakText(context),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStreakImage() {
+    return Container(
+      width: 96,
+      height: 96,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/Lotus.png'),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStreakText(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
+    return Column(
+      children: [
+        Text(
+          trans.meditationStreak,
+          textAlign: TextAlign.center,
+          style: bd_text.copyWith(color: text),
+        ),
+        ShaderMask(
+          shaderCallback: (bounds) {
+            return gradient.createShader(bounds);
+          },
+          child: Text(
+            currentStreak.toString(),
+            style: TextStyle(
+              color: active,
+              fontSize: 60,
+              fontFamily: 'ReadexPro',
+              fontWeight: FontWeight.w700,
+              height: 1,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildElevatedButton(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(Colors.transparent),
-        shadowColor: WidgetStateProperty.all(Colors.transparent),
-        padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
-        shape: WidgetStateProperty.all(const CircleBorder()),
+        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+        shadowColor: MaterialStateProperty.all(Colors.transparent),
+        padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+        shape: MaterialStateProperty.all(const CircleBorder()),
       ),
-      onPressed: () {
-        _selectedTrackIndex != null
-            ? pushWithoutNavBar(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PerformMeditate(
-                    selectedDuration: _selectedDuration,
-                    audioPath: theTracks[_selectedTrackIndex!]['asset'],
-                  ),
-                ),
-              )
-            : pushWithoutNavBar(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PerformMeditate(
-                    selectedDuration: _selectedDuration,
-                    audioPath: '',
-                  ),
-                ),
-              );
+      onPressed: () async {
+        await _updateStreakData();
+        pushWithoutNavBar(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PerformMeditate(
+              selectedDuration: _selectedDuration,
+              audioPath: _selectedTrackIndex != null
+                  ? theTracks[_selectedTrackIndex!]['asset']
+                  : '',
+            ),
+          ),
+        );
       },
       child: Ink(
         decoration: BoxDecoration(
@@ -162,42 +299,6 @@ class _MeditateState extends State<Meditate> {
             color: active,
           ),
         ),
-      ),
-    );
-  }
-}
-
-class StreakValue extends StatelessWidget {
-  final String streakValue;
-
-  const StreakValue(this.streakValue, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final trans = AppLocalizations.of(context)!;
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            trans.meditationStreak,
-            style: min_cap.copyWith(
-              color: text,
-            ),
-          ),
-          SizedBox(
-            height: 32,
-            child: ShaderMask(
-              shaderCallback: (bounds) {
-                return gradient.createShader(bounds);
-              },
-              child: Text(
-                streakValue,
-                style: h2.copyWith(color: active, height: 1),
-              ),
-            ),
-          )
-        ],
       ),
     );
   }

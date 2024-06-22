@@ -12,7 +12,6 @@ import 'package:YogiTech/src/pages/streak.dart';
 import 'package:YogiTech/src/pages/subscription.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
-import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:YogiTech/src/widgets/card.dart';
 
@@ -113,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                 ],
-                style: widthStyle.Medium,
+                style: widthStyle.Large,
                 titleWidget: BoxInputField(
                   controller: _searchController,
                   placeholder: trans.search,
