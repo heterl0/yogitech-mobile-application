@@ -203,5 +203,8 @@
   "close": "Close",
   "sendResetPasswordTo": "Forget password request email has been sent to",
   "request": "Send request",
-  "invalidEmail" :"Your email is Invalid!"
+  "invalidEmail" :"Your email is Invalid!",
+  "dontEmpty": "Please fill in both Email and Password fields!",
+  "doesntexist" : "Account doesn't not exist!",
+  "enterEmail" : "Please enter your email!"
 }

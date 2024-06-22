@@ -212,14 +212,13 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _handleLogin(BuildContext context) async {
     String enteredEmail = emailController.text;
     String enteredPassword = passwordController.text;
-
+    final trans = AppLocalizations.of(context)!;
     setState(() {
       _isLoading = true;
     });
     if (enteredEmail.isEmpty || enteredPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text('Please fill in both Email and Password fields')),
+        SnackBar(content: Text(trans.dontEmpty)),
       );
       setState(() {
         _isLoading = false;
@@ -236,12 +235,12 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pushReplacementNamed(context, AppRoutes.verifyEmail);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Account doesn\'t exist')),
+            SnackBar(content: Text(trans.doesntexist)),
           );
         }
       }
     } catch (e) {
-      print('sas+ $e');
+      print('Error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('$e')),
       );

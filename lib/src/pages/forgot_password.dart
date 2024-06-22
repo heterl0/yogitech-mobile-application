@@ -128,8 +128,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-              ''), // Giả sử trans.enterEmail là thông báo "Vui lòng nhập email"
+          content: Text(trans
+              .enterEmail), // Giả sử trans.enterEmail là thông báo "Vui lòng nhập email"
           backgroundColor: Colors.red,
         ),
       );
