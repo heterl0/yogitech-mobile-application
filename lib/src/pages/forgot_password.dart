@@ -31,7 +31,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           true, // Đảm bảo AppBar trong suốt không ảnh hưởng đến nội dung
       appBar: AppBar(
         leading: IconButton(
-          padding: EdgeInsets.all(12.0),
+          padding: EdgeInsets.all(22.0),
           iconSize: 32.0,
           icon: Icon(Icons.arrow_back,
               color: Colors.white), // Màu của biểu tượng mũi tên là màu trắng
