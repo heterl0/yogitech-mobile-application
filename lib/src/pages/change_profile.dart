@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -31,11 +32,12 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   final TextEditingController birthday = TextEditingController();
   final TextEditingController gender = TextEditingController();
 
-  File? _image;
-  Uint8List? _imageBytes;
-
   Profile? _profile;
   Account? _account;
+
+  File? _image;
+  Uint8List? _imageBytes;
+  bool _isLoading = false;
 
   void refreshProfile() {
     // Gọi API để lấy lại dữ liệu hồ sơ sau khi cập nhật
@@ -65,6 +67,10 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   }
 
   Future<void> _fetchUserProfile() async {
+    setState(() {
+      _isLoading = true; // Start loading
+    });
+
     Profile? profile = await getUserProfile();
     Account? account = await retrieveAccount();
 
@@ -72,6 +78,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     setState(() {
       _profile = profile;
       _account = account;
+      _isLoading = false;
+
       if (_profile != null) {
         lastName.text = _profile!.last_name ?? '';
         firstName.text = _profile!.first_name ?? '';
@@ -82,10 +90,15 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
 
         // Fetch the avatar image as a Uint8List and update the _imageBytes variable
         if (_profile!.avatar_url != null && _profile!.avatar_url!.isNotEmpty) {
+          setState(() {
+              _isLoading = true;
+
+            });
           getImageBytesFromUrl(_profile!.avatar_url!).then((imageBytes) {
             setState(() {
               _imageBytes = imageBytes;
-              print(_imageBytes);
+              _isLoading = false;
+
             });
           }).catchError((error) {
             print('Failed to load image: $error');
@@ -99,6 +112,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   }
 
   Future<Uint8List> getImageBytesFromUrl(String url) async {
+
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       return response.bodyBytes;
@@ -134,7 +148,10 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         title: trans.editProfile,
         style: widthStyle.Large,
       ),
-      body: SingleChildScrollView(
+      body:  _isLoading // Check loading state
+          ? Center(child: CircularProgressIndicator()) :
+      
+      SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(24.0),
           child: Center(
@@ -272,7 +289,10 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   style: ButtonStyleType
                       .Primary, // Set the button style (optional)
                   onPressed: () async {
-                    // _changgeProfile(context);
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    _changgeProfile(context);
                     _changgeAvatar(context);
                   },
                 ),
@@ -325,7 +345,9 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     if (profile != null) {
       final account = await retrieveAccount();
       setState(() {
-        _account = account;
+          _isLoading = false;
+          _profile = profile;
+          _account = account;
       });
     }
   }
@@ -336,11 +358,26 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
       if (profile != null) {
         final account = await retrieveAccount();
         setState(() {
+          _isLoading = false;
           _profile = profile;
           _account = account;
         });
+         _showSnackBar(true);
+      }else{
+        _showSnackBar(false);
       }
     }
+  }
+
+
+  void _showSnackBar(bool test) {
+    final trans = AppLocalizations.of(context)!;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text( test? trans.updateSuccess:trans.updateFail),
+        duration: Duration(seconds: 2), // Adjust as per your requirement
+      ),
+    );
   }
 
   Future<void> _changePasswordBottomSheet(BuildContext context) {
@@ -436,3 +473,4 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     );
   }
 }
+

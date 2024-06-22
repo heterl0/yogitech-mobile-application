@@ -179,6 +179,8 @@
   "passwordsDoNotMatch" :"Mật khẩu mới và xác nhận mật khẩu không khớp",
   "passwordChangeFailed" :"đổi mật khẩu thất bại",
   "seeall" : "Xem tất cả",
+  "updateSuccess": "Cập nhật thông tin thành công!",
+  "updateFail": "Cập nhật thông tin thất bại. Vui lòng thử lại sau.",
   "yourFistName" :"Nhập vào tên của bạn"
 
 }
