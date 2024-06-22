@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "D:/code/yogitech/mobile-app/linux"
+    "cmake.sourceDirectory": "D:/code/yogitech/mobile-app/linux",
+    "cmake.options.statusBarVisibility": "visible"
 }
