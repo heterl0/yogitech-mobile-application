@@ -14,6 +14,7 @@ import 'package:YogiTech/src/pages/friend_profile.dart';
 import 'package:YogiTech/src/pages/notifications.dart';
 import 'package:YogiTech/src/pages/payment_history.dart';
 import 'package:YogiTech/src/pages/perform_meditate.dart';
+import 'package:YogiTech/src/pages/pre_launch_survey_2.dart';
 import 'package:YogiTech/src/pages/pre_launch_survey_page.dart';
 import 'package:YogiTech/src/pages/pre_launch_survey_2.dart';
 import 'package:YogiTech/src/pages/meditate.dart';
