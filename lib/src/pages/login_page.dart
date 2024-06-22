@@ -87,6 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                     state: ButtonState.Enabled,
                     onPressed: () async {
                       _handleLogin(context);
+                      // print(await getExercises());
                     },
                   ),
                   SizedBox(height: 10.0),
@@ -225,11 +226,11 @@ class _LoginPageState extends State<LoginPage> {
       });
       return;
     }
-
     try {
       final accessToken = await login(enteredEmail, enteredPassword);
       if (accessToken != null) {
         Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
+        print(accessToken['status']);
       }
     } catch (e) {
       print('sas+ $e');
