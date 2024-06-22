@@ -179,3 +179,8 @@ Future<Account?> retrieveAccount() async {
     return null;
   }
 }
+
+Future<void> clearAccount() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove('_accountKey');
+}

@@ -23,6 +23,25 @@ Future<Account?> getUser() async {
   }
 }
 
+Future<List<Account>> getUserProfiles([String query = '']) async {
+  try {
+    final url = formatApiUrl('/api/v1/user_profiles/');
+    final Response response =
+        await DioInstance.get(url, params: {'query': query});
+    if (response.statusCode == 200) {
+      return (response.data as List)
+          .map((data) => Account.fromMap(data))
+          .toList();
+    } else {
+      print('Failed to get user profiles: ${response.statusCode}');
+      return [];
+    }
+  } catch (e) {
+    print('Error getting user profiles: $e');
+    return [];
+  }
+}
+
 Future<Profile?> getUserProfile() async {
   try {
     final url = formatApiUrl('/api/v1/users/me/');
@@ -215,6 +234,7 @@ Future<Profile?> patchProfile(PatchProfileRequest data) async {
       await storeAccount(Account.fromMap(accountRes.data));
       return Profile.fromMap(response.data);
     } else {
+      print(Profile.fromMap(response.data));
       print(
           'Patch profile detail failed with status code: ${response.statusCode}');
       return null;
@@ -260,9 +280,12 @@ Future<Profile?> patchAvatar(Uint8List binaryImage) async {
 
     // Include the timestamp in the filename
     final filename = 'avatar_$timestamp.jpg';
-    final response = await DioInstance.patch(url, data: {
+
+    final formData = FormData.fromMap({
       'avatar': MultipartFile.fromBytes(binaryImage, filename: filename),
     });
+
+    final response = await DioInstance.patch(url, data: formData);
     if (response.statusCode == 200) {
       return Profile.fromMap(response.data);
     } else {

@@ -7,6 +7,7 @@ class AppRoutes {
   static const String OtpConfirm = '/otpconfirm';
   static const String ResetPassword = '/resetpassword';
   static const String preLaunchSurvey = '/prelaunchsurvey';
+  static const String preLaunchSurvey2 = '/prelaunchsurvey2';
   static const String meditate = '/meditate';
   static const String performMeditate = '/performmeditate';
   static const String Profile = '/profile';

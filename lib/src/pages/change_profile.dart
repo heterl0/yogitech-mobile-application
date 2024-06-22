@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:ffi';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -10,10 +14,15 @@ import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:YogiTech/src/widgets/dropdown_field.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:YogiTech/src/pages/change_BMI.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:http/http.dart' as http;
 
 class ChangeProfilePage extends StatefulWidget {
-  const ChangeProfilePage({super.key});
+  final VoidCallback? onProfileUpdated;
+
+  
+  const ChangeProfilePage({super.key, this.onProfileUpdated,});
 
   @override
   State<ChangeProfilePage> createState() => _ChangeProfilePageState();
@@ -29,14 +38,30 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   Profile? _profile;
   Account? _account;
 
+  File? _image;
+  Uint8List? _imageBytes;
+  bool _isLoading = false;
+
   void refreshProfile() {
-    // Gọi API để lấy lại dữ liệu hồ sơ sau khi cập nhật BMI
+    // Gọi API để lấy lại dữ liệu hồ sơ sau khi cập nhật
     _fetchUserProfile();
   }
 
   // Regular expression for Vietnamese phone numbers
   final RegExp phoneRegExp =
       RegExp(r'^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$');
+
+  final Map<int, String> genderMap = {
+    0: 'Female',
+    1: 'Male',
+    2: 'Other',
+  };
+
+  final Map<String, String> transMap = {
+    'Female': 'Nam',
+    'Male': 'Nữ',
+    'Other': 'Khác',
+  };
 
   @override
   void initState() {
@@ -45,6 +70,10 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   }
 
   Future<void> _fetchUserProfile() async {
+    setState(() {
+      _isLoading = true; // Start loading
+    });
+
     Profile? profile = await getUserProfile();
     Account? account = await retrieveAccount();
     final trans = AppLocalizations.of(context)!;
@@ -57,6 +86,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     setState(() {
       _profile = profile;
       _account = account;
+      _isLoading = false;
+
       if (_profile != null) {
         lastName.text = _profile!.last_name ?? '';
         firstName.text = _profile!.first_name ?? '';
@@ -64,11 +95,50 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         if (_profile!.birthdate != null) {
           birthday.text = _formatDate(_profile!.birthdate ?? '');
         }
+
+        // Fetch the avatar image as a Uint8List and update the _imageBytes variable
+        if (_profile!.avatar_url != null && _profile!.avatar_url!.isNotEmpty) {
+          setState(() {
+              _isLoading = true;
+
+            });
+          getImageBytesFromUrl(_profile!.avatar_url!).then((imageBytes) {
+            setState(() {
+              _imageBytes = imageBytes;
+              _isLoading = false;
+
+            });
+          }).catchError((error) {
+            print('Failed to load image: $error');
+          });
+        }
       }
       if (_account != null) {
         phone.text = _account!.phone ?? '';
       }
     });
+  }
+
+  Future<Uint8List> getImageBytesFromUrl(String url) async {
+
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      return response.bodyBytes;
+    } else {
+      throw Exception('Failed to load image');
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+        _imageBytes = _image!.readAsBytesSync();
+      });
+    }
   }
 
   String _formatDate(String date) {
@@ -86,7 +156,10 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         title: trans.editProfile,
         style: widthStyle.Large,
       ),
-      body: SingleChildScrollView(
+      body:  _isLoading // Check loading state
+          ? Center(child: CircularProgressIndicator()) :
+      
+      SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(24.0),
           child: Center(
@@ -101,53 +174,19 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                     ),
-                    child: _profile != null &&
-                            (_profile!.avatar_url != null &&
-                                _profile!.avatar_url!.isNotEmpty)
-                        ? CircleAvatar(
-                            radius: 50,
-                            backgroundImage:
-                                NetworkImage(_profile!.avatar_url!),
-                            backgroundColor: Colors.transparent,
-                          )
-                        : Center(
-                            child: _profile != null &&
-                                    (_profile!.avatar_url != null &&
-                                        _profile!.avatar_url!.isNotEmpty)
-                                ? CircleAvatar(
-                                    radius: 50,
-                                    backgroundImage:
-                                        NetworkImage(_profile!.avatar_url!),
-                                    backgroundColor: Colors.transparent,
-                                  )
-                                : Center(
-                                    child: Container(
-                                      width: 144,
-                                      height: 144,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.transparent,
-                                        border: Border.all(
-                                          color: Colors.blue, // Màu của border
-                                          width: 3.0, // Độ rộng của border
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          (_account?.username ?? '').isNotEmpty
-                                              ? (_account!.username[0]
-                                                  .toUpperCase())
-                                              : '',
-                                          style: TextStyle(
-                                            fontSize: 40,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white, // Màu chữ
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                          ),
+                    child: Center(
+                        child: _profile != null && (_imageBytes != null)
+                            ? CircleAvatar(
+                                radius: 50,
+                                backgroundImage: MemoryImage(_imageBytes!),
+                                backgroundColor: Colors.transparent,
+                              )
+                            : CircleAvatar(
+                                radius: 50,
+                                backgroundImage: NetworkImage(
+                                    "https://storage.yogitech.me/cae3d36a-6b31-4086-a602-ca62eeb968a7.jpg"),
+                                backgroundColor: Colors.transparent,
+                              )),
                   ),
                 ),
                 SizedBox(height: 8),
@@ -156,6 +195,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   style: ButtonStyleType.Tertiary,
                   onPressed: () {
                     // Handle change avatar action here
+                    _pickImage();
                   },
                 ),
                 SizedBox(height: 16),
@@ -204,7 +244,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                             controller: birthday,
                             placeholder: (_profile?.birthdate != null)
                                 ? _formatDate(_profile!.birthdate ?? '')
-                                : 'Select your birthday',
+                                : trans.birthday,
                             trailing: Icon(Icons.calendar_today),
                             readOnly: true,
                             onTap: () async {
@@ -257,7 +297,12 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   style: ButtonStyleType
                       .Primary, // Set the button style (optional)
                   onPressed: () async {
-                    _changgeProfile(context);
+                    setState(() {
+                      _isLoading = true;
+                      _changgeProfile(context);
+                      _changgeAvatar(context);
+                    });
+                    
                   },
                 ),
                 SizedBox(height: 16.0),
@@ -313,12 +358,51 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         gender: genderValue);
 
     final Profile? profile = await patchProfile(request);
-    if (profile != null) {
-      final account = await retrieveAccount();
+    //fix cai api xong sua lai
+    final account = await retrieveAccount();
       setState(() {
-        _account = account;
+          _isLoading = false;
+          _fetchUserProfile();
+          if (widget.onProfileUpdated != null && !(_image != null && _imageBytes != null)) {
+            widget.onProfileUpdated!();
+          }
       });
+
+    // if (profile == null) {
+      
+    // }else{
+    //   setState(() {
+    //       _isLoading = false;
+    //   });
+    // }
+  }
+
+  Future<void> _changgeAvatar(BuildContext context) async {
+    if (_image != null && _imageBytes != null) {
+      Profile? profile = await patchAvatar(_imageBytes!);
+      setState(() {          
+        _isLoading = false;
+      });
+      final account = await retrieveAccount();
+        setState(() {
+          _fetchUserProfile();
+          if (widget.onProfileUpdated != null) {
+            widget.onProfileUpdated!();
+          }
+        });
+         _showSnackBar(true);
     }
+  }
+
+
+  void _showSnackBar(bool test) {
+    final trans = AppLocalizations.of(context)!;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text( test? trans.updateSuccess:trans.updateFail),
+        duration: Duration(seconds: 2), // Adjust as per your requirement
+      ),
+    );
   }
 
   Future<void> _changePasswordBottomSheet(BuildContext context) {
@@ -414,3 +498,4 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     );
   }
 }
+
