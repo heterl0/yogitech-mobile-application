@@ -121,6 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         onThemeChanged: widget.onThemeChanged,
                         locale: widget.locale,
                         onLanguageChanged: widget.onLanguageChanged,
+                        onProfileUpdated: refreshProfile,
                       ),
                     ),
                   );

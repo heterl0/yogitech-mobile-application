@@ -19,8 +19,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 
 class ChangeProfilePage extends StatefulWidget {
+  final VoidCallback? onProfileUpdated;
+
   
-  const ChangeProfilePage({super.key});
+  const ChangeProfilePage({super.key, this.onProfileUpdated,});
 
   @override
   State<ChangeProfilePage> createState() => _ChangeProfilePageState();
@@ -361,6 +363,9 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
       setState(() {
           _isLoading = false;
           _fetchUserProfile();
+          if (widget.onProfileUpdated != null) {
+            widget.onProfileUpdated!();
+          }
       });
     }else{
       setState(() {
@@ -379,6 +384,9 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         final account = await retrieveAccount();
         setState(() {
           _fetchUserProfile();
+          if (widget.onProfileUpdated != null) {
+            widget.onProfileUpdated!();
+          }
         });
          _showSnackBar(true);
       }else{

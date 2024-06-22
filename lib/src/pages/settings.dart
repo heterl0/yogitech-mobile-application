@@ -15,15 +15,18 @@ class SettingsPage extends StatelessWidget {
   final Locale locale;
   final bool isVietnamese;
   final ValueChanged<bool> onLanguageChanged;
+  final VoidCallback? onProfileUpdated;
 
   const SettingsPage({
-    super.key,
+    Key? key,
     required this.isDarkMode,
     required this.onThemeChanged,
     required this.locale,
     required this.onLanguageChanged,
     required this.isVietnamese,
-  });
+    this.onProfileUpdated,
+  }): super(key: key);
+  
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +60,7 @@ class SettingsPage extends StatelessWidget {
                   pushWithoutNavBar(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChangeProfilePage(),
+                      builder: (context) => ChangeProfilePage(onProfileUpdated: onProfileUpdated),
                     ),
                   );
                 },
