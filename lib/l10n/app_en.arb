@@ -202,5 +202,6 @@
   "advanced": "Advanced",
   "close": "Close",
   "sendResetPasswordTo": "Forget password request email has been sent to",
-  "request": "Send request"
+  "request": "Send request",
+  "invalidEmail" :"Your email is Invalid!"
 }

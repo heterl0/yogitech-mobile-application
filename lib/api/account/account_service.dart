@@ -245,24 +245,21 @@ Future<Profile?> patchProfile(PatchProfileRequest data) async {
   }
 }
 
-Future<void> resetPassword(final String email) async {
+Future<dynamic> resetPassword(final String email) async {
   final url = formatApiUrl("/api/v1/users/reset_password/");
   try {
     final response = await Dio().post(url, data: {'email': email});
 
     if (response.statusCode == 204) {
       print(response.statusCode);
-      print("Password reset email has been sent, check your email please.");
+      return {'status': response.statusCode, 'message': response.data};
     } else {
-      throw Exception(
-          'Failed to reset password. Status code: ${response.statusCode}');
+      return {'status': response.statusCode, 'message': response.data};
     }
   } catch (e) {
     if (e is DioException) {
-      final message = e.message;
-      print('detail forget password error: $message');
+      return {'status': e.response!.statusCode, 'message': e.response!.data};
     }
-    return null;
   }
 }
 

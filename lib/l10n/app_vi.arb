@@ -202,5 +202,6 @@
   "intermediate": "Trung cấp",
   "advanced": "Nâng cao",
   "close": "Đóng",
-  "request": "Gửi yêu cầu"
+  "request": "Gửi yêu cầu",
+  "invalidEmail" : "Email không hợp lệ"
 }

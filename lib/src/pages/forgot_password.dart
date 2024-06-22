@@ -141,15 +141,26 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     });
 
     try {
-      await resetPassword(email);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(trans.sendResetPasswordTo + ' $email'),
-          backgroundColor: Colors.green,
-        ),
-      );
-      pushWithNavBar(
-          context, MaterialPageRoute(builder: (context) => LoginPage()));
+      final response = await resetPassword(email);
+      print(response);
+
+      if (response['status'] == 204) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(trans.sendResetPasswordTo + ' $email'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        pushWithNavBar(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(trans.invalidEmail),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
