@@ -195,5 +195,8 @@
   "yourLastName": "Enter your last name",
   "supMuscle":"Supporting Muscles:",
   "level":"Level",
+  "beginner": "Beginner",
+  "intermediate": "Intermediate",
+  "advanced": "Advanced",
   "close":"Close"
 }

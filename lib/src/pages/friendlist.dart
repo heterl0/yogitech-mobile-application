@@ -4,10 +4,8 @@ import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/pages/friend_profile.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:yogi_application/api/account/account_service.dart';
-import 'package:yogi_application/src/models/account.dart';
-import 'package:yogi_application/src/widgets/box_input_field.dart';
 
 class FriendListPage extends StatefulWidget {
   final int initialTabIndex;
@@ -22,31 +20,57 @@ class _FriendListPageState extends State<FriendListPage>
   late TabController _tabController;
   bool _isNotSearching = true;
   bool _isSearching = false;
-  List<Account> accountList = [];
-  List<Account> searchResults = [];
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+
+  // Sample data for the friend list
+  List<String> friends = List.generate(20, (index) => 'Friend Name $index');
+  List<String> filteredFriends = [];
+
+  // Sample data for search results (new friends)
+  List<String> newFriends = List.generate(20, (index) => 'New Friend $index');
+  List<String> searchResults = [];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(
         length: 2, vsync: this, initialIndex: widget.initialTabIndex);
-    _fetchAccounts(); // Gọi hàm fetchAccounts khi trạng thái của widget được khởi tạo
+    filteredFriends = friends; // Initially display all friends
+  }
+
+  void _filterFriends(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        searchResults = [];
+      } else {
+        searchResults = newFriends
+            .where(
+                (friend) => friend.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
+  }
+
+  void _startSearch() {
+    setState(() {
+      _isNotSearching = false;
+      _isSearching = true;
+    });
+  }
+
+  void _stopSearch() {
+    setState(() {
+      _isNotSearching = true;
+      _isSearching = false;
+      _searchController.clear();
+      searchResults = [];
+    });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
-  }
-
-  Future<void> _fetchAccounts() async {
-    final List<dynamic> accountsData = await getUserProfiles();
-    final List<Account> accounts =
-        accountsData.map<Account>((json) => Account.fromJson(json)).toList();
-    setState(() {
-      accountList = accounts;
-    });
   }
 
   @override
@@ -58,54 +82,36 @@ class _FriendListPageState extends State<FriendListPage>
       backgroundColor: theme.colorScheme.surface,
       appBar: _isNotSearching
           ? CustomAppBar(
+              style: widthStyle.Large,
               title: trans.friends,
               postActions: [
                 IconButton(
-                  icon: Icon(Icons.group_add,
-                      color: theme.colorScheme.onBackground),
-                  onPressed: () {
-                    setState(() {
-                      _isNotSearching = false;
-                      _isSearching = true;
-                    });
-                  },
+                  icon:
+                      Icon(Icons.group_add, color: theme.colorScheme.onSurface),
+                  onPressed: _startSearch,
                 ),
               ],
             )
           : CustomAppBar(
               showBackButton: false,
-              onBackPressed: () {
-                setState(() {
-                  _isNotSearching = true;
-                  _isSearching = false;
-                  _searchController.clear();
-                });
-              },
+              onBackPressed: _stopSearch,
               style: widthStyle.Large,
               titleWidget: BoxInputField(
                 controller: _searchController,
                 placeholder: trans.search,
                 trailing:
-                    Icon(Icons.search, color: theme.colorScheme.onBackground),
+                    Icon(Icons.search, color: theme.colorScheme.onSurface),
                 keyboardType: TextInputType.text,
-                inputFormatters: [],
+                inputFormatters: const [],
                 onChanged: (value) {
-                  _fetchAccounts();
+                  _filterFriends(value);
                 },
                 onTap: () {},
               ),
               postActions: [
                 IconButton(
-                  icon:
-                      Icon(Icons.close, color: theme.colorScheme.onBackground),
-                  onPressed: () {
-                    _searchController.clear();
-                    _fetchAccounts(); // Fetch all friends again
-                    setState(() {
-                      _isNotSearching = true;
-                      _isSearching = false;
-                    });
-                  },
+                  icon: Icon(Icons.close, color: theme.colorScheme.onSurface),
+                  onPressed: _stopSearch,
                 ),
               ],
             ),
@@ -123,8 +129,8 @@ class _FriendListPageState extends State<FriendListPage>
           indicator: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color: primary, // Màu sắc của đường gạch chân tab được chọn
-                width: 2.0, // Độ dày của đường gạch chân tab được chọn
+                color: primary,
+                width: 2.0,
               ),
             ),
           ),
@@ -150,10 +156,10 @@ class _FriendListPageState extends State<FriendListPage>
             controller: _tabController,
             children: [
               FriendList(
-                accounts: accountList,
+                friends: filteredFriends,
               ),
               FriendList(
-                accounts: accountList,
+                friends: filteredFriends,
               ),
             ],
           ),
@@ -175,15 +181,14 @@ class _FriendListPageState extends State<FriendListPage>
             itemCount: searchResults.length,
             itemBuilder: (context, index) {
               return FriendListItem(
-                name: searchResults[index].username,
-                avatarUrl: searchResults[index].profile.avatar_url ?? '',
-                exp: searchResults[index].profile.exp.toString(),
+                name: searchResults[index],
+                avatarUrl: 'assets/images/gradient.jpg',
+                exp: '10000',
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          FriendProfile(id: searchResults[index].id),
+                      builder: (context) => FriendProfile(),
                     ),
                   );
                 },
@@ -197,17 +202,16 @@ class _FriendListPageState extends State<FriendListPage>
 }
 
 class FriendList extends StatelessWidget {
-  final List<Account> accounts;
+  final List<String> friends;
 
   const FriendList({
-    Key? key,
-    required this.accounts,
-  }) : super(key: key);
+    super.key,
+    required this.friends,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
+    Theme.of(context);
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -217,18 +221,17 @@ class FriendList extends StatelessWidget {
           ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: accounts.length,
+            itemCount: friends.length,
             itemBuilder: (context, index) {
               return FriendListItem(
-                name: accounts[index].username,
-                avatarUrl: accounts[index].profile.avatar_url ?? '',
-                exp: accounts[index].profile.exp.toString(),
+                name: friends[index],
+                avatarUrl: 'assets/images/gradient.jpg',
+                exp: '10000',
                 onTap: () {
-                  Navigator.push(
+                  pushWithoutNavBar(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          FriendProfile(id: accounts[index].id),
+                      builder: (context) => FriendProfile(),
                     ),
                   );
                 },
@@ -261,30 +264,24 @@ class FriendListItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.only(bottom: 12), // Thay đổi từ 8 thành 12
+        margin: EdgeInsets.only(bottom: 12),
         padding: EdgeInsets.all(8),
         constraints: BoxConstraints(minHeight: 80),
         child: Row(
-          crossAxisAlignment:
-              CrossAxisAlignment.center, // Canh chỉnh theo trục chính của Row
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               width: 60,
               height: 60,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: stroke, // Màu nền của Avatar placeholder
+                color: stroke,
               ),
               child: CircleAvatar(
-                backgroundImage: avatarUrl.isNotEmpty
-                    ? NetworkImage(avatarUrl)
-                    : AssetImage('assets/images/default_avatar.png')
-                        as ImageProvider,
+                backgroundImage: AssetImage(avatarUrl),
               ),
             ),
-            SizedBox(width: 12), // Thêm khoảng cách giữa Avatar và nội dung
-
-            // Sử dụng một Column để hiển thị tên và EXP
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,7 +290,7 @@ class FriendListItem extends StatelessWidget {
                     name,
                     style: h3.copyWith(color: theme.colorScheme.onPrimary),
                   ),
-                  SizedBox(height: 4), // Thêm khoảng cách giữa tên và EXP
+                  SizedBox(height: 4),
                   Text(
                     '$exp EXP',
                     style: min_cap.copyWith(color: text),

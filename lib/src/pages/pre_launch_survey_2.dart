@@ -9,12 +9,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:YogiTech/src/widgets/dropdown_field.dart';
 
 class PrelaunchSurvey2 extends StatefulWidget {
+  const PrelaunchSurvey2({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _PrelaunchSurvey2State createState() => _PrelaunchSurvey2State();
 }
 
 class _PrelaunchSurvey2State extends State<PrelaunchSurvey2> {
-  final TextEditingController interested = TextEditingController();
+  final TextEditingController level = TextEditingController();
   final TextEditingController height = TextEditingController();
   final TextEditingController weight = TextEditingController();
 
@@ -23,7 +26,7 @@ class _PrelaunchSurvey2State extends State<PrelaunchSurvey2> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -32,26 +35,43 @@ class _PrelaunchSurvey2State extends State<PrelaunchSurvey2> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                // SizedBox(height: 16.0),
+                // Text(trans.interested,
+                //     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
+                // SizedBox(height: 12.0),
+                // CustomDropdownFormField(
+                //   controller: interested,
+                //   items: [
+                //     trans.fitness,
+                //     trans.nature,
+                //     trans.health,
+                //     trans.happy,
+                //     trans.sports,
+                //     trans.breath,
+                //     trans.mood,
+                //     trans.motivation
+                //   ],
+                //   placeholder:
+                //       interested.text.isEmpty ? trans.choose : interested.text,
+                //   onTap: () {
+                //     setState(() {});
+                //   },
+                // ),
+
                 SizedBox(height: 16.0),
-                Text(trans.interested,
+                Text(trans.level,
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
                 SizedBox(height: 12.0),
                 CustomDropdownFormField(
-                  controller: interested,
+                  controller: level,
                   items: [
-                    trans.fitness,
-                    trans.nature,
-                    trans.health,
-                    trans.happy,
-                    trans.sports,
-                    trans.breath,
-                    trans.mood,
-                    trans.motivation
+                    trans.beginner,
+                    trans.intermediate,
+                    trans.advanced,
                   ],
-                  placeholder:
-                      interested.text.isEmpty ? trans.choose : interested.text,
+                  placeholder: level.text.isEmpty ? trans.choose : level.text,
                   onTap: () {
-                    // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết
+                    setState(() {});
                   },
                 ),
 
