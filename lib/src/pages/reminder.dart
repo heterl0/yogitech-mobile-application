@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/widgets/switch.dart'; // Assuming this is CustomSwitch
-import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/widgets/switch.dart'; // Assuming this is CustomSwitch
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReminderPage extends StatefulWidget {
@@ -11,10 +11,10 @@ class ReminderPage extends StatefulWidget {
   // final ValueChanged<bool> areRemindersEnabled;
 
   const ReminderPage({
-    Key? key,
+    super.key,
     this.reminderOn = true,
     // this.areRemindersEnabled,
-  }) : super(key: key);
+  });
 
   @override
   _ReminderPageState createState() => _ReminderPageState();
@@ -22,12 +22,13 @@ class ReminderPage extends StatefulWidget {
 
 class _ReminderPageState extends State<ReminderPage> {
   bool _isReminderEnabled = false;
-  List<Map<String, dynamic>> _selectedTimes = [];
+  final List<Map<String, dynamic>> _selectedTimes = [];
 
   String _getDayDescription(Set<int> days, AppLocalizations trans) {
     String local = trans.locale;
-    if (days.isEmpty)
+    if (days.isEmpty) {
       return local == "en" ? 'No days selected.' : 'Không có ngày được chọn.';
+    }
     if (days.length == 7) return trans.everyday;
 
     if (days.containsAll([2, 3, 4, 5, 6])) {
@@ -71,7 +72,7 @@ class _ReminderPageState extends State<ReminderPage> {
         final ScrollController scrollController = ScrollController();
 
         return SingleChildScrollView(
-          child: Container(
+          child: SizedBox(
             height: MediaQuery.of(context).size.height * 0.8,
             child: _SetupReminderWidget(
               scrollController: scrollController,
@@ -115,7 +116,7 @@ class _ReminderPageState extends State<ReminderPage> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.reminder,
       ),
@@ -199,12 +200,11 @@ class _SetupReminderWidget extends StatefulWidget {
   final bool showDeleteButton;
 
   const _SetupReminderWidget({
-    Key? key,
     this.scrollController,
     required this.initialTime,
     required this.initialDays,
     required this.showDeleteButton,
-  }) : super(key: key);
+  });
 
   @override
   __SetupReminderWidgetState createState() => __SetupReminderWidgetState();

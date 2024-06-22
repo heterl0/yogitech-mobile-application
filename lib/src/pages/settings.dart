@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:yogi_application/src/pages/notifications.dart';
-import 'package:yogi_application/src/pages/reminder.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/widgets/switch.dart';
-import 'package:yogi_application/src/pages/change_profile.dart';
+import 'package:YogiTech/src/pages/notifications.dart';
+import 'package:YogiTech/src/pages/reminder.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/widgets/switch.dart';
+import 'package:YogiTech/src/pages/change_profile.dart';
 
 class SettingsPage extends StatelessWidget {
   final bool isDarkMode;
@@ -17,20 +17,20 @@ class SettingsPage extends StatelessWidget {
   final ValueChanged<bool> onLanguageChanged;
 
   const SettingsPage({
-    Key? key,
+    super.key,
     required this.isDarkMode,
     required this.onThemeChanged,
     required this.locale,
     required this.onLanguageChanged,
     required this.isVietnamese,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.setting,
       ),
@@ -52,7 +52,7 @@ class SettingsPage extends StatelessWidget {
               SettingItem(
                 title: trans.profile,
                 description: trans.yourInfo,
-                icon: Icons.account_circle_outlined, // Biểu tượng cho mục này
+                icon: Icons.account_circle_outlined,
                 onTap: () {
                   pushWithoutNavBar(
                     context,
@@ -65,7 +65,7 @@ class SettingsPage extends StatelessWidget {
               SettingItem(
                 title: trans.reminder,
                 description: trans.exerciseReminder,
-                icon: Icons.alarm, // Biểu tượng cho mục này
+                icon: Icons.alarm,
                 onTap: () {
                   pushWithoutNavBar(
                     context,
@@ -78,8 +78,7 @@ class SettingsPage extends StatelessWidget {
               SettingItem(
                 title: trans.notifications,
                 description: trans.appNotifications,
-                icon: Icons
-                    .notifications_active_outlined, // Biểu tượng cho mục này
+                icon: Icons.notifications_active_outlined,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -101,75 +100,73 @@ class SettingItem extends StatelessWidget {
   final String? title;
   final String? description;
   final IconData? icon;
-  final VoidCallback? onTap; // Thêm thuộc tính onTap
+  final VoidCallback? onTap;
 
   const SettingItem({
-    Key? key,
+    super.key,
     this.title,
     this.description,
     this.icon,
-    this.onTap, // Thêm onTap vào constructor
-  }) : super(key: key);
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Container(
-        margin: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
+      margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: stroke),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: stroke),
-        ),
-        child: Material(
-            // Thêm Material để đảm bảo hiệu ứng ripple hoạt động đúng
-            color: Colors.transparent,
-            child: InkWell(
-                onTap: onTap,
-                borderRadius:
-                    BorderRadius.circular(16), // Thêm borderRadius cho InkWell
-                child: Padding(
-                  // Dùng Padding thay vì margin & padding riêng biệt
-                  padding: const EdgeInsets.all(8),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return gradient.createShader(bounds);
+                    },
+                    child: Icon(
+                      icon,
+                      color: Colors.white,
+                      size: 36,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: ShaderMask(
-                          shaderCallback: (Rect bounds) {
-                            return gradient
-                                .createShader(bounds); // Tạo shader từ gradient
-                          },
-                          child: Icon(
-                            icon, // Sử dụng IconData được truyền vào từ bên ngoài
-                            color: Colors.white,
-                            size:
-                                36, // Màu icon không quan trọng vì sẽ được thay thế bởi gradient
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(title ?? 'N/A',
-                                style: bd_text.copyWith(
-                                    color: theme.colorScheme.onPrimary)),
-                            const SizedBox(height: 4),
-                            Text('${description ?? 'N/A'}',
-                                style: min_cap.copyWith(color: text)),
-                          ],
-                        ),
-                      ),
+                      Text(title ?? 'N/A',
+                          style: bd_text.copyWith(
+                              color: theme.colorScheme.onPrimary)),
+                      const SizedBox(height: 4),
+                      Text(description ?? 'N/A',
+                          style: min_cap.copyWith(color: text)),
                     ],
                   ),
-                ))));
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

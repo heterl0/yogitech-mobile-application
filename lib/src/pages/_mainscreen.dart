@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:yogi_application/src/pages/activities.dart';
-import 'package:yogi_application/src/pages/blog.dart';
-import 'package:yogi_application/src/pages/homepage.dart';
-import 'package:yogi_application/src/pages/meditate.dart';
-import 'package:yogi_application/src/pages/profile.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
+import 'package:YogiTech/src/pages/activities.dart';
+import 'package:YogiTech/src/pages/blog.dart';
+import 'package:YogiTech/src/pages/homepage.dart';
+import 'package:YogiTech/src/pages/meditate.dart';
+import 'package:YogiTech/src/pages/profile.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 
 class MainScreen extends StatefulWidget {
   final bool isDarkMode;
@@ -17,13 +17,13 @@ class MainScreen extends StatefulWidget {
   final bool isVietnamese;
 
   const MainScreen({
-    Key? key,
+    super.key,
     required this.isDarkMode,
     required this.onThemeChanged,
     required this.locale,
     required this.onLanguageChanged,
     required this.isVietnamese,
-  }) : super(key: key);
+  });
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -62,8 +62,8 @@ class _MainScreenState extends State<MainScreen> {
           screen: Activities(),
           item: ItemConfig(
             textStyle: min_cap,
-            icon: const Icon(Icons.directions_run),
-            title: trans.activities,
+            icon: const Icon(Icons.celebration),
+            title: trans.event,
             activeForegroundColor: primary,
             inactiveForegroundColor: text,
           ),

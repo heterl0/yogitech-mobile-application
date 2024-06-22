@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:yogi_application/api/dioInstance.dart';
-import 'package:yogi_application/src/models/exercise.dart';
-import 'package:yogi_application/utils/formatting.dart';
+import 'package:YogiTech/api/dioInstance.dart';
+import 'package:YogiTech/src/models/exercise.dart';
+import 'package:YogiTech/utils/formatting.dart';
 
 Future<List<dynamic>> getExercises() async {
   try {

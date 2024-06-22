@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yogi_application/api/account/account_service.dart';
-import 'package:yogi_application/api/dioInstance.dart';
-import 'package:yogi_application/src/models/account.dart';
-import 'package:yogi_application/utils/formatting.dart';
+import 'package:YogiTech/api/account/account_service.dart';
+import 'package:YogiTech/api/dioInstance.dart';
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/utils/formatting.dart';
 
 Future<dynamic> login(String email, String password) async {
   try {

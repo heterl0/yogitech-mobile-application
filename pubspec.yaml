@@ -1,5 +1,5 @@
-name: yogi_application
-description: "A new Flutter project."
+name: YogiTech
+description: "A yoga mentor platform for everyone"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -53,8 +53,8 @@ dependencies:
   flutter_dotenv: ^5.1.0
   flutter_native_splash: ^2.4.0
   flutter_widget_from_html: ^0.15.1
-  flutter_charts: ^0.5.2
   share_plus: ^9.0.0
+  fl_chart: ^0.68.0
 # flutter_native_splash:
 #   android: true
 #   ios: true
@@ -66,7 +66,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   json_serializable: ^6.8.0
-  
+
   build_runner: ^2.4.9
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -125,3 +125,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/ic_launcher/playstore.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21

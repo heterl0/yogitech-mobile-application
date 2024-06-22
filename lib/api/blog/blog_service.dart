@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:yogi_application/api/dioInstance.dart';
-import 'package:yogi_application/src/models/blog.dart';
-import 'package:yogi_application/utils/formatting.dart';
+import 'package:YogiTech/api/dioInstance.dart';
+import 'package:YogiTech/src/models/blog.dart';
+import 'package:YogiTech/utils/formatting.dart';
 
 Future<List<dynamic>> getBlogs() async {
   try {
@@ -58,7 +58,7 @@ Future<BlogVote?> voteBlog(int id, int value) async {
 
 Future<bool?> removeVoteBlog(int idVote) async {
   try {
-    final url = formatApiUrl('/api/v1/votes/$idVote');
+    final url = formatApiUrl('/api/v1/votes/$idVote/');
     final Response response = await DioInstance.delete(url);
     return response.statusCode == 200;
   } catch (e) {
@@ -69,7 +69,7 @@ Future<bool?> removeVoteBlog(int idVote) async {
 
 Future<BlogVote?> updateVoteBlog(int idVote, int value) async {
   try {
-    final url = formatApiUrl('/api/v1/votes/');
+    final url = formatApiUrl('/api/v1/votes/$idVote/');
     final data = {
       'vote_value': value,
     };

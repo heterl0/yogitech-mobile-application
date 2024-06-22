@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/api/account/account_service.dart';
-import 'package:yogi_application/src/pages/login_page.dart';
-import 'package:yogi_application/src/routing/app_routes.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/widgets/box_input_field.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:YogiTech/api/account/account_service.dart';
+import 'package:YogiTech/src/pages/login_page.dart';
+import 'package:YogiTech/src/routing/app_routes.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/widgets/box_input_field.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ForgotPasswordPage extends StatelessWidget {

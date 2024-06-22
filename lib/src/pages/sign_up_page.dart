@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/api/auth/auth_service.dart';
-import 'package:yogi_application/src/routing/app_routes.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:YogiTech/api/auth/auth_service.dart';
+import 'package:YogiTech/src/routing/app_routes.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:yogi_application/src/widgets/box_input_field.dart';
+import 'package:YogiTech/src/widgets/box_input_field.dart';
 
 class SignUp extends StatefulWidget {
+  const SignUp({super.key});
+
   @override
   _SignUpState createState() => _SignUpState();
 }
@@ -174,7 +176,7 @@ class _SignUpState extends State<SignUp> {
     }
 
     try {
-      final response = await register(new RegisterRequest(
+      final response = await register(RegisterRequest(
           email: enteredEmail,
           password: enteredPassword,
           username: enteredUsername,

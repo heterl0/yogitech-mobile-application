@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:yogi_application/src/models/account.dart';
-import 'package:yogi_application/src/models/pose.dart';
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/models/pose.dart';
 
 class PoseWithTime {
   Pose pose;
@@ -120,7 +120,7 @@ class Exercise {
     bool? is_premium,
     String? created_at,
     String? updated_at,
-    dynamic? owner,
+    dynamic owner,
     int? active_status,
     List<PoseWithTime>? poses,
     List<Comment>? comments,
@@ -460,18 +460,18 @@ class Comment {
         exercise.hashCode;
   }
 
-  bool hasUserVoted(int user_id) {
+  bool hasUserVoted(int userId) {
     for (Vote vote in votes) {
-      if (vote.user_id == user_id) {
+      if (vote.user_id == userId) {
         return true;
       }
     }
     return false;
   }
 
-  Vote? getUserVote(int user_id) {
+  Vote? getUserVote(int userId) {
     for (Vote vote in votes) {
-      if (vote.user_id == user_id) {
+      if (vote.user_id == userId) {
         return vote;
       }
     }

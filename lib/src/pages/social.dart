@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/pages/friendlist.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/pages/friendlist.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SocialPage extends StatefulWidget {
+  const SocialPage({super.key});
+
   @override
   State<SocialPage> createState() => _SocialPageState();
 }
@@ -16,7 +18,7 @@ class _SocialPageState extends State<SocialPage> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.social,
         style: widthStyle.Large,
@@ -24,7 +26,7 @@ class _SocialPageState extends State<SocialPage> {
           IconButton(
               icon: Icon(
                 Icons.group_add_outlined,
-                color: theme.colorScheme.onBackground,
+                color: theme.colorScheme.onSurface,
               ),
               onPressed: () {
                 Navigator.push(
@@ -59,10 +61,10 @@ class NewsFeed extends StatelessWidget {
   final Function()? onTap;
 
   const NewsFeed({
-    Key? key,
+    super.key,
     required this.itemCount,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +81,7 @@ class NewsFeed extends StatelessWidget {
           itemCount: itemCount,
           itemBuilder: (context, index) {
             return NewsListItem(
-              name: trans.firstName + ' $index',
+              name: '${trans.firstName} $index',
               avatarUrl: 'assets/images/gradient.jpg',
               exp: '10000',
               onTap: onTap != null
@@ -100,12 +102,12 @@ class NewsListItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const NewsListItem({
-    Key? key,
+    super.key,
     required this.name,
     required this.avatarUrl,
     required this.onTap,
     required this.exp,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
