@@ -15,6 +15,7 @@ import 'package:YogiTech/src/pages/notifications.dart';
 import 'package:YogiTech/src/pages/payment_history.dart';
 import 'package:YogiTech/src/pages/perform_meditate.dart';
 import 'package:YogiTech/src/pages/pre_launch_survey_page.dart';
+import 'package:YogiTech/src/pages/pre_launch_survey_2.dart';
 import 'package:YogiTech/src/pages/meditate.dart';
 import 'package:YogiTech/src/pages/reminder.dart';
 import 'package:YogiTech/src/pages/result.dart';
@@ -131,8 +132,9 @@ class _MyAppState extends State<MyApp> {
         //   fit: BoxFit.fill,
         // ),
         debugShowCheckedModeBanner: false,
-        initialRoute:
-            widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
+        initialRoute: widget.access != null
+            ? AppRoutes.preLaunchSurvey
+            : AppRoutes.preLaunchSurvey,
         // onGenerateRoute: _generateRoute,
         theme: lightTheme,
         darkTheme: darkTheme,
@@ -161,6 +163,7 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.OtpConfirm: (context) => OTP_Page(),
           AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
           AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
+          AppRoutes.preLaunchSurvey2: (context) => PrelaunchSurvey2(),
           AppRoutes.meditate: (context) => Meditate(),
           AppRoutes.performMeditate: (context) => PerformMeditate(),
           AppRoutes.streak: (context) => Streak(),
