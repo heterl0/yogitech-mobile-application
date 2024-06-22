@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:yogi_application/api/dioInstance.dart';
-import 'package:yogi_application/src/models/pose.dart';
-import 'package:yogi_application/utils/formatting.dart';
+import 'package:YogiTech/api/dioInstance.dart';
+import 'package:YogiTech/src/models/pose.dart';
+import 'package:YogiTech/utils/formatting.dart';
 
 Future<List<dynamic>> getPoses() async {
   try {
@@ -33,5 +33,22 @@ Future<Pose?> getPose(int id) async {
   } catch (e) {
     print('Get pose detail error: $e');
     return null;
+  }
+}
+
+Future<List<dynamic>> getMuscles() async {
+  try {
+    final url = formatApiUrl('/api/v1/muscles/');
+    final Response response = await DioInstance.get(url);
+    if (response.statusCode == 200) {
+      List<dynamic> data = response.data.map((e) => Muscle.fromMap(e)).toList();
+      return data;
+    } else {
+      print('Get muscles failed with status code: ${response.statusCode}');
+      return [];
+    }
+  } catch (e) {
+    print('Get muscles error: $e');
+    return [];
   }
 }

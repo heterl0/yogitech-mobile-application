@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/widgets/box_input_field.dart';
-import 'package:yogi_application/src/widgets/card.dart';
-import 'package:yogi_application/src/pages/blog_detail.dart';
+import 'package:YogiTech/api/blog/blog_service.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/widgets/box_input_field.dart';
+import 'package:YogiTech/src/widgets/card.dart';
+import 'package:YogiTech/src/pages/blog_detail.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Blog extends StatefulWidget {
@@ -10,19 +11,12 @@ class Blog extends StatefulWidget {
 
   @override
   BlogState createState() => BlogState();
-
-  static fromJson(item) {}
-
-  static fromMap(x) {}
-
-  toMap() {}
 }
 
 class BlogState extends State<Blog> {
-  late Future<Blog> blogs;
+  List<dynamic> jsonList = [];
   bool _isNotSearching = true;
-  TextEditingController _searchController = TextEditingController();
-  List<Blog> _blogs = [];
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -30,16 +24,15 @@ class BlogState extends State<Blog> {
     _fetchBlogs(); // Gọi hàm fetchBlogs khi trạng thái của widget được khởi tạo
   }
 
-  Future<void> _fetchBlogs() async {
-    try {
-      // List<Blog> blogs =
-      //     await apiService.fetchBlogs(); // Gọi hàm fetchBlogs từ service
-      setState(() {
-        // _blogs = blogs;
-      });
-    } catch (e) {
-      print('Error fetching blogs: $e');
-    }
+  Future<void> _fetchBlogs([String query = '']) async {
+    final List<dynamic> blogs = await getBlogs();
+    setState(() {
+      if (query.isNotEmpty) {
+        jsonList = blogs.where((blog) => blog.containsQuery(query)).toList();
+      } else {
+        jsonList = blogs;
+      }
+    });
   }
 
   @override
@@ -53,8 +46,7 @@ class BlogState extends State<Blog> {
               title: trans.blog,
               postActions: [
                 IconButton(
-                  icon:
-                      Icon(Icons.search, color: theme.colorScheme.onBackground),
+                  icon: Icon(Icons.search, color: theme.colorScheme.onSurface),
                   onPressed: () {
                     setState(() {
                       _isNotSearching = false;
@@ -64,6 +56,7 @@ class BlogState extends State<Blog> {
               ],
             )
           : CustomAppBar(
+              showBackButton: false,
               onBackPressed: () {
                 setState(() {
                   _isNotSearching = true;
@@ -73,16 +66,21 @@ class BlogState extends State<Blog> {
               titleWidget: BoxInputField(
                 controller: _searchController,
                 placeholder: trans.search,
-                trailing: const Icon(Icons.search),
+                trailing:
+                    Icon(Icons.search, color: theme.colorScheme.onSurface),
                 keyboardType: TextInputType.text,
-                inputFormatters: [],
+                inputFormatters: const [],
+                onChanged: (value) {
+                  _fetchBlogs(value);
+                },
                 onTap: () {},
               ),
               postActions: [
                 IconButton(
-                  icon:
-                      Icon(Icons.close, color: theme.colorScheme.onBackground),
+                  icon: Icon(Icons.close, color: theme.colorScheme.onSurface),
                   onPressed: () {
+                    _searchController.clear();
+                    _fetchBlogs(); // Fetch all blogs again
                     setState(() {
                       _isNotSearching = true;
                     });
@@ -99,7 +97,7 @@ class BlogState extends State<Blog> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(color: theme.colorScheme.background),
+      decoration: BoxDecoration(color: theme.colorScheme.surface),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -111,38 +109,29 @@ class BlogState extends State<Blog> {
   }
 
   Widget _buildBlogMainContent() {
-    final trans = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
       child: GridView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 6.0),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 8.0,
-          mainAxisSpacing: 8.0,
-          childAspectRatio: 3 / 2,
+          childAspectRatio: 4 / 5,
         ),
-        itemCount: 6,
+        itemCount: jsonList.length,
         itemBuilder: (context, index) {
-          final title = 'title';
-          final caption = 'Caption';
-          final subtitle = '${6 - index} ${trans.daysLeft}';
-
+          final blog = jsonList[index];
           return CustomCard(
-            title: title,
-            caption: caption,
-            subtitle: subtitle,
+            title: blog.title,
+            caption: blog.description,
+            imageUrl: blog.image_url,
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => BlogDetail(
-                    title: title,
-                    caption: caption,
-                    subtitle: subtitle,
+                    id: blog.id,
                   ),
                 ),
               );

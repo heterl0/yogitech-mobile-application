@@ -1,30 +1,30 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'package:YogiTech/src/models/account.dart';
 import 'package:collection/collection.dart';
-import 'package:yogi_application/src/models/account.dart';
 
 class BlogVote {
   final int id;
-  final String user;
-  final String userId;
+  final String? user;
+  final int user_id;
   final String blog;
-  final int voteValue;
+  final int vote_value;
 
-  BlogVote(this.id, this.user, this.userId, this.blog, this.voteValue);
+  BlogVote(this.id, this.user, this.user_id, this.blog, this.vote_value);
 
   BlogVote copyWith({
     int? id,
     String? user,
-    String? userId,
+    int? user_id,
     String? blog,
-    int? voteValue,
+    int? vote_value,
   }) {
     return BlogVote(
       id ?? this.id,
       user ?? this.user,
-      userId ?? this.userId,
+      user_id ?? this.user_id,
       blog ?? this.blog,
-      voteValue ?? this.voteValue,
+      vote_value ?? this.vote_value,
     );
   }
 
@@ -32,19 +32,19 @@ class BlogVote {
     return <String, dynamic>{
       'id': id,
       'user': user,
-      'userId': userId,
+      'user_id': user_id,
       'blog': blog,
-      'voteValue': voteValue,
+      'vote_value': vote_value,
     };
   }
 
   factory BlogVote.fromMap(Map<String, dynamic> map) {
     return BlogVote(
       map['id'] as int,
-      map['user'] as String,
-      map['userId'] as String,
+      map['user'] != null ? map['user'] as String : null,
+      map['user_id'] as int,
       map['blog'] as String,
-      map['voteValue'] as int,
+      map['vote_value'] as int,
     );
   }
 
@@ -55,7 +55,7 @@ class BlogVote {
 
   @override
   String toString() {
-    return 'BlogVote(id: $id, user: $user, userId: $userId, blog: $blog, voteValue: $voteValue)';
+    return 'BlogVote(id: $id, user: $user, user_id: $user_id, blog: $blog, vote_value: $vote_value)';
   }
 
   @override
@@ -64,18 +64,18 @@ class BlogVote {
 
     return other.id == id &&
         other.user == user &&
-        other.userId == userId &&
+        other.user_id == user_id &&
         other.blog == blog &&
-        other.voteValue == voteValue;
+        other.vote_value == vote_value;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
         user.hashCode ^
-        userId.hashCode ^
+        user_id.hashCode ^
         blog.hashCode ^
-        voteValue.hashCode;
+        vote_value.hashCode;
   }
 }
 
@@ -210,5 +210,21 @@ class Blog {
         created_at.hashCode ^
         updated_at.hashCode ^
         active_status.hashCode;
+  }
+
+  bool containsQuery(String query) {
+    final titleLower = title.toLowerCase();
+    final descriptionLower = description.toLowerCase();
+    final searchLower = query.toLowerCase();
+    return titleLower.contains(searchLower) ||
+        descriptionLower.contains(searchLower);
+  }
+
+  bool hasUserVoted(int userId) {
+    return votes.any((element) => element.user_id == userId);
+  }
+
+  BlogVote? getUserVote(int userId) {
+    return votes.firstWhereOrNull((element) => element.user_id == userId);
   }
 }

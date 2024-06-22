@@ -1,27 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/custombar/bottombar.dart';
-import 'package:yogi_application/src/pages/result.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/widgets/box_input_field.dart';
-import 'package:yogi_application/src/widgets/card.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:YogiTech/api/auth/auth_service.dart';
+import 'package:YogiTech/api/exercise/exercise_service.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/custombar/bottombar.dart';
+import 'package:YogiTech/src/models/exercise.dart';
+import 'package:YogiTech/src/models/pose.dart';
+import 'package:YogiTech/src/pages/result.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/widgets/box_input_field.dart';
+import 'package:YogiTech/src/widgets/card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:YogiTech/utils/formatting.dart';
 
-class ExerciseDetail extends StatelessWidget {
-  final TextEditingController commentController = TextEditingController();
+class ExerciseDetail extends StatefulWidget {
+  final int? id;
+
+  const ExerciseDetail({super.key, this.id});
 
   @override
+  _ExerciseDetailState createState() => _ExerciseDetailState();
+}
+
+class _ExerciseDetailState extends State<ExerciseDetail> {
+  late Exercise? _exercise;
+  late bool _isLoading = false;
+  late int user_id = -1;
+  final TextEditingController commentController = TextEditingController();
+  @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
-        title: 'Exercise Detail',
+        title: trans.exerciseDetail,
         style: widthStyle.Large,
       ),
-      resizeToAvoidBottomInset: false,
-      body: _buildBody(context),
+      resizeToAvoidBottomInset: true,
+      body: _isLoading
+          ? Container(
+              color: theme.colorScheme.surface,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : _buildBody(context),
       bottomNavigationBar: CustomBottomBar(
-        buttonTitle: 'Do exercise',
+        buttonTitle: trans.doExercise,
         onPressed: () {
           Navigator.push(
             context,
@@ -34,26 +62,46 @@ class ExerciseDetail extends StatelessWidget {
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+    fetchExercise();
+  }
+
+  Future<void> fetchExercise() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final exercise = await getExercise(widget.id ?? 0);
+    final user = await retrieveAccount();
+    setState(() {
+      _exercise = exercise;
+      _isLoading = false;
+      user_id = user!.id;
+    });
+  }
+
   Widget _buildBody(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          _buildImage(),
+          _buildImage(context),
           _buildMainContent(context),
         ],
       ),
     );
   }
 
-  Widget _buildImage() {
+  Widget _buildImage(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 60),
       child: Container(
         width: double.infinity,
         height: 360,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/yoga.jpeg'),
+            image: NetworkImage(_exercise!.image_url), // ! for null safety
             fit: BoxFit.cover,
           ),
         ),
@@ -62,6 +110,8 @@ class ExerciseDetail extends StatelessWidget {
   }
 
   Widget _buildMainContent(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -70,20 +120,21 @@ class ExerciseDetail extends StatelessWidget {
           const SizedBox(height: 16),
           _buildTitle(context),
           const SizedBox(height: 16),
-          _buildRowWithText(),
+          _buildRowWithText(trans, context),
           const SizedBox(height: 16),
-          _buildDescription(),
+          _buildDescription(context),
           const SizedBox(height: 16),
-          _buildTitle2(context, 'Poses'),
+          _buildTitle2(context, trans.poses),
           const SizedBox(height: 16),
-          _buildPoses(),
+          _buildPoses(trans, context),
           const SizedBox(height: 16),
-          _buildTitle2(context, 'Comment'),
+          _buildTitle2(context, trans.comment),
           const SizedBox(height: 16),
-          _buildCommentSection(),
+          _buildCommentSection(trans),
           const SizedBox(height: 16),
-          _buildComment(context),
-          const SizedBox(height: 36),
+          ..._exercise!.comments.map(
+            (comment) => _buildComment(context, comment),
+          ),
         ],
       ),
     );
@@ -100,24 +151,31 @@ class ExerciseDetail extends StatelessWidget {
   Widget _buildTitle(BuildContext context) {
     final theme = Theme.of(context);
     return Text(
-      'Ringo Island',
-      style: h2.copyWith(color: theme.colorScheme.onPrimary),
+      _exercise?.title ?? "Ringo Island",
+      style: h2.copyWith(color: theme.colorScheme.onPrimary, height: 1.2),
     );
   }
 
-  Widget _buildRowWithText() {
+  Widget _buildRowWithText(AppLocalizations trans, BuildContext context) {
+    final durations = _exercise?.durations ?? 0;
+    final minute = durations ~/ 60;
+    final int level = _exercise?.level ?? 1;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '10 mins',
+          '$minute ${trans.minutes}',
           style: bd_text.copyWith(color: text),
         ),
         const SizedBox(width: 16),
         Expanded(
           child: Text(
-            'Beginner',
+            level == 1
+                ? trans.beginner
+                : level == 2
+                    ? trans.advance
+                    : trans.professional,
             style: bd_text.copyWith(color: primary),
           ),
         ),
@@ -125,14 +183,15 @@ class ExerciseDetail extends StatelessWidget {
     );
   }
 
-  Widget _buildDescription() {
-    return Text(
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncusLorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus',
-      style: bd_text.copyWith(color: text),
+  Widget _buildDescription(BuildContext context) {
+    return HtmlWidget(
+      _exercise?.description ??
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus',
+      textStyle: TextStyle(fontFamily: 'ReadexPro', fontSize: 16, height: 1.2),
     );
   }
 
-  Widget _buildPoses() {
+  Widget _buildPoses(AppLocalizations trans, BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
       padding: const EdgeInsets.all(0),
@@ -141,33 +200,186 @@ class ExerciseDetail extends StatelessWidget {
         crossAxisCount: 2,
         crossAxisSpacing: 2.0,
         mainAxisSpacing: 2.0,
-        childAspectRatio: 5 / 4,
+        childAspectRatio: 8 / 9,
       ),
-      itemCount: 6,
+      itemCount: _exercise?.poses.length ?? 0,
       itemBuilder: (context, index) {
-        final title = 'Pose ${index + 1}';
-        final subtitle = '${5 - index} minutes';
+        final PoseWithTime pose = _exercise!.poses[index];
+        final Pose poseDetail = pose.pose;
+        final title = poseDetail.name;
+        // final title = trans.pose + ' ${index + 1}';
+        final subtitle = '${pose.duration} ${trans.seconds}';
 
         return CustomCard(
           title: title,
           subtitle: subtitle,
-          onTap: () {},
+          imageUrl: poseDetail.image_url,
+          onTap: () {
+            showDetailDialog(context, poseDetail);
+          },
         );
       },
     );
   }
 
-  Widget _buildCommentSection() {
+  void showDetailDialog(BuildContext context, Pose pose) {
+    final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          elevation: appElevation,
+          backgroundColor: theme.colorScheme.onSecondary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      pose.name,
+                      style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.close,
+                        color: text,
+                        size: 24,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+                ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  child: Image.network(
+                    pose.image_url,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '${trans.duration}: ${pose.duration}',
+                      style: bd_text.copyWith(color: primary),
+                    ),
+                    Text(
+                      '${trans.level}: ${pose.level}',
+                      style: bd_text.copyWith(color: primary),
+                    ),
+                    Text(
+                      '${trans.calorie}: ${pose.calories}',
+                      style: bd_text.copyWith(color: primary),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+                Text(trans.supMuscle, style: bd_text.copyWith(color: text)),
+                SizedBox(height: 8),
+                Wrap(
+                  spacing: 4.0,
+                  runSpacing: 4.0,
+                  children: pose.muscles.map((muscle) {
+                    return Material(
+                      elevation: appElevation,
+                      borderRadius: BorderRadius.circular(
+                          20.0), // Điều chỉnh bo góc nếu cần
+                      color: primary,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 4.0),
+                        child: Text(
+                          muscle.name,
+                          style: min_cap.copyWith(
+                            color: active,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                SizedBox(height: 16),
+                SizedBox(
+                  height: 240, // height limit for the instruction text
+                  child: Stack(
+                    children: [
+                      SingleChildScrollView(
+                        padding: EdgeInsets.only(bottom: 24),
+                        child: Text(
+                          pose.instruction,
+                          style: bd_text.copyWith(
+                              color: theme.colorScheme.onPrimary),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 20, // adjust the height of the fade effect
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                theme.colorScheme.onSecondary.withOpacity(0.0),
+                                theme.colorScheme.onSecondary.withOpacity(0.5),
+                                theme.colorScheme.onSecondary,
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      trans.close,
+                      style: h3.copyWith(color: primary),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildCommentSection(AppLocalizations trans) {
     return Row(
       children: [
         Expanded(
           child: BoxInputField(
             controller: commentController,
-            placeholder: 'Your comment',
+            placeholder: trans.yourComment,
+            onSubmitted: (value) async {
+              await postAComment();
+            },
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () async {
+            await postAComment();
+          },
           icon: const Icon(
             Icons.send_outlined,
             size: 36,
@@ -178,12 +390,17 @@ class ExerciseDetail extends StatelessWidget {
     );
   }
 
-  Widget _buildComment(BuildContext context) {
-    bool like = false; // Define a variable to keep track of like state
+  Widget _buildComment(BuildContext context, Comment comment) {
+    bool isLike = comment.hasUserVoted(user_id);
+    Locale locale = Localizations.localeOf(context);
+    final name = comment.user.profile.first_name != null
+        ? "${comment.user.profile.last_name} ${comment.user.profile.first_name}"
+        : comment.user.username;
     final theme = Theme.of(context);
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return Container(
+          margin: const EdgeInsets.only(bottom: 16),
           width: double.infinity,
           padding: const EdgeInsets.all(8),
           decoration: ShapeDecoration(
@@ -200,7 +417,11 @@ class ExerciseDetail extends StatelessWidget {
                 width: 44,
                 height: 44,
                 decoration: ShapeDecoration(
-                  gradient: gradient,
+                  image: DecorationImage(
+                    image: NetworkImage(comment.user.profile.avatar_url ?? ''),
+                    fit: BoxFit.cover,
+                  ),
+                  // gradient: gradient,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(80),
                   ),
@@ -219,14 +440,15 @@ class ExerciseDetail extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            'Chinhphu',
+                            name,
                             textAlign: TextAlign.start,
                             style: min_cap.copyWith(color: primary),
                           ),
                         ),
                         Expanded(
                           child: Text(
-                            'Feb 30 2024',
+                            formatDateTime(
+                                comment.created_at, locale.languageCode),
                             textAlign: TextAlign.end,
                             style: min_cap.copyWith(color: text),
                           ),
@@ -234,7 +456,7 @@ class ExerciseDetail extends StatelessWidget {
                       ],
                     ),
                     Text(
-                      'This exercise is too hard to doooooooooooo!!!!!',
+                      comment.text,
                       style:
                           bd_text.copyWith(color: theme.colorScheme.onPrimary),
                     ),
@@ -242,12 +464,25 @@ class ExerciseDetail extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () {
-                  setState(() {
-                    like = !like; // Toggle the like state
-                  });
+                onPressed: () async {
+                  if (isLike) {
+                    Vote? vote = comment.getUserVote(user_id);
+                    if (vote != null) {
+                      await deleteVote(vote.id);
+                      setState(() {
+                        comment.votes.remove(vote);
+                        isLike = false;
+                      });
+                    }
+                  } else {
+                    Vote? vote = await postVote(comment.id);
+                    setState(() {
+                      isLike = vote != null;
+                      comment.votes.add(vote!);
+                    });
+                  }
                 },
-                icon: like
+                icon: isLike
                     ? const Icon(
                         Icons.favorite,
                         color: primary,
@@ -262,5 +497,26 @@ class ExerciseDetail extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> postAComment() async {
+    final text = commentController.text;
+    final exercise = widget.id;
+    if (text.isEmpty) {
+      return;
+    } else if (exercise == null) {
+      return;
+    }
+    final request = PostCommentRequest(text: text, exercise: exercise);
+    final comment = await postComment(request);
+    if (comment != null) {
+      commentController.clear();
+      setState(() {
+        _exercise!.comments.add(comment);
+      });
+    } else {
+      print('Failed to post comment');
+    }
+    // await postComment(request);
   }
 }

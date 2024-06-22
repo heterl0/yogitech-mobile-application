@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 
 // Enum to represent more descriptive checkbox states
 enum CheckState { Checked, Unchecked }
 
 class CheckBoxListTile extends StatefulWidget {
   final String title;
+  final String subtitle; // Added subtitle
   final CheckState state;
   final ValueChanged<bool>? onChanged; // Use ValueChanged for state updates
 
   const CheckBoxListTile({
-    Key? key,
+    super.key,
     this.title = '',
+    this.subtitle = '', // Added subtitle
     this.state = CheckState.Unchecked,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   _CheckBoxListTileState createState() => _CheckBoxListTileState();
@@ -37,9 +39,13 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
     return ListTile(
       title: Text(
         widget.title,
-        style: bd_text.copyWith(
-          color: text,
+        style: h3.copyWith(
+          color: theme.colorScheme.onPrimary,
         ),
+      ),
+      subtitle: Text(
+        widget.subtitle,
+        style: min_cap.copyWith(color: text),
       ),
       leading: Checkbox(
         value: _isChecked,

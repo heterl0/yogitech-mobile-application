@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:yogi_application/src/models/account.dart';
-import 'package:yogi_application/src/models/exercise.dart';
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/models/exercise.dart';
 
 class Event {
   int id;
@@ -153,7 +153,7 @@ class Event {
 class CandidateEvent {
   int id;
   Account user;
-  int event_point;
+  double event_point;
   int active_status;
   String join_at;
   String updated_at;
@@ -172,7 +172,7 @@ class CandidateEvent {
   CandidateEvent copyWith({
     int? id,
     Account? user,
-    int? event_point,
+    double? event_point,
     int? active_status,
     String? join_at,
     String? updated_at,
@@ -205,7 +205,7 @@ class CandidateEvent {
     return CandidateEvent(
       id: map['id'] as int,
       user: Account.fromMap(map['user'] as Map<String, dynamic>),
-      event_point: map['event_point'] as int,
+      event_point: map['event_point'] as double,
       active_status: map['active_status'] as int,
       join_at: map['join_at'] as String,
       updated_at: map['updated_at'] as String,

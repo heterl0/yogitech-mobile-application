@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 
 class CustomDropdownFormField extends StatefulWidget {
   final String placeholder;
@@ -8,15 +8,17 @@ class CustomDropdownFormField extends StatefulWidget {
   final TextEditingController controller;
   final bool readOnly;
   final VoidCallback? onTap;
+  final ValueChanged<String?>? onChanged; // Add callback for value change
 
-  CustomDropdownFormField({
-    Key? key,
+  const CustomDropdownFormField({
+    super.key,
     required this.controller,
     required this.items,
     this.placeholder = '',
     this.readOnly = false,
     this.onTap,
-  }) : super(key: key);
+    this.onChanged, // Add callback for value change
+  });
 
   @override
   _CustomDropdownFormFieldState createState() =>
@@ -25,8 +27,8 @@ class CustomDropdownFormField extends StatefulWidget {
 
 class _CustomDropdownFormFieldState extends State<CustomDropdownFormField> {
   bool _isFocused = false;
-  bool _hasError = false;
-  FocusNode _focusNode = FocusNode();
+  final bool _hasError = false;
+  final FocusNode _focusNode = FocusNode();
   final LayerLink _layerLink = LayerLink();
 
   @override
@@ -81,7 +83,7 @@ class _CustomDropdownFormFieldState extends State<CustomDropdownFormField> {
           contentPadding:
               const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
           filled: true,
-          fillColor: theme.colorScheme.background,
+          fillColor: theme.colorScheme.surface,
           border: circleBorder.copyWith(
             borderSide: BorderSide(color: theme.colorScheme.secondary),
           ),
@@ -124,6 +126,10 @@ class _CustomDropdownFormFieldState extends State<CustomDropdownFormField> {
                 setState(() {
                   widget.controller.text = value!;
                 });
+                if (widget.onChanged != null) {
+                  widget.onChanged!(
+                      value); // Call the callback with the selected value
+                }
               },
       ),
     );

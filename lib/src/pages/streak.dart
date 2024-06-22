@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import "package:yogi_application/src/custombar/appbar.dart";
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
+import "package:YogiTech/src/custombar/appbar.dart";
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 import 'package:intl/intl.dart'; // Add this import
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Streak extends StatefulWidget {
+  const Streak({super.key});
+
   @override
   _StreakState createState() => _StreakState();
 }
@@ -38,15 +41,16 @@ class _StreakState extends State<Streak> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
-        title: "Streak",
+        title: trans.streak,
         showBackButton: false,
         postActions: [
           IconButton(
-            icon: Icon(Icons.close, color: theme.colorScheme.onBackground),
+            icon: Icon(Icons.close, color: theme.colorScheme.onSurface),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -58,16 +62,18 @@ class _StreakState extends State<Streak> {
   }
 
   Widget _buildMainContent(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
             child: Column(
               children: [
-                _buildStreakInfo(),
+                _buildStreakInfo(trans),
                 SizedBox(height: 16),
                 _buildMonthInfo(context),
                 SizedBox(height: 16),
@@ -82,14 +88,14 @@ class _StreakState extends State<Streak> {
     );
   }
 
-  Widget _buildStreakInfo() {
+  Widget _buildStreakInfo(AppLocalizations trans) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
           flex: 2,
-          child: _buildStreakText(),
+          child: _buildStreakText(trans),
         ),
         Expanded(
           flex: 1,
@@ -99,7 +105,7 @@ class _StreakState extends State<Streak> {
     );
   }
 
-  Widget _buildStreakText() {
+  Widget _buildStreakText(AppLocalizations trans) {
     return Column(
       children: [
         ShaderMask(
@@ -118,7 +124,7 @@ class _StreakState extends State<Streak> {
           ),
         ),
         Text(
-          'day streak!',
+          trans.dayStreak,
           textAlign: TextAlign.center,
           style: bd_text.copyWith(color: text),
         ),
@@ -149,7 +155,7 @@ class _StreakState extends State<Streak> {
           Text(
             DateFormat('MMMM yyyy')
                 .format(_currentDate), // Use DateFormat to format the date
-            style: h2.copyWith(color: theme.colorScheme.onBackground),
+            style: h2.copyWith(color: theme.colorScheme.onSurface),
           ),
           Row(
             children: [
@@ -186,6 +192,8 @@ class _StreakState extends State<Streak> {
 
   Widget _buildAdditionalInfo(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     int daysInMonth = _getDaysInMonth(_currentDate.year, _currentDate.month);
 
     return Row(
@@ -205,11 +213,13 @@ class _StreakState extends State<Streak> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '$daysInMonth days',
+                    '$daysInMonth ${(daysInMonth == 1) && (trans.locale == "en") ? "day" : trans.days}',
                     style: h3.copyWith(color: active, height: 1.2),
                   ),
                   Text(
-                    'in this month',
+                    trans.locale == "en"
+                        ? 'in this month.'
+                        : 'trong tháng này.',
                     style: min_cap.copyWith(
                       color: active,
                     ),
@@ -241,9 +251,9 @@ class _StreakState extends State<Streak> {
                         color: theme.colorScheme.onPrimary, height: 1.2),
                   ),
                   Text(
-                    'begin of the streak',
+                    trans.beginOfTheStreak,
                     style: min_cap.copyWith(
-                      color: theme.colorScheme.onBackground,
+                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                 ],

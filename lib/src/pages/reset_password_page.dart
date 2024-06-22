@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ResetPasswordPage extends StatelessWidget {
   final TextEditingController newPassword = TextEditingController();
   final TextEditingController confirmNewPassword = TextEditingController();
 
+  ResetPasswordPage({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: const Color(0xFF0d1f29),
       body: Container(
@@ -22,7 +27,7 @@ class ResetPasswordPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Reset Password',
+              trans.resetPassword,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 40.0,
@@ -36,7 +41,7 @@ class ResetPasswordPage extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white.withOpacity(0),
-                hintText: 'New password',
+                hintText: trans.newPassword,
                 hintStyle: TextStyle(color: Color(0xFF8D8E99)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(44.0),
@@ -51,7 +56,7 @@ class ResetPasswordPage extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white.withOpacity(0),
-                hintText: 'Confirm new password',
+                hintText: trans.confirmNewPassword,
                 hintStyle: TextStyle(color: Color(0xFF8D8E99)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(44.0),
@@ -68,14 +73,14 @@ class ResetPasswordPage extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(44.0),
                 gradient: LinearGradient(
-                  colors: [
+                  colors: const [
                     Color(0xFF3BE2B0),
                     Color(0xFF4095D0),
                     Color(0xFF5986CC),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  stops: [0.0, 0.5, 1.0],
+                  stops: const [0.0, 0.5, 1.0],
                 ),
               ),
               child: Material(
@@ -87,7 +92,7 @@ class ResetPasswordPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(44.0),
                   child: Center(
                     child: Text(
-                      'Reset',
+                      trans.reset,
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -104,11 +109,11 @@ class ResetPasswordPage extends StatelessWidget {
     );
   }
 
-  void _handleSendOTP(BuildContext context, String email) {
+  void _handleSendOTP(BuildContext context, String email,AppLocalizations trans) {
     // Xử lý sự kiện gửi OTP
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('OTP sent to $email'),
+        content: Text('${trans.sendOTP} $email'),
       ),
     );
   }

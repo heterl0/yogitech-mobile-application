@@ -1,36 +1,116 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:yogi_application/src/custombar/appbar.dart';
-import 'package:yogi_application/src/pages/perform_meditate.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/pages/perform_meditate.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
 import 'dart:math';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:YogiTech/src/widgets/checkbox.dart';
 
 class Meditate extends StatefulWidget {
+  const Meditate({super.key});
+
   @override
   _MeditateState createState() => _MeditateState();
 }
 
+final List<Map<String, dynamic>> theTracks = [
+  {'asset': 'audios/rain.mp3'},
+  {'asset': 'audios/water_cave.mp3'},
+];
+
 class _MeditateState extends State<Meditate> {
-  bool _isChecked1 = false;
-  bool _isChecked2 = false;
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  int? _selectedTrackIndex;
+  int currentStreak = 0;
+
   Duration _selectedDuration = const Duration();
 
   @override
-  void dispose() {
-    _audioPlayer.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    _loadStreakData();
+  }
+
+  Future<void> _loadStreakData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      currentStreak = prefs.getInt('currentStreak') ?? 0;
+    });
+  }
+
+  Future<void> _updateStreakData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    DateTime today = DateTime.now();
+    DateTime? lastMeditationDate =
+        DateTime.tryParse(prefs.getString('lastMeditationDate') ?? '');
+
+    int currentStreak = prefs.getInt('currentStreak') ?? 0;
+    int longestStreak = prefs.getInt('longestStreak') ?? 0;
+
+    // Kiểm tra xem đã từng thiền trước đó chưa
+    if (lastMeditationDate != null) {
+      // Xóa thông tin giờ, phút, giây để so sánh chỉ với ngày
+      DateTime normalizedToday = DateTime(today.year, today.month, today.day);
+      DateTime normalizedLastDate = DateTime(lastMeditationDate.year,
+          lastMeditationDate.month, lastMeditationDate.day);
+
+      // Tính khoảng cách giữa ngày thiền gần nhất và hôm nay (tính theo ngày)
+      int daysDifference =
+          normalizedToday.difference(normalizedLastDate).inDays;
+
+      // Nếu khoảng cách là 0 (cùng ngày) hoặc 1, tăng streak
+      if (daysDifference == 0 || daysDifference == 1) {
+        // Cần kiểm tra thời gian để đảm bảo đúng trong vòng 24 giờ
+        if (daysDifference == 0 && today.hour < lastMeditationDate.hour) {
+          currentStreak++;
+        } else if (daysDifference == 1) {
+          // Nếu khoảng cách là 1 ngày, reset streak nếu hôm nay thiền trước giờ thiền ngày hôm qua
+          if (today.hour < lastMeditationDate.hour) {
+            currentStreak = 1;
+          } else {
+            currentStreak++;
+          }
+        }
+      } else {
+        // Nếu không thiền trong vòng 24 giờ, reset streak
+        currentStreak = 1;
+      }
+    } else {
+      // Nếu chưa từng thiền, đây là lần đầu tiên, streak = 1
+      currentStreak = 1;
+    }
+
+    // Cập nhật longestStreak nếu cần
+    if (currentStreak > longestStreak) {
+      longestStreak = currentStreak;
+      await prefs.setInt('longestStreak', longestStreak);
+    }
+
+    // Lưu lại currentStreak và lastMeditationDate
+    await prefs.setInt('currentStreak', currentStreak);
+    await prefs.setString('lastMeditationDate', today.toString());
+    await _loadStreakData();
+  }
+
+  Future<void> _resetStreakData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('currentStreak');
+    await prefs.remove('lastMeditationDate');
+    setState(() {
+      currentStreak = 0;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: CustomAppBar(
         showBackButton: false,
-        title: "Meditate",
-        style: widthStyle.Medium,
+        title: trans.meditate,
       ),
       body: _buildBody(),
       floatingActionButton: _buildElevatedButton(context),
@@ -40,44 +120,39 @@ class _MeditateState extends State<Meditate> {
 
   Widget _buildBody() {
     final theme = Theme.of(context);
+
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(color: theme.colorScheme.background),
-      child: Stack(
-        children: [
-          // _buildTopRoundedContainer(),
-          // _buildTitleText(),
-          _buildMainContent(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTitleText() {
-    final theme = Theme.of(context);
-    return Positioned(
-      left: 0,
-      right: 0,
-      top: 100,
-      child: Text('Meditate',
-          textAlign: TextAlign.center,
-          style: h2.copyWith(color: theme.colorScheme.onBackground)),
+      decoration: BoxDecoration(color: theme.colorScheme.surface),
+      child: _buildMainContent(),
     );
   }
 
   Widget _buildMainContent() {
     final theme = Theme.of(context);
-    return Positioned(
-      left: 24,
-      top: 24,
-      right: 24,
+    final trans = AppLocalizations.of(context)!;
+    final List<Map<String, dynamic>> _tracks = [
+      {
+        'title': trans.soundRain,
+        'subtitle': trans.soundRainDescription,
+      },
+      {
+        'title': trans.soundStream,
+        'subtitle': trans.soundStreamDescription,
+      },
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _buildStreakInfo(context),
+
+          SizedBox(height: 16),
           Container(
-            color:
-                theme.colorScheme.onSecondary, // Set background color directly
+            color: theme.colorScheme.onSecondary,
             child: CupertinoTimerPicker(
               mode: CupertinoTimerPickerMode.ms,
               initialTimerDuration: _selectedDuration,
@@ -93,120 +168,135 @@ class _MeditateState extends State<Meditate> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Sounds',
+            trans.sounds,
             style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
           const SizedBox(height: 16),
-          _buildCheckboxItem(
-            title: 'Sound of rain',
-            subtitle: 'Deep sound on rainy days',
-            value: _isChecked1,
-            onChanged: (value) {
-              setState(() {
-                _isChecked1 = value!;
-                if (value) _isChecked2 = false;
-              });
+          ListView.builder(
+            key: UniqueKey(),
+            shrinkWrap: true,
+            itemCount: _tracks.length,
+            itemBuilder: (context, index) {
+              return CheckBoxListTile(
+                title: _tracks[index]['title'],
+                subtitle: _tracks[index]['subtitle'],
+                state: _selectedTrackIndex == index
+                    ? CheckState.Checked
+                    : CheckState.Unchecked,
+                onChanged: (value) {
+                  setState(() {
+                    if (value) {
+                      _selectedTrackIndex = index;
+                    } else {
+                      _selectedTrackIndex = null;
+                    }
+                  });
+                },
+              );
             },
           ),
-          const SizedBox(height: 16),
-          _buildCheckboxItem(
-            title: 'The sound of the stream flowing',
-            subtitle: 'Immersing yourself in the refreshing nature',
-            value: _isChecked2,
-            onChanged: (value) {
-              setState(() {
-                _isChecked2 = value!;
-                if (value) _isChecked1 = false;
-              });
-            },
-          ),
+          // ElevatedButton(
+          //   onPressed: _resetStreakData,
+          //   child: Text('Reset Streak'),
+          // ),
         ],
       ),
     );
   }
 
-  Widget _buildCheckboxItem({
-    required String title,
-    required String subtitle,
-    required bool value,
-    required ValueChanged<bool?> onChanged,
-  }) {
-    final theme = Theme.of(context);
+  Widget _buildStreakInfo(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          flex: 1,
+          child: _buildStreakImage(),
+        ),
+        Expanded(
+          flex: 2,
+          child: _buildStreakText(context),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStreakImage() {
     return Container(
-      child: Row(
-        children: [
-          Checkbox(
-            value: value,
-            onChanged: onChanged,
-            activeColor: Colors.transparent,
-            checkColor: Colors.white,
-            side: MaterialStateBorderSide.resolveWith(
-              (states) => const BorderSide(
-                color: Colors.white, // Outline color
-                width: 2,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: h3.copyWith(color: theme.colorScheme.onPrimary),
-                ),
-                Text(subtitle, style: min_cap.copyWith(color: text)),
-              ],
-            ),
-          ),
-        ],
+      width: 96,
+      height: 96,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/Lotus.png'),
+        ),
       ),
+    );
+  }
+
+  Widget _buildStreakText(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
+    return Column(
+      children: [
+        Text(
+          trans.meditationStreak,
+          textAlign: TextAlign.center,
+          style: bd_text.copyWith(color: text),
+        ),
+        ShaderMask(
+          shaderCallback: (bounds) {
+            return gradient.createShader(bounds);
+          },
+          child: Text(
+            currentStreak.toString(),
+            style: TextStyle(
+              color: active,
+              fontSize: 60,
+              fontFamily: 'ReadexPro',
+              fontWeight: FontWeight.w700,
+              height: 1,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildElevatedButton(BuildContext context) {
-    Theme.of(context);
-
-    return Positioned(
-      right: 27,
-      bottom: 20,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.transparent),
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-          shape: MaterialStateProperty.all(const CircleBorder()),
-        ),
-        onPressed: () {
-          if (_isChecked1) {
-            _audioPlayer.play(AssetSource('assets/audios/rain.mp3'));
-          } else if (_isChecked2) {
-            _audioPlayer.play(AssetSource('assets/audios/tieng_suoi.mp3'));
-          }
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  performMeditate(selectedDuration: _selectedDuration),
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+        shadowColor: MaterialStateProperty.all(Colors.transparent),
+        padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+        shape: MaterialStateProperty.all(const CircleBorder()),
+      ),
+      onPressed: () async {
+        await _updateStreakData();
+        pushWithoutNavBar(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PerformMeditate(
+              selectedDuration: _selectedDuration,
+              audioPath: _selectedTrackIndex != null
+                  ? theTracks[_selectedTrackIndex!]['asset']
+                  : '',
             ),
-          );
-        },
-        child: Ink(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: gradient, // Áp dụng gradient từ app_colors.dart
           ),
-          child: Container(
-            width: 60,
-            height: 60,
-            alignment: Alignment.center,
-            child: Image.asset(
-              'assets/icons/play_arrow.png',
-              width: 24,
-              height: 24,
-              color: active,
-            ),
+        );
+      },
+      child: Ink(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: gradient,
+        ),
+        child: Container(
+          width: 60,
+          height: 60,
+          alignment: Alignment.center,
+          child: Image.asset(
+            'assets/icons/play_arrow.png',
+            width: 24,
+            height: 24,
+            color: active,
           ),
         ),
       ),

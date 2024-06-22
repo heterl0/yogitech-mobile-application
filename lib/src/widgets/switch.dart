@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/shared/app_colors.dart'; // Import your color definitions
-import 'package:yogi_application/src/shared/styles.dart'; // Import your text styles
+import 'package:YogiTech/src/shared/app_colors.dart'; // Import your color definitions
+import 'package:YogiTech/src/shared/styles.dart'; // Import your text styles
 
 class CustomSwitch extends StatefulWidget {
   final String title;
@@ -10,13 +10,13 @@ class CustomSwitch extends StatefulWidget {
   final bool enabled; // Add enabled property
 
   const CustomSwitch({
-    Key? key,
+    super.key,
     required this.title,
     this.subtitle, // Make subtitle nullable
     required this.value,
     this.onChanged,
     this.enabled = true, // Set default value to true
-  }) : super(key: key);
+  });
 
   @override
   _CustomSwitchState createState() => _CustomSwitchState();

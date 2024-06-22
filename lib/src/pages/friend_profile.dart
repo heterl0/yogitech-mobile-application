@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FriendProfile extends StatefulWidget {
   const FriendProfile({super.key});
@@ -11,54 +12,33 @@ class FriendProfile extends StatefulWidget {
 }
 
 class _nameState extends State<FriendProfile> {
+  bool follow = true; // Khai báo biến ở đây
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(24.0),
-            bottomRight: Radius.circular(24.0),
-          ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: theme.colorScheme.onSecondary,
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(0),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 12.0,
-                  right: 20.0,
-                  left: 20.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.white),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    Spacer(),
-                    Text('Friend Profile', style: h2.copyWith(color: active)),
-                    Spacer(
-                      flex: 2,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+      backgroundColor: theme.colorScheme.surface,
+      appBar: CustomAppBar(
+        title: trans.friendProfile,
+        style: widthStyle.Large,
       ),
       body: Container(
         margin: const EdgeInsets.all(24.0),
         child: Column(
           children: [
+            ShaderMask(
+              shaderCallback: (bounds) {
+                return gradient.createShader(bounds);
+              },
+              child: Text(
+                'Name',
+                style: h2.copyWith(color: active),
+              ),
+            ),
+
             Row(
               children: [
                 Column(
@@ -77,8 +57,8 @@ class _nameState extends State<FriendProfile> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Duy',
-                      style: h2.copyWith(color: theme.colorScheme.onPrimary),
+                      'Avatar',
+                      style: bd_text.copyWith(color: text),
                     ),
                   ],
                 ),
@@ -89,23 +69,42 @@ class _nameState extends State<FriendProfile> {
                     children: [
                       Text(
                         'EXP',
-                        style: min_cap,
+                        style: min_cap.copyWith(color: text, height: 1),
                       ),
                       Text(
                         '999',
-                        style: h1.copyWith(color: primary),
+                        style: h1.copyWith(color: primary, height: 1),
                       ),
                       SizedBox(height: 36), // Khoảng cách giữa các phần tử
                       Row(
                         children: [
                           Expanded(
-                            child: BoxButton(
-                              title: 'Following', // Set the button text
-                              style: ButtonStyleType
-                                  .Secondary, // Set the button style (optional)
-                              onPressed: () {
-                                // Handle change avatar action here
-                              },
+                            child: Container(
+                              height: 50.0,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(44.0),
+                                border: Border.all(
+                                    color: follow ? error : primary,
+                                    width: 2.0),
+                              ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    // Xử lý sự kiện khi nhấn vào nút
+                                    setState(() {
+                                      follow = !follow; // Thay đổi trạng thái
+                                    });
+                                  },
+                                  borderRadius: BorderRadius.circular(44.0),
+                                  child: Center(
+                                    child: Text(
+                                        follow ? trans.unfollow : trans.follow,
+                                        style: h3.copyWith(
+                                            color: follow ? error : primary)),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -135,6 +134,52 @@ class _nameState extends State<FriendProfile> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class BoxButton extends StatelessWidget {
+  final String title;
+  final Color backgroundColor;
+  final Color foregroundColor;
+  final EdgeInsets padding;
+  final TextStyle textStyle;
+  final ShapeBorder shape;
+  final VoidCallback onPressed;
+  final Color? borderColor; // Add this line
+
+  const BoxButton({
+    super.key,
+    required this.title,
+    required this.backgroundColor,
+    required this.foregroundColor,
+    required this.padding,
+    required this.textStyle,
+    required this.shape,
+    required this.onPressed,
+    this.borderColor, // Add this line
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Modify shape to include borderColor if provided
+    final buttonShape = borderColor != null
+        ? RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            side: BorderSide(color: borderColor!),
+          )
+        : shape;
+
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(backgroundColor),
+        foregroundColor: MaterialStateProperty.all(foregroundColor),
+        padding: MaterialStateProperty.all(padding),
+        textStyle: MaterialStateProperty.all(textStyle),
+        shape: MaterialStateProperty.all(buttonShape as OutlinedBorder?),
+      ),
+      onPressed: onPressed,
+      child: Text(title),
     );
   }
 }

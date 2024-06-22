@@ -1,37 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
-import 'package:yogi_application/api/auth/auth_service.dart';
-import 'package:yogi_application/api/dioInstance.dart';
-import 'package:yogi_application/src/pages/activities.dart';
-import 'package:yogi_application/src/pages/blog.dart';
-import 'package:yogi_application/src/pages/blog_detail.dart';
-import 'package:yogi_application/src/pages/event_detail.dart';
-import 'package:yogi_application/src/pages/change_profile.dart';
-import 'package:yogi_application/src/pages/exercise_detail.dart';
-import 'package:yogi_application/src/pages/forgot_password.dart';
-import 'package:yogi_application/src/pages/friend_profile.dart';
-import 'package:yogi_application/src/pages/notifications.dart';
-import 'package:yogi_application/src/pages/payment_history.dart';
-import 'package:yogi_application/src/pages/perform_meditate.dart';
-import 'package:yogi_application/src/pages/pre_launch_survey_page.dart';
-import 'package:yogi_application/src/pages/meditate.dart';
-import 'package:yogi_application/src/pages/reminder.dart';
-import 'package:yogi_application/src/pages/result.dart';
-import 'package:yogi_application/src/pages/streak.dart';
-import 'package:yogi_application/src/pages/subscription.dart';
-import 'package:yogi_application/src/routing/app_routes.dart';
-import 'package:yogi_application/src/pages/login_page.dart';
-import 'package:yogi_application/src/pages/sign_up_page.dart';
-import 'package:yogi_application/src/pages/OTP_confirm_page.dart';
-import 'package:yogi_application/src/pages/reset_password_page.dart';
-import 'package:yogi_application/src/pages/homepage.dart';
-import 'package:yogi_application/src/pages/profile.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/pages/settings.dart';
-import 'package:rive_splash_screen/rive_splash_screen.dart';
+import 'package:YogiTech/api/auth/auth_service.dart';
+import 'package:YogiTech/api/dioInstance.dart';
+import 'package:YogiTech/src/pages/_mainscreen.dart';
+import 'package:YogiTech/src/pages/activities.dart';
+import 'package:YogiTech/src/pages/blog.dart';
+import 'package:YogiTech/src/pages/event_detail.dart';
+import 'package:YogiTech/src/pages/change_profile.dart';
+import 'package:YogiTech/src/pages/exercise_detail.dart';
+import 'package:YogiTech/src/pages/forgot_password.dart';
+import 'package:YogiTech/src/pages/friend_profile.dart';
+import 'package:YogiTech/src/pages/notifications.dart';
+import 'package:YogiTech/src/pages/payment_history.dart';
+import 'package:YogiTech/src/pages/perform_meditate.dart';
+import 'package:YogiTech/src/pages/pre_launch_survey_page.dart';
+import 'package:YogiTech/src/pages/meditate.dart';
+import 'package:YogiTech/src/pages/reminder.dart';
+import 'package:YogiTech/src/pages/result.dart';
+import 'package:YogiTech/src/pages/streak.dart';
+import 'package:YogiTech/src/pages/subscription.dart';
+import 'package:YogiTech/src/pages/verify_email.dart';
+import 'package:YogiTech/src/routing/app_routes.dart';
+import 'package:YogiTech/src/pages/login_page.dart';
+import 'package:YogiTech/src/pages/sign_up_page.dart';
+import 'package:YogiTech/src/pages/OTP_confirm_page.dart';
+import 'package:YogiTech/src/pages/reset_password_page.dart';
+import 'package:YogiTech/src/pages/homepage.dart';
+import 'package:YogiTech/src/pages/profile.dart';
+import 'package:YogiTech/src/pages/settings.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:YogiTech/l10n/l10n.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
 import 'dart:io';
 import 'dart:async';
 
@@ -45,7 +47,6 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
   runApp(accessToken != null
       ? MyApp(access: accessToken)
       : MyApp()); // Conditional app start
@@ -55,7 +56,9 @@ Future<String?> checkToken() async {
   try {
     final tokens = await getToken();
     final accessToken = tokens['access'];
-    DioInstance.setAccessToken(accessToken ?? "");
+    if (accessToken != null) {
+      DioInstance.setAccessToken(accessToken);
+    }
     return accessToken;
   } catch (error) {
     // Handle error, e.g., log the error or show an error message.
@@ -84,7 +87,7 @@ class MyHttpOverrides extends HttpOverrides {
 class MyApp extends StatefulWidget {
   final String? access;
 
-  const MyApp({Key? key, this.access}) : super(key: key);
+  const MyApp({super.key, this.access});
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -129,17 +132,37 @@ class _MyAppState extends State<MyApp> {
         // ),
         debugShowCheckedModeBanner: false,
         initialRoute:
-            widget.access != null ? AppRoutes.homepage : AppRoutes.login,
+            widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
+        // onGenerateRoute: _generateRoute,
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: _themeMode,
+        supportedLocales: L10n.all,
+        locale: _locale,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
         routes: {
+          AppRoutes.firstScreen: (context) => MainScreen(
+                isVietnamese: _locale == const Locale('vi'),
+                isDarkMode: _themeMode == ThemeMode.dark,
+                onThemeChanged: _toggleTheme,
+                locale: _locale,
+                onLanguageChanged: _changeLanguage,
+              ),
           AppRoutes.homepage: (context) => HomePage(),
           AppRoutes.login: (context) => LoginPage(),
           AppRoutes.signup: (context) => SignUp(),
+          AppRoutes.verifyEmail: (context) => VerifyEmail(),
           AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
           AppRoutes.OtpConfirm: (context) => OTP_Page(),
           AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
           AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
           AppRoutes.meditate: (context) => Meditate(),
-          AppRoutes.performMeditate: (context) => performMeditate(),
+          AppRoutes.performMeditate: (context) => PerformMeditate(),
           AppRoutes.streak: (context) => Streak(),
           AppRoutes.exercisedetail: (context) => ExerciseDetail(),
           AppRoutes.result: (context) => Result(),
@@ -149,20 +172,13 @@ class _MyAppState extends State<MyApp> {
                 onThemeChanged: _toggleTheme,
                 locale: _locale,
                 onLanguageChanged: _changeLanguage,
-                isVietnamese: true,
+                isVietnamese: _locale == Locale('vi'),
               ),
           AppRoutes.activities: (context) => Activities(),
           AppRoutes.eventDetail: (context) => EventDetail(
-                title: 'Event Title',
-                caption: 'Event Caption',
-                remainingDays: 'Event Subtitle',
+                event: null,
               ),
           AppRoutes.blog: (context) => Blog(),
-          AppRoutes.blogDetail: (context) => BlogDetail(
-                title: 'Event Title',
-                caption: 'Event Caption',
-                subtitle: 'Event Subtitle',
-              ),
           AppRoutes.reminder: (context) => ReminderPage(),
           AppRoutes.notifications: (context) => NotificationsPage(),
           AppRoutes.friendProfile: (context) => FriendProfile(),

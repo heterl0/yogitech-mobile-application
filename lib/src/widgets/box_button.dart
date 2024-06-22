@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 
 enum ButtonStyleType { Primary, Secondary, Tertiary }
 
@@ -32,7 +32,7 @@ class BoxButton extends StatelessWidget {
         case ButtonStyleType.Primary:
           return theme.primaryColor;
         case ButtonStyleType.Secondary:
-          return theme.colorScheme.background;
+          return theme.colorScheme.surface;
         case ButtonStyleType.Tertiary:
           return Colors.transparent;
       }

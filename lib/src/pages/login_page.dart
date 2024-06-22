@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
-import 'package:yogi_application/api/auth/auth_service.dart';
-import 'package:yogi_application/src/routing/app_routes.dart';
-import 'package:yogi_application/src/shared/styles.dart';
-import 'package:yogi_application/src/shared/app_colors.dart';
-import 'package:yogi_application/src/widgets/box_input_field.dart';
-import 'package:yogi_application/src/widgets/box_button.dart';
+import 'package:YogiTech/api/auth/auth_service.dart';
+import 'package:YogiTech/src/routing/app_routes.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/widgets/box_input_field.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -26,6 +29,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     final String imageAsset = theme.brightness == Brightness.dark
         ? 'assets/images/login-sign.png'
         : 'assets/images/login-sign_light.png';
@@ -48,19 +53,19 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Login',
+                    trans.login,
                     style: h1.copyWith(color: theme.colorScheme.onPrimary),
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: 16.0),
                   BoxInputField(
                     controller: emailController,
-                    placeholder: 'Email',
+                    placeholder: trans.email,
                   ),
                   SizedBox(height: 16.0),
                   BoxInputField(
                     controller: passwordController,
-                    placeholder: 'Password',
+                    placeholder: trans.password,
                     password: true,
                   ),
                   Align(
@@ -70,18 +75,19 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.pushNamed(context, AppRoutes.forgotpassword);
                       },
                       child: Text(
-                        'Forgot password?',
+                        trans.forgotPassword,
                         style: bd_text.copyWith(color: theme.primaryColor),
                       ),
                     ),
                   ),
                   SizedBox(height: 0.0),
                   BoxButton(
-                    title: 'Login',
+                    title: trans.login,
                     style: ButtonStyleType.Primary,
                     state: ButtonState.Enabled,
                     onPressed: () async {
                       _handleLogin(context);
+                      // print(await getExercises());
                     },
                   ),
                   SizedBox(height: 10.0),
@@ -95,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(
-                            "Or sign in with",
+                            trans.orSignInWith,
                             style: bd_text.copyWith(color: text),
                           ),
                         ),
@@ -133,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "You don't have an account? ",
+                            trans.dontHaveAccount,
                             style: bd_text.copyWith(color: text),
                           ),
                           TextButton(
@@ -141,8 +147,8 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.pushNamed(context, AppRoutes.signup);
                             },
                             child: Text(
-                              'Sign up',
-                              style: h3.copyWith(color: primary),
+                              trans.signUp,
+                              style: h3.copyWith(color: Colors.lightBlueAccent),
                             ),
                           ),
                         ],
@@ -172,13 +178,11 @@ class _LoginPageState extends State<LoginPage> {
       GoogleSignInAuthentication googleSignInAuthentication =
           await googleUser!.authentication;
       try {
-        final user =
+        final accessToken =
             await loginGoogle(googleSignInAuthentication.idToken ?? "");
 
-        if (user != null &&
-            user.accessToken.isNotEmpty &&
-            user.refreshToken.isNotEmpty) {
-          Navigator.pushReplacementNamed(context, AppRoutes.homepage);
+        if (accessToken != null) {
+          Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -224,12 +228,10 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     try {
-      final user = await login(enteredEmail, enteredPassword);
+      final accessToken = await login(enteredEmail, enteredPassword);
 
-      if (user != null &&
-          user.accessToken.isNotEmpty &&
-          user.refreshToken.isNotEmpty) {
-        Navigator.pushReplacementNamed(context, AppRoutes.homepage);
+      if (accessToken != null) {
+        Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Invalid email or password')),

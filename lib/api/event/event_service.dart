@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:yogi_application/api/dioInstance.dart';
-import 'package:yogi_application/src/models/event.dart';
-import 'package:yogi_application/utils/formatting.dart';
+import 'package:YogiTech/api/dioInstance.dart';
+import 'package:YogiTech/src/models/event.dart';
+import 'package:YogiTech/utils/formatting.dart';
 
 Future<List<dynamic>> getEvents() async {
   try {
@@ -32,6 +32,36 @@ Future<Event?> getEvent(int id) async {
     }
   } catch (e) {
     print('Get event detail error: $e');
+    return null;
+  }
+}
+
+Future<CandidateEvent?> joinEvent(int id) async {
+  try {
+    final data = {"event": id};
+    final url = formatApiUrl('/api/v1/event-candidates/');
+    final response = await DioInstance.post(url, data: data);
+    if (response.statusCode == 201) {
+      print(response.data);
+      return CandidateEvent.fromMap(response.data);
+    } else {
+      print(
+          'Join event detail failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Join event detail error: $e');
+    return null;
+  }
+}
+
+Future<bool?> giveUpEvent(int id) async {
+  try {
+    final url = formatApiUrl('/api/v1/event-candidates/$id/');
+    final response = await DioInstance.delete(url);
+    return response.statusCode == 204;
+  } catch (e) {
+    print('Give up event detail error: $e');
     return null;
   }
 }
