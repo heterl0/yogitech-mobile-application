@@ -5,7 +5,9 @@ import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FriendProfile extends StatefulWidget {
-  const FriendProfile({super.key});
+  final int? id;
+
+  FriendProfile({Key? key, this.id}) : super(key: key);
 
   @override
   State<FriendProfile> createState() => _nameState();

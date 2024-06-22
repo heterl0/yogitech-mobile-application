@@ -6,6 +6,9 @@ import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:YogiTech/api/account/account_service.dart';
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/widgets/box_input_field.dart';
 
 class FriendListPage extends StatefulWidget {
   final int initialTabIndex;
@@ -71,6 +74,15 @@ class _FriendListPageState extends State<FriendListPage>
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  Future<void> _fetchAccounts() async {
+    final List<dynamic> accountsData = await getUserProfiles();
+    final List<Account> accounts =
+        accountsData.map<Account>((json) => Account.fromJson(json)).toList();
+    setState(() {
+      accountList = accounts;
+    });
   }
 
   @override
@@ -211,7 +223,8 @@ class FriendList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Theme.of(context);
+    final theme = Theme.of(context);
+
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -228,10 +241,11 @@ class FriendList extends StatelessWidget {
                 avatarUrl: 'assets/images/gradient.jpg',
                 exp: '10000',
                 onTap: () {
-                  pushWithoutNavBar(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FriendProfile(),
+                      builder: (context) =>
+                          FriendProfile(id: accounts[index].id),
                     ),
                   );
                 },
@@ -278,7 +292,10 @@ class FriendListItem extends StatelessWidget {
                 color: stroke,
               ),
               child: CircleAvatar(
-                backgroundImage: AssetImage(avatarUrl),
+                backgroundImage: avatarUrl.isNotEmpty
+                    ? NetworkImage(avatarUrl)
+                    : AssetImage('assets/images/default_avatar.png')
+                        as ImageProvider,
               ),
             ),
             SizedBox(width: 12),
