@@ -98,6 +98,18 @@ class ForgotPasswordPage extends StatelessWidget {
   Future<void> _handleResetPassword(BuildContext context, String email) async {
     final trans = AppLocalizations.of(context)!;
 
+    if (email.isEmpty) {
+      // Hiển thị thông báo lỗi khi email rỗng
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              'cant be empty!'), // Giả sử trans.enterEmail là thông báo "Vui lòng nhập email"
+          backgroundColor: Colors.red,
+        ),
+      );
+      return; // Dừng lại nếu email rỗng
+    }
+
     try {
       await resetPassword(email);
       // Hiển thị thông báo thành công và chuyển trang
