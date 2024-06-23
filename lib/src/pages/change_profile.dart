@@ -1,12 +1,8 @@
-import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:YogiTech/api/account/account_service.dart';
-import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/shared/styles.dart';
@@ -20,10 +16,12 @@ import 'package:http/http.dart' as http;
 
 class ChangeProfilePage extends StatefulWidget {
   final VoidCallback? onProfileUpdated;
+  final Account? account;
 
   const ChangeProfilePage({
     super.key,
     this.onProfileUpdated,
+    this.account,
   });
 
   @override
@@ -37,8 +35,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   final TextEditingController birthday = TextEditingController();
   final TextEditingController gender = TextEditingController();
 
-  Profile? _profile;
-  Account? _account;
+  // Profile? widget.account.profile;
 
   File? _image;
   Uint8List? _imageBytes;
@@ -46,7 +43,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
 
   void refreshProfile() {
     // Gọi API để lấy lại dữ liệu hồ sơ sau khi cập nhật
-    _fetchUserProfile();
+    // fetchAvatar();
   }
 
   // Regular expression for Vietnamese phone numbers
@@ -68,55 +65,30 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   @override
   void initState() {
     super.initState();
-    _fetchUserProfile();
+    // refreshProfile();
   }
 
-  Future<void> _fetchUserProfile() async {
-    setState(() {
-      _isLoading = true; // Start loading
-    });
-
-    Profile? profile = await getUserProfile();
-    Account? account = await retrieveAccount();
-    final trans = AppLocalizations.of(context)!;
+  void _fetchUserProfile(AppLocalizations trans) {
     final Map<int, String> genderMap = {
       0: trans.female,
       1: trans.male,
       2: trans.other,
     };
     // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
-    setState(() {
-      _profile = profile;
-      _account = account;
-      _isLoading = false;
 
-      if (_profile != null) {
-        lastName.text = _profile!.last_name ?? '';
-        firstName.text = _profile!.first_name ?? '';
-        gender.text = genderMap[_profile!.gender] ?? '';
-        if (_profile!.birthdate != null) {
-          birthday.text = _formatDate(_profile!.birthdate ?? '');
-        }
+    if (widget.account?.profile != null) {
+      lastName.text = widget.account?.profile.last_name ?? '';
+      firstName.text = widget.account?.profile.first_name ?? '';
+      gender.text = genderMap[widget.account?.profile.gender] ?? '';
+      if (widget.account?.profile.birthdate != null) {
+        birthday.text = _formatDate(widget.account?.profile.birthdate ?? '');
+      }
 
-        // Fetch the avatar image as a Uint8List and update the _imageBytes variable
-        if (_profile!.avatar_url != null && _profile!.avatar_url!.isNotEmpty) {
-          setState(() {
-            _isLoading = true;
-          });
-          getImageBytesFromUrl(_profile!.avatar_url!).then((imageBytes) {
-            setState(() {
-              _imageBytes = imageBytes;
-              _isLoading = false;
-            });
-          }).catchError((error) {
-            print('Failed to load image: $error');
-          });
-        }
-      }
-      if (_account != null) {
-        phone.text = _account!.phone ?? '';
-      }
-    });
+      // Fetch the avatar image as a Uint8List and update the _imageBytes variable
+    }
+    if (widget.account != null) {
+      phone.text = widget.account!.phone ?? '';
+    }
   }
 
   Future<Uint8List> getImageBytesFromUrl(String url) async {
@@ -149,6 +121,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+    _fetchUserProfile(trans);
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
@@ -173,17 +146,18 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                             shape: BoxShape.circle,
                           ),
                           child: Center(
-                              child: _profile != null && (_imageBytes != null)
+                              child: _imageBytes == null
                                   ? CircleAvatar(
                                       radius: 50,
-                                      backgroundImage:
-                                          MemoryImage(_imageBytes!),
+                                      backgroundImage: NetworkImage(
+                                          widget.account?.profile.avatar_url ??
+                                              ''),
                                       backgroundColor: Colors.transparent,
                                     )
                                   : CircleAvatar(
                                       radius: 50,
-                                      backgroundImage: NetworkImage(
-                                          "https://storage.yogitech.me/cae3d36a-6b31-4086-a602-ca62eeb968a7.jpg"),
+                                      backgroundImage:
+                                          MemoryImage(_imageBytes!),
                                       backgroundColor: Colors.transparent,
                                     )),
                         ),
@@ -222,7 +196,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                       SizedBox(height: 8.0),
                       BoxInputField(
                         controller: phone,
-                        placeholder: _account?.phone ?? '',
+                        placeholder: widget.account?.phone ?? '',
                         keyboardType: TextInputType.phone,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
@@ -246,8 +220,12 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                                 SizedBox(height: 8.0),
                                 BoxInputField(
                                   controller: birthday,
-                                  placeholder: (_profile?.birthdate != null)
-                                      ? _formatDate(_profile!.birthdate ?? '')
+                                  placeholder: (widget
+                                              .account?.profile.birthdate !=
+                                          null)
+                                      ? _formatDate(
+                                          widget.account?.profile.birthdate ??
+                                              '')
                                       : trans.birthday,
                                   trailing: Icon(Icons.calendar_today),
                                   readOnly: true,
@@ -308,8 +286,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                         onPressed: () async {
                           setState(() {
                             _isLoading = true;
-                            _changgeProfile(context);
-                            _changgeAvatar(context);
+                            _changeProfile(context);
+                            // _changeAvatar(context);
                           });
                         },
                       ),
@@ -328,8 +306,9 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  ChangeBMIPage(onBMIUpdated: refreshProfile),
+                              builder: (context) => ChangeBMIPage(
+                                  onBMIUpdated:
+                                      widget.onProfileUpdated ?? () {}),
                             ),
                           );
                         },
@@ -342,7 +321,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     );
   }
 
-  Future<void> _changgeProfile(BuildContext context) async {
+  Future<void> _changeProfile(BuildContext context) async {
     final trans = AppLocalizations.of(context)!;
     final Map<int, String> genderMap = {
       0: trans.female,
@@ -359,49 +338,42 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
             .key
         : null;
     PatchProfileRequest request = PatchProfileRequest(
-        lastName: lastName.text,
-        firstName: firstName.text,
-        phone: phone.text,
-        birthdate: birthdate,
-        gender: genderValue);
+      lastName: lastName.text,
+      firstName: firstName.text,
+      phone: phone.text,
+      birthdate: birthdate,
+      gender: genderValue,
+    );
 
-    final Profile? profile = await patchProfile(request);
-    //fix cai api xong sua lai
-    final account = await retrieveAccount();
+    final Profile? profile = await patchProfile(request, _imageBytes);
     setState(() {
       _isLoading = false;
-      _fetchUserProfile();
-      if (widget.onProfileUpdated != null &&
-          !(_image != null && _imageBytes != null)) {
-        widget.onProfileUpdated!();
-      }
+      widget.onProfileUpdated!();
     });
 
-    // if (profile == null) {
-
-    // }else{
-    //   setState(() {
-    //       _isLoading = false;
-    //   });
-    // }
-  }
-
-  Future<void> _changgeAvatar(BuildContext context) async {
-    if (_image != null && _imageBytes != null) {
-      Profile? profile = await patchAvatar(_imageBytes!);
-      setState(() {
-        _isLoading = false;
-      });
-      final account = await retrieveAccount();
-      setState(() {
-        _fetchUserProfile();
-        if (widget.onProfileUpdated != null) {
-          widget.onProfileUpdated!();
-        }
-      });
-      _showSnackBar(true);
+    if (profile != null) {
+      _showSnackBar(true); // Hiển thị thông báo thành công
+    } else {
+      _showSnackBar(false); // Hiển thị thông báo thất bại
     }
   }
+
+  // Future<void> _changeAvatar(BuildContext context) async {
+  //   if (_image != null && _imageBytes != null) {
+  //     Profile? profile = await patchAvatar(_imageBytes!);
+  //     if (profile != null) {
+  //       final account = await getUser();
+  //       await storeAccount(account!);
+  //       if (widget.onProfileUpdated != null) {
+  //         widget.onProfileUpdated!();
+  //       }
+  //       _showSnackBar(true);
+  //     }
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //   }
+  // }
 
   void _showSnackBar(bool test) {
     final trans = AppLocalizations.of(context)!;

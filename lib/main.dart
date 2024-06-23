@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/models/social.dart';
 import 'package:YogiTech/src/models/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -15,7 +16,6 @@ import 'package:YogiTech/src/pages/friend_profile.dart';
 import 'package:YogiTech/src/pages/notifications.dart';
 import 'package:YogiTech/src/pages/payment_history.dart';
 import 'package:YogiTech/src/pages/perform_meditate.dart';
-import 'package:YogiTech/src/pages/pre_launch_survey_2.dart';
 import 'package:YogiTech/src/pages/pre_launch_survey_page.dart';
 import 'package:YogiTech/src/pages/meditate.dart';
 import 'package:YogiTech/src/pages/reminder.dart';
@@ -111,6 +111,17 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  final SocialProfile profile = SocialProfile(
+    user_id: 1,
+    username: 'username',
+    first_name: 'first_name',
+    last_name: 'last_name',
+    avatar: 'https://via.placeholder.com/150',
+    exp: 999,
+    level: 1,
+    streak: 1,
+  );
+
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
@@ -163,7 +174,6 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.OtpConfirm: (context) => OTP_Page(),
           AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
           AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
-          AppRoutes.preLaunchSurvey2: (context) => PrelaunchSurvey2(),
           AppRoutes.meditate: (context) => Meditate(),
           AppRoutes.performMeditate: (context) => PerformMeditate(),
           AppRoutes.streak: (context) => Streak(),
@@ -184,7 +194,9 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.blog: (context) => Blog(),
           AppRoutes.reminder: (context) => ReminderPage(),
           AppRoutes.notifications: (context) => NotificationsPage(),
-          AppRoutes.friendProfile: (context) => FriendProfile(),
+          AppRoutes.friendProfile: (context) => FriendProfile(
+              // Sửa lại tên class
+              profile: profile),
         });
   }
 

@@ -127,25 +127,26 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
               children: [
                 Center(
                   child: Container(
-                      width: 160,
-                      height: 160,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: stroke, width: 2),
-                      ),
-                      child: ShaderMask(
-                        shaderCallback: (bounds) {
-                          return gradient.createShader(bounds);
-                        },
-                        child: Center(
-                          child: Text(
-                            bmiResult.isNotEmpty
-                                ? bmiResult
-                                : _profile?.bmi.toString() ?? 'BMI',
-                            style: h1.copyWith(color: primary),
-                          ),
+                    width: 160,
+                    height: 160,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: stroke, width: 2),
+                    ),
+                    child: ShaderMask(
+                      shaderCallback: (bounds) {
+                        return gradient.createShader(bounds);
+                      },
+                      child: Center(
+                        child: Text(
+                          bmiResult.isNotEmpty
+                              ? bmiResult
+                              : _profile?.bmi.toString() ?? 'BMI',
+                          style: h1.copyWith(color: primary),
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(height: 8),
                 Center(

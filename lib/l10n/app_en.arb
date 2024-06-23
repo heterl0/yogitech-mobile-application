@@ -195,10 +195,16 @@
   "updateFail": "Update Failed.",
   "yourFistName": "Enter your first name",
   "yourLastName": "Enter your last name",
-  "supMuscle":"Supporting Muscles:",
-  "level":"Level",
+  "supMuscle": "Supporting Muscles:",
+  "level": "Level",
   "beginner": "Beginner",
   "intermediate": "Intermediate",
   "advanced": "Advanced",
-  "close":"Close"
+  "close": "Close",
+  "sendResetPasswordTo": "Forget password request email has been sent to",
+  "request": "Send request",
+  "invalidEmail" :"Your email is Invalid!",
+  "dontEmpty": "Please fill in both Email and Password fields!",
+  "doesntexist" : "Account doesn't not exist!",
+  "enterEmail" : "Please enter your email!"
 }
