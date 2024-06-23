@@ -97,8 +97,20 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
         if (updatedProfile != null) {
           widget.onBMIUpdated();
           print('BMI updated successfully');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('BMI updated successfully'),
+              backgroundColor: Colors.green,
+            ),
+          );
         } else {
           print('Failed to update BMI');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to update BMI'),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
       } catch (e) {
         print('Error updating BMI: $e');

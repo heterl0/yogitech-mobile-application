@@ -380,7 +380,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => ChangeBMIPage(
-                                              onBMIUpdated: refreshProfile),
+                                            onBMIUpdated: refreshProfile,
+                                          ),
                                         ),
                                       );
                                     },
