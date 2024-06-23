@@ -332,7 +332,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                     ],
                   ),
                 ),
-                BoxButton(
+                CustomButton(
                   title: trans.close,
                   style: ButtonStyleType.Tertiary,
                   onPressed: () {

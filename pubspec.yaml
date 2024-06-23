@@ -56,7 +56,7 @@ dependencies:
   share_plus: ^9.0.0
   fl_chart: ^0.68.0
   flutter_local_notifications: ^17.1.2
-  timezone: ^0.9.3
+  flutter_timezone: ^1.0.8
   image_picker: ^1.1.2
   pay: ^2.0.0
   permission_handler: ^11.3.1

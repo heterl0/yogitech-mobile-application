@@ -310,10 +310,10 @@ class _SubscriptionState extends State<Subscription> {
                 style: h2.copyWith(color: theme.colorScheme.onPrimary),
               ),
               const SizedBox(height: 16),
-              BoxButton(
+              CustomButton(
                   title: trans.unsubscription, style: ButtonStyleType.Primary),
               const SizedBox(height: 16),
-              BoxButton(
+              CustomButton(
                   title: trans.cancel,
                   style: ButtonStyleType.Tertiary,
                   onPressed: () {
@@ -366,11 +366,12 @@ class _SubscriptionState extends State<Subscription> {
                 textAlign: TextAlign.start,
               ),
               const SizedBox(height: 16),
-              BoxButton(title: '4.999.999đ', style: ButtonStyleType.Primary),
+              CustomButton(title: '4.999.999đ', style: ButtonStyleType.Primary),
               const SizedBox(height: 16),
-              BoxButton(title: '9.999 gems', style: ButtonStyleType.Secondary),
+              CustomButton(
+                  title: '9.999 gems', style: ButtonStyleType.Secondary),
               const SizedBox(height: 16),
-              BoxButton(
+              CustomButton(
                 title: trans.cancel,
                 style: ButtonStyleType.Tertiary,
                 onPressed: () {

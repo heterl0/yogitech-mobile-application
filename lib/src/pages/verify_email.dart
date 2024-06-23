@@ -54,7 +54,7 @@ class VerifyEmail extends StatelessWidget {
               ),
               SizedBox(height: 20.0),
               Center(
-                child: BoxButton(
+                child: CustomButton(
                   title: trans.returnLogin,
                   style: ButtonStyleType.Primary,
                   state: ButtonState.Enabled,

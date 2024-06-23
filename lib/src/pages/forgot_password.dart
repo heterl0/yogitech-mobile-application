@@ -82,7 +82,7 @@ class ForgotPasswordPage extends StatelessWidget {
             //   ),
             // ),
 
-            BoxButton(
+            CustomButton(
               title: trans.sendOTP,
               style: ButtonStyleType.Primary,
               state: ButtonState

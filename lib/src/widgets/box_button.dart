@@ -6,13 +6,13 @@ enum ButtonStyleType { Primary, Secondary, Tertiary }
 
 enum ButtonState { Enabled, Disabled, Pressed }
 
-class BoxButton extends StatelessWidget {
+class CustomButton extends StatelessWidget {
   final String title;
   final ButtonStyleType style;
   final ButtonState state;
   final VoidCallback? onPressed;
 
-  const BoxButton({
+  const CustomButton({
     super.key,
     required this.title,
     required this.style,

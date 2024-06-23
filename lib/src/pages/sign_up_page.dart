@@ -83,7 +83,7 @@ class _SignUpState extends State<SignUp> {
                   ),
 
                   SizedBox(height: 10.0),
-                  BoxButton(
+                  CustomButton(
                     title: trans.signUp,
                     style: ButtonStyleType.Primary,
                     state: ButtonState

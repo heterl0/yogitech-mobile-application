@@ -1,618 +1,400 @@
 import 'dart:io';
+import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
+import 'package:YogiTech/src/widgets/switch.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/widgets.dart'; // Để sử dụng AnimatedList
 import 'dart:convert';
 
 class ReminderPage extends StatefulWidget {
+  final bool reminderOn;
+
+  const ReminderPage({
+    super.key,
+    this.reminderOn = true,
+  });
+
   @override
   _ReminderPageState createState() => _ReminderPageState();
 }
 
 class _ReminderPageState extends State<ReminderPage> {
-  late FlutterLocalNotificationsPlugin _notification;
-  List<Reminder> reminders = [];
-  int reminderIdCounter = 0;
-
-  Future<void> _requestPermissions() async {
-    if (Platform.isIOS) {
-      await _notification
-          .resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin>()
-          ?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-          );
-    } else if (Platform.isAndroid) {
-      if (await Permission.scheduleExactAlarm.isGranted) {
-        print('Exact alarm permission granted.');
-      } else {
-        if (await Permission.scheduleExactAlarm.request().isGranted) {
-          print('Exact alarm permission granted.');
-        } else {
-          print('Exact alarm permission denied.');
-        }
-      }
-    }
-  }
+  bool _isReminderEnabled = false;
+  final List<Map<String, dynamic>> _selectedTimes = [];
 
   @override
   void initState() {
     super.initState();
-    tz.initializeTimeZones();
-    const locationName = 'Asia/Ho_Chi_Minh';
-    tz.setLocalLocation(tz.getLocation(locationName));
-
-    _notification = FlutterLocalNotificationsPlugin();
-
-    final InitializationSettings initializationSettings =
-        InitializationSettings(
-            android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-            iOS: DarwinInitializationSettings());
-
-    _notification.initialize(initializationSettings);
-    _requestPermissions(); // Thêm dòng này
-    _loadReminders().then((_) {
-      for (var reminder in reminders) {
-        _scheduleReminder(reminder);
-      }
-    });
+    _loadReminders();
   }
 
-  // Function to load reminders from SharedPreferences
   Future<void> _loadReminders() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final reminderData = prefs.getStringList('reminders');
+    final prefs = await SharedPreferences.getInstance();
+    final reminderData = prefs.getString('reminders');
     if (reminderData != null) {
       setState(() {
-        reminders = reminderData
-            .map((reminderJson) => Reminder.fromJson(jsonDecode(reminderJson)))
-            .toList();
-        reminderIdCounter = reminders.isNotEmpty
-            ? reminders.map((r) => r.id).reduce((a, b) => a > b ? a : b) + 1
-            : 0;
+        _selectedTimes.addAll(List<Map<String, dynamic>>.from(
+          (prefs.getStringList('reminders') ?? []).map(
+            (item) => Map<String, dynamic>.from(
+              item as Map<String, dynamic>,
+            ),
+          ),
+        ));
       });
     }
   }
 
   Future<void> _saveReminders() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(
-      'reminders',
-      reminders.map((reminder) => jsonEncode(reminder.toJson())).toList(),
-    );
-    setState(() {}); // Trigger UI update after saving
+    final prefs = await SharedPreferences.getInstance();
+    final reminderData = _selectedTimes
+        .map(
+            (item) => item.map((key, value) => MapEntry(key, value.toString())))
+        .toList();
+    await prefs.setStringList('reminders', reminderData.cast<String>());
   }
 
-  Future<void> _scheduleReminder(Reminder reminder) async {
-    for (var day in reminder.repeatDays) {
-      print(
-          'Lên lịch nhắc nhở với ID: ${reminder.id}, Thời gian: ${reminder.time}, Ngày lặp lại: $day');
-      await _notification.zonedSchedule(
-        reminder.id,
-        reminder.title,
-        'Đến giờ rồi!',
-        _nextInstanceOfTime(reminder.time, day),
-        const NotificationDetails(
-          android: AndroidNotificationDetails('theReminder', 'Reminder',
-              importance: Importance.max, priority: Priority.high),
-        ),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-      );
+  String _getDayDescription(Set<int> days, AppLocalizations trans) {
+    String local = trans.locale;
+    if (days.isEmpty) {
+      return local == "en" ? 'No days selected.' : 'Không có ngày được chọn.';
     }
+    if (days.length == 7) return trans.everyday;
+
+    if (days.containsAll([2, 3, 4, 5, 6])) {
+      if (days.length == 5) return trans.dayInWeek;
+    }
+
+    if (days.containsAll([6, 7])) {
+      if (days.length == 2) return trans.dayWeeken;
+    }
+
+    List<int> sortedDays = days.toList()..sort();
+    List<String> dayNames = sortedDays.map((day) {
+      switch (day) {
+        case 1:
+          return local == "en" ? 'Mon' : 'Thứ 2';
+        case 2:
+          return local == "en" ? 'Tue' : 'Thứ 3';
+        case 3:
+          return local == "en" ? 'Wed' : 'Thứ 4';
+        case 4:
+          return local == "en" ? 'Thu' : 'Thứ 5';
+        case 5:
+          return local == "en" ? 'Fri' : 'Thứ 6';
+        case 6:
+          return local == "en" ? 'Sat' : 'Thứ 7';
+        case 7:
+          return local == "en" ? 'Sun' : 'Chủ nhật';
+        default:
+          return '';
+      }
+    }).toList();
+    return dayNames.join(', ');
   }
 
-  tz.TZDateTime _nextInstanceOfTime(DateTime time, int day) {
-    final now = tz.TZDateTime.now(tz.local);
-    var scheduledDate = tz.TZDateTime(
-      tz.local,
-      now.year,
-      now.month,
-      now.day,
-      time.hour,
-      time.minute,
-    );
-
-    while (scheduledDate.weekday != day) {
-      scheduledDate = scheduledDate.add(Duration(days: 1));
-    }
-
-    if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(Duration(days: 7));
-    }
-
-    return scheduledDate;
-  }
-
-  void _showRepeatDaysDialog(BuildContext context) {
-    DateTime selectedDateTime = DateTime.now();
-    List<int> selectedDays = [];
-
-    showModalBottomSheet(
-      isScrollControlled: true,
+  Future<void> _showSetupReminderPage(BuildContext context,
+      {bool isNew = false, int? index}) async {
+    final result = await showModalBottomSheet<Map<String, dynamic>>(
       context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return AlertDialog(
-              title: Text('Chọn giờ và ngày lặp lại'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  SizedBox(
-                    // Giới hạn chiều cao của CupertinoDatePicker
-                    height: 180,
-                    child: CupertinoDatePicker(
-                      mode: CupertinoDatePickerMode.time,
-                      initialDateTime: selectedDateTime,
-                      onDateTimeChanged: (DateTime newTime) {
-                        setState(() {
-                          selectedDateTime = newTime;
-                        });
-                      },
-                      use24hFormat: true, // Hiển thị AM/PM
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                      'Giờ đã chọn: ${TimeOfDay.fromDateTime(selectedDateTime).format(context)}'),
-                  SizedBox(height: 16),
-                  CheckboxListTile(
-                    title: Text('Thứ 2'),
-                    value: selectedDays.contains(DateTime.monday),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value!
-                            ? selectedDays.add(DateTime.monday)
-                            : selectedDays.remove(DateTime.monday);
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: Text('Thứ 3'),
-                    value: selectedDays.contains(DateTime.tuesday),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value!
-                            ? selectedDays.add(DateTime.tuesday)
-                            : selectedDays.remove(DateTime.tuesday);
-                      });
-                    },
-                  ),
-                  // Add CheckboxListTile for other days (Wednesday, Thursday, etc.)
-                  CheckboxListTile(
-                    title: Text('Thứ 4'),
-                    value: selectedDays.contains(DateTime.wednesday),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value!
-                            ? selectedDays.add(DateTime.wednesday)
-                            : selectedDays.remove(DateTime.wednesday);
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: Text('Thứ 5'),
-                    value: selectedDays.contains(DateTime.thursday),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value!
-                            ? selectedDays.add(DateTime.thursday)
-                            : selectedDays.remove(DateTime.thursday);
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: Text('Thứ 6'),
-                    value: selectedDays.contains(DateTime.friday),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value!
-                            ? selectedDays.add(DateTime.friday)
-                            : selectedDays.remove(DateTime.friday);
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: Text('Thứ 7'),
-                    value: selectedDays.contains(DateTime.saturday),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value!
-                            ? selectedDays.add(DateTime.saturday)
-                            : selectedDays.remove(DateTime.saturday);
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: Text('Chủ nhật'),
-                    value: selectedDays.contains(DateTime.sunday),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value!
-                            ? selectedDays.add(DateTime.sunday)
-                            : selectedDays.remove(DateTime.sunday);
-                      });
-                    },
-                  ),
-                ],
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('Hủy'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                TextButton(
-                  child: Text('Đặt nhắc nhở'),
-                  onPressed: () {
-                    final newReminder = Reminder(
-                      id: reminderIdCounter++,
-                      title: 'Nhắc nhở',
-                      time: selectedDateTime,
-                      repeatDays: selectedDays,
-                    );
-
-                    setState(() {
-                      reminders.add(newReminder);
-                      _scheduleReminder(newReminder);
-                    });
-
-                    _saveReminders();
-
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  void _showEditReminderDialog(BuildContext context, Reminder reminder) {
-    DateTime selectedDateTime = reminder.time;
-    List<int> selectedDays = List.from(reminder.repeatDays); // Copy days
-
-    showModalBottomSheet(
       isScrollControlled: true,
-      context: context,
       builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return AlertDialog(
-              title: Text('Chỉnh sửa nhắc nhở'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  SizedBox(
-                    // Giới hạn chiều cao của CupertinoDatePicker
-                    height: 180,
-                    child: CupertinoDatePicker(
-                      mode: CupertinoDatePickerMode.time,
-                      initialDateTime: selectedDateTime,
-                      onDateTimeChanged: (DateTime newTime) {
-                        setState(() {
-                          selectedDateTime = newTime;
-                        });
-                      },
-                      use24hFormat: true, // Hiển thị AM/PM
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                      'Giờ đã chọn: ${TimeOfDay.fromDateTime(selectedDateTime).format(context)}'),
-                  SizedBox(height: 16),
-                  CheckboxListTile(
-                    title: Text('Thứ 2'),
-                    value: selectedDays.contains(DateTime.monday),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value!
-                            ? selectedDays.add(DateTime.monday)
-                            : selectedDays.remove(DateTime.monday);
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: Text('Thứ 3'),
-                    value: selectedDays.contains(DateTime.tuesday),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value!
-                            ? selectedDays.add(DateTime.tuesday)
-                            : selectedDays.remove(DateTime.tuesday);
-                      });
-                    },
-                  ),
-                  // Add CheckboxListTile for other days (Wednesday, Thursday, etc.)
-                  CheckboxListTile(
-                    title: Text('Thứ 4'),
-                    value: selectedDays.contains(DateTime.wednesday),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value!
-                            ? selectedDays.add(DateTime.wednesday)
-                            : selectedDays.remove(DateTime.wednesday);
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: Text('Thứ 5'),
-                    value: selectedDays.contains(DateTime.thursday),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value!
-                            ? selectedDays.add(DateTime.thursday)
-                            : selectedDays.remove(DateTime.thursday);
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: Text('Thứ 6'),
-                    value: selectedDays.contains(DateTime.friday),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value!
-                            ? selectedDays.add(DateTime.friday)
-                            : selectedDays.remove(DateTime.friday);
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: Text('Thứ 7'),
-                    value: selectedDays.contains(DateTime.saturday),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value!
-                            ? selectedDays.add(DateTime.saturday)
-                            : selectedDays.remove(DateTime.saturday);
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: Text('Chủ nhật'),
-                    value: selectedDays.contains(DateTime.sunday),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        value!
-                            ? selectedDays.add(DateTime.sunday)
-                            : selectedDays.remove(DateTime.sunday);
-                      });
-                    },
-                  ),
-                ],
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('Hủy'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                TextButton(
-                  child: Text('Lưu'),
-                  onPressed: () {
-                    final editedReminder = Reminder(
-                      id: reminder.id,
-                      title: 'Nhắc nhở',
-                      time: selectedDateTime,
-                      repeatDays: selectedDays,
-                    );
+        final ScrollController scrollController = ScrollController();
 
-                    setState(() {
-                      reminders[reminders.indexWhere(
-                          (r) => r.id == reminder.id)] = editedReminder;
-                      _notification.cancel(reminder.id);
-                      _scheduleReminder(editedReminder);
-                    });
-
-                    _saveReminders();
-
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  void _removeReminder(Reminder reminder) {
-    setState(() {
-      reminders.remove(reminder);
-      _notification.cancel(reminder.id);
-    });
-
-    _saveReminders();
-  }
-
-  void _sendTestNotification() async {
-    await _notification.show(
-      0,
-      'Nhắc nhở thử',
-      'Đây là thông báo thử',
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'testReminder',
-          'Test Reminder',
-          importance: Importance.max,
-          priority: Priority.high,
-        ),
-      ),
-    );
-  }
-
-  void _sendTestScheduledNotification() async {
-    final now = DateTime.now();
-    final testTime = DateTime(now.year, now.month, now.day, now.hour,
-        now.minute + 1); // 1 minute later
-
-    print('Scheduling test notification for: $testTime');
-
-    if (Platform.isAndroid) {
-      var status = await Permission.scheduleExactAlarm.status;
-      if (status.isGranted) {
-        await _notification
-            .zonedSchedule(
-          1,
-          'Thông báo thử nghiệm',
-          'Đây là thông báo thử nghiệm đã được lên lịch',
-          tz.TZDateTime.from(testTime, tz.local),
-          const NotificationDetails(
-            android: AndroidNotificationDetails(
-              'testReminder',
-              'Test Reminder',
-              importance: Importance.max,
-              priority: Priority.high,
+        return SingleChildScrollView(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: _SetupReminderWidget(
+              scrollController: scrollController,
+              initialTime:
+                  isNew ? TimeOfDay.now() : _selectedTimes[index!]['time'],
+              initialDays: isNew ? {} : _selectedTimes[index!]['days'],
+              showDeleteButton: !isNew,
             ),
           ),
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-          matchDateTimeComponents: DateTimeComponents.time,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-        )
-            .then((_) {
-          print('Notification scheduled successfully');
-        }).catchError((error) {
-          print('Error scheduling notification: $error');
-        });
-      } else {
-        if (await Permission.scheduleExactAlarm.request().isGranted) {
-          print('Exact alarm permission granted.');
-          // Retry scheduling the notification after permission is granted
-          _sendTestScheduledNotification();
-        } else {
-          print('Exact alarm permission denied.');
+        );
+      },
+    );
+
+    if (result != null) {
+      if (result.containsKey('delete')) {
+        if (index != null) {
+          setState(() {
+            _selectedTimes.removeAt(index);
+          });
+          _saveReminders();
         }
+      } else if (result.containsKey('time') && result.containsKey('days')) {
+        if (isNew) {
+          setState(() {
+            _selectedTimes
+                .add({'time': result['time'], 'days': result['days']});
+          });
+        } else {
+          setState(() {
+            _selectedTimes[index!] = {
+              'time': result['time'],
+              'days': result['days']
+            };
+          });
+        }
+        _saveReminders();
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Nhắc nhở định kỳ'),
-        backgroundColor: Colors.black,
+      backgroundColor: theme.colorScheme.surface,
+      appBar: CustomAppBar(
+        title: trans.reminder,
       ),
-      body: reminders.isEmpty
-          ? Center(child: Text('Chưa có nhắc nhở nào'))
-          : ListView.builder(
-              itemCount: reminders.length,
-              itemBuilder: (context, index) {
-                final reminder = reminders[index];
-                return ListTile(
-                  title: Text(reminder.title),
-                  subtitle: Text(
-                      'Lặp lại vào các ngày: ${reminder.repeatDays.map((day) => _dayToString(day)).join(', ')} lúc ${TimeOfDay.fromDateTime(reminder.time).format(context)}'),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.edit),
-                        onPressed: () =>
-                            _showEditReminderDialog(context, reminder),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () => _removeReminder(reminder),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () => _showRepeatDaysDialog(context),
-            child: Icon(Icons.add),
-            backgroundColor: Colors.black,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            children: [
+              CustomSwitch(
+                title: trans.reminder,
+                value: widget.reminderOn,
+                onChanged: null,
+              ),
+              Divider(
+                color: stroke,
+              ),
+              Column(
+                children: _selectedTimes
+                    .asMap()
+                    .entries
+                    .map((entry) => GestureDetector(
+                          onTap: () {
+                            _showSetupReminderPage(context, index: entry.key);
+                          },
+                          child: CustomSwitch(
+                            title: '${entry.value['time'].format(context)}',
+                            subtitle:
+                                _getDayDescription(entry.value['days'], trans),
+                            value: _isReminderEnabled,
+                            onChanged: (value) {
+                              setState(() {
+                                _isReminderEnabled = value;
+                              });
+                            },
+                          ),
+                        ))
+                    .toList(),
+              ),
+            ],
           ),
-          SizedBox(height: 16),
-          FloatingActionButton(
-            onPressed: _sendTestNotification,
-            child: Icon(Icons.notifications),
-            backgroundColor: Colors.black,
-          ),
-          SizedBox(height: 16),
-          FloatingActionButton(
-            onPressed: _sendTestScheduledNotification,
-            child: Icon(Icons.alarm),
-            backgroundColor: Colors.black,
-          ),
-        ],
+        ),
       ),
+      floatingActionButton: _buildFloatingActionButton(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
-  String _dayToString(int day) {
-    switch (day) {
-      case DateTime.monday:
-        return 'Thứ 2';
-      case DateTime.tuesday:
-        return 'Thứ 3';
-      case DateTime.wednesday:
-        return 'Thứ 4';
-      case DateTime.thursday:
-        return 'Thứ 5';
-      case DateTime.friday:
-        return 'Thứ 6';
-      case DateTime.saturday:
-        return 'Thứ 7';
-      case DateTime.sunday:
-        return 'Chủ nhật';
-      default:
-        return '';
-    }
+  Widget _buildFloatingActionButton(BuildContext context) {
+    return FloatingActionButton(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      child: Ink(
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: gradient, // Gradient từ app_colors.dart
+        ),
+        width: 60,
+        height: 60,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(30),
+          onTap: () {
+            _showSetupReminderPage(context, isNew: true);
+          },
+          child: const Icon(
+            Icons.add,
+            color: active,
+            size: 24,
+          ),
+        ),
+      ),
+      onPressed: () {}, // Cái này nhấn không có tác dụng
+    );
   }
 }
 
-class Reminder {
-  final int id;
-  final String title;
-  final DateTime time;
-  final List<int> repeatDays;
+class _SetupReminderWidget extends StatefulWidget {
+  final ScrollController? scrollController;
+  final TimeOfDay initialTime;
+  final Set<int> initialDays;
+  final bool showDeleteButton;
 
-  Reminder({
-    required this.id,
-    required this.title,
-    required this.time,
-    required this.repeatDays,
+  const _SetupReminderWidget({
+    this.scrollController,
+    required this.initialTime,
+    required this.initialDays,
+    required this.showDeleteButton,
   });
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'time': time.toIso8601String(),
-      'repeatDays': repeatDays,
-    };
+  @override
+  __SetupReminderWidgetState createState() => __SetupReminderWidgetState();
+}
+
+class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
+  bool _loopEnabled = false;
+  late TimeOfDay _selectedTime;
+  late Set<int> _selectedDays;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedTime = widget.initialTime;
+    _selectedDays = widget.initialDays;
+    _loopEnabled = _selectedDays.isNotEmpty;
   }
 
-  factory Reminder.fromJson(Map<String, dynamic> json) {
-    return Reminder(
-      id: json['id'],
-      title: json['title'],
-      time: DateTime.parse(json['time']),
-      repeatDays: List<int>.from(json['repeatDays']),
+  @override
+  Widget build(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
+    String local = trans.locale;
+
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                trans.cancel,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            Text(trans.setReminder, style: h3.copyWith(color: Colors.white)),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(
+                    context, {'time': _selectedTime, 'days': _selectedDays});
+              },
+              child: Text(
+                trans.save,
+                style: h3.copyWith(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        controller: widget.scrollController,
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 20),
+            ListTile(
+              title: Text(trans.reTime),
+              trailing: InkWell(
+                onTap: () async {
+                  final timeOfDay = await showTimePicker(
+                    context: context,
+                    initialTime: _selectedTime,
+                  );
+                  if (timeOfDay != null) {
+                    setState(() {
+                      _selectedTime = timeOfDay;
+                    });
+                  }
+                },
+                child: Text(
+                  _selectedTime.format(context),
+                  style: h3,
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            SwitchListTile(
+              title: Text(trans.loop),
+              value: _loopEnabled,
+              onChanged: (value) {
+                setState(() {
+                  _loopEnabled = value;
+                  if (!_loopEnabled) {
+                    _selectedDays.clear();
+                  }
+                });
+              },
+            ),
+            if (_loopEnabled)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Wrap(
+                  spacing: 10.0,
+                  children: List<Widget>.generate(7, (index) {
+                    final dayIndex = index + 1;
+                    final isSelected = _selectedDays.contains(dayIndex);
+                    return ChoiceChip(
+                      label: Text(
+                        local == "en"
+                            ? [
+                                'Mon',
+                                'Tue',
+                                'Wed',
+                                'Thu',
+                                'Fri',
+                                'Sat',
+                                'Sun'
+                              ][index]
+                            : [
+                                'Thứ 2',
+                                'Thứ 3',
+                                'Thứ 4',
+                                'Thứ 5',
+                                'Thứ 6',
+                                'Thứ 7',
+                                'Chủ nhật'
+                              ][index],
+                      ),
+                      selected: isSelected,
+                      onSelected: (selected) {
+                        setState(() {
+                          if (selected) {
+                            _selectedDays.add(dayIndex);
+                          } else {
+                            _selectedDays.remove(dayIndex);
+                          }
+                        });
+                      },
+                    );
+                  }),
+                ),
+              ),
+            if (widget.showDeleteButton)
+              Center(
+                child: CustomButton(
+                  title: trans.deleteReminder,
+                  style: ButtonStyleType.Secondary,
+                  state: ButtonState.Enabled,
+                  onPressed: () {
+                    Navigator.pop(context, {'delete': true});
+                  },
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

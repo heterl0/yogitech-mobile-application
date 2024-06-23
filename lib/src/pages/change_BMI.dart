@@ -174,7 +174,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                   keyboardType: TextInputType.number,
                 ),
                 SizedBox(height: 48.0),
-                BoxButton(
+                CustomButton(
                     title: trans.recalculate,
                     onPressed: _recalculateBMI,
                     style: ButtonStyleType.Primary),

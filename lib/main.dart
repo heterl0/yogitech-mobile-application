@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/models/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
