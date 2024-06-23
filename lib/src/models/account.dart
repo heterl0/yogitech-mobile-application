@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 
-
-
 class Profile {
   final int id;
   final String user;
@@ -254,6 +252,7 @@ class Account {
   final String auth_provider;
   final Profile profile;
   final List<Following> following;
+  final List<Following> followers;
   final String? last_login;
   final String created_at;
 
@@ -269,6 +268,7 @@ class Account {
       this.auth_provider,
       this.profile,
       this.following,
+      this.followers,
       this.last_login,
       this.created_at);
 
@@ -284,6 +284,7 @@ class Account {
     String? auth_provider,
     Profile? profile,
     List<Following>? following,
+    List<Following>? followers,
     String? last_login,
     String? created_at,
   }) {
@@ -299,6 +300,7 @@ class Account {
       auth_provider ?? this.auth_provider,
       profile ?? this.profile,
       following ?? this.following,
+      followers ?? this.followers,
       last_login ?? this.last_login,
       created_at ?? this.created_at,
     );
@@ -317,6 +319,7 @@ class Account {
       'auth_provider': auth_provider,
       'profile': profile.toMap(),
       'following': following.map((x) => x.toMap()).toList(),
+      'followers': followers.map((x) => x.toMap()).toList(),
       'last_login': last_login,
       'created_at': created_at,
     };
@@ -339,6 +342,11 @@ class Account {
           (x) => Following.fromMap(x as Map<String, dynamic>),
         ),
       ),
+      List<Following>.from(
+        (map['followers'] as List<dynamic>).map<Following>(
+          (x) => Following.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
       map['last_login'] != null ? map['last_login'] as String : null,
       map['created_at'] as String,
     );
@@ -351,7 +359,7 @@ class Account {
 
   @override
   String toString() {
-    return 'Account(id: $id, username: $username, email: $email, phone: $phone, is_active: $is_active, is_staff: $is_staff, is_premium: $is_premium, active_status: $active_status, auth_provider: $auth_provider, profile: $profile, following: $following, last_login: $last_login, created_at: $created_at)';
+    return 'Account(id: $id, username: $username, email: $email, phone: $phone, is_active: $is_active, is_staff: $is_staff, is_premium: $is_premium, active_status: $active_status, auth_provider: $auth_provider, profile: $profile, following: $following, followers: $followers, last_login: $last_login, created_at: $created_at)';
   }
 
   @override
@@ -370,6 +378,7 @@ class Account {
         other.auth_provider == auth_provider &&
         other.profile == profile &&
         listEquals(other.following, following) &&
+        listEquals(other.followers, followers) &&
         other.last_login == last_login &&
         other.created_at == created_at;
   }
@@ -387,8 +396,8 @@ class Account {
         auth_provider.hashCode ^
         profile.hashCode ^
         following.hashCode ^
+        followers.hashCode ^
         last_login.hashCode ^
         created_at.hashCode;
   }
-  
 }
