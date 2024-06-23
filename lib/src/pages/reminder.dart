@@ -1,19 +1,26 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:YogiTech/src/custombar/appbar.dart';
-import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
-import 'package:YogiTech/src/widgets/switch.dart'; // Assuming this is CustomSwitch
+import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
+import 'package:YogiTech/src/widgets/switch.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter/cupertino.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/widgets.dart'; // Để sử dụng AnimatedList
+import 'dart:convert';
 
 class ReminderPage extends StatefulWidget {
   final bool reminderOn;
-  // final ValueChanged<bool> areRemindersEnabled;
 
   const ReminderPage({
     super.key,
     this.reminderOn = true,
-    // this.areRemindersEnabled,
   });
 
   @override
@@ -23,6 +30,37 @@ class ReminderPage extends StatefulWidget {
 class _ReminderPageState extends State<ReminderPage> {
   bool _isReminderEnabled = false;
   final List<Map<String, dynamic>> _selectedTimes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadReminders();
+  }
+
+  Future<void> _loadReminders() async {
+    final prefs = await SharedPreferences.getInstance();
+    final reminderData = prefs.getString('reminders');
+    if (reminderData != null) {
+      setState(() {
+        _selectedTimes.addAll(List<Map<String, dynamic>>.from(
+          (prefs.getStringList('reminders') ?? []).map(
+            (item) => Map<String, dynamic>.from(
+              item as Map<String, dynamic>,
+            ),
+          ),
+        ));
+      });
+    }
+  }
+
+  Future<void> _saveReminders() async {
+    final prefs = await SharedPreferences.getInstance();
+    final reminderData = _selectedTimes
+        .map(
+            (item) => item.map((key, value) => MapEntry(key, value.toString())))
+        .toList();
+    await prefs.setStringList('reminders', reminderData.cast<String>());
+  }
 
   String _getDayDescription(Set<int> days, AppLocalizations trans) {
     String local = trans.locale;
@@ -92,6 +130,7 @@ class _ReminderPageState extends State<ReminderPage> {
           setState(() {
             _selectedTimes.removeAt(index);
           });
+          _saveReminders();
         }
       } else if (result.containsKey('time') && result.containsKey('days')) {
         if (isNew) {
@@ -107,6 +146,7 @@ class _ReminderPageState extends State<ReminderPage> {
             };
           });
         }
+        _saveReminders();
       }
     }
   }
@@ -343,7 +383,7 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
               ),
             if (widget.showDeleteButton)
               Center(
-                child: BoxButton(
+                child: CustomButton(
                   title: trans.deleteReminder,
                   style: ButtonStyleType.Secondary,
                   state: ButtonState.Enabled,

@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/models/account.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
@@ -16,6 +17,7 @@ class SettingsPage extends StatelessWidget {
   final bool isVietnamese;
   final ValueChanged<bool> onLanguageChanged;
   final VoidCallback? onProfileUpdated;
+  final Account? account;
 
   const SettingsPage({
     Key? key,
@@ -25,8 +27,8 @@ class SettingsPage extends StatelessWidget {
     required this.onLanguageChanged,
     required this.isVietnamese,
     this.onProfileUpdated,
-  }): super(key: key);
-  
+    this.account,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +62,10 @@ class SettingsPage extends StatelessWidget {
                   pushWithoutNavBar(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChangeProfilePage(onProfileUpdated: onProfileUpdated),
+                      builder: (context) => ChangeProfilePage(
+                        onProfileUpdated: onProfileUpdated,
+                        account: account,
+                      ),
                     ),
                   );
                 },

@@ -34,7 +34,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
             alignment: Alignment.center,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 24),
-              child: BoxButton(
+              child: CustomButton(
                 title: widget.buttonTitle,
                 style: ButtonStyleType.Primary,
                 onPressed: widget.onPressed,

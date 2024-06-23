@@ -169,6 +169,10 @@ Future<Profile?> patchBMI(PatchBMIRequest data) async {
     final url = formatApiUrl('/api/v1/user-profiles/$profileId/');
     final Response response = await DioInstance.patch(url, data: data.toMap());
     if (response.statusCode == 200) {
+      final account = await getUser();
+      if (account != null) {
+        await storeAccount(account);
+      }
       return Profile.fromMap(response.data);
     } else {
       print(
@@ -220,53 +224,92 @@ class PatchProfileRequest {
   }
 }
 
-
 // Update profile
-Future<Profile?> patchProfile(PatchProfileRequest data) async {
+// Future<Profile?> patchProfile(PatchProfileRequest data) async {
+//   try {
+//     final Account? currentUser = await retrieveAccount();
+//     final int profileId = currentUser!.profile.id;
+//     final url = formatApiUrl('/api/v1/user-profiles/$profileId/');
+//     final response = await DioInstance.patch(url, data: data.toMap());
+//     final accountRes = await DioInstance.patch(
+//         formatApiUrl('/api/v1/users/me/'),
+//         data: data.toMap());
+//     if (response.statusCode == 200 && accountRes.statusCode == 200) {
+//       await storeAccount(Account.fromMap(accountRes.data));
+//       return Profile.fromMap(response.data);
+//     } else {
+//       print(Profile.fromMap(response.data));
+//       print(
+//           'Patch profile detail failed with status code: ${response.statusCode}');
+//       return null;
+//     }
+//   } catch (e) {
+//     print('Patch profile detail error: $e');
+//     return null;
+//   }
+// }
+
+Future<dynamic> resetPassword(final String email) async {
+  final url = formatApiUrl("/api/v1/users/reset_password/");
   try {
-    final Account? currentUser = await retrieveAccount();
-    final int profileId = currentUser!.profile.id;
-    final url = formatApiUrl('/api/v1/user-profiles/$profileId/');
-    final response = await DioInstance.patch(url, data: data.toMap());
-    final accountRes = await DioInstance.patch(
-        formatApiUrl('/api/v1/users/me/'),
-        data: data.toMap());
-    if (response.statusCode == 200 && accountRes.statusCode == 200) {
-      await storeAccount(Account.fromMap(accountRes.data));
-      return Profile.fromMap(response.data);
+    final response = await Dio().post(url, data: {'email': email});
+
+    if (response.statusCode == 204) {
+      print(response.statusCode);
+      return {'status': response.statusCode, 'message': response.data};
     } else {
-      print(Profile.fromMap(response.data));
-      print(
-          'Patch profile detail failed with status code: ${response.statusCode}');
-      return null;
+      return {'status': response.statusCode, 'message': response.data};
     }
   } catch (e) {
-    print('Patch profile detail error: $e');
-    return null;
+    if (e is DioException) {
+      return {'status': e.response!.statusCode, 'message': e.response!.data};
+    }
   }
 }
 
-Future<Profile?> patchAvatar(Uint8List binaryImage) async {
+Future<Profile?> patchProfile(
+    PatchProfileRequest data, Uint8List? binaryImage) async {
   try {
     final Account? currentUser = await retrieveAccount();
     final int profileId = currentUser!.profile.id;
     final url = formatApiUrl('/api/v1/user-profiles/$profileId/');
     // Get the current date and time
-    final now = DateTime.now();
+    late FormData formData;
+    if (binaryImage != null) {
+      final now = DateTime.now();
 
-    // Format the date and time as a string
-    final timestamp =
-        '${now.year}${now.month}${now.day}_${now.hour}${now.minute}${now.second}';
+      // Format the date and time as a string
+      final timestamp =
+          '${now.year}${now.month}${now.day}_${now.hour}${now.minute}${now.second}';
 
-    // Include the timestamp in the filename
-    final filename = 'avatar_$timestamp.jpg';
+      // Include the timestamp in the filename
+      final filename = 'avatar_$timestamp.jpg';
 
-    final formData = FormData.fromMap({
-      'avatar': MultipartFile.fromBytes(binaryImage, filename: filename),
-    });
-
+      formData = FormData.fromMap({
+        'avatar': MultipartFile.fromBytes(binaryImage, filename: filename),
+        'last_name': data.lastName,
+        'first_name': data.firstName,
+        'birthdate': data.birthdate?.toIso8601String(),
+        'gender': data.gender
+      });
+    } else {
+      formData = FormData.fromMap({
+        'last_name': data.lastName,
+        'first_name': data.firstName,
+        'birthdate': data.birthdate?.toIso8601String(),
+        'gender': data.gender
+      });
+    }
     final response = await DioInstance.patch(url, data: formData);
+    if (data.phone != null) {
+      await DioInstance.patch(formatApiUrl('/api/v1/users/me/'),
+          data: {'phone': data.phone});
+    }
     if (response.statusCode == 200) {
+      final account = await getUser();
+      if (account != null) {
+        await storeAccount(account);
+      }
       return Profile.fromMap(response.data);
     } else {
       print(

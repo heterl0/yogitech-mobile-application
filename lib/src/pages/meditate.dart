@@ -50,48 +50,39 @@ class _MeditateState extends State<Meditate> {
     int currentStreak = prefs.getInt('currentStreak') ?? 0;
     int longestStreak = prefs.getInt('longestStreak') ?? 0;
 
-    // Kiểm tra xem đã từng thiền trước đó chưa
+    // Check if there is a last meditation date
     if (lastMeditationDate != null) {
-      // Xóa thông tin giờ, phút, giây để so sánh chỉ với ngày
+      // Normalize dates to compare only year, month, and day
       DateTime normalizedToday = DateTime(today.year, today.month, today.day);
       DateTime normalizedLastDate = DateTime(lastMeditationDate.year,
           lastMeditationDate.month, lastMeditationDate.day);
 
-      // Tính khoảng cách giữa ngày thiền gần nhất và hôm nay (tính theo ngày)
       int daysDifference =
           normalizedToday.difference(normalizedLastDate).inDays;
-
-      // Nếu khoảng cách là 0 (cùng ngày) hoặc 1, tăng streak
-      if (daysDifference == 0 || daysDifference == 1) {
-        // Cần kiểm tra thời gian để đảm bảo đúng trong vòng 24 giờ
-        if (daysDifference == 0 && today.hour < lastMeditationDate.hour) {
-          currentStreak++;
-        } else if (daysDifference == 1) {
-          // Nếu khoảng cách là 1 ngày, reset streak nếu hôm nay thiền trước giờ thiền ngày hôm qua
-          if (today.hour < lastMeditationDate.hour) {
-            currentStreak = 1;
-          } else {
-            currentStreak++;
-          }
-        }
-      } else {
-        // Nếu không thiền trong vòng 24 giờ, reset streak
+      print(
+          'daysDifference:$daysDifference   normalizedLastDate:$normalizedLastDate lastMeditationDate:$lastMeditationDate');
+      // If the difference is 1 day, increment streak
+      if (daysDifference == 1) {
+        currentStreak++;
+      } else if (daysDifference > 1) {
+        // If the difference is more than 1 day, reset streak
         currentStreak = 1;
       }
+      // If the difference is 0 days, do nothing (already counted for today)
     } else {
-      // Nếu chưa từng thiền, đây là lần đầu tiên, streak = 1
+      // If there is no last meditation date, this is the first meditation
       currentStreak = 1;
     }
 
-    // Cập nhật longestStreak nếu cần
+    // Update longest streak if current streak is greater
     if (currentStreak > longestStreak) {
       longestStreak = currentStreak;
       await prefs.setInt('longestStreak', longestStreak);
     }
 
-    // Lưu lại currentStreak và lastMeditationDate
+    // Save current streak and last meditation date
     await prefs.setInt('currentStreak', currentStreak);
-    await prefs.setString('lastMeditationDate', today.toString());
+    await prefs.setString('lastMeditationDate', today.toIso8601String());
     await _loadStreakData();
   }
 

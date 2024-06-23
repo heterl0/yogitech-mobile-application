@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/models/social.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
@@ -6,8 +7,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FriendProfile extends StatefulWidget {
   final int? id;
+  final SocialProfile profile;
 
-  FriendProfile({Key? key, this.id}) : super(key: key);
+  FriendProfile({Key? key, this.id, required this.profile}) : super(key: key);
 
   @override
   State<FriendProfile> createState() => _nameState();
@@ -20,6 +22,9 @@ class _nameState extends State<FriendProfile> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+    final name = widget.profile.first_name != null
+        ? '${widget.profile.first_name} ${widget.profile.last_name}'
+        : widget.profile.username ?? 'User Name';
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
@@ -36,7 +41,7 @@ class _nameState extends State<FriendProfile> {
                 return gradient.createShader(bounds);
               },
               child: Text(
-                'Name',
+                name,
                 style: h2.copyWith(color: active),
               ),
             ),
@@ -52,9 +57,12 @@ class _nameState extends State<FriendProfile> {
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                       ),
-                      child: const CircleAvatar(
+                      child: CircleAvatar(
                         radius: 78,
-                        backgroundImage: AssetImage('assets/images/avatar.png'),
+                        backgroundImage: widget.profile.avatar != null
+                            ? NetworkImage(widget.profile.avatar ?? "")
+                                as ImageProvider
+                            : AssetImage('assets/images/avatar.png'),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -74,7 +82,7 @@ class _nameState extends State<FriendProfile> {
                         style: min_cap.copyWith(color: text, height: 1),
                       ),
                       Text(
-                        '999',
+                        widget.profile.exp.toString(),
                         style: h1.copyWith(color: primary, height: 1),
                       ),
                       SizedBox(height: 36), // Khoảng cách giữa các phần tử
@@ -159,7 +167,8 @@ class BoxButton extends StatelessWidget {
     required this.textStyle,
     required this.shape,
     required this.onPressed,
-    this.borderColor, // Add this line
+    this.borderColor,
+    required style, // Add this line
   });
 
   @override

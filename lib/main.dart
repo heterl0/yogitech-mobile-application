@@ -1,3 +1,5 @@
+import 'package:YogiTech/src/models/social.dart';
+import 'package:YogiTech/src/models/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
@@ -109,6 +111,17 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  final SocialProfile profile = SocialProfile(
+    user_id: 1,
+    username: 'username',
+    first_name: 'first_name',
+    last_name: 'last_name',
+    avatar: 'https://via.placeholder.com/150',
+    exp: 999,
+    level: 1,
+    streak: 1,
+  );
+
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
@@ -181,7 +194,9 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.blog: (context) => Blog(),
           AppRoutes.reminder: (context) => ReminderPage(),
           AppRoutes.notifications: (context) => NotificationsPage(),
-          AppRoutes.friendProfile: (context) => FriendProfile(),
+          AppRoutes.friendProfile: (context) => FriendProfile(
+              // Sửa lại tên class
+              profile: profile),
         });
   }
 
