@@ -21,8 +21,10 @@ import 'package:http/http.dart' as http;
 class ChangeProfilePage extends StatefulWidget {
   final VoidCallback? onProfileUpdated;
 
-  
-  const ChangeProfilePage({super.key, this.onProfileUpdated,});
+  const ChangeProfilePage({
+    super.key,
+    this.onProfileUpdated,
+  });
 
   @override
   State<ChangeProfilePage> createState() => _ChangeProfilePageState();
@@ -99,14 +101,12 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         // Fetch the avatar image as a Uint8List and update the _imageBytes variable
         if (_profile!.avatar_url != null && _profile!.avatar_url!.isNotEmpty) {
           setState(() {
-              _isLoading = true;
-
-            });
+            _isLoading = true;
+          });
           getImageBytesFromUrl(_profile!.avatar_url!).then((imageBytes) {
             setState(() {
               _imageBytes = imageBytes;
               _isLoading = false;
-
             });
           }).catchError((error) {
             print('Failed to load image: $error');
@@ -120,7 +120,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   }
 
   Future<Uint8List> getImageBytesFromUrl(String url) async {
-
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       return response.bodyBytes;
@@ -156,181 +155,190 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         title: trans.editProfile,
         style: widthStyle.Large,
       ),
-      body:  _isLoading // Check loading state
-          ? Center(child: CircularProgressIndicator()) :
-      
-      SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(24.0),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 144,
-                    height: 144,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                        child: _profile != null && (_imageBytes != null)
-                            ? CircleAvatar(
-                                radius: 50,
-                                backgroundImage: MemoryImage(_imageBytes!),
-                                backgroundColor: Colors.transparent,
-                              )
-                            : CircleAvatar(
-                                radius: 50,
-                                backgroundImage: NetworkImage(
-                                    "https://storage.yogitech.me/cae3d36a-6b31-4086-a602-ca62eeb968a7.jpg"),
-                                backgroundColor: Colors.transparent,
-                              )),
+      body: _isLoading // Check loading state
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.all(24.0),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          width: 144,
+                          height: 144,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                              child: _profile != null && (_imageBytes != null)
+                                  ? CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage:
+                                          MemoryImage(_imageBytes!),
+                                      backgroundColor: Colors.transparent,
+                                    )
+                                  : CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage: NetworkImage(
+                                          "https://storage.yogitech.me/cae3d36a-6b31-4086-a602-ca62eeb968a7.jpg"),
+                                      backgroundColor: Colors.transparent,
+                                    )),
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      BoxButton(
+                        title: trans.changeAvatar,
+                        style: ButtonStyleType.Tertiary,
+                        onPressed: () {
+                          // Handle change avatar action here
+                          _pickImage();
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      Text(trans.lastName,
+                          style:
+                              h3.copyWith(color: theme.colorScheme.onPrimary)),
+                      SizedBox(height: 8.0),
+                      BoxInputField(
+                        controller: lastName,
+                        placeholder: trans.yourLastName,
+                      ),
+                      SizedBox(height: 16.0),
+                      Text(trans.firstName,
+                          style:
+                              h3.copyWith(color: theme.colorScheme.onPrimary)),
+                      SizedBox(height: 8.0),
+                      BoxInputField(
+                        controller: firstName,
+                        placeholder: trans.yourFistName,
+                      ),
+                      SizedBox(height: 16.0),
+                      Text(trans.phoneNumber,
+                          style:
+                              h3.copyWith(color: theme.colorScheme.onPrimary)),
+                      SizedBox(height: 8.0),
+                      BoxInputField(
+                        controller: phone,
+                        placeholder: _account?.phone ?? '',
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        regExp: phoneRegExp,
+                        errorText: "Invalid phone number",
+                      ),
+                      SizedBox(height: 16.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  trans.birthday,
+                                  style: h3.copyWith(
+                                      color: theme.colorScheme.onPrimary),
+                                ),
+                                SizedBox(height: 8.0),
+                                BoxInputField(
+                                  controller: birthday,
+                                  placeholder: (_profile?.birthdate != null)
+                                      ? _formatDate(_profile!.birthdate ?? '')
+                                      : trans.birthday,
+                                  trailing: Icon(Icons.calendar_today),
+                                  readOnly: true,
+                                  onTap: () async {
+                                    DateTime? pickedDate = await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(1900),
+                                      lastDate: DateTime(2100),
+                                    );
+                                    if (pickedDate != null) {
+                                      setState(() {
+                                        birthday.text = DateFormat('dd-MM-yyyy')
+                                            .format(pickedDate);
+                                      });
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                              width: 16.0), // Khoảng cách giữa hai Expanded
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  trans.gender,
+                                  style: h3.copyWith(
+                                      color: theme.colorScheme.onPrimary),
+                                ),
+                                SizedBox(height: 8.0),
+                                CustomDropdownFormField(
+                                  controller: gender,
+                                  items: [
+                                    trans.male,
+                                    trans.female,
+                                    trans.other
+                                  ],
+                                  placeholder: gender.text.isEmpty
+                                      ? trans.sellectGender
+                                      : gender.text,
+                                  onTap: () {
+                                    // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 40.0),
+                      BoxButton(
+                        title: trans.save, // Set the button text
+                        style: ButtonStyleType
+                            .Primary, // Set the button style (optional)
+                        onPressed: () async {
+                          setState(() {
+                            _isLoading = true;
+                            _changgeProfile(context);
+                            _changgeAvatar(context);
+                          });
+                        },
+                      ),
+                      SizedBox(height: 16.0),
+                      BoxButton(
+                        title: trans.changePassword,
+                        style: ButtonStyleType.Tertiary,
+                        onPressed: () {
+                          _changePasswordBottomSheet(context);
+                        },
+                      ),
+                      BoxButton(
+                        title: trans.changeBMI,
+                        style: ButtonStyleType.Tertiary,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ChangeBMIPage(onBMIUpdated: refreshProfile),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 8),
-                BoxButton(
-                  title: trans.changeAvatar,
-                  style: ButtonStyleType.Tertiary,
-                  onPressed: () {
-                    // Handle change avatar action here
-                    _pickImage();
-                  },
-                ),
-                SizedBox(height: 16),
-                Text(trans.lastName,
-                    style: h3.copyWith(color: theme.colorScheme.onPrimary)),
-                SizedBox(height: 8.0),
-                BoxInputField(
-                  controller: lastName,
-                  placeholder: trans.yourLastName,
-                ),
-                SizedBox(height: 16.0),
-                Text(trans.firstName,
-                    style: h3.copyWith(color: theme.colorScheme.onPrimary)),
-                SizedBox(height: 8.0),
-                BoxInputField(
-                  controller: firstName,
-                  placeholder: trans.yourFistName,
-                ),
-                SizedBox(height: 16.0),
-                Text(trans.phoneNumber,
-                    style: h3.copyWith(color: theme.colorScheme.onPrimary)),
-                SizedBox(height: 8.0),
-                BoxInputField(
-                  controller: phone,
-                  placeholder: _account?.phone ?? '',
-                  keyboardType: TextInputType.phone,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  regExp: phoneRegExp,
-                  errorText: "Invalid phone number",
-                ),
-                SizedBox(height: 16.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            trans.birthday,
-                            style:
-                                h3.copyWith(color: theme.colorScheme.onPrimary),
-                          ),
-                          SizedBox(height: 8.0),
-                          BoxInputField(
-                            controller: birthday,
-                            placeholder: (_profile?.birthdate != null)
-                                ? _formatDate(_profile!.birthdate ?? '')
-                                : trans.birthday,
-                            trailing: Icon(Icons.calendar_today),
-                            readOnly: true,
-                            onTap: () async {
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime(2100),
-                              );
-                              if (pickedDate != null) {
-                                setState(() {
-                                  birthday.text = DateFormat('dd-MM-yyyy')
-                                      .format(pickedDate);
-                                });
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 16.0), // Khoảng cách giữa hai Expanded
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            trans.gender,
-                            style:
-                                h3.copyWith(color: theme.colorScheme.onPrimary),
-                          ),
-                          SizedBox(height: 8.0),
-                          CustomDropdownFormField(
-                            controller: gender,
-                            items: [trans.male, trans.female, trans.other],
-                            placeholder: gender.text.isEmpty
-                                ? trans.sellectGender
-                                : gender.text,
-                            onTap: () {
-                              // Tùy chỉnh hành động khi dropdown được nhấn, nếu cần thiết
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 40.0),
-                BoxButton(
-                  title: trans.save, // Set the button text
-                  style: ButtonStyleType
-                      .Primary, // Set the button style (optional)
-                  onPressed: () async {
-                    setState(() {
-                      _isLoading = true;
-                      _changgeProfile(context);
-                      _changgeAvatar(context);
-                    });
-                    
-                  },
-                ),
-                SizedBox(height: 16.0),
-                BoxButton(
-                  title: trans.changePassword,
-                  style: ButtonStyleType.Tertiary,
-                  onPressed: () {
-                    _changePasswordBottomSheet(context);
-                  },
-                ),
-                BoxButton(
-                  title: trans.changeBMI,
-                  style: ButtonStyleType.Tertiary,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ChangeBMIPage(onBMIUpdated: refreshProfile),
-                      ),
-                    );
-                  },
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -351,55 +359,53 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
             .key
         : null;
     PatchProfileRequest request = PatchProfileRequest(
-        lastName: lastName.text,
-        firstName: firstName.text,
-        phone: phone.text,
-        birthdate: birthdate,
-        gender: genderValue);
+      lastName: lastName.text,
+      firstName: firstName.text,
+      phone: phone.text,
+      birthdate: birthdate,
+      gender: genderValue,
+    );
 
     final Profile? profile = await patchProfile(request);
-    //fix cai api xong sua lai
     final account = await retrieveAccount();
-      setState(() {
-          _isLoading = false;
-          _fetchUserProfile();
-          if (widget.onProfileUpdated != null && !(_image != null && _imageBytes != null)) {
-            widget.onProfileUpdated!();
-          }
-      });
+    setState(() {
+      _isLoading = false;
+      _fetchUserProfile();
+      if (widget.onProfileUpdated != null &&
+          !(_image != null && _imageBytes != null)) {
+        widget.onProfileUpdated!();
+      }
+    });
 
-    // if (profile == null) {
-      
-    // }else{
-    //   setState(() {
-    //       _isLoading = false;
-    //   });
-    // }
+    if (profile != null) {
+      _showSnackBar(true); // Hiển thị thông báo thành công
+    } else {
+      _showSnackBar(false); // Hiển thị thông báo thất bại
+    }
   }
 
   Future<void> _changgeAvatar(BuildContext context) async {
     if (_image != null && _imageBytes != null) {
       Profile? profile = await patchAvatar(_imageBytes!);
-      setState(() {          
+      setState(() {
         _isLoading = false;
       });
       final account = await retrieveAccount();
-        setState(() {
-          _fetchUserProfile();
-          if (widget.onProfileUpdated != null) {
-            widget.onProfileUpdated!();
-          }
-        });
-         _showSnackBar(true);
+      setState(() {
+        _fetchUserProfile();
+        if (widget.onProfileUpdated != null) {
+          widget.onProfileUpdated!();
+        }
+      });
+      _showSnackBar(true);
     }
   }
-
 
   void _showSnackBar(bool test) {
     final trans = AppLocalizations.of(context)!;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text( test? trans.updateSuccess:trans.updateFail),
+        content: Text(test ? trans.updateSuccess : trans.updateFail),
         duration: Duration(seconds: 2), // Adjust as per your requirement
       ),
     );
@@ -498,4 +504,3 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     );
   }
 }
-

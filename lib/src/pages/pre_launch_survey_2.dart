@@ -7,12 +7,12 @@ import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:YogiTech/src/widgets/dropdown_field.dart';
+import 'package:YogiTech/api/account/account_service.dart';
 
 class PrelaunchSurvey2 extends StatefulWidget {
-  const PrelaunchSurvey2({super.key});
+  const PrelaunchSurvey2({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _PrelaunchSurvey2State createState() => _PrelaunchSurvey2State();
 }
 
@@ -35,29 +35,6 @@ class _PrelaunchSurvey2State extends State<PrelaunchSurvey2> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // SizedBox(height: 16.0),
-                // Text(trans.interested,
-                //     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
-                // SizedBox(height: 12.0),
-                // CustomDropdownFormField(
-                //   controller: interested,
-                //   items: [
-                //     trans.fitness,
-                //     trans.nature,
-                //     trans.health,
-                //     trans.happy,
-                //     trans.sports,
-                //     trans.breath,
-                //     trans.mood,
-                //     trans.motivation
-                //   ],
-                //   placeholder:
-                //       interested.text.isEmpty ? trans.choose : interested.text,
-                //   onTap: () {
-                //     setState(() {});
-                //   },
-                // ),
-
                 SizedBox(height: 16.0),
                 Text(trans.level,
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
@@ -74,31 +51,11 @@ class _PrelaunchSurvey2State extends State<PrelaunchSurvey2> {
                     setState(() {});
                   },
                 ),
-
                 SizedBox(height: 16.0),
-                // Last Name
-                Text(trans.weightKg, style: h3.copyWith(color: active)),
-                SizedBox(height: 12.0),
-                BoxInputField(
-                  controller: weight,
-                  placeholder: '60',
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                ),
-
+                _buildWeightField(trans),
                 SizedBox(height: 16.0),
-                // Height
-                Text(trans.heightCm, style: h3.copyWith(color: active)),
-                SizedBox(height: 12.0),
-                BoxInputField(
-                  controller: height,
-                  placeholder: '168',
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                ),
-
+                _buildHeightField(trans),
                 SizedBox(height: 16.0),
-                // Weight
               ],
             ),
           ),
@@ -106,7 +63,56 @@ class _PrelaunchSurvey2State extends State<PrelaunchSurvey2> {
       ),
       bottomNavigationBar: CustomBottomBar(
         buttonTitle: trans.letsGo,
-        onPressed: () {
+        onPressed: _saveUserBMI,
+      ),
+    );
+  }
+
+  Widget _buildWeightField(AppLocalizations trans) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(trans.weightKg, style: h3.copyWith(color: active)),
+        SizedBox(height: 12.0),
+        BoxInputField(
+          controller: weight,
+          placeholder: '60',
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeightField(AppLocalizations trans) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(trans.heightCm, style: h3.copyWith(color: active)),
+        SizedBox(height: 12.0),
+        BoxInputField(
+          controller: height,
+          placeholder: '168',
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        ),
+      ],
+    );
+  }
+
+  Future<void> _saveUserBMI() async {
+    double? userWeight = double.tryParse(weight.text);
+    double? userHeight = double.tryParse(height.text);
+
+    if (userWeight != null && userHeight != null) {
+      try {
+        final updatedProfile = await patchBMI(PatchBMIRequest(
+          weight: userWeight,
+          height: userHeight,
+          bmi: calculateBMI(userWeight, userHeight),
+        ));
+        if (updatedProfile != null) {
+          print('BMI updated successfully');
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -123,8 +129,20 @@ class _PrelaunchSurvey2State extends State<PrelaunchSurvey2> {
               ),
             ),
           );
-        },
-      ),
-    );
+        } else {
+          print('Failed to update BMI');
+        }
+      } catch (e) {
+        print('Error updating BMI: $e');
+      }
+    } else {
+      print('Invalid input for weight or height');
+    }
   }
+
+  double calculateBMI(double weight, double height) {
+    double bmi = weight / ((height / 100) * (height / 100));
+    return double.parse(bmi.toStringAsFixed(2));
+  }
+
 }
