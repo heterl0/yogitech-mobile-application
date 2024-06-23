@@ -179,7 +179,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
       );
 
       // Call patchProfile with the PatchProfileRequest object
-      patchProfile(request).then((profile) {
+      patchProfile(request, null).then((profile) {
         if (profile != null) {
           // Handle successful profile update
           print('User profile updated successfully');

@@ -342,11 +342,13 @@ class Account {
           (x) => Following.fromMap(x as Map<String, dynamic>),
         ),
       ),
-      List<Following>.from(
-        (map['followers'] as List<dynamic>).map<Following>(
-          (x) => Following.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+      map['followers'] != null
+          ? List<Following>.from(
+              (map['followers'] as List<dynamic>).map<Following>(
+                (x) => Following.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : <Following>[],
       map['last_login'] != null ? map['last_login'] as String : null,
       map['created_at'] as String,
     );
