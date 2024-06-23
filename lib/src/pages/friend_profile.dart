@@ -1,3 +1,5 @@
+import 'package:YogiTech/api/social/social_service.dart';
+import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/social.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
@@ -8,15 +10,53 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class FriendProfile extends StatefulWidget {
   final int? id;
   final SocialProfile profile;
+  final VoidCallback? onProfileUpdated;
+  final Account? account;
 
-  FriendProfile({Key? key, this.id, required this.profile}) : super(key: key);
+  FriendProfile(
+      {Key? key,
+      this.id,
+      required this.profile,
+      this.onProfileUpdated,
+      this.account})
+      : super(key: key);
 
   @override
   State<FriendProfile> createState() => _nameState();
 }
 
 class _nameState extends State<FriendProfile> {
-  bool follow = true; // Khai báo biến ở đây
+  bool isFollow = false; // Khai báo biến ở đây
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      isFollow = widget.account!.isFollowing(widget.profile.user_id ?? -1);
+    });
+  }
+
+  Future<void> unFollow(int id) async {
+    try {
+      await unfollowUser(id);
+      if (widget.onProfileUpdated != null) {
+        widget.onProfileUpdated!();
+      }
+    } catch (e) {
+      print('Error unfollowing: $e');
+    }
+  }
+
+  Future<void> followUserByUserId(int id) async {
+    try {
+      await followUser(id);
+      if (widget.onProfileUpdated != null) {
+        widget.onProfileUpdated!();
+      }
+    } catch (e) {
+      print('Error following: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +102,7 @@ class _nameState extends State<FriendProfile> {
                         backgroundImage: widget.profile.avatar != null
                             ? NetworkImage(widget.profile.avatar ?? "")
                                 as ImageProvider
-                            : AssetImage('assets/images/avatar.png'),
+                            : AssetImage('assets/images/gradient.jpg'),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -94,24 +134,32 @@ class _nameState extends State<FriendProfile> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(44.0),
                                 border: Border.all(
-                                    color: follow ? error : primary,
+                                    color: isFollow ? error : primary,
                                     width: 2.0),
                               ),
                               child: Material(
                                 color: Colors.transparent,
                                 child: InkWell(
                                   onTap: () {
-                                    // Xử lý sự kiện khi nhấn vào nút
+                                    if (isFollow) {
+                                      unFollow(widget.profile.user_id ?? -1);
+                                    } else {
+                                      followUserByUserId(
+                                          widget.profile.user_id ?? -1);
+                                    }
                                     setState(() {
-                                      follow = !follow; // Thay đổi trạng thái
+                                      isFollow =
+                                          !isFollow; // Thay đổi trạng thái
                                     });
                                   },
                                   borderRadius: BorderRadius.circular(44.0),
                                   child: Center(
                                     child: Text(
-                                        follow ? trans.unfollow : trans.follow,
+                                        isFollow
+                                            ? trans.unfollow
+                                            : trans.follow,
                                         style: h3.copyWith(
-                                            color: follow ? error : primary)),
+                                            color: isFollow ? error : primary)),
                                   ),
                                 ),
                               ),

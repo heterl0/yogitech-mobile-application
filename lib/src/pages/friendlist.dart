@@ -12,7 +12,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FriendListPage extends StatefulWidget {
   final int initialTabIndex;
-  const FriendListPage({super.key, required this.initialTabIndex});
+  final VoidCallback? onProfileUpdated;
+  late Account? account;
+  FriendListPage(
+      {super.key,
+      required this.initialTabIndex,
+      this.onProfileUpdated,
+      this.account});
 
   @override
   _FriendListPageState createState() => _FriendListPageState();
@@ -62,6 +68,44 @@ class _FriendListPageState extends State<FriendListPage>
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  Future<void> unFollow(int id) async {
+    try {
+      final account = await unfollowUser(id);
+
+      _following.removeWhere((element) => element.id == id);
+      setState(() {
+        _following = _following;
+      });
+      if (widget.onProfileUpdated != null) {
+        widget.onProfileUpdated!();
+      }
+      if (account != null) {
+        setState(() {
+          widget.account = account;
+        });
+      }
+    } catch (e) {
+      print('Error unfollowing: $e');
+    }
+  }
+
+  Future<void> followUserByUserId(int id) async {
+    try {
+      final account = await followUser(id);
+      if (widget.onProfileUpdated != null) {
+        widget.onProfileUpdated!();
+      }
+      _fetchFollower();
+      if (account != null) {
+        setState(() {
+          widget.account = account;
+        });
+      }
+    } catch (e) {
+      print('Error following: $e');
     }
   }
 
@@ -200,12 +244,13 @@ class _FriendListPageState extends State<FriendListPage>
                   children: [
                     FriendList(
                       friends: _following,
+                      unFollow: unFollow,
                       tab: 0,
                     ),
                     FriendList(
                       friends: _followers,
                       tab: 1,
-                      following: _following,
+                      // following: _following,
                     ),
                   ],
                 ),
@@ -229,6 +274,9 @@ class _FriendListPageState extends State<FriendListPage>
                   itemCount: searchResults.length,
                   itemBuilder: (context, index) {
                     final SocialProfile friend = searchResults[index];
+                    var isFollowing =
+                        widget.account!.isFollowing(friend.user_id ?? -1);
+
                     final name = friend.first_name != null
                         ? '${friend.first_name} ${friend.last_name}'
                         : friend.username ?? 'N/A';
@@ -242,10 +290,34 @@ class _FriendListPageState extends State<FriendListPage>
                           MaterialPageRoute(
                             builder: (context) => FriendProfile(
                               profile: friend,
+                              account: widget.account,
                             ),
                           ),
                         );
                       },
+                      postIcon: isFollowing
+                          ? IconButton(
+                              icon: Icon(
+                                Icons.group_remove_outlined,
+                                color: error,
+                              ),
+                              onPressed: () async {
+                                await unFollow(friend.user_id ?? -1);
+                              },
+                            )
+                          : IconButton(
+                              icon: Icon(
+                                Icons.group_add_outlined,
+                                color: primary,
+                              ),
+                              onPressed: () async {
+                                await followUserByUserId(friend.user_id ?? -1);
+                                if (widget.onProfileUpdated != null) {
+                                  widget.onProfileUpdated!();
+                                }
+                              },
+                            ),
+                      // isFollowing: isFollowing,
                     );
                   },
                 ),
@@ -265,11 +337,13 @@ class FriendList extends StatelessWidget {
   final int tab;
   final List<dynamic> friends;
   final List<dynamic>? following;
+  final Function(int)? unFollow;
 
   const FriendList({
     super.key,
     required this.friends,
     required this.tab,
+    this.unFollow,
     this.following,
   });
 
@@ -318,14 +392,22 @@ class FriendList extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => FriendProfile(
                         profile: friendProfile,
+                        account: friend,
                       ),
                     ),
                   );
                 },
                 postIcon: tab == 0
-                    ? Icon(
-                        Icons.group_remove_outlined,
-                        color: error,
+                    ? IconButton(
+                        icon: Icon(
+                          Icons.group_remove_outlined,
+                          color: error,
+                        ),
+                        onPressed: () async {
+                          if (unFollow != null) {
+                            await unFollow!(friend.id);
+                          }
+                        },
                       )
                     : null,
                 isFollowing: isFollowing,
