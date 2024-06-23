@@ -400,4 +400,8 @@ class Account {
         last_login.hashCode ^
         created_at.hashCode;
   }
+
+  bool isFollowing(int id) {
+    return following.any((element) => element.followed == id);
+  }
 }
