@@ -23,11 +23,12 @@ Future<dynamic> login(String email, String password) async {
       return accessToken;
     } else {
       print('Login failed with status code: ${response.statusCode}');
-      return null;
+      return {'status': response.statusCode, 'message': response.data};
     }
   } catch (e) {
-    print('Login error: $e');
-    return null;
+    if (e is DioException) {
+      return {'status': e.response!.statusCode, 'message': e.response!.data};
+    }
   }
 }
 
@@ -62,7 +63,7 @@ Future<dynamic> register(RegisterRequest data) async {
     if (e is DioException) {
       return {'status': e.response!.statusCode, 'message': e.response!.data};
     }
-    print('Login error: $e');
+    print('Register error: $e');
   }
 }
 

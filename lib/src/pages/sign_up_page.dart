@@ -32,6 +32,20 @@ class _SignUpState extends State<SignUp> {
         : 'assets/images/sign-up-bg_light.png';
 
     return Scaffold(
+      extendBodyBehindAppBar:
+          true, // Đảm bảo AppBar trong suốt không ảnh hưởng đến nội dung
+      appBar: AppBar(
+        leading: IconButton(
+          iconSize: 32.0,
+          icon: Icon(Icons.arrow_back,
+              color: Colors.white), // Màu của biểu tượng mũi tên là màu trắng
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Colors.transparent, // Nền của AppBar trong suốt
+        elevation: 0,
+      ),
       backgroundColor: theme.colorScheme.onSecondary,
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
@@ -93,20 +107,7 @@ class _SignUpState extends State<SignUp> {
                     },
                   ),
                   SizedBox(height: 10.0),
-                  Row(children: <Widget>[
-                    Expanded(
-                        child: Divider(
-                      color: text,
-                    )),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(
-                        trans.orSignInWith,
-                        style: bd_text.copyWith(color: text),
-                      ),
-                    ),
-                    Expanded(child: Divider(color: text)),
-                  ]),
+
                   // google sign in button here
 
                   Row(
@@ -118,8 +119,6 @@ class _SignUpState extends State<SignUp> {
                       ),
                       TextButton(
                         onPressed: () {
-                          // Xử lý sự kiện khi nhấn vào "Sign in"
-
                           Navigator.pushNamed(context, AppRoutes.login);
                         },
                         child: Text(
