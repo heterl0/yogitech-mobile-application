@@ -169,6 +169,10 @@ Future<Profile?> patchBMI(PatchBMIRequest data) async {
     final url = formatApiUrl('/api/v1/user-profiles/$profileId/');
     final Response response = await DioInstance.patch(url, data: data.toMap());
     if (response.statusCode == 200) {
+      final account = await getUser();
+      if (account != null) {
+        await storeAccount(account);
+      }
       return Profile.fromMap(response.data);
     } else {
       print(
