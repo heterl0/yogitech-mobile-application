@@ -1,3 +1,6 @@
+import 'package:YogiTech/api/social/social_service.dart';
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/models/social.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
@@ -21,6 +24,9 @@ class _FriendListPageState extends State<FriendListPage>
   bool _isNotSearching = true;
   bool _isSearching = false;
   final TextEditingController _searchController = TextEditingController();
+  late List<dynamic> _following;
+  late List<dynamic> _followers;
+  late bool _isLoading;
 
   // Sample data for the friend list
   List<String> friends = List.generate(20, (index) => 'Friend Name $index');
@@ -28,7 +34,7 @@ class _FriendListPageState extends State<FriendListPage>
 
   // Sample data for search results (new friends)
   List<String> newFriends = List.generate(20, (index) => 'New Friend $index');
-  List<String> searchResults = [];
+  late List<dynamic> searchResults = [];
 
   @override
   void initState() {
@@ -36,25 +42,51 @@ class _FriendListPageState extends State<FriendListPage>
     _tabController = TabController(
         length: 2, vsync: this, initialIndex: widget.initialTabIndex);
     filteredFriends = friends; // Initially display all friends
+    _fetchFollower();
   }
 
-  void _filterFriends(String query) {
+  Future<void> _fetchFollower() async {
     setState(() {
-      if (query.isEmpty) {
-        searchResults = [];
-      } else {
-        searchResults = newFriends
-            .where(
-                (friend) => friend.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-      }
+      _isLoading = true;
     });
+    try {
+      final fetchedFollowing = await getFollowing();
+      final fetchedFollowers = await getFollowers();
+      setState(() {
+        _following = fetchedFollowing;
+        _followers = fetchedFollowers;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('Error fetching friends: $e');
+    }
   }
+
+  // void _filterFriends(String query) {
+  //   setState(() {
+  //     if (query.isEmpty) {
+  //       searchResults = [];
+  //     } else {
+  //       searchResults = newFriends
+  //           .where(
+  //               (friend) => friend.toLowerCase().contains(query.toLowerCase()))
+  //           .toList();
+  //     }
+  //   });
+  // }
 
   void _startSearch() {
     setState(() {
       _isNotSearching = false;
       _isSearching = true;
+    });
+  }
+
+  Future<void> _searchFriend() async {
+    final result = await searchSocialProfile(_searchController.text);
+    print(result);
+    setState(() {
+      searchResults = result;
     });
   }
 
@@ -103,10 +135,13 @@ class _FriendListPageState extends State<FriendListPage>
                     Icon(Icons.search, color: theme.colorScheme.onSurface),
                 keyboardType: TextInputType.text,
                 inputFormatters: const [],
-                onChanged: (value) {
-                  _filterFriends(value);
+                // onChanged: (value) {
+                //   _filterFriends(value);
+                // },
+                // onTap: () {},
+                onSubmitted: (value) async {
+                  await _searchFriend();
                 },
-                onTap: () {},
               ),
               postActions: [
                 IconButton(
@@ -151,19 +186,24 @@ class _FriendListPageState extends State<FriendListPage>
             ),
           ],
         ),
-        Expanded(
-          child: TabBarView(
-            controller: _tabController,
-            children: [
-              FriendList(
-                friends: filteredFriends,
+        _isLoading
+            ? Padding(
+                padding: const EdgeInsets.all(24),
+                child: CircularProgressIndicator(),
+              )
+            : Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    FriendList(
+                      friends: _following,
+                    ),
+                    FriendList(
+                      friends: _followers,
+                    ),
+                  ],
+                ),
               ),
-              FriendList(
-                friends: filteredFriends,
-              ),
-            ],
-          ),
-        ),
       ],
     );
   }
@@ -180,15 +220,21 @@ class _FriendListPageState extends State<FriendListPage>
             physics: NeverScrollableScrollPhysics(),
             itemCount: searchResults.length,
             itemBuilder: (context, index) {
+              final SocialProfile friend = searchResults[index];
+              final name = friend.first_name != null
+                  ? '${friend.first_name} ${friend.last_name}'
+                  : friend.username ?? 'N/A';
               return FriendListItem(
-                name: searchResults[index],
-                avatarUrl: 'assets/images/gradient.jpg',
-                exp: '10000',
+                name: name,
+                avatarUrl: friend.avatar ?? 'assets/images/gradient.jpg',
+                exp: friend.exp.toString(),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FriendProfile(),
+                      builder: (context) => FriendProfile(
+                        profile: friend,
+                      ),
                     ),
                   );
                 },
@@ -202,7 +248,7 @@ class _FriendListPageState extends State<FriendListPage>
 }
 
 class FriendList extends StatelessWidget {
-  final List<String> friends;
+  final List<dynamic> friends;
 
   const FriendList({
     super.key,
@@ -223,15 +269,33 @@ class FriendList extends StatelessWidget {
             physics: NeverScrollableScrollPhysics(),
             itemCount: friends.length,
             itemBuilder: (context, index) {
+              final friend = friends[index] as Account;
+              final name = friend.profile.first_name != null
+                  ? '${friend.profile.first_name} ${friend.profile.last_name}'
+                  : friend.username;
+
+              final SocialProfile friendProfile = SocialProfile(
+                avatar: friend.profile.avatar_url,
+                exp: friend.profile.exp,
+                username: friend.username,
+                first_name: friend.profile.first_name,
+                last_name: friend.profile.last_name,
+                level: friend.profile.level,
+                streak: friend.profile.streak,
+                user_id: friend.id,
+              );
               return FriendListItem(
-                name: friends[index],
-                avatarUrl: 'assets/images/gradient.jpg',
-                exp: '10000',
+                name: name,
+                avatarUrl:
+                    friend.profile.avatar_url ?? 'assets/images/gradient.jpg',
+                exp: friend.profile.exp.toString(),
                 onTap: () {
                   pushWithoutNavBar(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FriendProfile(),
+                      builder: (context) => FriendProfile(
+                        profile: friendProfile,
+                      ),
                     ),
                   );
                 },
@@ -278,7 +342,9 @@ class FriendListItem extends StatelessWidget {
                 color: stroke,
               ),
               child: CircleAvatar(
-                backgroundImage: AssetImage(avatarUrl),
+                backgroundImage: avatarUrl.startsWith("assets")
+                    ? AssetImage(avatarUrl)
+                    : NetworkImage(avatarUrl) as ImageProvider,
               ),
             ),
             SizedBox(width: 12),
