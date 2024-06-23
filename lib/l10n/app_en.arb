@@ -206,5 +206,6 @@
   "invalidEmail" :"Your email is Invalid!",
   "dontEmpty": "Please fill in both Email and Password fields!",
   "doesntexist" : "Account doesn't not exist!",
-  "enterEmail" : "Please enter your email!"
+  "enterEmail" : "Please enter your email!",
+  "noResult":"No result"
 }
