@@ -391,7 +391,7 @@ class _SubscriptionState extends State<Subscription> {
                 textAlign: TextAlign.start,
               ),
               const SizedBox(height: 16),
-              CustomButton(title: '4.999.999đ', style: ButtonStyleType.Primary),
+              CustomButton(title: '3.999.999đ', style: ButtonStyleType.Primary),
               const SizedBox(height: 16),
               CustomButton(
                   title: '9.999 gems', style: ButtonStyleType.Secondary),
