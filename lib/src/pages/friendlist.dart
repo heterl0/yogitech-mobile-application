@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:YogiTech/api/social/social_service.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/social.dart';
@@ -245,11 +247,16 @@ class _FriendListPageState extends State<FriendListPage>
                     FriendList(
                       friends: _following,
                       unFollow: unFollow,
+                      followUserByUserId: followUserByUserId,
+                      account: widget.account,
                       tab: 0,
                     ),
                     FriendList(
                       friends: _followers,
+                      unFollow: unFollow,
+                      followUserByUserId: followUserByUserId,
                       tab: 1,
+                      account: widget.account,
                       // following: _following,
                     ),
                   ],
@@ -291,6 +298,8 @@ class _FriendListPageState extends State<FriendListPage>
                             builder: (context) => FriendProfile(
                               profile: friend,
                               account: widget.account,
+                              unFollow: unFollow,
+                              followUserByUserId: followUserByUserId,
                             ),
                           ),
                         );
@@ -336,8 +345,10 @@ class _FriendListPageState extends State<FriendListPage>
 class FriendList extends StatelessWidget {
   final int tab;
   final List<dynamic> friends;
+  final Account? account;
   final List<dynamic>? following;
   final Function(int)? unFollow;
+  final Function(int)? followUserByUserId;
 
   const FriendList({
     super.key,
@@ -345,6 +356,8 @@ class FriendList extends StatelessWidget {
     required this.tab,
     this.unFollow,
     this.following,
+    this.account,
+    this.followUserByUserId,
   });
 
   @override
@@ -392,7 +405,9 @@ class FriendList extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => FriendProfile(
                         profile: friendProfile,
-                        account: friend,
+                        account: account,
+                        unFollow: unFollow,
+                        followUserByUserId: followUserByUserId,
                       ),
                     ),
                   );

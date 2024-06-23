@@ -1,4 +1,3 @@
-import 'package:YogiTech/api/social/social_service.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/social.dart';
 import 'package:flutter/material.dart';
@@ -10,15 +9,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class FriendProfile extends StatefulWidget {
   final int? id;
   final SocialProfile profile;
-  final VoidCallback? onProfileUpdated;
   final Account? account;
+  final void Function(int id)? unFollow;
+  final void Function(int id)? followUserByUserId;
 
   FriendProfile(
       {Key? key,
       this.id,
       required this.profile,
-      this.onProfileUpdated,
-      this.account})
+      this.account,
+      this.unFollow,
+      this.followUserByUserId})
       : super(key: key);
 
   @override
@@ -34,28 +35,6 @@ class _nameState extends State<FriendProfile> {
     setState(() {
       isFollow = widget.account!.isFollowing(widget.profile.user_id ?? -1);
     });
-  }
-
-  Future<void> unFollow(int id) async {
-    try {
-      await unfollowUser(id);
-      if (widget.onProfileUpdated != null) {
-        widget.onProfileUpdated!();
-      }
-    } catch (e) {
-      print('Error unfollowing: $e');
-    }
-  }
-
-  Future<void> followUserByUserId(int id) async {
-    try {
-      await followUser(id);
-      if (widget.onProfileUpdated != null) {
-        widget.onProfileUpdated!();
-      }
-    } catch (e) {
-      print('Error following: $e');
-    }
   }
 
   @override
@@ -142,9 +121,10 @@ class _nameState extends State<FriendProfile> {
                                 child: InkWell(
                                   onTap: () {
                                     if (isFollow) {
-                                      unFollow(widget.profile.user_id ?? -1);
+                                      widget.unFollow!(
+                                          widget.profile.user_id ?? -1);
                                     } else {
-                                      followUserByUserId(
+                                      widget.followUserByUserId!(
                                           widget.profile.user_id ?? -1);
                                     }
                                     setState(() {
