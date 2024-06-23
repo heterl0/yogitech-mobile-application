@@ -20,25 +20,49 @@ class _SubscriptionState extends State<Subscription> {
   bool _isChecked2 = false;
   bool _isChecked3 = false;
   late final Future<PaymentConfiguration> _googlePayConfigFuture;
-  final _paymentItems = [
-    PaymentItem(
-      label: 'Weekly subscription',
-      amount: '0.01',
-      status: PaymentItemStatus.final_price,
-    ),
-    PaymentItem(
-      label: 'Monthly subscription',
-      amount: '0.1',
-      status: PaymentItemStatus.final_price,
-    ),
-    PaymentItem(
-      label: 'Yearly subscription',
-      amount: '1',
-      status: PaymentItemStatus.final_price,
-    ),
+  // final _paymentItems = [
+  //   PaymentItem(
+  //     label: 'Weekly subscription',
+  //     amount: '0.01',
+  //     status: PaymentItemStatus.final_price,
+  //   ),
+  //   PaymentItem(
+  //     label: 'Monthly subscription',
+  //     amount: '0.1',
+  //     status: PaymentItemStatus.final_price,
+  //   ),
+  //   PaymentItem(
+  //     label: 'Yearly subscription',
+  //     amount: '1',
+  //     status: PaymentItemStatus.final_price,
+  //   ),
+  // ];
+
+  final paymentItems = [
+    {
+      'id': 0,
+      'label': 'onceAWeek',
+      "image": "assets/images/Universe.png",
+      "gem": "199",
+      "price": "109,000đ",
+    },
+    {
+      'id': 1,
+      'label': 'onceAMonth',
+      "image": "assets/images/MoonPhase.png",
+      "gem": "999",
+      "price": "399,000đ",
+    },
+    {
+      'id': 2,
+      'label': 'onceAYear',
+      "image": "assets/images/Sun.png",
+      "gem": "9,999",
+      "price": "3,999,000đ",
+    },
   ];
 
-  late List<PaymentItem> _paymentSelected = [];
+  // late _paymentSelected;
 
   @override
   void initState() {
@@ -114,31 +138,32 @@ class _SubscriptionState extends State<Subscription> {
           const SizedBox(height: 16),
           _buildChoosePlanContainer(),
           const SizedBox(height: 16),
-          ..._paymentItems.map((e) => _buildPlanOptionContainer(e)).toList(),
-          // const SizedBox(height: 16),
-          // _buildPlanOptionContainer2(),
-          // const SizedBox(height: 16),
-          // _buildPlanOptionContainer3(),
-          // const SizedBox(height: 16),
-          FutureBuilder<PaymentConfiguration>(
-            future: _googlePayConfigFuture,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return GooglePayButton(
-                  paymentConfiguration: snapshot.data!,
-                  paymentItems: _paymentItems,
-                  type: GooglePayButtonType.buy,
-                  margin: const EdgeInsets.only(top: 15.0),
-                  onPaymentResult: onGooglePayResult,
-                  loadingIndicator: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
-          ),
+          // ..._paymentItems.map((e) => _buildPlanOptionContainer(e)).toList(),
+          _buildPlanOptionContainer(),
+          const SizedBox(height: 16),
+          _buildPlanOptionContainer2(),
+          const SizedBox(height: 16),
+          _buildPlanOptionContainer3(),
+          const SizedBox(height: 16),
+          // FutureBuilder<PaymentConfiguration>(
+          //   future: _googlePayConfigFuture,
+          //   builder: (context, snapshot) {
+          //     if (snapshot.hasData) {
+          //       return GooglePayButton(
+          //         paymentConfiguration: snapshot.data!,
+          //         paymentItems: _paymentItems,
+          //         type: GooglePayButtonType.buy,
+          //         margin: const EdgeInsets.only(top: 15.0),
+          //         onPaymentResult: onGooglePayResult,
+          //         loadingIndicator: const Center(
+          //           child: CircularProgressIndicator(),
+          //         ),
+          //       );
+          //     } else {
+          //       return const SizedBox.shrink();
+          //     }
+          //   },
+          // ),
         ],
       ),
     );
@@ -366,7 +391,7 @@ class _SubscriptionState extends State<Subscription> {
                 textAlign: TextAlign.start,
               ),
               const SizedBox(height: 16),
-              CustomButton(title: '4.999.999đ', style: ButtonStyleType.Primary),
+              CustomButton(title: '3.999.999đ', style: ButtonStyleType.Primary),
               const SizedBox(height: 16),
               CustomButton(
                   title: '9.999 gems', style: ButtonStyleType.Secondary),
@@ -418,7 +443,7 @@ class _SubscriptionState extends State<Subscription> {
     );
   }
 
-  Widget _buildPlanOptionContainer(PaymentItem item) {
+  Widget _buildPlanOptionContainer() {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
@@ -455,13 +480,12 @@ class _SubscriptionState extends State<Subscription> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        // trans.onceAWeek,
-                        item.label ?? "Label",
+                        trans.onceAWeek,
                         textAlign: TextAlign.center,
                         style: min_cap.copyWith(
                             color: theme.colorScheme.onSurface),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 8),
                       SizedBox(
                         width: double.infinity,
                         child: Row(
@@ -503,8 +527,8 @@ class _SubscriptionState extends State<Subscription> {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              // '109,000đ',
-                              item.amount,
+                              '109,000đ',
+                              // item.amount,
                               style: h3.copyWith(color: primary),
                             ),
                           ],
@@ -530,12 +554,15 @@ class _SubscriptionState extends State<Subscription> {
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        // const SizedBox(height: 16),
       ],
     );
   }
 
   Widget _buildPlanOptionContainer2() {
+    final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: ShapeDecoration(
@@ -568,17 +595,18 @@ class _SubscriptionState extends State<Subscription> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Once a month',
+                    trans.onceAMonth,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontFamily: 'Readex Pro',
-                      fontWeight: FontWeight.w400,
-                      height: 0.12,
-                    ),
+                    style: min_cap.copyWith(color: theme.colorScheme.onSurface),
+                    // style: TextStyle(
+                    //   color: Colors.white,
+                    //   fontSize: 10,
+                    //   fontFamily: 'Readex Pro',
+                    //   fontWeight: FontWeight.w400,
+                    //   height: 0.12,
+                    // ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
                   SizedBox(
                     width: double.infinity,
                     child: Row(
@@ -607,13 +635,15 @@ class _SubscriptionState extends State<Subscription> {
                                 width: 42,
                                 child: Text(
                                   '999',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontFamily: 'Readex Pro',
-                                    fontWeight: FontWeight.w600,
-                                    height: 0.06,
-                                  ),
+                                  style: h3.copyWith(
+                                      color: theme.colorScheme.onPrimary),
+                                  // style: TextStyle(
+                                  //   color: Colors.white,
+                                  //   fontSize: 16,
+                                  //   fontFamily: 'Readex Pro',
+                                  //   fontWeight: FontWeight.w600,
+                                  //   height: 0.06,
+                                  // ),
                                 ),
                               ),
                             ],
@@ -621,27 +651,30 @@ class _SubscriptionState extends State<Subscription> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'or',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xFF8D8E99),
-                            fontSize: 10,
-                            fontFamily: 'Readex Pro',
-                            fontWeight: FontWeight.w400,
-                            height: 0.12,
-                          ),
+                          trans.locale == "en" ? "or" : "hoặc",
+                          style: bd_text.copyWith(color: text),
+                          // textAlign: TextAlign.center,
+                          // style: TextStyle(
+                          //   color: Color(0xFF8D8E99),
+                          //   fontSize: 10,
+                          //   fontFamily: 'Readex Pro',
+                          //   fontWeight: FontWeight.w400,
+                          //   height: 0.12,
+                          // ),
                         ),
                         const SizedBox(width: 8),
                         Text(
                           '399,000đ',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xFF4094CF),
-                            fontSize: 16,
-                            fontFamily: 'Readex Pro',
-                            fontWeight: FontWeight.w600,
-                            height: 0.06,
-                          ),
+                          style: h3.copyWith(color: primary),
+
+                          // style: TextStyle(
+                          //   color: Color(0xFF4094CF),
+                          //   fontSize: 16,
+                          //   fontFamily: 'Readex Pro',
+                          //   fontWeight: FontWeight.w600,
+                          //   height: 0.06,
+                          // ),
                         ),
                       ],
                     ),
@@ -669,6 +702,9 @@ class _SubscriptionState extends State<Subscription> {
   }
 
   Widget _buildPlanOptionContainer3() {
+    final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: ShapeDecoration(
@@ -701,17 +737,18 @@ class _SubscriptionState extends State<Subscription> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Once a year',
+                    trans.onceAYear,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontFamily: 'Readex Pro',
-                      fontWeight: FontWeight.w400,
-                      height: 0.12,
-                    ),
+                    style: min_cap.copyWith(color: theme.colorScheme.onSurface),
+                    // style: TextStyle(
+                    //   color: Colors.white,
+                    //   fontSize: 10,
+                    //   fontFamily: 'Readex Pro',
+                    //   fontWeight: FontWeight.w400,
+                    //   height: 0.12,
+                    // ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
                   SizedBox(
                     width: double.infinity,
                     child: Row(
@@ -737,16 +774,18 @@ class _SubscriptionState extends State<Subscription> {
                               ),
                               const SizedBox(width: 4),
                               SizedBox(
-                                width: 42,
+                                width: 52,
                                 child: Text(
                                   '9,999',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontFamily: 'Readex Pro',
-                                    fontWeight: FontWeight.w600,
-                                    height: 0.06,
-                                  ),
+                                  style: h3.copyWith(
+                                      color: theme.colorScheme.onPrimary),
+                                  // style: TextStyle(
+                                  //   color: Colors.white,
+                                  //   fontSize: 16,
+                                  //   fontFamily: 'Readex Pro',
+                                  //   fontWeight: FontWeight.w600,
+                                  //   height: 0.06,
+                                  // ),
                                 ),
                               ),
                             ],
@@ -754,27 +793,22 @@ class _SubscriptionState extends State<Subscription> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'or',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xFF8D8E99),
-                            fontSize: 10,
-                            fontFamily: 'Readex Pro',
-                            fontWeight: FontWeight.w400,
-                            height: 0.12,
-                          ),
+                          trans.locale == "en" ? "or" : "hoặc",
+                          style: bd_text.copyWith(color: text),
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          '4,999,000đ',
+                          '3,999,000đ',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xFF4094CF),
-                            fontSize: 16,
-                            fontFamily: 'Readex Pro',
-                            fontWeight: FontWeight.w600,
-                            height: 0.06,
-                          ),
+                          style: h3.copyWith(color: primary),
+
+                          // style: TextStyle(
+                          //   color: Color(0xFF4094CF),
+                          //   fontSize: 16,
+                          //   fontFamily: 'Readex Pro',
+                          //   fontWeight: FontWeight.w600,
+                          //   height: 0.06,
+                          // ),
                         ),
                       ],
                     ),
@@ -783,7 +817,7 @@ class _SubscriptionState extends State<Subscription> {
               ),
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 8),
           _buildCheckboxItem(
             value: _isChecked3,
             onChanged: (value) {

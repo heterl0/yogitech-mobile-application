@@ -290,7 +290,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => SocialPage(),
+                                          builder: (context) => SocialPage(
+                                            account: _account,
+                                            onProfileUpdated: refreshProfile,
+                                          ),
                                         ),
                                       );
                                     },
@@ -333,6 +336,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         MaterialPageRoute(
                                           builder: (context) => FriendListPage(
                                             initialTabIndex: 0,
+                                            account: _account,
+                                            onProfileUpdated: refreshProfile,
                                           ),
                                         ),
                                       );
@@ -350,6 +355,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         MaterialPageRoute(
                                           builder: (context) => FriendListPage(
                                             initialTabIndex: 1,
+                                            account: _account,
+                                            onProfileUpdated: refreshProfile,
                                           ),
                                         ),
                                       );

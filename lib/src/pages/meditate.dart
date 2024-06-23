@@ -26,7 +26,7 @@ class _MeditateState extends State<Meditate> {
   int? _selectedTrackIndex;
   int currentStreak = 0;
 
-  Duration _selectedDuration = const Duration();
+  Duration _selectedDuration = const Duration(minutes: 1);
 
   @override
   void initState() {

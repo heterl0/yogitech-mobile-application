@@ -54,6 +54,12 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
     if (weight != null && height != null) {
       height = height / 100; // Convert cm to meters
       double bmi = weight / (height * height);
+      if (bmi > 100) {
+        bmi = 100; // Reset BMI if it's too high
+      }
+      if (bmi < 0) {
+        bmi = 0; // Reset BMI if it's negative
+      }
       setState(() {
         bmiResult = bmi.toStringAsFixed(2); // Round BMI to 2 decimal places
         if (bmi < 18.5) {
@@ -174,6 +180,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                   controller: weightController,
                   placeholder: trans.weightKg,
                   keyboardType: TextInputType.number,
+                  onChanged: (_) => _calculateBMI(),
                 ),
                 SizedBox(height: 16.0),
                 Text(
@@ -185,6 +192,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                   controller: heightController,
                   placeholder: trans.heightCm,
                   keyboardType: TextInputType.number,
+                  onChanged: (_) => _calculateBMI(),
                 ),
                 SizedBox(height: 48.0),
                 CustomButton(
