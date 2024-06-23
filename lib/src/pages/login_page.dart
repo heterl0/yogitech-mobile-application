@@ -89,6 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                     state: ButtonState.Enabled,
                     onPressed: () async {
                       _handleLogin(context);
+                      // print(await getExercises());
                     },
                   ),
                   SizedBox(height: 10.0),
@@ -219,25 +220,22 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _handleLogin(BuildContext context) async {
     String enteredEmail = emailController.text;
     String enteredPassword = passwordController.text;
-
+    final trans = AppLocalizations.of(context)!;
     setState(() {
       _isLoading = true;
     });
     if (enteredEmail.isEmpty || enteredPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text('Please fill in both Email and Password fields')),
+        SnackBar(content: Text(trans.dontEmpty)),
       );
       setState(() {
         _isLoading = false;
       });
       return;
     }
-
     try {
       final accessToken = await login(enteredEmail, enteredPassword);
-
-      if (accessToken != null) {
+      if (accessToken != null && accessToken is String) {
         final user = await getUser();
         if (user != null &&
             (user.profile.first_name == null ||
@@ -251,15 +249,17 @@ class _LoginPageState extends State<LoginPage> {
         } else {
           Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
         }
+      } else if (accessToken['status'] == 403) {
+        Navigator.pushReplacementNamed(context, AppRoutes.verifyEmail);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Invalid email or password')),
+          SnackBar(content: Text(trans.doesntexist)),
         );
       }
     } catch (e) {
+      print('Error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text('An error occurred. Please try again later. $e')),
+        SnackBar(content: Text('$e')),
       );
     }
     setState(() {
