@@ -341,7 +341,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   StatCard(
                                     title: trans.follower,
                                     value:
-                                        _account?.following.length.toString() ??
+                                        _account?.followers.length.toString() ??
                                             '0', // Replace with API data
                                     valueColor: theme.colorScheme.onPrimary,
                                     onTap: () {
