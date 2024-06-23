@@ -220,6 +220,7 @@ class PatchProfileRequest {
   }
 }
 
+
 // Update profile
 Future<Profile?> patchProfile(PatchProfileRequest data) async {
   try {
@@ -242,6 +243,24 @@ Future<Profile?> patchProfile(PatchProfileRequest data) async {
   } catch (e) {
     print('Patch profile detail error: $e');
     return null;
+  }
+}
+
+Future<dynamic> resetPassword(final String email) async {
+  final url = formatApiUrl("/api/v1/users/reset_password/");
+  try {
+    final response = await Dio().post(url, data: {'email': email});
+
+    if (response.statusCode == 204) {
+      print(response.statusCode);
+      return {'status': response.statusCode, 'message': response.data};
+    } else {
+      return {'status': response.statusCode, 'message': response.data};
+    }
+  } catch (e) {
+    if (e is DioException) {
+      return {'status': e.response!.statusCode, 'message': e.response!.data};
+    }
   }
 }
 
