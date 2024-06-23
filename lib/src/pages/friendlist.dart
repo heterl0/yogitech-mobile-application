@@ -59,6 +59,9 @@ class _FriendListPageState extends State<FriendListPage>
       });
     } catch (e) {
       print('Error fetching friends: $e');
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -197,9 +200,12 @@ class _FriendListPageState extends State<FriendListPage>
                   children: [
                     FriendList(
                       friends: _following,
+                      tab: 0,
                     ),
                     FriendList(
                       friends: _followers,
+                      tab: 1,
+                      following: _following,
                     ),
                   ],
                 ),
@@ -209,50 +215,62 @@ class _FriendListPageState extends State<FriendListPage>
   }
 
   Widget _buildSearchResults(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 8),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: searchResults.length,
-            itemBuilder: (context, index) {
-              final SocialProfile friend = searchResults[index];
-              final name = friend.first_name != null
-                  ? '${friend.first_name} ${friend.last_name}'
-                  : friend.username ?? 'N/A';
-              return FriendListItem(
-                name: name,
-                avatarUrl: friend.avatar ?? 'assets/images/gradient.jpg',
-                exp: friend.exp.toString(),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FriendProfile(
-                        profile: friend,
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-        ],
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      child: searchResults.length > 0
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 8),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: searchResults.length,
+                  itemBuilder: (context, index) {
+                    final SocialProfile friend = searchResults[index];
+                    final name = friend.first_name != null
+                        ? '${friend.first_name} ${friend.last_name}'
+                        : friend.username ?? 'N/A';
+                    return FriendListItem(
+                      name: name,
+                      avatarUrl: friend.avatar ?? 'assets/images/gradient.jpg',
+                      exp: friend.exp.toString(),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FriendProfile(
+                              profile: friend,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            )
+          : Center(
+              child: Text(
+                trans.noResult,
+                style: bd_text.copyWith(color: text),
+              ),
+            ),
     );
   }
 }
 
 class FriendList extends StatelessWidget {
+  final int tab;
   final List<dynamic> friends;
+  final List<dynamic>? following;
 
   const FriendList({
     super.key,
     required this.friends,
+    required this.tab,
+    this.following,
   });
 
   @override
@@ -284,6 +302,11 @@ class FriendList extends StatelessWidget {
                 streak: friend.profile.streak,
                 user_id: friend.id,
               );
+
+              final bool isFollowing = following != null
+                  ? following!.any((element) => element.id == friend.id)
+                  : false;
+
               return FriendListItem(
                 name: name,
                 avatarUrl:
@@ -299,6 +322,13 @@ class FriendList extends StatelessWidget {
                     ),
                   );
                 },
+                postIcon: tab == 0
+                    ? Icon(
+                        Icons.group_remove_outlined,
+                        color: error,
+                      )
+                    : null,
+                isFollowing: isFollowing,
               );
             },
           ),
@@ -313,42 +343,51 @@ class FriendListItem extends StatelessWidget {
   final String exp;
   final String avatarUrl;
   final VoidCallback onTap;
+  final Widget? postIcon;
+  final VoidCallback? onPressedIcon;
+  final bool isFollowing;
 
   const FriendListItem({
     super.key,
     required this.name,
+    required this.exp,
     required this.avatarUrl,
     required this.onTap,
-    required this.exp,
+    this.postIcon,
+    this.onPressedIcon,
+    this.isFollowing = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        margin: EdgeInsets.only(bottom: 12),
-        padding: EdgeInsets.all(8),
-        constraints: BoxConstraints(minHeight: 80),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(8),
+      constraints: const BoxConstraints(minHeight: 80),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: onTap,
+            child: Container(
               width: 60,
               height: 60,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: stroke,
+                color: Colors.grey,
               ),
               child: CircleAvatar(
                 backgroundImage: avatarUrl.startsWith("assets")
-                    ? AssetImage(avatarUrl)
-                    : NetworkImage(avatarUrl) as ImageProvider,
+                    ? AssetImage(avatarUrl) as ImageProvider
+                    : NetworkImage(avatarUrl),
               ),
             ),
-            SizedBox(width: 12),
-            Expanded(
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: GestureDetector(
+              onTap: onTap,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -356,7 +395,7 @@ class FriendListItem extends StatelessWidget {
                     name,
                     style: h3.copyWith(color: theme.colorScheme.onPrimary),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     '$exp EXP',
                     style: min_cap.copyWith(color: text),
@@ -364,8 +403,18 @@ class FriendListItem extends StatelessWidget {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+          if (postIcon != null)
+            IconButton(
+              icon: postIcon!,
+              onPressed: onPressedIcon,
+            ),
+          if (isFollowing)
+            IconButton(
+              icon: Icon(Icons.group_add_outlined, color: primary),
+              onPressed: onPressedIcon,
+            ),
+        ],
       ),
     );
   }

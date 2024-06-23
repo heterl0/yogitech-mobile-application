@@ -167,7 +167,8 @@ class BoxButton extends StatelessWidget {
     required this.textStyle,
     required this.shape,
     required this.onPressed,
-    this.borderColor, // Add this line
+    this.borderColor,
+    required style, // Add this line
   });
 
   @override

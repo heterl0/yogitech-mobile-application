@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(height: 0.0),
-                  BoxButton(
+                  CustomButton(
                     title: trans.login,
                     style: ButtonStyleType.Primary,
                     state: ButtonState.Enabled,

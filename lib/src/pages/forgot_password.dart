@@ -68,7 +68,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   placeholder: trans.email,
                 ),
                 SizedBox(height: 20.0),
-                BoxButton(
+                CustomButton(
                   title: trans.request,
                   style: ButtonStyleType.Primary,
                   state: isLoading ? ButtonState.Disabled : ButtonState.Enabled,
@@ -130,7 +130,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         SnackBar(
           content: Text(trans
               .enterEmail), // Giả sử trans.enterEmail là thông báo "Vui lòng nhập email"
-          backgroundColor: Colors.red,
+          backgroundColor: error,
         ),
       );
       return;
@@ -157,7 +157,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(trans.invalidEmail),
-            backgroundColor: Colors.redAccent,
+            backgroundColor: error,
           ),
         );
       }
@@ -165,7 +165,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Error: ${e.toString()}"),
-          backgroundColor: Colors.red,
+          backgroundColor: error,
         ),
       );
     } finally {

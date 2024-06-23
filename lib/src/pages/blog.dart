@@ -1,3 +1,5 @@
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/api/blog/blog_service.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
@@ -109,36 +111,44 @@ class BlogState extends State<Blog> {
   }
 
   Widget _buildBlogMainContent() {
+    final trans = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 4 / 5,
-        ),
-        itemCount: jsonList.length,
-        itemBuilder: (context, index) {
-          final blog = jsonList[index];
-          return CustomCard(
-            title: blog.title,
-            caption: blog.description,
-            imageUrl: blog.image_url,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BlogDetail(
-                    id: blog.id,
-                  ),
-                ),
-              );
-            },
-          );
-        },
-      ),
+      child: jsonList.length > 0
+          ? GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 4 / 5,
+              ),
+              itemCount: jsonList.length,
+              itemBuilder: (context, index) {
+                final blog = jsonList[index];
+                return CustomCard(
+                  title: blog.title,
+                  caption: blog.description,
+                  imageUrl: blog.image_url,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlogDetail(
+                          id: blog.id,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            )
+          : Center(
+              child: Text(
+                trans.noResult,
+                style: bd_text.copyWith(color: text),
+              ),
+            ),
     );
   }
 }

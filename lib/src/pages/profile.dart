@@ -107,6 +107,19 @@ class _ProfilePageState extends State<ProfilePage> {
         appBar: CustomAppBar(
           showBackButton: false,
           title: trans.profile,
+          preActions: [
+            IconButton(
+              icon: Icon(
+                Icons.ios_share,
+                color: theme.colorScheme.onSurface,
+              ),
+              onPressed: () async {
+                await Share.share(
+                    'check out my website https://www.yogitech.me',
+                    subject: 'Look what I made!');
+              },
+            ),
+          ],
           postActions: [
             IconButton(
                 icon: Icon(
@@ -129,19 +142,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   );
                 })
-          ],
-          preActions: [
-            IconButton(
-              icon: Icon(
-                Icons.ios_share,
-                color: theme.colorScheme.onSurface,
-              ),
-              onPressed: () async {
-                await Share.share(
-                    'check out my website https://www.yogitech.me',
-                    subject: 'Look what I made!');
-              },
-            ),
           ],
         ),
         body: _isLoading // Check loading state

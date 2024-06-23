@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:YogiTech/api/auth/auth_service.dart';
@@ -235,38 +236,27 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
             borderRadius: BorderRadius.circular(24),
           ),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      pose.name,
-                      style: h3.copyWith(color: theme.colorScheme.onPrimary),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.close,
-                        color: text,
-                        size: 24,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
                 ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
                   child: Image.network(
                     pose.image_url,
+                    height: 240, // Chiều cao cố định của ảnh
+                    width: double
+                        .infinity, // Đảm bảo ảnh chiếm toàn bộ chiều ngang
                     fit: BoxFit.cover,
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
+                Text(
+                  pose.name,
+                  style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                ),
+                const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -284,20 +274,19 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(trans.supMuscle, style: bd_text.copyWith(color: text)),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Wrap(
                   spacing: 4.0,
                   runSpacing: 4.0,
                   children: pose.muscles.map((muscle) {
                     return Material(
                       elevation: appElevation,
-                      borderRadius: BorderRadius.circular(
-                          20.0), // Điều chỉnh bo góc nếu cần
+                      borderRadius: BorderRadius.circular(20.0),
                       color: primary,
                       child: Padding(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 4.0),
                         child: Text(
                           muscle.name,
@@ -310,13 +299,13 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                     );
                   }).toList(),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 SizedBox(
-                  height: 240, // height limit for the instruction text
+                  height: 180, // height limit for the instruction text
                   child: Stack(
                     children: [
                       SingleChildScrollView(
-                        padding: EdgeInsets.only(bottom: 24),
+                        padding: const EdgeInsets.only(bottom: 24),
                         child: Text(
                           pose.instruction,
                           style: bd_text.copyWith(
@@ -343,18 +332,12 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                     ],
                   ),
                 ),
-                SizedBox(height: 8),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      trans.close,
-                      style: h3.copyWith(color: primary),
-                    ),
-                  ),
+                CustomButton(
+                  title: trans.close,
+                  style: ButtonStyleType.Tertiary,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
               ],
             ),

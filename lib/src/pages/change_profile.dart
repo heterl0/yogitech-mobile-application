@@ -163,7 +163,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                         ),
                       ),
                       SizedBox(height: 8),
-                      BoxButton(
+                      CustomButton(
                         title: trans.changeAvatar,
                         style: ButtonStyleType.Tertiary,
                         onPressed: () {
@@ -279,7 +279,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                         ],
                       ),
                       SizedBox(height: 40.0),
-                      BoxButton(
+                      CustomButton(
                         title: trans.save, // Set the button text
                         style: ButtonStyleType
                             .Primary, // Set the button style (optional)
@@ -292,14 +292,14 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                         },
                       ),
                       SizedBox(height: 16.0),
-                      BoxButton(
+                      CustomButton(
                         title: trans.changePassword,
                         style: ButtonStyleType.Tertiary,
                         onPressed: () {
                           _changePasswordBottomSheet(context);
                         },
                       ),
-                      BoxButton(
+                      CustomButton(
                         title: trans.changeBMI,
                         style: ButtonStyleType.Tertiary,
                         onPressed: () {
@@ -428,7 +428,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                   password: true,
                 ),
                 SizedBox(height: 32.0),
-                BoxButton(
+                CustomButton(
                   title: trans.save,
                   style: ButtonStyleType.Primary,
                   state: ButtonState

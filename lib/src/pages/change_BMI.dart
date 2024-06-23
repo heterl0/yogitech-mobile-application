@@ -195,11 +195,10 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                   onChanged: (_) => _calculateBMI(),
                 ),
                 SizedBox(height: 48.0),
-                BoxButton(
-                  title: trans.recalculate,
-                  onPressed: _recalculateBMI,
-                  style: ButtonStyleType.Primary,
-                ),
+                CustomButton(
+                    title: trans.recalculate,
+                    onPressed: _recalculateBMI,
+                    style: ButtonStyleType.Primary),
               ],
             ),
           ),

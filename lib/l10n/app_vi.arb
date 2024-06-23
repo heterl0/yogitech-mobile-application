@@ -206,5 +206,6 @@
   "invalidEmail" : "Email không hợp lệ",
   "dontEmpty" : "Email và mật khẩu không được bỏ trống!",
   "doesntexist" : "Tài khoản không tồn tại!",
-  "enterEmail" :"Vui lòng nhập email!"
+  "enterEmail" :"Vui lòng nhập email!",
+  "noResult":"Không có kết quả"
 }

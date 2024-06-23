@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:YogiTech/src/custombar/appbar.dart'; // Đoạn này bạn cần thay đổi tên package theo project của bạn
+import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -41,7 +41,9 @@ class _PerformMeditateState extends State<PerformMeditate> {
 
   void _startTimer() {
     if (_remainingTime.inSeconds > 0) {
-      _playAudio();
+      if (widget.audioPath != '') {
+        _playAudio();
+      }
       _timer = Timer.periodic(Duration(seconds: 1), (timer) {
         setState(() {
           if (_remainingTime.inSeconds > 0) {
