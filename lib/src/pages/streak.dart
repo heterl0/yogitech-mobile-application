@@ -1,8 +1,8 @@
+import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:flutter/material.dart';
-import "package:YogiTech/src/custombar/appbar.dart";
+import 'package:intl/intl.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
-import 'package:intl/intl.dart'; // Add this import
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Streak extends StatefulWidget {
@@ -13,7 +13,8 @@ class Streak extends StatefulWidget {
 }
 
 class _StreakState extends State<Streak> {
-  DateTime _currentDate = DateTime.now(); // Initialize the current date
+  DateTime _currentDate = DateTime.now();
+  DateTime? _lastStreakStartDate;
 
   void _incrementMonth() {
     setState(() {
@@ -28,14 +29,27 @@ class _StreakState extends State<Streak> {
   }
 
   int _getDaysInMonth(int year, int month) {
-    if (month == DateTime.february) {
-      if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
-        return 29; // Leap year
-      } else {
-        return 28;
+    return DateUtils.getDaysInMonth(year, month);
+  }
+
+  //Ngày tập được Generate từ hàm này
+  List<DateTime> _generateStreakData() {
+    List<DateTime> streakDays = [];
+    int daysInMonth = _getDaysInMonth(_currentDate.year, _currentDate.month);
+
+    // Assuming a streak of exercising on weekdays (Monday to Friday)
+    for (int i = 1; i <= daysInMonth; i++) {
+      DateTime day = DateTime(_currentDate.year, _currentDate.month, i);
+      // Check if the day is a weekday (Monday to Friday)
+      if (day.weekday >= DateTime.monday && day.weekday <= DateTime.friday) {
+        streakDays.add(day);
       }
     }
-    return [4, 6, 9, 11].contains(month) ? 30 : 31;
+
+    // Determine the start date of the last streak if streakDays is not empty
+    _lastStreakStartDate = streakDays.isNotEmpty ? streakDays.first : null;
+
+    return streakDays;
   }
 
   @override
@@ -79,7 +93,7 @@ class _StreakState extends State<Streak> {
                 SizedBox(height: 16),
                 _buildAdditionalInfo(context),
                 SizedBox(height: 16),
-                _buildPlaceholder(),
+                _buildCalendar(context),
               ],
             ),
           ),
@@ -153,8 +167,8 @@ class _StreakState extends State<Streak> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            DateFormat('MMMM yyyy')
-                .format(_currentDate), // Use DateFormat to format the date
+            DateFormat('MMMM y', Localizations.localeOf(context).toString())
+                .format(_currentDate),
             style: h2.copyWith(color: theme.colorScheme.onSurface),
           ),
           Row(
@@ -194,7 +208,8 @@ class _StreakState extends State<Streak> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
-    int daysInMonth = _getDaysInMonth(_currentDate.year, _currentDate.month);
+    List<DateTime> streakDays = _generateStreakData();
+    int streakDaysCount = streakDays.length;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -213,7 +228,7 @@ class _StreakState extends State<Streak> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '$daysInMonth ${(daysInMonth == 1) && (trans.locale == "en") ? "day" : trans.days}',
+                    '$streakDaysCount ${(streakDaysCount == 1) && (trans.locale == "en") ? "day" : trans.days}',
                     style: h3.copyWith(color: active, height: 1.2),
                   ),
                   Text(
@@ -229,7 +244,7 @@ class _StreakState extends State<Streak> {
             ),
           ),
         ),
-        SizedBox(width: 16), // Khoảng cách giữa hai Container
+        SizedBox(width: 16),
         Expanded(
           child: Container(
             height: 60,
@@ -246,7 +261,11 @@ class _StreakState extends State<Streak> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Feb 14',
+                    _lastStreakStartDate != null
+                        ? DateFormat.yMMMd(
+                                Localizations.localeOf(context).toString())
+                            .format(_lastStreakStartDate!)
+                        : 'N/A',
                     style: h3.copyWith(
                         color: theme.colorScheme.onPrimary, height: 1.2),
                   ),
@@ -265,16 +284,57 @@ class _StreakState extends State<Streak> {
     );
   }
 
-  Widget _buildPlaceholder() {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        width: double.infinity,
-        height: 280,
-        decoration: BoxDecoration(color: Color(0xFF8D8E99)),
-        child: Column(
-            // Add children widgets here
-            ),
+  Widget _buildCalendar(BuildContext context) {
+    List<DateTime> streakDays = _generateStreakData();
+    int daysInMonth = _getDaysInMonth(_currentDate.year, _currentDate.month);
+    int firstWeekdayOfMonth =
+        DateTime(_currentDate.year, _currentDate.month, 1).weekday;
+
+    List<Widget> calendarWidgets = [];
+
+    // Hiển thị thứ trong tuần theo bản địa hóa
+    for (int i = 3; i <= 9; i++) {
+      final dayOfWeek = DateFormat.E(Localizations.localeOf(context).toString())
+          .format(DateTime(2024, 6, i)); // Lấy thứ tự từ T2 -> CN
+      calendarWidgets.add(
+        Center(
+          child: Text(dayOfWeek, style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+      );
+    }
+
+    for (int i = 1; i < firstWeekdayOfMonth; i++) {
+      calendarWidgets.add(Container());
+    }
+
+    for (int day = 1; day <= daysInMonth; day++) {
+      DateTime date = DateTime(_currentDate.year, _currentDate.month, day);
+      bool isStreakDay = streakDays.contains(date);
+      calendarWidgets.add(_buildCalendarDay(date, isStreakDay));
+    }
+
+    return GridView.count(
+      crossAxisCount: 7,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      children: calendarWidgets,
+    );
+  }
+
+  Widget _buildCalendarDay(DateTime date, bool isStreakDay) {
+    final theme = Theme.of(context);
+    return Container(
+      margin: EdgeInsets.all(4.0),
+      decoration: BoxDecoration(
+        border: Border.all(color: isStreakDay ? primary : stroke),
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: Center(
+        child: Text(
+          date.day.toString(),
+          style: bd_text.copyWith(
+              color: isStreakDay ? primary : theme.colorScheme.onSurface),
+        ),
       ),
     );
   }
