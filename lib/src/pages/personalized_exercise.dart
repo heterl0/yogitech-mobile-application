@@ -39,18 +39,43 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
   bool _isNotSearching = true;
   final TextEditingController _searchController = TextEditingController();
   List<Pose> _poses = [];
+  List<Pose> _filteredPoses = [];
 
   @override
   void initState() {
     super.initState();
     _fetchPoses();
+    _searchController.addListener(_filterPoses);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   Future<void> _fetchPoses() async {
     final poses = await getPoses();
     setState(() {
       _poses = poses;
+      _filteredPoses = poses;
     });
+  }
+
+  void _filterPoses() {
+    final query = _searchController.text;
+    if (query.isNotEmpty) {
+      setState(() {
+        _filteredPoses = _poses
+            .where(
+                (pose) => pose.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      });
+    } else {
+      setState(() {
+        _filteredPoses = [];
+      });
+    }
   }
 
   @override
@@ -63,6 +88,16 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
           ? CustomAppBar(
               title: trans.yourExercise,
               style: widthStyle.Large,
+              postActions: [
+                IconButton(
+                  icon: Icon(Icons.search, color: theme.colorScheme.onSurface),
+                  onPressed: () {
+                    setState(() {
+                      _isNotSearching = false;
+                    });
+                  },
+                ),
+              ],
             )
           : CustomAppBar(
               showBackButton: false,
@@ -83,6 +118,8 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
                   onPressed: () {
                     setState(() {
                       _isNotSearching = true;
+                      _searchController.clear();
+                      _filteredPoses = _poses;
                     });
                   },
                 ),
@@ -100,10 +137,9 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount:
-                        _poses.length, // Số phần tử trong danh sách đầu tiên
+                    itemCount: _filteredPoses.length,
                     itemBuilder: (context, index) {
-                      final pose = _poses[index];
+                      final pose = _filteredPoses[index];
                       return ListItem(
                         image: pose.image_url,
                         difficulty: pose.level.toString(),
@@ -118,9 +154,8 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
           ),
         ),
       ),
-      floatingActionButton: _buildFloatingActionButton(context), // Thêm nút nổi
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.endFloat, // Định vị nút nổi
+      floatingActionButton: _buildFloatingActionButton(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
@@ -132,7 +167,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
       child: Ink(
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
-          gradient: gradient, // Gradient từ app_colors.dart
+          gradient: gradient,
         ),
         width: 60,
         height: 60,
@@ -150,7 +185,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
           ),
         ),
       ),
-      onPressed: () {}, // Cái này nhấn không có tác dụng
+      onPressed: () {},
     );
   }
 }
@@ -192,7 +227,7 @@ class ListItem extends StatelessWidget {
             height: 60,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: stroke, // Màu nền của Avatar placeholder
+              color: stroke,
               image: image != null
                   ? DecorationImage(
                       image: NetworkImage(image!),
