@@ -1,12 +1,20 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:YogiTech/src/custombar/appbar.dart';
-import 'package:YogiTech/src/shared/styles.dart';
-import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/pages/friendlist.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SocialPage extends StatefulWidget {
-  const SocialPage({super.key});
+  final VoidCallback? onProfileUpdated;
+  final Account? account;
+  const SocialPage({
+    Key? key,
+    this.onProfileUpdated,
+    required this.account,
+  }) : super(key: key);
 
   @override
   State<SocialPage> createState() => _SocialPageState();
@@ -33,8 +41,9 @@ class _SocialPageState extends State<SocialPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => FriendListPage(
-                        initialTabIndex: 0,
-                      ),
+                          initialTabIndex: 0,
+                          account: widget.account,
+                          onProfileUpdated: widget.onProfileUpdated),
                     ));
               })
         ],
