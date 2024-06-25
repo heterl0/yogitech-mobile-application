@@ -124,6 +124,7 @@
   "notifications": "Về việc thông báo",
   "appNotifications": "Thông báo ứng dụng",
   "everyday": "Hàng ngày",
+  "noDays": "Không có ngày được chọn.",
   "setReminder": "Thiết lập nhắc nhở",
   "save": "Lưu",
   "loop": "Lặp lại",

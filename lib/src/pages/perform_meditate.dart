@@ -67,7 +67,6 @@ class _PerformMeditateState extends State<PerformMeditate>
           } else {
             timer.cancel();
             print('Đã dừng');
-            LocalNotification().init();
             LocalNotification.showSimpleNotification(
                 title: AppLocalizations.of(context)!.notiMeditationTitle,
                 body: AppLocalizations.of(context)!.notiMeditationBody,

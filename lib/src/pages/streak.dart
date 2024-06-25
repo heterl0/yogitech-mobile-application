@@ -298,7 +298,7 @@ class _StreakState extends State<Streak> {
           .format(DateTime(2024, 6, i)); // Lấy thứ tự từ T2 -> CN
       calendarWidgets.add(
         Center(
-          child: Text(dayOfWeek, style: TextStyle(fontWeight: FontWeight.bold)),
+          child: Text(dayOfWeek, style: bd_text.copyWith(color: text)),
         ),
       );
     }
