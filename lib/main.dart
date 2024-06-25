@@ -44,19 +44,30 @@ import 'dart:async';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 void main() async {
-  await LocalNotification().init();
+  // Đảm bảo WidgetsFlutterBinding đã được khởi tạo
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Khởi tạo các dịch vụ hoặc các thành phần cần thiết khác
+  await LocalNotification().init();
   HttpOverrides.global = MyHttpOverrides();
-  FlutterNativeSplash.remove(); // Remove splash screen immediately
+
+  // Loại bỏ splash screen ngay lập tức
+  FlutterNativeSplash.remove();
+
+  // Tải các biến môi trường
   await loadEnv();
+
+  // Kiểm tra và lấy token
   final accessToken = await checkToken();
+
+  // Đặt chế độ xoay màn hình
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  runApp(accessToken != null
-      ? MyApp(access: accessToken)
-      : MyApp()); // Conditional app start
+
+  // Chạy ứng dụng với token nếu có
+  runApp(accessToken != null ? MyApp(access: accessToken) : MyApp());
 }
 
 Future<String?> checkToken() async {
