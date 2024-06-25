@@ -19,6 +19,15 @@ class Pose extends AiModel {
   final int inputSize = 256;
   final double threshold = 0.8;
 
+  // Default statics
+  final defaultStatics = [
+    createBufferLoad([1, 195]),
+    createBufferLoad([1, 1]),
+    createBufferLoad([1, 256, 256, 1]),
+    createBufferLoad([1, 64, 64, 39]),
+    createBufferLoad([1, 117])
+  ];
+
   @override
   List<Object> get props => [];
 
@@ -102,11 +111,11 @@ class Pose extends AiModel {
     final dynamic inputImage = getProcessedImage(image);
 
     final inputs = <Object>[inputImage!];
-    dynamic outputLandmarks = createBufferLoad(outputShapes[0]);
-    dynamic outputIdentity1 = createBufferLoad(outputShapes[1]);
-    dynamic outputIdentity2 = createBufferLoad(outputShapes[2]);
-    dynamic outputIdentity3 = createBufferLoad(outputShapes[3]);
-    dynamic outputIdentity4 = createBufferLoad(outputShapes[4]);
+    dynamic outputLandmarks = defaultStatics[0];
+    dynamic outputIdentity1 = defaultStatics[1];
+    dynamic outputIdentity2 = defaultStatics[2];
+    dynamic outputIdentity3 = defaultStatics[3];
+    dynamic outputIdentity4 = defaultStatics[4];
 
     final outputs = <int, Object>{
       0: outputLandmarks,
@@ -115,8 +124,10 @@ class Pose extends AiModel {
       3: outputIdentity3,
       4: outputIdentity4,
     };
-    interpreter!.runForMultipleInputs(inputs, outputs);
 
+    interpreter!.runForMultipleInputs(inputs, outputs);
+    print(outputIdentity1[0][0]);
+    // print(outputShapes);
     if (outputIdentity1[0][0] < threshold) {
       return null;
     }
@@ -136,93 +147,19 @@ class Pose extends AiModel {
   }
 }
 
-dynamic createBufferLoad(List<int> shape) {
+List<dynamic> createBufferLoad(List<int> shape) {
   if (shape.length == 2) {
-    List<dynamic> buffer = [];
-    for (var i = 0; i < shape[0]; i++) {
-      List<dynamic> row = List.filled(shape[1], 0.0);
-      buffer.add(row);
-    }
-    return buffer;
+    // Create a 2D buffer with shape [shape[0], shape[1]]
+    return List.generate(shape[0], (_) => List.filled(shape[1], 0.0));
+  } else if (shape.length == 4) {
+    // Create a 4D buffer with shape [shape[0], shape[1], shape[2], shape[3]]
+    return List.generate(
+        shape[0],
+        (_) => List.generate(shape[1],
+            (_) => List.generate(shape[2], (_) => List.filled(shape[3], 0.0))));
   }
-  if (shape.length == 4) {
-    List<dynamic> buffer = [];
-    for (var i = 0; i < shape[0]; i++) {
-      List<dynamic> row = [];
-      for (var j = 0; j < shape[1]; j++) {
-        List<dynamic> column = [];
-        for (var k = 0; k < shape[2]; k++) {
-          List<dynamic> depth = List.filled(shape[3], 0.0);
-          column.add(depth);
-        }
-        row.add(column);
-      }
-      buffer.add(row);
-    }
-    return buffer;
-  }
-  return null;
+  return [];
 }
-
-// @override
-// dynamic getProcessedImage(image_lib.Image inputImage) {
-//   // final imageProcessor = ImageProcessorBuilder()
-//   //     .add(ResizeOp(inputSize, inputSize, ResizeMethod.BILINEAR))
-//   //     .add(NormalizeOp(0, 255))
-//   //     .build();
-
-//   // inputImage = imageProcessor.process(inputImage);
-//   return inputImage;
-// }
-
-// @override
-// Map<String, dynamic>? predict(image_lib.Image image) {
-//   if (interpreter == null) {
-//     return null;
-//   }
-
-//   // if (Platform.isAndroid) {
-//   //   image = image_lib.copyRotate(image, -90);
-//   //   image = image_lib.flipHorizontal(image);
-//   // }
-//   // final tensorImage = TensorImage(TfLiteType.float32);
-//   // tensorImage.loadImage(image);
-//   // final inputImage = getProcessedImage(tensorImage);
-
-//   // TensorBuffer outputLandmarks = TensorBufferFloat(outputShapes[0]);
-//   // TensorBuffer outputIdentity1 = TensorBufferFloat(outputShapes[1]);
-//   // TensorBuffer outputIdentity2 = TensorBufferFloat(outputShapes[2]);
-//   // TensorBuffer outputIdentity3 = TensorBufferFloat(outputShapes[3]);
-//   // TensorBuffer outputIdentity4 = TensorBufferFloat(outputShapes[4]);
-
-//   final inputs = <Object>[image.buffer];
-
-//   final outputs = <int, Object>{
-//     0: outputLandmarks.buffer,
-//     1: outputIdentity1.buffer,
-//     2: outputIdentity2.buffer,
-//     3: outputIdentity3.buffer,
-//     4: outputIdentity4.buffer,
-//   };
-
-//   interpreter!.runForMultipleInputs(inputs);
-
-//   if (outputIdentity1.getDoubleValue(0) < threshold) {
-//     return null;
-//   }
-
-//   final landmarkPoints = outputLandmarks.getDoubleList().reshape([39, 5]);
-//   final landmarkResults = <Offset>[];
-
-//   for (var point in landmarkPoints) {
-//     landmarkResults.add(Offset(
-//       point[0] / inputSize * image.width,
-//       point[1] / inputSize * image.height,
-//     ));
-//   }
-
-//   return {'point': landmarkResults};
-// }
 
 Map<String, dynamic>? runPoseEstimator(Map<String, dynamic> params) {
   final pose =
