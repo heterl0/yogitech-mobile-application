@@ -24,7 +24,6 @@ class ProfilePage extends StatefulWidget {
   final Locale locale;
   final ValueChanged<bool> onLanguageChanged;
   final bool isVietnamese;
-  
 
   const ProfilePage(
       {super.key,
@@ -42,7 +41,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Profile? _profile;
   Account? _account;
   bool _isLoading = false;
-
 
   List<FlSpot> sampleDataPoints = [
     FlSpot(0, 1000), // x = thời gian (ví dụ: ngày), y = điểm
@@ -91,16 +89,12 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       _isLoading = true;
     });
-    Profile? profile = await getUserProfile();
-    print(profile);
     Account? account = await retrieveAccount();
-    print(account);
     // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
     setState(() {
-      _profile = profile;
+      _profile = account?.profile;
       _account = account;
       _isLoading = false;
-
     });
   }
 
@@ -113,6 +107,19 @@ class _ProfilePageState extends State<ProfilePage> {
         appBar: CustomAppBar(
           showBackButton: false,
           title: trans.profile,
+          preActions: [
+            IconButton(
+              icon: Icon(
+                Icons.ios_share,
+                color: theme.colorScheme.onSurface,
+              ),
+              onPressed: () async {
+                await Share.share(
+                    'check out my website https://www.yogitech.me',
+                    subject: 'Look what I made!');
+              },
+            ),
+          ],
           postActions: [
             IconButton(
                 icon: Icon(
@@ -130,353 +137,362 @@ class _ProfilePageState extends State<ProfilePage> {
                         locale: widget.locale,
                         onLanguageChanged: widget.onLanguageChanged,
                         onProfileUpdated: refreshProfile,
+                        account: _account,
                       ),
                     ),
                   );
                 })
           ],
-          preActions: [
-            IconButton(
-              icon: Icon(
-                Icons.ios_share,
-                color: theme.colorScheme.onSurface,
-              ),
-              onPressed: () async {
-                await Share.share(
-                    'check out my website https://www.yogitech.me',
-                    subject: 'Look what I made!');
-              },
-            ),
-          ],
         ),
-        body:  _isLoading // Check loading state
-          ? Center(child: CircularProgressIndicator()) :SafeArea(
-          child: SingleChildScrollView(
-            child: Container(
-              margin: const EdgeInsets.all(24.0),
-              child: Column(
-                children: [
-                  ShaderMask(
-                    shaderCallback: (bounds) {
-                      return gradient.createShader(bounds);
-                    },
-                    child: Text(
-                      [
-                        (_profile?.last_name ?? ''),
-                        (_profile?.first_name ?? '')
-                      ].where((s) => s.isNotEmpty).join(' ').isEmpty
-                          ? 'Name'
-                          : [
+        body: _isLoading // Check loading state
+            ? Center(child: CircularProgressIndicator())
+            : SafeArea(
+                child: SingleChildScrollView(
+                  child: Container(
+                    margin: const EdgeInsets.all(24.0),
+                    child: Column(
+                      children: [
+                        ShaderMask(
+                          shaderCallback: (bounds) {
+                            return gradient.createShader(bounds);
+                          },
+                          child: Text(
+                            [
                               (_profile?.last_name ?? ''),
                               (_profile?.first_name ?? '')
-                            ].where((s) => s.isNotEmpty).join(' '),
-                      style: h2.copyWith(color: active),
-                    ),
-                  ),
+                            ].where((s) => s.isNotEmpty).join(' ').isEmpty
+                                ? 'Name'
+                                : [
+                                    (_profile?.last_name ?? ''),
+                                    (_profile?.first_name ?? '')
+                                  ].where((s) => s.isNotEmpty).join(' '),
+                            style: h2.copyWith(color: active),
+                          ),
+                        ),
 
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          pushWithoutNavBar(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    ChangeProfilePage()), // Thay NewPage() bằng trang bạn muốn chuyển tới
-                          );
-                        },
-                        child: Column(
+                        const SizedBox(height: 16),
+                        Row(
                           children: [
-                            Container(
-                              width: 144, // 2 * radius + 8 (border width) * 2
-                              height:
-                                  144, // Đã sửa lại thành 144 cho khớp tỉ lệ so với Figma
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                              ),
-                              child: _profile != null &&
-                                      (_profile!.avatar_url != null &&
-                                          _profile!.avatar_url!.isNotEmpty)
-                                  ? CircleAvatar(
-                                      radius: 50,
-                                      backgroundImage:
-                                          NetworkImage(_profile!.avatar_url!),
-                                      backgroundColor: Colors.transparent,
-                                    )
-                                  : Center(
-                                      child: _profile != null &&
-                                              (_profile!.avatar_url != null &&
-                                                  _profile!
-                                                      .avatar_url!.isNotEmpty)
-                                          ? CircleAvatar(
-                                              radius: 50,
-                                              backgroundImage: NetworkImage(
-                                                  _profile!.avatar_url!),
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                            )
-                                          : Center(
-                                              child: Container(
-                                                width: 144,
-                                                height: 144,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.transparent,
-                                                  border: Border.all(
-                                                    color: Colors
-                                                        .blue, // Màu của border
-                                                    width:
-                                                        3.0, // Độ rộng của border
-                                                  ),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    (_account?.username ?? '')
-                                                            .isNotEmpty
-                                                        ? (_account!.username[0]
-                                                            .toUpperCase())
-                                                        : '',
-                                                    style: TextStyle(
-                                                      fontSize: 40,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors
-                                                          .white, // Màu chữ
+                            GestureDetector(
+                              onTap: () {
+                                pushWithoutNavBar(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChangeProfilePage(
+                                            onProfileUpdated: refreshProfile,
+                                            account: _account,
+                                          )), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                                );
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width:
+                                        144, // 2 * radius + 8 (border width) * 2
+                                    height:
+                                        144, // Đã sửa lại thành 144 cho khớp tỉ lệ so với Figma
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: _profile != null &&
+                                            (_profile!.avatar_url != null &&
+                                                _profile!
+                                                    .avatar_url!.isNotEmpty)
+                                        ? CircleAvatar(
+                                            radius: 50,
+                                            backgroundImage: NetworkImage(
+                                                _profile!.avatar_url!),
+                                            backgroundColor: Colors.transparent,
+                                          )
+                                        : Center(
+                                            child: _profile != null &&
+                                                    (_profile!.avatar_url !=
+                                                            null &&
+                                                        _profile!.avatar_url!
+                                                            .isNotEmpty)
+                                                ? CircleAvatar(
+                                                    radius: 50,
+                                                    backgroundImage:
+                                                        NetworkImage(_profile!
+                                                            .avatar_url!),
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                  )
+                                                : Center(
+                                                    child: Container(
+                                                      width: 144,
+                                                      height: 144,
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color:
+                                                            Colors.transparent,
+                                                        border: Border.all(
+                                                          color: Colors
+                                                              .blue, // Màu của border
+                                                          width:
+                                                              3.0, // Độ rộng của border
+                                                        ),
+                                                      ),
+                                                      child: Center(
+                                                        child: Text(
+                                                          (_account?.username ??
+                                                                      '')
+                                                                  .isNotEmpty
+                                                              ? (_account!
+                                                                  .username[0]
+                                                                  .toUpperCase())
+                                                              : '',
+                                                          style: TextStyle(
+                                                            fontSize: 40,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors
+                                                                .white, // Màu chữ
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ),
-                                            ),
-                                    ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              trans.avatar,
-                              style: bd_text.copyWith(color: text),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            InfoCard(
-                              title: trans.calorie,
-                              subtitle: trans.totalCalories,
-                              iconPath: 'assets/icons/info.png',
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Calorie(),
+                                          ),
                                   ),
-                                );
-                              },
-                            ),
-                            const SizedBox(height: 6),
-                            InfoCard(
-                              title: trans.social,
-                              subtitle: trans.yourFriends,
-                              iconPath: 'assets/icons/diversity_2.png',
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SocialPage(),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    trans.avatar,
+                                    style: bd_text.copyWith(color: text),
                                   ),
-                                );
-                              },
-                            ),
-                            const SizedBox(height: 6),
-                            InfoCard(
-                              title: trans.personalizedExercise,
-                              subtitle: trans.customizeExercise,
-                              iconPath: 'assets/icons/tune_setting.png',
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        PersonalizedExercisePage(),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16.0),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            StatCard(
-                              title: trans.following,
-                              value: _account?.following.length.toString() ??
-                                  '0', // Replace with API data
-                              valueColor: theme.colorScheme.onPrimary,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => FriendListPage(
-                                      initialTabIndex: 0,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            StatCard(
-                              title: trans.follower,
-                              value: _account?.following.length.toString() ??
-                                  '0', // Replace with API data
-                              valueColor: theme.colorScheme.onPrimary,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => FriendListPage(
-                                      initialTabIndex: 1,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            StatCard(
-                              title: 'EXP',
-                              value: _profile?.exp.toString() ?? '',
-// Replace with API data
-                              valueColor: primary,
-                              isTitleFirst: true,
-                            ),
-                            StatCard(
-                              title: 'BMI',
-                              value: _profile?.bmi?.toString() ??
-                                  '0', // Replace with API data
-                              valueColor: theme.colorScheme.onPrimary,
-                              isTitleFirst: true,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ChangeBMIPage(
-                                        onBMIUpdated: refreshProfile),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20.0),
-                  AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: LineChart(LineChartData(
-                        minX: 0,
-                        maxX: 5,
-                        minY: 1000,
-                        maxY: 3000,
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: sampleDataPoints,
-                            isCurved: true,
-                            color: green,
-                            barWidth: 4,
-                          ),
-                          LineChartBarData(
-                            spots: sampleDataExp,
-                            isCurved: true,
-                            gradient: gradient,
-                            barWidth: 4,
-                          ),
-                        ],
-                        titlesData: FlTitlesData(
-                          leftTitles: AxisTitles(
-                            axisNameWidget: Text(
-                              trans.value,
-                              style: min_cap.copyWith(color: text),
-                            ),
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                            ),
-                          ),
-                          bottomTitles: AxisTitles(
-                            axisNameWidget: Text(
-                              trans.days,
-                              style: min_cap.copyWith(color: text),
-                            ),
-                            sideTitles: SideTitles(showTitles: true),
-                          ),
-                          topTitles: AxisTitles(),
-                          rightTitles: AxisTitles(),
-                        ))),
-                  ),
-                  // Row(
-                  //   children: [
-                  //     Text(
-                  //       "Charts",
-                  //       style: h3.copyWith(color: primary),
-                  //     ),
-                  //     Expanded(
-                  //       child: Container(
-                  //         margin: const EdgeInsets.all(0.0),
-                  //         height: 160,
-                  //         decoration: BoxDecoration(
-                  //           border: Border.all(color: const Color(0xFF8D8E99)),
-                  //           borderRadius: BorderRadius.circular(20.0),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  const SizedBox(height: 20.0), // Added space for better layout
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: 50.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(44.0),
-                            border: Border.all(color: error, width: 2.0),
-                          ),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () {
-                                // Xử lý sự kiện khi nhấn vào nút "Đăng xuất"
-                                _logout();
-                              },
-                              borderRadius: BorderRadius.circular(44.0),
-                              child: Center(
-                                child: Text(trans.logout,
-                                    style: h3.copyWith(color: error)),
+                                ],
                               ),
                             ),
-                          ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  InfoCard(
+                                    title: trans.calorie,
+                                    subtitle: trans.totalCalories,
+                                    iconPath: 'assets/icons/info.png',
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Calorie(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(height: 6),
+                                  InfoCard(
+                                    title: trans.social,
+                                    subtitle: trans.yourFriends,
+                                    iconPath: 'assets/icons/diversity_2.png',
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => SocialPage(
+                                            account: _account,
+                                            onProfileUpdated: refreshProfile,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(height: 6),
+                                  InfoCard(
+                                    title: trans.personalizedExercise,
+                                    subtitle: trans.customizeExercise,
+                                    iconPath: 'assets/icons/tune_setting.png',
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              PersonalizedExercisePage(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 16.0),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  StatCard(
+                                    title: trans.following,
+                                    value:
+                                        _account?.following.length.toString() ??
+                                            '0', // Replace with API data
+                                    valueColor: theme.colorScheme.onPrimary,
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => FriendListPage(
+                                            initialTabIndex: 0,
+                                            account: _account,
+                                            onProfileUpdated: refreshProfile,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  StatCard(
+                                    title: trans.follower,
+                                    value:
+                                        _account?.followers.length.toString() ??
+                                            '0', // Replace with API data
+                                    valueColor: theme.colorScheme.onPrimary,
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => FriendListPage(
+                                            initialTabIndex: 1,
+                                            account: _account,
+                                            onProfileUpdated: refreshProfile,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  StatCard(
+                                    title: 'EXP',
+                                    value: _profile?.exp.toString() ?? '',
+// Replace with API data
+                                    valueColor: primary,
+                                    isTitleFirst: true,
+                                  ),
+                                  StatCard(
+                                    title: 'BMI',
+                                    value: _profile?.bmi?.toString() ??
+                                        '0', // Replace with API data
+                                    valueColor: theme.colorScheme.onPrimary,
+                                    isTitleFirst: true,
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ChangeBMIPage(
+                                            onBMIUpdated: refreshProfile,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20.0),
+                        AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: LineChart(LineChartData(
+                              minX: 0,
+                              maxX: 5,
+                              minY: 1000,
+                              maxY: 3000,
+                              lineBarsData: [
+                                LineChartBarData(
+                                  spots: sampleDataPoints,
+                                  isCurved: true,
+                                  color: green,
+                                  barWidth: 4,
+                                ),
+                                LineChartBarData(
+                                  spots: sampleDataExp,
+                                  isCurved: true,
+                                  gradient: gradient,
+                                  barWidth: 4,
+                                ),
+                              ],
+                              titlesData: FlTitlesData(
+                                leftTitles: AxisTitles(
+                                  axisNameWidget: Text(
+                                    trans.value,
+                                    style: min_cap.copyWith(color: text),
+                                  ),
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                  ),
+                                ),
+                                bottomTitles: AxisTitles(
+                                  axisNameWidget: Text(
+                                    trans.days,
+                                    style: min_cap.copyWith(color: text),
+                                  ),
+                                  sideTitles: SideTitles(showTitles: true),
+                                ),
+                                topTitles: AxisTitles(),
+                                rightTitles: AxisTitles(),
+                              ))),
+                        ),
+                        // Row(
+                        //   children: [
+                        //     Text(
+                        //       "Charts",
+                        //       style: h3.copyWith(color: primary),
+                        //     ),
+                        //     Expanded(
+                        //       child: Container(
+                        //         margin: const EdgeInsets.all(0.0),
+                        //         height: 160,
+                        //         decoration: BoxDecoration(
+                        //           border: Border.all(color: const Color(0xFF8D8E99)),
+                        //           borderRadius: BorderRadius.circular(20.0),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                        const SizedBox(
+                            height: 20.0), // Added space for better layout
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: 50.0,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(44.0),
+                                  border: Border.all(color: error, width: 2.0),
+                                ),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () {
+                                      // Xử lý sự kiện khi nhấn vào nút "Đăng xuất"
+                                      _logout();
+                                    },
+                                    borderRadius: BorderRadius.circular(44.0),
+                                    child: Center(
+                                      child: Text(trans.logout,
+                                          style: h3.copyWith(color: error)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ));
+                ),
+              ));
   }
 }
 

@@ -1,16 +1,22 @@
+import 'package:YogiTech/api/account/account_service.dart';
+import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/dioInstance.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/social.dart';
 import 'package:YogiTech/utils/formatting.dart';
 import 'package:dio/dio.dart';
 
-Future<Following?> followUser(int userId) async {
+Future<Account?> followUser(int userId) async {
   try {
     final url = formatApiUrl('/api/v1/social/follow/');
     final Response response =
         await DioInstance.post(url, data: {'followed': userId});
-    if (response.statusCode == 200) {
-      return Following.fromMap(response.data);
+    if (response.statusCode == 201) {
+      final account = await getUser();
+      if (account != null) {
+        await storeAccount(account);
+      }
+      return account;
     } else {
       print('Post follow user failed with status code: ${response.statusCode}');
       return null;
@@ -21,14 +27,18 @@ Future<Following?> followUser(int userId) async {
   }
 }
 
-Future<bool> unfollowUser(int userId) async {
+Future<Account?> unfollowUser(int userId) async {
   try {
     final url = formatApiUrl('/api/v1/social/unfollow/$userId/');
     final Response response = await DioInstance.delete(url);
-    return response.statusCode == 204;
+    final account = await getUser();
+    if (account != null) {
+      await storeAccount(account);
+    }
+    return account;
   } catch (e) {
     print('Unfollow user error: $e');
-    return false;
+    return null;
   }
 }
 

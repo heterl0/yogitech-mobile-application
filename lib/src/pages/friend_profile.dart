@@ -1,3 +1,5 @@
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/models/social.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
@@ -6,20 +8,42 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FriendProfile extends StatefulWidget {
   final int? id;
+  final SocialProfile profile;
+  final Account? account;
+  final void Function(int id)? unFollow;
+  final void Function(int id)? followUserByUserId;
 
-  FriendProfile({Key? key, this.id}) : super(key: key);
+  FriendProfile(
+      {Key? key,
+      this.id,
+      required this.profile,
+      this.account,
+      this.unFollow,
+      this.followUserByUserId})
+      : super(key: key);
 
   @override
   State<FriendProfile> createState() => _nameState();
 }
 
 class _nameState extends State<FriendProfile> {
-  bool follow = true; // Khai báo biến ở đây
+  bool isFollow = false; // Khai báo biến ở đây
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      isFollow = widget.account!.isFollowing(widget.profile.user_id ?? -1);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+    final name = widget.profile.first_name != null
+        ? '${widget.profile.first_name} ${widget.profile.last_name}'
+        : widget.profile.username ?? 'User Name';
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
@@ -36,7 +60,7 @@ class _nameState extends State<FriendProfile> {
                 return gradient.createShader(bounds);
               },
               child: Text(
-                'Name',
+                name,
                 style: h2.copyWith(color: active),
               ),
             ),
@@ -52,9 +76,12 @@ class _nameState extends State<FriendProfile> {
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                       ),
-                      child: const CircleAvatar(
+                      child: CircleAvatar(
                         radius: 78,
-                        backgroundImage: AssetImage('assets/images/avatar.png'),
+                        backgroundImage: widget.profile.avatar != null
+                            ? NetworkImage(widget.profile.avatar ?? "")
+                                as ImageProvider
+                            : AssetImage('assets/images/gradient.jpg'),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -74,7 +101,7 @@ class _nameState extends State<FriendProfile> {
                         style: min_cap.copyWith(color: text, height: 1),
                       ),
                       Text(
-                        '999',
+                        widget.profile.exp.toString(),
                         style: h1.copyWith(color: primary, height: 1),
                       ),
                       SizedBox(height: 36), // Khoảng cách giữa các phần tử
@@ -86,24 +113,33 @@ class _nameState extends State<FriendProfile> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(44.0),
                                 border: Border.all(
-                                    color: follow ? error : primary,
+                                    color: isFollow ? error : primary,
                                     width: 2.0),
                               ),
                               child: Material(
                                 color: Colors.transparent,
                                 child: InkWell(
                                   onTap: () {
-                                    // Xử lý sự kiện khi nhấn vào nút
+                                    if (isFollow) {
+                                      widget.unFollow!(
+                                          widget.profile.user_id ?? -1);
+                                    } else {
+                                      widget.followUserByUserId!(
+                                          widget.profile.user_id ?? -1);
+                                    }
                                     setState(() {
-                                      follow = !follow; // Thay đổi trạng thái
+                                      isFollow =
+                                          !isFollow; // Thay đổi trạng thái
                                     });
                                   },
                                   borderRadius: BorderRadius.circular(44.0),
                                   child: Center(
                                     child: Text(
-                                        follow ? trans.unfollow : trans.follow,
+                                        isFollow
+                                            ? trans.unfollow
+                                            : trans.follow,
                                         style: h3.copyWith(
-                                            color: follow ? error : primary)),
+                                            color: isFollow ? error : primary)),
                                   ),
                                 ),
                               ),
@@ -159,7 +195,8 @@ class BoxButton extends StatelessWidget {
     required this.textStyle,
     required this.shape,
     required this.onPressed,
-    this.borderColor, // Add this line
+    this.borderColor,
+    required style, // Add this line
   });
 
   @override

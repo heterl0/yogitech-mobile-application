@@ -120,7 +120,7 @@ class ResultAfterPractice extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24), // Adjust spacing
-          BoxButton(
+          CustomButton(
             title: trans.finish,
             style: ButtonStyleType.Primary,
             onPressed: () {
