@@ -96,7 +96,11 @@ class _ReminderPageState extends State<ReminderPage> {
 
   Future<void> _showSetupReminderPage(BuildContext context,
       {bool isNew = false, int? index}) async {
+    final trans = AppLocalizations.of(context)!;
+    final ThemeData theme = Theme.of(context);
     final result = await showModalBottomSheet<Map<String, dynamic>>(
+      backgroundColor: theme.colorScheme.onSecondary,
+      elevation: appElevation,
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
@@ -132,14 +136,22 @@ class _ReminderPageState extends State<ReminderPage> {
         final notificationPayload =
             'your_payload_here'; // Thay bằng payload thích hợp
 
-        LocalNotification localNotification = LocalNotification();
-        localNotification.showScheduleNotification(
-          title: 'Your title',
-          body: 'Your body',
-          time: timeOfDay,
-          days: days,
-          payload: notificationPayload,
-        );
+        // Kiểm tra xem có ngày nào được chọn hay không
+        if (days.isNotEmpty) {
+          LocalNotification localNotification = LocalNotification();
+          localNotification.showScheduleNotification(
+            title: 'Your title',
+            body: 'Your body',
+            time: timeOfDay,
+            days: days,
+            payload: notificationPayload,
+          );
+        } else {
+          // Nếu không có ngày nào được chọn, bạn có thể hiển thị thông báo lỗi cho người dùng (ví dụ: bằng Snackbar)
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(trans.noDays)),
+          );
+        }
 
         if (isNew) {
           setState(() {
@@ -256,7 +268,6 @@ class _SetupReminderWidget extends StatefulWidget {
 }
 
 class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
-  bool _loopEnabled = false;
   late TimeOfDay _selectedTime;
   late Set<int> _selectedDays;
 
@@ -265,7 +276,6 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
     super.initState();
     _selectedTime = widget.initialTime;
     _selectedDays = widget.initialDays;
-    _loopEnabled = _selectedDays.isNotEmpty;
   }
 
   @override
@@ -335,52 +345,38 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
               ), // Viền khung
               child: Column(
                 children: [
-                  CustomSwitch(
-                    title: trans.loop,
-                    value: _loopEnabled,
-                    onChanged: (value) {
-                      setState(() {
-                        _loopEnabled = value;
-                        if (!_loopEnabled) {
-                          _selectedDays.clear();
-                        }
-                      });
-                    },
-                  ),
-                  if (_loopEnabled)
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: List<Widget>.generate(7, (index) {
-                          final dayIndex = index +
-                              1; // Giữ nguyên dayIndex bắt đầu từ 1 (thứ Hai)
-                          final dateFormat = DateFormat.EEEE(
-                              Localizations.localeOf(context).toString());
-                          final dayName = dateFormat.format(DateTime(
-                              2024,
-                              1,
-                              index +
-                                  1)); // Sử dụng ngày cố định trong tuần đầu tiên của năm 2024 (bắt đầu từ thứ Hai)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: List<Widget>.generate(7, (index) {
+                        final dayIndex = index +
+                            1; // Giữ nguyên dayIndex bắt đầu từ 1 (thứ Hai)
+                        final dateFormat = DateFormat.EEEE(
+                            Localizations.localeOf(context).toString());
+                        final dayName = dateFormat.format(DateTime(
+                            2024,
+                            1,
+                            index +
+                                1)); // Sử dụng ngày cố định trong tuần đầu tiên của năm 2024 (bắt đầu từ thứ Hai)
 
-                          return CheckBoxListTile(
-                            title:
-                                dayName.toString(), // Show localized day name
-                            state: _selectedDays.contains(dayIndex)
-                                ? CheckState.Checked
-                                : CheckState.Unchecked,
-                            onChanged: (value) {
-                              setState(() {
-                                if (value) {
-                                  _selectedDays.add(dayIndex);
-                                } else {
-                                  _selectedDays.remove(dayIndex);
-                                }
-                              });
-                            },
-                          );
-                        }),
-                      ),
+                        return CheckBoxListTile(
+                          title: dayName.toString(), // Show localized day name
+                          state: _selectedDays.contains(dayIndex)
+                              ? CheckState.Checked
+                              : CheckState.Unchecked,
+                          onChanged: (value) {
+                            setState(() {
+                              if (value) {
+                                _selectedDays.add(dayIndex);
+                              } else {
+                                _selectedDays.remove(dayIndex);
+                              }
+                            });
+                          },
+                        );
+                      }),
                     ),
+                  ),
                 ],
               ),
             ),
