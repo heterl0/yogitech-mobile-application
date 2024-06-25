@@ -1,3 +1,4 @@
+import 'package:YogiTech/services/notifi_service.dart';
 import 'package:YogiTech/src/models/social.dart';
 import 'package:YogiTech/src/models/notification.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,7 @@ import 'dart:async';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 void main() async {
+  await LocalNotification().init();
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   FlutterNativeSplash.remove(); // Remove splash screen immediately
@@ -101,6 +103,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.dark;
   Locale _locale = const Locale('vi');
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void _toggleTheme(bool isDarkMode) {
     setState(() {

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:YogiTech/services/notifi_service.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
@@ -6,14 +7,9 @@ import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:YogiTech/src/widgets/switch.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter/cupertino.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/widgets.dart'; // Để sử dụng AnimatedList
-import 'dart:convert';
 
 class ReminderPage extends StatefulWidget {
   final bool reminderOn;
@@ -133,6 +129,21 @@ class _ReminderPageState extends State<ReminderPage> {
           _saveReminders();
         }
       } else if (result.containsKey('time') && result.containsKey('days')) {
+        final timeOfDay = result['time'] as TimeOfDay;
+        final days = result['days'] as Set<int>;
+        final notificationPayload =
+            'your_payload_here'; // Thay bằng payload thích hợp
+
+        LocalNotification localNotification = LocalNotification();
+        localNotification.showScheduleNotification(
+          title: 'Your title',
+          body: 'Your body',
+          time: timeOfDay,
+          days: days,
+          payload: notificationPayload,
+        );
+
+        Navigator.pop(context);
         if (isNew) {
           setState(() {
             _selectedTimes

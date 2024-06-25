@@ -1,10 +1,10 @@
 import 'dart:async';
+import 'package:YogiTech/services/notifi_service.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class PerformMeditate extends StatefulWidget {
   final Duration selectedDuration;
@@ -21,8 +21,6 @@ class PerformMeditate extends StatefulWidget {
 }
 
 class _PerformMeditateState extends State<PerformMeditate> {
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
   late Duration _remainingTime;
   Timer? _timer;
   bool _isPlaying = false;
@@ -33,40 +31,13 @@ class _PerformMeditateState extends State<PerformMeditate> {
     super.initState();
     _remainingTime = widget.selectedDuration;
     _audioPlayer = AudioPlayer();
-    const initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    const initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-    );
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  }
-
-  Future<void> _showNotification() async {
-    print('Thông báo');
-    const androidDetails = AndroidNotificationDetails(
-      'channel_id',
-      'channel_name',
-      channelDescription: 'channel_description',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
-
-    const notificationDetails = NotificationDetails(
-      android: androidDetails,
-    );
-
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      AppLocalizations.of(context)!.notiMeditationTitle,
-      AppLocalizations.of(context)!.notiMeditationBody,
-      notificationDetails,
-    );
   }
 
   @override
   void dispose() {
     _timer?.cancel();
     _audioPlayer.dispose();
+
     super.dispose();
   }
 
@@ -81,9 +52,14 @@ class _PerformMeditateState extends State<PerformMeditate> {
             _remainingTime -= Duration(seconds: 1);
           } else {
             timer.cancel();
+            print('Đã dừng');
+            LocalNotification().init();
+            LocalNotification.showSimpleNotification(
+                title: AppLocalizations.of(context)!.notiMeditationTitle,
+                body: AppLocalizations.of(context)!.notiMeditationBody,
+                payload: 'payload');
             _isPlaying = false;
             _stopAudio();
-            _showNotification(); // Show notification when timer completes
           }
         });
       });
