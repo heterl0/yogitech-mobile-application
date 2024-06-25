@@ -1,3 +1,5 @@
+import 'package:YogiTech/api/blog/blog_service.dart';
+import 'package:YogiTech/src/models/exercise.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -23,7 +25,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var jsonList;
+  List<dynamic> jsonList = [];
+  List<dynamic> jsonListSort = [];
   bool _isnotSearching = true;
   final TextEditingController _searchController = TextEditingController();
   Account? account;
@@ -32,6 +35,21 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _fetchExercises();
+    _fetchExercisesSort();
+  }
+
+  Future<void> _fetchExercisesSort() async {
+    final List<dynamic> exercisesSort = await getExercises();
+
+    exercisesSort.sort((a, b) {
+      var dateA = DateTime.parse(a.created_at);
+      var dateB = DateTime.parse(b.created_at);
+      return dateB.compareTo(dateA); // Sort descending (newest to oldest)
+    });
+    print(exercisesSort);
+    setState(() {
+      jsonListSort = exercisesSort;
+    });
   }
 
   Future<void> _fetchExercises() async {
@@ -265,39 +283,33 @@ class _HomePageState extends State<HomePage> {
                           );
                         },
                       ),
-                      // SizedBox(
-                      //   width: 130, // Điều chỉnh kích thước nút nếu cần
-                      //   child: BoxButton(
-                      //     title: trans.seeall,
-                      //     style: ButtonStyleType.Tertiary,
-                      //     onPressed: () {
-
-                      //     },
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
-                    children: List.generate(5, (index) {
-                      return CustomCard(
-                        title: 'Card with Image',
-                        caption:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                        onTap: () {
-                          // Navigate to the detail page when the card is tapped
-                          pushWithoutNavBar(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ExerciseDetail(),
-                            ),
-                          );
-                        },
-                      );
-                    }),
+                    children: [
+                      if (jsonListSort != null)
+                        for (final exercise in jsonListSort)
+                          CustomCard(
+                            title: exercise.title,
+                            // subtitle: exercise.durations ?? '0',
+                            imageUrl:
+                                exercise.image_url, // URL hình ảnh của bài tập
+                            onTap: () {
+                              // Chuyển sang trang chi tiết của bài tập khi thẻ được nhấn
+                              pushWithoutNavBar(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ExerciseDetail(id: exercise.id),
+                                ),
+                              );
+                            },
+                          ),
+                    ],
                   ),
                 ),
               ],
