@@ -101,6 +101,8 @@
   "sounds": "Sounds",
   "start": "Start",
   "pause": "Pause",
+  "notiMeditationTitle":"Meditation",
+  "notiMeditationBody":"Meditation finish",
   "calorie": "Calorie",
   "totalCalories": "Your total of calories",
   "social": "Notification",

@@ -101,6 +101,8 @@
   "sounds": "Âm thanh",
   "start": "Bắt đầu",
   "pause": "Tạm dừng",
+  "notiMeditationTitle":"Thiền",
+  "notiMeditationBody":"Kết thúc thiền",
   "calorie": "Calo",
   "totalCalories": "Tổng số calo của bạn",
   "social": "Thông báo",

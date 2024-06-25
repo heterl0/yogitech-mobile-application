@@ -31,6 +31,7 @@ import 'package:YogiTech/src/pages/reset_password_page.dart';
 import 'package:YogiTech/src/pages/homepage.dart';
 import 'package:YogiTech/src/pages/profile.dart';
 import 'package:YogiTech/src/pages/settings.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -39,6 +40,8 @@ import 'package:YogiTech/src/shared/app_colors.dart';
 import 'dart:io';
 import 'dart:async';
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();

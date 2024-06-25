@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class PerformMeditate extends StatefulWidget {
   final Duration selectedDuration;
@@ -19,17 +21,46 @@ class PerformMeditate extends StatefulWidget {
 }
 
 class _PerformMeditateState extends State<PerformMeditate> {
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   late Duration _remainingTime;
   Timer? _timer;
   bool _isPlaying = false;
-  late AudioPlayer
-      _audioPlayer; // Đã thêm biến _audioPlayer để quản lý player audio
+  late AudioPlayer _audioPlayer;
 
   @override
   void initState() {
     super.initState();
     _remainingTime = widget.selectedDuration;
     _audioPlayer = AudioPlayer();
+    const initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+    );
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future<void> _showNotification() async {
+    print('Thông báo');
+    const androidDetails = AndroidNotificationDetails(
+      'channel_id',
+      'channel_name',
+      channelDescription: 'channel_description',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+
+    const notificationDetails = NotificationDetails(
+      android: androidDetails,
+    );
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      AppLocalizations.of(context)!.notiMeditationTitle,
+      AppLocalizations.of(context)!.notiMeditationBody,
+      notificationDetails,
+    );
   }
 
   @override
@@ -52,6 +83,7 @@ class _PerformMeditateState extends State<PerformMeditate> {
             timer.cancel();
             _isPlaying = false;
             _stopAudio();
+            _showNotification(); // Show notification when timer completes
           }
         });
       });
@@ -68,9 +100,9 @@ class _PerformMeditateState extends State<PerformMeditate> {
     });
 
     if (_audioPlayer.state == PlayerState.playing) {
-      _audioPlayer.pause(); // Tạm dừng audio nếu đang phát
+      _audioPlayer.pause();
     } else if (_audioPlayer.state == PlayerState.paused) {
-      _audioPlayer.resume(); // Tiếp tục audio nếu đang tạm dừng
+      _audioPlayer.resume();
     }
   }
 
@@ -79,7 +111,7 @@ class _PerformMeditateState extends State<PerformMeditate> {
       await _audioPlayer.setReleaseMode(ReleaseMode.loop);
       await _audioPlayer.play(AssetSource(widget.audioPath));
     } catch (e) {
-      print("Error playing audio: $e"); // In ra thông tin lỗi cụ thể
+      print("Error playing audio: $e");
     }
   }
 
@@ -102,7 +134,8 @@ class _PerformMeditateState extends State<PerformMeditate> {
       appBar: CustomAppBar(
         title: trans.meditate,
       ),
-      body: Center(
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -113,24 +146,34 @@ class _PerformMeditateState extends State<PerformMeditate> {
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: _isPlaying ? _pauseTimer : _startTimer,
-                  child: Text(_isPlaying ? trans.pause : trans.start),
-                ),
-                SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _remainingTime = widget.selectedDuration;
-                      _isPlaying = false;
-                      _timer?.cancel();
-                      _stopAudio(); // Dừng phát audio khi reset
-                    });
-                  },
-                  child: Text(trans.reset),
-                ),
-              ],
+              children: [],
+            ),
+            SizedBox(
+              width: 240,
+              child: Column(
+                children: [
+                  CustomButton(
+                    title: _isPlaying ? trans.pause : trans.start,
+                    style: !_isPlaying
+                        ? ButtonStyleType.Primary
+                        : ButtonStyleType.Tertiary,
+                    onPressed: _isPlaying ? _pauseTimer : _startTimer,
+                  ),
+                  SizedBox(height: 16),
+                  CustomButton(
+                    title: trans.reset,
+                    style: ButtonStyleType.Tertiary,
+                    onPressed: () {
+                      setState(() {
+                        _remainingTime = widget.selectedDuration;
+                        _isPlaying = false;
+                        _timer?.cancel();
+                        _stopAudio();
+                      });
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         ),

@@ -61,6 +61,7 @@ class _MeditateState extends State<Meditate> {
           normalizedToday.difference(normalizedLastDate).inDays;
       print(
           'daysDifference:$daysDifference   normalizedLastDate:$normalizedLastDate lastMeditationDate:$lastMeditationDate');
+
       // If the difference is 1 day, increment streak
       if (daysDifference == 1) {
         currentStreak++;
@@ -261,7 +262,6 @@ class _MeditateState extends State<Meditate> {
         shape: MaterialStateProperty.all(const CircleBorder()),
       ),
       onPressed: () async {
-        await _updateStreakData();
         pushWithoutNavBar(
           context,
           MaterialPageRoute(
@@ -273,6 +273,7 @@ class _MeditateState extends State<Meditate> {
             ),
           ),
         );
+        await _updateStreakData();
       },
       child: Ink(
         decoration: BoxDecoration(
