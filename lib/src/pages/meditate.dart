@@ -19,7 +19,10 @@ class Meditate extends StatefulWidget {
 
 final List<Map<String, dynamic>> theTracks = [
   {'asset': 'audios/rain.mp3'},
-  {'asset': 'audios/water_cave.mp3'},
+  {'asset': 'audios/wave.mp3'},
+  {'asset': 'audios/morning.mp3'},
+  {'asset': 'audios/nature.mp3'},
+  {},
 ];
 
 class _MeditateState extends State<Meditate> {
@@ -130,8 +133,16 @@ class _MeditateState extends State<Meditate> {
         'subtitle': trans.soundRainDescription,
       },
       {
-        'title': trans.soundStream,
-        'subtitle': trans.soundStreamDescription,
+        'title': trans.soundWave,
+        'subtitle': trans.soundWaveDescription,
+      },
+      {
+        'title': trans.soundMorning,
+        'subtitle': trans.soundMorningDescription,
+      },
+      {
+        'title': trans.soundNature,
+        'subtitle': trans.soundNatureDescription,
       },
     ];
 
