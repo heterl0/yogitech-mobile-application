@@ -1,5 +1,5 @@
+import 'package:YogiTech/model/service_locator.dart';
 import 'package:YogiTech/src/models/social.dart';
-import 'package:YogiTech/src/models/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
@@ -44,6 +44,7 @@ void main() async {
   HttpOverrides.global = MyHttpOverrides();
   FlutterNativeSplash.remove(); // Remove splash screen immediately
   await loadEnv();
+  setupLocator();
   final accessToken = await checkToken();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
