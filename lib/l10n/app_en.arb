@@ -1,6 +1,7 @@
 {
   "exercise": "Exercises",
   "login": "Login",
+  "loginWithGoogle": "Sign In with Google",
   "returnLogin": "Return Login",
   "verifyEmail": "Verify your Email address",
   "checkYourEmail": "Check your email to get a link to active the new account, please",
