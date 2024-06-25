@@ -133,7 +133,21 @@ class _HomePageState extends State<HomePage> {
                 titleWidget: BoxInputField(
                   controller: _searchController,
                   placeholder: trans.search,
-                  trailing: Icon(Icons.search),
+                  trailing: IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      setState(() {
+                        String searchValue = _searchController.text.trim();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                AllExercise(searchString: searchValue),
+                          ),
+                        );
+                      });
+                    },
+                  ),
                   keyboardType: TextInputType.text,
                   inputFormatters: const [],
                   onSubmitted: (value) {
@@ -142,11 +156,10 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AllExercise(
-                                searchString:
-                                    searchValue)), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                          builder: (context) =>
+                              AllExercise(searchString: searchValue),
+                        ),
                       );
-                      // Use the value here after the user submits
                     });
                   },
                 ),
