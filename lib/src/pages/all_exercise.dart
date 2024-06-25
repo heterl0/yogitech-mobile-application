@@ -9,8 +9,6 @@ import 'package:YogiTech/src/models/exercise.dart';
 import 'package:YogiTech/src/models/pose.dart';
 import 'package:YogiTech/src/pages/exercise_detail.dart';
 import 'package:YogiTech/src/pages/filter.dart';
-import 'package:YogiTech/src/pages/homepage.dart';
-import 'package:YogiTech/src/pages/subscription.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:YogiTech/src/widgets/card.dart';
