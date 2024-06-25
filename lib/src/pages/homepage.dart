@@ -46,7 +46,6 @@ class _HomePageState extends State<HomePage> {
       var dateB = DateTime.parse(b.created_at);
       return dateB.compareTo(dateA); // Sort descending (newest to oldest)
     });
-    print(exercisesSort);
     setState(() {
       jsonListSort = exercisesSort;
     });
