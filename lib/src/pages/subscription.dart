@@ -401,6 +401,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
   Future<void> _subscriptionBottomSheet(BuildContext context,Subscription sub) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+    String price = '${sub.price.toInt().toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} VND';
 
     return showModalBottomSheet(
       context: context,
@@ -414,17 +415,31 @@ class _SubscriptionState extends State<SubscriptionPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: 120,
-                height: 120,
                 alignment: Alignment.center,
-                child: Center(
-                  // Thêm widget Center
-                  child:sub.durationInMonth < 1? Image.asset('assets/images/Universe.png'): (sub.durationInMonth >=12 ? Image.asset('assets/images/Sun.png'):Image.asset('assets/images/MoonPhase.png')),
-                ),
+                child: sub.durationInMonth < 1 
+                  ? Image.asset(
+                      'assets/images/Universe2.png',
+                      width: 120,
+                      height: 120,
+                      fit: BoxFit.cover,
+                    ) 
+                  : (sub.durationInMonth >= 12 
+                    ? Image.asset(
+                        'assets/images/Sun2.png',
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.cover,
+                      ) 
+                    : Image.asset(
+                        'assets/images/MoonPhase2.png',
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.cover,
+                      )),
               ),
               const SizedBox(height: 16),
               Text(
-                trans.onceAYear,
+                convertDuration(sub.durationInMonth,trans.locale),
                 textAlign: TextAlign.center,
                 style:
                     h2.copyWith(color: theme.colorScheme.onPrimary, height: 1),
@@ -436,10 +451,15 @@ class _SubscriptionState extends State<SubscriptionPage> {
                 textAlign: TextAlign.start,
               ),
               const SizedBox(height: 16),
-              CustomButton(title: '3.999.999đ', style: ButtonStyleType.Primary),
+              CustomButton(title: price, style: ButtonStyleType.Primary),
               const SizedBox(height: 16),
               CustomButton(
-                  title: '9.999 gems', style: ButtonStyleType.Secondary),
+                  title: '${sub.gemPrice} gems', 
+                  style: ButtonStyleType.Secondary,
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  ),
               const SizedBox(height: 16),
               CustomButton(
                 title: trans.cancel,
@@ -626,13 +646,15 @@ class _SubscriptionState extends State<SubscriptionPage> {
                   style: ButtonStyleType.Primary,
                   state: _selectedSub!=null ? ButtonState.Enabled:ButtonState.Disabled,
                   onPressed: ()=>{
-                    
+                    _subscriptionBottomSheet(context,_selectedSub!)
                   },
                   )
               : CustomButton(
                   title: trans.unsubscription,
                   style: ButtonStyleType.Quaternary,
-                  onPressed: ()=>{},
+                  onPressed: ()=>{
+                     _unsubscriptionBottomSheet(context)
+                  },
                   )
           )
         ),
