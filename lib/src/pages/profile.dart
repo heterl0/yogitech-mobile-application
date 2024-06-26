@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:share_plus/share_plus.dart';
@@ -161,7 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               (_profile?.last_name ?? ''),
                               (_profile?.first_name ?? '')
                             ].where((s) => s.isNotEmpty).join(' ').isEmpty
-                                ? 'Name'
+                                ? trans.name
                                 : [
                                     (_profile?.last_name ?? ''),
                                     (_profile?.first_name ?? '')
@@ -299,20 +301,64 @@ class _ProfilePageState extends State<ProfilePage> {
                                     },
                                   ),
                                   const SizedBox(height: 6),
-                                  InfoCard(
-                                    title: trans.personalizedExercise,
-                                    subtitle: trans.customizeExercise,
-                                    iconPath: 'assets/icons/tune_setting.png',
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              PersonalizedExercisePage(),
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                  ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(16)),
+                                      child: Stack(
+                                        children: [
+                                          InfoCard(
+                                            title: trans.personalizedExercise,
+                                            subtitle: trans.customizeExercise,
+                                            iconPath:
+                                                'assets/icons/tune_setting.png',
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PersonalizedExercisePage(),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                          if (!(_account?.is_premium ?? false))
+                                            Positioned.fill(
+                                              child: BackdropFilter(
+                                                filter: ImageFilter.blur(
+                                                    sigmaX: 5, sigmaY: 5),
+                                                child: Container(
+                                                  color: theme
+                                                      .colorScheme.onSecondary
+                                                      .withOpacity(0.8),
+                                                  child: Center(
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.lock_outline,
+                                                          color: theme
+                                                              .colorScheme
+                                                              .onPrimary,
+                                                          size: 24,
+                                                        ),
+                                                        SizedBox(width: 8),
+                                                        Text(
+                                                          trans.premiumFeature,
+                                                          style: bd_text.copyWith(
+                                                              color: theme
+                                                                  .colorScheme
+                                                                  .onPrimary),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      )),
                                 ],
                               ),
                             ),
@@ -399,66 +445,94 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                         const SizedBox(height: 20.0),
-                        AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: LineChart(LineChartData(
-                              minX: 0,
-                              maxX: 5,
-                              minY: 1000,
-                              maxY: 3000,
-                              lineBarsData: [
-                                LineChartBarData(
-                                  spots: sampleDataPoints,
-                                  isCurved: true,
-                                  color: green,
-                                  barWidth: 4,
+                        ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(8),
+                                child: AspectRatio(
+                                  aspectRatio: 16 / 9,
+                                  child: LineChart(LineChartData(
+                                    minX: 0,
+                                    maxX: 5,
+                                    minY: 1000,
+                                    maxY: 3000,
+                                    lineBarsData: [
+                                      LineChartBarData(
+                                        spots: sampleDataPoints,
+                                        isCurved: true,
+                                        color: green,
+                                        barWidth: 4,
+                                      ),
+                                      LineChartBarData(
+                                        spots: sampleDataExp,
+                                        isCurved: true,
+                                        gradient: gradient,
+                                        barWidth: 4,
+                                      ),
+                                    ],
+                                    titlesData: FlTitlesData(
+                                      leftTitles: AxisTitles(
+                                        axisNameWidget: Text(
+                                          trans.value,
+                                          style: min_cap.copyWith(color: text),
+                                        ),
+                                        sideTitles: SideTitles(
+                                          showTitles: true,
+                                        ),
+                                      ),
+                                      bottomTitles: AxisTitles(
+                                        drawBelowEverything: true,
+                                        axisNameWidget: Text(
+                                          trans.days,
+                                          style: min_cap.copyWith(color: text),
+                                        ),
+                                        sideTitles:
+                                            SideTitles(showTitles: true),
+                                      ),
+                                      topTitles: AxisTitles(),
+                                      rightTitles: AxisTitles(),
+                                    ),
+                                  )),
                                 ),
-                                LineChartBarData(
-                                  spots: sampleDataExp,
-                                  isCurved: true,
-                                  gradient: gradient,
-                                  barWidth: 4,
-                                ),
-                              ],
-                              titlesData: FlTitlesData(
-                                leftTitles: AxisTitles(
-                                  axisNameWidget: Text(
-                                    trans.value,
-                                    style: min_cap.copyWith(color: text),
+                              ),
+                              if (!(_account?.is_premium ?? false))
+                                Positioned.fill(
+                                  child: BackdropFilter(
+                                    filter:
+                                        ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                                    child: Container(
+                                      color: theme.colorScheme.onSecondary
+                                          .withOpacity(0.8),
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.lock_outline,
+                                              color:
+                                                  theme.colorScheme.onPrimary,
+                                              size: 40,
+                                            ),
+                                            SizedBox(height: 8),
+                                            Text(
+                                              trans.premiumFeature,
+                                              style: h2.copyWith(
+                                                  color: theme
+                                                      .colorScheme.onPrimary),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  sideTitles: SideTitles(
-                                    showTitles: true,
-                                  ),
                                 ),
-                                bottomTitles: AxisTitles(
-                                  axisNameWidget: Text(
-                                    trans.days,
-                                    style: min_cap.copyWith(color: text),
-                                  ),
-                                  sideTitles: SideTitles(showTitles: true),
-                                ),
-                                topTitles: AxisTitles(),
-                                rightTitles: AxisTitles(),
-                              ))),
+                            ],
+                          ),
                         ),
-                        // Row(
-                        //   children: [
-                        //     Text(
-                        //       "Charts",
-                        //       style: h3.copyWith(color: primary),
-                        //     ),
-                        //     Expanded(
-                        //       child: Container(
-                        //         margin: const EdgeInsets.all(0.0),
-                        //         height: 160,
-                        //         decoration: BoxDecoration(
-                        //           border: Border.all(color: const Color(0xFF8D8E99)),
-                        //           borderRadius: BorderRadius.circular(20.0),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
+
                         const SizedBox(
                             height: 20.0), // Added space for better layout
                         Row(

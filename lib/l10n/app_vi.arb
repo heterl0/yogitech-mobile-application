@@ -163,7 +163,7 @@
   "caloriesBurnedInMonth": "calo đã đốt cháy",
   "burnedInMonth": "đã đốt cháy trong tháng này",
   "yourExercise": "Bài tập của bạn",
-  "beginner": "Người mới bắt đầu",
+  "premiumFeature":"Tính năng trả phí",
   "advance": "Nâng cao",
   "professional": "Chuyên nghiệp",
   "friendProfile": "Hồ sơ bạn bè",
@@ -201,6 +201,7 @@
   "seeall": "Xem tất cả",
   "updateSuccess": "Cập nhật thông tin thành công!",
   "updateFail": "Cập nhật thông tin thất bại. Vui lòng thử lại sau.",
+  "name": "Tên",
   "yourFistName": "Nhập vào tên của bạn",
   "yourLastName": "Nhập vào họ của bạn",
   "sendResetPasswordTo": "Yêu cầu quên mật khẩu đã được gửi đến email của bạn",
@@ -215,5 +216,6 @@
   "dontEmpty" : "Email và mật khẩu không được bỏ trống!",
   "doesntexist" : "Tài khoản không tồn tại!",
   "enterEmail" :"Vui lòng nhập email!",
-  "noResult":"Không có kết quả"
+  "noResult":"Không có kết quả",
+  "inputName": "Nhập tên người dùng"
 }

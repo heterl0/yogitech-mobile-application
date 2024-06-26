@@ -147,8 +147,7 @@ class BlogState extends State<AllExercise> {
         style: widthStyle.Large,
         titleWidget: BoxInputField(
           controller: _searchController,
-          placeholder:
-              widget.searchString != null ? widget.searchString! : trans.search,
+          placeholder: trans.search,
           trailing: IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
@@ -218,7 +217,7 @@ class BlogState extends State<AllExercise> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
-      child: _exercises.length > 0
+      child: _exercises.isNotEmpty
           ? GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),

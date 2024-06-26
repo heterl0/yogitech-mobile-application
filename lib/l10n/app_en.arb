@@ -28,6 +28,7 @@
   "reset": "Reset",
   "welcomeToYogi": "Welcome to Yogi",
   "fillInformation": "Please fill in information here to optimize your experience",
+  "name": "Name",
   "firstName": "First name",
   "lastName": "Last name",
   "birthday": "Birthday",
@@ -163,7 +164,7 @@
   "caloriesBurnedInMonth": "calories burned",
   "burnedInMonth": "burned in this month",
   "yourExercise": "Your Exercise",
-  "beginner": "Beginner",
+  "premiumFeature":"Premium Feature",
   "advance": "Advance",
   "professional": "Professional",
   "friendProfile": "Friend Profile",
@@ -215,5 +216,6 @@
   "dontEmpty": "Please fill in both Email and Password fields!",
   "doesntexist": "Account does not exist!",
   "enterEmail": "Please enter your email!",
-  "noResult": "No result"
+  "noResult": "No result",
+  "inputName": "Enter username"
 }
