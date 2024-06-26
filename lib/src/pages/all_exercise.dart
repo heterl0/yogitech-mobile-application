@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/pages/homepage.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -9,8 +10,6 @@ import 'package:YogiTech/src/models/exercise.dart';
 import 'package:YogiTech/src/models/pose.dart';
 import 'package:YogiTech/src/pages/exercise_detail.dart';
 import 'package:YogiTech/src/pages/filter.dart';
-import 'package:YogiTech/src/pages/homepage.dart';
-import 'package:YogiTech/src/pages/subscription.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:YogiTech/src/widgets/card.dart';
@@ -150,7 +149,16 @@ class BlogState extends State<AllExercise> {
           controller: _searchController,
           placeholder:
               widget.searchString != null ? widget.searchString! : trans.search,
-          trailing: Icon(Icons.search),
+          trailing: IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              // Thực hiện hành động tìm kiếm khi biểu tượng được nhấn
+              setState(() {
+                _fetchExercise(_searchController.text.trim());
+                _isNotSearching = true;
+              });
+            },
+          ),
           keyboardType: TextInputType.text,
           inputFormatters: const [],
           onTap: () {
@@ -171,6 +179,12 @@ class BlogState extends State<AllExercise> {
                 _isNotSearching = true;
                 _fetchExercise('');
                 _searchController.clear();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          HomePage()), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                );
               });
             },
           ),
