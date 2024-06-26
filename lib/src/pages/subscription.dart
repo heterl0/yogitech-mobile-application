@@ -25,8 +25,8 @@ class _SubscriptionState extends State<Subscription> {
   bool _isChecked2 = false;
   bool _isChecked3 = false;
   late final Future<PaymentConfiguration> _googlePayConfigFuture;
-  List<Subscription?> _subs =[];
-  List<UserSubscription?> _userSubs =[];
+  List<dynamic> _subs =[];
+  List<dynamic> _userSubs =[];
   UserSubscription? _currendSub;
 
 
@@ -48,8 +48,8 @@ class _SubscriptionState extends State<Subscription> {
     try {
       final sub = await getSubscriptions();
       setState(() {
-        _subs = sub.cast<Subscription?>();
-      print(widget.account);
+        _subs = sub;
+        print(widget.account);
 
       });
     } catch (e) {
@@ -62,9 +62,12 @@ class _SubscriptionState extends State<Subscription> {
     try {
       final sub = await getUserSubscriptions();
       setState(() {
-        _userSubs = sub.cast<UserSubscription?>();
+        _userSubs = sub;
+        print(_userSubs);
+
         if(_userSubs[_userSubs.length-1]?.activeStatus !=0){
           _currendSub = _userSubs[_userSubs.length-1];
+
         }
       });
     } catch (e) {
@@ -93,7 +96,7 @@ class _SubscriptionState extends State<Subscription> {
               child: Image.asset('assets/images/Emerald.png'),
             ),
             Text(
-              '',
+              (widget.account!.profile.point).toString(),
               style: h3.copyWith(color: theme.colorScheme.onSurface),
             ),
           ],
@@ -134,6 +137,16 @@ class _SubscriptionState extends State<Subscription> {
           _buildChoosePlanContainer(),
           const SizedBox(height: 16),
           // ..._paymentItems.map((e) => _buildPlanOptionContainer(e)).toList(),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 0),
+            child: ListView.builder(
+              shrinkWrap: true, 
+              itemCount: _subs.length,
+              itemBuilder: (context, index) {
+                return _buildPlanOptionContainer();
+              },
+            ),
+          ),
           _buildPlanOptionContainer(),
           const SizedBox(height: 16),
           _buildPlanOptionContainer2(),
@@ -249,7 +262,7 @@ class _SubscriptionState extends State<Subscription> {
                                   SizedBox(
                                     width: 42,
                                     child: Text(
-                                      '999',
+                                      'sadioji',
                                       style: h3.copyWith(color: active),
                                     ),
                                   ),

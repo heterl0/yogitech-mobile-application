@@ -77,11 +77,11 @@ class _HomePageState extends State<HomePage> {
                 preActions: [
                   GestureDetector(
                     onTap: () {
-                      
+                      _fetchAccount();
                       pushWithoutNavBar(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Subscription(account:account,fetchAccount:_fetchAccount)));
+                              builder: (context) => Subscription(account: account,fetchAccount:_fetchAccount)));
                     },
                     child: Row(
                       children: [

@@ -75,11 +75,11 @@ class Subscription {
     return Subscription(
       id: map['id'] as int,
       name: map['name'] as String,
-      price: map['price'] as double,
+      price: double.parse(map['price']),
       gemPrice: map['gem_price'] != null ? map['gem_price'] as int : null,
       description: map['description'] as String,
       duration: map['duration'] as String,
-      durationInMonth: map['duration_in_month'] as double,
+      durationInMonth: double.parse(map['duration_in_month']),
       valid: map['valid'] as bool,
       createdAt: map['created_at'] as String,
       updatedAt: map['updated_at'] as String,
@@ -130,36 +130,37 @@ class Subscription {
   }
 }
 
+
 class UserSubscription {
-  final int id;
-  final int userId;
-  final Subscription subscription;
-  final String subscriptionType;
-  final int status;
+  final int? id;
+  final int? userId;
+  final int? subscriptionId;
+  final int? subscriptionType;
+  final int? status;
   final String? cancelAt;
-  final String createdAt;
-  final String expireDate;
-  final String updatedAt;
-  final int activeStatus;
+  final String? createdAt;
+  final String? expireDate;
+  final String? updatedAt;
+  final int? activeStatus;
 
   UserSubscription({
-    required this.id,
-    required this.userId,
-    required this.subscription,
-    required this.subscriptionType,
-    required this.status,
+    this.id,
+    this.userId,
+    this.subscriptionId,
+    this.subscriptionType,
+    this.status,
     this.cancelAt,
-    required this.createdAt,
-    required this.expireDate,
-    required this.updatedAt,
-    required this.activeStatus,
+    this.createdAt,
+    this.expireDate,
+    this.updatedAt,
+    this.activeStatus,
   });
 
   UserSubscription copyWith({
     int? id,
     int? userId,
-    Subscription? subscription,
-    String? subscriptionType,
+    int? subscriptionId,
+    int? subscriptionType,
     int? status,
     String? cancelAt,
     String? createdAt,
@@ -170,7 +171,7 @@ class UserSubscription {
     return UserSubscription(
       id: id ?? this.id,
       userId: userId ?? this.userId,
-      subscription: subscription ?? this.subscription,
+      subscriptionId: subscriptionId ?? this.subscriptionId,
       subscriptionType: subscriptionType ?? this.subscriptionType,
       status: status ?? this.status,
       cancelAt: cancelAt ?? this.cancelAt,
@@ -184,9 +185,9 @@ class UserSubscription {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'user_id': userId,
-      'subscription': subscription.toMap(),
-      'subscription_type': subscriptionType,
+      'user': userId,
+      'subscription': subscriptionId,
+      'subscriptionType': subscriptionType,
       'status': status,
       'cancel_at': cancelAt,
       'created_at': createdAt,
@@ -198,16 +199,16 @@ class UserSubscription {
 
   factory UserSubscription.fromMap(Map<String, dynamic> map) {
     return UserSubscription(
-      id: map['id'] as int,
-      userId: map['user_id'] as int,
-      subscription: Subscription.fromMap(map['subscription'] as Map<String, dynamic>),
-      subscriptionType: map['subscription_type'] as String,
-      status: map['status'] as int,
+      id: map['id'] as int?,
+      userId: map['user'] as int?,
+      subscriptionId: map['subscription'] as int?,
+      subscriptionType: map['subscriptionType'] as int?,
+      status: map['status'] as int?,
       cancelAt: map['cancel_at'] as String?,
-      createdAt: map['created_at'] as String,
-      expireDate: map['expire_date'] as String,
-      updatedAt: map['updated_at'] as String,
-      activeStatus: map['active_status'] as int,
+      createdAt: map['created_at'] as String?,
+      expireDate: map['expire_date'] as String?,
+      updatedAt: map['updated_at'] as String?,
+      activeStatus: map['active_status'] as int?,
     );
   }
 
@@ -217,7 +218,7 @@ class UserSubscription {
 
   @override
   String toString() {
-    return 'UserSubscription(id: $id, userId: $userId, subscription: $subscription, subscriptionType: $subscriptionType, status: $status, cancelAt: $cancelAt, createdAt: $createdAt, expireDate: $expireDate, updatedAt: $updatedAt, activeStatus: $activeStatus)';
+    return 'UserSubscription(id: $id, userId: $userId, subscriptionId: $subscriptionId, subscriptionType: $subscriptionType, status: $status, cancelAt: $cancelAt, createdAt: $createdAt, expireDate: $expireDate, updatedAt: $updatedAt, activeStatus: $activeStatus)';
   }
 
   @override
@@ -227,7 +228,7 @@ class UserSubscription {
     return other is UserSubscription &&
         other.id == id &&
         other.userId == userId &&
-        other.subscription == subscription &&
+        other.subscriptionId == subscriptionId &&
         other.subscriptionType == subscriptionType &&
         other.status == status &&
         other.cancelAt == cancelAt &&
@@ -241,7 +242,7 @@ class UserSubscription {
   int get hashCode {
     return id.hashCode ^
         userId.hashCode ^
-        subscription.hashCode ^
+        subscriptionId.hashCode ^
         subscriptionType.hashCode ^
         status.hashCode ^
         cancelAt.hashCode ^
