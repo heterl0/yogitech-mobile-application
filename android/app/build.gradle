@@ -31,10 +31,14 @@ android {
     // ndkVersion flutter.ndkVersion
     ndkVersion "27.0.11902837"
 
+    defaultConfig {
+        multiDexEnabled true
+    }
+
     compileOptions {
         // Flag to enable support for the new language APIs
         coreLibraryDesugaringEnabled true
-    // Sets Java compatibility to Java 8
+        // Sets Java compatibility to Java 8
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
 
@@ -101,5 +105,9 @@ flutter {
 
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:33.1.0')
+    implementation 'androidx.window:window:1.0.0'
+    implementation 'androidx.window:window-java:1.0.0'
+
+    // Bao gồm thư viện desugaring để hỗ trợ Java 8 trên các thiết bị cũ hơn
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }

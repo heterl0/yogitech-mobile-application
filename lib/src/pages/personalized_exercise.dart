@@ -1,9 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import 'package:YogiTech/api/dioInstance.dart';
+import 'package:YogiTech/src/models/pose.dart';
+import 'package:YogiTech/utils/formatting.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+Future<List<Pose>> getPoses() async {
+  try {
+    final url = formatApiUrl('/api/v1/poses/');
+    final Response response = await DioInstance.get(url);
+    if (response.statusCode == 200) {
+      List<Pose> data =
+          (response.data as List).map((e) => Pose.fromMap(e)).toList();
+      return data;
+    } else {
+      print('Get poses failed with status code: ${response.statusCode}');
+      return [];
+    }
+  } catch (e) {
+    print('Get poses error: $e');
+    return [];
+  }
+}
 
 class PersonalizedExercisePage extends StatefulWidget {
   const PersonalizedExercisePage({super.key});
@@ -16,6 +38,45 @@ class PersonalizedExercisePage extends StatefulWidget {
 class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
   bool _isNotSearching = true;
   final TextEditingController _searchController = TextEditingController();
+  List<Pose> _poses = [];
+  List<Pose> _filteredPoses = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchPoses();
+    _searchController.addListener(_filterPoses);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _fetchPoses() async {
+    final poses = await getPoses();
+    setState(() {
+      _poses = poses;
+      _filteredPoses = poses;
+    });
+  }
+
+  void _filterPoses() {
+    final query = _searchController.text;
+    if (query.isNotEmpty) {
+      setState(() {
+        _filteredPoses = _poses
+            .where(
+                (pose) => pose.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      });
+    } else {
+      setState(() {
+        _filteredPoses = [];
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +88,16 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
           ? CustomAppBar(
               title: trans.yourExercise,
               style: widthStyle.Large,
+              postActions: [
+                IconButton(
+                  icon: Icon(Icons.search, color: theme.colorScheme.onSurface),
+                  onPressed: () {
+                    setState(() {
+                      _isNotSearching = false;
+                    });
+                  },
+                ),
+              ],
             )
           : CustomAppBar(
               showBackButton: false,
@@ -47,6 +118,8 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
                   onPressed: () {
                     setState(() {
                       _isNotSearching = true;
+                      _searchController.clear();
+                      _filteredPoses = _poses;
                     });
                   },
                 ),
@@ -64,16 +137,14 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: 15, // Số phần tử trong danh sách đầu tiên
+                    itemCount: _filteredPoses.length,
                     itemBuilder: (context, index) {
+                      final pose = _filteredPoses[index];
                       return ListItem(
-                        difficulty: (index % 2) == 0
-                            ? trans.advance
-                            : (index % 3) == 0
-                                ? trans.professional
-                                : trans.beginner,
-                        poseName: 'Hip',
-                        calories: '100000',
+                        image: pose.image_url,
+                        difficulty: pose.level.toString(),
+                        poseName: pose.name,
+                        calories: pose.calories.toString(),
                       );
                     },
                   ),
@@ -83,10 +154,8 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
           ),
         ),
       ),
-
-      floatingActionButton: _buildFloatingActionButton(context), // Thêm nút nổi
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.endFloat, // Định vị nút nổi
+      floatingActionButton: _buildFloatingActionButton(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
@@ -98,7 +167,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
       child: Ink(
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
-          gradient: gradient, // Gradient từ app_colors.dart
+          gradient: gradient,
         ),
         width: 60,
         height: 60,
@@ -116,18 +185,20 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
           ),
         ),
       ),
-      onPressed: () {}, // Cái này nhấn không có tác dụng
+      onPressed: () {},
     );
   }
 }
 
 class ListItem extends StatelessWidget {
+  final String? image;
   final String? difficulty;
   final String? poseName;
   final String? calories;
 
   const ListItem({
     super.key,
+    this.image,
     this.difficulty,
     this.poseName,
     this.calories,
@@ -156,9 +227,21 @@ class ListItem extends StatelessWidget {
             height: 60,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: stroke, // Màu nền của Avatar placeholder
+              color: stroke,
+              image: image != null
+                  ? DecorationImage(
+                      image: NetworkImage(image!),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
             ),
-            // Avatar placeholder có thể được thay thế bằng Image.network hoặc CircleAvatar nếu có URL hình ảnh
+            child: image == null
+                ? Icon(
+                    Icons.image,
+                    color: Colors.white,
+                    size: 30,
+                  )
+                : null,
           ),
           SizedBox(width: 12),
           Expanded(

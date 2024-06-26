@@ -43,10 +43,12 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
           color: theme.colorScheme.onPrimary,
         ),
       ),
-      subtitle: Text(
-        widget.subtitle,
-        style: min_cap.copyWith(color: text),
-      ),
+      subtitle: widget.subtitle != ''
+          ? Text(
+              widget.subtitle,
+              style: min_cap.copyWith(color: text),
+            )
+          : null,
       leading: Checkbox(
         value: _isChecked,
         onChanged: (value) {
@@ -70,7 +72,7 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
           borderRadius: BorderRadius.circular(4),
         ), // Square checkbox
         side: BorderSide(
-          color: theme.scaffoldBackgroundColor,
+          color: stroke,
           width: 1,
         ), // Custom border color
       ),

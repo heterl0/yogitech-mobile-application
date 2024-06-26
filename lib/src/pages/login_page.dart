@@ -135,6 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                             // }
                             await _handleGoogleSignIn();
                           },
+                          text: trans.loginWithGoogle,
                         ),
                       ),
                       Row(

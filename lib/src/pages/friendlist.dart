@@ -167,8 +167,8 @@ class _FriendListPageState extends State<FriendListPage>
               title: trans.friends,
               postActions: [
                 IconButton(
-                  icon:
-                      Icon(Icons.group_add, color: theme.colorScheme.onSurface),
+                  icon: Icon(Icons.group_add_outlined,
+                      color: theme.colorScheme.onSurface),
                   onPressed: _startSearch,
                 ),
               ],
@@ -209,6 +209,7 @@ class _FriendListPageState extends State<FriendListPage>
     return Column(
       children: [
         TabBar(
+          dividerColor: Colors.transparent,
           controller: _tabController,
           indicator: BoxDecoration(
             border: Border(
