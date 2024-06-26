@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/pages/camera/camera_page.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -7,7 +8,6 @@ import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';
 import 'package:YogiTech/src/models/exercise.dart';
 import 'package:YogiTech/src/models/pose.dart';
-import 'package:YogiTech/src/pages/result.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/widgets/box_input_field.dart';
@@ -55,8 +55,8 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Result(),
-            ),
+                // builder: (context) => Result(),
+                builder: (context) => CameraPage()),
           );
         },
       ),
