@@ -1,3 +1,6 @@
+import 'package:YogiTech/api/subscription/subscription_service.dart';
+import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/models/subscriptions.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';
@@ -9,7 +12,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pay/pay.dart';
 
 class Subscription extends StatefulWidget {
-  const Subscription({super.key});
+  final Account? account;
+  final VoidCallback? fetchAccount;
+  const Subscription({super.key, this.account , this.fetchAccount});
 
   @override
   _SubscriptionState createState() => _SubscriptionState();
@@ -20,47 +25,10 @@ class _SubscriptionState extends State<Subscription> {
   bool _isChecked2 = false;
   bool _isChecked3 = false;
   late final Future<PaymentConfiguration> _googlePayConfigFuture;
-  // final _paymentItems = [
-  //   PaymentItem(
-  //     label: 'Weekly subscription',
-  //     amount: '0.01',
-  //     status: PaymentItemStatus.final_price,
-  //   ),
-  //   PaymentItem(
-  //     label: 'Monthly subscription',
-  //     amount: '0.1',
-  //     status: PaymentItemStatus.final_price,
-  //   ),
-  //   PaymentItem(
-  //     label: 'Yearly subscription',
-  //     amount: '1',
-  //     status: PaymentItemStatus.final_price,
-  //   ),
-  // ];
+  List<Subscription?> _subs =[];
+  List<UserSubscription?> _userSubs =[];
+  UserSubscription? _currendSub;
 
-  final paymentItems = [
-    {
-      'id': 0,
-      'label': 'onceAWeek',
-      "image": "assets/images/Universe.png",
-      "gem": "199",
-      "price": "109,000đ",
-    },
-    {
-      'id': 1,
-      'label': 'onceAMonth',
-      "image": "assets/images/MoonPhase.png",
-      "gem": "999",
-      "price": "399,000đ",
-    },
-    {
-      'id': 2,
-      'label': 'onceAYear',
-      "image": "assets/images/Sun.png",
-      "gem": "9,999",
-      "price": "3,999,000đ",
-    },
-  ];
 
   // late _paymentSelected;
 
@@ -68,16 +36,43 @@ class _SubscriptionState extends State<Subscription> {
   void initState() {
     super.initState();
     _googlePayConfigFuture =
-        PaymentConfiguration.fromAsset('default_google_pay_config.json');
+      PaymentConfiguration.fromAsset('default_google_pay_config.json');
+    
+    _loadSub();
+    _loadUserSub();
 
     // fetchData();
   }
 
-  // Future<void> fetchData() async {
-  //   final data =
-  //       await PaymentConfiguration.fromAsset('default_google_pay_config.json');
-  //   print(data.toString());
-  // }
+    Future<void> _loadSub() async {
+    try {
+      final sub = await getSubscriptions();
+      setState(() {
+        _subs = sub.cast<Subscription?>();
+      print(widget.account);
+
+      });
+    } catch (e) {
+      // Handle errors, e.g., show a snackbar or error message
+      print('Error loading Subscription: $e');
+    }
+    }
+
+    Future<void> _loadUserSub() async {
+    try {
+      final sub = await getUserSubscriptions();
+      setState(() {
+        _userSubs = sub.cast<UserSubscription?>();
+        if(_userSubs[_userSubs.length-1]?.activeStatus !=0){
+          _currendSub = _userSubs[_userSubs.length-1];
+        }
+      });
+    } catch (e) {
+      // Handle errors, e.g., show a snackbar or error message
+      print('Error loading UserSubscription: $e');
+    }
+    }
+
 
   void onGooglePayResult(paymentResult) {
     debugPrint(paymentResult.toString());
@@ -98,7 +93,7 @@ class _SubscriptionState extends State<Subscription> {
               child: Image.asset('assets/images/Emerald.png'),
             ),
             Text(
-              '5',
+              '',
               style: h3.copyWith(color: theme.colorScheme.onSurface),
             ),
           ],

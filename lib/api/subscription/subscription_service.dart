@@ -5,12 +5,12 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../src/models/subscriptions.dart';
 
-Future<List<dynamic>> getSubscriptions() async {
+Future<List<Subscription>> getSubscriptions() async {
   try {
     final url = formatApiUrl('/api/v1/subscriptions/');
     final Response response = await DioInstance.get(url);
     if (response.statusCode == 200) {
-      List<dynamic> data = response.data.map((e) => Subscription.fromMap(e)).toList();
+      List<Subscription> data = response.data.map((e) => Subscription.fromMap(e)).toList();
       return data;
     } else {
       print('Get subscription failed with status code: ${response.statusCode}');
@@ -38,12 +38,12 @@ Future<Subscription?> getSubscription(int id) async {
   }
 }
 
-Future<List<dynamic>> getUserSubscriptions() async {
+Future<List<UserSubscription>> getUserSubscriptions() async {
   try {
     final url = formatApiUrl('/api/v1/user-subscriptions/');
     final Response response = await DioInstance.get(url);
     if (response.statusCode == 200) {
-      List<dynamic> data = response.data.map((e) => UserSubscription.fromMap(e)).toList();
+      List<UserSubscription> data = response.data.map((e) => UserSubscription.fromMap(e)).toList();
       return data;
     } else {
       print('Get UserSubscription failed with status code: ${response.statusCode}');
