@@ -21,14 +21,11 @@ class SubscriptionPage extends StatefulWidget {
 }
 
 class _SubscriptionState extends State<SubscriptionPage> {
-  bool _isChecked1 = false;
-  bool _isChecked2 = false;
-  bool _isChecked3 = false;
   late final Future<PaymentConfiguration> _googlePayConfigFuture;
   List<dynamic> _subs =[];
   List<dynamic> _userSubs =[];
   UserSubscription? _currendSub;
-
+  Subscription? _selectedSub;
 
   // late _paymentSelected;
 
@@ -146,11 +143,11 @@ class _SubscriptionState extends State<SubscriptionPage> {
             ),
           ),
           // _buildPlanOptionContainer(),
-          const SizedBox(height: 16),
-          _buildPlanOptionContainer2(),
-          const SizedBox(height: 16),
-          _buildPlanOptionContainer3(),
-          const SizedBox(height: 16),
+          // const SizedBox(height: 16),
+          // _buildPlanOptionContainer2(),
+          // const SizedBox(height: 16),
+          // _buildPlanOptionContainer3(),
+          // const SizedBox(height: 16),
           // FutureBuilder<PaymentConfiguration>(
           //   future: _googlePayConfigFuture,
           //   builder: (context, snapshot) {
@@ -449,407 +446,152 @@ class _SubscriptionState extends State<SubscriptionPage> {
     );
   }
 
-  Widget _buildPlanOptionContainer(Subscription sub) {
+    Widget _buildPlanOptionContainer(Subscription sub) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
-
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(6),
-          decoration: ShapeDecoration(
-            shape: RoundedRectangleBorder(
-              side: BorderSide(width: 1, color: stroke),
-              borderRadius: BorderRadius.circular(16),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(6),
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(width: 1, color: stroke),
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: sub.durationInMonth < 1? AssetImage('assets/images/Universe.png'): (sub.durationInMonth >=12 ? AssetImage('assets/images/Sun.png'):AssetImage('assets/images/MoonPhase.png')),
+                fit: BoxFit.fill,
+              ),
             ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/Universe.png'),
-                    fit: BoxFit.fill,
-                  ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  convertDuration(sub.durationInMonth,trans.locale),
+                  textAlign: TextAlign.center,
+                  style: min_cap.copyWith(color: theme.colorScheme.onSurface),
                 ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        trans.onceAWeek,
-                        textAlign: TextAlign.center,
-                        style: min_cap.copyWith(
-                            color: theme.colorScheme.onSurface),
-                      ),
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        width: double.infinity,
+                      Container(
                         child: Row(
+                          mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 18,
-                                    height: 18,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/Emerald.png'),
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  SizedBox(
-                                    width: 42,
-                                    child: Text(
-                                      '199',
-                                      style: h3.copyWith(
-                                          color: theme.colorScheme.onPrimary),
-                                    ),
-                                  ),
-                                ],
+                              width: 18,
+                              height: 18,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/images/Emerald.png'),
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
-                            Text(
-                              trans.locale == "en" ? "or" : "hoặc",
-                              style: bd_text.copyWith(color: text),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '109,000đ',
-                              // item.amount,
-                              style: h3.copyWith(color: primary),
+                            const SizedBox(width: 4),
+                            SizedBox(
+                               child: Text(
+                                '${sub.gemPrice} ',
+                                style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ],
                         ),
                       ),
+                      Text(
+                       ( sub.gemPrice!=null && sub.price!=null) ? (trans.locale == "en" ? "or" : "hoặc"):'',
+                        style: bd_text.copyWith(color: text),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                      child: Text(
+                        '${sub.price.toInt().toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} VND',
+                        style: h3.copyWith(color: primary),
+                      ),
+                    ),
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(width: 16),
-              _buildCheckboxItem(
-                value: _isChecked1,
-                onChanged: (value) {
-                  setState(() {
-                    _isChecked1 = value!;
-                    if (value) {
-                      _isChecked2 = false;
-                      _isChecked3 = false;
-                    }
-                  });
-                },
-              ),
-            ],
-          ),
-        ),
-        // const SizedBox(height: 16),
-      ],
-    );
-  }
-
-  Widget _buildPlanOptionContainer2() {
-    final theme = Theme.of(context);
-    final trans = AppLocalizations.of(context)!;
-
-    return Container(
-      padding: const EdgeInsets.all(6),
-      decoration: ShapeDecoration(
-        color: Color(0xFF09141C),
-        shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1, color: Color(0x7FA4B7BD)),
-          borderRadius: BorderRadius.circular(16),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/MoonPhase.png'),
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    trans.onceAMonth,
-                    textAlign: TextAlign.center,
-                    style: min_cap.copyWith(color: theme.colorScheme.onSurface),
-                    // style: TextStyle(
-                    //   color: Colors.white,
-                    //   fontSize: 10,
-                    //   fontFamily: 'Readex Pro',
-                    //   fontWeight: FontWeight.w400,
-                    //   height: 0.12,
-                    // ),
-                  ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 18,
-                                height: 18,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image:
-                                        AssetImage('assets/images/Emerald.png'),
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                              SizedBox(
-                                width: 42,
-                                child: Text(
-                                  '999',
-                                  style: h3.copyWith(
-                                      color: theme.colorScheme.onPrimary),
-                                  // style: TextStyle(
-                                  //   color: Colors.white,
-                                  //   fontSize: 16,
-                                  //   fontFamily: 'Readex Pro',
-                                  //   fontWeight: FontWeight.w600,
-                                  //   height: 0.06,
-                                  // ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          trans.locale == "en" ? "or" : "hoặc",
-                          style: bd_text.copyWith(color: text),
-                          // textAlign: TextAlign.center,
-                          // style: TextStyle(
-                          //   color: Color(0xFF8D8E99),
-                          //   fontSize: 10,
-                          //   fontFamily: 'Readex Pro',
-                          //   fontWeight: FontWeight.w400,
-                          //   height: 0.12,
-                          // ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '399,000đ',
-                          textAlign: TextAlign.center,
-                          style: h3.copyWith(color: primary),
-
-                          // style: TextStyle(
-                          //   color: Color(0xFF4094CF),
-                          //   fontSize: 16,
-                          //   fontFamily: 'Readex Pro',
-                          //   fontWeight: FontWeight.w600,
-                          //   height: 0.06,
-                          // ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              ],
             ),
           ),
           const SizedBox(width: 16),
-          _buildCheckboxItem(
-            value: _isChecked2,
-            onChanged: (value) {
-              setState(() {
-                _isChecked2 = value!;
-                if (value) {
-                  _isChecked1 = false;
-                  _isChecked3 = false;
-                }
-              });
-            },
-          ),
+          _buildCheckboxItem(sub),
+
         ],
       ),
     );
   }
 
-  Widget _buildPlanOptionContainer3() {
-    final theme = Theme.of(context);
-    final trans = AppLocalizations.of(context)!;
-
-    return Container(
-      padding: const EdgeInsets.all(6),
-      decoration: ShapeDecoration(
-        color: Color(0xFF09141C),
-        shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1, color: Color(0x7FA4B7BD)),
-          borderRadius: BorderRadius.circular(16),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/Sun.png'),
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    trans.onceAYear,
-                    textAlign: TextAlign.center,
-                    style: min_cap.copyWith(color: theme.colorScheme.onSurface),
-                    // style: TextStyle(
-                    //   color: Colors.white,
-                    //   fontSize: 10,
-                    //   fontFamily: 'Readex Pro',
-                    //   fontWeight: FontWeight.w400,
-                    //   height: 0.12,
-                    // ),
-                  ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 18,
-                                height: 18,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image:
-                                        AssetImage('assets/images/Emerald.png'),
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                              SizedBox(
-                                width: 52,
-                                child: Text(
-                                  '9,999',
-                                  style: h3.copyWith(
-                                      color: theme.colorScheme.onPrimary),
-                                  // style: TextStyle(
-                                  //   color: Colors.white,
-                                  //   fontSize: 16,
-                                  //   fontFamily: 'Readex Pro',
-                                  //   fontWeight: FontWeight.w600,
-                                  //   height: 0.06,
-                                  // ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          trans.locale == "en" ? "or" : "hoặc",
-                          style: bd_text.copyWith(color: text),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '3,999,000đ',
-                          textAlign: TextAlign.center,
-                          style: h3.copyWith(color: primary),
-
-                          // style: TextStyle(
-                          //   color: Color(0xFF4094CF),
-                          //   fontSize: 16,
-                          //   fontFamily: 'Readex Pro',
-                          //   fontWeight: FontWeight.w600,
-                          //   height: 0.06,
-                          // ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          _buildCheckboxItem(
-            value: _isChecked3,
-            onChanged: (value) {
-              setState(() {
-                _isChecked3 = value!;
-                if (value) {
-                  _isChecked1 = false;
-                  _isChecked2 = false;
-                }
-              });
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCheckboxItem({
-    required bool value,
-    required Function(bool?) onChanged,
-  }) {
+  Widget _buildCheckboxItem(
+     Subscription sub) {
+    bool value = (_selectedSub==sub);
     return Checkbox(
       activeColor: Color(0xFF0D1F29), // Background color when checked
       checkColor: Color(0xFF4095D0), // Tick color when checked
       value: value,
-      onChanged: onChanged,
+      onChanged: (bool? value) {
+        setState(() {
+          if(value !=null && value){
+            _selectedSub =sub;
+          }else{
+            _selectedSub=null;
+          }
+        });
+      },
     );
   }
+
+
+  String convertDuration(double durationInMonths, String local) {
+    int years = (durationInMonths ~/ 12).toInt();
+    int months = (durationInMonths % 12).toInt();
+    int days = ((durationInMonths % 1) * 30).toInt();  // assuming 30 days in a month
+    String duration='';
+    if(local =='vi'){
+      duration +=  (days>0? '$days ngày ':'');
+      duration +=  (months>0? '$months tháng ':'');
+      duration +=  (years>0? '$years năm':'');
+    }else{
+      duration +=  (days==1? '$days day ':days>1?'$days days ':'');
+      duration +=  (months==1? '$months month ':months>1?'$months months ':'');
+      duration +=  (years==1? '$years year':years>1?'$years years':'');
+    }
+    return duration;
+  }
+
+ Map<String,String> formatCurrency(double amount, String locale) {
+  if (locale == 'vi') {
+    // Vietnamese dong (VND)
+    String formattedAmount = '${amount.toInt().toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} VND';
+    return {'amount':'$amount','curency':formattedAmount};
+  } else if (locale == 'en') {
+    // US Dollar ($)
+    double usdAmount = amount / 23000;
+    String formattedAmount = '\$${usdAmount.toStringAsFixed(2)}';
+    return {'amount':'$usdAmount','curency':formattedAmount};
+  } else {
+    throw Exception('Unsupported locale: $locale');
+  }
+}
 }
