@@ -11,16 +11,16 @@ import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pay/pay.dart';
 
-class Subscription extends StatefulWidget {
+class SubscriptionPage extends StatefulWidget {
   final Account? account;
   final VoidCallback? fetchAccount;
-  const Subscription({super.key, this.account , this.fetchAccount});
+  const SubscriptionPage({super.key, this.account , this.fetchAccount});
 
   @override
   _SubscriptionState createState() => _SubscriptionState();
 }
 
-class _SubscriptionState extends State<Subscription> {
+class _SubscriptionState extends State<SubscriptionPage> {
   bool _isChecked1 = false;
   bool _isChecked2 = false;
   bool _isChecked3 = false;
@@ -49,7 +49,6 @@ class _SubscriptionState extends State<Subscription> {
       final sub = await getSubscriptions();
       setState(() {
         _subs = sub;
-        print(widget.account);
 
       });
     } catch (e) {
@@ -129,7 +128,6 @@ class _SubscriptionState extends State<Subscription> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 16),
           _buildCurrentPlanContainer(),
           const SizedBox(height: 16),
           _buildUnSubscriptionContainer(),
@@ -143,11 +141,11 @@ class _SubscriptionState extends State<Subscription> {
               shrinkWrap: true, 
               itemCount: _subs.length,
               itemBuilder: (context, index) {
-                return _buildPlanOptionContainer();
+                return _buildPlanOptionContainer(_subs[index]);
               },
             ),
           ),
-          _buildPlanOptionContainer(),
+          // _buildPlanOptionContainer(),
           const SizedBox(height: 16),
           _buildPlanOptionContainer2(),
           const SizedBox(height: 16),
@@ -451,7 +449,7 @@ class _SubscriptionState extends State<Subscription> {
     );
   }
 
-  Widget _buildPlanOptionContainer() {
+  Widget _buildPlanOptionContainer(Subscription sub) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 

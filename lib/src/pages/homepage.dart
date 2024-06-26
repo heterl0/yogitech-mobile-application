@@ -1,5 +1,6 @@
 import 'package:YogiTech/api/blog/blog_service.dart';
 import 'package:YogiTech/src/models/exercise.dart';
+import 'package:YogiTech/src/pages/subscription.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -11,7 +12,6 @@ import 'package:YogiTech/src/pages/all_exercise.dart';
 import 'package:YogiTech/src/pages/exercise_detail.dart';
 import 'package:YogiTech/src/pages/filter.dart';
 import 'package:YogiTech/src/pages/streak.dart';
-import 'package:YogiTech/src/pages/subscription.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/widgets/box_input_field.dart';
@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                       pushWithoutNavBar(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Subscription(account: account,fetchAccount:_fetchAccount)));
+                              builder: (context) => SubscriptionPage(account: account,fetchAccount:_fetchAccount)));
                     },
                     child: Row(
                       children: [
