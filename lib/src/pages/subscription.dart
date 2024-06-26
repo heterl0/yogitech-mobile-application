@@ -178,7 +178,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0),
-      child: Column(
+      child: _currendSub!=null? Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -193,6 +193,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
             textAlign: TextAlign.center,
           ),
         ],
+      ):Column(
       ),
     );
   }
@@ -209,7 +210,10 @@ class _SubscriptionState extends State<SubscriptionPage> {
           borderRadius: BorderRadius.circular(16),
         ),
       ),
-      child: Column(
+      child: 
+        _currendSub!=null?
+
+      Column(
         children: [
           SizedBox(
             width: double.infinity,
@@ -254,8 +258,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                                     ),
                                   ),
                                   const SizedBox(width: 4),
-                                  SizedBox(
-                                    width: 42,
+                                    SizedBox(
                                     child: Text(
                                       'sadioji',
                                       style: h3.copyWith(color: active),
@@ -299,7 +302,52 @@ class _SubscriptionState extends State<SubscriptionPage> {
             ),
           ),
         ],
-      ),
+      ):
+          Column(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: Row(
+              children: [
+                Container(
+                  width: 86,
+                  height: 86,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/MoonPhase2.png'),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Container(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              child: 
+                                    SizedBox(
+                                    child: Text(
+                                      trans.locale=='vi'?
+                                      'Nâng cấp lên bản cao cấp để có các tính năng độc quyền và tối đa hóa trải nghiệm của bạn.':
+                                      "Unlock your full potential! Upgrade to premium for exclusive features and maximize your experience.",
+                                      style: h3.copyWith(color: active),
+                                    ),
+                                  ),
+                            ),
+                          ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      )
+      ,
     );
   }
 
