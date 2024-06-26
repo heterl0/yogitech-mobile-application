@@ -112,11 +112,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
         ],
       ),
       body: _buildBody(context),
-      bottomNavigationBar: CustomBottomBar(
-        buttonTitle: trans.subscription,
-        onPressed: () => _subscriptionBottomSheet(context),
-      ),
-    );
+      bottomNavigationBar: _buildBottomBar(context));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -402,7 +398,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
     );
   }
 
-  Future<void> _subscriptionBottomSheet(BuildContext context) {
+  Future<void> _subscriptionBottomSheet(BuildContext context,Subscription sub) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
@@ -423,9 +419,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                 alignment: Alignment.center,
                 child: Center(
                   // Thêm widget Center
-                  child: Image.asset(
-                    'assets/images/Sun2.png',
-                  ),
+                  child:sub.durationInMonth < 1? Image.asset('assets/images/Universe.png'): (sub.durationInMonth >=12 ? Image.asset('assets/images/Sun.png'):Image.asset('assets/images/MoonPhase.png')),
                 ),
               ),
               const SizedBox(height: 16),
@@ -609,6 +603,43 @@ class _SubscriptionState extends State<SubscriptionPage> {
       },
     );
   }
+
+  Widget _buildBottomBar(BuildContext context){
+    final trans = AppLocalizations.of(context)!;
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(24.0),
+        topRight: Radius.circular(24.0),
+      ),
+      child: BottomAppBar(
+          elevation: appElevation,
+          color: Theme.of(context).colorScheme.onSecondary,
+          height: 100,
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Container(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24),
+              child: (_currendSub==null)?
+                  CustomButton(
+                  title: trans.subscription,
+                  style: ButtonStyleType.Primary,
+                  state: _selectedSub!=null ? ButtonState.Enabled:ButtonState.Disabled,
+                  onPressed: ()=>{
+                    
+                  },
+                  )
+              : CustomButton(
+                  title: trans.unsubscription,
+                  style: ButtonStyleType.Quaternary,
+                  onPressed: ()=>{},
+                  )
+          )
+        ),
+      )
+    );
+    }
+  
 
 
   String convertDuration(double durationInMonths, String local) {
