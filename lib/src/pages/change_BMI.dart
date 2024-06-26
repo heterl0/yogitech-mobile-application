@@ -114,7 +114,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Failed to update BMI'),
-              backgroundColor: Colors.red,
+              backgroundColor: error,
             ),
           );
         }

@@ -160,7 +160,7 @@ class MuscleInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Muscle mus = muscles.firstWhere((mus) => mus.name == muscleName,
         orElse: () => muscles[0]);
-    Map<String, String> detail = createDetai();
+    Map<String, String> detail = createDetail();
 
     final trans = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
@@ -176,10 +176,6 @@ class MuscleInfoWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
             child: Container(
               height: 540,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: primary, width: 2),
-              ),
               child: Row(
                 children: [
                   Expanded(
@@ -209,7 +205,7 @@ class MuscleInfoWidget extends StatelessWidget {
                                   ? detail[muscleName]!
                                   : mus.description),
                               textAlign: TextAlign.left,
-                              style: h3.copyWith(color: primary),
+                              style: bd_text.copyWith(color: primary),
                             ),
                             Expanded(
                               flex: 2,
@@ -232,7 +228,7 @@ class MuscleInfoWidget extends StatelessWidget {
     );
   }
 
-  Map<String, String> createDetai() {
+  Map<String, String> createDetail() {
     return {
       "Quadriceps":
           "Cơ lớn ở phía trước đùi, được chia thành bốn phần riêng biệt và có chức năng duỗi chân.",

@@ -206,6 +206,7 @@ class _EventDetailState extends State<EventDetail>
           _buildDescription(),
           const SizedBox(height: 16),
           TabBar(
+            dividerColor: Colors.transparent,
             controller: _tabController,
             tabs: [
               Tab(child: Text(trans.leaderboard, style: h3)),

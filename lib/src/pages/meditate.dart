@@ -19,7 +19,10 @@ class Meditate extends StatefulWidget {
 
 final List<Map<String, dynamic>> theTracks = [
   {'asset': 'audios/rain.mp3'},
-  {'asset': 'audios/water_cave.mp3'},
+  {'asset': 'audios/wave.mp3'},
+  {'asset': 'audios/morning.mp3'},
+  {'asset': 'audios/nature.mp3'},
+  {},
 ];
 
 class _MeditateState extends State<Meditate> {
@@ -61,6 +64,7 @@ class _MeditateState extends State<Meditate> {
           normalizedToday.difference(normalizedLastDate).inDays;
       print(
           'daysDifference:$daysDifference   normalizedLastDate:$normalizedLastDate lastMeditationDate:$lastMeditationDate');
+
       // If the difference is 1 day, increment streak
       if (daysDifference == 1) {
         currentStreak++;
@@ -129,8 +133,16 @@ class _MeditateState extends State<Meditate> {
         'subtitle': trans.soundRainDescription,
       },
       {
-        'title': trans.soundStream,
-        'subtitle': trans.soundStreamDescription,
+        'title': trans.soundWave,
+        'subtitle': trans.soundWaveDescription,
+      },
+      {
+        'title': trans.soundMorning,
+        'subtitle': trans.soundMorningDescription,
+      },
+      {
+        'title': trans.soundNature,
+        'subtitle': trans.soundNatureDescription,
       },
     ];
 
@@ -140,8 +152,7 @@ class _MeditateState extends State<Meditate> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildStreakInfo(context),
-
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Container(
             color: theme.colorScheme.onSecondary,
             child: CupertinoTimerPicker(
@@ -163,33 +174,34 @@ class _MeditateState extends State<Meditate> {
             style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
           const SizedBox(height: 16),
-          ListView.builder(
-            key: UniqueKey(),
-            shrinkWrap: true,
-            itemCount: _tracks.length,
-            itemBuilder: (context, index) {
-              return CheckBoxListTile(
-                title: _tracks[index]['title'],
-                subtitle: _tracks[index]['subtitle'],
-                state: _selectedTrackIndex == index
-                    ? CheckState.Checked
-                    : CheckState.Unchecked,
-                onChanged: (value) {
-                  setState(() {
-                    if (value) {
-                      _selectedTrackIndex = index;
-                    } else {
-                      _selectedTrackIndex = null;
-                    }
-                  });
+          Expanded(
+            child: SingleChildScrollView(
+              child: ListView.builder(
+                key: UniqueKey(),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _tracks.length,
+                itemBuilder: (context, index) {
+                  return CheckBoxListTile(
+                    title: _tracks[index]['title'],
+                    subtitle: _tracks[index]['subtitle'],
+                    state: _selectedTrackIndex == index
+                        ? CheckState.Checked
+                        : CheckState.Unchecked,
+                    onChanged: (value) {
+                      setState(() {
+                        if (value) {
+                          _selectedTrackIndex = index;
+                        } else {
+                          _selectedTrackIndex = null;
+                        }
+                      });
+                    },
+                  );
                 },
-              );
-            },
+              ),
+            ),
           ),
-          // ElevatedButton(
-          //   onPressed: _resetStreakData,
-          //   child: Text('Reset Streak'),
-          // ),
         ],
       ),
     );
@@ -239,7 +251,7 @@ class _MeditateState extends State<Meditate> {
           },
           child: Text(
             currentStreak.toString(),
-            style: TextStyle(
+            style: const TextStyle(
               color: active,
               fontSize: 60,
               fontFamily: 'ReadexPro',
@@ -261,21 +273,21 @@ class _MeditateState extends State<Meditate> {
         shape: MaterialStateProperty.all(const CircleBorder()),
       ),
       onPressed: () async {
-        await _updateStreakData();
         pushWithoutNavBar(
           context,
           MaterialPageRoute(
             builder: (context) => PerformMeditate(
-              selectedDuration: _selectedDuration,
-              audioPath: _selectedTrackIndex != null
+              duration: _selectedDuration,
+              track: _selectedTrackIndex != null
                   ? theTracks[_selectedTrackIndex!]['asset']
                   : '',
             ),
           ),
         );
+        await _updateStreakData();
       },
       child: Ink(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           shape: BoxShape.circle,
           gradient: gradient,
         ),

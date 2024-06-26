@@ -33,7 +33,7 @@ class _SocialPageState extends State<SocialPage> {
         postActions: [
           IconButton(
               icon: Icon(
-                Icons.group_add_outlined,
+                Icons.group_outlined,
                 color: theme.colorScheme.onSurface,
               ),
               onPressed: () {
