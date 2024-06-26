@@ -60,7 +60,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   void _onNewCameraSelected(CameraDescription cameraDescription) async {
     _cameraController = CameraController(
       cameraDescription,
-      ResolutionPreset.medium,
+      ResolutionPreset.low,
       enableAudio: false,
     );
 
