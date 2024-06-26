@@ -34,19 +34,21 @@ class _SubscriptionState extends State<SubscriptionPage> {
     super.initState();
     _googlePayConfigFuture =
       PaymentConfiguration.fromAsset('default_google_pay_config.json');
-    
-    _loadSub();
-    _loadUserSub();
-
-    // fetchData();
+      _loadSub();
   }
 
     Future<void> _loadSub() async {
     try {
       final sub = await getSubscriptions();
+      final ussub = await getUserSubscriptions();
       setState(() {
         _subs = sub;
+        _userSubs = ussub;
+        print(_userSubs);
+        if(_userSubs[_userSubs.length-1]?.activeStatus !=0){
+          _currendSub = _userSubs[_userSubs.length-1];
 
+        }
       });
     } catch (e) {
       // Handle errors, e.g., show a snackbar or error message
@@ -62,15 +64,11 @@ class _SubscriptionState extends State<SubscriptionPage> {
         print(_userSubs);
 
         if(_userSubs[_userSubs.length-1]?.activeStatus !=0){
-          _currendSub = _userSubs[_userSubs.length-1];
-
-        }
+          _currendSub = _userSubs[_userSubs.length-1];}
       });
     } catch (e) {
-      // Handle errors, e.g., show a snackbar or error message
       print('Error loading UserSubscription: $e');
-    }
-    }
+    }}
 
 
   void onGooglePayResult(paymentResult) {
