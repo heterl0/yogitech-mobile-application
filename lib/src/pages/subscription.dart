@@ -52,9 +52,8 @@ class _SubscriptionState extends State<SubscriptionPage> {
         _subs = sub;
         _userSubs = ussub;
         _isLoading = false;
-
+        print('asd');
         print(_userSubs);
-        print(_subs);
         if (_userSubs.length > 0 &&
             _userSubs[_userSubs.length - 1]?.activeStatus != 0) {
           _currendSub = _userSubs[_userSubs.length - 1];
@@ -74,11 +73,13 @@ class _SubscriptionState extends State<SubscriptionPage> {
       final sub = await getUserSubscriptions();
       setState(() {
         _userSubs = sub;
-        _isLoading = true;
+        _isLoading = false;
 
         if (_userSubs.length > 0 &&
             _userSubs[_userSubs.length - 1]?.activeStatus != 0) {
-          _currendSub = _userSubs[_userSubs.length - 1];
+            _currendSub = _userSubs[_userSubs.length - 1];
+        }else{
+          _currendSub=null;
         }
       });
     } catch (e) {
@@ -390,9 +391,9 @@ class _SubscriptionState extends State<SubscriptionPage> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     Subscription sub = _subs.firstWhere(
-        (sub) => sub.id == _currendSub!.subscriptionId,
-        orElse: () => null,
-      );
+      (sub) => sub.id == _currendSub!.subscriptionId,
+      orElse: () => null,
+    );
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -412,13 +413,14 @@ class _SubscriptionState extends State<SubscriptionPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                  width: 120,
-                  height: 120,
-                  child: sub.durationInMonth < 1
+                width: 120,
+                height: 120,
+                child: sub.durationInMonth < 1
                     ? Image.asset('assets/images/Universe2.png')
                     : (sub.durationInMonth >= 12
                         ? Image.asset('assets/images/Sun2.png')
-                        : Image.asset('assets/images/MoonPhase2.png')),),
+                        : Image.asset('assets/images/MoonPhase2.png')),
+              ),
               const SizedBox(height: 12),
               Text(
                 trans.wantToUnsubscribe,
@@ -432,8 +434,35 @@ class _SubscriptionState extends State<SubscriptionPage> {
               ),
               const SizedBox(height: 16),
               CustomButton(
-                  title: trans.unsubscription,
-                  style: ButtonStyleType.Quaternary),
+                title: trans.unsubscription,
+                style: ButtonStyleType.Quaternary,
+                onPressed: () async {
+                  if (_currendSub != null) {
+                    int subscriptionId = _currendSub!.id!;
+                    try {
+                      final userSubscription =
+                          await cancelSubscription(subscriptionId);
+                      if (userSubscription != null) {
+                        // widget.fetchAccount!();
+                        // final account = await retrieveAccount();
+                        setState(() {
+                          _loadUserSub();
+                          // _account = account;
+                        });
+                        Navigator.pop(context); // Close the bottom sheet
+                      } else {
+                        _showCustomPopup(context, 'Error',
+                            'Subscription failed: User subscription is null');
+                      }
+                    } catch (error) {
+                      _showCustomPopup(
+                          context, trans.error, 'Subscription failed: $error');
+                    }
+                  } else {
+                    _showCustomPopup(context, trans.error, trans.waitToEndPlan);
+                  }
+                },
+              ),
               const SizedBox(height: 16),
               CustomButton(
                   title: trans.cancel,
