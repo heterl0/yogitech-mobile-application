@@ -31,6 +31,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
   UserSubscription? _currendSub;
   Subscription? _selectedSub;
   Account? _account;
+  bool _isLoading = true;
 
   // late _paymentSelected;
 
@@ -50,6 +51,8 @@ class _SubscriptionState extends State<SubscriptionPage> {
       setState(() {
         _subs = sub;
         _userSubs = ussub;
+        _isLoading = false;
+
         print(_userSubs);
         print(_subs);
         if(_userSubs.length>0 && _userSubs[_userSubs.length-1]?.activeStatus !=0){
@@ -64,6 +67,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
     }
 
     Future<void> _loadUserSub() async {
+    setState(() { _isLoading = true;});
     try {
       final sub = await getUserSubscriptions();
       setState(() {
@@ -115,7 +119,8 @@ class _SubscriptionState extends State<SubscriptionPage> {
           ),
         ],
       ),
-      body: _buildBody(context),
+      body:_isLoading
+       ? Center(child: CircularProgressIndicator()): _buildBody(context),
       bottomNavigationBar: _buildBottomBar(context));
   }
 
