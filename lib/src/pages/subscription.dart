@@ -301,16 +301,12 @@ class _SubscriptionState extends State<SubscriptionPage> {
               ],
             ),
           ),
-
-          
           const SizedBox(height: 8),
           Text(
           '${endDate.difference(now).inDays} '+trans.eventRemain,
           style:  h3.copyWith(color: active),
           ),
           const SizedBox(height: 8),
-          
-          
         ],
       ):
           Column(
@@ -393,15 +389,20 @@ class _SubscriptionState extends State<SubscriptionPage> {
               Text(
                 trans.wantToUnsubscribe,
                 textAlign: TextAlign.center,
-                style: h2.copyWith(color: theme.colorScheme.onPrimary),
+                style: h3.copyWith(color: theme.colorScheme.onPrimary),
+              ),
+              Text(
+                trans.unsubDetail,
+                textAlign: TextAlign.center,
+                style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
               ),
               const SizedBox(height: 16),
               CustomButton(
-                  title: trans.unsubscription, style: ButtonStyleType.Primary),
+                  title: trans.unsubscription, style: ButtonStyleType.Quaternary),
               const SizedBox(height: 16),
               CustomButton(
                   title: trans.cancel,
-                  style: ButtonStyleType.Tertiary,
+                  style: ButtonStyleType.Secondary,
                   onPressed: () {
                     Navigator.pop(context);
                   }),
