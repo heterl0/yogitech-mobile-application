@@ -9,8 +9,10 @@ import 'package:YogiTech/src/pages/payment_history.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/intl.dart';
 import 'package:pay/pay.dart';
 
 class SubscriptionPage extends StatefulWidget {
@@ -199,6 +201,14 @@ class _SubscriptionState extends State<SubscriptionPage> {
   Widget _buildUnSubscriptionContainer(Subscription? sub) {
     Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+    final local = Localizations.localeOf(context);
+    DateTime now = DateTime.now();
+    DateTime endDate = DateTime.parse('${_currendSub!.expireDate}');
+
+    String startDay = DateFormat.yMMMd(local.languageCode)
+        .format(DateTime.parse('${_currendSub!.createdAt}'));
+    String endDay = DateFormat.yMMMd(local.languageCode).format(endDate);
+
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -218,11 +228,11 @@ class _SubscriptionState extends State<SubscriptionPage> {
             child: Row(
               children: [
                 Container(
-                  width: 60,
-                  height: 60,
+                  width: 80,
+                  height: 80,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: sub!.durationInMonth < 1? AssetImage('assets/images/Universe.png'): (sub.durationInMonth >=12 ? AssetImage('assets/images/Sun.png'):AssetImage('assets/images/MoonPhase.png')),
+                      image: sub!.durationInMonth < 1? AssetImage('assets/images/Universe2.png'): (sub.durationInMonth >=12 ? AssetImage('assets/images/Sun2.png'):AssetImage('assets/images/MoonPhase2.png')),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -235,10 +245,27 @@ class _SubscriptionState extends State<SubscriptionPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          convertDuration(sub!.durationInMonth,trans.locale),
-                          style: min_cap.copyWith(color: active),
-                        ),
+                        Row(
+                          mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                          children: [
+                          Text(
+                          ' ${convertDuration(sub!.durationInMonth,trans.locale)}',
+                          style: bd_text.copyWith(color: Colors.white),
+                          ),Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              trans.start+': $startDay',
+                              style: min_cap.copyWith(color: active),
+                            ),
+                            Text(
+                              trans.end+': $endDay',
+                              style: min_cap.copyWith(color: active),
+                            ),
+                          ],),
+                        ],)
+                        ,
                         Row(
                           children: [
                             Container(
@@ -274,31 +301,16 @@ class _SubscriptionState extends State<SubscriptionPage> {
               ],
             ),
           ),
+
+          
           const SizedBox(height: 8),
-          Container(
-            width: double.infinity,
-            height: 48,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-            decoration: ShapeDecoration(
-              shape: RoundedRectangleBorder(
-                side: BorderSide(width: 2, color: Colors.white),
-                borderRadius: BorderRadius.circular(44),
-              ),
-            ),
-            child: Center(
-              child: GestureDetector(
-                onTap: () {
-                  // _showChangePasswordDrawer(context);
-                  _unsubscriptionBottomSheet(context);
-                },
-                child: Text(
-                  trans.unsubscription,
-                  textAlign: TextAlign.center,
-                  style: h3.copyWith(color: Colors.white),
-                ),
-              ),
-            ),
+          Text(
+          '${endDate.difference(now).inDays} '+trans.eventRemain,
+          style:  h3.copyWith(color: active),
           ),
+          const SizedBox(height: 8),
+          
+          
         ],
       ):
           Column(
