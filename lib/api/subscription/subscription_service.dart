@@ -97,7 +97,7 @@ Future<UserSubscription?> cancelSubscription(int id) async {
       "active_status": 0,
       "cancel_at": now.toString()
     };
-    final Response response = await DioInstance.post(url, data: data);
+    final Response response = await DioInstance.patch(url, data: data);
     if (response.statusCode == 200) {
       return UserSubscription.fromMap(response.data);
     } else {
