@@ -1,3 +1,5 @@
+import 'package:YogiTech/api/account/account_service.dart';
+import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/dioInstance.dart';
 import 'package:YogiTech/utils/formatting.dart';
 import 'package:dio/dio.dart';
@@ -65,6 +67,10 @@ Future<UserSubscription?> subscribe(int subscription,int subscriptionType) async
     final Response response = await DioInstance.post(url,data:data);
     if (response.statusCode == 200 || response.statusCode == 201) {
       UserSubscription data = UserSubscription.fromMap(response.data);
+      final user = await getUser();
+      if (user != null)  {
+        storeAccount(user);
+      }
       return data;
     }
     else {

@@ -62,6 +62,7 @@ class _HomePageState extends State<HomePage> {
     final Account? _account = await retrieveAccount();
     setState(() {
       account = _account;
+      print(account);
     });
   }
 

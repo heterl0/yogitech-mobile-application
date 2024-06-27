@@ -1,3 +1,4 @@
+import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/subscription/subscription_service.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/subscriptions.dart';
@@ -9,6 +10,7 @@ import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pay/pay.dart';
 
 class SubscriptionPage extends StatefulWidget {
@@ -26,6 +28,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
   List<dynamic> _userSubs =[];
   UserSubscription? _currendSub;
   Subscription? _selectedSub;
+  Account? _account;
 
   // late _paymentSelected;
 
@@ -35,6 +38,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
     _googlePayConfigFuture =
       PaymentConfiguration.fromAsset('default_google_pay_config.json');
       _loadSub();
+      _account = widget.account;
   }
 
     Future<void> _loadSub() async {
@@ -45,7 +49,8 @@ class _SubscriptionState extends State<SubscriptionPage> {
         _subs = sub;
         _userSubs = ussub;
         print(_userSubs);
-        if(_userSubs[_userSubs.length-1]?.activeStatus !=0){
+        print(_subs);
+        if(_userSubs.length>0 && _userSubs[_userSubs.length-1]?.activeStatus !=0){
           _currendSub = _userSubs[_userSubs.length-1];
 
         }
@@ -61,7 +66,6 @@ class _SubscriptionState extends State<SubscriptionPage> {
       final sub = await getUserSubscriptions();
       setState(() {
         _userSubs = sub;
-        print(_userSubs);
 
         if(_userSubs[_userSubs.length-1]?.activeStatus !=0){
           _currendSub = _userSubs[_userSubs.length-1];}
@@ -90,7 +94,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
               child: Image.asset('assets/images/Emerald.png'),
             ),
             Text(
-              (widget.account!.profile.point).toString(),
+              (_account!.profile.point).toString(),
               style: h3.copyWith(color: theme.colorScheme.onSurface),
             ),
           ],
@@ -121,7 +125,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
         children: [
           _buildCurrentPlanContainer(),
           const SizedBox(height: 16),
-          _buildUnSubscriptionContainer(),
+          _buildUnSubscriptionContainer(_subs.firstWhere((sub) => sub.id == _currendSub!.subscriptionId, orElse: () => null)),
           const SizedBox(height: 16),
           _buildChoosePlanContainer(),
           const SizedBox(height: 16),
@@ -192,7 +196,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
     );
   }
 
-  Widget _buildUnSubscriptionContainer() {
+  Widget _buildUnSubscriptionContainer(Subscription? sub) {
     Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
@@ -214,11 +218,11 @@ class _SubscriptionState extends State<SubscriptionPage> {
             child: Row(
               children: [
                 Container(
-                  width: 48,
-                  height: 48,
+                  width: 60,
+                  height: 60,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/MoonPhase.png'),
+                      image: sub!.durationInMonth < 1? AssetImage('assets/images/Universe.png'): (sub.durationInMonth >=12 ? AssetImage('assets/images/Sun.png'):AssetImage('assets/images/MoonPhase.png')),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -232,7 +236,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          trans.onceAMonth,
+                          convertDuration(sub!.durationInMonth,trans.locale),
                           style: min_cap.copyWith(color: active),
                         ),
                         Row(
@@ -241,12 +245,12 @@ class _SubscriptionState extends State<SubscriptionPage> {
                               child: Row(
                                 children: [
                                   Container(
-                                    width: 18,
-                                    height: 18,
+                                    width: 26,
+                                    height: 26,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/Emerald.png'),
+                                        image:  AssetImage('assets/images/Emerald.png')
+                                        ,
                                         fit: BoxFit.fill,
                                       ),
                                     ),
@@ -254,8 +258,8 @@ class _SubscriptionState extends State<SubscriptionPage> {
                                   const SizedBox(width: 4),
                                     SizedBox(
                                     child: Text(
-                                      'sadioji',
-                                      style: h3.copyWith(color: active),
+                                      '${_currendSub?.subscriptionType==1? sub.gemPrice:'${sub.price.toInt().toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} VND'}',
+                                      style: h2.copyWith(color: active),
                                     ),
                                   ),
                                 ],
@@ -396,12 +400,11 @@ class _SubscriptionState extends State<SubscriptionPage> {
     );
   }
 
-  Future<void> _subscriptionBottomSheet(BuildContext context,Subscription sub) {
+  Future<void> _showSubscriptionSheet(BuildContext context, Subscription sub) async {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
-    String price = '${sub.price.toInt().toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} VND';
-
-    return showModalBottomSheet(
+    final price = '${sub.price}';
+    showModalBottomSheet(
       context: context,
       backgroundColor: theme.colorScheme.onSecondary,
       builder: (context) {
@@ -414,33 +417,32 @@ class _SubscriptionState extends State<SubscriptionPage> {
             children: [
               Container(
                 alignment: Alignment.center,
-                child: sub.durationInMonth < 1 
-                  ? Image.asset(
-                      'assets/images/Universe2.png',
-                      width: 120,
-                      height: 120,
-                      fit: BoxFit.cover,
-                    ) 
-                  : (sub.durationInMonth >= 12 
+                child: sub.durationInMonth < 1
                     ? Image.asset(
-                        'assets/images/Sun2.png',
+                        'assets/images/Universe2.png',
                         width: 120,
                         height: 120,
                         fit: BoxFit.cover,
-                      ) 
-                    : Image.asset(
-                        'assets/images/MoonPhase2.png',
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.cover,
-                      )),
+                      )
+                    : (sub.durationInMonth >= 12
+                        ? Image.asset(
+                            'assets/images/Sun2.png',
+                            width: 120,
+                            height: 120,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.asset(
+                            'assets/images/MoonPhase2.png',
+                            width: 120,
+                            height: 120,
+                            fit: BoxFit.cover,
+                          )),
               ),
               const SizedBox(height: 16),
               Text(
-                convertDuration(sub.durationInMonth,trans.locale),
+                convertDuration(sub.durationInMonth, trans.locale),
                 textAlign: TextAlign.center,
-                style:
-                    h2.copyWith(color: theme.colorScheme.onPrimary, height: 1),
+                style: h2.copyWith(color: theme.colorScheme.onPrimary, height: 1),
               ),
               const SizedBox(height: 16),
               Text(
@@ -452,12 +454,37 @@ class _SubscriptionState extends State<SubscriptionPage> {
               CustomButton(title: price, style: ButtonStyleType.Primary),
               const SizedBox(height: 16),
               CustomButton(
-                  title: '${sub.gemPrice} gems', 
-                  style: ButtonStyleType.Secondary,
-                  onPressed: (){
-                    Navigator.pop(context);
-                  },
-                  ),
+                title: '${sub.gemPrice} gems',
+                style: ButtonStyleType.Secondary,
+                onPressed: () async {
+                  if (_currendSub == null) {
+                    int subscriptionId = sub.id;
+                    try {
+                      if ((_account?.profile.point)! >= sub.price) {
+                        final userSubscription = await subscribe(subscriptionId, 1);
+                        if (userSubscription != null) {
+                          widget.fetchAccount!();
+                          final account = await retrieveAccount();
+                          _loadUserSub();
+                          setState(() {
+                            _account = account;
+                          });
+                          Navigator.pop(context);  // Close the bottom sheet
+                        } else {
+                          _showCustomPopup(context, 'Error', 'Subscription failed: User subscription is null');
+                        }
+                      } else {
+                        trans.locale=='en'? _showCustomPopup(context, 'Error', 'Not enough Gem for subscription.'):
+                        _showCustomPopup(context, 'Lỗi', 'Bạn không có đủ Gem để đăng ký.');
+                      }
+                    } catch (error) {
+                      _showCustomPopup(context, trans.error, 'Subscription failed: $error');
+                    }
+                  } else {
+                    _showCustomPopup(context, trans.error, trans.waitToEndPlan);
+                  }
+                },
+              ),
               const SizedBox(height: 16),
               CustomButton(
                 title: trans.cancel,
@@ -610,7 +637,8 @@ class _SubscriptionState extends State<SubscriptionPage> {
       activeColor: Color(0xFF0D1F29), // Background color when checked
       checkColor: Color(0xFF4095D0), // Tick color when checked
       value: value,
-      onChanged: (bool? value) {
+      
+      onChanged:_currendSub != null? null: (bool? value) {
         setState(() {
           if(value !=null && value){
             _selectedSub =sub;
@@ -644,7 +672,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                   style: ButtonStyleType.Primary,
                   state: _selectedSub!=null ? ButtonState.Enabled:ButtonState.Disabled,
                   onPressed: ()=>{
-                    _subscriptionBottomSheet(context,_selectedSub!)
+                    _showSubscriptionSheet(context,_selectedSub!)
                   },
                   )
               : CustomButton(
@@ -659,7 +687,49 @@ class _SubscriptionState extends State<SubscriptionPage> {
       )
     );
     }
-  
+
+  void _showCustomPopup(BuildContext context, String title, String message) {
+    final trans = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: theme.colorScheme.surface,  // Custom background color
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),  // Custom border radius
+          ),
+          title: Text(
+            title,
+            style: theme.textTheme.headlineLarge?.copyWith(
+              color: theme.colorScheme.onSurface,  // Custom title style
+            ),
+          ),
+          content: Text(
+            message,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              color: theme.colorScheme.onSurface,  // Custom content style
+            ),
+          ),
+          actions: <Widget>[
+            SizedBox(height: 12,),
+            CustomButton(
+                  title: trans.close,
+                  style: ButtonStyleType.Primary,
+                  state: _selectedSub!=null ? ButtonState.Enabled:ButtonState.Disabled,
+                  onPressed: ()=>{
+                    Navigator.of(context).pop()
+                  }),
+          ],
+          contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),  // Custom content padding
+          titlePadding: EdgeInsets.only(top: 20, left: 24, right: 24),  // Custom title padding
+        );
+      },
+    );
+}
+
+      
 
 
   String convertDuration(double durationInMonths, String local) {
