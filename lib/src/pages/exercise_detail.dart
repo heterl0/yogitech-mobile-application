@@ -1,6 +1,7 @@
 import 'package:YogiTech/src/pages/camera/camera_page.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/exercise/exercise_service.dart';
@@ -52,12 +53,14 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       bottomNavigationBar: CustomBottomBar(
         buttonTitle: trans.doExercise,
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                // builder: (context) => Result(),
-                builder: (context) => CameraPage()),
-          );
+          const platform = MethodChannel('com.example.yogitech');
+          platform.invokeMethod('exerciseActivity');
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //       // builder: (context) => Result(),
+          //       builder: (context) => CameraPage()),
+          // );
         },
       ),
     );
