@@ -109,3 +109,22 @@ Future<UserSubscription?> cancelSubscription(int id) async {
     return null;
   }
 }
+
+Future<UserSubscription?> expiredSubscription(int id) async {
+  try {
+    final url = formatApiUrl('/api/v1/user-subscriptions/$id/');
+    final data = {
+      "active_status": 0,
+    };
+    final Response response = await DioInstance.patch(url, data: data);
+    if (response.statusCode == 200) {
+      return UserSubscription.fromMap(response.data);
+    } else {
+      print('Cancel UserSubscription failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Cancel UserSubscription detail error: $e');
+    return null;
+  }
+}

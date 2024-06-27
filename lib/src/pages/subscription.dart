@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/subscription/subscription_service.dart';
 import 'package:YogiTech/src/models/account.dart';
@@ -56,7 +58,8 @@ class _SubscriptionState extends State<SubscriptionPage> {
         print(_userSubs);
         if (_userSubs.length > 0 &&
             _userSubs[_userSubs.length - 1]?.activeStatus != 0) {
-          _currendSub = _userSubs[_userSubs.length - 1];
+          
+          _currendSub = checkExpire(_userSubs[_userSubs.length - 1])? null:_userSubs[_userSubs.length - 1];
         }
       });
     } catch (e) {
@@ -118,7 +121,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PaymentHistory(),
+                    builder: (context) => PaymentHistory(userSubs:_userSubs,subs:_subs),
                   ),
                 );
               },
@@ -818,6 +821,23 @@ class _SubscriptionState extends State<SubscriptionPage> {
         );
       },
     );
+  }
+
+  bool checkExpire(UserSubscription usub)  {
+    DateTime now = DateTime.now();
+
+    String? expireDateStr = usub.expireDate;
+    if (expireDateStr != null) {
+      DateTime endDate = DateTime.parse(expireDateStr);
+      
+      if (now.isAfter(endDate)) {
+         expiredSubscription(usub.id!);
+        return true;
+      } 
+    } else {
+      print('Expire date is not set.');
+    }
+    return false;
   }
 
   String convertDuration(double durationInMonths, String local) {
