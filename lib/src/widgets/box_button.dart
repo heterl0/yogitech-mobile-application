@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 
-enum ButtonStyleType { Primary, Secondary, Tertiary }
+enum ButtonStyleType { Primary, Secondary, Tertiary, Quaternary }
 
 enum ButtonState { Enabled, Disabled, Pressed }
 
@@ -26,7 +26,7 @@ class CustomButton extends StatelessWidget {
     final bool isDisabled = state == ButtonState.Disabled;
     final bool isPressed = state == ButtonState.Pressed;
 
-    // Định nghĩa màu nền dựa trên style và state
+    // Define background color based on style and state
     Color getBackgroundColor() {
       switch (style) {
         case ButtonStyleType.Primary:
@@ -35,6 +35,8 @@ class CustomButton extends StatelessWidget {
           return theme.colorScheme.surface;
         case ButtonStyleType.Tertiary:
           return Colors.transparent;
+        case ButtonStyleType.Quaternary:
+          return theme.colorScheme.surface;
       }
     }
 
@@ -43,18 +45,16 @@ class CustomButton extends StatelessWidget {
       return gradient;
     }
 
-    // Định nghĩa viền (outline) cho nút với kích thước 2
+    // Define border based on style and state
     Border? getButtonBorder() {
       if (style == ButtonStyleType.Secondary) {
-        if (isPressed || isDisabled) {
-          return Border.all(color: theme.primaryColor, width: 2);
-        } else {
-          return Border.all(color: theme.primaryColor, width: 2);
-        }
+        return Border.all(color: theme.primaryColor, width: 2);
       } else if (style == ButtonStyleType.Primary) {
         return isPressed
             ? Border.all(color: theme.colorScheme.onPrimary, width: 2)
             : null;
+      } else if (style == ButtonStyleType.Quaternary) {
+        return Border.all(color: Colors.redAccent, width: 2); // Add border for Quaternary
       }
       return null;
     }
@@ -62,6 +62,8 @@ class CustomButton extends StatelessWidget {
     Color getTextColor() {
       if (style == ButtonStyleType.Primary) {
         return active; // Use your defined active color for primary buttons
+      } else if (style == ButtonStyleType.Quaternary) {
+        return Colors.redAccent; // Specific color for Quaternary
       } else {
         return primary; // Use your defined gradient color for other styles
       }
