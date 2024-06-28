@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/models/account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';
@@ -10,7 +11,8 @@ import 'package:YogiTech/src/widgets/dropdown_field.dart';
 import 'package:YogiTech/api/account/account_service.dart';
 
 class PrelaunchSurvey2 extends StatefulWidget {
-  const PrelaunchSurvey2({Key? key}) : super(key: key);
+  final Profile profile;
+  const PrelaunchSurvey2({super.key, required this.profile});
 
   @override
   _PrelaunchSurvey2State createState() => _PrelaunchSurvey2State();

@@ -3,23 +3,23 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 
 class Profile {
-  final int id;
-  final String user;
-  final String? first_name;
-  final String? last_name;
-  final int point;
-  final int exp;
-  final int streak;
-  final String? avatar_url;
-  final int gender;
-  final String? birthdate;
-  final String? height;
-  final String? weight;
-  final String? bmi;
-  final String created_at;
-  final String updated_at;
-  final int active_status;
-  final int? level;
+   int id;
+   String user;
+   String? first_name;
+   String? last_name;
+   int point;
+   int exp;
+   int streak;
+   String? avatar_url;
+   int gender;
+   String? birthdate;
+   String? height;
+   String? weight;
+   String? bmi;
+   String created_at;
+   String updated_at;
+   int active_status;
+   int? level;
 
   Profile(
       this.id,

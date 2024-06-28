@@ -214,6 +214,7 @@
   "request": "Gửi yêu cầu",
   "invalidEmail" : "Email không hợp lệ",
   "dontEmpty" : "Email và mật khẩu không được bỏ trống!",
+  "mustInput": "không được bỏ trống.",
   "doesntexist" : "Tài khoản hoặc mật khẩu không đúng!",
   "enterEmail" :"Vui lòng nhập email!",
   "noResult":"Không có kết quả"
