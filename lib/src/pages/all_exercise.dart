@@ -62,15 +62,16 @@ class BlogState extends State<AllExercise> {
             .toList();
       }
       if (mus != null) {
-        for (var i = 0; i < filteredExercises.length; i++) {
-          List<PoseWithTime> poses = filteredExercises[i].poses;
-          for (var p = 0; p < poses.length; p++) {
-            if (!poses[p].pose.muscles.any((muscle) => muscle == mus)) {
-              filteredExercises.removeAt(i);
+        filteredExercises = filteredExercises.where((exercise) {
+          for (var poseWithTime in exercise.poses) {
+            if (poseWithTime.pose.muscles.any((muscle) => muscle.id == mus.id)) {
+              return true; // Keep this exercise
             }
           }
-        }
+          return false; // Filter out this exercise
+        }).toList();
       }
+
       setState(() {
         _exercises = filteredExercises;
         _isLoading = false;
