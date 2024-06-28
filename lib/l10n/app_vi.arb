@@ -215,6 +215,7 @@
   "invalidEmail" : "Email không hợp lệ",
   "dontEmpty" : "Email và mật khẩu không được bỏ trống!",
   "mustInput": "không được bỏ trống.",
+  "invalid": "không hợp lệ.",
   "doesntexist" : "Tài khoản hoặc mật khẩu không đúng!",
   "enterEmail" :"Vui lòng nhập email!",
   "noResult":"Không có kết quả"

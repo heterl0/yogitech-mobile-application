@@ -215,6 +215,7 @@
   "invalidEmail": "Your email is Invalid!",
   "dontEmpty": "Please fill in both Email and Password fields!",
   "mustInput": "can't be emty.",
+  "invalid": "invalid.",
   "doesntexist": "Email or Password is not correct!",
   "enterEmail": "Please enter your email!",
   "noResult": "No result"
