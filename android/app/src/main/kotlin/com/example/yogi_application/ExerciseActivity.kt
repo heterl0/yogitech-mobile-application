@@ -35,6 +35,9 @@ class ExerciseActivity : AppCompatActivity() {
         activityMainBinding.navigation.setOnNavigationItemReselectedListener {
             // ignore the reselection
         }
+
+        val scoreFragment = supportFragmentManager.findFragmentById(R.id.fragment_score)
+
     }
 
     override fun onResume() {

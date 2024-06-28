@@ -43,9 +43,9 @@
             app:navGraph="@navigation/nav_graph"
             tools:context=".MainActivity" />
 
-        <include
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_score"
-            layout="@layout/fragment_score"
+            android:name="com.example.yogi_application.fragment.ScoreFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="8"

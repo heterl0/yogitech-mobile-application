@@ -9,9 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.yogi_application.R
 import com.example.yogi_application.databinding.FragmentScoreBinding
 
-class ScoreFragment: Fragment() {
+class ScoreFragment: Fragment(R.layout.fragment_score) {
     private var _fragmentScoreBinding: FragmentScoreBinding? = null
 
     private val fragmentCameraBinding
@@ -23,7 +24,6 @@ class ScoreFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _fragmentScoreBinding = FragmentScoreBinding.inflate(inflater, container, false);
-
         return _fragmentScoreBinding!!.root;
     }
 
@@ -35,7 +35,6 @@ class ScoreFragment: Fragment() {
 
         // 2. Measure Text Width
         val width = paint.measureText(gradientTextView.text.toString())
-        Log.d("onViewCreated", "onViewCreated: $width")
         // 3. Create LinearGradient Shader
         val textShader: Shader = LinearGradient(
             0f, 0f, width, gradientTextView.textSize,
