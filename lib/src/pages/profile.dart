@@ -18,6 +18,7 @@ import 'package:YogiTech/src/pages/friendlist.dart';
 import 'package:YogiTech/src/pages/change_BMI.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'dart:ui';
 
 class ProfilePage extends StatefulWidget {
   final bool isDarkMode;
@@ -201,11 +202,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     .avatar_url!.isNotEmpty)
                                         ? CircleAvatar(
                                             radius: 50,
-                                            backgroundImage: _profile!.avatar_url != null
-                                                ? CachedNetworkImageProvider(_profile!.avatar_url!)
+                                            backgroundImage: _profile!
+                                                        .avatar_url !=
+                                                    null
+                                                ? CachedNetworkImageProvider(
+                                                    _profile!.avatar_url!)
                                                 : null,
                                             backgroundColor: Colors.transparent,
-                                            child: _profile!.avatar_url == null ? Icon(Icons.person, size: 50) : null,
+                                            child: _profile!.avatar_url == null
+                                                ? Icon(Icons.person, size: 50)
+                                                : null,
                                           )
                                         : Center(
                                             child: _profile != null &&
@@ -216,7 +222,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 ? CircleAvatar(
                                                     radius: 50,
                                                     backgroundImage:
-                                                    CachedNetworkImageProvider(_profile!.avatar_url!),
+                                                        CachedNetworkImageProvider(
+                                                            _profile!
+                                                                .avatar_url!),
                                                     backgroundColor:
                                                         Colors.transparent,
                                                   )

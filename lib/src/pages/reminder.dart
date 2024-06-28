@@ -9,6 +9,7 @@ import 'package:YogiTech/src/widgets/checkbox.dart';
 import 'package:YogiTech/src/widgets/switch.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
@@ -67,6 +68,19 @@ class _ReminderPageState extends State<ReminderPage> {
       };
     }).toList();
     await prefs.setString('reminders', jsonEncode(reminderData));
+
+    for (var item in _selectedTimes) {
+      for (var day in item['days']) {
+        await LocalNotification.showWeeklyAtDayAndTime(
+          id: item['id'],
+          title: 'Reminder',
+          body: 'It\'s time for your reminder',
+          time: item['time'],
+          day: day,
+          payload: 'Reminder payload',
+        );
+      }
+    }
   }
 
   int _generateUniqueId() {
@@ -119,26 +133,6 @@ class _ReminderPageState extends State<ReminderPage> {
 
         // Kiểm tra xem có ngày nào được chọn hay không
         if (days.isNotEmpty) {
-          LocalNotification localNotification = LocalNotification();
-          await localNotification.showScheduleNotification(
-            title: 'Nhắc nhở uống nước', // Ví dụ tiêu đề
-            body: 'Đã đến giờ uống nước rồi!', // Ví dụ nội dung
-            time: timeOfDay,
-            days: days,
-            payload:
-                'water_reminder_payload', // Payload tùy chọn (có thể là ID nhắc nhở)
-            id: id,
-          );
-          // LocalNotification localNotification = LocalNotification();
-          // await localNotification.showScheduleNotification(
-          //   title: 'Your title',
-          //   body: 'Your body',
-          //   time: timeOfDay,
-          //   days: days,
-          //   payload: 'your_payload_here',
-          //   id: id,
-          // );
-
           if (isNew) {
             setState(() {
               _selectedTimes.add({'id': id, 'time': timeOfDay, 'days': days});

@@ -18,7 +18,6 @@ class LocalNotification {
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.requestNotificationsPermission();
-    print('Có kiểm tra giấy phép');
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     final DarwinInitializationSettings initializationSettingsDarwin =
@@ -73,100 +72,78 @@ class LocalNotification {
         payload: payload);
   }
 
-  List<tz.TZDateTime> _nextInstancesOfTime(TimeOfDay time, Set<int> days) {
-    final now = tz.TZDateTime.now(tz.local);
-    List<tz.TZDateTime> scheduledDates = [];
-
-    // Tạo lịch trình cho từng ngày trong tuần được chọn
-    for (var day in days) {
-      var scheduledDate = tz.TZDateTime(
-        tz.local,
-        now.year,
-        now.month,
-        now.day,
-        time.hour,
-        time.minute,
-      );
-
-      // Tìm ngày tiếp theo trong tuần theo ngày đã chọn
-      while (scheduledDate.weekday != day) {
-        scheduledDate = scheduledDate.add(const Duration(days: 1));
-      }
-
-      // Nếu thời gian đã qua, chuyển sang tuần tiếp theo
-      if (scheduledDate.isBefore(now)) {
-        scheduledDate = scheduledDate.add(const Duration(days: 7));
-      }
-
-      scheduledDates.add(scheduledDate);
+  static Day _convertIntToDay(int day) {
+    switch (day) {
+      case DateTime.monday:
+        return Day.monday;
+      case DateTime.tuesday:
+        return Day.tuesday;
+      case DateTime.wednesday:
+        return Day.wednesday;
+      case DateTime.thursday:
+        return Day.thursday;
+      case DateTime.friday:
+        return Day.friday;
+      case DateTime.saturday:
+        return Day.saturday;
+      case DateTime.sunday:
+        return Day.sunday;
+      default:
+        throw ArgumentError('Invalid day value');
     }
-
-    return scheduledDates;
   }
 
-  Future<void> showScheduleNotification({
+  static Future showWeeklyAtDayAndTime({
     required int id,
     required String title,
     required String body,
-    required Set<int> days,
     required TimeOfDay time,
+    required int day,
     required String payload,
   }) async {
-    // Lấy ngày hiện tại và giờ từ thời gian cục bộ
-    final now = DateTime.now();
-
-    // Tính toán ngày và giờ chính xác từ `days` và `time`
-    DateTime scheduledDateTime =
-        DateTime(now.year, now.month, now.day, time.hour, time.minute);
-
-    // Tạo TZDateTime từ scheduledDateTime và local time zone
-    final scheduledTime = tz.TZDateTime.from(scheduledDateTime, tz.local);
-
-    tz.initializeTimeZones();
-    print('Đã nhận gửi thông báo vào lúc $scheduledTime ');
-
     await _flutterLocalNotificationsPlugin.zonedSchedule(
-        id * 10 + 1,
-        title,
-        body,
-        scheduledTime,
-        const NotificationDetails(
-            android: AndroidNotificationDetails(
-                'your channel id', 'your channel name',
-                channelDescription: 'your channel description')),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime);
-    // final scheduledDates = _nextInstancesOfTime(time, days);
+      id,
+      title,
+      body,
+      _nextInstanceOfDayAndTime(_convertIntToDay(day), time),
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'yogi',
+          'YogiTech',
+          channelDescription: 'YogiTech notification',
+          importance: Importance.max,
+          priority: Priority.high,
+          ticker: 'ticker',
+        ),
+      ),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+      payload: payload,
+    );
+  }
 
-    // print('ID: $id, Scheduled Times: $scheduledDates'); // In ra để kiểm tra
+  static tz.TZDateTime _nextInstanceOfDayAndTime(Day day, TimeOfDay time) {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(
+      tz.local,
+      now.year,
+      now.month,
+      now.day,
+      time.hour,
+      time.minute,
+    );
 
-    // for (var i = 0; i < scheduledDates.length; i++) {
-    //   var scheduledDate = scheduledDates[i];
+    while (scheduledDate.weekday != day.index + 1) {
+      scheduledDate = scheduledDate.add(Duration(days: 1));
+    }
 
-    //   await _flutterLocalNotificationsPlugin.zonedSchedule(
-    //     id * 10 + i, // ID duy nhất
-    //     title,
-    //     body,
-    //     scheduledDate,
-    //     const NotificationDetails(
-    //       android: AndroidNotificationDetails(
-    //         'yogi3', // ID kênh thông báo
-    //         'YogiTech', // Tên kênh thông báo
-    //         channelDescription: 'YogiTech notification',
-    //         importance: Importance.max,
-    //         priority: Priority.high,
-    //         ticker: 'ticker',
-    //       ),
-    //     ),
-    //     payload: payload,
-    //     androidAllowWhileIdle: true,
-    //     uiLocalNotificationDateInterpretation:
-    //         UILocalNotificationDateInterpretation.absoluteTime,
-    //     matchDateTimeComponents:
-    //         DateTimeComponents.dayOfWeekAndTime, // Lặp lại hàng tuần
-    //   );
-    // }
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(Duration(days: 7));
+    }
+
+    return scheduledDate;
   }
 
   static Future cancel(int id) async {
