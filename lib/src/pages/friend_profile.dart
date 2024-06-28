@@ -1,5 +1,6 @@
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/social.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
@@ -79,7 +80,7 @@ class _nameState extends State<FriendProfile> {
                       child: CircleAvatar(
                         radius: 78,
                         backgroundImage: widget.profile.avatar != null
-                            ? NetworkImage(widget.profile.avatar ?? "")
+                            ? CachedNetworkImageProvider(widget.profile.avatar ?? "")
                                 as ImageProvider
                             : AssetImage('assets/images/gradient.jpg'),
                       ),
