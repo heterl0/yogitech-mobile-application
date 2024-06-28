@@ -1,6 +1,7 @@
 import 'package:YogiTech/model/service_locator.dart';
 import 'package:YogiTech/services/notifi_service.dart';
 import 'package:YogiTech/src/models/social.dart';
+import 'package:YogiTech/src/pages/subscription.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
@@ -22,7 +23,6 @@ import 'package:YogiTech/src/pages/meditate.dart';
 import 'package:YogiTech/src/pages/reminder.dart';
 import 'package:YogiTech/src/pages/result.dart';
 import 'package:YogiTech/src/pages/streak.dart';
-import 'package:YogiTech/src/pages/subscription.dart';
 import 'package:YogiTech/src/pages/verify_email.dart';
 import 'package:YogiTech/src/routing/app_routes.dart';
 import 'package:YogiTech/src/pages/login_page.dart';
@@ -200,7 +200,7 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.streak: (context) => Streak(),
           AppRoutes.exercisedetail: (context) => ExerciseDetail(),
           AppRoutes.result: (context) => Result(),
-          AppRoutes.subscription: (context) => Subscription(),
+          AppRoutes.subscription: (context) => SubscriptionPage(),
           AppRoutes.Profile: (context) => ProfilePage(
                 isDarkMode: _themeMode == ThemeMode.dark,
                 onThemeChanged: _toggleTheme,
