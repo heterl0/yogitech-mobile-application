@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:YogiTech/api/dioInstance.dart';
 import 'package:YogiTech/src/models/exercise.dart';
 import 'package:YogiTech/utils/formatting.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<List<dynamic>> getExercises() async {
   try {
@@ -36,6 +37,12 @@ Future<Exercise?> getExercise(int id) async {
     print('Get exercise detail error: $e');
     return null;
   }
+}
+
+Future<void> storeExercise(Exercise exercise) async {
+  // Store exercise in local storage
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('exercise', exercise.toJson());
 }
 
 class PostCommentRequest {

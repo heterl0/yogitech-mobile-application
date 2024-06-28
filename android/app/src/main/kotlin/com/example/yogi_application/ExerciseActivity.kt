@@ -1,12 +1,15 @@
 package com.example.yogi_application
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.yogi_application.databinding.ActivityMainBinding
+import com.example.yogi_application.model.Exercise
 
 class ExerciseActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityMainBinding
@@ -14,6 +17,13 @@ class ExerciseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Access the SharedPreferences
+        val prefs = getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+
+        // Retrieve the tokens using the same keys but prefixed with "flutter."
+        val accessToken = prefs.getString("flutter.accessToken", "default_value")
+        val exerciseString = prefs.getString("flutter.exercise", "")
+        val exercise = exerciseString?.let { Exercise.fromJson(it) };
 
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)

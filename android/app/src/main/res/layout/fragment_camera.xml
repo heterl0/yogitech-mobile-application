@@ -26,20 +26,23 @@
         android:layout_height="match_parent"
         app:scaleType="fillStart" />
 
+    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/settings_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="top|start"-->
+<!--        android:layout_margin="16dp"-->
+<!--        android:src="@drawable/settings" />-->
+
     <com.example.yogi_application.OverlayView
         android:id="@+id/overlay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layout_anchor="@+id/view_finder"
+        app:layout_anchorGravity="center" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/settings_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|start"
-        android:layout_margin="16dp"
-        android:src="@drawable/settings" />
 
-<!--        <include-->
-<!--        android:id="@+id/bottom_sheet_layout"-->
-<!--        layout="@layout/info_bottom_sheet" />-->
+    <include
+    android:id="@+id/bottom_sheet_layout"
+    layout="@layout/info_bottom_sheet" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

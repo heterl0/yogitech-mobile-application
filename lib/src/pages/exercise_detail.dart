@@ -52,9 +52,11 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           : _buildBody(context),
       bottomNavigationBar: CustomBottomBar(
         buttonTitle: trans.doExercise,
-        onPressed: () {
+        onPressed: () async {
+          await storeExercise(_exercise!);
           const platform = MethodChannel('com.example.yogitech');
           platform.invokeMethod('exerciseActivity');
+
           // Navigator.push(
           //   context,
           //   MaterialPageRoute(
