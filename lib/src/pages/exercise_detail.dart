@@ -1,5 +1,6 @@
 import 'package:YogiTech/src/pages/camera/camera_page.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:YogiTech/api/auth/auth_service.dart';
@@ -102,7 +103,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         height: 360,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: NetworkImage(_exercise!.image_url), // ! for null safety
+            image:CachedNetworkImageProvider(_exercise!.image_url), // ! for null safety
             fit: BoxFit.cover,
           ),
         ),
@@ -243,12 +244,14 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
               children: <Widget>[
                 ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: Image.network(
-                    pose.image_url,
+                  child: 
+                  CachedNetworkImage(
+                    imageUrl: pose.image_url,
                     height: 240, // Chiều cao cố định của ảnh
-                    width: double
-                        .infinity, // Đảm bảo ảnh chiếm toàn bộ chiều ngang
+                    width: double.infinity, // Đảm bảo ảnh chiếm toàn bộ chiều ngang
                     fit: BoxFit.cover,
+                    placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -401,7 +404,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                 height: 44,
                 decoration: ShapeDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(comment.user.profile.avatar_url ?? ''),
+                    image:CachedNetworkImageProvider(comment.user.profile.avatar_url ?? ''),
                     fit: BoxFit.cover,
                   ),
                   // gradient: gradient,

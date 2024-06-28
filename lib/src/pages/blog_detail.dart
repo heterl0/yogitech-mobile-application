@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/blog/blog_service.dart';
@@ -187,7 +188,7 @@ class _BlogDetailState extends State<BlogDetail> {
         height: 360,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: NetworkImage(blog?.image_url ?? ''),
+            image:CachedNetworkImageProvider(blog?.image_url ?? ''),
             fit: BoxFit.cover,
           ),
         ),

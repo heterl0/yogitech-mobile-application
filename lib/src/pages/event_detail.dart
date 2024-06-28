@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/event/event_service.dart';
@@ -182,10 +183,13 @@ class _EventDetailState extends State<EventDetail>
           style: h2.copyWith(color: theme.colorScheme.onSurface)),
       expandedHeight: 320,
       flexibleSpace: FlexibleSpaceBar(
-        background: Image.network(
-          _event!.image_url,
-          fit: BoxFit.cover,
-        ),
+        background: 
+        CachedNetworkImage(
+        imageUrl: _event!.image_url,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      ),
       ),
     );
   }

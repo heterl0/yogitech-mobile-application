@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/api/pose/pose_service.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
@@ -210,9 +211,12 @@ class MuscleInfoWidget extends StatelessWidget {
                             Expanded(
                               flex: 2,
                               child: Center(
-                                child: Image.network(
-                                  mus.image,
+                                child:
+                                 CachedNetworkImage(
+                                  imageUrl:mus.image,
                                   fit: BoxFit.cover,
+                                  placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                                  errorWidget: (context, url, error) => Icon(Icons.error),
                                 ),
                               ),
                             ),
