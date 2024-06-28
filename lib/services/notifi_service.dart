@@ -101,11 +101,21 @@ class LocalNotification {
     required int day,
     required String payload,
   }) async {
+    tz.TZDateTime scheduledDate =
+        _nextInstanceOfDayAndTime(_convertIntToDay(day), time)
+            .subtract(const Duration(days: 1, hours: 7));
+    // In ra thời gian đã được tính toán
+    print('Scheduled notification for: $scheduledDate');
+
+    // Sử dụng múi giờ địa phương cho thời gian hiện tại
+    final now = tz.TZDateTime.now(tz.local);
+    print('Lên lịch sau 1 phút: ${now.add(Duration(minutes: 1))}');
+
     await _flutterLocalNotificationsPlugin.zonedSchedule(
       id,
       title,
       body,
-      _nextInstanceOfDayAndTime(_convertIntToDay(day), time),
+      scheduledDate,
       const NotificationDetails(
         android: AndroidNotificationDetails(
           'yogi',
@@ -135,13 +145,15 @@ class LocalNotification {
       time.minute,
     );
 
-    while (scheduledDate.weekday != day.index + 1) {
-      scheduledDate = scheduledDate.add(Duration(days: 1));
+    // Tính toán số ngày cần thêm vào để đến ngày đã chọn
+    int daysDifference = day.value - now.weekday;
+    if (daysDifference < 0 ||
+        (daysDifference == 0 && scheduledDate.isBefore(now))) {
+      daysDifference +=
+          7; // Chuyển sang tuần tiếp theo nếu thời gian đã trôi qua trong ngày
     }
 
-    if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(Duration(days: 7));
-    }
+    scheduledDate = scheduledDate.add(Duration(days: daysDifference));
 
     return scheduledDate;
   }
