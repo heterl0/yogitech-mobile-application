@@ -404,7 +404,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                 height: 44,
                 decoration: ShapeDecoration(
                   image: DecorationImage(
-                    image:CachedNetworkImageProvider(comment.user.profile.avatar_url ?? ''),
+                    image:(comment.user.profile.avatar_url!=null && comment.user.profile.avatar_url!='')? CachedNetworkImageProvider(comment.user.profile.avatar_url.toString()):AssetImage('assets/images/gradient.jpg') as ImageProvider,
                     fit: BoxFit.cover,
                   ),
                   // gradient: gradient,
