@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 
@@ -44,12 +45,13 @@ class CustomCard extends StatelessWidget {
                 padding: EdgeInsets.only(top: 8, right: 8, left: 8),
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: Image.network(
-                    imageUrl!,
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl!,
+                    placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                     fit: BoxFit.cover,
                     height: 90, // Chiều cao cố định của ảnh
-                    width: double
-                        .infinity, // Đảm bảo ảnh chiếm toàn bộ chiều ngang
+                    width: double.infinity, // Đảm bảo ảnh chiếm toàn bộ chiều ngang
                   ),
                 ),
               ),
@@ -59,9 +61,7 @@ class CustomCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title.endsWith('\n')
-                        ? '$title\n'
-                        : '$title\n', // Thêm một dòng trống nếu cần
+                    title.endsWith('\n') ? '$title\n' : '$title\n', // Thêm một dòng trống nếu cần
                     style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

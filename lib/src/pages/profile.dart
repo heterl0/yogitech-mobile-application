@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:share_plus/share_plus.dart';
@@ -202,9 +201,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     .avatar_url!.isNotEmpty)
                                         ? CircleAvatar(
                                             radius: 50,
-                                            backgroundImage: NetworkImage(
-                                                _profile!.avatar_url!),
+                                            backgroundImage: _profile!.avatar_url != null
+                                                ? CachedNetworkImageProvider(_profile!.avatar_url!)
+                                                : null,
                                             backgroundColor: Colors.transparent,
+                                            child: _profile!.avatar_url == null ? Icon(Icons.person, size: 50) : null,
                                           )
                                         : Center(
                                             child: _profile != null &&
@@ -215,8 +216,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 ? CircleAvatar(
                                                     radius: 50,
                                                     backgroundImage:
-                                                        NetworkImage(_profile!
-                                                            .avatar_url!),
+                                                    CachedNetworkImageProvider(_profile!.avatar_url!),
                                                     backgroundColor:
                                                         Colors.transparent,
                                                   )

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -149,8 +150,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                               child: _imageBytes == null
                                   ? CircleAvatar(
                                       radius: 50,
-                                      backgroundImage: NetworkImage(
-                                          widget.account?.profile.avatar_url ??
+                                      backgroundImage: 
+                                      CachedNetworkImageProvider(widget.account?.profile.avatar_url ??
                                               ''),
                                       backgroundColor: Colors.transparent,
                                     )

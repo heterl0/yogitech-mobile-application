@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:YogiTech/api/social/social_service.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/social.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
@@ -486,7 +487,7 @@ class FriendListItem extends StatelessWidget {
               child: CircleAvatar(
                 backgroundImage: avatarUrl.startsWith("assets")
                     ? AssetImage(avatarUrl) as ImageProvider
-                    : NetworkImage(avatarUrl),
+                    : CachedNetworkImageProvider(avatarUrl),
               ),
             ),
           ),

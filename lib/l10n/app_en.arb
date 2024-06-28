@@ -88,6 +88,7 @@
   "onceAYear": "Once a year",
   "subscription": "Subscription",
   "wantToUnsubscribe": "Do you want to unsubcription",
+  "unsubDetail": "Canceling your subscription will immediately terminate your plan. No refunds will be issued.",
   "cancel": "Cancel",
   "subscriptionBy": "Subscription by",
   "gems": "gems",
