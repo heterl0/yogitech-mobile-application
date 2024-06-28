@@ -45,6 +45,7 @@ class _ReminderPageState extends State<ReminderPage> {
         _selectedTimes.clear();
         _selectedTimes.addAll(parsedData.map((item) {
           return {
+            'id': item['id'],
             'time': TimeOfDay(
               hour: int.parse(item['time'].split(':')[0]),
               minute: int.parse(item['time'].split(':')[1]),
@@ -60,6 +61,7 @@ class _ReminderPageState extends State<ReminderPage> {
     final prefs = await SharedPreferences.getInstance();
     final reminderData = _selectedTimes.map((item) {
       return {
+        'id': item['id'],
         'time': '${item['time'].hour}:${item['time'].minute}',
         'days': item['days'].toList(),
       };
@@ -67,31 +69,8 @@ class _ReminderPageState extends State<ReminderPage> {
     await prefs.setString('reminders', jsonEncode(reminderData));
   }
 
-  String _getDayDescription(Set<int> days, AppLocalizations trans) {
-    if (days.isEmpty) {
-      return trans.noDays;
-    }
-    if (days.length == 7) return trans.everyday;
-
-    if (days.containsAll([2, 3, 4, 5, 6])) {
-      if (days.length == 5) return trans.dayInWeek;
-    }
-
-    if (days.containsAll([6, 7])) {
-      if (days.length == 2) return trans.dayWeeken;
-    }
-
-    List<int> sortedDays = days.toList()..sort();
-
-    // Sử dụng DateFormat để định dạng tên thứ theo locale
-    final dateFormat = DateFormat.E(Localizations.localeOf(context).toString());
-    List<String> dayNames = sortedDays.map((day) {
-      // Chuyển đổi số thứ tự thành DateTime để định dạng
-      return dateFormat.format(DateTime(
-          2024, 1, day)); // Ngày bất kỳ trong tuần đầu tiên của năm 2024
-    }).toList();
-
-    return dayNames.join(', ');
+  int _generateUniqueId() {
+    return DateTime.now().millisecondsSinceEpoch.remainder(100000);
   }
 
   Future<void> _showSetupReminderPage(BuildContext context,
@@ -124,48 +103,92 @@ class _ReminderPageState extends State<ReminderPage> {
     if (result != null) {
       if (result.containsKey('delete')) {
         if (index != null) {
+          // Xóa nhắc nhở
+          await LocalNotification.cancel(_selectedTimes[index]['id']);
           setState(() {
             _selectedTimes.removeAt(index);
           });
-          await _saveReminders(); // Lưu lại dữ liệu sau khi xóa
+          await _saveReminders();
         }
       } else if (result.containsKey('time') && result.containsKey('days')) {
         final timeOfDay = result['time'] as TimeOfDay;
         final days = result['days'] as Set<int>;
 
-        final notificationPayload =
-            'your_payload_here'; // Thay bằng payload thích hợp
+        // Tạo ID duy nhất
+        int id = isNew ? _generateUniqueId() : _selectedTimes[index!]['id'];
 
         // Kiểm tra xem có ngày nào được chọn hay không
         if (days.isNotEmpty) {
           LocalNotification localNotification = LocalNotification();
-          localNotification.showScheduleNotification(
-            title: 'Your title',
-            body: 'Your body',
+          await localNotification.showScheduleNotification(
+            title: 'Nhắc nhở uống nước', // Ví dụ tiêu đề
+            body: 'Đã đến giờ uống nước rồi!', // Ví dụ nội dung
             time: timeOfDay,
             days: days,
-            payload: notificationPayload,
+            payload:
+                'water_reminder_payload', // Payload tùy chọn (có thể là ID nhắc nhở)
+            id: id,
           );
+          // LocalNotification localNotification = LocalNotification();
+          // await localNotification.showScheduleNotification(
+          //   title: 'Your title',
+          //   body: 'Your body',
+          //   time: timeOfDay,
+          //   days: days,
+          //   payload: 'your_payload_here',
+          //   id: id,
+          // );
+
+          if (isNew) {
+            setState(() {
+              _selectedTimes.add({'id': id, 'time': timeOfDay, 'days': days});
+            });
+          } else {
+            setState(() {
+              _selectedTimes[index!] = {
+                'id': id,
+                'time': timeOfDay,
+                'days': days
+              };
+            });
+          }
+
+          await _saveReminders();
         } else {
-          // Nếu không có ngày nào được chọn, bạn có thể hiển thị thông báo lỗi cho người dùng (ví dụ: bằng Snackbar)
+          // Hiển thị thông báo lỗi nếu không có ngày nào được chọn
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(trans.noDays)),
           );
         }
-
-        if (isNew) {
-          setState(() {
-            _selectedTimes.add({'time': timeOfDay, 'days': days});
-          });
-        } else {
-          setState(() {
-            _selectedTimes[index!] = {'time': timeOfDay, 'days': days};
-          });
-        }
-
-        await _saveReminders(); // Lưu lại dữ liệu sau khi thêm/sửa
       }
     }
+  }
+
+  String _getDayDescription(Set<int> days, AppLocalizations trans) {
+    if (days.isEmpty) {
+      return trans.noDays;
+    }
+    if (days.length == 7) return trans.everyday;
+
+    if (days.containsAll([2, 3, 4, 5, 6])) {
+      if (days.length == 5) return trans.dayInWeek;
+    }
+
+    if (days.containsAll([6, 7])) {
+      if (days.length == 2) return trans.dayWeeken;
+    }
+
+    List<int> sortedDays = days.toList()..sort();
+
+    // Sử dụng DateFormat để định dạng tên thứ theo locale
+    final dateFormat = DateFormat.E(Localizations.localeOf(context).toString());
+    List<String> dayNames = sortedDays.map((day) {
+      // Chuyển đổi số thứ tự thành DateTime để định dạng
+      return dateFormat.format(DateTime(
+          2024, 1, day)); // Ngày bất kỳ trong tuần đầu tiên của năm 2024
+    }).toList();
+
+    return dayNames.join(', ');
   }
 
   @override

@@ -34,7 +34,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: Column(
             children: [
               CustomSwitch(
