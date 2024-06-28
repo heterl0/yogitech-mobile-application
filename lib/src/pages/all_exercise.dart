@@ -235,6 +235,7 @@ class BlogState extends State<AllExercise> {
                   caption: ex.description,
                   imageUrl: ex.image_url,
                   onTap: () {
+                    print(ex);
                     Navigator.push(
                       context,
                       MaterialPageRoute(

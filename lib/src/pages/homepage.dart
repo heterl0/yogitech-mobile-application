@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                   IconButton(
                     icon: Icon(Icons.tune_outlined),
                     onPressed: () {
-                      pushWithoutNavBar(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => FilterPage(),

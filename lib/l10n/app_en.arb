@@ -214,7 +214,7 @@
   "request": "Send request",
   "invalidEmail": "Your email is Invalid!",
   "dontEmpty": "Please fill in both Email and Password fields!",
-  "doesntexist": "Account does not exist!",
+  "doesntexist": "Email or Password is not correct!",
   "enterEmail": "Please enter your email!",
   "noResult": "No result"
 }
