@@ -17,9 +17,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:YogiTech/utils/formatting.dart';
 
 class ExerciseDetail extends StatefulWidget {
-  final int? id;
+  final Exercise? exercise;
 
-  const ExerciseDetail({super.key, this.id});
+  const ExerciseDetail({super.key, this.exercise});
 
   @override
   _ExerciseDetailState createState() => _ExerciseDetailState();
@@ -75,7 +75,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       _isLoading = true;
     });
 
-    final exercise = await getExercise(widget.id ?? 0);
+    final exercise = widget.exercise;
     final user = await retrieveAccount();
     setState(() {
       _exercise = exercise;
@@ -487,13 +487,13 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
 
   Future<void> postAComment() async {
     final text = commentController.text;
-    final exercise = widget.id;
+    final exercise = _exercise;
     if (text.isEmpty) {
       return;
     } else if (exercise == null) {
       return;
     }
-    final request = PostCommentRequest(text: text, exercise: exercise);
+    final request = PostCommentRequest(text: text, exercise: exercise.id);
     final comment = await postComment(request);
     if (comment != null) {
       commentController.clear();

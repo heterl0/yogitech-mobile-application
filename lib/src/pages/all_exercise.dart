@@ -228,16 +228,16 @@ class BlogState extends State<AllExercise> {
               ),
               itemCount: _exercises.length,
               itemBuilder: (context, index) {
-                final blog = _exercises[index];
+                final ex = _exercises[index];
                 return CustomCard(
-                  title: blog.title,
-                  caption: blog.description,
-                  imageUrl: blog.image_url,
+                  title: ex.title,
+                  caption: ex.description,
+                  imageUrl: ex.image_url,
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ExerciseDetail(id: blog.id),
+                        builder: (context) => ExerciseDetail(exercise: ex),
                       ),
                     );
                   },
