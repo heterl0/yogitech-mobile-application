@@ -21,6 +21,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'dart:ui';
 
 class ProfilePage extends StatefulWidget {
+  final Account? account;
+  final VoidCallback? fetchAccount;
+
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChanged;
   final Locale locale;
@@ -33,7 +36,8 @@ class ProfilePage extends StatefulWidget {
       required this.onThemeChanged,
       required this.locale,
       required this.onLanguageChanged,
-      required this.isVietnamese});
+      required this.isVietnamese, 
+      this.account, this.fetchAccount});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -64,6 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void refreshProfile() {
     // Gọi API để lấy lại dữ liệu hồ sơ sau khi cập nhật BMI
+    widget.fetchAccount?.call();
     _fetchUserProfile();
   }
 
@@ -87,18 +92,22 @@ class _ProfilePageState extends State<ProfilePage> {
     _fetchUserProfile();
   }
 
-  Future<void> _fetchUserProfile() async {
-    setState(() {
-      _isLoading = true;
-    });
-    Account? account = await retrieveAccount();
-    // Cập nhật trạng thái với danh sách bài tập mới nhận được từ API
-    setState(() {
-      _profile = account?.profile;
-      _account = account;
-      _isLoading = false;
-    });
-  }
+  @override
+    void didUpdateWidget(covariant ProfilePage oldWidget) {
+      super.didUpdateWidget(oldWidget);
+      if (oldWidget.account != widget.account) {
+        _fetchUserProfile();
+      }
+    }
+
+    Future<void> _fetchUserProfile() async {
+      setState(() {
+        _isLoading = true;
+        _account = widget.account;
+        _profile = _account?.profile;
+        _isLoading = false;
+      });
+    }
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,5 @@
+import 'package:YogiTech/api/auth/auth_service.dart';
+import 'package:YogiTech/src/models/account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -30,6 +32,25 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  Account? _account;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAccount();
+  }
+
+  Future<void> _fetchAccount() async {
+    final Account? account = await retrieveAccount();
+
+    setState(() {
+      _account = account;
+    });
+
+    // Print the account after it's set
+    print(_account);
+  }
+
   @override
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!; // Bản dịch
@@ -39,7 +60,10 @@ class _MainScreenState extends State<MainScreen> {
       backgroundColor: theme.colorScheme.onSecondary,
       tabs: [
         PersistentTabConfig(
-          screen: HomePage(),
+          screen: HomePage(
+            account: _account,
+            fetchAccount: _fetchAccount,
+          ),
           item: ItemConfig(
             textStyle: min_cap,
             icon: const Icon(Icons.grid_view),
@@ -85,6 +109,8 @@ class _MainScreenState extends State<MainScreen> {
             onThemeChanged: widget.onThemeChanged,
             locale: widget.locale,
             onLanguageChanged: widget.onLanguageChanged,
+            account: _account,
+            fetchAccount: _fetchAccount,
           ),
           item: ItemConfig(
             textStyle: min_cap,

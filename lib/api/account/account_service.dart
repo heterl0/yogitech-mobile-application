@@ -62,10 +62,12 @@ Future<Profile?> getUserProfile() async {
 class PatchUserAccountRequest {
   String? username;
   String? phone;
+  bool? isPremium;
 
   PatchUserAccountRequest({
-    required this.username,
-    required this.phone,
+     this.username,
+     this.phone,
+     this.isPremium,
   });
 
   Map<String, dynamic> toMap() {
@@ -76,6 +78,9 @@ class PatchUserAccountRequest {
     if (phone != null) {
       data['phone'] = phone;
     }
+    if (isPremium != null) {
+      data['is_premium'] = isPremium;
+    }
     return data;
   }
 }
@@ -84,6 +89,7 @@ class PatchUserAccountRequest {
 Future<Account?> patchUserAccount(PatchUserAccountRequest data) async {
   try {
     final url = formatApiUrl('/api/v1/users/me/');
+
     final Response response = await DioInstance.patch(url, data: data.toMap());
     if (response.statusCode == 200) {
       return Account.fromMap(response.data);
@@ -97,6 +103,8 @@ Future<Account?> patchUserAccount(PatchUserAccountRequest data) async {
     return null;
   }
 }
+
+
 
 class PasswordChangeRequest {
   String newPassword;
