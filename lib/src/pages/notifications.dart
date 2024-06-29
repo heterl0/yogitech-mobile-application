@@ -108,11 +108,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
   }
 
   void _handleStreakSaverNotifications(bool isStreakSaverOn) {
-    if (isStreakSaverOn && currentStreak > 0) {
+    if (isStreakSaverOn) {
+      print('Bật bảo vệ chuỗi');
       // Hiển thị thông báo định kỳ
       LocalNotification.showPeriodicNotification(
-        title: 'Giờ tập Yoga!',
-        body: 'Đã đến giờ tập luyện của bạn.',
+        title: AppLocalizations.of(context)!.streakSaver,
+        body: AppLocalizations.of(context)!.yourReminderDetail,
         repeat: RepeatInterval.daily,
         payload: 'yoga_reminder',
       );
