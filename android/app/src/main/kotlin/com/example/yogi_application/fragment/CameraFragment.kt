@@ -19,11 +19,17 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.AdapterView
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.camera.core.Preview
 import androidx.camera.core.CameraSelector
@@ -33,9 +39,11 @@ import androidx.camera.core.Camera
 import androidx.camera.core.AspectRatio
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import com.bumptech.glide.Glide
 import com.example.yogi_application.PoseLandmarkerHelper
 import com.example.yogi_application.MainViewModel
 import com.example.yogi_application.R
@@ -155,7 +163,31 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                     Log.d(TAG, "onCreateView: error Keypoint")
                 }
             }
+            Glide.with(this)
+                .load(exercise?.poses?.get(0)?.pose?.imageUrl)
+                .into(_fragmentCameraBinding!!.imageSample)
         }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (_fragmentCameraBinding != null) { // Null check to ensure binding is still valid
+                val coverImageSample = _fragmentCameraBinding!!.coverImageSample
+
+                // Ensure the ImageView is visible before applying animation
+                if (coverImageSample.isVisible) {
+//                    val scaleXAnimator = ObjectAnimator.ofFloat(imageView, "scaleX", 1.0f, 0.8f)
+//                    val scaleYAnimator = ObjectAnimator.ofFloat(imageView, "scaleY", 1.0f, 0.8f)
+//
+//                    val animatorSet = AnimatorSet()
+//                    animatorSet.playTogether(scaleXAnimator, scaleYAnimator)
+//                    animatorSet.duration = 500 // Animation duration in milliseconds (adjust as needed)
+//                    animatorSet.interpolator = AccelerateDecelerateInterpolator()
+                    val animZoomOut = AnimationUtils.loadAnimation(requireContext(),
+                        R.anim.zoom_out)
+
+                    coverImageSample.startAnimation(animZoomOut)
+                }
+            }
+        }, 3000)
         return fragmentCameraBinding.root
     }
 

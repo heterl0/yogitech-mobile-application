@@ -20,6 +20,20 @@
         app:tint="@android:color/white" />
 
     <TextView
+        android:id="@+id/timer"
+        android:layout_width="164dp"
+        android:layout_height="wrap_content"
+        android:gravity="start|center_horizontal"
+        android:text=""
+        android:textColor="@android:color/white"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="24dp"
+        />
+    <TextView
         android:id="@+id/for_result"
         android:layout_width="164dp"
         android:layout_height="wrap_content"
