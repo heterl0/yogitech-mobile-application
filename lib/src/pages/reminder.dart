@@ -15,11 +15,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 
 class ReminderPage extends StatefulWidget {
-  final bool reminderOn;
-
   const ReminderPage({
     super.key,
-    this.reminderOn = true,
   });
 
   @override
@@ -204,14 +201,6 @@ class _ReminderPageState extends State<ReminderPage> {
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: Column(
             children: [
-              // CustomSwitch(
-              //   title: trans.reminder,
-              //   value: widget.reminderOn,
-              //   onChanged: null,
-              // ),
-              // Divider(
-              //   color: stroke,
-              // ),
               Column(
                 children: _selectedTimes
                     .asMap()
