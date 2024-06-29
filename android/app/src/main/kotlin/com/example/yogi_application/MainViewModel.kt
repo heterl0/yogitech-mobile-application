@@ -15,7 +15,16 @@
  */
 package com.example.yogi_application
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.yogi_application.model.ExerciseFeedback
+import com.example.yogi_application.model.FeedbackResponse
+import com.example.yogi_application.network.FeedbackApiService
+import com.example.yogi_application.network.ServiceBuilder
+import kotlinx.coroutines.launch
 
 /**
  *  This ViewModel is used to store pose landmarker helper settings
@@ -62,4 +71,38 @@ class MainViewModel : ViewModel() {
     fun setModel(model: Int) {
         _model = model
     }
+
+    private val apiService: FeedbackApiService by lazy {
+        ServiceBuilder.buildService(FeedbackApiService::class.java)
+    }
+
+    private val _feedbackResult = MutableLiveData<FeedbackResult>()
+    val feedbackResult: LiveData<FeedbackResult> get() = _feedbackResult
+
+    fun postExerciseFeedback(feedback: ExerciseFeedback) {
+        viewModelScope.launch { // Use viewModelScope for coroutine
+            try {
+                val response = apiService.postExerciseFeedback(feedback)
+                if (response.isSuccessful) {
+                    // Handle successful response (update UI using LiveData)
+                    val data = response.body()
+                    _feedbackResult.value = FeedbackResult.Success(response.body())
+                    Log.d("noTag", "postExerciseFeedback: $data")
+                } else {
+                    // Handle error response
+                    val errorBody = response.errorBody()?.string() ?: "Unknown error"
+                    _feedbackResult.value = FeedbackResult.Error(errorBody)
+                    Log.d("noTag", "postExerciseFeedback: $errorBody")
+                }
+            } catch (e: Exception) {
+                // Handle network errors
+                _feedbackResult.value = FeedbackResult.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+}
+
+sealed class FeedbackResult {
+    data class Success(val data: FeedbackResponse?) : FeedbackResult() // Adjust for your actual response type
+    data class Error(val message: String) : FeedbackResult()
 }

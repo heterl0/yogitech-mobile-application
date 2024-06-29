@@ -39,6 +39,9 @@ import com.example.yogi_application.PoseLandmarkerHelper
 import com.example.yogi_application.MainViewModel
 import com.example.yogi_application.R
 import com.example.yogi_application.databinding.FragmentCameraBinding
+import com.example.yogi_application.model.ExerciseFeedback
+import com.example.yogi_application.network.FeedbackApiService
+import com.example.yogi_application.network.ServiceBuilder
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import java.util.Locale
 import java.util.concurrent.ExecutorService
@@ -76,6 +79,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 requireActivity(), R.id.fragment_container
             ).navigate(R.id.action_camera_to_permissions)
         }
+
 
         // Start the PoseLandmarkerHelper again when users come back
         // to the foreground.
@@ -119,6 +123,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     ): View {
         _fragmentCameraBinding =
             FragmentCameraBinding.inflate(inflater, container, false)
+        viewModel.postExerciseFeedback(ExerciseFeedback())
 
         return fragmentCameraBinding.root
     }
@@ -134,6 +139,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         fragmentCameraBinding.viewFinder.post {
             // Set up the camera and its use cases
             setUpCamera()
+
         }
 
         // Create the PoseLandmarkerHelper that will handle the inference
@@ -377,7 +383,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     // Update UI after pose have been detected. Extracts original
     // image height/width to scale and place the landmarks properly through
     // OverlayView
-    override fun onResults(
+    override fun  onResults(
         resultBundle: PoseLandmarkerHelper.ResultBundle
     ) {
         activity?.runOnUiThread {
@@ -392,6 +398,9 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                     resultBundle.inputImageWidth,
                     RunningMode.LIVE_STREAM
                 )
+
+                val apiService = ServiceBuilder.buildService(FeedbackApiService::class.java);
+
 
                 // Force a redraw
                 fragmentCameraBinding.overlay.invalidate()

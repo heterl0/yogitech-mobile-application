@@ -28,15 +28,17 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def apiUrl = localProperties.getProperty('API_URL')
+if (apiUrl == null) {
+    apiUrl = 'http://localhost:8000'
+}
+
 android {
     namespace "com.example.yogi_application"
     compileSdk flutter.compileSdkVersion
     // ndkVersion flutter.ndkVersion
     ndkVersion "27.0.11902837"
 
-    defaultConfig {
-        multiDexEnabled true
-    }
 
     compileOptions {
         // Flag to enable support for the new language APIs
@@ -57,6 +59,7 @@ android {
 
     buildFeatures {
         viewBinding true
+        buildConfig = true
     }
 
     defaultConfig {
@@ -69,6 +72,9 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        buildConfigField "String", "API_URL", "\"$apiUrl\""
+
+//        apiUrl apiUrl
     }
     
     signingConfigs {
@@ -159,4 +165,9 @@ dependencies {
     implementation 'com.google.mediapipe:tasks-vision:0.10.14'
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+
+    // Add dependencies
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0' // For JSON parsing
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'        // Underlying HTTP client
 }

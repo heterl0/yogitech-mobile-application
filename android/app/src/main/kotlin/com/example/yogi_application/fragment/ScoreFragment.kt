@@ -9,6 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import com.example.yogi_application.FeedbackResult
+import com.example.yogi_application.MainViewModel
 import com.example.yogi_application.R
 import com.example.yogi_application.databinding.FragmentScoreBinding
 
@@ -17,6 +20,8 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
 
     private val fragmentCameraBinding
         get() = _fragmentScoreBinding!!
+
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,6 +53,19 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
         )
         // 4. Apply Shader to TextView
         paint.shader = textShader
+
+        viewModel.feedbackResult.observe(viewLifecycleOwner) {
+            result -> when(result) {
+            is FeedbackResult.Error -> {
+                _fragmentScoreBinding!!.description.text = result.message;
+
+            }
+            is FeedbackResult.Success -> {
+                _fragmentScoreBinding!!.result.text = result.data?.score.toString();
+            }
+            }
+        }
+
     }
 }
 

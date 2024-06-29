@@ -3,13 +3,19 @@ package com.example.yogi_application
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.yogi_application.databinding.ActivityMainBinding
 import com.example.yogi_application.model.Exercise
+import com.example.yogi_application.model.ExerciseFeedback
+import com.example.yogi_application.network.FeedbackApiService
+import com.example.yogi_application.network.ServiceBuilder
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class ExerciseActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityMainBinding
@@ -27,6 +33,9 @@ class ExerciseActivity : AppCompatActivity() {
 
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
+
+        ServiceBuilder.setToken(accessToken)
+
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
