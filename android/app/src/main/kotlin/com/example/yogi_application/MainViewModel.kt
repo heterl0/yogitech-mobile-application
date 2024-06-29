@@ -20,6 +20,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.yogi_application.model.Exercise
 import com.example.yogi_application.model.ExerciseFeedback
 import com.example.yogi_application.model.FeedbackResponse
 import com.example.yogi_application.network.FeedbackApiService
@@ -51,6 +52,28 @@ class MainViewModel : ViewModel() {
     val currentMinPosePresenceConfidence: Float
         get() =
             _minPosePresenceConfidence
+
+    var currentIndex: Int = 0;
+
+    var exercise: Exercise? = null;
+
+    private val _eventTrigger = MutableLiveData<Int>()
+    val eventTrigger: LiveData<Int> = _eventTrigger
+
+    fun triggerEvent() {
+        _eventTrigger.value = currentIndex + 1;
+        increaseIndex();
+    }
+
+    fun increaseIndex() {
+        currentIndex += 1;
+    }
+
+//    fun setExercise(exercise: Exercise?) {
+//        if (exercise != null) {
+//            this.exercise = exercise;
+//        }
+//    }
 
     fun setDelegate(delegate: Int) {
         _delegate = delegate
@@ -100,6 +123,8 @@ class MainViewModel : ViewModel() {
             }
         }
     }
+
+
 }
 
 sealed class FeedbackResult {

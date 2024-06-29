@@ -92,7 +92,6 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     private lateinit var backgroundExecutor: ExecutorService
 
     private var exercise: Exercise? = null
-    private var currentIndex = 0
     private var poseKeypoint: List<KeyPoint>? = null
 
     override fun onResume() {
@@ -151,6 +150,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         val prefs = activity?.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
         val exerciseString = prefs?.getString("flutter.exercise", "")
         exercise = exerciseString?.let { Exercise.fromJson(it) };
+        viewModel.exercise = exercise;
         if (exercise?.poses?.size != null) {
             val keypointUrl = exercise?.poses?.get(0)?.pose?.keypointUrl
             loadJsonFromUrl(keypointUrl) { jsonString ->
@@ -188,6 +188,51 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 }
             }
         }, 3000)
+
+        viewModel.eventTrigger.observe(viewLifecycleOwner) { indexValue ->
+            if (exercise?.poses?.size!! > indexValue) {
+                if (exercise?.poses?.size != null) {
+                    val keypointUrl = exercise?.poses?.get(indexValue)?.pose?.keypointUrl
+                    loadJsonFromUrl(keypointUrl) { jsonString ->
+                        if (jsonString != null) {
+                            // Example using Gson:
+                            val listType = object : TypeToken<List<KeyPoint>>() {}.type
+                            poseKeypoint = Gson().fromJson(jsonString, listType)
+                            Log.d(TAG, "onCreateView: success $poseKeypoint")
+                        } else {
+                            Log.d(TAG, "onCreateView: error Keypoint")
+                        }
+                    }
+                    Glide.with(this)
+                        .load(exercise?.poses?.get(0)?.pose?.imageUrl)
+                        .into(_fragmentCameraBinding!!.imageSample)
+                }
+                val coverImageSample = _fragmentCameraBinding!!.coverImageSample
+                val animZoomIn = AnimationUtils.loadAnimation(requireContext(),
+                    R.anim.zoom_in)
+
+                coverImageSample.startAnimation(animZoomIn)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    if (_fragmentCameraBinding != null) { // Null check to ensure binding is still valid
+
+                        // Ensure the ImageView is visible before applying animation
+                        if (coverImageSample.isVisible) {
+//                    val scaleXAnimator = ObjectAnimator.ofFloat(imageView, "scaleX", 1.0f, 0.8f)
+//                    val scaleYAnimator = ObjectAnimator.ofFloat(imageView, "scaleY", 1.0f, 0.8f)
+//
+//                    val animatorSet = AnimatorSet()
+//                    animatorSet.playTogether(scaleXAnimator, scaleYAnimator)
+//                    animatorSet.duration = 500 // Animation duration in milliseconds (adjust as needed)
+//                    animatorSet.interpolator = AccelerateDecelerateInterpolator()
+                            val animZoomOut = AnimationUtils.loadAnimation(requireContext(),
+                                R.anim.zoom_out)
+
+                            coverImageSample.startAnimation(animZoomOut)
+                        }
+                    }
+                }, 3000)
+            }
+        }
         return fragmentCameraBinding.root
     }
 

@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,8 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
         get() = _fragmentScoreBinding!!
 
     private val viewModel: MainViewModel by activityViewModels()
+
+    private var countDownTimer: CountDownTimer? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,11 +69,35 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
                     _fragmentScoreBinding!!.description.text = "Adjust your body full in screen"
                 } else {
                     _fragmentScoreBinding!!.result.text = "${result.data?.score.toString()}%";
+                    if (result.data?.score!! >  80)  {
+                        startCountDownTimer()
+                    }
                 }
             }
             }
         }
 
+    }
+
+    private fun startCountDownTimer() {
+        countDownTimer?.cancel()
+        countDownTimer = object : CountDownTimer(15000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val secondsRemaining = millisUntilFinished / 1000
+                _fragmentScoreBinding!!.timer.text = "00:$secondsRemaining"
+            }
+
+            override fun onFinish() {
+                _fragmentScoreBinding!!.timer.text = ""
+                viewModel.triggerEvent();
+            }
+        }.start()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _fragmentScoreBinding = null
+        countDownTimer?.cancel()
     }
 }
 
