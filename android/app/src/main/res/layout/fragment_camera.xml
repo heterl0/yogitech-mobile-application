@@ -24,13 +24,7 @@
         android:id="@+id/view_finder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:scaleType="fillStart" >
-
-        <com.example.yogi_application.OverlayView
-            android:id="@+id/overlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </androidx.camera.view.PreviewView>
+        app:scaleType="fillStart" />
 
     <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
 <!--        android:id="@+id/settings_button"-->
@@ -40,10 +34,13 @@
 <!--        android:layout_margin="16dp"-->
 <!--        android:src="@drawable/settings" />-->
 
+    <com.example.yogi_application.OverlayView
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_anchor="@+id/view_finder"
+        app:layout_anchorGravity="center" />
 
-    <include
-    android:id="@+id/bottom_sheet_layout"
-    layout="@layout/info_bottom_sheet" />
 
     <FrameLayout
         android:id="@+id/coverImageSample"
@@ -60,5 +57,8 @@
             android:layout_height="match_parent"
             />
     </FrameLayout>
-
+    
+    <include
+    android:id="@+id/bottom_sheet_layout"
+    layout="@layout/info_bottom_sheet" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
