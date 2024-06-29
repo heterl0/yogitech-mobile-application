@@ -97,18 +97,21 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
 
   Widget _buildImage(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 60),
-      child: Container(
-        width: double.infinity,
-        height: 360,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image:CachedNetworkImageProvider(_exercise!.image_url), // ! for null safety
-            fit: BoxFit.cover,
+        padding: const EdgeInsets.only(top: 90),
+        child: AspectRatio(
+          aspectRatio: 16 / 9,
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: CachedNetworkImageProvider(
+                  _exercise!
+                      .image_url, // Thay thế URL mặc định nếu _exercise!.image_url null
+                ),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget _buildMainContent(BuildContext context) {
@@ -244,13 +247,14 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
               children: <Widget>[
                 ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: 
-                  CachedNetworkImage(
+                  child: CachedNetworkImage(
                     imageUrl: pose.image_url,
                     height: 240, // Chiều cao cố định của ảnh
-                    width: double.infinity, // Đảm bảo ảnh chiếm toàn bộ chiều ngang
+                    width: double
+                        .infinity, // Đảm bảo ảnh chiếm toàn bộ chiều ngang
                     fit: BoxFit.cover,
-                    placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                    placeholder: (context, url) =>
+                        Center(child: CircularProgressIndicator()),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
@@ -404,7 +408,8 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                 height: 44,
                 decoration: ShapeDecoration(
                   image: DecorationImage(
-                    image:CachedNetworkImageProvider(comment.user.profile.avatar_url ?? ''),
+                    image: CachedNetworkImageProvider(
+                        comment.user.profile.avatar_url ?? ''),
                     fit: BoxFit.cover,
                   ),
                   // gradient: gradient,
