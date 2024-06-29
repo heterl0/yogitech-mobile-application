@@ -110,7 +110,8 @@ class MainViewModel : ViewModel() {
                     // Handle successful response (update UI using LiveData)
                     val data = response.body()
                     _feedbackResult.value = FeedbackResult.Success(response.body())
-                    Log.d("noTag", "postExerciseFeedback: $data")
+                    Log.d("noTag", "postExerciseFeedback: ${response.body()?.feedback?.getFeedback()}")
+
                 } else {
                     // Handle error response
                     val errorBody = response.errorBody()?.string() ?: "Unknown error"

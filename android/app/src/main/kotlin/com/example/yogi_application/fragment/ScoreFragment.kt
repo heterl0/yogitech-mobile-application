@@ -22,6 +22,8 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
     private val fragmentCameraBinding
         get() = _fragmentScoreBinding!!
 
+    private var isTimerRunning = false
+
     private val viewModel: MainViewModel by activityViewModels()
 
     private var countDownTimer: CountDownTimer? = null
@@ -68,8 +70,9 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
                     _fragmentScoreBinding!!.result.text = "0%";
                     _fragmentScoreBinding!!.description.text = "Adjust your body full in screen"
                 } else {
-                    _fragmentScoreBinding!!.result.text = "${result.data?.score.toString()}%";
-                    if (result.data?.score!! >  80)  {
+                    _fragmentScoreBinding!!.result.text = "${result.data?.score?.toInt().toString()}%";
+                    _fragmentScoreBinding!!.description.text = "${result.data?.feedback?.getFeedback()}"
+                    if (result.data?.score!! >  80 && !isTimerRunning)  {
                         startCountDownTimer()
                     }
                 }
@@ -80,7 +83,9 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
     }
 
     private fun startCountDownTimer() {
+        if (isTimerRunning) return
         countDownTimer?.cancel()
+        isTimerRunning = true
         countDownTimer = object : CountDownTimer(15000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val secondsRemaining = millisUntilFinished / 1000
@@ -89,6 +94,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
 
             override fun onFinish() {
                 _fragmentScoreBinding!!.timer.text = ""
+                isTimerRunning = false
                 viewModel.triggerEvent();
             }
         }.start()

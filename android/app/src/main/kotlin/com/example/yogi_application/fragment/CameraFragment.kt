@@ -204,7 +204,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                         }
                     }
                     Glide.with(this)
-                        .load(exercise?.poses?.get(0)?.pose?.imageUrl)
+                        .load(exercise?.poses?.get(indexValue)?.pose?.imageUrl)
                         .into(_fragmentCameraBinding!!.imageSample)
                 }
                 val coverImageSample = _fragmentCameraBinding!!.coverImageSample
