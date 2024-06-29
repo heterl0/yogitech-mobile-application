@@ -10,7 +10,7 @@ class PaymentHistory extends StatefulWidget {
   final List<dynamic>? userSubs;
   final List<dynamic>? subs;
 
-  const PaymentHistory({super.key,  this.userSubs,  this.subs});
+  const PaymentHistory({super.key, this.userSubs, this.subs});
 
   @override
   _PaymentHistoryState createState() => _PaymentHistoryState();
@@ -20,12 +20,11 @@ class _PaymentHistoryState extends State<PaymentHistory> {
   List<dynamic>? _userSubs;
   List<dynamic>? _subs;
 
-
   @override
   void initState() {
     super.initState();
     _userSubs = widget.userSubs;
-    _subs=widget.subs;
+    _subs = widget.subs;
   }
 
   @override
@@ -84,7 +83,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
             itemCount: _userSubs!.length,
             itemBuilder: (context, index) {
               int reverseIndex = _userSubs!.length - 1 - index;
-              return buildPaymentRow(context, _userSubs![reverseIndex],trans);
+              return buildPaymentRow(context, _userSubs![reverseIndex], trans);
             },
           )
           // child: Column(
@@ -113,7 +112,8 @@ class _PaymentHistoryState extends State<PaymentHistory> {
     );
   }
 
-  Widget buildPaymentRow(BuildContext context, UserSubscription usub,AppLocalizations trans) {
+  Widget buildPaymentRow(
+      BuildContext context, UserSubscription usub, AppLocalizations trans) {
     Subscription sub = _subs!.firstWhere(
       (sub) => sub.id == usub.subscriptionId,
       orElse: () => null,
@@ -121,10 +121,10 @@ class _PaymentHistoryState extends State<PaymentHistory> {
 
     final local = Localizations.localeOf(context);
     String startDay = DateFormat.yMMMd(local.languageCode)
-          .format(DateTime.parse('${usub.createdAt}'));
+        .format(DateTime.parse('${usub.createdAt}'));
     String endDay = DateFormat.yMMMd(local.languageCode)
-          .format(DateTime.parse('${usub.expireDate}'));
-    
+        .format(DateTime.parse('${usub.expireDate}'));
+
     final theme = Theme.of(context);
     return ElevatedButton(
       onPressed: () {},
@@ -140,10 +140,10 @@ class _PaymentHistoryState extends State<PaymentHistory> {
         children: [
           Image.asset(
               sub.durationInMonth < 1
-                  ? 'assets/images/Universe2.png'
+                  ? 'assets/images/Universe.png'
                   : (sub.durationInMonth >= 12
-                      ? 'assets/images/Sun2.png'
-                      : 'assets/images/MoonPhase2.png'),
+                      ? 'assets/images/Sun.png'
+                      : 'assets/images/MoonPhase.png'),
               height: 48,
               width: 48), // Use Image.asset
           SizedBox(width: 16),
@@ -162,7 +162,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
               ],
             ),
           ),
-          if (usub.subscriptionType==1) ...[
+          if (usub.subscriptionType == 1) ...[
             Row(
               children: [
                 Image.asset('assets/images/Emerald.png', height: 24, width: 24),
@@ -190,32 +190,31 @@ String formatCurrency(double amount) {
 }
 
 String convertDuration(double durationInMonths, String local) {
-    int years = (durationInMonths ~/ 12).toInt();
-    int months = (durationInMonths % 12).toInt();
-    int days =
-        ((durationInMonths % 1) * 30).toInt(); // assuming 30 days in a month
-    String duration = '';
-    if (local == 'vi') {
-      duration += (days > 0 ? '$days ngày ' : '');
-      duration += (months > 0 ? '$months tháng ' : '');
-      duration += (years > 0 ? '$years năm' : '');
-    } else {
-      duration += (days == 1
-          ? '$days day '
-          : days > 1
-              ? '$days days '
-              : '');
-      duration += (months == 1
-          ? '$months month '
-          : months > 1
-              ? '$months months '
-              : '');
-      duration += (years == 1
-          ? '$years year'
-          : years > 1
-              ? '$years years'
-              : '');
-    }
-    return duration;
+  int years = (durationInMonths ~/ 12).toInt();
+  int months = (durationInMonths % 12).toInt();
+  int days =
+      ((durationInMonths % 1) * 30).toInt(); // assuming 30 days in a month
+  String duration = '';
+  if (local == 'vi') {
+    duration += (days > 0 ? '$days ngày ' : '');
+    duration += (months > 0 ? '$months tháng ' : '');
+    duration += (years > 0 ? '$years năm' : '');
+  } else {
+    duration += (days == 1
+        ? '$days day '
+        : days > 1
+            ? '$days days '
+            : '');
+    duration += (months == 1
+        ? '$months month '
+        : months > 1
+            ? '$months months '
+            : '');
+    duration += (years == 1
+        ? '$years year'
+        : years > 1
+            ? '$years years'
+            : '');
   }
-
+  return duration;
+}

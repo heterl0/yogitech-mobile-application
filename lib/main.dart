@@ -40,13 +40,17 @@ import 'package:YogiTech/l10n/l10n.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'dart:io';
 import 'dart:async';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 void main() async {
   // Đảm bảo WidgetsFlutterBinding đã được khởi tạo
   WidgetsFlutterBinding.ensureInitialized();
-
+  tz.initializeTimeZones();
+  tz.setLocalLocation(
+      tz.getLocation('Asia/Ho_Chi_Minh')); // Đặt múi giờ Việt Nam
   // Khởi tạo các dịch vụ hoặc các thành phần cần thiết khác
   await LocalNotification().init();
   HttpOverrides.global = MyHttpOverrides();

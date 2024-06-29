@@ -4,6 +4,11 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:rxdart/rxdart.dart';
 
+// id thông báo:
+// 0: Thông báo kết thúc thiền
+// 1: Chưa dùng đến
+// ????: Các nhắc nhở do người dùng thiết lập
+
 class LocalNotification {
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -18,7 +23,6 @@ class LocalNotification {
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.requestNotificationsPermission();
-    print('Có kiểm tra giấy phép');
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     final DarwinInitializationSettings initializationSettingsDarwin =
@@ -73,9 +77,72 @@ class LocalNotification {
         payload: payload);
   }
 
-  tz.TZDateTime _nextInstanceOfTime(TimeOfDay time, Set<int> days) {
+  static Day _convertIntToDay(int day) {
+    switch (day) {
+      case DateTime.monday:
+        return Day.monday;
+      case DateTime.tuesday:
+        return Day.tuesday;
+      case DateTime.wednesday:
+        return Day.wednesday;
+      case DateTime.thursday:
+        return Day.thursday;
+      case DateTime.friday:
+        return Day.friday;
+      case DateTime.saturday:
+        return Day.saturday;
+      case DateTime.sunday:
+        return Day.sunday;
+      default:
+        throw ArgumentError('Invalid day value');
+    }
+  }
+
+  static Future showWeeklyAtDayAndTime({
+    required int id,
+    required String title,
+    required String body,
+    required TimeOfDay time,
+    required int day,
+    required String payload,
+  }) async {
+    tz.TZDateTime scheduledDate =
+        _nextInstanceOfDayAndTime(_convertIntToDay(day), time)
+            .subtract(const Duration(days: 1));
+
+    // Sử dụng múi giờ địa phương cho thời gian hiện tại
     final now = tz.TZDateTime.now(tz.local);
-    var scheduledDate = tz.TZDateTime(
+    print('Thời gian hệ thống hiện tại: $now');
+    // In ra thời gian đã được tính toán
+    print('Scheduled notification for: $scheduledDate');
+    // print('Lên lịch sau 1 phút: ${now.add(Duration(minutes: 1))}');
+
+    await _flutterLocalNotificationsPlugin.zonedSchedule(
+      id,
+      title,
+      body,
+      scheduledDate,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'yogi',
+          'YogiTech',
+          channelDescription: 'YogiTech notification',
+          importance: Importance.max,
+          priority: Priority.high,
+          ticker: 'ticker',
+        ),
+      ),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+      payload: payload,
+    );
+  }
+
+  static tz.TZDateTime _nextInstanceOfDayAndTime(Day day, TimeOfDay time) {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(
       tz.local,
       now.year,
       now.month,
@@ -84,46 +151,17 @@ class LocalNotification {
       time.minute,
     );
 
-    // Tìm ngày tiếp theo trong tuần theo các ngày đã chọn
-    while (!days.contains(scheduledDate.weekday)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    // Tính toán số ngày cần thêm vào để đến ngày đã chọn
+    int daysDifference = day.value - now.weekday;
+    if (daysDifference < 0 ||
+        (daysDifference == 0 && scheduledDate.isBefore(now))) {
+      daysDifference +=
+          7; // Chuyển sang tuần tiếp theo nếu thời gian đã trôi qua trong ngày
     }
 
+    scheduledDate = scheduledDate.add(Duration(days: daysDifference));
+
     return scheduledDate;
-  }
-
-  Future<void> showScheduleNotification({
-    required String title,
-    required String body,
-    required Set<int> days,
-    required TimeOfDay time,
-    required String payload,
-  }) async {
-    tz.initializeTimeZones();
-    final scheduledDate = _nextInstanceOfTime(time, days);
-
-    await _flutterLocalNotificationsPlugin.zonedSchedule(
-      2,
-      title,
-      body,
-      scheduledDate,
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'yogi3',
-          'YogiTech',
-          channelDescription: 'YogiTech notification',
-          importance: Importance.max,
-          priority: Priority.high,
-          ticker: 'ticker',
-        ),
-      ),
-      payload: payload,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-    );
   }
 
   static Future cancel(int id) async {
