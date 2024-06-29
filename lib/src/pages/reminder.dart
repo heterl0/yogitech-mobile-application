@@ -59,6 +59,7 @@ class _ReminderPageState extends State<ReminderPage> {
   }
 
   Future<void> _saveReminders() async {
+    final trans = AppLocalizations.of(context)!;
     final prefs = await SharedPreferences.getInstance();
     final reminderData = _selectedTimes.map((item) {
       return {
@@ -75,8 +76,8 @@ class _ReminderPageState extends State<ReminderPage> {
         for (var day in item['days']) {
           await LocalNotification.showWeeklyAtDayAndTime(
             id: item['id'],
-            title: 'Reminder',
-            body: 'It\'s time for your reminder',
+            title: trans.yourReminder,
+            body: trans.yourReminderDetail,
             time: item['time'],
             day: day,
             payload: 'Reminder payload',
@@ -367,6 +368,11 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
                   });
                 },
               ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              trans.loopInWeek,
+              style: h3.copyWith(color: theme.colorScheme.onPrimary),
             ),
             SizedBox(height: 20),
             Container(
