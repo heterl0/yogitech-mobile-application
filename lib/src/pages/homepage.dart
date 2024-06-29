@@ -82,13 +82,15 @@ class _HomePageState extends State<HomePage> {
                       pushWithoutNavBar(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SubscriptionPage(account: account,fetchAccount:_fetchAccount)));
+                              builder: (context) => SubscriptionPage(
+                                  account: account,
+                                  fetchAccount: _fetchAccount)));
                     },
                     child: Row(
                       children: [
                         SizedBox(
-                          width: 40,
-                          height: 50,
+                          width: 28,
+                          height: 28,
                           child: Image.asset('assets/images/Emerald.png'),
                         ),
                         Text(

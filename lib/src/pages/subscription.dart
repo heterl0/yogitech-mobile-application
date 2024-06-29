@@ -105,8 +105,8 @@ class _SubscriptionState extends State<SubscriptionPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                width: 40,
-                height: 50,
+                width: 28,
+                height: 28,
                 child: Image.asset('assets/images/Emerald.png'),
               ),
               Text(
@@ -159,31 +159,6 @@ class _SubscriptionState extends State<SubscriptionPage> {
               },
             ),
           ),
-          // _buildPlanOptionContainer(),
-          // const SizedBox(height: 16),
-          // _buildPlanOptionContainer2(),
-          // const SizedBox(height: 16),
-          // _buildPlanOptionContainer3(),
-          // const SizedBox(height: 16),
-          // FutureBuilder<PaymentConfiguration>(
-          //   future: _googlePayConfigFuture,
-          //   builder: (context, snapshot) {
-          //     if (snapshot.hasData) {
-          //       return GooglePayButton(
-          //         paymentConfiguration: snapshot.data!,
-          //         paymentItems: _paymentItems,
-          //         type: GooglePayButtonType.buy,
-          //         margin: const EdgeInsets.only(top: 15.0),
-          //         onPaymentResult: onGooglePayResult,
-          //         loadingIndicator: const Center(
-          //           child: CircularProgressIndicator(),
-          //         ),
-          //       );
-          //     } else {
-          //       return const SizedBox.shrink();
-          //     }
-          //   },
-          // ),
         ],
       ),
     );
@@ -245,83 +220,74 @@ class _SubscriptionState extends State<SubscriptionPage> {
               width: double.infinity,
               child: Row(
                 children: [
-                  Container(
+                  SizedBox(
                     width: 80,
                     height: 80,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: sub!.durationInMonth < 1
-                            ? AssetImage('assets/images/Universe.png')
-                            : (sub.durationInMonth >= 12
-                                ? AssetImage('assets/images/Sun.png')
-                                : AssetImage('assets/images/MoonPhase.png')),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
+                    child: sub!.durationInMonth < 1
+                        ? Image.asset('assets/images/Universe.png')
+                        : (sub.durationInMonth >= 12
+                            ? Image.asset('assets/images/Sun.png')
+                            : Image.asset('assets/images/MoonPhase.png')),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: Container(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                ' ${convertDuration(sub.durationInMonth, trans.locale)}',
-                                style: bd_text.copyWith(color: Colors.white),
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    trans.start + ': $startDay',
-                                    style: min_cap.copyWith(color: active),
-                                  ),
-                                  Text(
-                                    trans.end + ': $endDay',
-                                    style: min_cap.copyWith(color: active),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 26,
-                                      height: 26,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/images/Emerald.png'),
-                                          fit: BoxFit.fill,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    SizedBox(
-                                      child: Text(
-                                        _currendSub?.subscriptionType == 1
-                                            ? '${sub.gemPrice}'
-                                            : '${sub.price.toInt().toString().replaceAllMapped(RegExp(r'(\\d{1,3})(?=(\\d{3})+(?!\\d))'), (Match m) => '${m[1]},')} VND',
-                                        style: h2.copyWith(color: active),
-                                      ),
-                                    ),
-                                  ],
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              ' ${convertDuration(sub.durationInMonth, trans.locale)}',
+                              style: bd_text.copyWith(color: Colors.white),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${trans.start}: $startDay',
+                                  style: min_cap.copyWith(color: active),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                                Text(
+                                  '${trans.end}: $endDay',
+                                  style: min_cap.copyWith(color: active),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  width: 26,
+                                  height: 26,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/Emerald.png'),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                SizedBox(
+                                  child: Text(
+                                    _currendSub?.subscriptionType == 1
+                                        ? '${sub.gemPrice}'
+                                        : '${sub.price.toInt().toString().replaceAllMapped(RegExp(r'(\\d{1,3})(?=(\\d{3})+(?!\\d))'), (Match m) => '${m[1]},')} VND',
+                                    style: h2.copyWith(color: active),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -329,7 +295,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
             ),
             const SizedBox(height: 8),
             Text(
-              '${endDate.difference(now).inDays} ' + trans.eventRemain,
+              '${endDate.difference(now).inDays} ${trans.eventRemain}',
               style: h3.copyWith(color: active),
             ),
             const SizedBox(height: 8),
@@ -363,24 +329,20 @@ class _SubscriptionState extends State<SubscriptionPage> {
                   ),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: Container(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            child: SizedBox(
-                              child: Text(
-                                trans.locale == 'vi'
-                                    ? 'Nâng cấp lên bản cao cấp để có các tính năng độc quyền và tối đa hóa trải nghiệm của bạn.'
-                                    : "Unlock your full potential! Upgrade to premium for exclusive features and maximize your experience.",
-                                style: h3.copyWith(color: active),
-                              ),
-                            ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          child: Text(
+                            trans.locale == 'vi'
+                                ? 'Nâng cấp lên bản cao cấp để có các tính năng độc quyền và tối đa hóa trải nghiệm của bạn.'
+                                : "Unlock your full potential! Upgrade to premium for exclusive features and maximize your experience.",
+                            style: h3.copyWith(color: active),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
