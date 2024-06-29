@@ -435,7 +435,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                         child: Text(
                           comment.user.username != ''
                               ? comment.user.username[0].toUpperCase()
-                              : ':))',
+                              : ':)',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

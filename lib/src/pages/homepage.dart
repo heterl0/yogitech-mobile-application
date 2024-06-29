@@ -74,7 +74,6 @@ class _HomePageState extends State<HomePage> {
     if(widget.account!=null){
       setState(() {
         _account = widget.account;
-        print(_account);
       });
     }else{
           print('I got null');
