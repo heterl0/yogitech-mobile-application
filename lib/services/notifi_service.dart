@@ -4,6 +4,11 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:rxdart/rxdart.dart';
 
+// id thông báo:
+// 0: Thông báo kết thúc thiền
+// 1: Chưa dùng đến
+// ????: Các nhắc nhở do người dùng thiết lập
+
 class LocalNotification {
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -103,13 +108,14 @@ class LocalNotification {
   }) async {
     tz.TZDateTime scheduledDate =
         _nextInstanceOfDayAndTime(_convertIntToDay(day), time)
-            .subtract(const Duration(days: 1, hours: 7));
-    // In ra thời gian đã được tính toán
-    print('Scheduled notification for: $scheduledDate');
+            .subtract(const Duration(days: 1));
 
     // Sử dụng múi giờ địa phương cho thời gian hiện tại
     final now = tz.TZDateTime.now(tz.local);
-    print('Lên lịch sau 1 phút: ${now.add(Duration(minutes: 1))}');
+    print('Thời gian hệ thống hiện tại: $now');
+    // In ra thời gian đã được tính toán
+    print('Scheduled notification for: $scheduledDate');
+    // print('Lên lịch sau 1 phút: ${now.add(Duration(minutes: 1))}');
 
     await _flutterLocalNotificationsPlugin.zonedSchedule(
       id,

@@ -9,11 +9,10 @@ import 'package:YogiTech/src/widgets/checkbox.dart';
 import 'package:YogiTech/src/widgets/switch.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart'; // Để sử dụng AnimatedList
+import 'package:flutter/widgets.dart';
 
 class ReminderPage extends StatefulWidget {
   final bool reminderOn;
@@ -28,7 +27,6 @@ class ReminderPage extends StatefulWidget {
 }
 
 class _ReminderPageState extends State<ReminderPage> {
-  bool _isReminderEnabled = false;
   final List<Map<String, dynamic>> _selectedTimes = [];
 
   @override
@@ -40,6 +38,7 @@ class _ReminderPageState extends State<ReminderPage> {
   Future<void> _loadReminders() async {
     final prefs = await SharedPreferences.getInstance();
     final reminderData = prefs.getString('reminders');
+    print('Dữ liệu thông báo: $reminderData');
     if (reminderData != null) {
       final List<dynamic> parsedData = jsonDecode(reminderData);
       setState(() {
@@ -52,6 +51,7 @@ class _ReminderPageState extends State<ReminderPage> {
               minute: int.parse(item['time'].split(':')[1]),
             ),
             'days': Set<int>.from(item['days']),
+            'isEnabled': item['isEnabled'] ?? true, // Default to true if null
           };
         }).toList());
       });
@@ -65,20 +65,25 @@ class _ReminderPageState extends State<ReminderPage> {
         'id': item['id'],
         'time': '${item['time'].hour}:${item['time'].minute}',
         'days': item['days'].toList(),
+        'isEnabled': item['isEnabled'],
       };
     }).toList();
     await prefs.setString('reminders', jsonEncode(reminderData));
 
     for (var item in _selectedTimes) {
-      for (var day in item['days']) {
-        await LocalNotification.showWeeklyAtDayAndTime(
-          id: item['id'],
-          title: 'Reminder',
-          body: 'It\'s time for your reminder',
-          time: item['time'],
-          day: day,
-          payload: 'Reminder payload',
-        );
+      if (item['isEnabled']) {
+        for (var day in item['days']) {
+          await LocalNotification.showWeeklyAtDayAndTime(
+            id: item['id'],
+            title: 'Reminder',
+            body: 'It\'s time for your reminder',
+            time: item['time'],
+            day: day,
+            payload: 'Reminder payload',
+          );
+        }
+      } else {
+        await LocalNotification.cancel(item['id']);
       }
     }
   }
@@ -135,14 +140,20 @@ class _ReminderPageState extends State<ReminderPage> {
         if (days.isNotEmpty) {
           if (isNew) {
             setState(() {
-              _selectedTimes.add({'id': id, 'time': timeOfDay, 'days': days});
+              _selectedTimes.add({
+                'id': id,
+                'time': timeOfDay,
+                'days': days,
+                'isEnabled': true, // Set isEnabled to true by default
+              });
             });
           } else {
             setState(() {
               _selectedTimes[index!] = {
                 'id': id,
                 'time': timeOfDay,
-                'days': days
+                'days': days,
+                'isEnabled': _selectedTimes[index!]['isEnabled'],
               };
             });
           }
@@ -178,8 +189,7 @@ class _ReminderPageState extends State<ReminderPage> {
     final dateFormat = DateFormat.E(Localizations.localeOf(context).toString());
     List<String> dayNames = sortedDays.map((day) {
       // Chuyển đổi số thứ tự thành DateTime để định dạng
-      return dateFormat.format(DateTime(
-          2024, 1, day)); // Ngày bất kỳ trong tuần đầu tiên của năm 2024
+      return dateFormat.format(DateTime(2024, 1, day));
     }).toList();
 
     return dayNames.join(', ');
@@ -199,14 +209,14 @@ class _ReminderPageState extends State<ReminderPage> {
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: Column(
             children: [
-              CustomSwitch(
-                title: trans.reminder,
-                value: widget.reminderOn,
-                onChanged: null,
-              ),
-              Divider(
-                color: stroke,
-              ),
+              // CustomSwitch(
+              //   title: trans.reminder,
+              //   value: widget.reminderOn,
+              //   onChanged: null,
+              // ),
+              // Divider(
+              //   color: stroke,
+              // ),
               Column(
                 children: _selectedTimes
                     .asMap()
@@ -219,11 +229,12 @@ class _ReminderPageState extends State<ReminderPage> {
                             title: '${entry.value['time'].format(context)}',
                             subtitle:
                                 _getDayDescription(entry.value['days'], trans),
-                            value: _isReminderEnabled,
+                            value: entry.value['isEnabled'],
                             onChanged: (value) {
                               setState(() {
-                                _isReminderEnabled = value;
+                                _selectedTimes[entry.key]['isEnabled'] = value;
                               });
+                              _saveReminders();
                             },
                           ),
                         ))
@@ -246,7 +257,7 @@ class _ReminderPageState extends State<ReminderPage> {
       child: Ink(
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
-          gradient: gradient, // Gradient từ app_colors.dart
+          gradient: gradient,
         ),
         width: 60,
         height: 60,
@@ -262,7 +273,7 @@ class _ReminderPageState extends State<ReminderPage> {
           ),
         ),
       ),
-      onPressed: () {}, // Cái này nhấn không có tác dụng
+      onPressed: () {},
     );
   }
 }
@@ -318,8 +329,11 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
                 style: h3.copyWith(color: theme.colorScheme.onBackground)),
             TextButton(
               onPressed: () {
-                Navigator.pop(
-                    context, {'time': _selectedTime, 'days': _selectedDays});
+                Navigator.pop(context, {
+                  'time': _selectedTime,
+                  'days': _selectedDays,
+                  'isEnabled': true
+                });
               },
               child: Text(
                 trans.save,
@@ -337,9 +351,9 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
           children: [
             SizedBox(height: 10),
             Container(
-              height: 200, // Điều chỉnh độ cao của CupertinoTimerPicker
+              height: 200,
               child: CupertinoTimerPicker(
-                mode: CupertinoTimerPickerMode.hm, // Chỉ chọn giờ và phút
+                mode: CupertinoTimerPickerMode.hm,
                 initialTimerDuration: Duration(
                   hours: _selectedTime.hour,
                   minutes: _selectedTime.minute,
@@ -357,27 +371,23 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
             SizedBox(height: 20),
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.0), // Bo góc khung
+                borderRadius: BorderRadius.circular(16.0),
                 border: Border.all(color: stroke),
-              ), // Viền khung
+              ),
               child: Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: List<Widget>.generate(7, (index) {
-                        final dayIndex = index +
-                            1; // Giữ nguyên dayIndex bắt đầu từ 1 (thứ Hai)
+                        final dayIndex = index + 1;
                         final dateFormat = DateFormat.EEEE(
                             Localizations.localeOf(context).toString());
-                        final dayName = dateFormat.format(DateTime(
-                            2024,
-                            1,
-                            index +
-                                1)); // Sử dụng ngày cố định trong tuần đầu tiên của năm 2024 (bắt đầu từ thứ Hai)
+                        final dayName =
+                            dateFormat.format(DateTime(2024, 1, index + 1));
 
                         return CheckBoxListTile(
-                          title: dayName.toString(), // Show localized day name
+                          title: dayName.toString(),
                           state: _selectedDays.contains(dayIndex)
                               ? CheckState.Checked
                               : CheckState.Unchecked,
