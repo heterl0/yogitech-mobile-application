@@ -403,21 +403,47 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: ShapeDecoration(
-                  image: DecorationImage(
-                    image: CachedNetworkImageProvider(
-                        comment.user.profile.avatar_url ?? ''),
-                    fit: BoxFit.cover,
-                  ),
-                  // gradient: gradient,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(80),
-                  ),
-                ),
-              ),
+              (comment.user.profile.avatar_url != null &&
+                      comment.user.profile.avatar_url != '')
+                  ? Container(
+                      width: 44,
+                      height: 44,
+                      decoration: ShapeDecoration(
+                        image: DecorationImage(
+                          image: CachedNetworkImageProvider(
+                              comment.user.profile.avatar_url ?? ''),
+                          fit: BoxFit.cover,
+                        ),
+                        // gradient: gradient,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(80),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.transparent,
+                        border: Border.all(
+                          color: Colors.blue,
+                          width: 1.0,
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          comment.user.username != ''
+                              ? comment.user.username[0].toUpperCase()
+                              : ':))',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
