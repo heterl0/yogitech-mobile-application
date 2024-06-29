@@ -271,76 +271,84 @@ class _FriendListPageState extends State<FriendListPage>
   Widget _buildSearchResults(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: searchResults.length > 0
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 8),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: searchResults.length,
-                  itemBuilder: (context, index) {
-                    final SocialProfile friend = searchResults[index];
-                    var isFollowing =
-                        widget.account!.isFollowing(friend.user_id ?? -1);
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        child: searchResults.isNotEmpty
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 8),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: searchResults.length,
+                    itemBuilder: (context, index) {
+                      final SocialProfile friend = searchResults[index];
+                      var isFollowing =
+                          widget.account!.isFollowing(friend.user_id ?? -1);
 
-                    final name = friend.first_name != null
-                        ? '${friend.first_name} ${friend.last_name}'
-                        : friend.username ?? 'N/A';
-                    return FriendListItem(
-                      name: name,
-                      avatarUrl: friend.avatar ?? 'assets/images/gradient.jpg',
-                      exp: friend.exp.toString(),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FriendProfile(
-                              profile: friend,
-                              account: widget.account,
-                              unFollow: unFollow,
-                              followUserByUserId: followUserByUserId,
-                            ),
-                          ),
-                        );
-                      },
-                      postIcon: isFollowing
-                          ? IconButton(
-                              icon: Icon(
-                                Icons.group_remove_outlined,
-                                color: error,
+                      final name = friend.first_name != null
+                          ? '${friend.first_name} ${friend.last_name}'
+                          : friend.username ?? 'N/A';
+                      return FriendListItem(
+                        name: name,
+                        avatarUrl:
+                            friend.avatar ?? 'assets/images/gradient.jpg',
+                        exp: friend.exp.toString(),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FriendProfile(
+                                profile: friend,
+                                account: widget.account,
+                                unFollow: unFollow,
+                                followUserByUserId: followUserByUserId,
                               ),
-                              onPressed: () async {
-                                await unFollow(friend.user_id ?? -1);
-                              },
-                            )
-                          : IconButton(
-                              icon: Icon(
-                                Icons.group_add_outlined,
-                                color: primary,
-                              ),
-                              onPressed: () async {
-                                await followUserByUserId(friend.user_id ?? -1);
-                                if (widget.onProfileUpdated != null) {
-                                  widget.onProfileUpdated!();
-                                }
-                              },
                             ),
-                      // isFollowing: isFollowing,
-                    );
-                  },
-                ),
-              ],
-            )
-          : Center(
-              child: Text(
-                trans.noResult,
-                style: bd_text.copyWith(color: text),
-              ),
-            ),
-    );
+                          );
+                        },
+                        postIcon: isFollowing
+                            ? IconButton(
+                                icon: Icon(
+                                  Icons.group_remove_outlined,
+                                  color: error,
+                                ),
+                                onPressed: () async {
+                                  await unFollow(friend.user_id ?? -1);
+                                },
+                              )
+                            : IconButton(
+                                icon: Icon(
+                                  Icons.group_add_outlined,
+                                  color: primary,
+                                ),
+                                onPressed: () async {
+                                  await followUserByUserId(
+                                      friend.user_id ?? -1);
+                                  if (widget.onProfileUpdated != null) {
+                                    widget.onProfileUpdated!();
+                                  }
+                                },
+                              ),
+                        // isFollowing: isFollowing,
+                      );
+                    },
+                  ),
+                ],
+              )
+            : searchResults.isEmpty && _searchController.text.isNotEmpty
+                ? Center(
+                    child: Text(
+                      trans.noResult,
+                      style: bd_text.copyWith(color: text),
+                    ),
+                  )
+                : Center(
+                    child: Text(
+                      trans.inputName,
+                      style: bd_text.copyWith(color: text),
+                    ),
+                  ));
   }
 }
 
@@ -474,7 +482,7 @@ class FriendListItem extends StatelessWidget {
               height: 60,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.grey,
+                color: stroke,
               ),
               child: CircleAvatar(
                 backgroundImage: avatarUrl.startsWith("assets")
