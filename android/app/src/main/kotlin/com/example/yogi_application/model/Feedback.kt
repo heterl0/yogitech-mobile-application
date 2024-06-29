@@ -1,6 +1,7 @@
 package com.example.yogi_application.model
 
 import com.google.gson.annotations.SerializedName
+import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -26,14 +27,12 @@ data class KeyPoint(
 
 @Serializable
 data class ExerciseFeedback(
-    @SerialName("correct_keypoint") val correctKeypoint: List<KeyPoint>? = null,
-    @SerialName("user_keypoint") val userKeypoint: List<KeyPoint>? = null
+    val correct_keypoint: List<KeyPoint>? = null,
+    val user_keypoint: List<KeyPoint>? = null
 ) {
 
-
-
     companion object {
-        fun fromJson(source: String): KeyPoint {
+        fun fromJson(source: String): ExerciseFeedback {
             return Json.decodeFromString(source)
         }
     }

@@ -61,7 +61,12 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
 
             }
             is FeedbackResult.Success -> {
-                _fragmentScoreBinding!!.result.text = result.data?.score.toString();
+                if (result.data?.isValid == false) {
+                    _fragmentScoreBinding!!.result.text = "0%";
+                    _fragmentScoreBinding!!.description.text = "Adjust your body full in screen"
+                } else {
+                    _fragmentScoreBinding!!.result.text = "${result.data?.score.toString()}%";
+                }
             }
             }
         }

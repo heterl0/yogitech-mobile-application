@@ -16,6 +16,7 @@
 package com.example.yogi_application.fragment
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -39,10 +40,22 @@ import com.example.yogi_application.PoseLandmarkerHelper
 import com.example.yogi_application.MainViewModel
 import com.example.yogi_application.R
 import com.example.yogi_application.databinding.FragmentCameraBinding
+import com.example.yogi_application.model.Exercise
 import com.example.yogi_application.model.ExerciseFeedback
+import com.example.yogi_application.model.KeyPoint
 import com.example.yogi_application.network.FeedbackApiService
 import com.example.yogi_application.network.ServiceBuilder
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.google.mediapipe.tasks.vision.core.RunningMode
+import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarker
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -69,6 +82,10 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
 
     /** Blocking ML operations are performed using this executor */
     private lateinit var backgroundExecutor: ExecutorService
+
+    private var exercise: Exercise? = null
+    private var currentIndex = 0
+    private var poseKeypoint: List<KeyPoint>? = null
 
     override fun onResume() {
         super.onResume()
@@ -123,8 +140,22 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     ): View {
         _fragmentCameraBinding =
             FragmentCameraBinding.inflate(inflater, container, false)
-        viewModel.postExerciseFeedback(ExerciseFeedback())
-
+        val prefs = activity?.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+        val exerciseString = prefs?.getString("flutter.exercise", "")
+        exercise = exerciseString?.let { Exercise.fromJson(it) };
+        if (exercise?.poses?.size != null) {
+            val keypointUrl = exercise?.poses?.get(0)?.pose?.keypointUrl
+            loadJsonFromUrl(keypointUrl) { jsonString ->
+                if (jsonString != null) {
+                    // Example using Gson:
+                    val listType = object : TypeToken<List<KeyPoint>>() {}.type
+                    poseKeypoint = Gson().fromJson(jsonString, listType)
+                    Log.d(TAG, "onCreateView: success $poseKeypoint")
+                } else {
+                    Log.d(TAG, "onCreateView: error Keypoint")
+                }
+            }
+        }
         return fragmentCameraBinding.root
     }
 
@@ -398,10 +429,21 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                     resultBundle.inputImageWidth,
                     RunningMode.LIVE_STREAM
                 )
-
-                val apiService = ServiceBuilder.buildService(FeedbackApiService::class.java);
-
-
+                val predictKeypoint: MutableList<KeyPoint> = mutableListOf<KeyPoint>()
+                if (resultBundle.results.first().landmarks().size > 0) {
+                    for (normalizedLandmark in resultBundle.results.first().landmarks().get(0)) {
+                        predictKeypoint.add(
+                            KeyPoint(
+                                normalizedLandmark.x(),
+                                normalizedLandmark.y(),
+                                normalizedLandmark.y(),
+                                normalizedLandmark.visibility().get()
+                            )
+                        )
+                    }
+                    val exerciseFeedback = ExerciseFeedback(poseKeypoint, predictKeypoint)
+                    viewModel.postExerciseFeedback(exerciseFeedback)
+                }
                 // Force a redraw
                 fragmentCameraBinding.overlay.invalidate()
             }
@@ -415,6 +457,31 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 fragmentCameraBinding.bottomSheetLayout.spinnerDelegate.setSelection(
                     PoseLandmarkerHelper.DELEGATE_CPU, false
                 )
+            }
+        }
+    }
+
+    fun loadJsonFromUrl(url: String?, callback: (String?) -> Unit) {
+        val client = OkHttpClient()
+        if (url != null) {
+            val request = Request.Builder()
+                .url(url)
+                .build()
+
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val response = client.newCall(request).execute()
+                    val jsonString = response.body?.string()
+
+                    withContext(Dispatchers.Main) {
+                        callback(jsonString)
+                    }
+                } catch (e: Exception) {
+                    Log.e("loadJsonFromUrl", "Error fetching JSON: ${e.message}")
+                    withContext(Dispatchers.Main) {
+                        callback(null) // Notify about the error
+                    }
+                }
             }
         }
     }

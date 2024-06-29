@@ -28,8 +28,7 @@ class ExerciseActivity : AppCompatActivity() {
 
         // Retrieve the tokens using the same keys but prefixed with "flutter."
         val accessToken = prefs.getString("flutter.accessToken", "default_value")
-        val exerciseString = prefs.getString("flutter.exercise", "")
-        val exercise = exerciseString?.let { Exercise.fromJson(it) };
+
 
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
