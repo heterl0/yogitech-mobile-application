@@ -9,6 +9,7 @@ class CheckBoxListTile extends StatefulWidget {
   final String title;
   final String subtitle; // Added subtitle
   final CheckState state;
+  final TextStyle? customTextStyle;
   final ValueChanged<bool>? onChanged; // Use ValueChanged for state updates
 
   const CheckBoxListTile({
@@ -17,6 +18,7 @@ class CheckBoxListTile extends StatefulWidget {
     this.subtitle = '', // Added subtitle
     this.state = CheckState.Unchecked,
     this.onChanged,
+    this.customTextStyle,
   });
 
   @override
@@ -37,13 +39,16 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
     final theme = Theme.of(context);
 
     return ListTile(
-      title: Text(
-        widget.title,
-        style: h3.copyWith(
-          color: theme.colorScheme.onPrimary,
-        ),
-      ),
-      subtitle: widget.subtitle != ''
+      title: widget.title.isNotEmpty
+          ? Text(
+              widget.title,
+              style: widget.customTextStyle ??
+                  h3.copyWith(
+                    color: theme.colorScheme.onPrimary,
+                  ),
+            )
+          : null,
+      subtitle: widget.subtitle.isNotEmpty
           ? Text(
               widget.subtitle,
               style: min_cap.copyWith(color: text),

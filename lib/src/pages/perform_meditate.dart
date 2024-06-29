@@ -120,7 +120,7 @@ class _PerformMeditateState extends State<PerformMeditate>
   @override
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
-
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: CustomAppBar(
         title: trans.meditate,
@@ -130,26 +130,39 @@ class _PerformMeditateState extends State<PerformMeditate>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AnimatedBuilder(
-              animation: _animationController,
-              builder: (context, child) {
-                return CircularProgressIndicator(
-                  value: _animation.value,
-                  strokeWidth: 10,
-                  backgroundColor: stroke,
-                  valueColor: const AlwaysStoppedAnimation<Color>(
-                    primary,
+            Row(),
+            Stack(
+              // Sử dụng Stack để chồng các widget lên nhau
+              alignment:
+                  Alignment.center, // Căn giữa các widget con trong Stack
+              children: [
+                SizedBox(
+                  // Thêm SizedBox để điều chỉnh kích thước
+                  height: 240, // Chiều cao vòng tròn
+                  width: 240, // Chiều rộng vòng tròn
+                  child: AnimatedBuilder(
+                    // CircularProgressIndicator nằm dưới
+                    animation: _animationController,
+                    builder: (context, child) {
+                      return CircularProgressIndicator(
+                        strokeCap: StrokeCap.round,
+                        value: _animation.value,
+                        strokeWidth: 16,
+                        backgroundColor: theme.colorScheme.onSecondary,
+                        valueColor:
+                            const AlwaysStoppedAnimation<Color>(primary),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+                Text(
+                  // Text nằm trên
+                  _formatDuration(_remainingTime),
+                  style: h1.copyWith(color: text),
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-            const Row(),
-            Text(
-              _formatDuration(_remainingTime),
-              style: h1.copyWith(color: text),
-            ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 36),
             SizedBox(
               width: 240,
               child: Column(

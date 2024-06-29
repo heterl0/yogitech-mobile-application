@@ -90,50 +90,7 @@ class BlogState extends State<AllExercise> {
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
-      appBar:
-          // _isNotSearching
-          //     ? CustomAppBar(
-          //         showBackButton: false,
-          //         preActions: [
-          //           GestureDetector(
-          //             onTap: () {
-          //               pushWithoutNavBar(
-          //                   context,
-          //                   MaterialPageRoute(
-          //                       builder: (context) => Subscription()));
-          //             },
-          //             child: Row(
-          //               children: [
-          //                 SizedBox(
-          //                   width: 40,
-          //                   height: 50,
-          //                   child: Image.asset('assets/images/Emerald.png'),
-          //                 ),
-          //                 Text(
-          //                   account != null
-          //                       ? account!.profile.point.toString()
-          //                       : '0',
-          //                   style: h3.copyWith(color: theme.colorScheme.onSurface),
-          //                 ),
-          //               ],
-          //             ),
-          //           ),
-          //         ],
-          //         titleWidget: StreakValue(
-          //             account != null ? account!.profile.streak.toString() : '0'),
-          //         postActions: [
-          //           IconButton(
-          //             icon: Icon(Icons.search, color: theme.colorScheme.onSurface),
-          //             onPressed: () {
-          //               setState(() {
-          //                 _isNotSearching = false;
-          //               });
-          //             },
-          //           ),
-          //         ],
-          //       )
-          //     :
-          CustomAppBar(
+      appBar: CustomAppBar(
         showBackButton: false,
         preActions: [
           IconButton(
@@ -147,8 +104,7 @@ class BlogState extends State<AllExercise> {
         style: widthStyle.Large,
         titleWidget: BoxInputField(
           controller: _searchController,
-          placeholder:
-              widget.searchString != null ? widget.searchString! : trans.search,
+          placeholder: trans.search,
           trailing: IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
@@ -218,7 +174,7 @@ class BlogState extends State<AllExercise> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
-      child: _exercises.length > 0
+      child: _exercises.isNotEmpty
           ? GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
