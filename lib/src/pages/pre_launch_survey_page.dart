@@ -19,6 +19,9 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
   final TextEditingController firstName = TextEditingController();
   final TextEditingController lastName = TextEditingController();
   final TextEditingController birthday = TextEditingController();
+  late Profile _profile;
+  bool _isSent = false;
+  List<bool> _isValid =[false,false,false];
 
   @override
   void initState() {
@@ -37,6 +40,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
             DateTime parsedDate = DateTime.parse(profile.birthdate!);
             birthday.text = _formatDate(parsedDate);
           }
+          _profile = profile;
         });
       }
     } catch (e) {
@@ -110,6 +114,12 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                     controller: firstName,
                     placeholder: trans.firstName,
                   ),
+                  if (_isSent==true && !_isValid[0])
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0,top:8), // adjust the padding value as needed
+                    child: Text('${trans.firstName} ${trans.mustInput}',
+                        style: bd_text.copyWith(color: Colors.redAccent)),
+                  ),
                   SizedBox(height: 16.0),
                   // Last Name
                   Text(trans.lastName, style: h3.copyWith(color: active)),
@@ -117,6 +127,12 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                   BoxInputField(
                     controller: lastName,
                     placeholder: trans.lastName,
+                  ),
+                  if (_isSent==true && !_isValid[1])
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0,top:8), // adjust the padding value as needed
+                    child: Text('${trans.lastName} ${trans.mustInput}',
+                        style: bd_text.copyWith(color: Colors.redAccent)),
                   ),
                   SizedBox(height: 16.0),
                   // Birthday
@@ -146,6 +162,12 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                       }
                     },
                   ),
+                  if (_isSent==true && (!_isValid[2]))
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0,top:8), // adjust the padding value as needed
+                    child: Text('${trans.birthday} ${trans.mustInput}',
+                        style: bd_text.copyWith(color: Colors.redAccent)),
+                  )
                 ],
               ),
             ),
@@ -155,45 +177,67 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
           buttonTitle: trans.next,
           onPressed: () {
             _saveUserProfile(); // Save profile before navigation
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PrelaunchSurvey2(),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => PrelaunchSurvey2(),
+            //   ),
+            // );
           },
         ),
       ),
     );
   }
 
-  void _saveUserProfile() {
-    // Save user profile information
-    try {
-      // Create PatchProfileRequest object with updated values
-      PatchProfileRequest request = PatchProfileRequest(
-        firstName: firstName.text,
-        lastName: lastName.text,
-        birthdate: DateTime.parse(
-            birthday.text), // Assuming birthday.text is in ISO8601 format
-      );
+  List<bool> _checkValid(){
+    return [(firstName.text.trim()!=''),(lastName.text.trim()!=''),(birthday.text.trim()!='')];
+  }
 
-      // Call patchProfile with the PatchProfileRequest object
-      patchProfile(request, null).then((profile) {
-        if (profile != null) {
-          // Handle successful profile update
-          print('User profile updated successfully');
-          // Optionally, you can navigate to the next screen or update UI here
-        } else {
-          // Handle case where profile update failed
-          print('Failed to update user profile');
-        }
-      }).catchError((e) {
-        // Handle error case
-        print('Error saving user profile: $e');
-      });
-    } catch (e) {
-      print('Error saving user profile: $e');
+  void _saveUserProfile() {
+    setState(() {
+    _isSent = true;
+    _isValid = _checkValid();
+    if(_isValid[0] && _isValid[1] && _isValid[2]){
+      _profile.first_name = firstName.text.toString().trim();
+      _profile.last_name = lastName.text.toString().trim();
+      _profile.birthdate = DateTime.parse(birthday.text).toString().trim();
+      print(_profile);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PrelaunchSurvey2(profile: _profile),),
+      );
     }
+    });
+    
+    
+    // Save user profile information
+    // try {
+    //   // Create PatchProfileRequest object with updated values
+    //   PatchProfileRequest request = PatchProfileRequest(
+    //     firstName: firstName.text,
+    //     lastName: lastName.text,
+    //     birthdate: DateTime.parse(
+    //         birthday.text), // Assuming birthday.text is in ISO8601 format
+    //   );
+
+    //   // Call patchProfile with the PatchProfileRequest object
+    //   patchProfile(request, null).then((profile) {
+    //     if (profile != null) {
+    //       // Handle successful profile update
+    //       print('User profile updated successfully');
+    //       // Optionally, you can navigate to the next screen or update UI here
+    //     } else {
+    //       // Handle case where profile update failed
+    //       print('Failed to update user profile');
+    //     }
+    //   }).catchError((e) {
+    //     // Handle error case
+    //     print('Error saving user profile: $e');
+    //   });
+    // } catch (e) {
+    //   print('Error saving user profile: $e');
+    // }
   }
 }
