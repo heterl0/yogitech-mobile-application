@@ -58,8 +58,9 @@ class _SubscriptionState extends State<SubscriptionPage> {
         print(_userSubs);
         if (_userSubs.length > 0 &&
             _userSubs[_userSubs.length - 1]?.activeStatus != 0) {
-          
-          _currendSub = checkExpire(_userSubs[_userSubs.length - 1])? null:_userSubs[_userSubs.length - 1];
+          _currendSub = checkExpire(_userSubs[_userSubs.length - 1])
+              ? null
+              : _userSubs[_userSubs.length - 1];
         }
       });
     } catch (e) {
@@ -80,9 +81,9 @@ class _SubscriptionState extends State<SubscriptionPage> {
 
         if (_userSubs.length > 0 &&
             _userSubs[_userSubs.length - 1]?.activeStatus != 0) {
-            _currendSub = _userSubs[_userSubs.length - 1];
-        }else{
-          _currendSub=null;
+          _currendSub = _userSubs[_userSubs.length - 1];
+        } else {
+          _currendSub = null;
         }
       });
     } catch (e) {
@@ -121,7 +122,8 @@ class _SubscriptionState extends State<SubscriptionPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PaymentHistory(userSubs:_userSubs,subs:_subs),
+                    builder: (context) =>
+                        PaymentHistory(userSubs: _userSubs, subs: _subs),
                   ),
                 );
               },
@@ -249,10 +251,10 @@ class _SubscriptionState extends State<SubscriptionPage> {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: sub!.durationInMonth < 1
-                            ? AssetImage('assets/images/Universe2.png')
+                            ? AssetImage('assets/images/Universe.png')
                             : (sub.durationInMonth >= 12
-                                ? AssetImage('assets/images/Sun2.png')
-                                : AssetImage('assets/images/MoonPhase2.png')),
+                                ? AssetImage('assets/images/Sun.png')
+                                : AssetImage('assets/images/MoonPhase.png')),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -354,7 +356,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                     height: 86,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/images/MoonPhase2.png'),
+                        image: AssetImage('assets/images/MoonPhase.png'),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -419,10 +421,10 @@ class _SubscriptionState extends State<SubscriptionPage> {
                 width: 120,
                 height: 120,
                 child: sub.durationInMonth < 1
-                    ? Image.asset('assets/images/Universe2.png')
+                    ? Image.asset('assets/images/Universe.png')
                     : (sub.durationInMonth >= 12
-                        ? Image.asset('assets/images/Sun2.png')
-                        : Image.asset('assets/images/MoonPhase2.png')),
+                        ? Image.asset('assets/images/Sun.png')
+                        : Image.asset('assets/images/MoonPhase.png')),
               ),
               const SizedBox(height: 12),
               Text(
@@ -500,20 +502,20 @@ class _SubscriptionState extends State<SubscriptionPage> {
                 alignment: Alignment.center,
                 child: sub.durationInMonth < 1
                     ? Image.asset(
-                        'assets/images/Universe2.png',
+                        'assets/images/Universe.png',
                         width: 120,
                         height: 120,
                         fit: BoxFit.cover,
                       )
                     : (sub.durationInMonth >= 12
                         ? Image.asset(
-                            'assets/images/Sun2.png',
+                            'assets/images/Sun.png',
                             width: 120,
                             height: 120,
                             fit: BoxFit.cover,
                           )
                         : Image.asset(
-                            'assets/images/MoonPhase2.png',
+                            'assets/images/MoonPhase.png',
                             width: 120,
                             height: 120,
                             fit: BoxFit.cover,
@@ -823,17 +825,17 @@ class _SubscriptionState extends State<SubscriptionPage> {
     );
   }
 
-  bool checkExpire(UserSubscription usub)  {
+  bool checkExpire(UserSubscription usub) {
     DateTime now = DateTime.now();
 
     String? expireDateStr = usub.expireDate;
     if (expireDateStr != null) {
       DateTime endDate = DateTime.parse(expireDateStr);
-      
+
       if (now.isAfter(endDate)) {
-         expiredSubscription(usub.id!);
+        expiredSubscription(usub.id!);
         return true;
-      } 
+      }
     } else {
       print('Expire date is not set.');
     }
