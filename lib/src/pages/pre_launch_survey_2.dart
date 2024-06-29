@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/models/account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';
@@ -10,7 +11,8 @@ import 'package:YogiTech/src/widgets/dropdown_field.dart';
 import 'package:YogiTech/api/account/account_service.dart';
 
 class PrelaunchSurvey2 extends StatefulWidget {
-  const PrelaunchSurvey2({Key? key}) : super(key: key);
+  final Profile profile;
+  const PrelaunchSurvey2({super.key, required this.profile});
 
   @override
   _PrelaunchSurvey2State createState() => _PrelaunchSurvey2State();
@@ -20,6 +22,15 @@ class _PrelaunchSurvey2State extends State<PrelaunchSurvey2> {
   final TextEditingController level = TextEditingController();
   final TextEditingController height = TextEditingController();
   final TextEditingController weight = TextEditingController();
+  late Profile _profile;
+  bool _isSent = false;
+  List<bool> _isValid = [false, false, false];
+
+  @override
+  void initState() {
+    super.initState();
+    _profile = widget.profile;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +62,34 @@ class _PrelaunchSurvey2State extends State<PrelaunchSurvey2> {
                     setState(() {});
                   },
                 ),
+                if (_isSent == true && !_isValid[0])
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0,
+                        top: 8), // adjust the padding value as needed
+                    child: Text('${trans.level} ${trans.mustInput}',
+                        style: bd_text.copyWith(color: Colors.redAccent)),
+                  ),
                 SizedBox(height: 16.0),
                 _buildWeightField(trans),
+                if (_isSent == true && !_isValid[1])
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0,
+                        top: 8), // adjust the padding value as needed
+                    child: Text('${trans.weightKg} ${trans.mustInput}',
+                        style: bd_text.copyWith(color: Colors.redAccent)),
+                  ),
                 SizedBox(height: 16.0),
                 _buildHeightField(trans),
+                if (_isSent == true && !_isValid[2])
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0,
+                        top: 8), // adjust the padding value as needed
+                    child: Text('${trans.heightCm} ${trans.mustInput}',
+                        style: bd_text.copyWith(color: Colors.redAccent)),
+                  ),
                 SizedBox(height: 16.0),
               ],
             ),
@@ -77,8 +112,11 @@ class _PrelaunchSurvey2State extends State<PrelaunchSurvey2> {
         BoxInputField(
           controller: weight,
           placeholder: '60',
-          keyboardType: TextInputType.number,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          keyboardType: TextInputType.numberWithOptions(decimal: true),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(
+                r'^\d{0,3}(\.\d{0,2})?$')), // allow 2 to 3 digits before decimal point and up to 2 digits after
+          ],
         ),
       ],
     );
@@ -101,43 +139,55 @@ class _PrelaunchSurvey2State extends State<PrelaunchSurvey2> {
   }
 
   Future<void> _saveUserBMI() async {
-    double? userWeight = double.tryParse(weight.text);
-    double? userHeight = double.tryParse(height.text);
+    setState(() {
+      _isSent = true;
+      _isValid = _checkValid();
+    });
 
-    if (userWeight != null && userHeight != null) {
-      try {
-        final updatedProfile = await patchBMI(PatchBMIRequest(
-          weight: userWeight,
-          height: userHeight,
-          bmi: calculateBMI(userWeight, userHeight),
-        ));
-        if (updatedProfile != null) {
-          print('BMI updated successfully');
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainScreen(
-                isDarkMode: false, // Set the appropriate value
-                onThemeChanged: (bool value) {
-                  // Define the theme change logic
-                },
-                locale: Locale('en'), // Set the appropriate locale
-                onLanguageChanged: (bool value) {
-                  // Define the language change logic
-                },
-                isVietnamese: false, // Set the appropriate value
-              ),
-            ),
-          );
+    if(_isValid[0]&&_isValid[1]&&_isValid[2]){
+        double? userWeight = double.tryParse(weight.text);
+        double? userHeight = double.tryParse(height.text);
+
+        if (userWeight != null && userHeight != null) {
+          try {
+            final updatedProfile = await patchPreLaunch(PatchProfileRequest(
+              firstName: _profile.first_name,
+              lastName: _profile.last_name,
+              birthdate: DateTime.parse(
+                  _profile.birthdate.toString()),
+              weight: userWeight,
+              height: userHeight,
+              bmi: calculateBMI(userWeight, userHeight),
+            ));
+            if (updatedProfile != null) {
+              print('BMI updated successfully');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainScreen(
+                    isDarkMode: false, // Set the appropriate value
+                    onThemeChanged: (bool value) {
+                      // Define the theme change logic
+                    },
+                    locale: Locale('en'), // Set the appropriate locale
+                    onLanguageChanged: (bool value) {
+                      // Define the language change logic
+                    },
+                    isVietnamese: false, // Set the appropriate value
+                  ),
+                ),
+              );
+            } else {
+              print('Failed to update BMI');
+            }
+          } catch (e) {
+            print('Error updating BMI: $e');
+          }
         } else {
-          print('Failed to update BMI');
+          print('Invalid input for weight or height');
         }
-      } catch (e) {
-        print('Error updating BMI: $e');
       }
-    } else {
-      print('Invalid input for weight or height');
-    }
+    
   }
 
   double calculateBMI(double weight, double height) {
@@ -145,4 +195,11 @@ class _PrelaunchSurvey2State extends State<PrelaunchSurvey2> {
     return double.parse(bmi.toStringAsFixed(2));
   }
 
+  List<bool> _checkValid() {
+    return [
+      (level.text.trim() != ''),
+      (double.tryParse(weight.text) != null),
+      (double.tryParse(height.text) != null)
+    ];
+  }
 }
