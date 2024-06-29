@@ -1,6 +1,9 @@
 package com.example.yogi_application
 
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import com.example.yogi_application.model.ExerciseLog
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -17,13 +20,23 @@ class MainActivity: FlutterActivity() {
             when (call.method) {
                 "exerciseActivity" -> {
                     val intent = Intent(this, ExerciseActivity::class.java)
-                    startActivity(intent)
+                    startActivityForResult(intent, 0)
                     result.success("Activity started") // More informative success message
                 }
                 else -> {
                     result.notImplemented()
                 }
             }
+        }
+    }
+
+    fun sendDataToFlutter(exerciseLog: ExerciseLog) {
+        // Use the FlutterEngine's dartExecutor
+        Handler(Looper.getMainLooper()).post {
+            MethodChannel(
+                flutterEngine?.dartExecutor?.binaryMessenger!!, // Use flutterEngine here
+                CHANNEL
+            ).invokeMethod("receiveObject", exerciseLog)
         }
     }
 }

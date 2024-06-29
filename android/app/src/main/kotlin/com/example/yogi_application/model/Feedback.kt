@@ -111,3 +111,41 @@ data class FeedbackDetails(
         return null // All in good alignment
     }
 }
+
+@Serializable
+data class PoseLogResult(
+    val pose: Int,
+    val score: Float,
+    @SerialName("time_finish") val timeFinish: Int
+) {
+    companion object {
+        fun fromJson(source: String): PoseLogResult {
+            return Json.decodeFromString(source)
+        }
+    }
+
+    fun toJson(): String {
+        return Json.encodeToString(this)
+    }
+}
+
+data class ExerciseLog(
+    val exercise: Int,
+    val process: Int,
+    @SerialName("complete_pose") val completePose: Int,
+    val result: Float? = null,
+    val calories: Float? = null,
+    @SerialName("exercise_pose_results") val exercisePoseResults: List<PoseLogResult>? = null,
+    @SerialName("total_time_finish") val totalTimeFinish: Int? = null,
+    val event: Int? = null
+) {
+    companion object {
+        fun fromJson(source: String): ExerciseLog {
+            return Json.decodeFromString(source)
+        }
+    }
+
+    fun toJson(): String {
+        return Json.encodeToString(this)
+    }
+}

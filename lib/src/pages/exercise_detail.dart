@@ -1,5 +1,6 @@
 import 'package:YogiTech/src/pages/camera/camera_page.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
+import 'package:YogiTech/utils/method_channel_handler.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -56,8 +57,8 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         onPressed: () async {
           await storeExercise(_exercise!);
           const platform = MethodChannel('com.example.yogitech');
-          platform.invokeMethod('exerciseActivity');
-
+          final result = await platform.invokeMethod('exerciseActivity');
+          MethodChannelHandler();
           // Navigator.push(
           //   context,
           //   MaterialPageRoute(

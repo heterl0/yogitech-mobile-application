@@ -20,7 +20,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ExerciseActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityMainBinding
     private val viewModel : MainViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Access the SharedPreferences
@@ -70,7 +69,7 @@ class ExerciseActivity : AppCompatActivity() {
                     or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
         }
     }
-    
+
 
     override fun onBackPressed() {
         finish()

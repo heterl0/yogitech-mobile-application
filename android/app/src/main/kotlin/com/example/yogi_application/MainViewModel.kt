@@ -23,6 +23,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.yogi_application.model.Exercise
 import com.example.yogi_application.model.ExerciseFeedback
 import com.example.yogi_application.model.FeedbackResponse
+import com.example.yogi_application.model.PoseLogResult
 import com.example.yogi_application.network.FeedbackApiService
 import com.example.yogi_application.network.ServiceBuilder
 import kotlinx.coroutines.launch
@@ -56,6 +57,8 @@ class MainViewModel : ViewModel() {
     var currentIndex: Int = 0;
 
     var exercise: Exercise? = null;
+
+    var poseLogResults: MutableList<PoseLogResult> = mutableListOf<PoseLogResult>();
 
     private val _eventTrigger = MutableLiveData<Int>()
     val eventTrigger: LiveData<Int> = _eventTrigger
@@ -123,6 +126,17 @@ class MainViewModel : ViewModel() {
                 _feedbackResult.value = FeedbackResult.Error(e.message ?: "Unknown error")
             }
         }
+    }
+
+    fun getScore(): Float {
+        if (poseLogResults.isEmpty()) {
+            return 0.toFloat();
+        }
+        var totalScore = 0f
+        for (result in poseLogResults) {
+            totalScore += result.score
+        }
+        return totalScore / poseLogResults.size
     }
 
 

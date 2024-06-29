@@ -22,14 +22,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
-import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.camera.core.Preview
 import androidx.camera.core.CameraSelector
@@ -50,17 +47,17 @@ import com.example.yogi_application.R
 import com.example.yogi_application.databinding.FragmentCameraBinding
 import com.example.yogi_application.model.Exercise
 import com.example.yogi_application.model.ExerciseFeedback
+import com.example.yogi_application.model.ExerciseLog
 import com.example.yogi_application.model.KeyPoint
-import com.example.yogi_application.network.FeedbackApiService
-import com.example.yogi_application.network.ServiceBuilder
+import com.google.common.flogger.backend.LogData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.mediapipe.tasks.vision.core.RunningMode
-import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarker
+import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -87,6 +84,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     private var camera: Camera? = null
     private var cameraProvider: ProcessCameraProvider? = null
     private var cameraFacing = CameraSelector.LENS_FACING_FRONT
+    private var startTime: Long? = null
 
     /** Blocking ML operations are performed using this executor */
     private lateinit var backgroundExecutor: ExecutorService
@@ -147,6 +145,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     ): View {
         _fragmentCameraBinding =
             FragmentCameraBinding.inflate(inflater, container, false)
+        startTime = System.currentTimeMillis()
         val prefs = activity?.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
         val exerciseString = prefs?.getString("flutter.exercise", "")
         exercise = exerciseString?.let { Exercise.fromJson(it) };
@@ -174,13 +173,6 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
 
                 // Ensure the ImageView is visible before applying animation
                 if (coverImageSample.isVisible) {
-//                    val scaleXAnimator = ObjectAnimator.ofFloat(imageView, "scaleX", 1.0f, 0.8f)
-//                    val scaleYAnimator = ObjectAnimator.ofFloat(imageView, "scaleY", 1.0f, 0.8f)
-//
-//                    val animatorSet = AnimatorSet()
-//                    animatorSet.playTogether(scaleXAnimator, scaleYAnimator)
-//                    animatorSet.duration = 500 // Animation duration in milliseconds (adjust as needed)
-//                    animatorSet.interpolator = AccelerateDecelerateInterpolator()
                     val animZoomOut = AnimationUtils.loadAnimation(requireContext(),
                         R.anim.zoom_out)
 
@@ -217,13 +209,6 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
 
                         // Ensure the ImageView is visible before applying animation
                         if (coverImageSample.isVisible) {
-//                    val scaleXAnimator = ObjectAnimator.ofFloat(imageView, "scaleX", 1.0f, 0.8f)
-//                    val scaleYAnimator = ObjectAnimator.ofFloat(imageView, "scaleY", 1.0f, 0.8f)
-//
-//                    val animatorSet = AnimatorSet()
-//                    animatorSet.playTogether(scaleXAnimator, scaleYAnimator)
-//                    animatorSet.duration = 500 // Animation duration in milliseconds (adjust as needed)
-//                    animatorSet.interpolator = AccelerateDecelerateInterpolator()
                             val animZoomOut = AnimationUtils.loadAnimation(requireContext(),
                                 R.anim.zoom_out)
 
@@ -231,6 +216,21 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                         }
                     }
                 }, 3000)
+            } else {
+                val totalTimeFinish = (System.currentTimeMillis() - startTime!!) / 1000
+                val exerciseLog: ExerciseLog = ExerciseLog(exercise?.id!!, 1, exercise?.poses?.size!!, viewModel.getScore(), null, viewModel.poseLogResults, totalTimeFinish.toInt())
+                // Jump to the main thread to use MethodChannel
+//                Handler(Looper.getMainLooper()).post {
+//                    activity?.let {
+//                        MethodChannel(
+//                            getFlutter.dartExecutor.binaryMessenger,
+//                            "com.example.yogitech"
+//                        ).invokeMethod("receiveObject", exerciseLog)
+//                    }
+//                }
+
+                Log.d("NoTag", exerciseLog.toJson());
+
             }
         }
         return fragmentCameraBinding.root
