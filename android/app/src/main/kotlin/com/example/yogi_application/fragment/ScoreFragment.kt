@@ -97,8 +97,8 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
         if (isTimerRunning) return
         countDownTimer?.cancel()
         isTimerRunning = true
-        val duration = viewModel.exercise?.poses?.get(viewModel.currentIndex)?.duration
-        countDownTimer = object : CountDownTimer(duration!!.toLong(), 1000) {
+        val duration = viewModel.exercise?.poses?.get(viewModel.currentIndex)?.duration!! * 1000
+        countDownTimer = object : CountDownTimer(duration.toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val secondsRemaining = millisUntilFinished / 1000
                 _fragmentScoreBinding!!.timer.text = "00:$secondsRemaining"
