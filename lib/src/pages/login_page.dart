@@ -240,7 +240,7 @@ class _LoginPageState extends State<LoginPage> {
         final user = await getUser();
         if (user != null &&
             (user.profile.first_name == null ||
-                user.profile.last_name == null)) {
+                user.profile.last_name == null || user.profile.bmi == null)) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(

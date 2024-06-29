@@ -194,6 +194,9 @@ class PatchProfileRequest {
   String? phone;
   DateTime? birthdate;
   int? gender;
+  double? weight;
+  double? height;
+  double? bmi;
 
   PatchProfileRequest({
     this.lastName,
@@ -201,6 +204,9 @@ class PatchProfileRequest {
     this.phone,
     this.birthdate,
     this.gender,
+    this.weight,
+    this.height,
+    this.bmi,
   });
 
   Map<String, dynamic> toMap() {
@@ -220,34 +226,46 @@ class PatchProfileRequest {
     if (gender != null) {
       data['gender'] = gender;
     }
+    if (weight != null) {
+      data['weight'] = weight;
+    }
+    if (height != null) {
+      data['height'] = height;
+    }
+    if (bmi != null) {
+      data['bmi'] = bmi;
+    }
     return data;
   }
 }
 
-// Update profile
-// Future<Profile?> patchProfile(PatchProfileRequest data) async {
-//   try {
-//     final Account? currentUser = await retrieveAccount();
-//     final int profileId = currentUser!.profile.id;
-//     final url = formatApiUrl('/api/v1/user-profiles/$profileId/');
-//     final response = await DioInstance.patch(url, data: data.toMap());
-//     final accountRes = await DioInstance.patch(
-//         formatApiUrl('/api/v1/users/me/'),
-//         data: data.toMap());
-//     if (response.statusCode == 200 && accountRes.statusCode == 200) {
-//       await storeAccount(Account.fromMap(accountRes.data));
-//       return Profile.fromMap(response.data);
-//     } else {
-//       print(Profile.fromMap(response.data));
-//       print(
-//           'Patch profile detail failed with status code: ${response.statusCode}');
-//       return null;
-//     }
-//   } catch (e) {
-//     print('Patch profile detail error: $e');
-//     return null;
-//   }
-// }
+Future<Profile?> patchPreLaunch(PatchProfileRequest data) async {
+  try {
+    final Account? currentUser = await retrieveAccount();
+    final int profileId = currentUser!.profile.id;
+    print(data.toMap());
+    final url = formatApiUrl('/api/v1/user-profiles/$profileId/');
+    final Response response = await DioInstance.patch(url, data: data.toMap());
+    if (response.statusCode == 200) {
+      final account = await getUser();
+      if (account != null) {
+        await storeAccount(account);
+      }
+      return Profile.fromMap(response.data);
+    } else {
+      print(
+          'Patch profile detail failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    if (e is DioException) {
+      final message = e.message;
+      print('Patch profile detail error: $message');
+    }
+    return null;
+  }
+}
+
 
 Future<dynamic> resetPassword(final String email) async {
   final url = formatApiUrl("/api/v1/users/reset_password/");
@@ -297,7 +315,8 @@ Future<Profile?> patchProfile(
         'last_name': data.lastName,
         'first_name': data.firstName,
         'birthdate': data.birthdate?.toIso8601String(),
-        'gender': data.gender
+        'gender': data.gender,
+        
       });
     }
     final response = await DioInstance.patch(url, data: formData);

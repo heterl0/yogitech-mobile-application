@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/pages/homepage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/api/pose/pose_service.dart';
@@ -74,7 +75,12 @@ class _FilterPageState extends State<FilterPage> {
           IconButton(
             icon: Icon(Icons.close, color: theme.colorScheme.onSurface),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          HomePage()), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                );
             },
           ),
         ],
@@ -124,7 +130,6 @@ class _FilterPageState extends State<FilterPage> {
         buttonTitle: trans.apply,
         onPressed: () {
           Navigator.pop(context);
-          print(selectedMuscle);
           List<dynamic>? mus =
               _muscles.where((mus) => mus.name == selectedMuscle).toList();
           if (mus.isNotEmpty) {

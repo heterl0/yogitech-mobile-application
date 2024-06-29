@@ -54,8 +54,6 @@ class _SubscriptionState extends State<SubscriptionPage> {
         _subs = sub;
         _userSubs = ussub;
         _isLoading = false;
-        print('asd');
-        print(_userSubs);
         if (_userSubs.length > 0 &&
             _userSubs[_userSubs.length - 1]?.activeStatus != 0) {
           _currendSub = checkExpire(_userSubs[_userSubs.length - 1])

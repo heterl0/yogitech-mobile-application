@@ -62,15 +62,16 @@ class BlogState extends State<AllExercise> {
             .toList();
       }
       if (mus != null) {
-        for (var i = 0; i < filteredExercises.length; i++) {
-          List<PoseWithTime> poses = filteredExercises[i].poses;
-          for (var p = 0; p < poses.length; p++) {
-            if (!poses[p].pose.muscles.any((muscle) => muscle == mus)) {
-              filteredExercises.removeAt(i);
+        filteredExercises = filteredExercises.where((exercise) {
+          for (var poseWithTime in exercise.poses) {
+            if (poseWithTime.pose.muscles.any((muscle) => muscle.id == mus.id)) {
+              return true; // Keep this exercise
             }
           }
-        }
+          return false; // Filter out this exercise
+        }).toList();
       }
+
       setState(() {
         _exercises = filteredExercises;
         _isLoading = false;
@@ -184,16 +185,17 @@ class BlogState extends State<AllExercise> {
               ),
               itemCount: _exercises.length,
               itemBuilder: (context, index) {
-                final blog = _exercises[index];
+                final ex = _exercises[index];
                 return CustomCard(
-                  title: blog.title,
-                  caption: blog.description,
-                  imageUrl: blog.image_url,
+                  title: ex.title,
+                  caption: ex.description,
+                  imageUrl: ex.image_url,
                   onTap: () {
+                    print(ex);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ExerciseDetail(id: blog.id),
+                        builder: (context) => ExerciseDetail(exercise: ex),
                       ),
                     );
                   },
