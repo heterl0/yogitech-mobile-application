@@ -121,3 +121,20 @@ Future<bool> deleteVote(int voteId) async {
     return false;
   }
 }
+
+Future<dynamic> postExerciseLog(dynamic data) async {
+  try {
+    final url = formatApiUrl('/api/v1/exercise-logs/');
+    final Response response = await DioInstance.post(url, data: data);
+    if (response.statusCode == 201) {
+      return response.data;
+    } else {
+      print(
+          'Post exercise log failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Post exercise log error: $e');
+    return null;
+  }
+}

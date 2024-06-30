@@ -1,3 +1,4 @@
+import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:YogiTech/src/pages/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +16,7 @@ class MethodChannelHandler {
       case 'receiveObject':
         final text = call.arguments;
         print('Received: $text');
+        final data = await postExerciseLog(text);
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => Result()),
         );
