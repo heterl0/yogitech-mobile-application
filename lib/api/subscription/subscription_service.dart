@@ -67,9 +67,10 @@ Future<UserSubscription?> subscribe(int subscription,int subscriptionType) async
     final Response response = await DioInstance.post(url,data:data);
     if (response.statusCode == 200 || response.statusCode == 201) {
       UserSubscription data = UserSubscription.fromMap(response.data);
-      final user = await getUser();
-      if (user != null)  {
-        storeAccount(user);
+      PatchUserAccountRequest ac = new PatchUserAccountRequest(isPremium:true);
+      final account = await patchUserAccount(ac );
+      if (account != null)  {
+        storeAccount(account);
       }
       return data;
     }
@@ -99,7 +100,12 @@ Future<UserSubscription?> cancelSubscription(int id) async {
     };
     final Response response = await DioInstance.patch(url, data: data);
     if (response.statusCode == 200) {
-      return UserSubscription.fromMap(response.data);
+      PatchUserAccountRequest ac = new PatchUserAccountRequest(isPremium:false);
+      final account = await patchUserAccount(ac);
+      if (account != null)  {
+        storeAccount(account);
+        return UserSubscription.fromMap(response.data);
+      }
     } else {
       print('Cancel UserSubscription failed with status code: ${response.statusCode}');
       return null;

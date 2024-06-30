@@ -18,7 +18,9 @@ import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:YogiTech/src/widgets/card.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final Account? account;
+  final VoidCallback? fetchAccount;
+  const HomePage({super.key,  this.account, this.fetchAccount});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -29,13 +31,15 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> jsonListSort = [];
   bool _isnotSearching = true;
   final TextEditingController _searchController = TextEditingController();
-  Account? account;
+  Account? _account;
 
   @override
   void initState() {
     super.initState();
     _fetchExercises();
     _fetchExercisesSort();
+    _fetchAccount();
+    
   }
 
   Future<void> _fetchExercisesSort() async {
@@ -58,12 +62,23 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  @override
+  void didUpdateWidget(covariant HomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.account != widget.account) {
+      _fetchAccount();
+    }
+  }
+
   Future<void> _fetchAccount() async {
-    final Account? _account = await retrieveAccount();
-    setState(() {
-      account = _account;
-      print(account);
-    });
+    if(widget.account!=null){
+      setState(() {
+        _account = widget.account;
+      });
+    }else{
+          print('I got null');
+    }
+
   }
 
   @override
@@ -78,13 +93,12 @@ class _HomePageState extends State<HomePage> {
                 preActions: [
                   GestureDetector(
                     onTap: () {
-                      _fetchAccount();
                       pushWithoutNavBar(
                           context,
                           MaterialPageRoute(
                               builder: (context) => SubscriptionPage(
-                                  account: account,
-                                  fetchAccount: _fetchAccount)));
+                                  account: _account,
+                                  fetchAccount: widget.fetchAccount)));
                     },
                     child: Row(
                       children: [
@@ -94,8 +108,8 @@ class _HomePageState extends State<HomePage> {
                           child: Image.asset('assets/images/Emerald.png'),
                         ),
                         Text(
-                          account != null
-                              ? account!.profile.point.toString()
+                          _account != null
+                              ? _account!.profile.point.toString()
                               : '0',
                           style:
                               h3.copyWith(color: theme.colorScheme.onSurface),
@@ -105,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
                 titleWidget: StreakValue(
-                    account != null ? account!.profile.streak.toString() : '0'),
+                    _account != null ? _account!.profile.streak.toString() : '0'),
                 postActions: [
                   IconButton(
                     icon:

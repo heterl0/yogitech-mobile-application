@@ -272,6 +272,8 @@ class Account {
       this.last_login,
       this.created_at);
 
+  get isNotEmpty => null;
+
   Account copyWith({
     int? id,
     String? username,

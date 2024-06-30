@@ -408,12 +408,13 @@ class _SubscriptionState extends State<SubscriptionPage> {
                       final userSubscription =
                           await cancelSubscription(subscriptionId);
                       if (userSubscription != null) {
-                        // widget.fetchAccount!();
-                        // final account = await retrieveAccount();
-                        setState(() {
+                        widget.fetchAccount!();
+                          final account = await retrieveAccount();
                           _loadUserSub();
-                          // _account = account;
-                        });
+                          setState(() {
+                            _account = account;
+                            print(_account);
+                          });
                         Navigator.pop(context); // Close the bottom sheet
                       } else {
                         _showCustomPopup(context, 'Error',
