@@ -291,8 +291,7 @@ class _FriendListPageState extends State<FriendListPage>
                           : friend.username ?? 'N/A';
                       return FriendListItem(
                         name: name,
-                        avatarUrl:
-                            friend.avatar ?? 'assets/images/gradient.jpg',
+                        avatarUrl: friend.avatar ?? '',
                         exp: friend.exp.toString(),
                         onTap: () {
                           Navigator.push(
@@ -407,7 +406,7 @@ class FriendList extends StatelessWidget {
               return FriendListItem(
                 name: name,
                 avatarUrl:
-                    friend.profile.avatar_url ?? 'assets/images/gradient.jpg',
+                    friend.profile.avatar_url ?? '',
                 exp: friend.profile.exp.toString(),
                 onTap: () {
                   pushWithoutNavBar(
@@ -477,19 +476,41 @@ class FriendListItem extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: onTap,
-            child: Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: stroke,
-              ),
-              child: CircleAvatar(
-                backgroundImage: avatarUrl.startsWith("assets")
-                    ? AssetImage(avatarUrl) as ImageProvider
-                    : CachedNetworkImageProvider(avatarUrl),
-              ),
-            ),
+            child: avatarUrl != ''
+                ? Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: stroke,
+                    ),
+                    child: CircleAvatar(
+                        backgroundImage: CachedNetworkImageProvider(avatarUrl)),
+                  )
+                : Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.transparent,
+                      border: Border.all(
+                        color: Colors.blue,
+                        width: 1.0,
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        name != ''
+                            ? name[0].toUpperCase()
+                            : ':)',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
           ),
           const SizedBox(width: 12),
           Expanded(
