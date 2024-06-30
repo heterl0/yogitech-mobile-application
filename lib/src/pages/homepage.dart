@@ -277,7 +277,7 @@ class _HomePageState extends State<HomePage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      ExerciseDetail(exercise: exercise),
+                                      ExerciseDetail(exercise: exercise, account: _account,fetchAccount: widget.fetchAccount,),
                                 ),
                               );
                             },
@@ -334,7 +334,7 @@ class _HomePageState extends State<HomePage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      ExerciseDetail(exercise: exercise),
+                                      ExerciseDetail(exercise: exercise ,account: _account,fetchAccount: widget.fetchAccount,),
                                 ),
                               );
                             },

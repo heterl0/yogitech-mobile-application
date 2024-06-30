@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/exercise.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
