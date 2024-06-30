@@ -129,6 +129,7 @@ data class PoseLogResult(
     }
 }
 
+@Serializable
 data class ExerciseLog(
     val exercise: Int,
     val process: Int,

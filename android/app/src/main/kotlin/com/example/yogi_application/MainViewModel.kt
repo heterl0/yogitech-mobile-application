@@ -26,6 +26,7 @@ import com.example.yogi_application.model.FeedbackResponse
 import com.example.yogi_application.model.PoseLogResult
 import com.example.yogi_application.network.FeedbackApiService
 import com.example.yogi_application.network.ServiceBuilder
+import io.flutter.embedding.engine.FlutterEngine
 import kotlinx.coroutines.launch
 
 /**
@@ -41,7 +42,7 @@ class MainViewModel : ViewModel() {
         .DEFAULT_POSE_TRACKING_CONFIDENCE
     private var _minPosePresenceConfidence: Float = PoseLandmarkerHelper
         .DEFAULT_POSE_PRESENCE_CONFIDENCE
-
+    var flutterEngine: FlutterEngine? = null
     val currentDelegate: Int get() = _delegate
     val currentModel: Int get() = _model
     val currentMinPoseDetectionConfidence: Float
@@ -65,10 +66,6 @@ class MainViewModel : ViewModel() {
 
     fun triggerEvent() {
         _eventTrigger.value = currentIndex + 1;
-        increaseIndex();
-    }
-
-    fun increaseIndex() {
         currentIndex += 1;
     }
 

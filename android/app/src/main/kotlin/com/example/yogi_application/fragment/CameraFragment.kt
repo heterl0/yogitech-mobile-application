@@ -229,8 +229,15 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
 //                    }
 //                }
 
-                Log.d("NoTag", exerciseLog.toJson());
 
+                Log.d("NoTag", exerciseLog.toJson());
+                Handler(Looper.getMainLooper()).post {
+                    MethodChannel(
+                        viewModel.flutterEngine?.dartExecutor?.binaryMessenger!!, // Use flutterEngine here
+                        "com.example.yogitech"
+                    ).invokeMethod("receiveObject", exerciseLog.toJson())
+                }
+                activity?.finish();
             }
         }
         return fragmentCameraBinding.root

@@ -75,6 +75,9 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
                     startTime = System.currentTimeMillis();
                 }
                 if (result.data?.isValid == false) {
+                    if (!isTimerRunning)  {
+                        startCountDownTimer()
+                    }
                     _fragmentScoreBinding!!.result.text = "0%";
                     _fragmentScoreBinding!!.description.text = "Adjust your body full in screen"
                 } else {
@@ -97,8 +100,10 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
         if (isTimerRunning) return
         countDownTimer?.cancel()
         isTimerRunning = true
-        val duration = viewModel.exercise?.poses?.get(viewModel.currentIndex)?.duration!! * 1000
+//        val duration = viewModel.exercise?.poses?.get(viewModel.currentIndex)?.duration!! * 1000
+        val duration = 1000
         countDownTimer = object : CountDownTimer(duration.toLong(), 1000) {
+
             override fun onTick(millisUntilFinished: Long) {
                 val secondsRemaining = millisUntilFinished / 1000
                 _fragmentScoreBinding!!.timer.text = "00:$secondsRemaining"
@@ -107,12 +112,21 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
             override fun onFinish() {
                 _fragmentScoreBinding!!.timer.text = ""
                 isTimerRunning = false
-                val second = (System.currentTimeMillis() - startTime!!) / 1000.0
-                val poseLogResult: PoseLogResult = PoseLogResult(viewModel.exercise?.poses?.get(viewModel.currentIndex)?.pose?.id!!, calculateMean(scoreList), second.toInt())
-                startTime = null
-                scoreList.removeAll(scoreList);
-                viewModel.poseLogResults.add(poseLogResult)
+                val currentIndex = viewModel.currentIndex
+                if (currentIndex < viewModel.exercise?.poses?.size!!) {
+                    Log.d("NoTag", currentIndex.toString())
+                    val second = (System.currentTimeMillis() - startTime!!) / 1000.0
+                    val poseLogResult: PoseLogResult = PoseLogResult(
+                        viewModel.exercise?.poses?.get(currentIndex)?.pose?.id!!,
+                        calculateMean(scoreList),
+                        second.toInt()
+                    )
+                    startTime = null
+                    scoreList.removeAll(scoreList);
+                    viewModel.poseLogResults.add(poseLogResult)
+                }
                 viewModel.triggerEvent();
+
             }
         }.start()
     }
@@ -125,7 +139,8 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
 
     fun calculateMean(numbers: List<Float>): Float {
         if (numbers.isEmpty()) {
-            throw IllegalArgumentException("The list cannot be empty")
+//            throw IllegalArgumentException("The list cannot be empty")
+            return 0.toFloat()
         }
         val sum = numbers.sum()
         return sum / numbers.size

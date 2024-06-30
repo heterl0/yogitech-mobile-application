@@ -58,7 +58,8 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           await storeExercise(_exercise!);
           const platform = MethodChannel('com.example.yogitech');
           final result = await platform.invokeMethod('exerciseActivity');
-          MethodChannelHandler();
+          final methodChannel = MethodChannelHandler();
+          methodChannel.context = context;
           // Navigator.push(
           //   context,
           //   MaterialPageRoute(

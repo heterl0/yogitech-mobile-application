@@ -27,7 +27,8 @@ class ExerciseActivity : AppCompatActivity() {
 
         // Retrieve the tokens using the same keys but prefixed with "flutter."
         val accessToken = prefs.getString("flutter.accessToken", "default_value")
-
+        val flutterEngine = (application as YogiApplication).flutterEngine
+        viewModel.flutterEngine =flutterEngine
 
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)

@@ -10,10 +10,10 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "com.example.yogitech" // Define channel name as a constant
-
+//    private val viewModel: MainViewModel by viewModels();
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-
+        (application as YogiApplication).flutterEngine = flutterEngine
         // No need for GeneratedPluginRegistrant if you're not using plugins
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
@@ -28,9 +28,19 @@ class MainActivity: FlutterActivity() {
                 }
             }
         }
+
+
+
+//        Handler(Looper.getMainLooper()).post {
+//            MethodChannel(
+//                flutterEngine.dartExecutor.binaryMessenger, // Use flutterEngine here
+//                CHANNEL
+//            ).invokeMethod("receiveObject", "return")
+//        }
+
     }
 
-    fun sendDataToFlutter(exerciseLog: ExerciseLog) {
+    public fun sendDataToFlutter(exerciseLog: ExerciseLog) {
         // Use the FlutterEngine's dartExecutor
         Handler(Looper.getMainLooper()).post {
             MethodChannel(
