@@ -215,7 +215,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                             coverImageSample.startAnimation(animZoomOut)
                         }
                     }
-                }, 3000)
+                }, 10000)
             } else {
                 val totalTimeFinish = (System.currentTimeMillis() - startTime!!) / 1000
                 val exerciseLog: ExerciseLog = ExerciseLog(exercise?.id!!, 1, exercise?.poses?.size!!, viewModel.getScore(), null, viewModel.poseLogResults, totalTimeFinish.toInt())

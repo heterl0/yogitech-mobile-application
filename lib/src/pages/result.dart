@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/models/exercise.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
@@ -6,8 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Result extends StatelessWidget {
-  const Result({super.key});
+  final ExerciseResult? exerciseResult;
 
+  const Result({super.key, this.exerciseResult});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,17 +20,22 @@ class Result extends StatelessWidget {
   }
 
   Widget _buildResult() {
-    return ResultAfterPractice();
+    return ResultAfterPractice(
+      exerciseResult: exerciseResult,
+    );
   }
 }
 
 class ResultAfterPractice extends StatelessWidget {
-  const ResultAfterPractice({super.key});
+  final ExerciseResult? exerciseResult;
+  const ResultAfterPractice({super.key, this.exerciseResult});
 
   @override
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final minite = exerciseResult!.totalTimeFinish ~/ 60;
+    final second = exerciseResult!.totalTimeFinish % 60;
     return Container(
       width: 360,
       padding: const EdgeInsets.symmetric(
@@ -60,40 +67,42 @@ class ResultAfterPractice extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            '${trans.accuracy} 90%',
+            '${trans.accuracy} ${exerciseResult!.result} %',
             textAlign: TextAlign.center,
             style: h2.copyWith(color: primary),
           ),
           const SizedBox(height: 12),
           Text(
-            '+ 300 EXP',
+            '+ ${exerciseResult!.exp} EXP',
             style: h3.copyWith(color: theme.colorScheme.onSurface),
           ),
           const SizedBox(height: 12),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                '+',
-                style: h3.copyWith(color: theme.colorScheme.onSurface),
-              ),
-              const SizedBox(width: 4),
-              SizedBox(
-                width: 16,
-                height: 16,
-                child: Image.asset(
-                  'assets/images/Emerald.png',
-                ),
-              ),
-              const SizedBox(width: 2),
-              Text(
-                '100',
-                style: h3.copyWith(color: theme.colorScheme.onSurface),
-              ),
-            ],
-          ),
+          exerciseResult!.point > 0
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '+',
+                      style: h3.copyWith(color: theme.colorScheme.onSurface),
+                    ),
+                    const SizedBox(width: 4),
+                    SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: Image.asset(
+                        'assets/images/Emerald.png',
+                      ),
+                    ),
+                    const SizedBox(width: 2),
+                    Text(
+                      exerciseResult!.point.toString(),
+                      style: h3.copyWith(color: theme.colorScheme.onSurface),
+                    ),
+                  ],
+                )
+              : Container(),
           const SizedBox(height: 12),
           Container(
             width: double.infinity,
@@ -104,19 +113,32 @@ class ResultAfterPractice extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${trans.caloriesBurned} 9000',
+                  '${trans.caloriesBurned} ${exerciseResult!.calories} kcal',
                   style: bd_text.copyWith(color: theme.colorScheme.onSurface),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  trans.duration +
-                      ': ' +
-                      "20" +
-                      trans.minutes +
-                      "70" +
-                      trans.seconds,
-                  style: bd_text.copyWith(color: theme.colorScheme.onSurface),
-                ),
+                minite == 0
+                    ? Text(
+                        trans.duration +
+                            ': ' +
+                            second.toString() +
+                            " " +
+                            trans.seconds,
+                        style: bd_text.copyWith(
+                            color: theme.colorScheme.onSurface),
+                      )
+                    : Text(
+                        trans.duration +
+                            ': ' +
+                            minite.toString() +
+                            " " +
+                            trans.minutes +
+                            second.toString() +
+                            " " +
+                            trans.seconds,
+                        style: bd_text.copyWith(
+                            color: theme.colorScheme.onSurface),
+                      ),
               ],
             ),
           ),

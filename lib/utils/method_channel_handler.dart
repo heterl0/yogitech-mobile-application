@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:YogiTech/api/exercise/exercise_service.dart';
+import 'package:YogiTech/src/models/exercise.dart';
 import 'package:YogiTech/src/pages/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,10 +18,14 @@ class MethodChannelHandler {
     switch (call.method) {
       case 'receiveObject':
         final text = call.arguments;
-        print('Received: $text');
         final data = await postExerciseLog(text);
+        final exercise = ExerciseResult.fromJson(data);
+        print('Exercise: ${exercise.toJson()}');
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => Result()),
+          MaterialPageRoute(
+              builder: (context) => Result(
+                    exerciseResult: exercise,
+                  )),
         );
         break;
       default:

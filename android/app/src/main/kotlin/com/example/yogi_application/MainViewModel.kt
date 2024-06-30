@@ -133,7 +133,8 @@ class MainViewModel : ViewModel() {
         for (result in poseLogResults) {
             totalScore += result.score
         }
-        return totalScore / poseLogResults.size
+        val mean = totalScore / poseLogResults.size
+        return String.format("%.0f", mean).toFloat()
     }
 
 

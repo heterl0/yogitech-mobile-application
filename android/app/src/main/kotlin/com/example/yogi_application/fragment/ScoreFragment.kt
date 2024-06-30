@@ -24,6 +24,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
         get() = _fragmentScoreBinding!!
 
     private var isTimerRunning = false
+    private var isWaitingRunning = false
 
     private val viewModel: MainViewModel by activityViewModels()
 
@@ -74,20 +75,21 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
                 if (startTime == null) {
                     startTime = System.currentTimeMillis();
                 }
-                if (result.data?.isValid == false) {
-                    if (!isTimerRunning)  {
-                        startCountDownTimer()
-                    }
-                    _fragmentScoreBinding!!.result.text = "0%";
-                    _fragmentScoreBinding!!.description.text = "Adjust your body full in screen"
-                } else {
-                    _fragmentScoreBinding!!.result.text = "${result.data?.score?.toInt().toString()}%";
-                    _fragmentScoreBinding!!.description.text = "${result.data?.feedback?.getFeedback()}"
-                    if (isTimerRunning) {
-                        scoreList.add(result.data?.score!!)
-                    }
-                    if (result.data?.score!! >  80 && !isTimerRunning)  {
-                        startCountDownTimer()
+                if (!isWaitingRunning) {
+                    if (result.data?.isValid == false) {
+                        _fragmentScoreBinding!!.result.text = "0%";
+                        _fragmentScoreBinding!!.description.text = "Adjust your body full in screen"
+                    } else {
+                        _fragmentScoreBinding!!.result.text =
+                            "${result.data?.score?.toInt().toString()}%";
+                        _fragmentScoreBinding!!.description.text =
+                            "${result.data?.feedback?.getFeedback()}"
+                        if (isTimerRunning) {
+                            scoreList.add(result.data?.score!!)
+                        }
+                        if (result.data?.score!! > 80 && !isTimerRunning && !isWaitingRunning) {
+                            startCountDownTimer()
+                        }
                     }
                 }
             }
@@ -100,8 +102,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
         if (isTimerRunning) return
         countDownTimer?.cancel()
         isTimerRunning = true
-//        val duration = viewModel.exercise?.poses?.get(viewModel.currentIndex)?.duration!! * 1000
-        val duration = 1000
+        val duration = viewModel.exercise?.poses?.get(viewModel.currentIndex)?.duration!! * 1000
         countDownTimer = object : CountDownTimer(duration.toLong(), 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
@@ -126,10 +127,35 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
                     viewModel.poseLogResults.add(poseLogResult)
                 }
                 viewModel.triggerEvent();
-
+                startWaitingTimer();
             }
         }.start()
     }
+
+    private fun startWaitingTimer() {
+        if (isWaitingRunning) return
+        countDownTimer?.cancel()
+        isWaitingRunning = true
+//        val duration = viewModel.exercise?.poses?.get(viewModel.currentIndex)?.duration!! * 1000
+        val duration = 10000
+        countDownTimer = object : CountDownTimer(duration.toLong(), 1000) {
+
+            override fun onTick(millisUntilFinished: Long) {
+                val secondsRemaining = millisUntilFinished / 1000
+                _fragmentScoreBinding!!.timer.text = "00:$secondsRemaining"
+                _fragmentScoreBinding!!.result.text = "Take a rest";
+                _fragmentScoreBinding!!.description.text = "Breath slowly."
+            }
+
+            override fun onFinish() {
+                _fragmentScoreBinding!!.timer.text = ""
+                isWaitingRunning = false
+            }
+        }.start()
+    }
+
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -143,7 +169,8 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
             return 0.toFloat()
         }
         val sum = numbers.sum()
-        return sum / numbers.size
+        val mean =  sum / numbers.size
+        return String.format("%.2f", mean).toFloat()
     }
 }
 
