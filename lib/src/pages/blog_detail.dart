@@ -70,14 +70,12 @@ class _BlogDetailState extends State<BlogDetail> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildImage(),
-            _buildMainContent(context),
-          ],
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _buildImage(),
+          _buildMainContent(context),
+        ],
       ),
     );
   }
@@ -181,15 +179,30 @@ class _BlogDetailState extends State<BlogDetail> {
   }
 
   Widget _buildImage() {
+    // return Padding(
+    //   padding: const EdgeInsets.only(top: 20),
+    //   child: Container(
+    //     width: double.infinity,
+    //     height: 360,
+    //     decoration: BoxDecoration(
+    //       image: DecorationImage(
+    //         image:CachedNetworkImageProvider(blog?.image_url ?? ''),
+    //         fit: BoxFit.cover,
+    //       ),
+    //     ),
+    //   ),
+    // );
+
     return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Container(
-        width: double.infinity,
-        height: 360,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image:CachedNetworkImageProvider(blog?.image_url ?? ''),
-            fit: BoxFit.cover,
+      padding: const EdgeInsets.only(top: 90),
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: CachedNetworkImageProvider(blog?.image_url ?? ''),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),
@@ -208,6 +221,7 @@ class _BlogDetailState extends State<BlogDetail> {
           _buildDescription(),
           const SizedBox(height: 16),
           _buildSubtitle(),
+          const SizedBox(height: 120),
         ],
       ),
     );
