@@ -1,3 +1,4 @@
+import 'package:YogiTech/api/account/account_service.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -15,6 +16,22 @@ class Streak extends StatefulWidget {
 class _StreakState extends State<Streak> {
   DateTime _currentDate = DateTime.now();
   DateTime? _lastStreakStartDate;
+  late dynamic streakData;
+
+  @override
+  void initState() {
+    _fetchStreakData();
+    super.initState();
+  }
+
+  Future<void> _fetchStreakData() async {
+    // Call API to fetch streak data
+    final data = await getStreakInMonth(6, 2024);
+    print(data);
+    setState(() {
+      streakData = data;
+    });
+  }
 
   void _incrementMonth() {
     setState(() {

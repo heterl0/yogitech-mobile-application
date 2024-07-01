@@ -65,9 +65,9 @@ class PatchUserAccountRequest {
   bool? isPremium;
 
   PatchUserAccountRequest({
-     this.username,
-     this.phone,
-     this.isPremium,
+    this.username,
+    this.phone,
+    this.isPremium,
   });
 
   Map<String, dynamic> toMap() {
@@ -103,8 +103,6 @@ Future<Account?> patchUserAccount(PatchUserAccountRequest data) async {
     return null;
   }
 }
-
-
 
 class PasswordChangeRequest {
   String newPassword;
@@ -274,7 +272,6 @@ Future<Profile?> patchPreLaunch(PatchProfileRequest data) async {
   }
 }
 
-
 Future<dynamic> resetPassword(final String email) async {
   final url = formatApiUrl("/api/v1/users/reset_password/");
   try {
@@ -324,7 +321,6 @@ Future<Profile?> patchProfile(
         'first_name': data.firstName,
         'birthdate': data.birthdate?.toIso8601String(),
         'gender': data.gender,
-        
       });
     }
     final response = await DioInstance.patch(url, data: formData);
@@ -345,6 +341,23 @@ Future<Profile?> patchProfile(
     }
   } catch (e) {
     print('Patch profile detail error: $e');
+    return null;
+  }
+}
+
+Future<dynamic> getStreakInMonth(month, year) async {
+  try {
+    final url =
+        formatApiUrl('/api/v1/streak-in-month/?month=$month&year=$year');
+    final Response response = await DioInstance.get(url);
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      print('Get streak failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Get streak error: $e');
     return null;
   }
 }
