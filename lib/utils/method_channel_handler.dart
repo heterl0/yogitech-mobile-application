@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:YogiTech/api/account/account_service.dart';
+import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/exercise.dart';
@@ -22,6 +24,8 @@ class MethodChannelHandler {
       case 'receiveObject':
         final text = call.arguments;
         final data = await postExerciseLog(text);
+        final account = await getUser();
+        storeAccount(account!);
         final exercise = ExerciseResult.fromJson(data);
         print('Exercise: ${exercise.toJson()}');
         fetchAccount?.call();
