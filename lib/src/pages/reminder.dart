@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:YogiTech/services/notifi_service.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
@@ -145,7 +144,7 @@ class _ReminderPageState extends State<ReminderPage> {
                 'id': id,
                 'time': timeOfDay,
                 'days': days,
-                'isEnabled': _selectedTimes[index!]['isEnabled'],
+                'isEnabled': _selectedTimes[index]['isEnabled'],
               };
             });
           }
