@@ -8,6 +8,7 @@ import 'package:YogiTech/src/pages/friendlist.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SocialPage extends StatefulWidget {
@@ -24,19 +25,19 @@ class SocialPage extends StatefulWidget {
 }
 
 class _SocialPageState extends State<SocialPage> {
-  late List<n.Notification>? _notifications = [];
+  List<Notification>? _notifications = [];
 
   @override
   void initState() {
-    fetchNotification();
     super.initState();
+    fetchNotification();
   }
 
   Future<void> fetchNotification() async {
     final notifications = await getNotifications();
     print(notifications);
     setState(() {
-      _notifications = notifications.map((e) => e as n.Notification).toList();
+      _notifications = notifications.cast<Notification>();
     });
   }
 
@@ -73,7 +74,7 @@ class _SocialPageState extends State<SocialPage> {
           child: Column(
             children: [
               NewsFeed(
-                itemCount: 10,
+                notifications: _notifications,
                 onTap: () {},
               ),
             ],
@@ -85,13 +86,12 @@ class _SocialPageState extends State<SocialPage> {
 }
 
 class NewsFeed extends StatelessWidget {
-  final int itemCount;
+  final List<Notification>? notifications;
   final Function()? onTap;
 
   const NewsFeed({
     super.key,
-    required this.itemCount,
-    this.onTap,
+    this.onTap, required this.notifications,
   });
 
   @override
@@ -106,7 +106,7 @@ class NewsFeed extends StatelessWidget {
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: itemCount,
+          itemCount: notifications!.length,
           itemBuilder: (context, index) {
             return NewsListItem(
               name: '${trans.firstName} $index',
