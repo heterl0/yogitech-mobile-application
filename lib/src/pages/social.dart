@@ -1,4 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:YogiTech/api/notification/notification_service.dart';
+import 'package:YogiTech/api/social/social_service.dart';
+import 'package:YogiTech/src/models/notification.dart' as n;
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/pages/friendlist.dart';
@@ -21,6 +24,22 @@ class SocialPage extends StatefulWidget {
 }
 
 class _SocialPageState extends State<SocialPage> {
+  late List<n.Notification>? _notifications = [];
+
+  @override
+  void initState() {
+    fetchNotification();
+    super.initState();
+  }
+
+  Future<void> fetchNotification() async {
+    final notifications = await getNotifications();
+    print(notifications);
+    setState(() {
+      _notifications = notifications.map((e) => e as n.Notification).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
