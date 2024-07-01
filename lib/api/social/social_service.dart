@@ -132,3 +132,20 @@ Future<List<dynamic>> searchSocialProfile(String? query) async {
     return [];
   }
 }
+
+Future<dynamic> getSocialProfile(int userId) async {
+  try {
+    final url = formatApiUrl('/api/v1/social/search-profiles/?query=$userId');
+    final Response response = await DioInstance.get(url);
+    if (response.statusCode == 200) {
+      return SocialProfile.fromMap(response.data[0]);
+    } else {
+      print(
+          'Get social profile failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Get social profile error: $e');
+    return null;
+  }
+}

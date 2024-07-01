@@ -1,9 +1,11 @@
+import 'package:YogiTech/api/notification/notification_service.dart';
 import 'package:YogiTech/services/notifi_service.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/widgets/switch.dart'; // Assuming this is CustomSwitch
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:YogiTech/src/models/notification.dart' as n;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationsPage extends StatefulWidget {
@@ -28,12 +30,22 @@ class _NotificationsPageState extends State<NotificationsPage> {
   late bool _streakSaverOn;
   late bool _friendActivitiesOn;
   late bool _newEventOn;
+  late List<n.Notification>? _notifications;
   int currentStreak = 0;
 
   @override
   void initState() {
+    fetchNotification();
     super.initState();
     _loadSwitchStates(); // Load initial switch states
+  }
+
+  Future<void> fetchNotification() async {
+    final notifications = await getNotifications();
+    setState(() {
+      _notifications =
+          notifications.map((e) => n.Notification.fromMap(e)).toList();
+    });
   }
 
   Future<void> _loadSwitchStates() async {
