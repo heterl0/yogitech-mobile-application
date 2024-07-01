@@ -1,9 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:YogiTech/src/models/social.dart';
+
 class Notification {
   int id;
   int user;
+  SocialProfile profile;
   String title;
   String body;
   String time;
@@ -15,6 +18,7 @@ class Notification {
   Notification({
     required this.id,
     required this.user,
+    required this.profile,
     required this.title,
     required this.body,
     required this.time,
@@ -27,6 +31,7 @@ class Notification {
   Notification copyWith({
     int? id,
     int? user,
+    SocialProfile? profile,
     String? title,
     String? body,
     String? time,
@@ -38,6 +43,7 @@ class Notification {
     return Notification(
       id: id ?? this.id,
       user: user ?? this.user,
+      profile: profile ?? this.profile,
       title: title ?? this.title,
       body: body ?? this.body,
       time: time ?? this.time,
@@ -52,6 +58,7 @@ class Notification {
     return <String, dynamic>{
       'id': id,
       'user': user,
+      'profile': profile.toMap(),
       'title': title,
       'body': body,
       'time': time,
@@ -66,6 +73,7 @@ class Notification {
     return Notification(
       id: map['id'] as int,
       user: map['user'] as int,
+      profile: SocialProfile.fromMap(map['profile'] as Map<String, dynamic>),
       title: map['title'] as String,
       body: map['body'] as String,
       time: map['time'] as String,
@@ -83,7 +91,7 @@ class Notification {
 
   @override
   String toString() {
-    return 'Notification(id: $id, user: $user, title: $title, body: $body, time: $time, is_admin: $is_admin, created_at: $created_at, updated_at: $updated_at, active_status: $active_status)';
+    return 'Notification(id: $id, user: $user, profile: $profile,  title: $title, body: $body, time: $time, is_admin: $is_admin, created_at: $created_at, updated_at: $updated_at, active_status: $active_status)';
   }
 
   @override
@@ -92,6 +100,7 @@ class Notification {
 
     return other.id == id &&
         other.user == user &&
+        other.profile == profile &&
         other.title == title &&
         other.body == body &&
         other.time == time &&
@@ -105,6 +114,7 @@ class Notification {
   int get hashCode {
     return id.hashCode ^
         user.hashCode ^
+        profile.hashCode ^
         title.hashCode ^
         body.hashCode ^
         time.hashCode ^
