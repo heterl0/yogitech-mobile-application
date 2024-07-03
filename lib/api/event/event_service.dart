@@ -56,11 +56,18 @@ Future<CandidateEvent?> joinEvent(int id) async {
   }
 }
 
-Future<bool?> giveUpEvent(int id) async {
+Future<CandidateEvent?> updateStatusCandidateEvent(int id,int status) async {
   try {
     final url = formatApiUrl('/api/v1/event-candidates/$id/');
-    final response = await DioInstance.delete(url);
-    return response.statusCode == 204;
+    final data = {"active_status":status};
+    final response = await DioInstance.patch(url,data:data);
+    if (response.statusCode == 200){
+      print(response.data);
+      return CandidateEvent.fromMap(response.data);
+    }else{
+      print(
+          'Giveup event detail failed with status code: ${response.statusCode}');
+    }
   } catch (e) {
     print('Give up event detail error: $e');
     return null;

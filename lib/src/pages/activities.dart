@@ -1,4 +1,6 @@
+import 'package:YogiTech/main.dart';
 import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/models/event.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/api/event/event_service.dart';
@@ -11,21 +13,19 @@ import 'package:YogiTech/utils/formatting.dart';
 class Activities extends StatefulWidget {
   final Account? account;
   final VoidCallback? fetchAccount;
-  const Activities({super.key, this.account,  this.fetchAccount});
+  const Activities({super.key, this.account, this.fetchAccount});
 
   @override
   State<Activities> createState() => _ActivitiesState();
 }
 
 class _ActivitiesState extends State<Activities> {
-  // Biến trạng thái để lưu trữ nội dung hiện tại
-
   List<dynamic> _events = [];
 
   @override
   void initState() {
     super.initState();
-    _loadEvents();
+    _loadEvents(null);
   }
 
   @override
@@ -40,14 +40,13 @@ class _ActivitiesState extends State<Activities> {
     );
   }
 
-  Future<void> _loadEvents() async {
+  Future<void> _loadEvents(int? eventId) async {
     try {
       final events = await getEvents();
       setState(() {
         _events = events;
       });
     } catch (e) {
-      // Handle errors, e.g., show a snackbar or error message
       print('Error loading activities: $e');
     }
   }
@@ -75,30 +74,28 @@ class _ActivitiesState extends State<Activities> {
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
       child: GridView.builder(
         shrinkWrap: true,
-        physics: const BouncingScrollPhysics(), // Enable scrolling
+        physics: const BouncingScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // 2 columns
-
-          childAspectRatio: 5 / 6, // Aspect ratio of each card
+          crossAxisCount: 2,
+          childAspectRatio: 5 / 6,
         ),
-        itemCount: _events.length, // Number of cards
-
+        itemCount: _events.length,
         itemBuilder: (context, index) {
           return CustomCard(
             imageUrl: _events[index].image_url,
             title: _events[index].title,
-            caption:
-                "${trans.participants}: ${_events[index].event_candidate.length}",
-            subtitle: checkDateExpired(
-                _events[index].start_date, _events[index].expire_date, trans),
+            caption: "${trans.participants}: ${_events[index].event_candidate.length}",
+            subtitle: checkDateExpired(_events[index].start_date, _events[index].expire_date, trans),
             onTap: () {
               pushWithoutNavBar(
                 context,
                 MaterialPageRoute(
                   builder: (context) => EventDetail(
+                    key: UniqueKey(), // Ensure EventDetail is keyed
                     event: _events[index],
                     account: widget.account,
                     fetchAccount: widget.fetchAccount,
+                    fetchEvent: _loadEvents,
                   ),
                 ),
               );

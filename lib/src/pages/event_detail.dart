@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/api/auth/auth_service.dart';
@@ -17,8 +18,15 @@ class EventDetail extends StatefulWidget {
   final Event? event;
   final Account? account;
   final VoidCallback? fetchAccount;
-  const EventDetail({super.key, required this.event, this.account, this.fetchAccount});
+  final void Function(int)? fetchEvent;
 
+  const EventDetail({
+    Key? key, // Add a key here
+    required this.event,
+    this.account,
+    this.fetchAccount,
+    this.fetchEvent,
+  }) : super(key: key);
 
   @override
   _EventDetailState createState() => _EventDetailState();
@@ -26,19 +34,21 @@ class EventDetail extends StatefulWidget {
 
 class _EventDetailState extends State<EventDetail>
     with TickerProviderStateMixin {
-  late Event? _event;
-  late Account? _account;
+  Event? _event;
+  Account? _account;
   late TabController _tabController;
   bool isLoading = false;
-  bool _isJoin= false;
+  bool _isJoin = false;
+  CandidateEvent? _candidateEvent;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    _account = widget.account;
     _event = widget.event;
-    _isJoin = isjoin(_event!,_account!.id);
+    _account = widget.account;
+    _tabController = TabController(length: 2, vsync: this);
+    _fetchEventDetails(null);
+    _fetchUsers();
   }
 
   @override
@@ -47,44 +57,60 @@ class _EventDetailState extends State<EventDetail>
     super.dispose();
   }
 
-  Future<void> fetchUsers() async {
+  Future<void> _fetchUsers() async {
+    if (_event == null || _account == null) return;
     setState(() {
       isLoading = true; // Start loading
-      widget.fetchAccount!.call();
-      _account = widget.account;
-      _isJoin = isjoin(_event!,_account!.id);
+    });
+    JoinEvent join = getCandidateByUser();
+    setState(() {
+      _isJoin = join.isJoin;
+      _candidateEvent = join.candidate;
       isLoading = false;
     });
   }
 
-  Future<void> handleJoinEvent(Event ev, bool isJoin) async {
-    if (!isJoin) {
+  Future<void> handleJoinEvent() async {
+    if (_event == null) return;
+    setState(() {
+      isLoading = true; // Start loading
+    });
+    CandidateEvent? updateResult;
+    if (!_isJoin && _candidateEvent == null) {
+      updateResult = await joinEvent(_event!.id);
+    } else if (!_isJoin && _candidateEvent != null) {
+      updateResult = await updateStatusCandidateEvent(_candidateEvent!.id, 1);
+    } else {
+      updateResult = null;
+    }
+    if (updateResult is CandidateEvent) {
+      print('nowfetch');
+      // await _fetchUsers();
       setState(() {
-        isLoading = true; // Start loading
+        widget.fetchEvent!.call(_event!.id);
+        _fetchEventDetails(_event!.id);
       });
-      final joinResult = await joinEvent(ev.id);
-      if (joinResult is CandidateEvent) {
-        print('st');
-        fetchEventDetails(ev.id);
-        fetchUsers();
-      } else {
-        print('Error joining event: $joinResult');
-        setState(() {
-          isLoading = false; // Stop loading on error
-        });
-      }
+    } else {
+      print('Error joining event: $updateResult');
+      setState(() {
+        isLoading = false; // Stop loading on error
+      });
     }
   }
 
-  Future<void> handleGiveUpEvent(Event ev, bool isJoin,int candidateId) async {
-    if (candidateId != -1 && isJoin) {
+  Future<void> handleGiveUpEvent() async {
+    if (_isJoin && _candidateEvent != null) {
       setState(() {
         isLoading = true; // Start loading
       });
-      final bool? giveUpResult = await giveUpEvent(candidateId);
-      if (giveUpResult != null && giveUpResult) {
-        fetchEventDetails(ev.id);
-        fetchUsers();
+      final CandidateEvent? giveUpResult =
+          await updateStatusCandidateEvent(_candidateEvent!.id, 0);
+      if (giveUpResult != null) {
+        // await _fetchUsers();
+        setState(() {
+          widget.fetchEvent!.call(_event!.id);
+          _fetchEventDetails(_event!.id);
+        });
       } else {
         print('Error giving up event: $giveUpResult');
         setState(() {
@@ -94,16 +120,29 @@ class _EventDetailState extends State<EventDetail>
     }
   }
 
-  Future<void> fetchEventDetails(int eventId) async {
-      // Kiểm tra _event trước khi gọi API
-      setState(() {
-        isLoading = true;
-      });
-      Event? updatedEvent = await getEvent(eventId);
+  Future<void> _fetchEventDetails(int? event) async {
+    if (event != null) {
+      Event? updatedEvent = await getEvent(event);
       setState(() {
         _event = updatedEvent;
+        final join = getCandidateByUser();
+        _isJoin = join.isJoin;
+        _candidateEvent = join.candidate;
         isLoading = false;
       });
+    } else {
+      setState(() {
+        isLoading = true;
+        _event = widget.event;
+        _account = widget.account;
+        if (_event != null && _account != null) {
+          final join = getCandidateByUser();
+          _isJoin = join.isJoin;
+          _candidateEvent = join.candidate;
+        }
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -111,47 +150,40 @@ class _EventDetailState extends State<EventDetail>
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
-    // Find the candidate ID by matching the user ID in the candidates list
-    // int candidateId =
-    //     _event!.event_candidate.map((candidate) => candidate.id).firstWhere(
-    //           (id) => _event!.event_candidate.any((candidate) =>
-    //               candidate.user == _account!.id && candidate.id == id),
-    //           orElse: () => -1,
-    //         );
-    // bool isJoin = (candidateId != -1);
-
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      backgroundColor: theme.colorScheme.surface,
-      body: CustomScrollView(
-        slivers: [
-          _buildCustomTopBar(context),
-          SliverToBoxAdapter(
-            child: _buildBody(context),
-          ),
-          if (isLoading)
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Container(
-                color: Colors.black54,
-                child: Center(
-                  child: CircularProgressIndicator(),
+    return isLoading
+        ? Center(child: CircularProgressIndicator())
+        : Scaffold(
+            extendBodyBehindAppBar: true,
+            backgroundColor: theme.colorScheme.surface,
+            body: CustomScrollView(
+              slivers: [
+                if (_event != null) _buildCustomTopBar(context),
+                SliverToBoxAdapter(
+                  child: _buildBody(context),
                 ),
-              ),
+                if (isLoading)
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Container(
+                      color: Colors.black54,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ),
+              ],
             ),
-        ],
-      ),
-      bottomNavigationBar: CustomBottomBar(
-        buttonTitle: _isJoin ? trans.giveUp : trans.joinIn,
-        onPressed: () {
-          if (!_isJoin) {
-            handleJoinEvent(_event!,_isJoin);
-          } else {
-            handleGiveUpEvent(_event!,_isJoin,_account!.id);
-          }
-        },
-      ),
-    );
+            bottomNavigationBar: _isJoin
+                ? CustomBottomBar(
+                    buttonTitle: trans.giveUp,
+                    style: ButtonStyleType.Quaternary,
+                    onPressed: handleGiveUpEvent,
+                  )
+                : CustomBottomBar(
+                    buttonTitle: trans.joinIn,
+                    onPressed: handleJoinEvent,
+                  ),
+          );
   }
 
   Widget _buildCustomTopBar(BuildContext context) {
@@ -188,13 +220,13 @@ class _EventDetailState extends State<EventDetail>
           style: h2.copyWith(color: theme.colorScheme.onSurface)),
       expandedHeight: 320,
       flexibleSpace: FlexibleSpaceBar(
-        background: 
-        CachedNetworkImage(
-        imageUrl: _event!.image_url,
-        fit: BoxFit.cover,
-        placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-        errorWidget: (context, url, error) => Icon(Icons.error),
-      ),
+        background: CachedNetworkImage(
+          imageUrl: _event!.image_url,
+          fit: BoxFit.cover,
+          placeholder: (context, url) =>
+              Center(child: CircularProgressIndicator()),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        ),
       ),
     );
   }
@@ -208,11 +240,11 @@ class _EventDetailState extends State<EventDetail>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 16),
-          _buildTitle(context),
+          if (_event != null) _buildTitle(context),
           const SizedBox(height: 16),
-          _buildRowWithText(context, trans),
+          if (_event != null) _buildRowWithText(context, trans),
           const SizedBox(height: 16),
-          _buildDescription(),
+          if (_event != null) _buildDescription(),
           const SizedBox(height: 16),
           TabBar(
             dividerColor: Colors.transparent,
@@ -441,13 +473,27 @@ class _EventDetailState extends State<EventDetail>
     );
   }
 
-  bool isjoin(Event event, int accId){
-    int candidateId =
-        event.event_candidate.map((candidate) => candidate.id).firstWhere(
-              (id) => event.event_candidate.any((candidate) =>
-                  candidate.user == accId && candidate.id == id),
-              orElse: () => -1,
-            );
-    return (candidateId != -1);
+  JoinEvent getCandidateByUser() {
+    CandidateEvent? candi;
+    bool isjoin = false;
+    try {
+      candi = _event!.event_candidate.firstWhere(
+        (candidate) => candidate.user == _account!.id,
+      );
+    } catch (e) {
+      candi = null;
+    }
+    // print(candi);
+    if (candi != null && candi.active_status == 1) {
+      isjoin = true;
+    }
+    JoinEvent join = JoinEvent(isJoin: isjoin, candidate: candi);
+    return join;
   }
+}
+
+class JoinEvent {
+  bool isJoin;
+  CandidateEvent? candidate;
+  JoinEvent({required this.isJoin, this.candidate});
 }
