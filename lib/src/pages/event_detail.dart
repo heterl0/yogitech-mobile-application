@@ -15,7 +15,10 @@ import 'package:intl/intl.dart';
 
 class EventDetail extends StatefulWidget {
   final Event? event;
-  const EventDetail({super.key, required this.event});
+  final Account? account;
+  final VoidCallback? fetchAccount;
+  const EventDetail({super.key, required this.event, this.account, this.fetchAccount});
+
 
   @override
   _EventDetailState createState() => _EventDetailState();
@@ -27,13 +30,15 @@ class _EventDetailState extends State<EventDetail>
   late Account? _account;
   late TabController _tabController;
   bool isLoading = false;
+  bool _isJoin= false;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    fetchUsers(); // Gọi fetchUsers ở đây
+    _account = widget.account;
     _event = widget.event;
+    _isJoin = isjoin(_event!,_account!.id);
   }
 
   @override
@@ -45,22 +50,23 @@ class _EventDetailState extends State<EventDetail>
   Future<void> fetchUsers() async {
     setState(() {
       isLoading = true; // Start loading
-    });
-    Account? account = await retrieveAccount();
-    setState(() {
-      _account = account;
+      widget.fetchAccount!.call();
+      _account = widget.account;
+      _isJoin = isjoin(_event!,_account!.id);
       isLoading = false;
     });
   }
 
-  Future<void> handleJoinEvent() async {
-    if (_event != null) {
+  Future<void> handleJoinEvent(Event ev, bool isJoin) async {
+    if (!isJoin) {
       setState(() {
         isLoading = true; // Start loading
       });
-      final joinResult = await joinEvent(_event!.id);
+      final joinResult = await joinEvent(ev.id);
       if (joinResult is CandidateEvent) {
-        fetchEventDetails();
+        print('st');
+        fetchEventDetails(ev.id);
+        fetchUsers();
       } else {
         print('Error joining event: $joinResult');
         setState(() {
@@ -70,14 +76,15 @@ class _EventDetailState extends State<EventDetail>
     }
   }
 
-  Future<void> handleGiveUpEvent(int candidateId) async {
-    if (candidateId != -1) {
+  Future<void> handleGiveUpEvent(Event ev, bool isJoin,int candidateId) async {
+    if (candidateId != -1 && isJoin) {
       setState(() {
         isLoading = true; // Start loading
       });
       final bool? giveUpResult = await giveUpEvent(candidateId);
       if (giveUpResult != null && giveUpResult) {
-        fetchEventDetails();
+        fetchEventDetails(ev.id);
+        fetchUsers();
       } else {
         print('Error giving up event: $giveUpResult');
         setState(() {
@@ -87,18 +94,16 @@ class _EventDetailState extends State<EventDetail>
     }
   }
 
-  Future<void> fetchEventDetails() async {
-    if (_event != null) {
+  Future<void> fetchEventDetails(int eventId) async {
       // Kiểm tra _event trước khi gọi API
       setState(() {
         isLoading = true;
       });
-      Event? updatedEvent = await getEvent(_event!.id);
+      Event? updatedEvent = await getEvent(eventId);
       setState(() {
         _event = updatedEvent;
         isLoading = false;
       });
-    }
   }
 
   @override
@@ -107,13 +112,13 @@ class _EventDetailState extends State<EventDetail>
     final trans = AppLocalizations.of(context)!;
 
     // Find the candidate ID by matching the user ID in the candidates list
-    int candidateId =
-        _event!.event_candidate.map((candidate) => candidate.id).firstWhere(
-              (id) => _event!.event_candidate.any((candidate) =>
-                  candidate.user.id == _account!.id && candidate.id == id),
-              orElse: () => -1,
-            );
-    bool isJoin = (candidateId != -1);
+    // int candidateId =
+    //     _event!.event_candidate.map((candidate) => candidate.id).firstWhere(
+    //           (id) => _event!.event_candidate.any((candidate) =>
+    //               candidate.user == _account!.id && candidate.id == id),
+    //           orElse: () => -1,
+    //         );
+    // bool isJoin = (candidateId != -1);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -137,12 +142,12 @@ class _EventDetailState extends State<EventDetail>
         ],
       ),
       bottomNavigationBar: CustomBottomBar(
-        buttonTitle: isJoin ? trans.giveUp : trans.joinIn,
+        buttonTitle: _isJoin ? trans.giveUp : trans.joinIn,
         onPressed: () {
-          if (!isJoin) {
-            handleJoinEvent();
+          if (!_isJoin) {
+            handleJoinEvent(_event!,_isJoin);
           } else {
-            handleGiveUpEvent(candidateId);
+            handleGiveUpEvent(_event!,_isJoin,_account!.id);
           }
         },
       ),
@@ -391,7 +396,7 @@ class _EventDetailState extends State<EventDetail>
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      item.user.username,
+                      '${item.profile.first_name} ${item.profile.last_name}',
                       style: h3.copyWith(color: theme.colorScheme.onSurface),
                       maxLines: 1, // Đảm bảo tên người dùng không quá dài
                       overflow:
@@ -434,5 +439,15 @@ class _EventDetailState extends State<EventDetail>
         );
       },
     );
+  }
+
+  bool isjoin(Event event, int accId){
+    int candidateId =
+        event.event_candidate.map((candidate) => candidate.id).firstWhere(
+              (id) => event.event_candidate.any((candidate) =>
+                  candidate.user == accId && candidate.id == id),
+              orElse: () => -1,
+            );
+    return (candidateId != -1);
   }
 }

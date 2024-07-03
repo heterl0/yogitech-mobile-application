@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/models/account.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/api/event/event_service.dart';
@@ -8,7 +9,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:YogiTech/utils/formatting.dart';
 
 class Activities extends StatefulWidget {
-  const Activities({super.key});
+  final Account? account;
+  final VoidCallback? fetchAccount;
+  const Activities({super.key, this.account,  this.fetchAccount});
 
   @override
   State<Activities> createState() => _ActivitiesState();
@@ -94,6 +97,8 @@ class _ActivitiesState extends State<Activities> {
                 MaterialPageRoute(
                   builder: (context) => EventDetail(
                     event: _events[index],
+                    account: widget.account,
+                    fetchAccount: widget.fetchAccount,
                   ),
                 ),
               );

@@ -83,7 +83,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
         PersistentTabConfig(
-          screen: Activities(),
+          screen: Activities(account: _account,fetchAccount: _fetchAccount,),
           item: ItemConfig(
             textStyle: min_cap,
             icon: const Icon(Icons.celebration),
