@@ -138,16 +138,58 @@ class _NotificationDetailState extends State<NotificationDetail> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 70,
-              height: 70,
-              decoration: ShapeDecoration(
-                gradient: gradient,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(80),
-                ),
-              ),
-            ),
+            (!_noti!.is_admin)
+                  ? ((_noti!.profile.avatar != null) &&
+                          _noti!.profile.avatar != '')
+                      ? Container(
+                          width: 60,
+                          height: 60,
+                          child: CircleAvatar(
+                            radius: 80,
+                            backgroundImage: CachedNetworkImageProvider(
+                                _noti!.profile.avatar.toString()),
+                            backgroundColor: Colors.transparent,
+                          ))
+                      : Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.black54,
+                            border: Border.all(
+                              color: Colors.blue, // Màu của border
+                              width: 1.0, // Độ rộng của border
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              _noti!.profile.first_name != null
+                                  ? _noti!.profile.first_name![0].toUpperCase()
+                                  : ':)',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white, // Màu chữ
+                              ),
+                            ),
+                          ),
+                        )
+                  :Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.transparent,
+                      border: Border.all(
+                        color: Colors.blue, // Color of the border
+                        width: 1.0, // Width of the border
+                      ),
+                      image: DecorationImage(
+                        image: AssetImage('assets/icons/yogiAvatar.png'),
+                        fit: BoxFit.cover, // This ensures the image covers the circle properly
+                      ),
+                    ),
+                  ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -177,20 +219,14 @@ class _NotificationDetailState extends State<NotificationDetail> {
                   ),
                   _noti!.is_admin?
                   ShaderMask(
-                    shaderCallback: (bounds) {
-                      return gradient.createShader(bounds);
-                    },
-                    child: const Text(
-                      'YogiTech',
-                      style: TextStyle(
-                        color: active,
-                        fontSize: 28,
-                        fontFamily: 'ReadexPro',
-                        fontWeight: FontWeight.w700,
-                        height: 1,
-                      ),
-                    ),
-                  ):
+                          shaderCallback: (bounds) {
+                            return gradient.createShader(bounds);
+                          },
+                          child: Text(
+                            'YogiTech',
+                            style: h2.copyWith(color: active),
+                          ),
+                        ):
                   Text(
                     '${_noti!.profile.first_name} ${_noti!.profile.last_name}',
                     style: h2.copyWith(color:  primary,fontSize: 28),
