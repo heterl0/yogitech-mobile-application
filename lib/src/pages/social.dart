@@ -193,7 +193,7 @@ class NewsFeed extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        NotificationDetail(notification: notifications![index]),
+                        NotificationDetail(notification: notifications![index],account: account,unFollow: unFollow,followUserByUserId: followUserByUserId),
                   ),
                 );
               },

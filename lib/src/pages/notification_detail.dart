@@ -1,4 +1,6 @@
+import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/pages/camera/camera_page.dart';
+import 'package:YogiTech/src/pages/friend_profile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/models/notification.dart' as n;
@@ -17,10 +19,14 @@ import 'package:intl/intl.dart';
 
 class NotificationDetail extends StatefulWidget {
   final n.Notification? notification;
+  final Account? account;
+  final void Function(int id)? unFollow;
+  final void Function(int id)? followUserByUserId;
+
 
   const NotificationDetail({
     super.key,
-    this.notification,
+    this.notification, this.account, this.unFollow, this.followUserByUserId,
   });
 
   @override
@@ -29,6 +35,8 @@ class NotificationDetail extends StatefulWidget {
 
 class _NotificationDetailState extends State<NotificationDetail> {
   late n.Notification? _noti;
+  late Account? _account;
+
   late bool _isLoading = false;
   final TextEditingController commentController = TextEditingController();
   @override
@@ -57,6 +65,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
   void initState() {
     super.initState();
     _noti = widget.notification;
+    _account = widget.account;
     print(_noti);
   }
 
@@ -119,7 +128,23 @@ class _NotificationDetailState extends State<NotificationDetail> {
     final theme = Theme.of(context);
     DateTime dateTime = DateTime.parse(_noti!.time);
 
-    return Container(
+    return GestureDetector(
+      onTap:(){
+        if(!_noti!.is_admin){
+          Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FriendProfile(
+              profile: _noti!.profile,
+              account: _account,
+              unFollow: widget.unFollow,
+              followUserByUserId: widget.followUserByUserId,
+            ),
+          ),
+        );
+        }
+  },
+      child: Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.only(bottom: 12),
@@ -231,6 +256,6 @@ class _NotificationDetailState extends State<NotificationDetail> {
           ),
         ],
       ),
-    );
+    ));
   }
 }
