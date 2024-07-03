@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void didUpdateWidget(covariant HomePage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.account != widget.account) {
+    if ((oldWidget.account != widget.account)|| (oldWidget.account?.profile != widget.account?.profile)) {
       _fetchAccount();
     }
   }
@@ -276,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      ExerciseDetail(exercise: exercise),
+                                      ExerciseDetail(exercise: exercise, account: _account,fetchAccount: widget.fetchAccount,),
                                 ),
                               );
                             },
@@ -333,7 +333,7 @@ class _HomePageState extends State<HomePage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      ExerciseDetail(exercise: exercise),
+                                      ExerciseDetail(exercise: exercise ,account: _account,fetchAccount: widget.fetchAccount,),
                                 ),
                               );
                             },

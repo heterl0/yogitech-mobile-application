@@ -28,4 +28,5 @@ class AppRoutes {
   static const String firstScreen = '/firstScreen';
   static const String verifyEmail = '/verifyEmail';
   static const String allExercise = '/allexercise';
+  static const String notificationDetail = '/notificationDetail';
 }

@@ -1,6 +1,6 @@
-import 'package:YogiTech/model/service_locator.dart';
 import 'package:YogiTech/services/notifi_service.dart';
 import 'package:YogiTech/src/models/social.dart';
+import 'package:YogiTech/src/pages/notification_detail.dart';
 import 'package:YogiTech/src/pages/subscription.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -60,7 +60,6 @@ void main() async {
 
   // Tải các biến môi trường
   await loadEnv();
-  setupLocator();
   // Kiểm tra và lấy token
   final accessToken = await checkToken();
 
@@ -219,6 +218,7 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.blog: (context) => Blog(),
           AppRoutes.reminder: (context) => ReminderPage(),
           AppRoutes.notifications: (context) => NotificationsPage(),
+          AppRoutes.notificationDetail: (context) => NotificationDetail(),
           AppRoutes.friendProfile: (context) => FriendProfile(
               // Sửa lại tên class
               profile: profile),

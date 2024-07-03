@@ -19,7 +19,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class AllExercise extends StatefulWidget {
   final String? searchString;
   final Muscle? selectedMuscle;
-  const AllExercise({super.key, this.searchString, this.selectedMuscle});
+  final Account? account;
+  final VoidCallback? fetchAccount;
+  const AllExercise({super.key, this.searchString, this.selectedMuscle, this.account, this.fetchAccount});
 
   @override
   BlogState createState() => BlogState();
@@ -30,22 +32,22 @@ class BlogState extends State<AllExercise> {
   bool _isNotSearching = true;
   bool _isLoading = false;
   final TextEditingController _searchController = TextEditingController();
-  Account? account;
+  Account? _account;
 
   @override
   void initState() {
     super.initState();
     _fetchExercise(widget.searchString, widget.selectedMuscle);
-    _fetchAccount();
+    _account = widget.account;
     _searchController.text = widget.searchString ?? '';
   }
 
-  Future<void> _fetchAccount() async {
-    final Account? _account = await retrieveAccount();
-    setState(() {
-      account = _account;
-    });
-  }
+  // Future<void> _fetchAccount() async {
+  //   final Account? _account = await retrieveAccount();
+  //   setState(() {
+  //     account = _account;
+  //   });
+  // }
 
   Future<void> _fetchExercise([String? query = '', Muscle? mus]) async {
     setState(() {
@@ -196,7 +198,7 @@ class BlogState extends State<AllExercise> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ExerciseDetail(exercise: ex),
+                        builder: (context) => ExerciseDetail(exercise: ex,account: _account,fetchAccount: widget.fetchAccount),
                       ),
                     );
                   },
