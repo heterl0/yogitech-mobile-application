@@ -48,9 +48,4 @@
         android:id="@+id/score_fragment"
         android:name="com.example.yogi_application.fragment.ScoreFragment"
         android:label="ScoreFragment" />
-
-    <fragment
-        android:id="@+id/gallery_fragment"
-        android:name="com.example.yogi_application.fragment.GalleryFragment"
-        android:label="GalleryFragment" />
 </navigation>
