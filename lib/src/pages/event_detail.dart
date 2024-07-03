@@ -183,7 +183,6 @@ class _EventDetailState extends State<EventDetail>
              CustomBottomBar(
                     buttonTitle: _expired.toString(),
                     style: ButtonStyleType.Tertiary,
-                    onPressed: (){},
             ):
             _isJoin
                 ? CustomBottomBar(
@@ -394,9 +393,8 @@ class _EventDetailState extends State<EventDetail>
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
-    List<dynamic> candidates = _event!.event_candidate;
-    candidates
-        .sort((a, b) => (a.event_point ?? 0).compareTo(b.event_point ?? 0));
+    List<dynamic> candidates = _event!.event_candidate.where((candidate) => candidate.active_status != 0).toList();
+    candidates.sort((a, b) => (a.event_point ?? 0).compareTo(b.event_point ?? 0));
 
     return SingleChildScrollView(
       child: Column(
