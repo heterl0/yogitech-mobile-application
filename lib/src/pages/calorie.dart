@@ -1,12 +1,18 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class Calorie extends StatelessWidget {
+class Calorie extends StatefulWidget {
   const Calorie({super.key});
 
+  @override
+  State<Calorie> createState() => _CalorieState();
+}
+
+class _CalorieState extends State<Calorie> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -24,6 +30,15 @@ class Calorie extends StatelessWidget {
       body: _buildMainContent(context),
     );
   }
+
+  List<FlSpot> sampleDataCalorie = [
+    FlSpot(0, 2000), // x = thời gian (ví dụ: ngày), y = kinh nghiệm
+    FlSpot(1, 2200),
+    FlSpot(2, 2400),
+    FlSpot(3, 2600),
+    FlSpot(4, 2800),
+    FlSpot(5, 3000),
+  ];
 
   Widget _buildMainContent(BuildContext context) {
     return SingleChildScrollView(
@@ -211,15 +226,66 @@ class Calorie extends StatelessWidget {
   }
 
   Widget _buildPlaceholder() {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        width: double.infinity,
-        height: 280,
-        decoration: BoxDecoration(color: Color(0xFF8D8E99)),
-        child: Column(
-            // Add children widgets here
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: AspectRatio(
+        aspectRatio: 1 / 1,
+        child: LineChart(LineChartData(
+          minX: 0,
+          maxX: 5,
+          minY: 1000,
+          maxY: 3000,
+          borderData: FlBorderData(show: false),
+          gridData: FlGridData(
+            show: true,
+            drawVerticalLine: false,
+            drawHorizontalLine: true,
+            getDrawingHorizontalLine: (value) {
+              return FlLine(
+                color: stroke,
+                strokeWidth: 1,
+              );
+            },
+          ),
+          lineBarsData: [
+            LineChartBarData(
+              spots: sampleDataCalorie,
+              isCurved: true,
+              gradient: gradient,
+              barWidth: 4,
             ),
+          ],
+          titlesData: FlTitlesData(
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                getTitlesWidget: (value, meta) {
+                  return Text(
+                    value.toString(),
+                    style: min_cap.copyWith(color: text),
+                    textAlign: TextAlign.center,
+                  );
+                },
+                reservedSize: 60,
+                showTitles: true,
+              ),
+            ),
+            bottomTitles: AxisTitles(
+              drawBelowEverything: true,
+              sideTitles: SideTitles(
+                  getTitlesWidget: (value, meta) {
+                    return Text(
+                      value.toString(),
+                      style: min_cap.copyWith(color: text),
+                      textAlign: TextAlign.center,
+                    );
+                  },
+                  showTitles: true,
+                  reservedSize: 48),
+            ),
+            topTitles: AxisTitles(),
+            rightTitles: AxisTitles(),
+          ),
+        )),
       ),
     );
   }

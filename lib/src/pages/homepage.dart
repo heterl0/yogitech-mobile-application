@@ -20,7 +20,7 @@ import 'package:YogiTech/src/widgets/card.dart';
 class HomePage extends StatefulWidget {
   final Account? account;
   final VoidCallback? fetchAccount;
-  const HomePage({super.key,  this.account, this.fetchAccount});
+  const HomePage({super.key, this.account, this.fetchAccount});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -39,7 +39,6 @@ class _HomePageState extends State<HomePage> {
     _fetchExercises();
     _fetchExercisesSort();
     _fetchAccount();
-    
   }
 
   Future<void> _fetchExercisesSort() async {
@@ -71,14 +70,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _fetchAccount() async {
-    if(widget.account!=null){
+    if (widget.account != null) {
       setState(() {
         _account = widget.account;
       });
-    }else{
-          print('I got null');
+    } else {
+      print('I got null');
     }
-
   }
 
   @override
@@ -118,8 +116,9 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ],
-                titleWidget: StreakValue(
-                    _account != null ? _account!.profile.streak.toString() : '0'),
+                titleWidget: StreakValue(_account != null
+                    ? _account!.profile.streak.toString()
+                    : '0'),
                 postActions: [
                   IconButton(
                     icon:
@@ -138,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                   IconButton(
                     icon: Icon(Icons.tune_outlined),
                     onPressed: () {
-                      Navigator.push(
+                      pushWithoutNavBar(
                         context,
                         MaterialPageRoute(
                           builder: (context) => FilterPage(),
