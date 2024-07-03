@@ -1,3 +1,5 @@
+import 'package:YogiTech/api/social/social_service.dart';
+import 'package:YogiTech/src/pages/friend_profile.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -393,58 +395,115 @@ class _EventDetailState extends State<EventDetail>
         children: candidates.asMap().entries.map((entry) {
           int index = entry.key;
           CandidateEvent item = entry.value as CandidateEvent;
-          return item.active_status==1? Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
-            child: SizedBox(
-              height: 48, // Điều chỉnh chiều cao cho mỗi hàng
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 28,
-                    height: 28,
-                    child: index == 0
-                        ? Image.asset('assets/icons/Warranty.png',
-                            fit: BoxFit.fill)
-                        : Center(
+          return item.active_status == 1
+              ? GestureDetector(
+                  onTap: () {
+                    if(item.user!=_account!.id){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FriendProfile(
+                          profile: item.profile,
+                          account: _account,
+                          unFollow: unFollow,
+                          followUserByUserId: followUserByUserId,
+                        ),
+                      ),
+                    );}
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: SizedBox(
+                      height: 48, // Điều chỉnh chiều cao cho mỗi hàng
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 28,
+                            height: 28,
+                            child: index == 0
+                                ? Image.asset('assets/icons/Warranty.png',
+                                    fit: BoxFit.fill)
+                                : Center(
+                                    child: Text(
+                                      (index + 1).toString(),
+                                      textAlign: TextAlign.center,
+                                      style: h3.copyWith(
+                                          color: theme.colorScheme.onSurface),
+                                    ),
+                                  ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            child: (item.profile.avatar != null &&
+                                    item.profile.avatar != '')
+                                ? Container(
+                                    width: 60,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: stroke,
+                                    ),
+                                    child: CircleAvatar(
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(item
+                                                .profile.avatar
+                                                .toString())),
+                                  )
+                                : Container(
+                                    width:
+                                        60, // 2 * radius + 8 (border width) * 2
+                                    height:
+                                        60, // Matching the ratio as per Figma
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: CircleAvatar(
+                                      radius: 78,
+                                      backgroundImage: AssetImage(
+                                          'assets/images/gradient.jpg'),
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          item.profile.first_name != ''
+                                              ? item.profile.first_name![0]
+                                                  .toUpperCase()
+                                              : ':)',
+                                          style: TextStyle(
+                                            fontSize:
+                                                28, // Adjust the size as needed
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
                             child: Text(
-                              (index + 1).toString(),
-                              textAlign: TextAlign.center,
+                              '${item.profile.first_name} ${item.profile.last_name}',
                               style: h3.copyWith(
                                   color: theme.colorScheme.onSurface),
+                              maxLines:
+                                  1, // Đảm bảo tên người dùng không quá dài
+                              overflow: TextOverflow
+                                  .ellipsis, // Xử lý trường hợp tràn bản
                             ),
                           ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: const ShapeDecoration(
-                      gradient: gradient,
-                      shape: CircleBorder(),
+                          const SizedBox(width: 8),
+                          Text(
+                            '${item.event_point.toStringAsFixed(1)} ${trans.point}',
+                            textAlign: TextAlign.right,
+                            style: h3.copyWith(color: primary),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      '${item.profile.first_name} ${item.profile.last_name}',
-                      style: h3.copyWith(color: theme.colorScheme.onSurface),
-                      maxLines: 1, // Đảm bảo tên người dùng không quá dài
-                      overflow:
-                          TextOverflow.ellipsis, // Xử lý trường hợp tràn bản
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    '${item.event_point.toStringAsFixed(1)} ${trans.point}',
-                    textAlign: TextAlign.right,
-                    style: h3.copyWith(color: primary),
-                  ),
-                ],
-              ),
-            ),
-          ):SizedBox();
+                  ))
+              : SizedBox();
         }).toList(),
       ),
     );
@@ -489,6 +548,39 @@ class _EventDetailState extends State<EventDetail>
     }
     JoinEvent join = JoinEvent(isJoin: isjoin, candidate: candi);
     return join;
+  }
+
+  Future<void> unFollow(int id) async {
+    try {
+      final account = await unfollowUser(id);
+
+      if (widget.fetchAccount != null) {
+        widget.fetchAccount!();
+      }
+      if (account != null) {
+        setState(() {
+          _account = account;
+        });
+      }
+    } catch (e) {
+      print('Error unfollowing: $e');
+    }
+  }
+
+  Future<void> followUserByUserId(int id) async {
+    try {
+      final account = await followUser(id);
+      if (widget.fetchAccount != null) {
+        widget.fetchAccount!();
+      }
+      if (account != null) {
+        setState(() {
+          _account = account;
+        });
+      }
+    } catch (e) {
+      print('Error following: $e');
+    }
   }
 }
 
