@@ -36,8 +36,9 @@ class ProfilePage extends StatefulWidget {
       required this.onThemeChanged,
       required this.locale,
       required this.onLanguageChanged,
-      required this.isVietnamese, 
-      this.account, this.fetchAccount});
+      required this.isVietnamese,
+      this.account,
+      this.fetchAccount});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -93,21 +94,21 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
-    void didUpdateWidget(covariant ProfilePage oldWidget) {
-      super.didUpdateWidget(oldWidget);
-      if (oldWidget.account != widget.account) {
-        _fetchUserProfile();
-      }
+  void didUpdateWidget(covariant ProfilePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.account != widget.account) {
+      _fetchUserProfile();
     }
+  }
 
-    Future<void> _fetchUserProfile() async {
-      setState(() {
-        _isLoading = true;
-        _account = widget.account;
-        _profile = _account?.profile;
-        _isLoading = false;
-      });
-    }
+  Future<void> _fetchUserProfile() async {
+    setState(() {
+      _isLoading = true;
+      _account = widget.account;
+      _profile = _account?.profile;
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -475,6 +476,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                     maxX: 5,
                                     minY: 1000,
                                     maxY: 3000,
+                                    borderData: FlBorderData(show: false),
+                                    gridData: FlGridData(
+                                      show: true,
+                                      drawVerticalLine: false,
+                                      drawHorizontalLine: true,
+                                      getDrawingHorizontalLine: (value) {
+                                        return FlLine(
+                                          color: stroke,
+                                          strokeWidth: 1,
+                                        );
+                                      },
+                                    ),
                                     lineBarsData: [
                                       LineChartBarData(
                                         spots: sampleDataPoints,
@@ -491,22 +504,32 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ],
                                     titlesData: FlTitlesData(
                                       leftTitles: AxisTitles(
-                                        axisNameWidget: Text(
-                                          trans.value,
-                                          style: min_cap.copyWith(color: text),
-                                        ),
                                         sideTitles: SideTitles(
+                                          getTitlesWidget: (value, meta) {
+                                            return Text(
+                                              value.toString(),
+                                              style:
+                                                  min_cap.copyWith(color: text),
+                                              textAlign: TextAlign.center,
+                                            );
+                                          },
+                                          reservedSize: 60,
                                           showTitles: true,
                                         ),
                                       ),
                                       bottomTitles: AxisTitles(
                                         drawBelowEverything: true,
-                                        axisNameWidget: Text(
-                                          trans.days,
-                                          style: min_cap.copyWith(color: text),
-                                        ),
-                                        sideTitles:
-                                            SideTitles(showTitles: true),
+                                        sideTitles: SideTitles(
+                                            getTitlesWidget: (value, meta) {
+                                              return Text(
+                                                value.toString(),
+                                                style: min_cap.copyWith(
+                                                    color: text),
+                                                textAlign: TextAlign.center,
+                                              );
+                                            },
+                                            showTitles: true,
+                                            reservedSize: 48),
                                       ),
                                       topTitles: AxisTitles(),
                                       rightTitles: AxisTitles(),

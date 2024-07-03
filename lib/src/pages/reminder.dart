@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:YogiTech/services/notifi_service.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
@@ -145,7 +144,7 @@ class _ReminderPageState extends State<ReminderPage> {
                 'id': id,
                 'time': timeOfDay,
                 'days': days,
-                'isEnabled': _selectedTimes[index!]['isEnabled'],
+                'isEnabled': _selectedTimes[index]['isEnabled'],
               };
             });
           }
@@ -201,29 +200,39 @@ class _ReminderPageState extends State<ReminderPage> {
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: Column(
             children: [
-              Column(
-                children: _selectedTimes
-                    .asMap()
-                    .entries
-                    .map((entry) => GestureDetector(
-                          onTap: () {
-                            _showSetupReminderPage(context, index: entry.key);
-                          },
-                          child: CustomSwitch(
-                            title: '${entry.value['time'].format(context)}',
-                            subtitle:
-                                _getDayDescription(entry.value['days'], trans),
-                            value: entry.value['isEnabled'],
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedTimes[entry.key]['isEnabled'] = value;
-                              });
-                              _saveReminders();
-                            },
-                          ),
-                        ))
-                    .toList(),
-              ),
+              _selectedTimes.isNotEmpty
+                  ? Column(
+                      children: _selectedTimes
+                          .asMap()
+                          .entries
+                          .map((entry) => GestureDetector(
+                                onTap: () {
+                                  _showSetupReminderPage(context,
+                                      index: entry.key);
+                                },
+                                child: CustomSwitch(
+                                  title:
+                                      '${entry.value['time'].format(context)}',
+                                  subtitle: _getDayDescription(
+                                      entry.value['days'], trans),
+                                  value: entry.value['isEnabled'],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedTimes[entry.key]['isEnabled'] =
+                                          value;
+                                    });
+                                    _saveReminders();
+                                  },
+                                ),
+                              ))
+                          .toList(),
+                    )
+                  : Center(
+                      child: Text(
+                        trans.noReminder,
+                        style: bd_text.copyWith(color: text),
+                      ),
+                    ),
             ],
           ),
         ),
