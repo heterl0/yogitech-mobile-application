@@ -521,15 +521,11 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
               ),
               // Nếu có parent_comment, hiển thị reply của admin bên dưới
               if (adminReply) ...[
-                const SizedBox(height: 16),
-                Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 1, color: stroke),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
+                Divider(
+                  color: stroke,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
