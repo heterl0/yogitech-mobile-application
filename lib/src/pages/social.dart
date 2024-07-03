@@ -9,10 +9,12 @@ import 'package:YogiTech/src/pages/notification_detail.dart';
 import 'package:YogiTech/src/pages/notifications.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import '../../api/notification/notification_service.dart';
 
@@ -32,7 +34,7 @@ class SocialPage extends StatefulWidget {
 
 class _SocialPageState extends State<SocialPage> {
   List<n.Notification>? _notifications = [];
-  Account? _account; 
+  Account? _account;
 
   @override
   void initState() {
@@ -47,6 +49,7 @@ class _SocialPageState extends State<SocialPage> {
       if (notifications != null) {
         setState(() {
           _notifications = notifications.cast<n.Notification>();
+          _notifications!.sort((a, b) => b.time.compareTo(a.time));
         });
       } else {
         setState(() {
@@ -61,7 +64,7 @@ class _SocialPageState extends State<SocialPage> {
     }
   }
 
-    Future<void> unFollow(int id) async {
+  Future<void> unFollow(int id) async {
     try {
       final account = await unfollowUser(id);
 
@@ -87,7 +90,7 @@ class _SocialPageState extends State<SocialPage> {
       }
       if (account != null) {
         setState(() {
-        _account = account;
+          _account = account;
         });
       }
       fetchNotification();
@@ -150,11 +153,13 @@ class NewsFeed extends StatelessWidget {
   final void Function(int id)? unFollow;
   final void Function(int id)? followUserByUserId;
 
-
   const NewsFeed({
     super.key,
     this.onTap,
-    required this.notifications, this.account, this.unFollow, this.followUserByUserId,
+    required this.notifications,
+    this.account,
+    this.unFollow,
+    this.followUserByUserId,
   });
 
   @override
@@ -172,24 +177,25 @@ class NewsFeed extends StatelessWidget {
           itemBuilder: (context, index) {
             return NewsListItem(
               notification: notifications![index],
-              onTap:(){
-                  // Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //             builder: (context) => FriendProfile(
-                  //               profile: notifications![index].profile,
-                  //               account: account,
-                  //               unFollow: unFollow,
-                  //               followUserByUserId: followUserByUserId,
-                  //             ),
-                  //           ),
-                  //         );
-                  Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => NotificationDetail(notification: notifications![index]),
-                            ),
-                          );
+              onTap: () {
+                // Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //             builder: (context) => FriendProfile(
+                //               profile: notifications![index].profile,
+                //               account: account,
+                //               unFollow: unFollow,
+                //               followUserByUserId: followUserByUserId,
+                //             ),
+                //           ),
+                //         );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        NotificationDetail(notification: notifications![index]),
+                  ),
+                );
               },
             );
           },
@@ -202,7 +208,6 @@ class NewsFeed extends StatelessWidget {
 class NewsListItem extends StatelessWidget {
   final n.Notification notification;
   final VoidCallback onTap;
-  
 
   const NewsListItem({
     super.key,
@@ -214,72 +219,120 @@ class NewsListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+    DateTime dateTime = DateTime.parse(notification.time);
+    timeago.setLocaleMessages(trans.locale,
+        trans.locale == 'vi' ? timeago.ViMessages() : timeago.EnMessages());
+    // trans.locale == 'vi'? timeago.ViMessages():timeago.EnMessages();
 
-    return 
-    GestureDetector(
-      onTap: onTap,
-      child: 
-      Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(12),
-        margin: const EdgeInsets.only(bottom: 12),
-        decoration: ShapeDecoration(
-          shape: RoundedRectangleBorder(
-            side: BorderSide(width: 1, color: stroke),
-            borderRadius: BorderRadius.circular(16),
+    return GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.only(bottom: 12),
+          decoration: ShapeDecoration(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(width: 1, color: stroke),
+              borderRadius: BorderRadius.circular(16),
+              
+            ),
           ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: ShapeDecoration(
-                gradient: gradient,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(80),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              (!notification.is_admin)
+                  ? ((notification.profile.avatar != null) &&
+                          notification.profile.avatar != '')
+                      ? Container(
+                          width: 60,
+                          height: 60,
+                          child: CircleAvatar(
+                            radius: 80,
+                            backgroundImage: CachedNetworkImageProvider(
+                                notification.profile.avatar.toString()),
+                            backgroundColor: Colors.transparent,
+                          ))
+                      : Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.transparent,
+                            border: Border.all(
+                              color: Colors.blue, // Màu của border
+                              width: 1.0, // Độ rộng của border
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              notification.profile.last_name != null
+                                  ? notification.profile.last_name![0].toUpperCase()
+                                  : ':)',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white, // Màu chữ
+                              ),
+                            ),
+                          ),
+                        )
+                  : Container(
+                      width: 60,
+                      height: 60,
+                      child: CircleAvatar(
+                        radius: 80,
+                        backgroundImage: CachedNetworkImageProvider(
+                            notification.profile.avatar.toString()),
+                        backgroundColor: Colors.transparent,
+                      )),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        notification.is_admin?
+                        Expanded(
+                          child: Text(
+                            'YogiTech',
+                            textAlign: TextAlign.start,
+                            style: min_cap.copyWith(color: Colors.redAccent),
+                          ),
+                        ):
+
+                        Expanded(
+                          child: Text(
+                            '${notification.profile.first_name} ${notification.profile.last_name}',
+                            textAlign: TextAlign.start,
+                            style: min_cap.copyWith(color: primary),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            timeago.format(dateTime, locale: trans.locale),
+                            textAlign: TextAlign.end,
+                            style: min_cap.copyWith(color: text),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      notification.title,
+                      style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          notification.title,
-                          textAlign: TextAlign.start,
-                          style: min_cap.copyWith(color: primary),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          notification.time,
-                          textAlign: TextAlign.end,
-                          style: min_cap.copyWith(color: text),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    notification.body,
-                    style: h3.copyWith(color: theme.colorScheme.onPrimary),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      )
-      );
+            ],
+          ),
+        ));
   }
 }

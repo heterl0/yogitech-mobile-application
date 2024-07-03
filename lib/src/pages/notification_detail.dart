@@ -13,6 +13,7 @@ import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:YogiTech/src/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:YogiTech/utils/formatting.dart';
+import 'package:intl/intl.dart';
 
 class NotificationDetail extends StatefulWidget {
   final n.Notification? notification;
@@ -54,6 +55,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
   void initState() {
     super.initState();
     _noti = widget.notification;
+    print(_noti);
   }
 
   Widget _buildBody(BuildContext context) {
@@ -89,12 +91,13 @@ class _NotificationDetailState extends State<NotificationDetail> {
 
   Widget _buildRowWithText(AppLocalizations trans, BuildContext context) {
     final time = _noti?.time ?? 0;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '$time',
+          '???',
           style: bd_text.copyWith(color: text),
         ),
         const SizedBox(width: 16),
@@ -119,6 +122,8 @@ class _NotificationDetailState extends State<NotificationDetail> {
 
   Widget _buildTitle(BuildContext context) {
     final theme = Theme.of(context);
+    DateTime dateTime = DateTime.parse(_noti!.time);
+
     return      Container(
         width: double.infinity,
         padding: const EdgeInsets.all(12),
@@ -156,10 +161,9 @@ class _NotificationDetailState extends State<NotificationDetail> {
                     children: [
                       Expanded(
                         child: Text(
-                          _noti!.is_admin? 'YogiTech':
-                          '${_noti!.profile.first_name} ${_noti!.profile.last_name}',
+                          '${DateFormat('dd/MM/yyyy HH:mm').format(dateTime)}',
                           textAlign: TextAlign.start,
-                          style: h3.copyWith(color: _noti!.is_admin? Colors.redAccent:primary),
+                          style: bd_text.copyWith(color: Colors.white),
                         ),
                       ),
                       // Expanded(
@@ -171,9 +175,25 @@ class _NotificationDetailState extends State<NotificationDetail> {
                       // ),
                     ],
                   ),
+                  _noti!.is_admin?
+                  ShaderMask(
+                    shaderCallback: (bounds) {
+                      return gradient.createShader(bounds);
+                    },
+                    child: const Text(
+                      'YogiTech',
+                      style: TextStyle(
+                        color: active,
+                        fontSize: 28,
+                        fontFamily: 'ReadexPro',
+                        fontWeight: FontWeight.w700,
+                        height: 1,
+                      ),
+                    ),
+                  ):
                   Text(
-                    _noti!.title,
-                    style: h2.copyWith(color: theme.colorScheme.onPrimary),
+                    '${_noti!.profile.first_name} ${_noti!.profile.last_name}',
+                    style: h2.copyWith(color:  primary,fontSize: 28),
                   ),
                 ],
               ),
