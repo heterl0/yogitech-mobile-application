@@ -25,7 +25,6 @@ Future<Event?> getEvent(int id) async {
     final url = formatApiUrl('/api/v1/events/$id/');
     final Response response = await DioInstance.get(url);
     if (response.statusCode == 200) {
-      print(response.data);
       return Event.fromMap(response.data);
     } else {
       print('Get event detail failed with status code: ${response.statusCode}');

@@ -393,7 +393,7 @@ class _EventDetailState extends State<EventDetail>
         children: candidates.asMap().entries.map((entry) {
           int index = entry.key;
           CandidateEvent item = entry.value as CandidateEvent;
-          return Padding(
+          return item.active_status==1? Padding(
             padding: const EdgeInsets.only(bottom: 12.0),
             child: SizedBox(
               height: 48, // Điều chỉnh chiều cao cho mỗi hàng
@@ -444,7 +444,7 @@ class _EventDetailState extends State<EventDetail>
                 ],
               ),
             ),
-          );
+          ):SizedBox();
         }).toList(),
       ),
     );
