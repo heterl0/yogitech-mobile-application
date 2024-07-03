@@ -28,25 +28,5 @@ class MainActivity: FlutterActivity() {
                 }
             }
         }
-
-
-
-//        Handler(Looper.getMainLooper()).post {
-//            MethodChannel(
-//                flutterEngine.dartExecutor.binaryMessenger, // Use flutterEngine here
-//                CHANNEL
-//            ).invokeMethod("receiveObject", "return")
-//        }
-
-    }
-
-    public fun sendDataToFlutter(exerciseLog: ExerciseLog) {
-        // Use the FlutterEngine's dartExecutor
-        Handler(Looper.getMainLooper()).post {
-            MethodChannel(
-                flutterEngine?.dartExecutor?.binaryMessenger!!, // Use flutterEngine here
-                CHANNEL
-            ).invokeMethod("receiveObject", exerciseLog)
-        }
     }
 }
