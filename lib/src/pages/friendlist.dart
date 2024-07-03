@@ -405,8 +405,7 @@ class FriendList extends StatelessWidget {
 
               return FriendListItem(
                 name: name,
-                avatarUrl:
-                    friend.profile.avatar_url ?? '',
+                avatarUrl: friend.profile.avatar_url ?? '',
                 exp: friend.profile.exp.toString(),
                 onTap: () {
                   pushWithoutNavBar(
@@ -488,25 +487,23 @@ class FriendListItem extends StatelessWidget {
                         backgroundImage: CachedNetworkImageProvider(avatarUrl)),
                   )
                 : Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
+                    width: 60, // 2 * radius + 8 (border width) * 2
+                    height: 60, // Matching the ratio as per Figma
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.transparent,
-                      border: Border.all(
-                        color: Colors.blue,
-                        width: 1.0,
-                      ),
                     ),
-                    child: Center(
-                      child: Text(
-                        name != ''
-                            ? name[0].toUpperCase()
-                            : ':)',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                    child: CircleAvatar(
+                      radius: 78,
+                      backgroundImage: AssetImage('assets/images/gradient.jpg'),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          name != '' ? name[0].toUpperCase() : ':)',
+                          style: TextStyle(
+                            fontSize: 36, // Adjust the size as needed
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
