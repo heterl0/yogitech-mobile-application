@@ -108,23 +108,6 @@ class _SocialPageState extends State<SocialPage> {
       appBar: CustomAppBar(
         title: trans.social,
         style: widthStyle.Large,
-        postActions: [
-          IconButton(
-              icon: Icon(
-                Icons.group_outlined,
-                color: theme.colorScheme.onSurface,
-              ),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FriendListPage(
-                          initialTabIndex: 0,
-                          account: _account,
-                          onProfileUpdated: widget.onProfileUpdated),
-                    ));
-              })
-        ],
       ),
       body: SingleChildScrollView(
         child: Container(
