@@ -23,10 +23,12 @@ class NotificationDetail extends StatefulWidget {
   final void Function(int id)? unFollow;
   final void Function(int id)? followUserByUserId;
 
-
   const NotificationDetail({
     super.key,
-    this.notification, this.account, this.unFollow, this.followUserByUserId,
+    this.notification,
+    this.account,
+    this.unFollow,
+    this.followUserByUserId,
   });
 
   @override
@@ -98,7 +100,6 @@ class _NotificationDetailState extends State<NotificationDetail> {
     );
   }
 
-
   Widget _buildDescription(BuildContext context) {
     return HtmlWidget(
       _noti?.body != null
@@ -129,133 +130,136 @@ class _NotificationDetailState extends State<NotificationDetail> {
     DateTime dateTime = DateTime.parse(_noti!.time);
 
     return GestureDetector(
-      onTap:(){
-        if(!_noti!.is_admin){
-          Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FriendProfile(
-              profile: _noti!.profile,
-              account: _account,
-              unFollow: widget.unFollow,
-              followUserByUserId: widget.followUserByUserId,
+        onTap: () {
+          if (!_noti!.is_admin) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FriendProfile(
+                  profile: _noti!.profile,
+                  account: _account,
+                  unFollow: widget.unFollow,
+                  followUserByUserId: widget.followUserByUserId,
+                ),
+              ),
+            );
+          }
+        },
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.only(bottom: 12),
+          decoration: ShapeDecoration(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(width: 1, color: stroke),
+              borderRadius: BorderRadius.circular(16),
             ),
           ),
-        );
-        }
-  },
-      child: Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: ShapeDecoration(
-        shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1, color: stroke),
-          borderRadius: BorderRadius.circular(16),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          (!_noti!.is_admin)
-              ? ((_noti!.profile.avatar != null) && _noti!.profile.avatar != '')
-                  ? Container(
-                      width: 60,
-                      height: 60,
-                      child: CircleAvatar(
-                        radius: 80,
-                        backgroundImage: CachedNetworkImageProvider(
-                            _noti!.profile.avatar.toString()),
-                        backgroundColor: Colors.transparent,
-                      ))
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              (!_noti!.is_admin)
+                  ? ((_noti!.profile.avatar != null) &&
+                          _noti!.profile.avatar != '')
+                      ? Container(
+                          width: 60,
+                          height: 60,
+                          child: CircleAvatar(
+                            radius: 80,
+                            backgroundImage: CachedNetworkImageProvider(
+                                _noti!.profile.avatar.toString()),
+                            backgroundColor: Colors.transparent,
+                          ))
+                      : Container(
+                          width: 60, // 2 * radius + 8 (border width) * 2
+                          height: 60, // Matching the ratio as per Figma
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: CircleAvatar(
+                            radius: 78,
+                            backgroundImage:
+                                AssetImage('assets/images/gradient.jpg'),
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                _noti!.profile.first_name != null
+                                    ? _noti!.profile.first_name![0]
+                                        .toUpperCase()
+                                    : ':)',
+                                style: TextStyle(
+                                  fontSize: 36, // Adjust the size as needed
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
                   : Container(
                       width: 60,
                       height: 60,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.black54,
+                        color: Colors.transparent,
                         border: Border.all(
-                          color: Colors.blue, // Màu của border
-                          width: 1.0, // Độ rộng của border
+                          color: Colors.blue, // Color of the border
+                          width: 1.0, // Width of the border
+                        ),
+                        image: DecorationImage(
+                          image: AssetImage('assets/icons/yogiAvatar.png'),
+                          fit: BoxFit
+                              .cover, // This ensures the image covers the circle properly
                         ),
                       ),
-                      child: Center(
-                        child: Text(
-                          _noti!.profile.first_name != null
-                              ? _noti!.profile.first_name![0].toUpperCase()
-                              : ':)',
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white, // Màu chữ
-                          ),
-                        ),
-                      ),
-                    )
-              : Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.transparent,
-                    border: Border.all(
-                      color: Colors.blue, // Color of the border
-                      width: 1.0, // Width of the border
                     ),
-                    image: DecorationImage(
-                      image: AssetImage('assets/icons/yogiAvatar.png'),
-                      fit: BoxFit
-                          .cover, // This ensures the image covers the circle properly
-                    ),
-                  ),
-                ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: Text(
-                        '${DateFormat('HH:mm dd/MM/yyyy').format(dateTime)}',
-                        textAlign: TextAlign.start,
-                        style: bd_text.copyWith(color: Colors.white),
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '${DateFormat('HH:mm dd/MM/yyyy').format(dateTime)}',
+                            textAlign: TextAlign.start,
+                            style: bd_text.copyWith(color: Colors.white),
+                          ),
+                        ),
+                        // Expanded(
+                        //   child: Text(
+                        //     _noti!.time,
+                        //     textAlign: TextAlign.end,
+                        //     style: min_cap.copyWith(color: text),
+                        //   ),
+                        // ),
+                      ],
                     ),
-                    // Expanded(
-                    //   child: Text(
-                    //     _noti!.time,
-                    //     textAlign: TextAlign.end,
-                    //     style: min_cap.copyWith(color: text),
-                    //   ),
-                    // ),
+                    _noti!.is_admin
+                        ? ShaderMask(
+                            shaderCallback: (bounds) {
+                              return gradient.createShader(bounds);
+                            },
+                            child: Text(
+                              'YogiTech',
+                              style: h2.copyWith(color: active),
+                            ),
+                          )
+                        : Text(
+                            '${_noti!.profile.first_name} ${_noti!.profile.last_name}',
+                            style: h2.copyWith(color: primary, fontSize: 28),
+                          ),
                   ],
                 ),
-                _noti!.is_admin
-                    ? ShaderMask(
-                        shaderCallback: (bounds) {
-                          return gradient.createShader(bounds);
-                        },
-                        child: Text(
-                          'YogiTech',
-                          style: h2.copyWith(color: active),
-                        ),
-                      )
-                    : Text(
-                        '${_noti!.profile.first_name} ${_noti!.profile.last_name}',
-                        style: h2.copyWith(color: primary, fontSize: 28),
-                      ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ));
+        ));
   }
 }

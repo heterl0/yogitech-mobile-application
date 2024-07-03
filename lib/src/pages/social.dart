@@ -192,8 +192,11 @@ class NewsFeed extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        NotificationDetail(notification: notifications![index],account: account,unFollow: unFollow,followUserByUserId: followUserByUserId),
+                    builder: (context) => NotificationDetail(
+                        notification: notifications![index],
+                        account: account,
+                        unFollow: unFollow,
+                        followUserByUserId: followUserByUserId),
                   ),
                 );
               },
@@ -234,7 +237,6 @@ class NewsListItem extends StatelessWidget {
             shape: RoundedRectangleBorder(
               side: BorderSide(width: 1, color: stroke),
               borderRadius: BorderRadius.circular(16),
-              
             ),
           ),
           child: Row(
@@ -254,76 +256,76 @@ class NewsListItem extends StatelessWidget {
                             backgroundColor: Colors.transparent,
                           ))
                       : Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
+                          width: 60, // 2 * radius + 8 (border width) * 2
+                          height: 60, // Matching the ratio as per Figma
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.black54,
-                            border: Border.all(
-                              color: Colors.blue, // Màu của border
-                              width: 1.0, // Độ rộng của border
-                            ),
                           ),
-                          child: Center(
-                            child: Text(
-                              notification.profile.first_name != null
+                          child: CircleAvatar(
+                            radius: 78,
+                            backgroundImage:
+                                AssetImage('assets/images/gradient.jpg'),
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                notification.profile.first_name != null
                                   ? notification.profile.first_name![0].toUpperCase()
                                   : ':)',
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white, // Màu chữ
+                                style: TextStyle(
+                                  fontSize: 36, // Adjust the size as needed
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
                         )
-                  :Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.transparent,
-                      border: Border.all(
-                        color: Colors.blue, // Color of the border
-                        width: 1.0, // Width of the border
-                      ),
-                      image: DecorationImage(
-                        image: AssetImage('assets/icons/yogiAvatar.png'),
-                        fit: BoxFit.cover, // This ensures the image covers the circle properly
+                  : Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.transparent,
+                        border: Border.all(
+                          color: Colors.blue, // Color of the border
+                          width: 1.0, // Width of the border
+                        ),
+                        image: DecorationImage(
+                          image: AssetImage('assets/icons/yogiAvatar.png'),
+                          fit: BoxFit
+                              .cover, // This ensures the image covers the circle properly
+                        ),
                       ),
                     ),
-                  ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  
                   children: [
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        notification.is_admin?
-                        Expanded(
-                          child:
-                          ShaderMask(
-                          shaderCallback: (bounds) {
-                            return gradient.createShader(bounds);
-                          },
-                          child: Text(
-                            'YogiTech',
-                            style: min_cap.copyWith(color: active),
-                          ),
-                        )):
-                        Expanded(
-                          child: Text(
-                            '${notification.profile.first_name} ${notification.profile.last_name}',
-                            textAlign: TextAlign.start,
-                            style: min_cap.copyWith(color: primary),
-                          ),
-                        ),
+                        notification.is_admin
+                            ? Expanded(
+                                child: ShaderMask(
+                                shaderCallback: (bounds) {
+                                  return gradient.createShader(bounds);
+                                },
+                                child: Text(
+                                  'YogiTech',
+                                  style: min_cap.copyWith(color: active),
+                                ),
+                              ))
+                            : Expanded(
+                                child: Text(
+                                  '${notification.profile.first_name} ${notification.profile.last_name}',
+                                  textAlign: TextAlign.start,
+                                  style: min_cap.copyWith(color: primary),
+                                ),
+                              ),
                         Expanded(
                           child: Text(
                             timeago.format(dateTime, locale: trans.locale),
