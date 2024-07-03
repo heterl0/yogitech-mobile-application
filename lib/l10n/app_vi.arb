@@ -76,6 +76,7 @@
   "goodJob": "Làm tốt lắm!",
   "accuracy": "Độ chính xác:",
   "caloriesBurned": "Calo đã đốt cháy:",
+  "burnInThisWeek":"Lượng calo bạn đã đốt cháy trong một tuần qua",
   "finish": "Kết thúc",
   "currentPlan": "Gói hiện tại của bạn",
   "waitToEndPlan": "Bạn phải đợi gói này kết thúc để đăng ký gói khác",

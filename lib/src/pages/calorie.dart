@@ -4,6 +4,7 @@ import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart'; // Thêm package này để format ngày tháng
 
 class Calorie extends StatefulWidget {
   const Calorie({super.key});
@@ -32,15 +33,20 @@ class _CalorieState extends State<Calorie> {
   }
 
   List<FlSpot> sampleDataCalorie = [
-    FlSpot(0, 2000), // x = thời gian (ví dụ: ngày), y = kinh nghiệm
+    FlSpot(0, 3000),
     FlSpot(1, 2200),
     FlSpot(2, 2400),
     FlSpot(3, 2600),
     FlSpot(4, 2800),
-    FlSpot(5, 3000),
+    FlSpot(5, 4000),
+    FlSpot(6, 0),
   ];
 
+  final List<DateTime> dates = List.generate(
+      7, (index) => DateTime.now().subtract(Duration(days: 6 - index)));
+
   Widget _buildMainContent(BuildContext context) {
+    final trans = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
       child: Column(
@@ -49,17 +55,16 @@ class _CalorieState extends State<Calorie> {
           SizedBox(
             width: double.infinity,
             child: Column(
-              // mainAxisSize: MainAxisSize.min,
-              // mainAxisAlignment: MainAxisAlignment.start,
-              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _buildStreakInfo(context),
                 SizedBox(height: 16),
-                _buildMonthInfo(context),
+                Text(
+                  trans.burnInThisWeek,
+                  style: h3.copyWith(color: primary),
+                  textAlign: TextAlign.center,
+                ),
                 SizedBox(height: 16),
-                _buildAdditionalInfo(context),
-                SizedBox(height: 16),
-                _buildPlaceholder(),
+                _buildChart(),
               ],
             ),
           ),
@@ -125,116 +130,14 @@ class _CalorieState extends State<Calorie> {
     );
   }
 
-  Widget _buildMonthInfo(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      width: double.infinity,
-      alignment: Alignment.center,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'May 2024',
-            style: h2.copyWith(color: theme.colorScheme.onSurface),
-          ),
-          Row(
-            children: [
-              _buildMonthControlBack(),
-              _buildMonthControlForward(),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMonthControlBack() {
-    return IconButton(
-      icon: Icon(
-        Icons.chevron_left,
-        size: 36,
-        color: stroke,
-      ),
-      onPressed: () {},
-    );
-    // return Container(
-    //   width: 27,
-    //   height: 27,
-    //   decoration: BoxDecoration(
-    //     image: DecorationImage(
-    //       image: AssetImage('assets/icons/arrow_back_ios.png'),
-    //     ),
-    //   ),
-    // );
-  }
-
-  Widget _buildMonthControlForward() {
-    // return Container(
-    //   width: 27,
-    //   height: 27,
-    //   decoration: BoxDecoration(
-    //     image: DecorationImage(
-    //       image: AssetImage('assets/icons/arrow_forward_ios.png'),
-    //     ),
-    //   ),
-    // );
-    return IconButton(
-      icon: Icon(
-        Icons.chevron_right,
-        size: 36,
-        color: stroke,
-      ),
-      onPressed: () {},
-    );
-  }
-
-  Widget _buildAdditionalInfo(BuildContext context) {
-    final trans = AppLocalizations.of(context)!;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Container(
-            height: 60,
-            decoration: BoxDecoration(
-              gradient: gradient,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '800 cal',
-                    style: h3.copyWith(color: active, height: 1.2),
-                  ),
-                  Text(
-                    trans.burnedInMonth,
-                    style: min_cap.copyWith(
-                      color: active,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPlaceholder() {
+  Widget _buildChart() {
     return Padding(
       padding: EdgeInsets.all(8),
       child: AspectRatio(
         aspectRatio: 1 / 1,
         child: LineChart(LineChartData(
           minX: 0,
-          maxX: 5,
-          minY: 1000,
-          maxY: 3000,
+          maxX: 6,
           borderData: FlBorderData(show: false),
           gridData: FlGridData(
             show: true,
@@ -272,15 +175,18 @@ class _CalorieState extends State<Calorie> {
             bottomTitles: AxisTitles(
               drawBelowEverything: true,
               sideTitles: SideTitles(
-                  getTitlesWidget: (value, meta) {
-                    return Text(
-                      value.toString(),
-                      style: min_cap.copyWith(color: text),
-                      textAlign: TextAlign.center,
-                    );
-                  },
-                  showTitles: true,
-                  reservedSize: 48),
+                getTitlesWidget: (value, meta) {
+                  final date = dates[value.toInt()];
+                  final formattedDate = DateFormat('dd/MM').format(date);
+                  return Text(
+                    formattedDate,
+                    style: min_cap.copyWith(color: text),
+                    textAlign: TextAlign.center,
+                  );
+                },
+                showTitles: true,
+                reservedSize: 48,
+              ),
             ),
             topTitles: AxisTitles(),
             rightTitles: AxisTitles(),

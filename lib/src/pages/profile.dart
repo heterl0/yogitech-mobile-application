@@ -247,8 +247,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         color:
                                                             Colors.transparent,
                                                         border: Border.all(
-                                                          color: Colors
-                                                              .blue, // Màu của border
+                                                          color:
+                                                              primary, // Màu của border
                                                           width:
                                                               3.0, // Độ rộng của border
                                                         ),
@@ -266,8 +266,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             fontSize: 40,
                                                             fontWeight:
                                                                 FontWeight.bold,
-                                                            color: Colors
-                                                                .white, // Màu chữ
+                                                            color: theme
+                                                                .colorScheme
+                                                                .onPrimary, // Màu chữ
                                                           ),
                                                         ),
                                                       ),
@@ -472,10 +473,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: AspectRatio(
                                   aspectRatio: 16 / 9,
                                   child: LineChart(LineChartData(
-                                    minX: 0,
-                                    maxX: 5,
-                                    minY: 1000,
-                                    maxY: 3000,
                                     borderData: FlBorderData(show: false),
                                     gridData: FlGridData(
                                       show: true,

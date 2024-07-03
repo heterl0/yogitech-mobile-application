@@ -77,6 +77,7 @@
   "goodJob": "Good job!",
   "accuracy": "Accuracy:",
   "caloriesBurned": "Calories burned:",
+  "burnInThisWeek":"Calories burned in this week",
   "finish": "Finish",
   "currentPlan": "Your current plan",
   "waitToEndPlan": "You have to wait to end this plan to subscribe to another plan",

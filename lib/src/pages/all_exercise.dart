@@ -1,6 +1,7 @@
 import 'package:YogiTech/src/pages/homepage.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/exercise/exercise_service.dart';
@@ -64,7 +65,8 @@ class BlogState extends State<AllExercise> {
       if (mus != null) {
         filteredExercises = filteredExercises.where((exercise) {
           for (var poseWithTime in exercise.poses) {
-            if (poseWithTime.pose.muscles.any((muscle) => muscle.id == mus.id)) {
+            if (poseWithTime.pose.muscles
+                .any((muscle) => muscle.id == mus.id)) {
               return true; // Keep this exercise
             }
           }
@@ -188,10 +190,9 @@ class BlogState extends State<AllExercise> {
                 final ex = _exercises[index];
                 return CustomCard(
                   title: ex.title,
-                  caption: ex.description,
+                  caption: ex.description.replaceAll(RegExp(r'<[^>]*>'), ''),
                   imageUrl: ex.image_url,
                   onTap: () {
-                    print(ex);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
