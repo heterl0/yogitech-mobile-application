@@ -14,7 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import "package:timeago/timeago.dart" as timeago;
 
 import '../../api/notification/notification_service.dart';
 
@@ -252,8 +252,9 @@ class NewsListItem extends StatelessWidget {
                               alignment: Alignment.center,
                               child: Text(
                                 notification.profile.first_name != null
-                                  ? notification.profile.first_name![0].toUpperCase()
-                                  : ':)',
+                                    ? notification.profile.first_name![0]
+                                        .toUpperCase()
+                                    : ':)',
                                 style: TextStyle(
                                   fontSize: 36, // Adjust the size as needed
                                   color: Colors.white,
