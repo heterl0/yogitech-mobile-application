@@ -1,7 +1,9 @@
-import 'package:YogiTech/src/pages/camera/camera_page.dart';
+import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
+import 'package:YogiTech/utils/method_channel_handler.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:YogiTech/api/auth/auth_service.dart';
@@ -18,9 +20,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:YogiTech/utils/formatting.dart';
 
 class ExerciseDetail extends StatefulWidget {
+  final Account? account;
+  final VoidCallback? fetchAccount;
   final Exercise? exercise;
 
-  const ExerciseDetail({super.key, this.exercise});
+  const ExerciseDetail(
+      {super.key, this.exercise, this.account, this.fetchAccount});
 
   @override
   _ExerciseDetailState createState() => _ExerciseDetailState();
@@ -28,6 +33,8 @@ class ExerciseDetail extends StatefulWidget {
 
 class _ExerciseDetailState extends State<ExerciseDetail> {
   late Exercise? _exercise;
+  late Account? _account;
+
   late bool _isLoading = false;
   late int user_id = -1;
   final TextEditingController commentController = TextEditingController();
@@ -53,13 +60,19 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           : _buildBody(context),
       bottomNavigationBar: CustomBottomBar(
         buttonTitle: trans.doExercise,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                // builder: (context) => Result(),
-                builder: (context) => CameraPage()),
-          );
+        onPressed: () async {
+          await storeExercise(_exercise!);
+          const platform = MethodChannel('com.example.yogitech');
+          final result = await platform.invokeMethod('exerciseActivity');
+          final methodChannel = MethodChannelHandler(
+              account: _account, fetchAccount: widget.fetchAccount);
+          methodChannel.context = context;
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //       // builder: (context) => Result(),
+          //       builder: (context) => CameraPage()),
+          // );
         },
       ),
     );
@@ -77,11 +90,11 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
     });
 
     final exercise = widget.exercise;
-    final user = await retrieveAccount();
+    _account = widget.account;
     setState(() {
       _exercise = exercise;
       _isLoading = false;
-      user_id = user!.id;
+      user_id = _account!.id;
     });
   }
 
