@@ -32,6 +32,10 @@ def apiUrl = localProperties.getProperty('API_URL')
 if (apiUrl == null) {
     apiUrl = 'http://localhost:8000'
 }
+def devMode = localProperties.getProperty('DEV_MODE')
+if (devMode == null) {
+    devMode = 'false'
+}
 
 android {
     namespace "com.example.yogi_application"
@@ -73,6 +77,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         buildConfigField "String", "API_URL", "\"$apiUrl\""
+        buildConfigField "boolean", "DEV_MODE", devMode
 
 //        apiUrl apiUrl
     }

@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.yogi_application.BuildConfig
 import com.example.yogi_application.FeedbackResult
 import com.example.yogi_application.MainViewModel
 import com.example.yogi_application.R
@@ -33,7 +34,6 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
 
     private var countDownTimer: CountDownTimer? = null
     var startTime: Long? = null
-    var endTime: Long? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -69,26 +69,32 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
             result -> when(result) {
             is FeedbackResult.Error -> {
                 _fragmentScoreBinding!!.description.text = result.message;
-
             }
             is FeedbackResult.Success -> {
                 if (startTime == null) {
                     startTime = System.currentTimeMillis();
                 }
                 if (!isWaitingRunning) {
-                    if (result.data?.isValid == false) {
-                        _fragmentScoreBinding!!.result.text = "0%";
-                        _fragmentScoreBinding!!.description.text = "Adjust your body full in screen"
-                    } else {
-                        _fragmentScoreBinding!!.result.text =
-                            "${result.data?.score?.toInt().toString()}%";
-                        _fragmentScoreBinding!!.description.text =
-                            "${result.data?.feedback?.getFeedback()}"
-                        if (isTimerRunning) {
-                            scoreList.add(result.data?.score!!)
-                        }
-                        if (result.data?.score!! > 80 && !isTimerRunning && !isWaitingRunning) {
+                    if (BuildConfig.DEV_MODE == true) {
+                        if (!isTimerRunning) {
                             startCountDownTimer()
+                        }
+                    } else {
+                        if (result.data?.isValid == false) {
+                            _fragmentScoreBinding!!.result.text = "0%";
+                            _fragmentScoreBinding!!.description.text =
+                                "Adjust your body full in screen"
+                        } else {
+                            _fragmentScoreBinding!!.result.text =
+                                "${result.data?.score?.toInt().toString()}%";
+                            _fragmentScoreBinding!!.description.text =
+                                "${result.data?.feedback?.getFeedback()}"
+                            if (isTimerRunning) {
+                                scoreList.add(result.data?.score!!)
+                            }
+                            if (result.data?.score!! > 80 && !isTimerRunning && !isWaitingRunning) {
+                                startCountDownTimer()
+                            }
                         }
                     }
                 }
@@ -102,7 +108,8 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
         if (isTimerRunning) return
         countDownTimer?.cancel()
         isTimerRunning = true
-        val duration = viewModel.exercise?.poses?.get(viewModel.currentIndex)?.duration!! * 1000
+        var duration = viewModel.exercise?.poses?.get(viewModel.currentIndex)?.duration!! * 1000
+        if (BuildConfig.DEV_MODE == true) duration = 1000;
         countDownTimer = object : CountDownTimer(duration.toLong(), 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
@@ -137,7 +144,8 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
         countDownTimer?.cancel()
         isWaitingRunning = true
 //        val duration = viewModel.exercise?.poses?.get(viewModel.currentIndex)?.duration!! * 1000
-        val duration = 10000
+        var duration = 10000
+        if (BuildConfig.DEV_MODE == true) duration = 1000;
         countDownTimer = object : CountDownTimer(duration.toLong(), 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
