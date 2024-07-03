@@ -62,7 +62,6 @@ dependencies:
   image_picker: ^1.1.2
   pay: ^2.0.0
   permission_handler: ^11.3.1
-  tflite_flutter: ^0.10.4
   image: ^4.2.0
   camera: ^0.11.0+1
   get_it: ^7.7.0
@@ -108,7 +107,6 @@ flutter:
     - assets/native_splash/logo.riv
     - .env
     - assets/
-    - assets/models/
 
     # fonts:
     # - family: ReadexPro
