@@ -42,6 +42,7 @@ class _EventDetailState extends State<EventDetail>
   bool isLoading = false;
   bool _isJoin = false;
   CandidateEvent? _candidateEvent;
+  String? _expired;
 
   @override
   void initState() {
@@ -151,6 +152,8 @@ class _EventDetailState extends State<EventDetail>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+    _expired = checkDateExpired(_event!.start_date, _event!.expire_date, trans);
+
 
     return isLoading
         ? Center(child: CircularProgressIndicator())
@@ -175,7 +178,14 @@ class _EventDetailState extends State<EventDetail>
                   ),
               ],
             ),
-            bottomNavigationBar: _isJoin
+            bottomNavigationBar: 
+            (!_expired!.startsWith(RegExp(r'[0-9]')))?
+             CustomBottomBar(
+                    buttonTitle: _expired.toString(),
+                    style: ButtonStyleType.Tertiary,
+                    onPressed: (){},
+            ):
+            _isJoin
                 ? CustomBottomBar(
                     buttonTitle: trans.giveUp,
                     style: ButtonStyleType.Quaternary,
@@ -218,7 +228,7 @@ class _EventDetailState extends State<EventDetail>
       pinned: true,
       centerTitle: true,
       title: Text(
-          checkDateExpired(_event!.start_date, _event!.expire_date, trans),
+          _expired!,
           style: h2.copyWith(color: theme.colorScheme.onSurface)),
       expandedHeight: 320,
       flexibleSpace: FlexibleSpaceBar(
