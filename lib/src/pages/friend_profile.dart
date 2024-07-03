@@ -28,12 +28,16 @@ class FriendProfile extends StatefulWidget {
 }
 
 class _nameState extends State<FriendProfile> {
+  Account? _account;
+  SocialProfile? _soProfile;
   bool isFollow = false; // Khai báo biến ở đây
 
   @override
   void initState() {
     super.initState();
     setState(() {
+      _account = widget.account;
+      _soProfile = widget.profile;
       isFollow = widget.account!.isFollowing(widget.profile.user_id ?? -1);
     });
   }
@@ -70,19 +74,30 @@ class _nameState extends State<FriendProfile> {
               children: [
                 Column(
                   children: [
-                    Container(
+                     Container(
                       width: 144, // 2 * radius + 8 (border width) * 2
-                      height:
-                          144, // Đã sửa lại thành 144 cho khớp tỉ lệ so với Figma
+                      height: 144, // Matching the ratio as per Figma
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                       ),
                       child: CircleAvatar(
                         radius: 78,
-                        backgroundImage: widget.profile.avatar != null
-                            ? CachedNetworkImageProvider(widget.profile.avatar ?? "")
-                                as ImageProvider
+                        backgroundImage: _soProfile!.avatar != null && _soProfile!.avatar!.isNotEmpty
+                            ? CachedNetworkImageProvider(_soProfile!.avatar!) as ImageProvider
                             : AssetImage('assets/images/gradient.jpg'),
+                        child: _soProfile!.avatar == null ||_soProfile!.avatar!.isEmpty
+                            ? Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  _soProfile!.first_name!.isNotEmpty ? _soProfile!.first_name![0].toUpperCase() : ':)',
+                                  style: TextStyle(
+                                    fontSize: 74, // Adjust the size as needed
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              )
+                            : null,
                       ),
                     ),
                     const SizedBox(height: 8),
