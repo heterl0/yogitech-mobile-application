@@ -2,6 +2,7 @@ import 'package:YogiTech/src/pages/camera/camera_page.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/exercise/exercise_service.dart';
@@ -380,13 +381,18 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
     );
   }
 
-  Widget _buildComment(BuildContext context, Comment comment) {
+  Widget _buildComment(
+    BuildContext context,
+    Comment comment,
+  ) {
     bool isLike = comment.hasUserVoted(user_id);
     Locale locale = Localizations.localeOf(context);
     final name = comment.user.profile.first_name != null
         ? "${comment.user.profile.last_name} ${comment.user.profile.first_name}"
         : comment.user.username;
     final theme = Theme.of(context);
+    bool adminReply = true; // Admin có rep hay không?
+
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return Container(
@@ -399,116 +405,157 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
               borderRadius: BorderRadius.circular(16),
             ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              (comment.user.profile.avatar_url != null &&
-                      comment.user.profile.avatar_url != '')
-                  ? Container(
-                      width: 44,
-                      height: 44,
-                      decoration: ShapeDecoration(
-                        image: DecorationImage(
-                          image: CachedNetworkImageProvider(
-                              comment.user.profile.avatar_url ?? ''),
-                          fit: BoxFit.cover,
-                        ),
-                        // gradient: gradient,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(80),
-                        ),
-                      ),
-                    )
-                  : Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.transparent,
-                        border: Border.all(
-                          color: Colors.blue,
-                          width: 1.0,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          comment.user.username != ''
-                              ? comment.user.username[0].toUpperCase()
-                              : ':)',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  (comment.user.profile.avatar_url != null &&
+                          comment.user.profile.avatar_url != '')
+                      ? Container(
+                          width: 44,
+                          height: 44,
+                          decoration: ShapeDecoration(
+                            image: DecorationImage(
+                              image: CachedNetworkImageProvider(
+                                  comment.user.profile.avatar_url ?? ''),
+                              fit: BoxFit.cover,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(80),
+                            ),
+                          ),
+                        )
+                      : Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.transparent,
+                            border: Border.all(
+                              color: primary,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              comment.user.username != ''
+                                  ? comment.user.username[0].toUpperCase()
+                                  : ':)',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: primary,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: Text(
-                            name,
-                            textAlign: TextAlign.start,
-                            style: min_cap.copyWith(color: primary),
-                          ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                name,
+                                textAlign: TextAlign.start,
+                                style: min_cap.copyWith(color: primary),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                formatDateTime(
+                                    comment.created_at, locale.languageCode),
+                                textAlign: TextAlign.end,
+                                style: min_cap.copyWith(color: text),
+                              ),
+                            ),
+                          ],
                         ),
-                        Expanded(
-                          child: Text(
-                            formatDateTime(
-                                comment.created_at, locale.languageCode),
-                            textAlign: TextAlign.end,
-                            style: min_cap.copyWith(color: text),
-                          ),
+                        Text(
+                          comment.text,
+                          style: bd_text.copyWith(
+                              color: theme.colorScheme.onPrimary),
                         ),
                       ],
                     ),
-                    Text(
-                      comment.text,
-                      style:
-                          bd_text.copyWith(color: theme.colorScheme.onPrimary),
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      if (isLike) {
+                        Vote? vote = comment.getUserVote(user_id);
+                        if (vote != null) {
+                          await deleteVote(vote.id);
+                          setState(() {
+                            comment.votes.remove(vote);
+                            isLike = false;
+                          });
+                        }
+                      } else {
+                        Vote? vote = await postVote(comment.id);
+                        setState(() {
+                          isLike = vote != null;
+                          comment.votes.add(vote!);
+                        });
+                      }
+                    },
+                    icon: isLike
+                        ? const Icon(
+                            Icons.favorite,
+                            color: primary,
+                          )
+                        : const Icon(
+                            Icons.favorite_border_outlined,
+                            color: text,
+                          ),
+                  ),
+                ],
+              ),
+              // Nếu có parent_comment, hiển thị reply của admin bên dưới
+              if (adminReply) ...[
+                const SizedBox(height: 16),
+                Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: ShapeDecoration(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(width: 1, color: stroke),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                  ],
-                ),
-              ),
-              IconButton(
-                onPressed: () async {
-                  if (isLike) {
-                    Vote? vote = comment.getUserVote(user_id);
-                    if (vote != null) {
-                      await deleteVote(vote.id);
-                      setState(() {
-                        comment.votes.remove(vote);
-                        isLike = false;
-                      });
-                    }
-                  } else {
-                    Vote? vote = await postVote(comment.id);
-                    setState(() {
-                      isLike = vote != null;
-                      comment.votes.add(vote!);
-                    });
-                  }
-                },
-                icon: isLike
-                    ? const Icon(
-                        Icons.favorite,
-                        color: primary,
-                      )
-                    : const Icon(
-                        Icons.favorite_border_outlined,
-                        color: text,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Admin',
+                            style: min_cap.copyWith(color: primary),
+                          ),
+                          Text(
+                            '30/12/2024',
+                            textAlign: TextAlign.end,
+                            style: min_cap.copyWith(color: text),
+                          ),
+                        ],
                       ),
-              ),
+                      Text(
+                        'Admin reply here...',
+                        style: bd_text.copyWith(
+                            color: theme.colorScheme.onPrimary),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ],
           ),
         );

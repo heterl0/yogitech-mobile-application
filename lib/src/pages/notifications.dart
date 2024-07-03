@@ -12,14 +12,12 @@ class NotificationsPage extends StatefulWidget {
   final bool streakSaverOn;
   final bool friendAactivitiesOn;
   final bool newEventOn;
-  // final ValueChanged<bool> areRemindersEnabled;
 
   const NotificationsPage({
     super.key,
     this.streakSaverOn = true,
     this.friendAactivitiesOn = true,
     this.newEventOn = true,
-    // this.areRemindersEnabled,
   });
 
   @override
@@ -27,9 +25,9 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  late bool _streakSaverOn;
-  late bool _friendActivitiesOn;
-  late bool _newEventOn;
+  late bool _streakSaverOn = widget.streakSaverOn;
+  late bool _friendActivitiesOn = widget.friendAactivitiesOn;
+  late bool _newEventOn = widget.newEventOn;
   late List<n.Notification>? _notifications;
   int currentStreak = 0;
 
@@ -43,8 +41,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   Future<void> fetchNotification() async {
     final notifications = await getNotifications();
     setState(() {
-      _notifications =
-          notifications.map((e) => n.Notification.fromMap(e)).toList();
+      _notifications = notifications.cast<n.Notification>();
     });
   }
 
@@ -122,7 +119,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
   void _handleStreakSaverNotifications(bool isStreakSaverOn) {
     if (isStreakSaverOn) {
       print('Bật bảo vệ chuỗi');
-      // Hiển thị thông báo định kỳ
       LocalNotification.showPeriodicNotification(
         title: AppLocalizations.of(context)!.streakSaver,
         body: AppLocalizations.of(context)!.yourReminderDetail,
@@ -131,7 +127,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
       );
     } else {
       print('Hủy bảo vệ chuỗi');
-      // Hủy thông báo định kỳ (nếu đang có)
       LocalNotification.cancel(1);
     }
   }
