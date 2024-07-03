@@ -18,7 +18,10 @@ import 'package:intl/intl.dart';
 class NotificationDetail extends StatefulWidget {
   final n.Notification? notification;
 
-  const NotificationDetail({super.key, this.notification, });
+  const NotificationDetail({
+    super.key,
+    this.notification,
+  });
 
   @override
   _NotificationDetailState createState() => _NotificationDetailState();
@@ -34,21 +37,20 @@ class _NotificationDetailState extends State<NotificationDetail> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: CustomAppBar(
-        title: trans.social,
-        style: widthStyle.Large,
-      ),
-      resizeToAvoidBottomInset: true,
-      body: _isLoading
-          ? Container(
-              color: theme.colorScheme.surface,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            )
-          : _buildBody(context)
-    );
+        extendBodyBehindAppBar: true,
+        appBar: CustomAppBar(
+          title: trans.social,
+          style: widthStyle.Large,
+        ),
+        resizeToAvoidBottomInset: true,
+        body: _isLoading
+            ? Container(
+                color: theme.colorScheme.surface,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : _buildBody(context));
   }
 
   @override
@@ -63,7 +65,6 @@ class _NotificationDetailState extends State<NotificationDetail> {
       child: Column(
         children: [
           _buildMainContent(context),
-
         ],
       ),
     );
@@ -78,9 +79,9 @@ class _NotificationDetailState extends State<NotificationDetail> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 140),
-          _buildTitle(context),
+          _buildHeader(context),
           const SizedBox(height: 16),
-          _buildRowWithText(trans, context),
+          _buildTitle(context),
           const SizedBox(height: 16),
           _buildDescription(context),
         ],
@@ -89,155 +90,147 @@ class _NotificationDetailState extends State<NotificationDetail> {
   }
 
 
-  Widget _buildRowWithText(AppLocalizations trans, BuildContext context) {
-    final time = _noti?.time ?? 0;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '???',
-          style: bd_text.copyWith(color: text),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Text(
-            'st',
-            style: bd_text.copyWith(color: primary),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildDescription(BuildContext context) {
     return HtmlWidget(
-      _noti?.body != null? 
-          _noti!.body:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus',
+      _noti?.body != null
+          ? _noti!.body
+          : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt sollicitudin nisl, vel ornare dolor tincidunt ut. Fusce consectetur turpis feugiat tellus efficitur, id egestas dui rhoncus',
       textStyle: TextStyle(fontFamily: 'ReadexPro', fontSize: 16, height: 1.2),
     );
   }
 
   Widget _buildTitle(BuildContext context) {
     final theme = Theme.of(context);
-    DateTime dateTime = DateTime.parse(_noti!.time);
 
-    return      Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(12),
-        margin: const EdgeInsets.only(bottom: 12),
-        decoration: ShapeDecoration(
-          shape: RoundedRectangleBorder(
-            side: BorderSide(width: 1, color: stroke),
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            (!_noti!.is_admin)
-                  ? ((_noti!.profile.avatar != null) &&
-                          _noti!.profile.avatar != '')
-                      ? Container(
-                          width: 60,
-                          height: 60,
-                          child: CircleAvatar(
-                            radius: 80,
-                            backgroundImage: CachedNetworkImageProvider(
-                                _noti!.profile.avatar.toString()),
-                            backgroundColor: Colors.transparent,
-                          ))
-                      : Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.black54,
-                            border: Border.all(
-                              color: Colors.blue, // Màu của border
-                              width: 1.0, // Độ rộng của border
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              _noti!.profile.first_name != null
-                                  ? _noti!.profile.first_name![0].toUpperCase()
-                                  : ':)',
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white, // Màu chữ
-                              ),
-                            ),
-                          ),
-                        )
-                  :Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.transparent,
-                      border: Border.all(
-                        color: Colors.blue, // Color of the border
-                        width: 1.0, // Width of the border
-                      ),
-                      image: DecorationImage(
-                        image: AssetImage('assets/icons/yogiAvatar.png'),
-                        fit: BoxFit.cover, // This ensures the image covers the circle properly
-                      ),
-                    ),
-                  ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '${DateFormat('dd/MM/yyyy HH:mm').format(dateTime)}',
-                          textAlign: TextAlign.start,
-                          style: bd_text.copyWith(color: Colors.white),
-                        ),
-                      ),
-                      // Expanded(
-                      //   child: Text(
-                      //     _noti!.time,
-                      //     textAlign: TextAlign.end,
-                      //     style: min_cap.copyWith(color: text),
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                  _noti!.is_admin?
-                  ShaderMask(
-                          shaderCallback: (bounds) {
-                            return gradient.createShader(bounds);
-                          },
-                          child: Text(
-                            'YogiTech',
-                            style: h2.copyWith(color: active),
-                          ),
-                        ):
-                  Text(
-                    '${_noti!.profile.first_name} ${_noti!.profile.last_name}',
-                    style: h2.copyWith(color:  primary,fontSize: 28),
-                  ),
-                ],
-              ),
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Text(
+              _noti!.title,
+              style: h2.copyWith(color: primary),
             ),
-          ],
-        ),
-      );
+          )
+        ]);
   }
 
+  Widget _buildHeader(BuildContext context) {
+    final theme = Theme.of(context);
+    DateTime dateTime = DateTime.parse(_noti!.time);
 
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(width: 1, color: stroke),
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          (!_noti!.is_admin)
+              ? ((_noti!.profile.avatar != null) && _noti!.profile.avatar != '')
+                  ? Container(
+                      width: 60,
+                      height: 60,
+                      child: CircleAvatar(
+                        radius: 80,
+                        backgroundImage: CachedNetworkImageProvider(
+                            _noti!.profile.avatar.toString()),
+                        backgroundColor: Colors.transparent,
+                      ))
+                  : Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.black54,
+                        border: Border.all(
+                          color: Colors.blue, // Màu của border
+                          width: 1.0, // Độ rộng của border
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          _noti!.profile.first_name != null
+                              ? _noti!.profile.first_name![0].toUpperCase()
+                              : ':)',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white, // Màu chữ
+                          ),
+                        ),
+                      ),
+                    )
+              : Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.transparent,
+                    border: Border.all(
+                      color: Colors.blue, // Color of the border
+                      width: 1.0, // Width of the border
+                    ),
+                    image: DecorationImage(
+                      image: AssetImage('assets/icons/yogiAvatar.png'),
+                      fit: BoxFit
+                          .cover, // This ensures the image covers the circle properly
+                    ),
+                  ),
+                ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '${DateFormat('HH:mm dd/MM/yyyy').format(dateTime)}',
+                        textAlign: TextAlign.start,
+                        style: bd_text.copyWith(color: Colors.white),
+                      ),
+                    ),
+                    // Expanded(
+                    //   child: Text(
+                    //     _noti!.time,
+                    //     textAlign: TextAlign.end,
+                    //     style: min_cap.copyWith(color: text),
+                    //   ),
+                    // ),
+                  ],
+                ),
+                _noti!.is_admin
+                    ? ShaderMask(
+                        shaderCallback: (bounds) {
+                          return gradient.createShader(bounds);
+                        },
+                        child: Text(
+                          'YogiTech',
+                          style: h2.copyWith(color: active),
+                        ),
+                      )
+                    : Text(
+                        '${_noti!.profile.first_name} ${_noti!.profile.last_name}',
+                        style: h2.copyWith(color: primary, fontSize: 28),
+                      ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
