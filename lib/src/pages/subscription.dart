@@ -4,6 +4,7 @@ import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/subscription/subscription_service.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/subscriptions.dart';
+import 'package:YogiTech/src/widgets/checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';
@@ -96,7 +97,6 @@ class _SubscriptionState extends State<SubscriptionPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final trans = AppLocalizations.of(context)!;
     return Scaffold(
         appBar: CustomAppBar(
           titleWidget: Row(
@@ -146,7 +146,6 @@ class _SubscriptionState extends State<SubscriptionPage> {
           const SizedBox(height: 16),
           _buildChoosePlanContainer(),
           const SizedBox(height: 16),
-          // ..._paymentItems.map((e) => _buildPlanOptionContainer(e)).toList(),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 0),
             child: ListView.builder(
@@ -205,101 +204,85 @@ class _SubscriptionState extends State<SubscriptionPage> {
           .format(DateTime.parse('${_currendSub?.createdAt}'));
       String endDay = DateFormat.yMMMd(local.languageCode).format(endDate);
       return Container(
-        padding: const EdgeInsets.all(12),
-        decoration: ShapeDecoration(
-          gradient: gradient,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+          padding: const EdgeInsets.all(12),
+          decoration: ShapeDecoration(
+            gradient: gradient,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
           ),
-        ),
-        child: Column(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 80,
-                    height: 80,
-                    child: sub!.durationInMonth < 1
-                        ? Image.asset('assets/images/Universe.png')
-                        : (sub.durationInMonth >= 12
-                            ? Image.asset('assets/images/Sun.png')
-                            : Image.asset('assets/images/MoonPhase.png')),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment
+                  .stretch, // Đảm bảo các phần tử trong Row có cùng chiều cao
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      ' ${convertDuration(sub.durationInMonth, trans.locale)}',
+                      style: bd_text.copyWith(color: active),
+                    ),
+                    SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: sub.durationInMonth < 1
+                          ? Image.asset('assets/images/Universe_.png')
+                          : (sub.durationInMonth >= 12
+                              ? Image.asset('assets/images/Sun_.png')
+                              : Image.asset('assets/images/MoonPhase_.png')),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      '${endDate.difference(now).inDays} ${trans.eventRemain}',
+                      style: h3.copyWith(color: active, height: 1),
+                    ),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              ' ${convertDuration(sub.durationInMonth, trans.locale)}',
-                              style: bd_text.copyWith(color: Colors.white),
+                        Container(
+                          width: 16,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/images/Emerald_.png'),
+                              fit: BoxFit.fill,
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${trans.start}: $startDay',
-                                  style: min_cap.copyWith(color: active),
-                                ),
-                                Text(
-                                  '${trans.end}: $endDay',
-                                  style: min_cap.copyWith(color: active),
-                                ),
-                              ],
-                            ),
-                          ],
+                          ),
                         ),
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 26,
-                                  height: 26,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                          'assets/images/Emerald.png'),
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                SizedBox(
-                                  child: Text(
-                                    _currendSub?.subscriptionType == 1
-                                        ? '${sub.gemPrice}'
-                                        : '${sub.price.toInt().toString().replaceAllMapped(RegExp(r'(\\d{1,3})(?=(\\d{3})+(?!\\d))'), (Match m) => '${m[1]},')} VND',
-                                    style: h2.copyWith(color: active),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                        const SizedBox(width: 4),
+                        SizedBox(
+                          child: Text(
+                            _currendSub?.subscriptionType == 1
+                                ? '${sub.gemPrice}'
+                                : '${sub.price.toInt().toString().replaceAllMapped(RegExp(r'(\\d{1,3})(?=(\\d{3})+(?!\\d))'), (Match m) => '${m[1]},')} VND',
+                            style: h3.copyWith(color: active),
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
+                    Text(
+                      '${trans.start}: $startDay',
+                      style: min_cap.copyWith(color: active),
+                    ),
+                    Text(
+                      '${trans.end}: $endDay',
+                      style: min_cap.copyWith(color: active),
+                    ),
+                  ],
+                )
+              ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              '${endDate.difference(now).inDays} ${trans.eventRemain}',
-              style: h3.copyWith(color: active),
-            ),
-            const SizedBox(height: 8),
-          ],
-        ),
-      );
+          ));
     } else {
       return Container(
         padding: const EdgeInsets.all(12),
@@ -334,9 +317,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                       children: [
                         SizedBox(
                           child: Text(
-                            trans.locale == 'vi'
-                                ? 'Nâng cấp lên bản cao cấp để có các tính năng độc quyền và tối đa hóa trải nghiệm của bạn.'
-                                : "Unlock your full potential! Upgrade to premium for exclusive features and maximize your experience.",
+                            trans.upgradeYourSub,
                             style: h3.copyWith(color: active),
                           ),
                         ),
@@ -409,12 +390,12 @@ class _SubscriptionState extends State<SubscriptionPage> {
                           await cancelSubscription(subscriptionId);
                       if (userSubscription != null) {
                         widget.fetchAccount!();
-                          final account = await retrieveAccount();
-                          _loadUserSub();
-                          setState(() {
-                            _account = account;
-                            print(_account);
-                          });
+                        final account = await retrieveAccount();
+                        _loadUserSub();
+                        setState(() {
+                          _account = account;
+                          print(_account);
+                        });
                         Navigator.pop(context); // Close the bottom sheet
                       } else {
                         _showCustomPopup(context, 'Error',
@@ -589,7 +570,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
     final trans = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(6),
+      padding: const EdgeInsets.all(12),
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(
           side: BorderSide(width: 1, color: stroke),
@@ -597,91 +578,76 @@ class _SubscriptionState extends State<SubscriptionPage> {
         ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: sub.durationInMonth < 1
-                    ? AssetImage('assets/images/Universe.png')
-                    : (sub.durationInMonth >= 12
-                        ? AssetImage('assets/images/Sun.png')
-                        : AssetImage('assets/images/MoonPhase.png')),
-                fit: BoxFit.fill,
+          Column(
+            children: [
+              Text(
+                convertDuration(sub.durationInMonth, trans.locale),
+                textAlign: TextAlign.center,
+                style: min_cap.copyWith(color: theme.colorScheme.onSurface),
               ),
-            ),
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: sub.durationInMonth < 1
+                        ? AssetImage('assets/images/Universe.png')
+                        : (sub.durationInMonth >= 12
+                            ? AssetImage('assets/images/Sun.png')
+                            : AssetImage('assets/images/MoonPhase.png')),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 36),
           Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  convertDuration(sub.durationInMonth, trans.locale),
-                  textAlign: TextAlign.center,
-                  style: min_cap.copyWith(color: theme.colorScheme.onSurface),
+                Row(
+                  children: [
+                    Container(
+                      width: 18,
+                      height: 18,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/Emerald.png'),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    SizedBox(
+                      child: Text(
+                        '${sub.gemPrice} ',
+                        style: h3.copyWith(
+                          color: theme.colorScheme.onPrimary,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 18,
-                              height: 18,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image:
-                                      AssetImage('assets/images/Emerald.png'),
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            SizedBox(
-                              child: Text(
-                                '${sub.gemPrice} ',
-                                style: h3.copyWith(
-                                    color: theme.colorScheme.onPrimary),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Text(
-                        (sub.gemPrice != null && sub.price != null)
-                            ? (trans.locale == "en" ? "or" : "hoặc")
-                            : '',
-                        style: bd_text.copyWith(color: text),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          '${sub.price.toInt().toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} VND',
-                          style: h3.copyWith(color: primary),
-                        ),
-                      ),
-                    ],
+                Text(
+                  (sub.gemPrice != null && sub.price != null) ? (trans.or) : '',
+                  style: min_cap.copyWith(color: text, height: 1),
+                ),
+                Text(
+                  '${sub.price.toInt().toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} VND',
+                  style: h3.copyWith(
+                    color: primary,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 16),
           _buildCheckboxItem(sub),
         ],
       ),

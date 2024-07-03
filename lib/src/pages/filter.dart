@@ -75,12 +75,7 @@ class _FilterPageState extends State<FilterPage> {
           IconButton(
             icon: Icon(Icons.close, color: theme.colorScheme.onSurface),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          HomePage()), // Thay NewPage() bằng trang bạn muốn chuyển tới
-                );
+              Navigator.pop(context);
             },
           ),
         ],
@@ -216,12 +211,13 @@ class MuscleInfoWidget extends StatelessWidget {
                             Expanded(
                               flex: 2,
                               child: Center(
-                                child:
-                                 CachedNetworkImage(
-                                  imageUrl:mus.image,
+                                child: CachedNetworkImage(
+                                  imageUrl: mus.image,
                                   fit: BoxFit.cover,
-                                  placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-                                  errorWidget: (context, url, error) => Icon(Icons.error),
+                                  placeholder: (context, url) => Center(
+                                      child: CircularProgressIndicator()),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
                                 ),
                               ),
                             ),

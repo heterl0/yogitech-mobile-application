@@ -1,23 +1,16 @@
+import 'package:YogiTech/api/notification/notification_service.dart';
 import 'package:YogiTech/services/notifi_service.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
-import 'package:YogiTech/src/widgets/switch.dart'; // Assuming this is CustomSwitch
+import 'package:YogiTech/src/widgets/switch.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:YogiTech/src/models/notification.dart' as n;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationsPage extends StatefulWidget {
-  final bool streakSaverOn;
-  final bool friendAactivitiesOn;
-  final bool newEventOn;
-  // final ValueChanged<bool> areRemindersEnabled;
-
   const NotificationsPage({
     super.key,
-    this.streakSaverOn = true,
-    this.friendAactivitiesOn = true,
-    this.newEventOn = true,
-    // this.areRemindersEnabled,
   });
 
   @override
@@ -28,23 +21,37 @@ class _NotificationsPageState extends State<NotificationsPage> {
   late bool _streakSaverOn;
   late bool _friendActivitiesOn;
   late bool _newEventOn;
+  late List<n.Notification>? _notifications;
   int currentStreak = 0;
+  late Future<void> _loadPreferencesFuture;
 
   @override
   void initState() {
     super.initState();
-    _loadSwitchStates(); // Load initial switch states
+    fetchNotification();
+    _loadPreferencesFuture = _loadSwitchStates(); // Load initial switch states
+  }
+
+  Future<void> fetchNotification() async {
+    final notifications = await getNotifications();
+    setState(() {
+      _notifications = notifications.cast<n.Notification>();
+    });
   }
 
   Future<void> _loadSwitchStates() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       currentStreak = prefs.getInt('currentStreak') ?? 0;
-      _streakSaverOn = prefs.getBool('streakSaverOn') ?? widget.streakSaverOn;
-      _friendActivitiesOn =
-          prefs.getBool('friendActivitiesOn') ?? widget.friendAactivitiesOn;
-      _newEventOn = prefs.getBool('newEventOn') ?? widget.newEventOn;
+      _streakSaverOn = prefs.getBool('streakSaverOn')!;
+      _friendActivitiesOn = prefs.getBool('friendActivitiesOn')!;
+      _newEventOn = prefs.getBool('newEventOn')!;
     });
+  }
+
+  Future<void> _saveSwitchState(String key, bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(key, value);
   }
 
   @override
@@ -57,68 +64,70 @@ class _NotificationsPageState extends State<NotificationsPage> {
         title: trans.notifications,
         style: widthStyle.Large,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Column(
-            children: [
-              CustomSwitch(
-                title: trans.streakSaver,
-                value: _streakSaverOn,
-                onChanged: (newValue) async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  await prefs.setBool('streakSaverOn', newValue);
-                  setState(() {
-                    _streakSaverOn = newValue;
-                  });
-                  _handleStreakSaverNotifications(_streakSaverOn);
-                },
+      body: FutureBuilder(
+        future: _loadPreferencesFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Column(
+                  children: [
+                    CustomSwitch(
+                      title: trans.streakSaver,
+                      value: _streakSaverOn,
+                      onChanged: (newValue) async {
+                        setState(() {
+                          _streakSaverOn = newValue;
+                        });
+                        await _saveSwitchState('streakSaverOn', newValue);
+                        _handleStreakSaverNotifications(_streakSaverOn);
+                      },
+                    ),
+                    CustomSwitch(
+                      title: trans.friendsActivities,
+                      value: _friendActivitiesOn,
+                      onChanged: (newValue) async {
+                        setState(() {
+                          _friendActivitiesOn = newValue;
+                        });
+                        await _saveSwitchState('friendActivitiesOn', newValue);
+                      },
+                    ),
+                    CustomSwitch(
+                      title: trans.newEvent,
+                      value: _newEventOn,
+                      onChanged: (newValue) async {
+                        setState(() {
+                          _newEventOn = newValue;
+                        });
+                        await _saveSwitchState('newEventOn', newValue);
+                      },
+                    ),
+                  ],
+                ),
               ),
-              CustomSwitch(
-                title: trans.friendsActivities,
-                value: _friendActivitiesOn,
-                onChanged: (newValue) async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  await prefs.setBool('friendActivitiesOn', newValue);
-                  setState(() {
-                    _friendActivitiesOn = newValue;
-                  });
-                },
-              ),
-              CustomSwitch(
-                title: trans.newEvent,
-                value: _newEventOn,
-                onChanged: (newValue) async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  await prefs.setBool('newEventOn', newValue);
-                  setState(() {
-                    _newEventOn = newValue;
-                  });
-                },
-              ),
-            ],
-          ),
-        ),
+            );
+          }
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
   void _handleStreakSaverNotifications(bool isStreakSaverOn) {
-    if (isStreakSaverOn && currentStreak > 0) {
-      // Hiển thị thông báo định kỳ
+    if (isStreakSaverOn) {
+      print('Bật bảo vệ chuỗi');
       LocalNotification.showPeriodicNotification(
-        title: 'Giờ tập Yoga!',
-        body: 'Đã đến giờ tập luyện của bạn.',
+        title: AppLocalizations.of(context)!.streakSaver,
+        body: AppLocalizations.of(context)!.yourReminderDetail,
         repeat: RepeatInterval.daily,
         payload: 'yoga_reminder',
       );
     } else {
       print('Hủy bảo vệ chuỗi');
-      // Hủy thông báo định kỳ (nếu đang có)
       LocalNotification.cancel(1);
     }
   }

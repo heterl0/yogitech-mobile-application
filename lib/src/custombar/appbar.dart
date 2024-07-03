@@ -19,7 +19,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showBackButton = true,
     this.preActions = const [],
     this.postActions = const [],
-    this.height = 120.0,
+    this.height = 108.0,
     this.onBackPressed,
     this.style = widthStyle.Small,
   });
