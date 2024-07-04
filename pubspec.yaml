@@ -58,17 +58,16 @@ dependencies:
   share_plus: ^9.0.0
   fl_chart: ^0.68.0
   flutter_local_notifications: ^17.1.2
-  flutter_timezone: ^1.0.8
+  flutter_timezone: ^2.0.0
   image_picker: ^1.1.2
   pay: ^2.0.0
   permission_handler: ^11.3.1
-  tflite_flutter: ^0.10.4
   image: ^4.2.0
   camera: ^0.11.0+1
   get_it: ^7.7.0
   flutter_screenutil: ^5.9.3
-  timezone: ^0.9.3
   rxdart: ^0.27.7
+  timezone: ^0.9.4
 
 # flutter_native_splash:
 #   android: true
@@ -108,7 +107,6 @@ flutter:
     - assets/native_splash/logo.riv
     - .env
     - assets/
-    - assets/models/
 
     # fonts:
     # - family: ReadexPro

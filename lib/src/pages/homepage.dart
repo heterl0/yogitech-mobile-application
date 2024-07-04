@@ -64,7 +64,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void didUpdateWidget(covariant HomePage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if ((oldWidget.account != widget.account)|| (oldWidget.account?.profile != widget.account?.profile)) {
+    if ((oldWidget.account != widget.account) ||
+        (oldWidget.account?.profile != widget.account?.profile)) {
       _fetchAccount();
     }
   }
@@ -104,6 +105,9 @@ class _HomePageState extends State<HomePage> {
                           width: 28,
                           height: 28,
                           child: Image.asset('assets/images/Emerald.png'),
+                        ),
+                        SizedBox(
+                          width: 4,
                         ),
                         Text(
                           _account != null
@@ -266,17 +270,20 @@ class _HomePageState extends State<HomePage> {
                       if (jsonList != null)
                         for (final exercise in jsonList)
                           CustomCard(
+                            topRightIcon: exercise.is_premium
+                                ? Image.asset('assets/images/Crown.png')
+                                : null,
                             title: exercise.title,
-                            // subtitle: exercise.durations ?? '0',
-                            imageUrl:
-                                exercise.image_url, // URL hình ảnh của bài tập
+                            imageUrl: exercise.image_url,
                             onTap: () {
-                              // Chuyển sang trang chi tiết của bài tập khi thẻ được nhấn
                               pushWithoutNavBar(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      ExerciseDetail(exercise: exercise),
+                                  builder: (context) => ExerciseDetail(
+                                    exercise: exercise,
+                                    account: _account,
+                                    fetchAccount: widget.fetchAccount,
+                                  ),
                                 ),
                               );
                             },
@@ -323,6 +330,9 @@ class _HomePageState extends State<HomePage> {
                       if (jsonListSort != null)
                         for (final exercise in jsonListSort)
                           CustomCard(
+                            topRightIcon: exercise.is_premium
+                                ? Image.asset('assets/images/Crown.png')
+                                : null,
                             title: exercise.title,
                             // subtitle: exercise.durations ?? '0',
                             imageUrl:
@@ -332,8 +342,11 @@ class _HomePageState extends State<HomePage> {
                               pushWithoutNavBar(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      ExerciseDetail(exercise: exercise),
+                                  builder: (context) => ExerciseDetail(
+                                    exercise: exercise,
+                                    account: _account,
+                                    fetchAccount: widget.fetchAccount,
+                                  ),
                                 ),
                               );
                             },

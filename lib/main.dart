@@ -1,4 +1,3 @@
-import 'package:YogiTech/model/service_locator.dart';
 import 'package:YogiTech/services/notifi_service.dart';
 import 'package:YogiTech/src/models/social.dart';
 import 'package:YogiTech/src/pages/notification_detail.dart';
@@ -61,7 +60,6 @@ void main() async {
 
   // Tải các biến môi trường
   await loadEnv();
-  setupLocator();
   // Kiểm tra và lấy token
   final accessToken = await checkToken();
 

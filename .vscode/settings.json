@@ -1,4 +1,7 @@
 {
     "cmake.sourceDirectory": "D:/code/yogitech/mobile-app/linux",
-    "cmake.options.statusBarVisibility": "visible"
+    "cmake.options.statusBarVisibility": "visible",
+    "cSpell.words": [
+        "timeago"
+    ]
 }

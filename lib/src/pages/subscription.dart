@@ -131,6 +131,9 @@ Future<void> _loadSub() async {
                 height: 28,
                 child: Image.asset('assets/images/Emerald.png'),
               ),
+              SizedBox(
+                width: 4,
+              ),
               Text(
                 (_account!.profile.point).toString(),
                 style: h3.copyWith(color: theme.colorScheme.onSurface),
@@ -306,6 +309,7 @@ Future<void> _loadSub() async {
                           '$startDay',
                           style: min_cap.copyWith(color: active),
                         ),
+                    Spacer(),
                         Text(
                           '${trans.end}: ',
                           style: min_cap.copyWith(color: active),

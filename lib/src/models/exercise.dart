@@ -478,3 +478,106 @@ class Comment {
     return null;
   }
 }
+
+class ExerciseResult {
+  final int exercise;
+  final int user;
+  final String process;
+  final int completePose;
+  final String result;
+  final int point;
+  final int exp;
+  final String calories;
+  final List<ExercisePoseResult> exercisePoseResults;
+  final int totalTimeFinish;
+  final String createdAt;
+  final String updatedAt;
+  final dynamic event; // Assuming event can be various types or null
+  final int activeStatus;
+
+  ExerciseResult({
+    required this.exercise,
+    required this.user,
+    required this.process,
+    required this.completePose,
+    required this.result,
+    required this.point,
+    required this.exp,
+    required this.calories,
+    required this.exercisePoseResults,
+    required this.totalTimeFinish,
+    required this.createdAt,
+    required this.updatedAt,
+    this.event,
+    required this.activeStatus,
+  });
+
+  factory ExerciseResult.fromJson(Map<String, dynamic> json) {
+    return ExerciseResult(
+      exercise: json['exercise'],
+      user: json['user'],
+      process: json['process'],
+      completePose: json['complete_pose'],
+      result: json['result'],
+      point: json['point'],
+      exp: json['exp'],
+      calories: json['calories'],
+      exercisePoseResults: (json['exercise_pose_results'] as List)
+          .map((i) => ExercisePoseResult.fromJson(i))
+          .toList(),
+      totalTimeFinish: json['total_time_finish'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
+      event: json['event'],
+      activeStatus: json['active_status'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'exercise': exercise,
+      'user': user,
+      'process': process,
+      'complete_pose': completePose,
+      'result': result,
+      'point': point,
+      'exp': exp,
+      'calories': calories,
+      'exercise_pose_results':
+          exercisePoseResults.map((i) => i.toJson()).toList(),
+      'total_time_finish': totalTimeFinish,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+      'event': event,
+      'active_status': activeStatus,
+    };
+  }
+}
+
+class ExercisePoseResult {
+  final int pose;
+  final String score;
+  final int timeFinish;
+
+  ExercisePoseResult({
+    required this.pose,
+    required this.score,
+    required this.timeFinish,
+  });
+
+  factory ExercisePoseResult.fromJson(Map<String, dynamic> json) {
+    return ExercisePoseResult(
+      pose: json['pose'],
+      score: json['score'],
+      timeFinish: json['time_finish'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'pose': pose,
+      'score': score,
+      'time_finish': timeFinish,
+    };
+  }
+}

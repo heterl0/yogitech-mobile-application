@@ -1,20 +1,13 @@
 import 'package:YogiTech/src/models/account.dart';
-import 'package:YogiTech/src/pages/camera/camera_page.dart';
 import 'package:YogiTech/src/pages/friend_profile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/models/notification.dart' as n;
-
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
-import 'package:YogiTech/src/custombar/bottombar.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
-import 'package:YogiTech/src/widgets/box_input_field.dart';
-import 'package:YogiTech/src/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:YogiTech/utils/formatting.dart';
 import 'package:intl/intl.dart';
 
 class NotificationDetail extends StatefulWidget {
