@@ -81,11 +81,12 @@ class _ActivitiesState extends State<Activities> {
         ),
         itemCount: _events.length,
         itemBuilder: (context, index) {
+          String check = checkDateExpired(_events[index].start_date, _events[index].expire_date, trans);
           return CustomCard(
             imageUrl: _events[index].image_url,
             title: _events[index].title,
             caption: "${trans.participants}: ${_events[index].event_candidate.length}",
-            subtitle: checkDateExpired(_events[index].start_date, _events[index].expire_date, trans),
+            subtitle: check,
             onTap: () {
               pushWithoutNavBar(
                 context,
