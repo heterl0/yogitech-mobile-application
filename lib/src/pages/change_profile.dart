@@ -115,7 +115,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   }
 
   String _formatDate(String date) {
-    DateTime parsedDate = DateTime.parse(date);
+    DateTime parsedDate = DateTime.parse(date).toUtc().toLocal();
     return DateFormat('dd-MM-yyyy').format(parsedDate);
   }
 

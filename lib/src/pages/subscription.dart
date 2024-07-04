@@ -17,6 +17,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:pay/pay.dart';
+import 'package:YogiTech/utils/formatting.dart' as format;
 
 class SubscriptionPage extends StatefulWidget {
   final Account? account;
@@ -32,6 +33,8 @@ class _SubscriptionState extends State<SubscriptionPage> {
   List<dynamic> _subs = [];
   List<dynamic> _userSubs = [];
   UserSubscription? _currendSub;
+  String? _subStatus;
+
   Subscription? _selectedSub;
   Account? _account;
   bool _isLoading = true;
@@ -43,29 +46,50 @@ class _SubscriptionState extends State<SubscriptionPage> {
     super.initState();
     _googlePayConfigFuture =
         PaymentConfiguration.fromAsset('default_google_pay_config.json');
-    _loadSub();
     _account = widget.account;
+    _loadSub();
   }
+Future<void> _loadSub() async {
+  try {
+    final sub = await getSubscriptions();
+    final ussub = await getUserSubscriptions();
+    setState(() {
+      _subs = sub;
+      _userSubs = ussub;
+      _isLoading = false;
 
-  Future<void> _loadSub() async {
-    try {
-      final sub = await getSubscriptions();
-      final ussub = await getUserSubscriptions();
-      setState(() {
-        _subs = sub;
-        _userSubs = ussub;
-        _isLoading = false;
-        if (_userSubs.length > 0 &&
-            _userSubs[_userSubs.length - 1]?.activeStatus != 0) {
-          _currendSub = checkExpire(_userSubs[_userSubs.length - 1])
-              ? null
-              : _userSubs[_userSubs.length - 1];
+      // if (_account!.is_staff == true) {
+      //   _subStatus = 'Admin';
+      //   _currendSub = _createFakeSubscription();
+      // } else {
+        _subStatus = _userSubs.isNotEmpty ? checkExpire(_userSubs.last) : null;
+        if (_userSubs.isNotEmpty && _userSubs.last?.activeStatus != 0) {
+          _currendSub = _userSubs.last;
+        } else {
+          _currendSub = null;
         }
-      });
-    } catch (e) {
-      // Handle errors, e.g., show a snackbar or error message
-      print('Error loading Subscription: $e');
-    }
+      // }
+    });
+  } catch (e) {
+    // Handle errors, e.g., show a snackbar or error message
+    print('Error loading Subscription: $e');
+  }
+}
+
+
+  UserSubscription _createFakeSubscription() {
+    // Create a fake subscription
+    final fakeSub = UserSubscription(
+      id:-1,
+      userId: _account!.id,
+      subscriptionId: 3,
+      subscriptionType: 1,
+      status: 1,
+      createdAt: DateTime.now().toString(),
+      expireDate: DateTime.now().toString(),
+      activeStatus: 1,
+    );
+    return fakeSub;
   }
 
   Future<void> _loadUserSub() async {
@@ -197,12 +221,12 @@ class _SubscriptionState extends State<SubscriptionPage> {
         orElse: () => null,
       );
       final local = Localizations.localeOf(context);
-      DateTime now = DateTime.now();
       DateTime endDate = DateTime.parse('${_currendSub?.expireDate}');
 
-      String startDay = DateFormat.yMMMd(local.languageCode)
-          .format(DateTime.parse('${_currendSub?.createdAt}'));
-      String endDay = DateFormat.yMMMd(local.languageCode).format(endDate);
+      String startDay = DateFormat('HH:mm dd/MM/yyyy')
+          .format(DateTime.parse('${_currendSub?.createdAt}').toLocal());
+      String endDay = DateFormat('HH:mm dd/MM/yyyy')
+          .format(DateTime.parse('${endDate}').toLocal());
       return Container(
           padding: const EdgeInsets.all(12),
           decoration: ShapeDecoration(
@@ -238,7 +262,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                 Expanded(
                   child: Center(
                     child: Text(
-                      '${endDate.difference(now).inDays} ${trans.eventRemain}',
+                      '${_subStatus}',
                       style: h3.copyWith(color: active, height: 1),
                     ),
                   ),
@@ -270,14 +294,27 @@ class _SubscriptionState extends State<SubscriptionPage> {
                         ),
                       ],
                     ),
-                    Text(
-                      '${trans.start}: $startDay',
-                      style: min_cap.copyWith(color: active),
-                    ),
-                    Text(
-                      '${trans.end}: $endDay',
-                      style: min_cap.copyWith(color: active),
-                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${trans.start}: ',
+                          style: min_cap.copyWith(color: active),
+                        ),
+                        Text(
+                          '$startDay',
+                          style: min_cap.copyWith(color: active),
+                        ),
+                        Text(
+                          '${trans.end}: ',
+                          style: min_cap.copyWith(color: active),
+                        ),
+                        Text(
+                          ' $endDay',
+                          style: min_cap.copyWith(color: active),
+                        ),
+                    ]),
                   ],
                 )
               ],
@@ -752,21 +789,17 @@ class _SubscriptionState extends State<SubscriptionPage> {
     );
   }
 
-  bool checkExpire(UserSubscription usub) {
+  String? checkExpire(UserSubscription usub) {
     DateTime now = DateTime.now();
-
+    final trans = AppLocalizations.of(context)!;
     String? expireDateStr = usub.expireDate;
-    if (expireDateStr != null) {
-      DateTime endDate = DateTime.parse(expireDateStr);
-
-      if (now.isAfter(endDate)) {
-        expiredSubscription(usub.id!);
-        return true;
-      }
-    } else {
-      print('Expire date is not set.');
+    String checkDateExpired = format.checkDateExpired(
+        usub.createdAt.toString(), expireDateStr.toString(), trans);
+    bool check = checkDateExpired.startsWith(RegExp(r'[0-9]'));
+    if (check) {
+      return checkDateExpired;
     }
-    return false;
+    return null;
   }
 
   String convertDuration(double durationInMonths, String local) {

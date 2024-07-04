@@ -23,17 +23,12 @@ String checkDateExpired(String startDateStr, String dateStr, AppLocalizations tr
   
   // Calculate the difference
   DateTime nowUtc = DateTime.now().toUtc();
-  print('now (UTC) $nowUtc');
-  print('start (UTC) $startDateUtc');
-  print('end (UTC) $targetDateUtc');
 
   Duration startDifferent = startDateUtc.difference(nowUtc);
   if (!startDifferent.isNegative) {
     return trans.eventNotStart;
   }
   Duration difference = targetDateUtc.difference(nowUtc);
-
-  print('difference (UTC): ${difference.inDays} days, ${difference.inHours} hours, ${difference.inMinutes} minutes');
 
   if (difference.isNegative) {
     return trans.eventPassed;
@@ -43,15 +38,10 @@ String checkDateExpired(String startDateStr, String dateStr, AppLocalizations tr
     DateTime nowLocal = nowUtc.toLocal();
     Duration localDifference = targetDateLocal.difference(nowLocal);
 
-    print('now (Local) $nowLocal');
-    print('end (Local) $targetDateLocal');
-    print('localDifference: ${localDifference.inDays} days, ${localDifference.inHours} hours, ${localDifference.inMinutes} minutes');
-
     int days = localDifference.inDays;
     int hours = localDifference.inHours % 24;
     int minutes = localDifference.inMinutes % 60;
 
-    print('days: $days, hours: $hours, minutes: $minutes');
 
     if (days == 0) {
       if (hours == 0) {
