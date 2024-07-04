@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:YogiTech/src/models/notification.dart' as n;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({
@@ -94,6 +95,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           _friendActivitiesOn = newValue;
                         });
                         await _saveSwitchState('friendActivitiesOn', newValue);
+                        _handleFriendsNotifications(_friendActivitiesOn);
                       },
                     ),
                     CustomSwitch(
@@ -115,6 +117,22 @@ class _NotificationsPageState extends State<NotificationsPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
+  }
+
+  void _handleFriendsNotifications(bool isFriendsOn) {
+    if (isFriendsOn) {
+      print('Bật thông báo của bạn bè');
+      print(_notifications);
+      LocalNotification.showPeriodicNotification(
+        title: AppLocalizations.of(context)!.streakSaver,
+        body: AppLocalizations.of(context)!.yourReminderDetail,
+        repeat: RepeatInterval.daily,
+        payload: 'yoga_reminder',
+      );
+    } else {
+      print('Hủy thông báo của bạn bè');
+      LocalNotification.cancel(1);
+    }
   }
 
   void _handleStreakSaverNotifications(bool isStreakSaverOn) {
