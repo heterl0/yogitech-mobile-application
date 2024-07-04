@@ -123,15 +123,23 @@ class _NotificationsPageState extends State<NotificationsPage> {
     if (isFriendsOn) {
       print('Bật thông báo của bạn bè');
       print(_notifications);
-      LocalNotification.showPeriodicNotification(
-        title: AppLocalizations.of(context)!.streakSaver,
-        body: AppLocalizations.of(context)!.yourReminderDetail,
-        repeat: RepeatInterval.daily,
-        payload: 'yoga_reminder',
-      );
+      if (_notifications != null) {
+        for (var notification in _notifications!) {
+          LocalNotification.showFriendNotification(
+            id: notification.id + 10,
+            title: notification.title,
+            body: notification.body,
+            payload: 'friend_notification_${notification.id}',
+          );
+        }
+      }
     } else {
       print('Hủy thông báo của bạn bè');
-      LocalNotification.cancel(1);
+      if (_notifications != null) {
+        for (var notification in _notifications!) {
+          LocalNotification.cancel(notification.id);
+        }
+      }
     }
   }
 
