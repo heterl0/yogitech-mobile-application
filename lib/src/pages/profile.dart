@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/shared/premium_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -247,8 +248,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         color:
                                                             Colors.transparent,
                                                         border: Border.all(
-                                                          color: Colors
-                                                              .blue, // Màu của border
+                                                          color:
+                                                              primary, // Màu của border
                                                           width:
                                                               3.0, // Độ rộng của border
                                                         ),
@@ -266,8 +267,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             fontSize: 40,
                                                             fontWeight:
                                                                 FontWeight.bold,
-                                                            color: Colors
-                                                                .white, // Màu chữ
+                                                            color: theme
+                                                                .colorScheme
+                                                                .onPrimary, // Màu chữ
                                                           ),
                                                         ),
                                                       ),
@@ -344,32 +346,41 @@ class _ProfilePageState extends State<ProfilePage> {
                                               child: BackdropFilter(
                                                 filter: ImageFilter.blur(
                                                     sigmaX: 5, sigmaY: 5),
-                                                child: Container(
-                                                  color: theme
-                                                      .colorScheme.onSecondary
-                                                      .withOpacity(0.8),
-                                                  child: Center(
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Icon(
-                                                          Icons.lock_outline,
-                                                          color: theme
-                                                              .colorScheme
-                                                              .onPrimary,
-                                                          size: 24,
-                                                        ),
-                                                        SizedBox(width: 8),
-                                                        Text(
-                                                          trans.premiumFeature,
-                                                          style: bd_text.copyWith(
-                                                              color: theme
-                                                                  .colorScheme
-                                                                  .onPrimary),
-                                                        ),
-                                                      ],
+                                                child: GestureDetector(
+                                                  onTap: () => {
+                                                    showPremiumDialog(
+                                                        context,
+                                                        _account!,
+                                                        widget.fetchAccount),
+                                                  },
+                                                  child: Container(
+                                                    color: theme
+                                                        .colorScheme.onSecondary
+                                                        .withOpacity(0.8),
+                                                    child: Center(
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.lock_outline,
+                                                            color: theme
+                                                                .colorScheme
+                                                                .onPrimary,
+                                                            size: 24,
+                                                          ),
+                                                          SizedBox(width: 8),
+                                                          Text(
+                                                            trans
+                                                                .premiumFeature,
+                                                            style: bd_text.copyWith(
+                                                                color: theme
+                                                                    .colorScheme
+                                                                    .onPrimary),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -472,10 +483,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: AspectRatio(
                                   aspectRatio: 16 / 9,
                                   child: LineChart(LineChartData(
-                                    minX: 0,
-                                    maxX: 5,
-                                    minY: 1000,
-                                    maxY: 3000,
                                     borderData: FlBorderData(show: false),
                                     gridData: FlGridData(
                                       show: true,
@@ -542,28 +549,34 @@ class _ProfilePageState extends State<ProfilePage> {
                                   child: BackdropFilter(
                                     filter:
                                         ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                                    child: Container(
-                                      color: theme.colorScheme.onSecondary
-                                          .withOpacity(0.8),
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.lock_outline,
-                                              color:
-                                                  theme.colorScheme.onPrimary,
-                                              size: 40,
-                                            ),
-                                            SizedBox(height: 8),
-                                            Text(
-                                              trans.premiumFeature,
-                                              style: h2.copyWith(
-                                                  color: theme
-                                                      .colorScheme.onPrimary),
-                                            ),
-                                          ],
+                                    child: GestureDetector(
+                                      onTap: () => {
+                                        showPremiumDialog(context, _account!,
+                                            widget.fetchAccount),
+                                      },
+                                      child: Container(
+                                        color: theme.colorScheme.onSecondary
+                                            .withOpacity(0.8),
+                                        child: Center(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.lock_outline,
+                                                color:
+                                                    theme.colorScheme.onPrimary,
+                                                size: 40,
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(
+                                                trans.premiumFeature,
+                                                style: h2.copyWith(
+                                                    color: theme
+                                                        .colorScheme.onPrimary),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),

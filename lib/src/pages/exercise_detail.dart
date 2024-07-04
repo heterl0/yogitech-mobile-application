@@ -1,4 +1,5 @@
 import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/shared/premium_dialog.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:YogiTech/utils/method_channel_handler.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -48,6 +49,15 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       appBar: CustomAppBar(
         title: trans.exerciseDetail,
         style: widthStyle.Large,
+        postActions: [
+          SizedBox(
+            width: 48,
+            height: 28,
+            child: _exercise!.is_premium
+                ? Image.asset('assets/images/Crown.png')
+                : null,
+          ),
+        ],
       ),
       resizeToAvoidBottomInset: true,
       body: _isLoading
@@ -61,18 +71,23 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       bottomNavigationBar: CustomBottomBar(
         buttonTitle: trans.doExercise,
         onPressed: () async {
-          await storeExercise(_exercise!);
-          const platform = MethodChannel('com.example.yogitech');
-          final result = await platform.invokeMethod('exerciseActivity');
-          final methodChannel = MethodChannelHandler(
-              account: _account, fetchAccount: widget.fetchAccount);
-          methodChannel.context = context;
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       // builder: (context) => Result(),
-          //       builder: (context) => CameraPage()),
-          // );
+          bool? isPremium = _account?.is_premium ?? false;
+          if (_account != null && (isPremium || !_exercise!.is_premium)) {
+            await storeExercise(_exercise!);
+            const platform = MethodChannel('com.example.yogitech');
+            final result = await platform.invokeMethod('exerciseActivity');
+            final methodChannel = MethodChannelHandler(
+                account: _account, fetchAccount: widget.fetchAccount);
+            methodChannel.context = context;
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  content: Text(
+                      'You do not have access to this exercise. Upgrade to premium to access.')),
+            );
+          } else {
+            showPremiumDialog(context, _account!, widget.fetchAccount);
+          }
         },
       ),
     );
@@ -99,6 +114,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
   }
 
   Widget _buildBody(BuildContext context) {
+    print('Bài tập có trả phí hay không? ${_exercise?.is_premium}');
     return SingleChildScrollView(
       child: Column(
         children: [

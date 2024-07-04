@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:YogiTech/src/models/notification.dart' as n;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({
@@ -94,6 +95,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           _friendActivitiesOn = newValue;
                         });
                         await _saveSwitchState('friendActivitiesOn', newValue);
+                        _handleFriendsNotifications(_friendActivitiesOn);
                       },
                     ),
                     CustomSwitch(
@@ -115,6 +117,30 @@ class _NotificationsPageState extends State<NotificationsPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
+  }
+
+  void _handleFriendsNotifications(bool isFriendsOn) {
+    if (isFriendsOn) {
+      print('Bật thông báo của bạn bè');
+      print(_notifications);
+      if (_notifications != null) {
+        for (var notification in _notifications!) {
+          LocalNotification.showFriendNotification(
+            id: notification.id + 10,
+            title: notification.title,
+            body: notification.body,
+            payload: 'friend_notification_${notification.id}',
+          );
+        }
+      }
+    } else {
+      print('Hủy thông báo của bạn bè');
+      if (_notifications != null) {
+        for (var notification in _notifications!) {
+          LocalNotification.cancel(notification.id);
+        }
+      }
+    }
   }
 
   void _handleStreakSaverNotifications(bool isStreakSaverOn) {
