@@ -9,6 +9,7 @@ class CustomCard extends StatelessWidget {
   final String? subtitle;
   final String? imageUrl;
   final VoidCallback? onTap; // Thêm thuộc tính onTap
+  final Widget? topRightIcon; // Thêm thuộc tính topRightIcon
 
   const CustomCard({
     super.key,
@@ -17,6 +18,7 @@ class CustomCard extends StatelessWidget {
     this.subtitle,
     this.imageUrl,
     this.onTap, // Thêm thuộc tính onTap vào constructor
+    this.topRightIcon, // Thêm thuộc tính topRightIcon vào constructor
   });
 
   @override
@@ -24,67 +26,86 @@ class CustomCard extends StatelessWidget {
     final theme = Theme.of(context);
     return GestureDetector(
       onTap: onTap, // Gọi callback khi thẻ được nhấn
-      child: Container(
-        margin: EdgeInsets.all(8),
-        constraints: const BoxConstraints(
-          maxWidth: 160, // Kích thước tối thiểu ngang
-          minWidth: 152, // Kích thước tối thiểu ngang
-          minHeight: 120, // Kích thước tối thiểu dọc
-        ),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface, // Màu nền của Container
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: const [], // Không có bóng đổ
-          border: Border.all(color: stroke),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (imageUrl != null)
-              Padding(
-                padding: EdgeInsets.only(top: 8, right: 8, left: 8),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: CachedNetworkImage(
-                    imageUrl: imageUrl!,
-                    placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                    fit: BoxFit.cover,
-                    height: 90, // Chiều cao cố định của ảnh
-                    width: double.infinity, // Đảm bảo ảnh chiếm toàn bộ chiều ngang
+      child: Stack(
+        children: [
+          Container(
+            margin: EdgeInsets.all(8),
+            constraints: const BoxConstraints(
+              maxWidth: 160, // Kích thước tối thiểu ngang
+              minWidth: 152, // Kích thước tối thiểu ngang
+              minHeight: 120, // Kích thước tối thiểu dọc
+            ),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface, // Màu nền của Container
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: const [], // Không có bóng đổ
+              border: Border.all(color: stroke),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (imageUrl != null)
+                  Padding(
+                    padding: EdgeInsets.only(top: 8, right: 8, left: 8),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      child: CachedNetworkImage(
+                        imageUrl: imageUrl!,
+                        placeholder: (context, url) =>
+                            Center(child: CircularProgressIndicator()),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        fit: BoxFit.cover,
+                        height: 90, // Chiều cao cố định của ảnh
+                        width: double
+                            .infinity, // Đảm bảo ảnh chiếm toàn bộ chiều ngang
+                      ),
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title.endsWith('\n')
+                            ? '$title\n'
+                            : '$title\n', // Thêm một dòng trống nếu cần
+                        style: bd_text.copyWith(
+                            color: theme.colorScheme.onPrimary),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (subtitle != null)
+                        Text(
+                          subtitle!,
+                          style: min_cap.copyWith(color: primary),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      if (caption != null)
+                        Text(
+                          caption!,
+                          style: min_cap.copyWith(color: text),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                    ],
                   ),
                 ),
-              ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title.endsWith('\n') ? '$title\n' : '$title\n', // Thêm một dòng trống nếu cần
-                    style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  if (subtitle != null)
-                    Text(
-                      subtitle!,
-                      style: min_cap.copyWith(color: primary),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  if (caption != null)
-                    Text(
-                      caption!,
-                      style: min_cap.copyWith(color: text),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                ],
+              ],
+            ),
+          ),
+          if (topRightIcon != null)
+            Positioned(
+              top: 16, // Điều chỉnh vị trí của icon
+              right: 20, // Điều chỉnh vị trí của icon
+              child: SizedBox(
+                width: 24,
+                height: 24,
+                child: topRightIcon,
               ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }

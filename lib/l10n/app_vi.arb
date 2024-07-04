@@ -84,6 +84,7 @@
   "unsubscription": "Hủy đăng ký",
   "choosePlan": "Chọn gói",
   "unlockPremium": "Mở khóa tất cả các bài tập cao cấp",
+  "needPremium":"Tính năng này cần tài khoản cao cấp",
   "onceAWeek": "Một lần một tuần",
   "onceAYear": "Một lần một năm",
   "subscription": "Đăng ký",
@@ -168,6 +169,7 @@
   "burnedInMonth": "đã đốt cháy trong tháng này",
   "yourExercise": "Bài tập của bạn",
   "premiumFeature":"Tính năng trả phí",
+
   "advance": "Nâng cao",
   "professional": "Chuyên nghiệp",
   "friendProfile": "Hồ sơ bạn bè",

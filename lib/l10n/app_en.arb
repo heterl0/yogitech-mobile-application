@@ -85,6 +85,7 @@
   "unsubscription": "Unsubscription",
   "choosePlan": "Choose a plan",
   "unlockPremium": "Unlock all premium exercises",
+  "needPremium":"This function need a premium account",
   "onceAWeek": "Once a week",
   "onceAYear": "Once a year",
   "subscription": "Subscription",

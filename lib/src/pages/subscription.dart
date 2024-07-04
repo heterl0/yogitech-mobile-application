@@ -107,6 +107,9 @@ class _SubscriptionState extends State<SubscriptionPage> {
                 height: 28,
                 child: Image.asset('assets/images/Emerald.png'),
               ),
+              SizedBox(
+                width: 4,
+              ),
               Text(
                 (_account!.profile.point).toString(),
                 style: h3.copyWith(color: theme.colorScheme.onSurface),
@@ -236,11 +239,21 @@ class _SubscriptionState extends State<SubscriptionPage> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Center(
-                    child: Text(
-                      '${endDate.difference(now).inDays} ${trans.eventRemain}',
-                      style: h3.copyWith(color: active, height: 1),
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${endDate.difference(now).inDays}',
+                        style: h2.copyWith(color: active, height: 1),
+                      ),
+                      Text(
+                        trans.daysLeft,
+                        style: bd_text.copyWith(
+                          color: active,
+                          height: 1,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Column(
@@ -270,6 +283,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                         ),
                       ],
                     ),
+                    Spacer(),
                     Text(
                       '${trans.start}: $startDay',
                       style: min_cap.copyWith(color: active),

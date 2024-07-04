@@ -21,7 +21,12 @@ class AllExercise extends StatefulWidget {
   final Muscle? selectedMuscle;
   final Account? account;
   final VoidCallback? fetchAccount;
-  const AllExercise({super.key, this.searchString, this.selectedMuscle, this.account, this.fetchAccount});
+  const AllExercise(
+      {super.key,
+      this.searchString,
+      this.selectedMuscle,
+      this.account,
+      this.fetchAccount});
 
   @override
   BlogState createState() => BlogState();
@@ -191,14 +196,20 @@ class BlogState extends State<AllExercise> {
               itemBuilder: (context, index) {
                 final ex = _exercises[index];
                 return CustomCard(
+                  topRightIcon: ex.is_premium
+                      ? Image.asset('assets/images/Crown.png')
+                      : null,
                   title: ex.title,
                   caption: ex.description.replaceAll(RegExp(r'<[^>]*>'), ''),
                   imageUrl: ex.image_url,
                   onTap: () {
-                    Navigator.push(
+                    pushWithoutNavBar(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ExerciseDetail(exercise: ex,account: _account,fetchAccount: widget.fetchAccount),
+                        builder: (context) => ExerciseDetail(
+                            exercise: ex,
+                            account: _account,
+                            fetchAccount: widget.fetchAccount),
                       ),
                     );
                   },
