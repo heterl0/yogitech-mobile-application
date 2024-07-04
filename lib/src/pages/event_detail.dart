@@ -297,10 +297,10 @@ class _EventDetailState extends State<EventDetail>
     final local = Localizations.localeOf(context);
     String startDay = DateFormat.yMMMd(local.languageCode)
         .add_Hm()
-        .format(DateTime.parse(_event!.start_date));
+        .format(DateTime.parse(_event!.start_date).toUtc().toLocal());
     String endDay = DateFormat.yMMMd(local.languageCode)
         .add_Hm()
-        .format(DateTime.parse(_event!.expire_date));
+        .format(DateTime.parse(_event!.expire_date).toUtc().toLocal());
 
     return Container(
       alignment: Alignment.centerLeft,
