@@ -217,6 +217,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
 
   Widget _buildUnSubscriptionContainer() {
     Theme.of(context);
+    DateTime now = DateTime.now();
     final trans = AppLocalizations.of(context)!;
     if (_currendSub != null) {
       Subscription sub = _subs.firstWhere(
