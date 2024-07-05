@@ -345,12 +345,15 @@ Future<Profile?> patchProfile(
   }
 }
 
-Future<dynamic> getStreakInMonth(month, year) async {
+Future<dynamic> getStreakInMonth(int month, int year) async {
   try {
     final url =
         formatApiUrl('/api/v1/streak-in-month/?month=$month&year=$year');
+    print('Formatted URL: $url');
     final Response response = await DioInstance.get(url);
+    print('API response received with status code: ${response.statusCode}');
     if (response.statusCode == 200) {
+      print('Response data: ${response.data}');
       return response.data;
     } else {
       print('Get streak failed with status code: ${response.statusCode}');
