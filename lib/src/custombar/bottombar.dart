@@ -5,11 +5,12 @@ import 'package:YogiTech/src/widgets/box_button.dart';
 class CustomBottomBar extends StatefulWidget {
   final String buttonTitle;
   final VoidCallback? onPressed;
+  final ButtonStyleType? style;
 
   const CustomBottomBar({
     super.key,
     this.buttonTitle = '',
-    this.onPressed,
+    this.onPressed, this.style,
   });
 
   @override
@@ -36,7 +37,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
               padding: EdgeInsets.symmetric(horizontal: 24),
               child: CustomButton(
                 title: widget.buttonTitle,
-                style: ButtonStyleType.Primary,
+                style: widget.style ?? ButtonStyleType.Primary,
                 onPressed: widget.onPressed,
               ),
             ),

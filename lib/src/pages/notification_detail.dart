@@ -120,7 +120,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
 
   Widget _buildHeader(BuildContext context) {
     final theme = Theme.of(context);
-    DateTime dateTime = DateTime.parse(_noti!.time);
+    DateTime dateTime = DateTime.parse(_noti!.time).toUtc().toLocal();
 
     return GestureDetector(
         onTap: () {

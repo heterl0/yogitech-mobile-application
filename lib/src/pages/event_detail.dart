@@ -1,3 +1,6 @@
+import 'package:YogiTech/api/social/social_service.dart';
+import 'package:YogiTech/src/pages/friend_profile.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/api/auth/auth_service.dart';
@@ -15,7 +18,17 @@ import 'package:intl/intl.dart';
 
 class EventDetail extends StatefulWidget {
   final Event? event;
-  const EventDetail({super.key, required this.event});
+  final Account? account;
+  final VoidCallback? fetchAccount;
+  final void Function(int)? fetchEvent;
+
+  const EventDetail({
+    Key? key, // Add a key here
+    required this.event,
+    this.account,
+    this.fetchAccount,
+    this.fetchEvent,
+  }) : super(key: key);
 
   @override
   _EventDetailState createState() => _EventDetailState();
@@ -23,17 +36,22 @@ class EventDetail extends StatefulWidget {
 
 class _EventDetailState extends State<EventDetail>
     with TickerProviderStateMixin {
-  late Event? _event;
-  late Account? _account;
+  Event? _event;
+  Account? _account;
   late TabController _tabController;
   bool isLoading = false;
+  bool _isJoin = false;
+  CandidateEvent? _candidateEvent;
+  String? _expired;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    fetchUsers(); // Gọi fetchUsers ở đây
     _event = widget.event;
+    _account = widget.account;
+    _tabController = TabController(length: 2, vsync: this);
+    _fetchEventDetails(null);
+    _fetchUsers();
   }
 
   @override
@@ -42,42 +60,60 @@ class _EventDetailState extends State<EventDetail>
     super.dispose();
   }
 
-  Future<void> fetchUsers() async {
+  Future<void> _fetchUsers() async {
+    if (_event == null || _account == null) return;
     setState(() {
       isLoading = true; // Start loading
     });
-    Account? account = await retrieveAccount();
+    JoinEvent join = getCandidateByUser();
     setState(() {
-      _account = account;
+      _isJoin = join.isJoin;
+      _candidateEvent = join.candidate;
       isLoading = false;
     });
   }
 
   Future<void> handleJoinEvent() async {
-    if (_event != null) {
+    if (_event == null) return;
+    setState(() {
+      isLoading = true; // Start loading
+    });
+    CandidateEvent? updateResult;
+    if (!_isJoin && _candidateEvent == null) {
+      updateResult = await joinEvent(_event!.id);
+    } else if (!_isJoin && _candidateEvent != null) {
+      updateResult = await updateStatusCandidateEvent(_candidateEvent!.id, 1);
+    } else {
+      updateResult = null;
+    }
+    if (updateResult is CandidateEvent) {
+      print('nowfetch');
+      // await _fetchUsers();
       setState(() {
-        isLoading = true; // Start loading
+        widget.fetchEvent!.call(_event!.id);
+        _fetchEventDetails(_event!.id);
       });
-      final joinResult = await joinEvent(_event!.id);
-      if (joinResult is CandidateEvent) {
-        fetchEventDetails();
-      } else {
-        print('Error joining event: $joinResult');
-        setState(() {
-          isLoading = false; // Stop loading on error
-        });
-      }
+    } else {
+      print('Error joining event: $updateResult');
+      setState(() {
+        isLoading = false; // Stop loading on error
+      });
     }
   }
 
-  Future<void> handleGiveUpEvent(int candidateId) async {
-    if (candidateId != -1) {
+  Future<void> handleGiveUpEvent() async {
+    if (_isJoin && _candidateEvent != null) {
       setState(() {
         isLoading = true; // Start loading
       });
-      final bool? giveUpResult = await giveUpEvent(candidateId);
-      if (giveUpResult != null && giveUpResult) {
-        fetchEventDetails();
+      final CandidateEvent? giveUpResult =
+          await updateStatusCandidateEvent(_candidateEvent!.id, 0);
+      if (giveUpResult != null) {
+        // await _fetchUsers();
+        setState(() {
+          widget.fetchEvent!.call(_event!.id);
+          _fetchEventDetails(_event!.id);
+        });
       } else {
         print('Error giving up event: $giveUpResult');
         setState(() {
@@ -87,15 +123,26 @@ class _EventDetailState extends State<EventDetail>
     }
   }
 
-  Future<void> fetchEventDetails() async {
-    if (_event != null) {
-      // Kiểm tra _event trước khi gọi API
-      setState(() {
-        isLoading = true;
-      });
-      Event? updatedEvent = await getEvent(_event!.id);
+  Future<void> _fetchEventDetails(int? event) async {
+    if (event != null) {
+      Event? updatedEvent = await getEvent(event);
       setState(() {
         _event = updatedEvent;
+        final join = getCandidateByUser();
+        _isJoin = join.isJoin;
+        _candidateEvent = join.candidate;
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = true;
+        _event = widget.event;
+        _account = widget.account;
+        if (_event != null && _account != null) {
+          final join = getCandidateByUser();
+          _isJoin = join.isJoin;
+          _candidateEvent = join.candidate;
+        }
         isLoading = false;
       });
     }
@@ -105,48 +152,49 @@ class _EventDetailState extends State<EventDetail>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+    _expired = checkDateExpired(_event!.start_date, _event!.expire_date, trans);
 
-    // Find the candidate ID by matching the user ID in the candidates list
-    int candidateId =
-        _event!.event_candidate.map((candidate) => candidate.id).firstWhere(
-              (id) => _event!.event_candidate.any((candidate) =>
-                  candidate.user.id == _account!.id && candidate.id == id),
-              orElse: () => -1,
-            );
-    bool isJoin = (candidateId != -1);
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      backgroundColor: theme.colorScheme.surface,
-      body: CustomScrollView(
-        slivers: [
-          _buildCustomTopBar(context),
-          SliverToBoxAdapter(
-            child: _buildBody(context),
-          ),
-          if (isLoading)
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Container(
-                color: Colors.black54,
-                child: Center(
-                  child: CircularProgressIndicator(),
+    return isLoading
+        ? Center(child: CircularProgressIndicator())
+        : Scaffold(
+            extendBodyBehindAppBar: true,
+            backgroundColor: theme.colorScheme.surface,
+            body: CustomScrollView(
+              slivers: [
+                if (_event != null) _buildCustomTopBar(context),
+                SliverToBoxAdapter(
+                  child: _buildBody(context),
                 ),
-              ),
+                if (isLoading)
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Container(
+                      color: Colors.black54,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ),
+              ],
             ),
-        ],
-      ),
-      bottomNavigationBar: CustomBottomBar(
-        buttonTitle: isJoin ? trans.giveUp : trans.joinIn,
-        onPressed: () {
-          if (!isJoin) {
-            handleJoinEvent();
-          } else {
-            handleGiveUpEvent(candidateId);
-          }
-        },
-      ),
-    );
+            bottomNavigationBar: 
+            (!_expired!.startsWith(RegExp(r'[0-9]')))?
+             CustomBottomBar(
+                    buttonTitle: _expired.toString(),
+                    style: ButtonStyleType.Tertiary,
+            ):
+            _isJoin
+                ? CustomBottomBar(
+                    buttonTitle: trans.giveUp,
+                    style: ButtonStyleType.Quaternary,
+                    onPressed: handleGiveUpEvent,
+                  )
+                : CustomBottomBar(
+                    buttonTitle: trans.joinIn,
+                    onPressed: handleJoinEvent,
+                  ),
+          );
   }
 
   Widget _buildCustomTopBar(BuildContext context) {
@@ -179,17 +227,17 @@ class _EventDetailState extends State<EventDetail>
       pinned: true,
       centerTitle: true,
       title: Text(
-          checkDateExpired(_event!.start_date, _event!.expire_date, trans),
+          _expired!,
           style: h2.copyWith(color: theme.colorScheme.onSurface)),
       expandedHeight: 320,
       flexibleSpace: FlexibleSpaceBar(
-        background: 
-        CachedNetworkImage(
-        imageUrl: _event!.image_url,
-        fit: BoxFit.cover,
-        placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-        errorWidget: (context, url, error) => Icon(Icons.error),
-      ),
+        background: CachedNetworkImage(
+          imageUrl: _event!.image_url,
+          fit: BoxFit.cover,
+          placeholder: (context, url) =>
+              Center(child: CircularProgressIndicator()),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        ),
       ),
     );
   }
@@ -203,11 +251,11 @@ class _EventDetailState extends State<EventDetail>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 16),
-          _buildTitle(context),
+          if (_event != null) _buildTitle(context),
           const SizedBox(height: 16),
-          _buildRowWithText(context, trans),
+          if (_event != null) _buildRowWithText(context, trans),
           const SizedBox(height: 16),
-          _buildDescription(),
+          if (_event != null) _buildDescription(),
           const SizedBox(height: 16),
           TabBar(
             dividerColor: Colors.transparent,
@@ -249,10 +297,10 @@ class _EventDetailState extends State<EventDetail>
     final local = Localizations.localeOf(context);
     String startDay = DateFormat.yMMMd(local.languageCode)
         .add_Hm()
-        .format(DateTime.parse(_event!.start_date));
+        .format(DateTime.parse(_event!.start_date).toUtc().toLocal());
     String endDay = DateFormat.yMMMd(local.languageCode)
         .add_Hm()
-        .format(DateTime.parse(_event!.expire_date));
+        .format(DateTime.parse(_event!.expire_date).toUtc().toLocal());
 
     return Container(
       alignment: Alignment.centerLeft,
@@ -345,9 +393,8 @@ class _EventDetailState extends State<EventDetail>
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
-    List<dynamic> candidates = _event!.event_candidate;
-    candidates
-        .sort((a, b) => (a.event_point ?? 0).compareTo(b.event_point ?? 0));
+    List<dynamic> candidates = _event!.event_candidate.where((candidate) => candidate.active_status != 0).toList();
+    candidates.sort((a, b) => (a.event_point ?? 0).compareTo(b.event_point ?? 0));
 
     return SingleChildScrollView(
       child: Column(
@@ -356,58 +403,115 @@ class _EventDetailState extends State<EventDetail>
         children: candidates.asMap().entries.map((entry) {
           int index = entry.key;
           CandidateEvent item = entry.value as CandidateEvent;
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
-            child: SizedBox(
-              height: 48, // Điều chỉnh chiều cao cho mỗi hàng
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 28,
-                    height: 28,
-                    child: index == 0
-                        ? Image.asset('assets/icons/Warranty.png',
-                            fit: BoxFit.fill)
-                        : Center(
+          return item.active_status == 1
+              ? GestureDetector(
+                  onTap: () {
+                    if(item.user!=_account!.id){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FriendProfile(
+                          profile: item.profile,
+                          account: _account,
+                          unFollow: unFollow,
+                          followUserByUserId: followUserByUserId,
+                        ),
+                      ),
+                    );}
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: SizedBox(
+                      height: 48, // Điều chỉnh chiều cao cho mỗi hàng
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 28,
+                            height: 28,
+                            child: index == 0
+                                ? Image.asset('assets/icons/Warranty.png',
+                                    fit: BoxFit.fill)
+                                : Center(
+                                    child: Text(
+                                      (index + 1).toString(),
+                                      textAlign: TextAlign.center,
+                                      style: h3.copyWith(
+                                          color: theme.colorScheme.onSurface),
+                                    ),
+                                  ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            child: (item.profile.avatar != null &&
+                                    item.profile.avatar != '')
+                                ? Container(
+                                    width: 60,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: stroke,
+                                    ),
+                                    child: CircleAvatar(
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(item
+                                                .profile.avatar
+                                                .toString())),
+                                  )
+                                : Container(
+                                    width:
+                                        60, // 2 * radius + 8 (border width) * 2
+                                    height:
+                                        60, // Matching the ratio as per Figma
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: CircleAvatar(
+                                      radius: 78,
+                                      backgroundImage: AssetImage(
+                                          'assets/images/gradient.jpg'),
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          item.profile.first_name != ''
+                                              ? item.profile.first_name![0]
+                                                  .toUpperCase()
+                                              : ':)',
+                                          style: TextStyle(
+                                            fontSize:
+                                                28, // Adjust the size as needed
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
                             child: Text(
-                              (index + 1).toString(),
-                              textAlign: TextAlign.center,
+                              '${item.profile.first_name} ${item.profile.last_name}',
                               style: h3.copyWith(
                                   color: theme.colorScheme.onSurface),
+                              maxLines:
+                                  1, // Đảm bảo tên người dùng không quá dài
+                              overflow: TextOverflow
+                                  .ellipsis, // Xử lý trường hợp tràn bản
                             ),
                           ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: const ShapeDecoration(
-                      gradient: gradient,
-                      shape: CircleBorder(),
+                          const SizedBox(width: 8),
+                          Text(
+                            '${item.event_point.toStringAsFixed(1)} ${trans.point}',
+                            textAlign: TextAlign.right,
+                            style: h3.copyWith(color: primary),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      item.user.username,
-                      style: h3.copyWith(color: theme.colorScheme.onSurface),
-                      maxLines: 1, // Đảm bảo tên người dùng không quá dài
-                      overflow:
-                          TextOverflow.ellipsis, // Xử lý trường hợp tràn bản
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    '${item.event_point.toStringAsFixed(1)} ${trans.point}',
-                    textAlign: TextAlign.right,
-                    style: h3.copyWith(color: primary),
-                  ),
-                ],
-              ),
-            ),
-          );
+                  ))
+              : SizedBox();
         }).toList(),
       ),
     );
@@ -435,4 +539,61 @@ class _EventDetailState extends State<EventDetail>
       },
     );
   }
+
+  JoinEvent getCandidateByUser() {
+    CandidateEvent? candi;
+    bool isjoin = false;
+    try {
+      candi = _event!.event_candidate.firstWhere(
+        (candidate) => candidate.user == _account!.id,
+      );
+    } catch (e) {
+      candi = null;
+    }
+    // print(candi);
+    if (candi != null && candi.active_status == 1) {
+      isjoin = true;
+    }
+    JoinEvent join = JoinEvent(isJoin: isjoin, candidate: candi);
+    return join;
+  }
+
+  Future<void> unFollow(int id) async {
+    try {
+      final account = await unfollowUser(id);
+
+      if (widget.fetchAccount != null) {
+        widget.fetchAccount!();
+      }
+      if (account != null) {
+        setState(() {
+          _account = account;
+        });
+      }
+    } catch (e) {
+      print('Error unfollowing: $e');
+    }
+  }
+
+  Future<void> followUserByUserId(int id) async {
+    try {
+      final account = await followUser(id);
+      if (widget.fetchAccount != null) {
+        widget.fetchAccount!();
+      }
+      if (account != null) {
+        setState(() {
+          _account = account;
+        });
+      }
+    } catch (e) {
+      print('Error following: $e');
+    }
+  }
+}
+
+class JoinEvent {
+  bool isJoin;
+  CandidateEvent? candidate;
+  JoinEvent({required this.isJoin, this.candidate});
 }
