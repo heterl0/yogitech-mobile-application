@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:YogiTech/api/dioInstance.dart';
 import 'package:YogiTech/src/models/exercise.dart';
 import 'package:YogiTech/utils/formatting.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<List<dynamic>> getExercises() async {
   try {
@@ -36,6 +37,12 @@ Future<Exercise?> getExercise(int id) async {
     print('Get exercise detail error: $e');
     return null;
   }
+}
+
+Future<void> storeExercise(Exercise exercise) async {
+  // Store exercise in local storage
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('exercise', exercise.toJson());
 }
 
 class PostCommentRequest {
@@ -112,5 +119,22 @@ Future<bool> deleteVote(int voteId) async {
   } catch (e) {
     print('Delete vote error: $e');
     return false;
+  }
+}
+
+Future<dynamic> postExerciseLog(dynamic data) async {
+  try {
+    final url = formatApiUrl('/api/v1/exercise-logs/');
+    final Response response = await DioInstance.post(url, data: data);
+    if (response.statusCode == 201) {
+      return response.data;
+    } else {
+      print(
+          'Post exercise log failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Post exercise log error: $e');
+    return null;
   }
 }

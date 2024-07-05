@@ -6,7 +6,8 @@ import 'package:rxdart/rxdart.dart';
 
 // id thông báo:
 // 0: Thông báo kết thúc thiền
-// 1: Chưa dùng đến
+// 1: Thông báo nhắc nhở giữ streak
+// id+10: Thông báo bạn bè
 // ????: Các nhắc nhở do người dùng thiết lập
 
 class LocalNotification {
@@ -75,6 +76,24 @@ class LocalNotification {
     await _flutterLocalNotificationsPlugin.periodicallyShow(
         1, title, body, repeat, notificationDetails,
         payload: payload);
+  }
+
+  static Future showFriendNotification({
+    required int id,
+    required String title,
+    required String body,
+    required String payload,
+  }) async {
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails('yogi3', 'YogiTech',
+            channelDescription: 'YogiTech notification',
+            importance: Importance.max,
+            priority: Priority.high,
+            ticker: 'ticker');
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
+    await _flutterLocalNotificationsPlugin
+        .show(id, title, body, notificationDetails, payload: payload);
   }
 
   static Day _convertIntToDay(int day) {

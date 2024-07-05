@@ -76,6 +76,7 @@
   "goodJob": "Làm tốt lắm!",
   "accuracy": "Độ chính xác:",
   "caloriesBurned": "Calo đã đốt cháy:",
+  "burnInThisWeek":"Lượng calo bạn đã đốt cháy trong một tuần qua",
   "finish": "Kết thúc",
   "currentPlan": "Gói hiện tại của bạn",
   "waitToEndPlan": "Bạn phải đợi gói này kết thúc để đăng ký gói khác",
@@ -83,6 +84,7 @@
   "unsubscription": "Hủy đăng ký",
   "choosePlan": "Chọn gói",
   "unlockPremium": "Mở khóa tất cả các bài tập cao cấp",
+  "needPremium":"Tính năng này cần tài khoản cao cấp",
   "onceAWeek": "Một lần một tuần",
   "onceAYear": "Một lần một năm",
   "subscription": "Đăng ký",
@@ -167,6 +169,7 @@
   "burnedInMonth": "đã đốt cháy trong tháng này",
   "yourExercise": "Bài tập của bạn",
   "premiumFeature":"Tính năng trả phí",
+
   "advance": "Nâng cao",
   "professional": "Chuyên nghiệp",
   "friendProfile": "Hồ sơ bạn bè",

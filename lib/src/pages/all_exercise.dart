@@ -1,6 +1,7 @@
 import 'package:YogiTech/src/pages/homepage.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/exercise/exercise_service.dart';
@@ -18,7 +19,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class AllExercise extends StatefulWidget {
   final String? searchString;
   final Muscle? selectedMuscle;
-  const AllExercise({super.key, this.searchString, this.selectedMuscle});
+  final Account? account;
+  final VoidCallback? fetchAccount;
+  const AllExercise(
+      {super.key,
+      this.searchString,
+      this.selectedMuscle,
+      this.account,
+      this.fetchAccount});
 
   @override
   BlogState createState() => BlogState();
@@ -29,22 +37,22 @@ class BlogState extends State<AllExercise> {
   bool _isNotSearching = true;
   bool _isLoading = false;
   final TextEditingController _searchController = TextEditingController();
-  Account? account;
+  Account? _account;
 
   @override
   void initState() {
     super.initState();
     _fetchExercise(widget.searchString, widget.selectedMuscle);
-    _fetchAccount();
+    _account = widget.account;
     _searchController.text = widget.searchString ?? '';
   }
 
-  Future<void> _fetchAccount() async {
-    final Account? _account = await retrieveAccount();
-    setState(() {
-      account = _account;
-    });
-  }
+  // Future<void> _fetchAccount() async {
+  //   final Account? _account = await retrieveAccount();
+  //   setState(() {
+  //     account = _account;
+  //   });
+  // }
 
   Future<void> _fetchExercise([String? query = '', Muscle? mus]) async {
     setState(() {
@@ -64,7 +72,8 @@ class BlogState extends State<AllExercise> {
       if (mus != null) {
         filteredExercises = filteredExercises.where((exercise) {
           for (var poseWithTime in exercise.poses) {
-            if (poseWithTime.pose.muscles.any((muscle) => muscle.id == mus.id)) {
+            if (poseWithTime.pose.muscles
+                .any((muscle) => muscle.id == mus.id)) {
               return true; // Keep this exercise
             }
           }
@@ -187,15 +196,20 @@ class BlogState extends State<AllExercise> {
               itemBuilder: (context, index) {
                 final ex = _exercises[index];
                 return CustomCard(
+                  topRightIcon: ex.is_premium
+                      ? Image.asset('assets/images/Crown.png')
+                      : null,
                   title: ex.title,
-                  caption: ex.description,
+                  caption: ex.description.replaceAll(RegExp(r'<[^>]*>'), ''),
                   imageUrl: ex.image_url,
                   onTap: () {
-                    print(ex);
-                    Navigator.push(
+                    pushWithoutNavBar(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ExerciseDetail(exercise: ex),
+                        builder: (context) => ExerciseDetail(
+                            exercise: ex,
+                            account: _account,
+                            fetchAccount: widget.fetchAccount),
                       ),
                     );
                   },

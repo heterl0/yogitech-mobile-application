@@ -28,72 +28,64 @@ final List<Map<String, dynamic>> theTracks = [
 class _MeditateState extends State<Meditate> {
   int? _selectedTrackIndex;
   int currentStreak = 0;
-
   Duration _selectedDuration = const Duration(minutes: 1);
+  SharedPreferences? prefs;
 
   @override
   void initState() {
     super.initState();
+    _initSharedPreferences();
+  }
+
+  Future<void> _initSharedPreferences() async {
+    prefs = await SharedPreferences.getInstance();
     _loadStreakData();
   }
 
-  Future<void> _loadStreakData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  void _loadStreakData() {
     setState(() {
-      currentStreak = prefs.getInt('currentStreak') ?? 0;
+      currentStreak = prefs?.getInt('currentStreak') ?? 0;
     });
   }
 
   Future<void> _updateStreakData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     DateTime today = DateTime.now();
     DateTime? lastMeditationDate =
-        DateTime.tryParse(prefs.getString('lastMeditationDate') ?? '');
+        DateTime.tryParse(prefs?.getString('lastMeditationDate') ?? '');
 
-    int currentStreak = prefs.getInt('currentStreak') ?? 0;
-    int longestStreak = prefs.getInt('longestStreak') ?? 0;
+    int currentStreak = prefs?.getInt('currentStreak') ?? 0;
+    int longestStreak = prefs?.getInt('longestStreak') ?? 0;
 
-    // Check if there is a last meditation date
     if (lastMeditationDate != null) {
-      // Normalize dates to compare only year, month, and day
       DateTime normalizedToday = DateTime(today.year, today.month, today.day);
       DateTime normalizedLastDate = DateTime(lastMeditationDate.year,
           lastMeditationDate.month, lastMeditationDate.day);
 
       int daysDifference =
           normalizedToday.difference(normalizedLastDate).inDays;
-      print(
-          'daysDifference:$daysDifference   normalizedLastDate:$normalizedLastDate lastMeditationDate:$lastMeditationDate');
 
-      // If the difference is 1 day, increment streak
       if (daysDifference == 1) {
         currentStreak++;
       } else if (daysDifference > 1) {
-        // If the difference is more than 1 day, reset streak
         currentStreak = 1;
       }
-      // If the difference is 0 days, do nothing (already counted for today)
     } else {
-      // If there is no last meditation date, this is the first meditation
       currentStreak = 1;
     }
 
-    // Update longest streak if current streak is greater
     if (currentStreak > longestStreak) {
       longestStreak = currentStreak;
-      await prefs.setInt('longestStreak', longestStreak);
+      await prefs?.setInt('longestStreak', longestStreak);
     }
 
-    // Save current streak and last meditation date
-    await prefs.setInt('currentStreak', currentStreak);
-    await prefs.setString('lastMeditationDate', today.toIso8601String());
-    await _loadStreakData();
+    await prefs?.setInt('currentStreak', currentStreak);
+    await prefs?.setString('lastMeditationDate', today.toIso8601String());
+    _loadStreakData();
   }
 
   Future<void> _resetStreakData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('currentStreak');
-    await prefs.remove('lastMeditationDate');
+    await prefs?.remove('currentStreak');
+    await prefs?.remove('lastMeditationDate');
     setState(() {
       currentStreak = 0;
     });
@@ -131,18 +123,22 @@ class _MeditateState extends State<Meditate> {
       {
         'title': trans.soundRain,
         'subtitle': trans.soundRainDescription,
+        'asset': 'audios/rain.mp3'
       },
       {
         'title': trans.soundWave,
         'subtitle': trans.soundWaveDescription,
+        'asset': 'audios/wave.mp3'
       },
       {
         'title': trans.soundMorning,
         'subtitle': trans.soundMorningDescription,
+        'asset': 'audios/morning.mp3'
       },
       {
         'title': trans.soundNature,
         'subtitle': trans.soundNatureDescription,
+        'asset': 'audios/nature.mp3'
       },
     ];
 
@@ -267,10 +263,10 @@ class _MeditateState extends State<Meditate> {
   Widget _buildElevatedButton(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(Colors.transparent),
-        shadowColor: MaterialStateProperty.all(Colors.transparent),
-        padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-        shape: MaterialStateProperty.all(const CircleBorder()),
+        backgroundColor: WidgetStateProperty.all(Colors.transparent),
+        shadowColor: WidgetStateProperty.all(Colors.transparent),
+        padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
+        shape: WidgetStateProperty.all(const CircleBorder()),
       ),
       onPressed: () async {
         pushWithoutNavBar(
