@@ -84,6 +84,7 @@ class _StreakState extends State<Streak> {
       appBar: CustomAppBar(
         title: trans.streak,
         showBackButton: false,
+        style: widthStyle.Large,
         postActions: [
           IconButton(
             icon: Icon(Icons.close, color: theme.colorScheme.onSurface),

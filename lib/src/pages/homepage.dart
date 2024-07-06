@@ -1,6 +1,8 @@
 import 'package:YogiTech/api/blog/blog_service.dart';
 import 'package:YogiTech/src/models/exercise.dart';
+import 'package:YogiTech/src/pages/_onbroading.dart';
 import 'package:YogiTech/src/pages/subscription.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -202,6 +204,17 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // CustomButton(
+                //     title: 'title',
+                //     style: ButtonStyleType.Primary,
+                //     onPressed: () => {
+                //           pushWithoutNavBar(
+                //             context,
+                //             MaterialPageRoute(
+                //               builder: (context) => OnboardingScreen(),
+                //             ),
+                //           ),
+                //         }),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
