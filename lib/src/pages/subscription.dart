@@ -49,38 +49,38 @@ class _SubscriptionState extends State<SubscriptionPage> {
     _account = widget.account;
     _loadSub();
   }
-Future<void> _loadSub() async {
-  try {
-    final sub = await getSubscriptions();
-    final ussub = await getUserSubscriptions();
-    setState(() {
-      _subs = sub;
-      _userSubs = ussub;
-      _isLoading = false;
 
-      // if (_account!.is_staff == true) {
-      //   _subStatus = 'Admin';
-      //   _currendSub = _createFakeSubscription();
-      // } else {
+  Future<void> _loadSub() async {
+    try {
+      final sub = await getSubscriptions();
+      final ussub = await getUserSubscriptions();
+      setState(() {
+        _subs = sub;
+        _userSubs = ussub;
+        _isLoading = false;
+
+        // if (_account!.is_staff == true) {
+        //   _subStatus = 'Admin';
+        //   _currendSub = _createFakeSubscription();
+        // } else {
         _subStatus = _userSubs.isNotEmpty ? checkExpire(_userSubs.last) : null;
         if (_userSubs.isNotEmpty && _userSubs.last?.activeStatus != 0) {
           _currendSub = _userSubs.last;
         } else {
           _currendSub = null;
         }
-      // }
-    });
-  } catch (e) {
-    // Handle errors, e.g., show a snackbar or error message
-    print('Error loading Subscription: $e');
+        // }
+      });
+    } catch (e) {
+      // Handle errors, e.g., show a snackbar or error message
+      print('Error loading Subscription: $e');
+    }
   }
-}
-
 
   UserSubscription _createFakeSubscription() {
     // Create a fake subscription
     final fakeSub = UserSubscription(
-      id:-1,
+      id: -1,
       userId: _account!.id,
       subscriptionId: 3,
       subscriptionType: 1,
@@ -217,6 +217,7 @@ Future<void> _loadSub() async {
 
   Widget _buildUnSubscriptionContainer() {
     Theme.of(context);
+    DateTime now = DateTime.now();
     final trans = AppLocalizations.of(context)!;
     if (_currendSub != null) {
       Subscription sub = _subs.firstWhere(
@@ -263,11 +264,21 @@ Future<void> _loadSub() async {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Center(
-                    child: Text(
-                      '${_subStatus}',
-                      style: h3.copyWith(color: active, height: 1),
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${endDate.difference(now).inDays}',
+                        style: h2.copyWith(color: active, height: 1),
+                      ),
+                      Text(
+                        trans.daysLeft,
+                        style: bd_text.copyWith(
+                          color: active,
+                          height: 1,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Column(
@@ -298,27 +309,26 @@ Future<void> _loadSub() async {
                       ],
                     ),
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${trans.start}: ',
-                          style: min_cap.copyWith(color: active),
-                        ),
-                        Text(
-                          '$startDay',
-                          style: min_cap.copyWith(color: active),
-                        ),
-                    Spacer(),
-                        Text(
-                          '${trans.end}: ',
-                          style: min_cap.copyWith(color: active),
-                        ),
-                        Text(
-                          ' $endDay',
-                          style: min_cap.copyWith(color: active),
-                        ),
-                    ]),
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${trans.start}: ',
+                            style: min_cap.copyWith(color: active),
+                          ),
+                          Text(
+                            '$startDay',
+                            style: min_cap.copyWith(color: active),
+                          ),
+                          Text(
+                            '${trans.end}: ',
+                            style: min_cap.copyWith(color: active),
+                          ),
+                          Text(
+                            ' $endDay',
+                            style: min_cap.copyWith(color: active),
+                          ),
+                        ]),
                   ],
                 )
               ],
