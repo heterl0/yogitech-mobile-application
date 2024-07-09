@@ -226,5 +226,6 @@
   "doesntexist" : "Tài khoản hoặc mật khẩu không đúng!",
   "enterEmail" :"Vui lòng nhập email!",
   "noResult":"Không có kết quả",
-  "inputName": "Nhập tên người dùng"
+  "inputName": "Nhập tên người dùng",
+  "baned": "Tài khoản của bạn đã bị chặn."
 }
