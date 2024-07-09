@@ -1,4 +1,3 @@
-import 'package:YogiTech/src/pages/_mainscreen.dart';
 import 'package:YogiTech/src/pages/_onbroading.dart';
 import 'package:YogiTech/src/widgets/dropdown_field.dart';
 import 'package:flutter/material.dart';
@@ -25,14 +24,37 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
   final TextEditingController firstName = TextEditingController();
   final TextEditingController lastName = TextEditingController();
   final TextEditingController birthday = TextEditingController();
+  final TextEditingController gender = TextEditingController();
   final TextEditingController level = TextEditingController();
   final TextEditingController height = TextEditingController();
   final TextEditingController weight = TextEditingController();
-  late Profile _profile;
+  Profile? _profile;
   bool _isSent = false;
-  List<bool> _isValid = [false, false, false];
+
+  final Map<String, bool> _isValid = {
+    'firstName': false,
+    'lastName': false,
+    'birthday': false,
+    'gender': false,
+    'level': false,
+    'weight': false,
+    'height': false,
+  };
+
   static const String _dateFormat = 'dd/MM/yyyy'; // Định dạng ngày tháng
   final DateFormat _dateFormatter = DateFormat(_dateFormat);
+
+  final Map<int, String> genderMap = {
+    0: 'Female',
+    1: 'Male',
+    2: 'Other',
+  };
+
+  final Map<String, String> transMap = {
+    'Female': 'Nam',
+    'Male': 'Nữ',
+    'Other': 'Khác',
+  };
 
   @override
   void initState() {
@@ -51,6 +73,9 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
             DateTime parsedDate = DateTime.parse(profile.birthdate!);
             birthday.text = _formatDate(parsedDate);
           }
+          weight.text = profile.weight ?? '';
+          height.text = profile.height ?? '';
+
           _profile = profile;
         });
       }
@@ -60,7 +85,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
   }
 
   String _formatDate(DateTime date) {
-    return "${date.day}/${date.month}/${date.year}";
+    return _dateFormatter.format(date);
   }
 
   @override
@@ -70,7 +95,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        _saveUserProfile();
+        _savePage1();
         return true;
       },
       child: Scaffold(
@@ -78,6 +103,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
         body: Stack(
           children: [
             PageView.builder(
+              physics: NeverScrollableScrollPhysics(),
               controller: _pageController,
               itemCount: 2,
               itemBuilder: (context, index) {
@@ -103,8 +129,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                       dotWidth: 12,
                       spacing: 16,
                       dotColor: stroke,
-                      activeDotColor:
-                          theme.colorScheme.onPrimary, // Màu chấm active trắng
+                      activeDotColor: theme.colorScheme.onPrimary,
                     ),
                   ),
                 ],
@@ -116,13 +141,17 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
           buttonTitle: trans.next,
           onPressed: () {
             if (_pageController.page == 0) {
-              _saveUserProfile();
-              _pageController.nextPage(
-                duration: Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
+              if (_validatePage1()) {
+                _savePage1();
+                _pageController.nextPage(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              }
             } else {
-              _saveUserBMI();
+              if (_validatePage2()) {
+                _savePage2();
+              }
             }
           },
         ),
@@ -174,7 +203,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                 controller: firstName,
                 placeholder: trans.firstName,
               ),
-              if (_isSent && !_isValid[0])
+              if (_isSent && !_isValid['firstName']!)
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 8),
                   child: Text('${trans.firstName} ${trans.mustInput}',
@@ -187,7 +216,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                 controller: lastName,
                 placeholder: trans.lastName,
               ),
-              if (_isSent && !_isValid[1])
+              if (_isSent && !_isValid['lastName']!)
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 8),
                   child: Text('${trans.lastName} ${trans.mustInput}',
@@ -212,13 +241,12 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                   );
                   if (pickedDate != null) {
                     setState(() {
-                      birthday.text = _dateFormatter
-                          .format(pickedDate); // Sử dụng formatter
+                      birthday.text = _formatDate(pickedDate);
                     });
                   }
                 },
               ),
-              if (_isSent && !_isValid[2])
+              if (_isSent && !_isValid['birthday']!)
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 8),
                   child: Text('${trans.birthday} ${trans.mustInput}',
@@ -240,6 +268,30 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Text(
+                trans.gender,
+                style: h3.copyWith(color: theme.colorScheme.onPrimary),
+              ),
+              SizedBox(height: 8.0),
+              CustomDropdownFormField(
+                controller: gender,
+                items: [
+                  trans.male,
+                  trans.female,
+                  trans.other,
+                ],
+                placeholder:
+                    gender.text.isEmpty ? trans.sellectGender : gender.text,
+                onTap: () {
+                  // Optional: handle dropdown tap
+                },
+              ),
+              if (_isSent && !_isValid['gender']!)
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top: 8),
+                  child: Text('${trans.level} ${trans.mustInput}',
+                      style: bd_text.copyWith(color: Colors.redAccent)),
+                ),
               SizedBox(height: 16.0),
               Text(trans.level,
                   style: h3.copyWith(color: theme.colorScheme.onPrimary)),
@@ -256,7 +308,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                   setState(() {});
                 },
               ),
-              if (_isSent && !_isValid[0])
+              if (_isSent && !_isValid['level']!)
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 8),
                   child: Text('${trans.level} ${trans.mustInput}',
@@ -264,7 +316,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                 ),
               SizedBox(height: 16.0),
               _buildWeightField(trans),
-              if (_isSent && !_isValid[1])
+              if (_isSent && !_isValid['weight']!)
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 8),
                   child: Text('${trans.weightKg} ${trans.mustInput}',
@@ -272,7 +324,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                 ),
               SizedBox(height: 16.0),
               _buildHeightField(trans),
-              if (_isSent && !_isValid[2])
+              if (_isSent && !_isValid['height']!)
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 8),
                   child: Text('${trans.heightCm} ${trans.mustInput}',
@@ -294,7 +346,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
         SizedBox(height: 12.0),
         BoxInputField(
           controller: weight,
-          placeholder: '60',
+          placeholder: trans.weightKg,
           keyboardType: TextInputType.numberWithOptions(decimal: true),
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp(r'^\d{0,3}(\.\d{0,2})?$')),
@@ -312,7 +364,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
         SizedBox(height: 12.0),
         BoxInputField(
           controller: height,
-          placeholder: '168',
+          placeholder: trans.heightCm,
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         ),
@@ -320,59 +372,64 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
     );
   }
 
-  void _saveUserProfile() {
+  bool _validatePage1() {
     setState(() {
-      _isSent = true;
-      _isValid = _checkValid();
+      _isValid['firstName'] = firstName.text.trim().isNotEmpty;
+      _isValid['lastName'] = lastName.text.trim().isNotEmpty;
+      _isValid['birthday'] = birthday.text.trim().isNotEmpty;
     });
 
-    if (_isValid[0] && _isValid[1] && _isValid[2]) {
-      _profile.first_name = firstName.text.trim();
-      _profile.last_name = lastName.text.trim();
+    return _isValid['firstName']! &&
+        _isValid['lastName']! &&
+        _isValid['birthday']!;
+  }
 
-      // Phân tích ngày tháng đã được định dạng trở lại thành DateTime
+  void _savePage1() {
+    if (_validatePage1() && _profile != null) {
+      _profile!.first_name = firstName.text.trim();
+      _profile!.last_name = lastName.text.trim();
+
       try {
         DateTime parsedBirthday = _dateFormatter.parse(birthday.text);
-        _profile.birthdate = parsedBirthday.toIso8601String();
+        _profile!.birthdate = parsedBirthday.toIso8601String();
       } catch (e) {
-        // Xử lý trường hợp định dạng có thể không chính xác
-        print('Lỗi khi phân tích ngày sinh: $e');
-        // Bạn có thể muốn hiển thị thông báo lỗi cho người dùng ở đây
+        print('Error parsing birthday: $e');
       }
     }
   }
 
-  List<bool> _checkValid() {
-    return [
-      (firstName.text.trim() != ''),
-      (lastName.text.trim() != ''),
-      (birthday.text.trim() != ''),
-    ];
-  }
-
-  Future<void> _saveUserBMI() async {
+  bool _validatePage2() {
     setState(() {
       _isSent = true;
-      _isValid = _checkValid();
+      _isValid['gender'] = gender.text.trim().isNotEmpty;
+      _isValid['level'] = level.text.trim().isNotEmpty;
+      _isValid['weight'] = weight.text.trim().isNotEmpty;
+      _isValid['height'] = height.text.trim().isNotEmpty;
     });
 
-    if (_isValid[0] && _isValid[1] && _isValid[2]) {
+    return _isValid['gender']! &&
+        _isValid['level']! &&
+        _isValid['weight']! &&
+        _isValid['height']!;
+  }
+
+  Future<void> _savePage2() async {
+    if (_validatePage2() && _profile != null) {
       double? userWeight = double.tryParse(weight.text);
       double? userHeight = double.tryParse(height.text);
 
       if (userWeight != null && userHeight != null) {
         try {
           final updatedProfile = await patchPreLaunch(PatchProfileRequest(
-            firstName: _profile.first_name,
-            lastName: _profile.last_name,
-            birthdate: DateTime.parse(_profile.birthdate.toString()),
+            firstName: _profile!.first_name,
+            lastName: _profile!.last_name,
+            birthdate: DateTime.parse(_profile!.birthdate.toString()),
             weight: userWeight,
             height: userHeight,
             bmi: calculateBMI(userWeight, userHeight),
           ));
           if (updatedProfile != null) {
             print('BMI updated successfully');
-
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => OnboardingScreen()),
