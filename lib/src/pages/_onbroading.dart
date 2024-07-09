@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/pages/_mainscreen.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
@@ -37,35 +38,37 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               switch (index) {
                 case 0:
                   return buildPage(
-                    color: Color(0xFF7851a9), // Màu tím yoga
+                    color: theme.colorScheme.surface, // Màu tím yoga
                     title: trans.onboarding_title_1,
                     text: trans.onboarding_text_1,
                     imageAsset: 'assets/onboarding/onboarding1.png',
                   );
                 case 1:
                   return buildPage(
-                    color: Color(0xFF548c2f), // Màu xanh lá cây tươi mát
+                    color:
+                        theme.colorScheme.surface, // Màu xanh lá cây tươi mát
                     title: trans.onboarding_title_2,
                     text: trans.onboarding_text_2,
                     imageAsset: 'assets/onboarding/onboarding2.png',
                   );
                 case 2:
                   return buildPage(
-                    color: Color(0xFFf7941d), // Màu cam năng động
+                    color: theme.colorScheme.surface, // Màu cam năng động
                     title: trans.onboarding_title_3,
                     text: trans.onboarding_text_3,
                     imageAsset: 'assets/onboarding/onboarding3.png',
                   );
                 case 3:
                   return buildPage(
-                    color: Color(0xFF0077c2), // Màu xanh dương nhẹ nhàng
+                    color:
+                        theme.colorScheme.surface, // Màu xanh dương nhẹ nhàng
                     title: trans.onboarding_title_4,
                     text: trans.onboarding_text_4,
                     imageAsset: 'assets/onboarding/onboarding4.png',
                   );
                 case 4:
                   return buildPage(
-                    color: Color(0xFFc2185b), // Màu hồng đậm
+                    color: theme.colorScheme.surface, // Màu hồng đậm
                     title: trans.onboarding_title_5,
                     text: trans.onboarding_text_5,
                     imageAsset: 'assets/onboarding/onboarding5.png',
@@ -89,7 +92,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     dotHeight: 12,
                     dotWidth: 12,
                     spacing: 16,
-                    dotColor: text,
+                    dotColor: stroke,
                     activeDotColor:
                         theme.colorScheme.onPrimary, // Màu chấm active trắng
                   ),
@@ -102,7 +105,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       : ButtonStyleType.Secondary,
                   onPressed: () {
                     if (_currentPage == 4) {
-                      //Làm gì đó
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MainScreen(
+                            isDarkMode: false,
+                            onThemeChanged: (bool value) {},
+                            locale: Locale('en'),
+                            onLanguageChanged: (bool value) {},
+                            isVietnamese: false,
+                          ),
+                        ),
+                      );
                     } else {
                       _controller.nextPage(
                         duration: Duration(milliseconds: 300),
@@ -133,7 +147,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(imageAsset, height: 250),
+          Image.asset(imageAsset, height: 240),
           SizedBox(height: 30),
           Text(
             title,

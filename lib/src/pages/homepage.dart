@@ -1,6 +1,7 @@
 import 'package:YogiTech/api/blog/blog_service.dart';
 import 'package:YogiTech/src/models/exercise.dart';
 import 'package:YogiTech/src/pages/_onbroading.dart';
+import 'package:YogiTech/src/pages/pre_launch_survey_page.dart';
 import 'package:YogiTech/src/pages/subscription.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter/material.dart';
@@ -204,17 +205,17 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // CustomButton(
-                //     title: 'title',
-                //     style: ButtonStyleType.Primary,
-                //     onPressed: () => {
-                //           pushWithoutNavBar(
-                //             context,
-                //             MaterialPageRoute(
-                //               builder: (context) => OnboardingScreen(),
-                //             ),
-                //           ),
-                //         }),
+                CustomButton(
+                    title: 'title',
+                    style: ButtonStyleType.Primary,
+                    onPressed: () => {
+                          pushWithoutNavBar(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PrelaunchSurveyPage(),
+                            ),
+                          ),
+                        }),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
