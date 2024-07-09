@@ -225,12 +225,11 @@ class _SubscriptionState extends State<SubscriptionPage> {
         orElse: () => null,
       );
       final local = Localizations.localeOf(context);
-      DateTime endDate = DateTime.parse('${_currendSub?.expireDate}');
 
       String startDay = DateFormat('HH:mm dd/MM/yyyy')
           .format(DateTime.parse('${_currendSub?.createdAt}').toLocal());
       String endDay = DateFormat('HH:mm dd/MM/yyyy')
-          .format(DateTime.parse('${endDate}').toLocal());
+          .format(DateTime.parse('${_currendSub?.expireDate}').toLocal());
       return Container(
           padding: const EdgeInsets.all(12),
           decoration: ShapeDecoration(
@@ -264,21 +263,11 @@ class _SubscriptionState extends State<SubscriptionPage> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '${endDate.difference(now).inDays}',
-                        style: h2.copyWith(color: active, height: 1),
-                      ),
-                      Text(
-                        trans.daysLeft,
-                        style: bd_text.copyWith(
-                          color: active,
-                          height: 1,
-                        ),
-                      ),
-                    ],
+                  child: Center(
+                    child: Text(
+                      '${_subStatus}',
+                      style: h3.copyWith(color: active, height: 1),
+                    ),
                   ),
                 ),
                 Column(
@@ -635,7 +624,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
           Column(
             children: [
               Text(
-                convertDuration(sub.durationInMonth, trans.locale),
+                convertDuration(sub.durationInMonth, trans.locale)+ 's',
                 textAlign: TextAlign.center,
                 style: min_cap.copyWith(color: theme.colorScheme.onSurface),
               ),
