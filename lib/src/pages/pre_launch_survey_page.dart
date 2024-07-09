@@ -29,7 +29,8 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
   final TextEditingController height = TextEditingController();
   final TextEditingController weight = TextEditingController();
   Profile? _profile;
-  bool _isSent = false;
+  bool _isSent1 = false;
+  bool _isSent2 = false;
 
   final Map<String, bool> _isValid = {
     'firstName': false,
@@ -108,9 +109,9 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
               itemCount: 2,
               itemBuilder: (context, index) {
                 if (index == 0) {
-                  return _buildFirstPage(trans, theme);
+                  return _buildPage1(trans, theme);
                 } else {
-                  return _buildSecondPage(trans, theme);
+                  return _buildPage2(trans, theme);
                 }
               },
             ),
@@ -159,7 +160,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
     );
   }
 
-  Widget _buildFirstPage(AppLocalizations trans, ThemeData theme) {
+  Widget _buildPage1(AppLocalizations trans, ThemeData theme) {
     return Center(
       child: SingleChildScrollView(
         child: Container(
@@ -203,11 +204,11 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                 controller: firstName,
                 placeholder: trans.firstName,
               ),
-              if (_isSent && !_isValid['firstName']!)
+              if (_isSent1 && !_isValid['firstName']!)
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 8),
                   child: Text('${trans.firstName} ${trans.mustInput}',
-                      style: bd_text.copyWith(color: Colors.redAccent)),
+                      style: bd_text.copyWith(color: error)),
                 ),
               SizedBox(height: 16.0),
               Text(trans.lastName, style: h3.copyWith(color: active)),
@@ -216,11 +217,11 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                 controller: lastName,
                 placeholder: trans.lastName,
               ),
-              if (_isSent && !_isValid['lastName']!)
+              if (_isSent1 && !_isValid['lastName']!)
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 8),
                   child: Text('${trans.lastName} ${trans.mustInput}',
-                      style: bd_text.copyWith(color: Colors.redAccent)),
+                      style: bd_text.copyWith(color: error)),
                 ),
               SizedBox(height: 16.0),
               Text(trans.birthday, style: h3.copyWith(color: active)),
@@ -246,11 +247,11 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                   }
                 },
               ),
-              if (_isSent && !_isValid['birthday']!)
+              if (_isSent1 && !_isValid['birthday']!)
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 8),
                   child: Text('${trans.birthday} ${trans.mustInput}',
-                      style: bd_text.copyWith(color: Colors.redAccent)),
+                      style: bd_text.copyWith(color: error)),
                 ),
             ],
           ),
@@ -259,7 +260,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
     );
   }
 
-  Widget _buildSecondPage(AppLocalizations trans, ThemeData theme) {
+  Widget _buildPage2(AppLocalizations trans, ThemeData theme) {
     return Center(
       child: SingleChildScrollView(
         child: Container(
@@ -280,17 +281,18 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                   trans.female,
                   trans.other,
                 ],
-                placeholder:
-                    gender.text.isEmpty ? trans.sellectGender : gender.text,
+                placeholder: gender.text.isEmpty
+                    ? trans.sellectGender
+                    : transMap[gender.text]!,
                 onTap: () {
                   // Optional: handle dropdown tap
                 },
               ),
-              if (_isSent && !_isValid['gender']!)
+              if (_isSent2 && !_isValid['gender']!)
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 8),
-                  child: Text('${trans.level} ${trans.mustInput}',
-                      style: bd_text.copyWith(color: Colors.redAccent)),
+                  child: Text('${trans.gender} ${trans.mustInput}',
+                      style: bd_text.copyWith(color: error)),
                 ),
               SizedBox(height: 16.0),
               Text(trans.level,
@@ -308,27 +310,27 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                   setState(() {});
                 },
               ),
-              if (_isSent && !_isValid['level']!)
+              if (_isSent2 && !_isValid['level']!)
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 8),
                   child: Text('${trans.level} ${trans.mustInput}',
-                      style: bd_text.copyWith(color: Colors.redAccent)),
+                      style: bd_text.copyWith(color: error)),
                 ),
               SizedBox(height: 16.0),
               _buildWeightField(trans),
-              if (_isSent && !_isValid['weight']!)
+              if (_isSent2 && !_isValid['weight']!)
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 8),
                   child: Text('${trans.weightKg} ${trans.mustInput}',
-                      style: bd_text.copyWith(color: Colors.redAccent)),
+                      style: bd_text.copyWith(color: error)),
                 ),
               SizedBox(height: 16.0),
               _buildHeightField(trans),
-              if (_isSent && !_isValid['height']!)
+              if (_isSent2 && !_isValid['height']!)
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 8),
                   child: Text('${trans.heightCm} ${trans.mustInput}',
-                      style: bd_text.copyWith(color: Colors.redAccent)),
+                      style: bd_text.copyWith(color: error)),
                 ),
               SizedBox(height: 16.0),
             ],
@@ -374,6 +376,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
 
   bool _validatePage1() {
     setState(() {
+      _isSent1 = true;
       _isValid['firstName'] = firstName.text.trim().isNotEmpty;
       _isValid['lastName'] = lastName.text.trim().isNotEmpty;
       _isValid['birthday'] = birthday.text.trim().isNotEmpty;
@@ -400,7 +403,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
 
   bool _validatePage2() {
     setState(() {
-      _isSent = true;
+      _isSent2 = true;
       _isValid['gender'] = gender.text.trim().isNotEmpty;
       _isValid['level'] = level.text.trim().isNotEmpty;
       _isValid['weight'] = weight.text.trim().isNotEmpty;
@@ -417,6 +420,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
     if (_validatePage2() && _profile != null) {
       double? userWeight = double.tryParse(weight.text);
       double? userHeight = double.tryParse(height.text);
+      int? userGender = int.tryParse(gender.text);
 
       if (userWeight != null && userHeight != null) {
         try {
@@ -424,6 +428,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
             firstName: _profile!.first_name,
             lastName: _profile!.last_name,
             birthdate: DateTime.parse(_profile!.birthdate.toString()),
+            gender: userGender,
             weight: userWeight,
             height: userHeight,
             bmi: calculateBMI(userWeight, userHeight),
