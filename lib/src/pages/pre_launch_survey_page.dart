@@ -51,12 +51,6 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
     2: 'Other',
   };
 
-  final Map<String, String> transMap = {
-    'Female': 'Nam',
-    'Male': 'Nữ',
-    'Other': 'Khác',
-  };
-
   @override
   void initState() {
     super.initState();
@@ -277,13 +271,12 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
               CustomDropdownFormField(
                 controller: gender,
                 items: [
-                  trans.male,
-                  trans.female,
-                  trans.other,
+                  'Female',
+                  'Male',
+                  'Other',
                 ],
-                placeholder: gender.text.isEmpty
-                    ? trans.sellectGender
-                    : transMap[gender.text]!,
+                placeholder:
+                    gender.text.isEmpty ? trans.sellectGender : gender.text,
                 onTap: () {
                   // Optional: handle dropdown tap
                 },
@@ -420,7 +413,11 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
     if (_validatePage2() && _profile != null) {
       double? userWeight = double.tryParse(weight.text);
       double? userHeight = double.tryParse(height.text);
-      int? userGender = int.tryParse(gender.text);
+      int? userGender = genderMap.entries
+          .firstWhere((entry) => entry.value == gender.text,
+              orElse: () => MapEntry(2, 'Other'))
+          .key;
+      print("Giới tánh: ${gender.text}, int là? ${userGender}");
 
       if (userWeight != null && userHeight != null) {
         try {

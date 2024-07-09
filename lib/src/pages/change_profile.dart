@@ -15,23 +15,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 
-import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
-import 'package:YogiTech/api/account/account_service.dart';
-import 'package:YogiTech/src/custombar/appbar.dart';
-import 'package:YogiTech/src/models/account.dart';
-import 'package:YogiTech/src/shared/styles.dart';
-import 'package:YogiTech/src/widgets/box_input_field.dart';
-import 'package:YogiTech/src/widgets/dropdown_field.dart';
-import 'package:YogiTech/src/widgets/box_button.dart';
-import 'package:YogiTech/src/pages/change_BMI.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:http/http.dart' as http;
-
 class ChangeProfilePage extends StatefulWidget {
   final VoidCallback? onProfileUpdated;
   final Account? account;
@@ -65,12 +48,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     0: 'Female',
     1: 'Male',
     2: 'Other',
-  };
-
-  final Map<String, String> transMap = {
-    'Female': 'Nam',
-    'Male': 'Nữ',
-    'Other': 'Khác',
   };
 
   @override
@@ -172,7 +149,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                                           ),
                                           child: Center(
                                             child: Text(
-                                              widget.account!.username.isNotEmpty
+                                              widget.account!.username
+                                                      .isNotEmpty
                                                   ? widget.account!.username[0]
                                                       .toUpperCase()
                                                   : '',
@@ -187,8 +165,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                                       ))
                                 : CircleAvatar(
                                     radius: 50,
-                                    backgroundImage:
-                                        MemoryImage(_imageBytes!),
+                                    backgroundImage: MemoryImage(_imageBytes!),
                                     backgroundColor: Colors.transparent,
                                   ),
                           ),
@@ -256,8 +233,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                                   trailing: Icon(Icons.calendar_today),
                                   readOnly: true,
                                   onTap: () async {
-                                    DateTime? pickedDate =
-                                        await showDatePicker(
+                                    DateTime? pickedDate = await showDatePicker(
                                       context: context,
                                       initialDate: DateTime.now(),
                                       firstDate: DateTime(1900),
@@ -288,9 +264,9 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                                 CustomDropdownFormField(
                                   controller: gender,
                                   items: [
-                                    trans.male,
-                                    trans.female,
-                                    trans.other,
+                                    'Female',
+                                    'Male',
+                                    'Other',
                                   ],
                                   placeholder: gender.text.isEmpty
                                       ? trans.sellectGender
@@ -331,8 +307,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ChangeBMIPage(
-                                onBMIUpdated:
-                                    widget.onProfileUpdated ?? () {},
+                                onBMIUpdated: widget.onProfileUpdated ?? () {},
                               ),
                             ),
                           );
@@ -351,9 +326,14 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     DateTime? birthdate = birthday.text.isNotEmpty
         ? DateFormat('dd-MM-yyyy').parse(birthday.text)
         : null;
+
     int? genderValue = genderMap.entries
-        .firstWhere((entry) => entry.value == gender.text, orElse: () => MapEntry(2, 'Other'))
+        .firstWhere((entry) => entry.value == gender.text,
+            orElse: () => MapEntry(2, 'Other'))
         .key;
+
+    print(
+        "Giới tánh được sửa? ${genderValue}, giá trị của text: ${gender.text}");
 
     PatchProfileRequest request = PatchProfileRequest(
       lastName: lastName.text,
