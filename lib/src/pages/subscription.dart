@@ -635,7 +635,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
           Column(
             children: [
               Text(
-                convertDuration(sub.durationInMonth, trans.locale) + 's',
+                convertDuration(sub.durationInMonth, trans.locale) ,
                 textAlign: TextAlign.center,
                 style: min_cap.copyWith(color: theme.colorScheme.onSurface),
               ),
