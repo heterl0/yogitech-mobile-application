@@ -98,7 +98,7 @@ class _PersonalizedExerciseCreatePageState
               itemCount: _poses.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 3 / 3,
+                childAspectRatio: 3 / 4,
               ),
               itemBuilder: (context, index) {
                 final pose = _poses[index];
@@ -201,7 +201,8 @@ class _PersonalizedExerciseCreatePageState
                 runSpacing: 4.0,
                 children: _selectedPoses
                     .map((pose) => Chip(
-                          label: Text('${pose.name} (${pose.duration} min)'),
+                          label:
+                              Text('${pose.name} (${pose.duration} seconds)'),
                           onDeleted: () {
                             setState(() {
                               _selectedPoses.remove(pose);

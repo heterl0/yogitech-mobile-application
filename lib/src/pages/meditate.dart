@@ -53,8 +53,16 @@ class _MeditateState extends State<Meditate> {
     DateTime? lastMeditationDate =
         DateTime.tryParse(prefs?.getString('lastMeditationDate') ?? '');
 
-    int currentStreak = prefs?.getInt('currentStreak') ?? 0;
     int longestStreak = prefs?.getInt('longestStreak') ?? 0;
+
+    // Kiểm tra nếu đã thiền hôm nay
+    if (lastMeditationDate != null &&
+        lastMeditationDate.year == today.year &&
+        lastMeditationDate.month == today.month &&
+        lastMeditationDate.day == today.day) {
+      // Đã thiền hôm nay rồi, không cần cập nhật chuỗi
+      return;
+    }
 
     if (lastMeditationDate != null) {
       DateTime normalizedToday = DateTime(today.year, today.month, today.day);
@@ -67,16 +75,18 @@ class _MeditateState extends State<Meditate> {
       if (daysDifference == 1) {
         currentStreak++;
       } else if (daysDifference > 1) {
-        currentStreak = 1;
+        currentStreak = 0; // Đặt lại về 0 nếu có khoảng trống
       }
     } else {
-      currentStreak = 1;
+      currentStreak = 0; // Lần thiền đầu tiên
     }
 
     if (currentStreak > longestStreak) {
       longestStreak = currentStreak;
       await prefs?.setInt('longestStreak', longestStreak);
     }
+
+    currentStreak++; // Tăng chuỗi sau khi kiểm tra xong
 
     await prefs?.setInt('currentStreak', currentStreak);
     await prefs?.setString('lastMeditationDate', today.toIso8601String());

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:YogiTech/src/pages/view_avatar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +15,7 @@ import 'package:YogiTech/src/pages/change_BMI.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
+import 'dart:typed_data';
 
 class ChangeProfilePage extends StatefulWidget {
   final VoidCallback? onProfileUpdated;
@@ -96,6 +98,71 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     return DateFormat('dd-MM-yyyy').format(parsedDate);
   }
 
+  Widget _buildAvatar(BuildContext context) {
+    const double avatarSize = 144;
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AvatarViewPage(
+              avatarUrl: widget.account?.profile.avatar_url ?? '',
+              imageBytes: _imageBytes,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        width: avatarSize,
+        height: avatarSize,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+        ),
+        child: Center(
+          child: _imageBytes == null
+              ? (widget.account?.profile.avatar_url != null
+                  ? CircleAvatar(
+                      radius: avatarSize,
+                      backgroundImage: CachedNetworkImageProvider(
+                          widget.account!.profile.avatar_url.toString()),
+                      backgroundColor: Colors.transparent,
+                    )
+                  : Center(
+                      child: Container(
+                        width: avatarSize,
+                        height: avatarSize,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.transparent,
+                          border: Border.all(
+                            color: Colors.blue,
+                            width: 3.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            widget.account!.username.isNotEmpty
+                                ? widget.account!.username[0].toUpperCase()
+                                : '',
+                            style: TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ))
+              : CircleAvatar(
+                  radius: 50,
+                  backgroundImage: MemoryImage(_imageBytes!),
+                  backgroundColor: Colors.transparent,
+                ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -117,60 +184,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                        child: Container(
-                          width: 144,
-                          height: 144,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: _imageBytes == null
-                                ? (widget.account?.profile.avatar_url != null
-                                    ? CircleAvatar(
-                                        radius: 50,
-                                        backgroundImage:
-                                            CachedNetworkImageProvider(widget
-                                                .account!.profile.avatar_url
-                                                .toString()),
-                                        backgroundColor: Colors.transparent,
-                                      )
-                                    : Center(
-                                        child: Container(
-                                          width: 144,
-                                          height: 144,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.transparent,
-                                            border: Border.all(
-                                              color: Colors.blue,
-                                              width: 3.0,
-                                            ),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              widget.account!.username
-                                                      .isNotEmpty
-                                                  ? widget.account!.username[0]
-                                                      .toUpperCase()
-                                                  : '',
-                                              style: TextStyle(
-                                                fontSize: 40,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ))
-                                : CircleAvatar(
-                                    radius: 50,
-                                    backgroundImage: MemoryImage(_imageBytes!),
-                                    backgroundColor: Colors.transparent,
-                                  ),
-                          ),
-                        ),
-                      ),
+                      Center(child: _buildAvatar(context)),
                       SizedBox(height: 8),
                       CustomButton(
                         title: trans.changeAvatar,
