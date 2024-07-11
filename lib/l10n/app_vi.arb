@@ -237,5 +237,10 @@
   "enterEmail" :"Vui lòng nhập email!",
   "noResult":"Không có kết quả",
   "inputName": "Nhập tên người dùng",
-  "baned": "Tài khoản của bạn đã bị chặn."
+  "baned": "Tài khoản của bạn đã bị chặn.",
+  "create": "Tạo",
+  "createExercise": "Tạo bài tập",
+  "title": "Tiêu đề",
+  "benefits": "Các lợi ích",
+  "selectPoses" :"Chọn các tư thế"
 }

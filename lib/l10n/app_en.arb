@@ -236,5 +236,10 @@
   "enterEmail": "Please enter your email!",
   "noResult": "No result",
   "inputName": "Enter username",
-  "baned": "your account has been blocked."
+  "baned": "your account has been blocked.",
+  "create": "Create",
+  "createExercise": "Create exercise",
+  "title": "Title",
+  "benefits": "Benefits",
+  "selectPoses" :"Select poses"
 }
