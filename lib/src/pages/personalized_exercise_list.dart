@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/pages/personalized_exercise_create.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:YogiTech/api/dioInstance.dart';
@@ -8,6 +9,7 @@ import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 Future<List<Pose>> getPoses() async {
   try {
@@ -36,7 +38,7 @@ class PersonalizedExercisePage extends StatefulWidget {
 }
 
 class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
-  bool _isNotSearching = true;
+  // bool _isNotSearching = true;
   final TextEditingController _searchController = TextEditingController();
   List<Pose> _poses = [];
   List<Pose> _filteredPoses = [];
@@ -84,47 +86,10 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
-      appBar: _isNotSearching
-          ? CustomAppBar(
-              title: trans.yourExercise,
-              style: widthStyle.Large,
-              postActions: [
-                IconButton(
-                  icon: Icon(Icons.search, color: theme.colorScheme.onSurface),
-                  onPressed: () {
-                    setState(() {
-                      _isNotSearching = false;
-                    });
-                  },
-                ),
-              ],
-            )
-          : CustomAppBar(
-              showBackButton: false,
-              style: widthStyle.Large,
-              titleWidget: BoxInputField(
-                controller: _searchController,
-                placeholder: "${trans.search}...",
-                trailing: Icon(Icons.search),
-                keyboardType: TextInputType.text,
-                inputFormatters: const [],
-                onTap: () {
-                  // Xử lý khi input field được nhấn
-                },
-              ),
-              postActions: [
-                IconButton(
-                  icon: Icon(Icons.close, color: theme.colorScheme.onSurface),
-                  onPressed: () {
-                    setState(() {
-                      _isNotSearching = true;
-                      _searchController.clear();
-                      _filteredPoses = _poses;
-                    });
-                  },
-                ),
-              ],
-            ),
+      appBar: CustomAppBar(
+        title: trans.yourExercise,
+        style: widthStyle.Large,
+      ),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(24.0),
@@ -174,12 +139,16 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
         child: InkWell(
           borderRadius: BorderRadius.circular(30),
           onTap: () {
-            setState(() {
-              _isNotSearching = false;
-            });
+            // Chỗ này mới có tác dụng
+            pushWithoutNavBar(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PersonalizedExerciseCreatePage(),
+              ),
+            );
           },
           child: const Icon(
-            Icons.edit,
+            Icons.add,
             color: active,
             size: 24,
           ),

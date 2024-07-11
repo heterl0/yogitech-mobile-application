@@ -119,8 +119,9 @@ class _CustomDropdownFormFieldState extends State<CustomDropdownFormField> {
             items: widget.items
                 .map((label) => DropdownMenuItem(
                       value: label,
-                      child:
-                          Text(label, style: bd_text.copyWith(color: active)),
+                      child: Text(label,
+                          style: bd_text.copyWith(
+                              color: theme.colorScheme.onPrimary)),
                     ))
                 .toList(),
             borderRadius: BorderRadius.circular(16),

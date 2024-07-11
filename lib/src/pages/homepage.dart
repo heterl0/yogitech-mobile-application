@@ -205,17 +205,17 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomButton(
-                    title: 'title',
-                    style: ButtonStyleType.Primary,
-                    onPressed: () => {
-                          pushWithoutNavBar(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PrelaunchSurveyPage(),
-                            ),
-                          ),
-                        }),
+                // CustomButton(
+                //     title: 'title',
+                //     style: ButtonStyleType.Primary,
+                //     onPressed: () => {
+                //           pushWithoutNavBar(
+                //             context,
+                //             MaterialPageRoute(
+                //               builder: (context) => PrelaunchSurveyPage(),
+                //             ),
+                //           ),
+                //         }),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 16),

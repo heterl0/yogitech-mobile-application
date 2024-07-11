@@ -13,7 +13,7 @@ import 'package:YogiTech/src/pages/social.dart';
 import 'package:YogiTech/src/routing/app_routes.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
-import 'package:YogiTech/src/pages/personalized_exercise.dart';
+import 'package:YogiTech/src/pages/personalized_exercise_list.dart';
 import 'package:YogiTech/src/pages/settings.dart';
 import 'package:YogiTech/src/pages/friendlist.dart';
 import 'package:YogiTech/src/pages/change_BMI.dart';
@@ -341,51 +341,51 @@ class _ProfilePageState extends State<ProfilePage> {
                                               );
                                             },
                                           ),
-                                          if (!(_account?.is_premium ?? false))
-                                            Positioned.fill(
-                                              child: BackdropFilter(
-                                                filter: ImageFilter.blur(
-                                                    sigmaX: 5, sigmaY: 5),
-                                                child: GestureDetector(
-                                                  onTap: () => {
-                                                    showPremiumDialog(
-                                                        context,
-                                                        _account!,
-                                                        widget.fetchAccount),
-                                                  },
-                                                  child: Container(
-                                                    color: theme
-                                                        .colorScheme.onSecondary
-                                                        .withOpacity(0.8),
-                                                    child: Center(
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Icon(
-                                                            Icons.lock_outline,
-                                                            color: theme
-                                                                .colorScheme
-                                                                .onPrimary,
-                                                            size: 24,
-                                                          ),
-                                                          SizedBox(width: 8),
-                                                          Text(
-                                                            trans
-                                                                .premiumFeature,
-                                                            style: bd_text.copyWith(
-                                                                color: theme
-                                                                    .colorScheme
-                                                                    .onPrimary),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
+                                          // if (!(_account?.is_premium ?? false))
+                                          //   Positioned.fill(
+                                          //     child: BackdropFilter(
+                                          //       filter: ImageFilter.blur(
+                                          //           sigmaX: 5, sigmaY: 5),
+                                          //       child: GestureDetector(
+                                          //         onTap: () => {
+                                          //           showPremiumDialog(
+                                          //               context,
+                                          //               _account!,
+                                          //               widget.fetchAccount),
+                                          //         },
+                                          //         child: Container(
+                                          //           color: theme
+                                          //               .colorScheme.onSecondary
+                                          //               .withOpacity(0.8),
+                                          //           child: Center(
+                                          //             child: Row(
+                                          //               mainAxisAlignment:
+                                          //                   MainAxisAlignment
+                                          //                       .center,
+                                          //               children: [
+                                          //                 Icon(
+                                          //                   Icons.lock_outline,
+                                          //                   color: theme
+                                          //                       .colorScheme
+                                          //                       .onPrimary,
+                                          //                   size: 24,
+                                          //                 ),
+                                          //                 SizedBox(width: 8),
+                                          //                 Text(
+                                          //                   trans
+                                          //                       .premiumFeature,
+                                          //                   style: bd_text.copyWith(
+                                          //                       color: theme
+                                          //                           .colorScheme
+                                          //                           .onPrimary),
+                                          //                 ),
+                                          //               ],
+                                          //             ),
+                                          //           ),
+                                          //         ),
+                                          //       ),
+                                          //     ),
+                                          //   ),
                                         ],
                                       )),
                                 ],
