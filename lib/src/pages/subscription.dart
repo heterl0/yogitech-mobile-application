@@ -29,7 +29,7 @@ class SubscriptionPage extends StatefulWidget {
 }
 
 class _SubscriptionState extends State<SubscriptionPage> {
-  late final Future<PaymentConfiguration> _googlePayConfigFuture;
+  // late final Future<PaymentConfiguration> _googlePayConfigFuture;
   List<dynamic> _subs = [];
   List<dynamic> _userSubs = [];
   UserSubscription? _currendSub;
@@ -44,8 +44,8 @@ class _SubscriptionState extends State<SubscriptionPage> {
   @override
   void initState() {
     super.initState();
-    _googlePayConfigFuture =
-        PaymentConfiguration.fromAsset('default_google_pay_config.json');
+    // _googlePayConfigFuture =
+    //     PaymentConfiguration.fromAsset('default_google_pay_config.json');
     _account = widget.account;
     _loadSub();
   }
@@ -103,8 +103,9 @@ class _SubscriptionState extends State<SubscriptionPage> {
         _isLoading = false;
 
         if (_userSubs.length > 0 &&
-            _userSubs[_userSubs.length - 1]?.activeStatus != 0) {
+          _userSubs[_userSubs.length - 1]?.activeStatus != 0) {
           _currendSub = _userSubs[_userSubs.length - 1];
+          _subStatus = checkExpire(_currendSub!);
         } else {
           _currendSub = null;
         }
@@ -225,12 +226,11 @@ class _SubscriptionState extends State<SubscriptionPage> {
         orElse: () => null,
       );
       final local = Localizations.localeOf(context);
-      DateTime endDate = DateTime.parse('${_currendSub?.expireDate}');
 
       String startDay = DateFormat('HH:mm dd/MM/yyyy')
           .format(DateTime.parse('${_currendSub?.createdAt}').toLocal());
       String endDay = DateFormat('HH:mm dd/MM/yyyy')
-          .format(DateTime.parse('${endDate}').toLocal());
+          .format(DateTime.parse('${_currendSub?.expireDate}').toLocal());
       return Container(
           padding: const EdgeInsets.all(12),
           decoration: ShapeDecoration(
@@ -264,21 +264,11 @@ class _SubscriptionState extends State<SubscriptionPage> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '${endDate.difference(now).inDays}',
-                        style: h2.copyWith(color: active, height: 1),
-                      ),
-                      Text(
-                        trans.daysLeft,
-                        style: bd_text.copyWith(
-                          color: active,
-                          height: 1,
-                        ),
-                      ),
-                    ],
+                  child: Center(
+                    child: Text(
+                      '${_subStatus}',
+                      style: h3.copyWith(color: active, height: 1),
+                    ),
                   ),
                 ),
                 Column(
@@ -537,14 +527,16 @@ class _SubscriptionState extends State<SubscriptionPage> {
                   if (_currendSub == null) {
                     int subscriptionId = sub.id;
                     try {
-                      if ((_account?.profile.point)! >= sub.price) {
+                      if (sub.gemPrice != null &&
+                          ((_account?.profile.point)! >= sub.gemPrice!)) {
                         final userSubscription =
                             await subscribe(subscriptionId, 1);
                         if (userSubscription != null) {
                           widget.fetchAccount!();
                           final account = await retrieveAccount();
-                          _loadUserSub();
                           setState(() {
+                            _loadUserSub();
+                            
                             _account = account;
                           });
                           Navigator.pop(context); // Close the bottom sheet
@@ -553,11 +545,19 @@ class _SubscriptionState extends State<SubscriptionPage> {
                               'Subscription failed: User subscription is null');
                         }
                       } else {
-                        trans.locale == 'en'
-                            ? _showCustomPopup(context, 'Error',
-                                'Not enough Gem for subscription.')
-                            : _showCustomPopup(context, 'Lỗi',
-                                'Bạn không có đủ Gem để đăng ký.');
+                        if (!(sub.gemPrice != null)) {
+                          trans.locale == 'en'
+                              ? _showCustomPopup(context, 'Error',
+                                  'This subscription is not allow Gem payment menthod.')
+                              : _showCustomPopup(context, 'Lỗi',
+                                  'Gói đăng ký này không có phương thức thanh toán bằng Gem.');
+                        } else {
+                          trans.locale == 'en'
+                              ? _showCustomPopup(context, 'Error',
+                                  'Not enough Gem for subscription.')
+                              : _showCustomPopup(context, 'Lỗi',
+                                  'Bạn không có đủ Gem để đăng ký.');
+                        }
                       }
                     } catch (error) {
                       _showCustomPopup(
@@ -635,7 +635,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
           Column(
             children: [
               Text(
-                convertDuration(sub.durationInMonth, trans.locale),
+                convertDuration(sub.durationInMonth, trans.locale) + 's',
                 textAlign: TextAlign.center,
                 style: min_cap.copyWith(color: theme.colorScheme.onSurface),
               ),
@@ -809,6 +809,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
     String? expireDateStr = usub.expireDate;
     String checkDateExpired = format.checkDateExpired(
         usub.createdAt.toString(), expireDateStr.toString(), trans);
+    print(checkDateExpired);
     bool check = checkDateExpired.startsWith(RegExp(r'[0-9]'));
     if (check) {
       return checkDateExpired;

@@ -19,12 +19,13 @@ String cleanApiUrl(String? url) => (url ?? '')
 
 String checkDateExpired(String startDateStr, String dateStr, AppLocalizations trans) {
   DateTime targetDateUtc = DateTime.parse(dateStr).toUtc();
-  DateTime startDateUtc = DateTime.parse(startDateStr).toUtc();
+  DateTime startDateUtc = DateTime.parse(startDateStr).toUtc().subtract(Duration(minutes: 1));
   
   // Calculate the difference
   DateTime nowUtc = DateTime.now().toUtc();
 
   Duration startDifferent = startDateUtc.difference(nowUtc);
+
   if (!startDifferent.isNegative) {
     return trans.eventNotStart;
   }
