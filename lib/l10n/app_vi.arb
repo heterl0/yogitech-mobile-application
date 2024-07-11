@@ -207,7 +207,8 @@
   "giveUp": "Hủy đăng ký",
   "eventNotStart": "Sự kiện chưa diễn ra.",
   "eventPassed": "Sự kiện đã kết thúc",
-  "eventRemain": "ngày còn lại.",
+  "eventRemain": "còn lại.",
+  "hours":"giờ",
   "muscles": "Nhóm cơ",
   "end": "Kết thúc",
   "value": "Giá trị",
@@ -235,5 +236,6 @@
   "doesntexist" : "Tài khoản hoặc mật khẩu không đúng!",
   "enterEmail" :"Vui lòng nhập email!",
   "noResult":"Không có kết quả",
-  "inputName": "Nhập tên người dùng"
+  "inputName": "Nhập tên người dùng",
+  "baned": "Tài khoản của bạn đã bị chặn."
 }

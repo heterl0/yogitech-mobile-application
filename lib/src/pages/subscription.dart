@@ -17,6 +17,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:pay/pay.dart';
+import 'package:YogiTech/utils/formatting.dart' as format;
 
 class SubscriptionPage extends StatefulWidget {
   final Account? account;
@@ -28,10 +29,12 @@ class SubscriptionPage extends StatefulWidget {
 }
 
 class _SubscriptionState extends State<SubscriptionPage> {
-  late final Future<PaymentConfiguration> _googlePayConfigFuture;
+  // late final Future<PaymentConfiguration> _googlePayConfigFuture;
   List<dynamic> _subs = [];
   List<dynamic> _userSubs = [];
   UserSubscription? _currendSub;
+  String? _subStatus;
+
   Subscription? _selectedSub;
   Account? _account;
   bool _isLoading = true;
@@ -41,10 +44,10 @@ class _SubscriptionState extends State<SubscriptionPage> {
   @override
   void initState() {
     super.initState();
-    _googlePayConfigFuture =
-        PaymentConfiguration.fromAsset('default_google_pay_config.json');
-    _loadSub();
+    // _googlePayConfigFuture =
+    //     PaymentConfiguration.fromAsset('default_google_pay_config.json');
     _account = widget.account;
+    _loadSub();
   }
 
   Future<void> _loadSub() async {
@@ -55,17 +58,38 @@ class _SubscriptionState extends State<SubscriptionPage> {
         _subs = sub;
         _userSubs = ussub;
         _isLoading = false;
-        if (_userSubs.length > 0 &&
-            _userSubs[_userSubs.length - 1]?.activeStatus != 0) {
-          _currendSub = checkExpire(_userSubs[_userSubs.length - 1])
-              ? null
-              : _userSubs[_userSubs.length - 1];
+
+        // if (_account!.is_staff == true) {
+        //   _subStatus = 'Admin';
+        //   _currendSub = _createFakeSubscription();
+        // } else {
+        _subStatus = _userSubs.isNotEmpty ? checkExpire(_userSubs.last) : null;
+        if (_userSubs.isNotEmpty && _userSubs.last?.activeStatus != 0) {
+          _currendSub = _userSubs.last;
+        } else {
+          _currendSub = null;
         }
+        // }
       });
     } catch (e) {
       // Handle errors, e.g., show a snackbar or error message
       print('Error loading Subscription: $e');
     }
+  }
+
+  UserSubscription _createFakeSubscription() {
+    // Create a fake subscription
+    final fakeSub = UserSubscription(
+      id: -1,
+      userId: _account!.id,
+      subscriptionId: 3,
+      subscriptionType: 1,
+      status: 1,
+      createdAt: DateTime.now().toString(),
+      expireDate: DateTime.now().toString(),
+      activeStatus: 1,
+    );
+    return fakeSub;
   }
 
   Future<void> _loadUserSub() async {
@@ -79,8 +103,9 @@ class _SubscriptionState extends State<SubscriptionPage> {
         _isLoading = false;
 
         if (_userSubs.length > 0 &&
-            _userSubs[_userSubs.length - 1]?.activeStatus != 0) {
+          _userSubs[_userSubs.length - 1]?.activeStatus != 0) {
           _currendSub = _userSubs[_userSubs.length - 1];
+          _subStatus = checkExpire(_currendSub!);
         } else {
           _currendSub = null;
         }
@@ -193,6 +218,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
 
   Widget _buildUnSubscriptionContainer() {
     Theme.of(context);
+    DateTime now = DateTime.now();
     final trans = AppLocalizations.of(context)!;
     if (_currendSub != null) {
       Subscription sub = _subs.firstWhere(
@@ -200,12 +226,11 @@ class _SubscriptionState extends State<SubscriptionPage> {
         orElse: () => null,
       );
       final local = Localizations.localeOf(context);
-      DateTime now = DateTime.now();
-      DateTime endDate = DateTime.parse('${_currendSub?.expireDate}');
 
-      String startDay = DateFormat.yMMMd(local.languageCode)
-          .format(DateTime.parse('${_currendSub?.createdAt}'));
-      String endDay = DateFormat.yMMMd(local.languageCode).format(endDate);
+      String startDay = DateFormat('HH:mm dd/MM/yyyy')
+          .format(DateTime.parse('${_currendSub?.createdAt}').toLocal());
+      String endDay = DateFormat('HH:mm dd/MM/yyyy')
+          .format(DateTime.parse('${_currendSub?.expireDate}').toLocal());
       return Container(
           padding: const EdgeInsets.all(12),
           decoration: ShapeDecoration(
@@ -239,21 +264,11 @@ class _SubscriptionState extends State<SubscriptionPage> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '${endDate.difference(now).inDays}',
-                        style: h2.copyWith(color: active, height: 1),
-                      ),
-                      Text(
-                        trans.daysLeft,
-                        style: bd_text.copyWith(
-                          color: active,
-                          height: 1,
-                        ),
-                      ),
-                    ],
+                  child: Center(
+                    child: Text(
+                      '${_subStatus}',
+                      style: h3.copyWith(color: active, height: 1),
+                    ),
                   ),
                 ),
                 Column(
@@ -283,15 +298,27 @@ class _SubscriptionState extends State<SubscriptionPage> {
                         ),
                       ],
                     ),
-                    Spacer(),
-                    Text(
-                      '${trans.start}: $startDay',
-                      style: min_cap.copyWith(color: active),
-                    ),
-                    Text(
-                      '${trans.end}: $endDay',
-                      style: min_cap.copyWith(color: active),
-                    ),
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${trans.start}: ',
+                            style: min_cap.copyWith(color: active),
+                          ),
+                          Text(
+                            '$startDay',
+                            style: min_cap.copyWith(color: active),
+                          ),
+                          Text(
+                            '${trans.end}: ',
+                            style: min_cap.copyWith(color: active),
+                          ),
+                          Text(
+                            ' $endDay',
+                            style: min_cap.copyWith(color: active),
+                          ),
+                        ]),
                   ],
                 )
               ],
@@ -500,14 +527,16 @@ class _SubscriptionState extends State<SubscriptionPage> {
                   if (_currendSub == null) {
                     int subscriptionId = sub.id;
                     try {
-                      if ((_account?.profile.point)! >= sub.price) {
+                      if (sub.gemPrice != null &&
+                          ((_account?.profile.point)! >= sub.gemPrice!)) {
                         final userSubscription =
                             await subscribe(subscriptionId, 1);
                         if (userSubscription != null) {
                           widget.fetchAccount!();
                           final account = await retrieveAccount();
-                          _loadUserSub();
                           setState(() {
+                            _loadUserSub();
+                            
                             _account = account;
                           });
                           Navigator.pop(context); // Close the bottom sheet
@@ -516,11 +545,19 @@ class _SubscriptionState extends State<SubscriptionPage> {
                               'Subscription failed: User subscription is null');
                         }
                       } else {
-                        trans.locale == 'en'
-                            ? _showCustomPopup(context, 'Error',
-                                'Not enough Gem for subscription.')
-                            : _showCustomPopup(context, 'Lỗi',
-                                'Bạn không có đủ Gem để đăng ký.');
+                        if (!(sub.gemPrice != null)) {
+                          trans.locale == 'en'
+                              ? _showCustomPopup(context, 'Error',
+                                  'This subscription is not allow Gem payment menthod.')
+                              : _showCustomPopup(context, 'Lỗi',
+                                  'Gói đăng ký này không có phương thức thanh toán bằng Gem.');
+                        } else {
+                          trans.locale == 'en'
+                              ? _showCustomPopup(context, 'Error',
+                                  'Not enough Gem for subscription.')
+                              : _showCustomPopup(context, 'Lỗi',
+                                  'Bạn không có đủ Gem để đăng ký.');
+                        }
                       }
                     } catch (error) {
                       _showCustomPopup(
@@ -598,7 +635,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
           Column(
             children: [
               Text(
-                convertDuration(sub.durationInMonth, trans.locale),
+                convertDuration(sub.durationInMonth, trans.locale) + 's',
                 textAlign: TextAlign.center,
                 style: min_cap.copyWith(color: theme.colorScheme.onSurface),
               ),
@@ -766,21 +803,18 @@ class _SubscriptionState extends State<SubscriptionPage> {
     );
   }
 
-  bool checkExpire(UserSubscription usub) {
+  String? checkExpire(UserSubscription usub) {
     DateTime now = DateTime.now();
-
+    final trans = AppLocalizations.of(context)!;
     String? expireDateStr = usub.expireDate;
-    if (expireDateStr != null) {
-      DateTime endDate = DateTime.parse(expireDateStr);
-
-      if (now.isAfter(endDate)) {
-        expiredSubscription(usub.id!);
-        return true;
-      }
-    } else {
-      print('Expire date is not set.');
+    String checkDateExpired = format.checkDateExpired(
+        usub.createdAt.toString(), expireDateStr.toString(), trans);
+    print(checkDateExpired);
+    bool check = checkDateExpired.startsWith(RegExp(r'[0-9]'));
+    if (check) {
+      return checkDateExpired;
     }
-    return false;
+    return null;
   }
 
   String convertDuration(double durationInMonths, String local) {

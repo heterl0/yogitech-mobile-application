@@ -133,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                             // if (user != null) {
                             //   print(user.displayName);
                             // }
-                            await _handleGoogleSignIn();
+                            await _handleGoogleSignIn(trans);
                           },
                           text: trans.loginWithGoogle,
                         ),
@@ -164,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> _handleGoogleSignIn() async {
+  Future<void> _handleGoogleSignIn(AppLocalizations trans) async {
     setState(() {
       _isLoading = true;
     });
@@ -175,6 +175,7 @@ class _LoginPageState extends State<LoginPage> {
       GoogleSignInAuthentication googleSignInAuthentication =
           await googleUser!.authentication;
       try {
+        print(googleSignInAuthentication.idToken ?? "");
         final accessToken =
             await loginGoogle(googleSignInAuthentication.idToken ?? "");
 
@@ -194,8 +195,7 @@ class _LoginPageState extends State<LoginPage> {
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text('An error occurred. Please try again later.')),
+            SnackBar(content: Text('Please continue your login using email')),
           );
         }
       } catch (e) {
@@ -236,19 +236,27 @@ class _LoginPageState extends State<LoginPage> {
     }
     try {
       final accessToken = await login(enteredEmail, enteredPassword);
+
       if (accessToken != null && accessToken is String) {
         final user = await getUser();
-        if (user != null &&
-            (user.profile.first_name == null ||
-                user.profile.last_name == null || user.profile.bmi == null)) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PrelaunchSurveyPage(),
-            ),
-          );
+
+        if (user != null && user.active_status == 1) {
+          if ((user.profile.first_name == null ||
+              user.profile.last_name == null ||
+              user.profile.bmi == null)) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PrelaunchSurveyPage(),
+              ),
+            );
+          } else {
+            Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
+          }
         } else {
-          Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(trans.baned)),
+          );
         }
       } else if (accessToken['status'] == 403) {
         Navigator.pushReplacementNamed(context, AppRoutes.verifyEmail);

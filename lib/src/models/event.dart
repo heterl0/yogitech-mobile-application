@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'package:YogiTech/src/models/social.dart';
 import 'package:flutter/foundation.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/exercise.dart';
@@ -152,7 +153,8 @@ class Event {
 
 class CandidateEvent {
   int id;
-  Account user;
+  int user;
+  SocialProfile profile;
   double event_point;
   int active_status;
   String join_at;
@@ -162,6 +164,7 @@ class CandidateEvent {
   CandidateEvent({
     required this.id,
     required this.user,
+    required this.profile,
     required this.event_point,
     required this.active_status,
     required this.join_at,
@@ -171,7 +174,8 @@ class CandidateEvent {
 
   CandidateEvent copyWith({
     int? id,
-    Account? user,
+    int? user,
+    SocialProfile? profile,
     double? event_point,
     int? active_status,
     String? join_at,
@@ -181,6 +185,7 @@ class CandidateEvent {
     return CandidateEvent(
       id: id ?? this.id,
       user: user ?? this.user,
+      profile: profile ?? this.profile,
       event_point: event_point ?? this.event_point,
       active_status: active_status ?? this.active_status,
       join_at: join_at ?? this.join_at,
@@ -192,7 +197,8 @@ class CandidateEvent {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'user': user.toMap(),
+      'user':user,
+      'profile': profile.toMap(),
       'event_point': event_point,
       'active_status': active_status,
       'join_at': join_at,
@@ -204,7 +210,8 @@ class CandidateEvent {
   factory CandidateEvent.fromMap(Map<String, dynamic> map) {
     return CandidateEvent(
       id: map['id'] as int,
-      user: Account.fromMap(map['user'] as Map<String, dynamic>),
+      user: map['user'] as int,
+      profile: SocialProfile.fromMap(map['profile'] as Map<String, dynamic>),
       event_point: map['event_point'] as double,
       active_status: map['active_status'] as int,
       join_at: map['join_at'] as String,
@@ -220,7 +227,7 @@ class CandidateEvent {
 
   @override
   String toString() {
-    return 'CandidateEvent(id: $id, user: $user, event_point: $event_point, active_status: $active_status, join_at: $join_at, updated_at: $updated_at, event: $event)';
+    return 'CandidateEvent(id: $id, user: $user,profile: $profile, event_point: $event_point, active_status: $active_status, join_at: $join_at, updated_at: $updated_at, event: $event)';
   }
 
   @override
@@ -229,6 +236,7 @@ class CandidateEvent {
 
     return other.id == id &&
         other.user == user &&
+        other.profile == profile &&
         other.event_point == event_point &&
         other.active_status == active_status &&
         other.join_at == join_at &&
@@ -240,6 +248,7 @@ class CandidateEvent {
   int get hashCode {
     return id.hashCode ^
         user.hashCode ^
+        profile.hashCode ^
         event_point.hashCode ^
         active_status.hashCode ^
         join_at.hashCode ^

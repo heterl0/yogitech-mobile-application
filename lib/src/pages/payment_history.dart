@@ -120,10 +120,10 @@ class _PaymentHistoryState extends State<PaymentHistory> {
     );
 
     final local = Localizations.localeOf(context);
-    String startDay = DateFormat.yMMMd(local.languageCode)
-        .format(DateTime.parse('${usub.createdAt}'));
-    String endDay = DateFormat.yMMMd(local.languageCode)
-        .format(DateTime.parse('${usub.expireDate}'));
+    String startDay = DateFormat.yMMMd(local.languageCode).add_Hm()
+        .format(DateTime.parse('${usub.createdAt}').toUtc().toLocal());
+    String endDay = DateFormat.yMMMd(local.languageCode).add_Hm()
+        .format(DateTime.parse('${usub.expireDate}').toUtc().toLocal());
 
     final theme = Theme.of(context);
     return ElevatedButton(
