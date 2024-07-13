@@ -43,8 +43,8 @@ class _ActivitiesState extends State<Activities> {
 
   Future<void> _loadEvents(int? eventId) async {
     setState(() {
-        _isloading = true;
-      });
+      _isloading = true;
+    });
     try {
       final events = await getEvents();
       setState(() {
@@ -58,20 +58,20 @@ class _ActivitiesState extends State<Activities> {
 
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
-    return  _isloading
-      ? Center(child: CircularProgressIndicator()):
-     Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(color: theme.colorScheme.surface),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildEventMainContent(),
-          ],
-        ),
-      ),
-    );
+    return _isloading
+        ? Center(child: CircularProgressIndicator())
+        : Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(color: theme.colorScheme.surface),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  _buildEventMainContent(),
+                ],
+              ),
+            ),
+          );
   }
 
   Widget _buildEventMainContent() {
@@ -79,9 +79,20 @@ class _ActivitiesState extends State<Activities> {
 
     // Filter the events based on the status
     final filteredEvents = _events.where((event) {
-      CheckDateResult check = checkDateExpired(event.start_date, event.expire_date, trans);
+      CheckDateResult check =
+          checkDateExpired(event.start_date, event.expire_date, trans);
       return check.status == 1 || check.status == 2;
     }).toList();
+
+    filteredEvents.sort((a, b) {
+      CheckDateResult checkA =
+          checkDateExpired(a.start_date, a.expire_date, trans);
+      CheckDateResult checkB =
+          checkDateExpired(b.start_date, b.expire_date, trans);
+
+      // Sort by status (1 for remaining, 2 for expiring soon) in ascending order
+      return checkA.status.compareTo(checkB.status);
+    });
 
     return Container(
       width: double.infinity,
@@ -96,7 +107,8 @@ class _ActivitiesState extends State<Activities> {
         itemCount: filteredEvents.length,
         itemBuilder: (context, index) {
           final event = filteredEvents[index];
-          final check = checkDateExpired(event.start_date, event.expire_date, trans);
+          final check =
+              checkDateExpired(event.start_date, event.expire_date, trans);
 
           return CustomCard(
             imageUrl: event.image_url,
@@ -122,5 +134,4 @@ class _ActivitiesState extends State<Activities> {
       ),
     );
   }
-
 }
