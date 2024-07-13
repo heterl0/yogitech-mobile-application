@@ -124,7 +124,12 @@ Future<UserSubscription?> expiredSubscription(int id) async {
     };
     final Response response = await DioInstance.patch(url, data: data);
     if (response.statusCode == 200) {
-      return UserSubscription.fromMap(response.data);
+      PatchUserAccountRequest ac = new PatchUserAccountRequest(isPremium:false);
+      final account = await patchUserAccount(ac);
+      if (account != null)  {
+        storeAccount(account);
+        return UserSubscription.fromMap(response.data);
+      }
     } else {
       print('Cancel UserSubscription failed with status code: ${response.statusCode}');
       return null;
