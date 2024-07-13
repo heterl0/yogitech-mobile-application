@@ -108,6 +108,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
     _account = widget.account;
     setState(() {
       _exercise = exercise;
+      print(_exercise);
       _isLoading = false;
       user_id = _account!.id;
     });
@@ -168,7 +169,9 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           _buildCommentSection(trans),
           const SizedBox(height: 16),
           ..._exercise!.comments.map(
-            (comment) => comment.active_status==1? _buildComment(context, comment):Container(),
+            (comment) => comment.active_status == 1
+                ? _buildComment(context, comment)
+                : Container(),
           ),
         ],
       ),
@@ -438,7 +441,6 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   (comment.user.profile.avatar_url != null &&
@@ -486,68 +488,81 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
-                              child: Text(
-                                name,
-                                textAlign: TextAlign.start,
-                                style: min_cap.copyWith(color: primary),
-                              ),
+                            Text(
+                              name,
+                              textAlign: TextAlign.start,
+                              style: min_cap.copyWith(color: primary),
                             ),
-                            Expanded(
-                              child: Text(
-                                formatDateTime(
-                                    comment.created_at, locale.languageCode),
-                                textAlign: TextAlign.end,
-                                style: min_cap.copyWith(color: text),
-                              ),
+                            Text(
+                              formatDateTime(
+                                  comment.created_at, locale.languageCode),
+                              textAlign: TextAlign.end,
+                              style: min_cap.copyWith(color: text),
                             ),
                           ],
                         ),
-                        Text(
-                          comment.text,
-                          style: bd_text.copyWith(
-                              color: theme.colorScheme.onPrimary),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 8.0), // Adjust the value as needed
+                              child: Text(
+                                comment.text,
+                                style: min_cap.copyWith(color: text),
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () async {
+                                    if (isLike) {
+                                      Vote? vote = comment.getUserVote(user_id);
+                                      if (vote != null) {
+                                        await deleteVote(vote.id);
+                                        setState(() {
+                                          comment.votes.remove(vote);
+                                          isLike = false;
+                                        });
+                                      }
+                                    } else {
+                                      Vote? vote = await postVote(comment.id);
+                                      setState(() {
+                                        isLike = vote != null;
+                                        comment.votes.add(vote!);
+                                      });
+                                    }
+                                  },
+                                  iconSize: 24,
+                                  icon: isLike
+                                      ? const Icon(
+                                          Icons.favorite,
+                                          color: primary,
+                                        )
+                                      : const Icon(
+                                          Icons.favorite_border_outlined,
+                                          color: text,
+                                        ),
+                                ),
+                                Text(
+                                  '${comment.votes.length} vote',
+                                  textAlign: TextAlign.end,
+                                  style: min_cap.copyWith(color: text),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                  IconButton(
-                    onPressed: () async {
-                      if (isLike) {
-                        Vote? vote = comment.getUserVote(user_id);
-                        if (vote != null) {
-                          await deleteVote(vote.id);
-                          setState(() {
-                            comment.votes.remove(vote);
-                            isLike = false;
-                          });
-                        }
-                      } else {
-                        Vote? vote = await postVote(comment.id);
-                        setState(() {
-                          isLike = vote != null;
-                          comment.votes.add(vote!);
-                        });
-                      }
-                    },
-                    icon: isLike
-                        ? const Icon(
-                            Icons.favorite,
-                            color: primary,
-                          )
-                        : const Icon(
-                            Icons.favorite_border_outlined,
-                            color: text,
-                          ),
-                  ),
                 ],
               ),
+
               // Nếu có parent_comment, hiển thị reply của admin bên dưới
               if (adminReply) ...[
                 Divider(
