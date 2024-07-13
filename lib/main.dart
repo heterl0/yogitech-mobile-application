@@ -1,3 +1,4 @@
+import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:YogiTech/services/notifi_service.dart';
 import 'package:YogiTech/src/models/social.dart';
 import 'package:YogiTech/src/pages/notification_detail.dart';
@@ -57,7 +58,6 @@ void main() async {
 
   // Loại bỏ splash screen ngay lập tức
   FlutterNativeSplash.remove();
-
   // Tải các biến môi trường
   await loadEnv();
   // Kiểm tra và lấy token

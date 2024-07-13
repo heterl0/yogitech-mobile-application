@@ -138,3 +138,21 @@ Future<dynamic> postExerciseLog(dynamic data) async {
     return null;
   }
 }
+
+Future<bool> isExerciseToday() async {
+  try {
+    final url = formatApiUrl('/api/v1/exercise-logs/today/');
+    final Response response = await DioInstance.get(url);
+    if (response.statusCode == 200) {
+      List<dynamic> logs = response.data;
+      return logs.isNotEmpty;
+    } else {
+      print(
+          'Check exercise log failed with status code: ${response.statusCode}');
+      return false;
+    }
+  } catch (e) {
+    print('Check exercise log error: $e');
+    return false;
+  }
+}

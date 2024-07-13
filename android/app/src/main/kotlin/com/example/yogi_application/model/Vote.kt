@@ -8,11 +8,10 @@ import kotlinx.serialization.json.Json
 @Serializable
 data class Vote(
     val id: Int,
-    val userId: Int,
-    val value: Int,
-    @SerialName("created_at") val createdAt: String,
-    @SerialName("updated_at") val updatedAt: String,
-    @SerialName("active_status") val activeStatus: Int
+    @SerialName("user_id") val userId: Int,
+    val user: String,
+    val comment: Int,
+    @SerialName("vote_value") val voteValue: Int,
 ) {
     companion object {
         fun fromJson(source: String): Vote {
