@@ -6,11 +6,14 @@ class CustomBottomBar extends StatefulWidget {
   final String buttonTitle;
   final VoidCallback? onPressed;
   final ButtonStyleType? style;
+  final bool transparentBg;
 
   const CustomBottomBar({
     super.key,
     this.buttonTitle = '',
-    this.onPressed, this.style,
+    this.onPressed,
+    this.style,
+    this.transparentBg = false,
   });
 
   @override
@@ -28,7 +31,9 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
       ),
       child: BottomAppBar(
           elevation: appElevation,
-          color: theme.colorScheme.onSecondary,
+          color: widget.transparentBg
+              ? Colors.transparent
+              : theme.colorScheme.onSecondary,
           height: 100,
           padding: const EdgeInsets.only(bottom: 20),
           child: Container(

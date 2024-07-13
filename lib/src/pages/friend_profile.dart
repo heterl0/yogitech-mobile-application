@@ -1,11 +1,13 @@
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/social.dart';
+import 'package:YogiTech/src/pages/view_avatar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'dart:typed_data';
 
 class FriendProfile extends StatefulWidget {
   final int? id;
@@ -28,6 +30,7 @@ class FriendProfile extends StatefulWidget {
 }
 
 class _nameState extends State<FriendProfile> {
+  Uint8List? _imageBytes;
   Account? _account;
   SocialProfile? _soProfile;
   bool isFollow = false; // Khai báo biến ở đây
@@ -74,30 +77,49 @@ class _nameState extends State<FriendProfile> {
               children: [
                 Column(
                   children: [
-                     Container(
-                      width: 144, // 2 * radius + 8 (border width) * 2
-                      height: 144, // Matching the ratio as per Figma
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: CircleAvatar(
-                        radius: 78,
-                        backgroundImage: _soProfile!.avatar != null && _soProfile!.avatar!.isNotEmpty
-                            ? CachedNetworkImageProvider(_soProfile!.avatar!) as ImageProvider
-                            : AssetImage('assets/images/gradient.jpg'),
-                        child: _soProfile!.avatar == null ||_soProfile!.avatar!.isEmpty
-                            ? Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  _soProfile!.first_name!.isNotEmpty ? _soProfile!.first_name![0].toUpperCase() : ':)',
-                                  style: TextStyle(
-                                    fontSize: 74, // Adjust the size as needed
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AvatarViewPage(
+                              avatarUrl: _soProfile!.avatar!,
+                              imageBytes: _imageBytes,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 144, // 2 * radius + 8 (border width) * 2
+                        height: 144, // Matching the ratio as per Figma
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: CircleAvatar(
+                          radius: 78,
+                          backgroundImage: _soProfile!.avatar != null &&
+                                  _soProfile!.avatar!.isNotEmpty
+                              ? CachedNetworkImageProvider(_soProfile!.avatar!)
+                                  as ImageProvider
+                              : AssetImage('assets/images/gradient.jpg'),
+                          child: _soProfile!.avatar == null ||
+                                  _soProfile!.avatar!.isEmpty
+                              ? Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    _soProfile!.first_name!.isNotEmpty
+                                        ? _soProfile!.first_name![0]
+                                            .toUpperCase()
+                                        : ':)',
+                                    style: TextStyle(
+                                      fontSize: 74, // Adjust the size as needed
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                              )
-                            : null,
+                                )
+                              : null,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 8),

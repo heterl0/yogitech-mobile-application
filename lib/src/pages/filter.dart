@@ -1,4 +1,5 @@
 import 'package:YogiTech/src/pages/homepage.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/api/pose/pose_service.dart';
@@ -10,6 +11,7 @@ import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';
 import 'package:YogiTech/src/widgets/dropdown_field.dart'; // Import DropdownField
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class FilterPage extends StatefulWidget {
   const FilterPage({super.key});
@@ -122,6 +124,7 @@ class _FilterPageState extends State<FilterPage> {
         ),
       ),
       bottomNavigationBar: CustomBottomBar(
+        transparentBg: true,
         buttonTitle: trans.apply,
         onPressed: () {
           Navigator.pop(context);
@@ -130,13 +133,16 @@ class _FilterPageState extends State<FilterPage> {
           if (mus.isNotEmpty) {
             setState(() {
               Muscle? muscle = mus[0];
+              // pushScreenWithNavBar(
+              //     context, AllExercise(selectedMuscle: muscle));
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => AllExercise(
-                        selectedMuscle:
-                            muscle)), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                  builder: (context) => AllExercise(selectedMuscle: muscle),
+                ),
               );
+              // Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+              //     builder: (context) => AllExercise(selectedMuscle: muscle)));
             });
           }
         },
