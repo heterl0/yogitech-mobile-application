@@ -168,7 +168,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           _buildCommentSection(trans),
           const SizedBox(height: 16),
           ..._exercise!.comments.map(
-            (comment) => _buildComment(context, comment),
+            (comment) => comment.active_status==1? _buildComment(context, comment):Container(),
           ),
         ],
       ),
