@@ -10,6 +10,7 @@ class SocialProfile {
   String? avatar;
   int? exp;
   int? level;
+  int? active_status;
 
   SocialProfile({
     this.user_id,
@@ -20,6 +21,7 @@ class SocialProfile {
     this.avatar,
     this.exp,
     this.level,
+    this.active_status,
   });
 
   SocialProfile copyWith({
@@ -31,6 +33,7 @@ class SocialProfile {
     String? avatar,
     int? exp,
     int? level,
+    int? active_status,
   }) {
     return SocialProfile(
       user_id: user_id ?? this.user_id,
@@ -41,6 +44,7 @@ class SocialProfile {
       avatar: avatar ?? this.avatar,
       exp: exp ?? this.exp,
       level: level ?? this.level,
+      active_status: active_status ?? this.active_status,
     );
   }
 
@@ -54,6 +58,7 @@ class SocialProfile {
       'avatar': avatar,
       'exp': exp,
       'level': level,
+      'active_status': active_status,
     };
   }
 
@@ -68,6 +73,8 @@ class SocialProfile {
       avatar: map['avatar'] != null ? map['avatar'] as String : null,
       exp: map['exp'] != null ? map['exp'] as int : null,
       level: map['level'] != null ? map['level'] as int : null,
+      active_status:
+          map['active_status'] != null ? map['active_status'] as int : null,
     );
   }
 
@@ -78,7 +85,7 @@ class SocialProfile {
 
   @override
   String toString() {
-    return 'SocialProfile(user_id: $user_id, username: $username, first_name: $first_name, last_name: $last_name, streak: $streak, avatar: $avatar, exp: $exp, level: $level)';
+    return 'SocialProfile(user_id: $user_id, username: $username, first_name: $first_name, last_name: $last_name, streak: $streak, avatar: $avatar, exp: $exp, level: $level, active_status: $active_status)';
   }
 
   @override
@@ -92,7 +99,8 @@ class SocialProfile {
         other.streak == streak &&
         other.avatar == avatar &&
         other.exp == exp &&
-        other.level == level;
+        other.level == level &&
+        other.active_status == active_status;
   }
 
   @override
@@ -104,6 +112,7 @@ class SocialProfile {
         streak.hashCode ^
         avatar.hashCode ^
         exp.hashCode ^
-        level.hashCode;
+        level.hashCode ^
+        active_status.hashCode;
   }
 }
