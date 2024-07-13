@@ -150,23 +150,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
     return MaterialApp(
-        // home: SplashScreen.navigate(
-        //   name: 'assets/native_splash/logo.riv',
-        //   next: (context) => MainScreen(
-        //     isVietnamese: _locale == Locale('vi'),
-        //     savedEmail: widget.savedEmail,
-        //     savedPassword: widget.savedPassword,
-        //     isDarkMode: _themeMode == ThemeMode.dark,
-        //     onThemeChanged: _toggleTheme,
-        //     locale: _locale,
-        //     onLanguageChanged: _changeLanguage,
-        //   ),
-        //   until: () => Future.delayed(const Duration(seconds: 1)),
-        //   startAnimation: '1',
-        //   endAnimation: '1',
-        //   backgroundColor: active,
-        //   fit: BoxFit.fill,
-        // ),
         debugShowCheckedModeBanner: false,
         initialRoute:
             widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,

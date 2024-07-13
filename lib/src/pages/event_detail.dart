@@ -154,7 +154,6 @@ class _EventDetailState extends State<EventDetail>
     final trans = AppLocalizations.of(context)!;
     _expired = checkDateExpired(_event!.start_date, _event!.expire_date, trans);
 
-
     return isLoading
         ? Center(child: CircularProgressIndicator())
         : Scaffold(
@@ -178,22 +177,21 @@ class _EventDetailState extends State<EventDetail>
                   ),
               ],
             ),
-            bottomNavigationBar: 
-            (!_expired!.startsWith(RegExp(r'[0-9]')))?
-             CustomBottomBar(
+            bottomNavigationBar: (!_expired!.startsWith(RegExp(r'[0-9]')))
+                ? CustomBottomBar(
                     buttonTitle: _expired.toString(),
                     style: ButtonStyleType.Tertiary,
-            ):
-            _isJoin
-                ? CustomBottomBar(
-                    buttonTitle: trans.giveUp,
-                    style: ButtonStyleType.Quaternary,
-                    onPressed: handleGiveUpEvent,
                   )
-                : CustomBottomBar(
-                    buttonTitle: trans.joinIn,
-                    onPressed: handleJoinEvent,
-                  ),
+                : _isJoin
+                    ? CustomBottomBar(
+                        buttonTitle: trans.giveUp,
+                        style: ButtonStyleType.Quaternary,
+                        onPressed: handleGiveUpEvent,
+                      )
+                    : CustomBottomBar(
+                        buttonTitle: trans.joinIn,
+                        onPressed: handleJoinEvent,
+                      ),
           );
   }
 
@@ -226,8 +224,7 @@ class _EventDetailState extends State<EventDetail>
       backgroundColor: theme.colorScheme.onSecondary,
       pinned: true,
       centerTitle: true,
-      title: Text(
-          _expired!,
+      title: Text(_expired!,
           style: h2.copyWith(color: theme.colorScheme.onSurface)),
       expandedHeight: 320,
       flexibleSpace: FlexibleSpaceBar(
@@ -393,8 +390,11 @@ class _EventDetailState extends State<EventDetail>
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
-    List<dynamic> candidates = _event!.event_candidate.where((candidate) => candidate.active_status != 0).toList();
-    candidates.sort((a, b) => (a.event_point ?? 0).compareTo(b.event_point ?? 0));
+    List<dynamic> candidates = _event!.event_candidate
+        .where((candidate) => candidate.active_status != 0)
+        .toList();
+    candidates
+        .sort((a, b) => (a.event_point ?? 0).compareTo(b.event_point ?? 0));
 
     return SingleChildScrollView(
       child: Column(
@@ -406,18 +406,19 @@ class _EventDetailState extends State<EventDetail>
           return item.active_status == 1
               ? GestureDetector(
                   onTap: () {
-                    if(item.user!=_account!.id){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FriendProfile(
-                          profile: item.profile,
-                          account: _account,
-                          unFollow: unFollow,
-                          followUserByUserId: followUserByUserId,
+                    if (item.user != _account!.id) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FriendProfile(
+                            profile: item.profile,
+                            account: _account,
+                            unFollow: unFollow,
+                            followUserByUserId: followUserByUserId,
+                          ),
                         ),
-                      ),
-                    );}
+                      );
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),

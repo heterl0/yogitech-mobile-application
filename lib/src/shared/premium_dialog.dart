@@ -37,25 +37,36 @@ void showPremiumDialog(
                 textAlign: TextAlign.center,
                 style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
               ),
-              const SizedBox(height: 24),
-              CustomButton(
-                title: trans.subscription, // "Upgrade Now"
-                onPressed: () {
-                  pushWithoutNavBar(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SubscriptionPage(
-                              account: account, fetchAccount: fetchAccount)));
-                },
-                style: ButtonStyleType.Primary,
-              ),
-              const SizedBox(height: 8),
-              CustomButton(
-                title: trans.close, // "Close"
-                style: ButtonStyleType.Tertiary, // Hoặc kiểu button tương ứng
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomButton(
+                      title: trans.close, // "Close"
+                      style: ButtonStyleType
+                          .Tertiary, // Hoặc kiểu button tương ứng
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: CustomButton(
+                      title: trans.subscription, // "Upgrade Now"
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        pushWithoutNavBar(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SubscriptionPage(
+                                    account: account,
+                                    fetchAccount: fetchAccount)));
+                      },
+                      style: ButtonStyleType.Primary,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

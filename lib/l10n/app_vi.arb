@@ -1,4 +1,14 @@
 {
+  "onboarding_title_1": "Chào mừng bạn đến với YogiTech",
+  "onboarding_text_1": "Trợ lý Yoga AI của bạn",
+  "onboarding_title_2": "Tư thế chuẩn, tập luyện an toàn hơn",
+  "onboarding_text_2": "AI giúp bạn điều chỉnh tư thế, tránh chấn thương",
+  "onboarding_title_3": "Thư viện yoga phong phú",
+  "onboarding_text_3": "Phù hợp với mọi nhu cầu và cấp độ",
+  "onboarding_title_4": "Theo dõi tiến trình, chinh phục mục tiêu",
+  "onboarding_text_4": "Ghi lại lịch sử tập luyện và thành tích của bạn",
+  "onboarding_title_5": "Sẵn sàng bắt đầu?",
+  "onboarding_text_5": "Bắt đầu hành trình Yoga của bạn ngay!",
   "exercise": "Các bài tập",
   "login": "Đăng nhập",
   "loginWithGoogle": "Đăng nhập với Google",
@@ -227,5 +237,10 @@
   "enterEmail" :"Vui lòng nhập email!",
   "noResult":"Không có kết quả",
   "inputName": "Nhập tên người dùng",
-  "baned": "Tài khoản của bạn đã bị chặn."
+  "baned": "Tài khoản của bạn đã bị chặn.",
+  "create": "Tạo",
+  "createExercise": "Tạo bài tập",
+  "title": "Tiêu đề",
+  "benefits": "Các lợi ích",
+  "selectPoses" :"Chọn các tư thế"
 }
