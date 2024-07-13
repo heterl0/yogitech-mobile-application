@@ -17,7 +17,14 @@ String cleanApiUrl(String? url) => (url ?? '')
     .replaceFirst(RegExp(r'/api/v1'), '')
     .replaceFirst(RegExp(r'/$'), '');
 
-String checkDateExpired(String startDateStr, String dateStr, AppLocalizations trans) {
+class CheckDateResult {
+  final String message;
+  final int status;
+
+  CheckDateResult({required this.message, required this.status});
+}
+
+CheckDateResult checkDateExpired(String startDateStr, String dateStr, AppLocalizations trans) {
   DateTime targetDateUtc = DateTime.parse(dateStr).toUtc();
   DateTime startDateUtc = DateTime.parse(startDateStr).toUtc().subtract(Duration(minutes: 1));
   
@@ -27,12 +34,16 @@ String checkDateExpired(String startDateStr, String dateStr, AppLocalizations tr
   Duration startDifferent = startDateUtc.difference(nowUtc);
 
   if (!startDifferent.isNegative) {
-    return trans.eventNotStart;
+    return CheckDateResult(message: trans.eventNotStart, status: 0);
   }
+
   Duration difference = targetDateUtc.difference(nowUtc);
 
   if (difference.isNegative) {
-    return trans.eventPassed;
+    if (difference < Duration(days: -7)) {
+      return CheckDateResult(message: trans.eventPassed, status: 3);
+    }
+    return CheckDateResult(message: trans.eventPassed, status: 2);
   } else {
     // Convert targetDateUtc to local time for display
     DateTime targetDateLocal = targetDateUtc.toLocal();
@@ -43,17 +54,22 @@ String checkDateExpired(String startDateStr, String dateStr, AppLocalizations tr
     int hours = localDifference.inHours % 24;
     int minutes = localDifference.inMinutes % 60;
 
-
+    String message;
     if (days == 0) {
       if (hours == 0) {
-        return '$minutes ${trans.minutes} ${trans.eventRemain}';
+        message = '$minutes ${trans.minutes} ${trans.eventRemain}';
+      } else {
+        message = '$hours ${trans.hours} $minutes ${trans.minutes} ${trans.eventRemain}';
       }
-      return '$hours ${trans.hours} $minutes ${trans.minutes} ${trans.eventRemain}';
     } else {
-      return '$days ${trans.day} ${trans.eventRemain}';
+      message = '$days ${trans.day} ${trans.eventRemain}';
     }
+
+    return CheckDateResult(message: message, status: 1);
   }
 }
+
+
 
 String formatDateTime(String isoString, String locale) {
   DateTime date = DateTime.parse(isoString).toLocal();

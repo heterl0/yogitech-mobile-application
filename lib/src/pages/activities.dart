@@ -69,6 +69,13 @@ class _ActivitiesState extends State<Activities> {
 
   Widget _buildEventMainContent() {
     final trans = AppLocalizations.of(context)!;
+
+    // Filter the events based on the status
+    final filteredEvents = _events.where((event) {
+      CheckDateResult check = checkDateExpired(event.start_date, event.expire_date, trans);
+      return check.status == 1 || check.status == 2;
+    }).toList();
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
@@ -79,21 +86,23 @@ class _ActivitiesState extends State<Activities> {
           crossAxisCount: 2,
           childAspectRatio: 5 / 6,
         ),
-        itemCount: _events.length,
+        itemCount: filteredEvents.length,
         itemBuilder: (context, index) {
-          String check = checkDateExpired(_events[index].start_date, _events[index].expire_date, trans);
+          final event = filteredEvents[index];
+          final check = checkDateExpired(event.start_date, event.expire_date, trans);
+
           return CustomCard(
-            imageUrl: _events[index].image_url,
-            title: _events[index].title,
-            caption: "${trans.participants}: ${_events[index].event_candidate.length}",
-            subtitle: check,
+            imageUrl: event.image_url,
+            title: event.title,
+            caption: "${trans.participants}: ${event.event_candidate.length}",
+            subtitle: check.message,
             onTap: () {
               pushWithoutNavBar(
                 context,
                 MaterialPageRoute(
                   builder: (context) => EventDetail(
                     key: UniqueKey(), // Ensure EventDetail is keyed
-                    event: _events[index],
+                    event: event,
                     account: widget.account,
                     fetchAccount: widget.fetchAccount,
                     fetchEvent: _loadEvents,
@@ -106,4 +115,5 @@ class _ActivitiesState extends State<Activities> {
       ),
     );
   }
+
 }

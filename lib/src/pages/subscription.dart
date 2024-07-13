@@ -5,6 +5,7 @@ import 'package:YogiTech/api/subscription/subscription_service.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/subscriptions.dart';
 import 'package:YogiTech/src/widgets/checkbox.dart';
+import 'package:YogiTech/utils/formatting.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';
@@ -80,7 +81,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
           && (_userSubs[_userSubs.length - 1]?.activeStatus != 0 )
           && (_account!.is_premium!)) {
           _currendSub = _userSubs[_userSubs.length - 1];
-          _subStatus = checkExpire(_currendSub!);
+          _subStatus = checkExpire(_currendSub!)!.message;
           if(_subStatus==null && _currendSub!.activeStatus !=0){
             makeSubExpire(_currendSub!);
             _currendSub = null;
@@ -795,18 +796,15 @@ class _SubscriptionState extends State<SubscriptionPage> {
         });
   }}
 
-  String? checkExpire(UserSubscription usub) {
+  CheckDateResult? checkExpire(UserSubscription usub) {
     DateTime now = DateTime.now();
     final trans = AppLocalizations.of(context)!;
     String? expireDateStr = usub.expireDate;
-    String checkDateExpired = format.checkDateExpired(
+    CheckDateResult checkDateExpired = format.checkDateExpired(
         usub.createdAt.toString(), expireDateStr.toString(), trans);
     print(checkDateExpired);
-    bool check = checkDateExpired.startsWith(RegExp(r'[0-9]'));
-    if (check) {
-      return checkDateExpired;
-    }
-    return null;
+    bool check = (checkDateExpired.status==1);
+    return checkDateExpired;
   }
 
   String convertDuration(double durationInMonths, String local) {

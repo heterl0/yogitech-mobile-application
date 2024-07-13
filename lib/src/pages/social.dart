@@ -209,8 +209,7 @@ class NewsListItem extends StatelessWidget {
         trans.locale == 'vi' ? timeago.ViMessages() : timeago.EnMessages());
     // trans.locale == 'vi'? timeago.ViMessages():timeago.EnMessages();
     bool check =
-        !checkDateExpired(notification.created_at, notification.time, trans)
-            .startsWith(RegExp(r'[0-9]'));
+        !(checkDateExpired(notification.created_at, notification.time, trans).status==1);
     return check
         ? GestureDetector(
             onTap: onTap,
