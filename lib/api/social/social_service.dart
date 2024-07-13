@@ -49,6 +49,7 @@ Future<List<dynamic>> getFollowersById(int userId) async {
     if (response.statusCode == 200) {
       List<dynamic> data =
           response.data.map((e) => Account.fromMap(e)).toList();
+      data = data.where((ac)=> ac.active_status==1).toList();
       return data;
     } else {
       print('Get followers failed with status code: ${response.statusCode}');
@@ -85,6 +86,7 @@ Future<List<dynamic>> getFollowers() async {
     if (response.statusCode == 200) {
       List<dynamic> data =
           response.data.map((e) => Account.fromMap(e)).toList();
+      data = data.where((ac)=> ac.active_status==1).toList();
       return data;
     } else {
       print('Get followers failed with status code: ${response.statusCode}');
@@ -103,6 +105,7 @@ Future<List<dynamic>> getFollowing() async {
     if (response.statusCode == 200) {
       List<dynamic> data =
           response.data.map((e) => Account.fromMap(e)).toList();
+      data = data.where((ac)=> ac.active_status==1).toList();
       return data;
     } else {
       print('Get following failed with status code: ${response.statusCode}');
