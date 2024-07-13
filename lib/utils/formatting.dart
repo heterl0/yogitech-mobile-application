@@ -24,6 +24,7 @@ class CheckDateResult {
   CheckDateResult({required this.message, required this.status});
 }
 
+
 CheckDateResult checkDateExpired(String startDateStr, String dateStr, AppLocalizations trans) {
   DateTime targetDateUtc = DateTime.parse(dateStr).toUtc();
   DateTime startDateUtc = DateTime.parse(startDateStr).toUtc().subtract(Duration(minutes: 1));
@@ -40,10 +41,16 @@ CheckDateResult checkDateExpired(String startDateStr, String dateStr, AppLocaliz
   Duration difference = targetDateUtc.difference(nowUtc);
 
   if (difference.isNegative) {
-    if (difference < Duration(days: -7)) {
-      return CheckDateResult(message: trans.eventPassed, status: 3);
+    int daysPassed = -difference.inDays;
+    String message = '${trans.eventPassed}';
+    if(daysPassed>=1){
+      message+=' $daysPassed ${trans.days}';
     }
-    return CheckDateResult(message: trans.eventPassed, status: 2);
+    
+    if (daysPassed > 7) {
+      return CheckDateResult(message: message, status: 3);
+    }
+    return CheckDateResult(message: message, status: 2);
   } else {
     // Convert targetDateUtc to local time for display
     DateTime targetDateLocal = targetDateUtc.toLocal();
@@ -68,6 +75,7 @@ CheckDateResult checkDateExpired(String startDateStr, String dateStr, AppLocaliz
     return CheckDateResult(message: message, status: 1);
   }
 }
+
 
 
 
