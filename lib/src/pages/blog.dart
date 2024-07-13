@@ -18,6 +18,7 @@ class Blog extends StatefulWidget {
 class BlogState extends State<Blog> {
   List<dynamic> jsonList = [];
   bool _isNotSearching = true;
+  bool _isLoading = false;
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -27,6 +28,7 @@ class BlogState extends State<Blog> {
   }
 
   Future<void> _fetchBlogs([String query = '']) async {
+    setState(() {_isLoading=true;});
     final List<dynamic> blogs = await getBlogs();
     setState(() {
       if (query.isNotEmpty) {
@@ -34,6 +36,7 @@ class BlogState extends State<Blog> {
       } else {
         jsonList = blogs;
       }
+      _isLoading=false;
     });
   }
 
@@ -41,7 +44,8 @@ class BlogState extends State<Blog> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
-    return Scaffold(
+    return  
+      Scaffold(
       appBar: _isNotSearching
           ? CustomAppBar(
               showBackButton: false,
@@ -96,7 +100,9 @@ class BlogState extends State<Blog> {
 
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
+    return _isLoading
+      ? Center(child: CircularProgressIndicator()):
+      Container(
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(color: theme.colorScheme.surface),
