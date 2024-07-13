@@ -1,4 +1,14 @@
 {
+  "onboarding_title_1": "Welcome to YogiTech",
+  "onboarding_text_1": "Your AI Yoga Assistant",
+  "onboarding_title_2": "Perfect Poses, Safer Practice",
+  "onboarding_text_2": "AI helps you adjust your posture and avoid injuries",
+  "onboarding_title_3": "Rich Yoga Library",
+  "onboarding_text_3": "Suitable for all needs and levels",
+  "onboarding_title_4": "Track Progress, Conquer Goals",
+  "onboarding_text_4": "Record your practice history and achievements",
+  "onboarding_title_5": "Ready to Begin?",
+  "onboarding_text_5": "Start your Yoga journey now!",
   "exercise": "Exercises",
   "login": "Login",
   "loginWithGoogle": "Sign In with Google",
@@ -226,5 +236,10 @@
   "enterEmail": "Please enter your email!",
   "noResult": "No result",
   "inputName": "Enter username",
-  "baned": "your account has been blocked."
+  "baned": "your account has been blocked.",
+  "create": "Create",
+  "createExercise": "Create exercise",
+  "title": "Title",
+  "benefits": "Benefits",
+  "selectPoses" :"Select poses"
 }

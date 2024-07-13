@@ -16,32 +16,43 @@ class Streak extends StatefulWidget {
 class _StreakState extends State<Streak> {
   DateTime _currentDate = DateTime.now();
   DateTime? _lastStreakStartDate;
-  late dynamic streakData;
+  late Map<String, dynamic> streakData = {
+    "number_of_dates": 0,
+    "streak_dates": []
+  };
 
   @override
   void initState() {
-    _fetchStreakData();
     super.initState();
+    print("initState called");
+    _fetchStreakData();
   }
 
   Future<void> _fetchStreakData() async {
-    // Call API to fetch streak data
-    final data = await getStreakInMonth(6, 2024);
-    print(data);
-    setState(() {
-      streakData = data;
-    });
+    print("Fetching streak data...");
+    try {
+      final data =
+          await getStreakInMonth(_currentDate.month, _currentDate.year);
+      print("Streak Data: $data");
+      setState(() {
+        streakData = data;
+      });
+    } catch (e) {
+      print("Error fetching streak data: $e");
+    }
   }
 
   void _incrementMonth() {
     setState(() {
       _currentDate = DateTime(_currentDate.year, _currentDate.month + 1);
+      _fetchStreakData();
     });
   }
 
   void _decrementMonth() {
     setState(() {
       _currentDate = DateTime(_currentDate.year, _currentDate.month - 1);
+      _fetchStreakData();
     });
   }
 
@@ -49,21 +60,15 @@ class _StreakState extends State<Streak> {
     return DateUtils.getDaysInMonth(year, month);
   }
 
-  //Ngày tập được Generate từ hàm này
   List<DateTime> _generateStreakData() {
     List<DateTime> streakDays = [];
-    int daysInMonth = _getDaysInMonth(_currentDate.year, _currentDate.month);
+    List<int> streakDates = streakData['streak_dates']?.cast<int>() ?? [];
 
-    // Assuming a streak of exercising on weekdays (Monday to Friday)
-    for (int i = 1; i <= daysInMonth; i++) {
-      DateTime day = DateTime(_currentDate.year, _currentDate.month, i);
-      // Check if the day is a weekday (Monday to Friday)
-      if (day.weekday >= DateTime.monday && day.weekday <= DateTime.friday) {
-        streakDays.add(day);
-      }
+    for (int day in streakDates) {
+      DateTime date = DateTime(_currentDate.year, _currentDate.month, day);
+      streakDays.add(date);
     }
 
-    // Determine the start date of the last streak if streakDays is not empty
     _lastStreakStartDate = streakDays.isNotEmpty ? streakDays.first : null;
 
     return streakDays;
@@ -79,6 +84,7 @@ class _StreakState extends State<Streak> {
       appBar: CustomAppBar(
         title: trans.streak,
         showBackButton: false,
+        style: widthStyle.Large,
         postActions: [
           IconButton(
             icon: Icon(Icons.close, color: theme.colorScheme.onSurface),
@@ -143,8 +149,8 @@ class _StreakState extends State<Streak> {
           shaderCallback: (bounds) {
             return gradient.createShader(bounds);
           },
-          child: const Text(
-            "256",
+          child: Text(
+            streakData['number_of_dates'].toString(),
             style: TextStyle(
               color: active,
               fontSize: 60,
@@ -226,7 +232,7 @@ class _StreakState extends State<Streak> {
     final trans = AppLocalizations.of(context)!;
 
     List<DateTime> streakDays = _generateStreakData();
-    int streakDaysCount = streakDays.length;
+    int streakDaysCount = streakData['number_of_dates'];
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -309,10 +315,9 @@ class _StreakState extends State<Streak> {
 
     List<Widget> calendarWidgets = [];
 
-    // Hiển thị thứ trong tuần theo bản địa hóa
     for (int i = 3; i <= 9; i++) {
       final dayOfWeek = DateFormat.E(Localizations.localeOf(context).toString())
-          .format(DateTime(2024, 6, i)); // Lấy thứ tự từ T2 -> CN
+          .format(DateTime(2024, 6, i));
       calendarWidgets.add(
         Center(
           child: Text(dayOfWeek, style: bd_text.copyWith(color: text)),

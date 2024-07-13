@@ -68,6 +68,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   rxdart: ^0.27.7
   timezone: ^0.9.4
+  smooth_page_indicator: ^1.1.0
 
 # flutter_native_splash:
 #   android: true
@@ -107,6 +108,7 @@ flutter:
     - assets/native_splash/logo.riv
     - .env
     - assets/
+    - assets/onboarding/
 
     # fonts:
     # - family: ReadexPro

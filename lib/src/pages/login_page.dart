@@ -175,32 +175,27 @@ class _LoginPageState extends State<LoginPage> {
       GoogleSignInAuthentication googleSignInAuthentication =
           await googleUser!.authentication;
       try {
+        print(googleSignInAuthentication.idToken ?? "");
         final accessToken =
             await loginGoogle(googleSignInAuthentication.idToken ?? "");
 
         if (accessToken != null) {
           final user = await getUser();
-          if (user != null && user.active_status==1) {
-            if ((user.profile.first_name == null ||
-                user.profile.last_name == null)) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PrelaunchSurveyPage(),
-                ),
-              );
-            } else {
-              Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
-            }
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(trans.baned)),
+          if (user != null &&
+              (user.profile.first_name == null ||
+                  user.profile.last_name == null)) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PrelaunchSurveyPage(),
+              ),
             );
+          } else {
+            Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text('An error occurred. Please try again later.')),
+            SnackBar(content: Text('Please continue your login using email')),
           );
         }
       } catch (e) {
@@ -247,8 +242,8 @@ class _LoginPageState extends State<LoginPage> {
 
         if (user != null && user.active_status == 1) {
           if ((user.profile.first_name == null ||
-                  user.profile.last_name == null ||
-                  user.profile.bmi == null)) {
+              user.profile.last_name == null ||
+              user.profile.bmi == null)) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -259,10 +254,10 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
           }
         } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(trans.baned)),
-            );
-          }
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(trans.baned)),
+          );
+        }
       } else if (accessToken['status'] == 403) {
         Navigator.pushReplacementNamed(context, AppRoutes.verifyEmail);
       } else {
