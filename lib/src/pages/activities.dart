@@ -21,6 +21,7 @@ class Activities extends StatefulWidget {
 
 class _ActivitiesState extends State<Activities> {
   List<dynamic> _events = [];
+  bool _isloading = false;
 
   @override
   void initState() {
@@ -41,10 +42,14 @@ class _ActivitiesState extends State<Activities> {
   }
 
   Future<void> _loadEvents(int? eventId) async {
+    setState(() {
+        _isloading = true;
+      });
     try {
       final events = await getEvents();
       setState(() {
         _events = events;
+        _isloading = false;
       });
     } catch (e) {
       print('Error loading activities: $e');
@@ -53,7 +58,9 @@ class _ActivitiesState extends State<Activities> {
 
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
+    return  _isloading
+      ? Center(child: CircularProgressIndicator()):
+     Container(
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(color: theme.colorScheme.surface),

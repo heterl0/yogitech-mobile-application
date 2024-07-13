@@ -403,7 +403,7 @@ class _EventDetailState extends State<EventDetail>
         children: candidates.asMap().entries.map((entry) {
           int index = entry.key;
           CandidateEvent item = entry.value as CandidateEvent;
-          return item.active_status == 1
+          return ((item.active_status == 1) && (item.profile.active_status==1))
               ? GestureDetector(
                   onTap: () {
                     if (item.user != _account!.id) {
