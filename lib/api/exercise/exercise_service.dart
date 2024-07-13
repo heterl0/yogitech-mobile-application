@@ -11,6 +11,7 @@ Future<List<dynamic>> getExercises() async {
     if (response.statusCode == 200) {
       List<dynamic> data =
           response.data.map((e) => Exercise.fromMap(e)).toList();
+      data = data.where((e) => e.active_status == 1).toList();
       return data;
     } else {
       print('Get exercises failed with status code: ${response.statusCode}');
@@ -21,6 +22,7 @@ Future<List<dynamic>> getExercises() async {
     return [];
   }
 }
+
 
 Future<Exercise?> getExercise(int id) async {
   try {
