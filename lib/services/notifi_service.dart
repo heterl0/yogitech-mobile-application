@@ -1,3 +1,4 @@
+import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -65,17 +66,21 @@ class LocalNotification {
     required RepeatInterval repeat,
     required String payload,
   }) async {
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails('yogi2', 'YogiTech',
-            channelDescription: 'YogiTech notification',
-            importance: Importance.max,
-            priority: Priority.high,
-            ticker: 'ticker');
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
-    await _flutterLocalNotificationsPlugin.periodicallyShow(
-        1, title, body, repeat, notificationDetails,
-        payload: payload);
+    final bool hasExercisedToday = await isExerciseToday();
+
+    if (!hasExercisedToday) {
+      const AndroidNotificationDetails androidNotificationDetails =
+          AndroidNotificationDetails('yogi2', 'YogiTech',
+              channelDescription: 'YogiTech notification',
+              importance: Importance.max,
+              priority: Priority.high,
+              ticker: 'ticker');
+      const NotificationDetails notificationDetails =
+          NotificationDetails(android: androidNotificationDetails);
+      await _flutterLocalNotificationsPlugin.periodicallyShow(
+          1, title, body, repeat, notificationDetails,
+          payload: payload);
+    }
   }
 
   static Future showFriendNotification({

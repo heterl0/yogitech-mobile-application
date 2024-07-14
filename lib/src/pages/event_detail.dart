@@ -1,4 +1,5 @@
 import 'package:YogiTech/api/social/social_service.dart';
+import 'package:YogiTech/src/pages/exercise_detail.dart';
 import 'package:YogiTech/src/pages/friend_profile.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -177,7 +178,7 @@ class _EventDetailState extends State<EventDetail>
                   ),
               ],
             ),
-            bottomNavigationBar: (!(_expired!.status==1))
+            bottomNavigationBar: (!(_expired!.status == 1))
                 ? CustomBottomBar(
                     buttonTitle: _expired!.message,
                     style: ButtonStyleType.Tertiary,
@@ -403,7 +404,8 @@ class _EventDetailState extends State<EventDetail>
         children: candidates.asMap().entries.map((entry) {
           int index = entry.key;
           CandidateEvent item = entry.value as CandidateEvent;
-          return ((item.active_status == 1) && (item.profile.active_status==1))
+          return ((item.active_status == 1) &&
+                  (item.profile.active_status == 1))
               ? GestureDetector(
                   onTap: () {
                     if (item.user != _account!.id) {
@@ -535,7 +537,19 @@ class _EventDetailState extends State<EventDetail>
           subtitle:
               '${exercise.calories} ${trans.calorie} / ${exercise.durations} ${trans.seconds}',
           imageUrl: exercise.image_url,
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ExerciseDetail(
+                  exercise: exercise,
+                  account: _account,
+                  fetchAccount: widget.fetchAccount,
+                  event_id: _event!.id,
+                ),
+              ),
+            );
+          },
         );
       },
     );

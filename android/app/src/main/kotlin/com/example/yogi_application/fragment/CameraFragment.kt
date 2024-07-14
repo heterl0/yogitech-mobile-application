@@ -133,6 +133,8 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         startTime = System.currentTimeMillis()
         val prefs = activity?.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
         val exerciseString = prefs?.getString("flutter.exercise", "")
+        val event = prefs?.getString("flutter.event_id", null)
+
         exercise = exerciseString?.let { Exercise.fromJson(it) };
         viewModel.exercise = exercise;
         if (exercise?.poses?.size != null) {
@@ -203,7 +205,8 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 }, 10000)
             } else {
                 val totalTimeFinish = (System.currentTimeMillis() - startTime!!) / 1000
-                val exerciseLog: ExerciseLog = ExerciseLog(exercise?.id!!, 1, exercise?.poses?.size!!, viewModel.getScore(), null, viewModel.poseLogResults, totalTimeFinish.toInt())
+
+                val exerciseLog: ExerciseLog = ExerciseLog(exercise?.id!!, 1, exercise?.poses?.size!!, viewModel.getScore(), null, viewModel.poseLogResults, totalTimeFinish.toInt(), event?.toInt())
                 // Jump to the main thread to use MethodChannel
 //                Handler(Looper.getMainLooper()).post {
 //                    activity?.let {
@@ -213,7 +216,6 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
 //                        ).invokeMethod("receiveObject", exerciseLog)
 //                    }
 //                }
-
 
                 Log.d("NoTag", exerciseLog.toJson());
                 Handler(Looper.getMainLooper()).post {

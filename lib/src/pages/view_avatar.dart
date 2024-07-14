@@ -25,6 +25,7 @@ class AvatarViewPage extends StatelessWidget {
       ),
       body: Center(
         child: InteractiveViewer(
+          scaleEnabled: true,
           minScale: 0.1,
           maxScale: 4.0,
           child: imageBytes != null
