@@ -549,7 +549,8 @@ class _EventDetailState extends State<EventDetail>
                   exercise: exercise,
                   account: _account,
                   fetchAccount: widget.fetchAccount,
-                  event_id: _event!.id,
+                  event: _event,
+                  fetchEvent: ()=>{_fetchEventDetails(_event!.id)},
                 ),
               ),
             );
