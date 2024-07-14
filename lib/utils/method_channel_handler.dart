@@ -24,6 +24,7 @@ class MethodChannelHandler {
       case 'receiveObject':
         final text = call.arguments;
         final data = await postExerciseLog(text);
+        await checkEvent();
         final account = await getUser();
         storeAccount(account!);
         final exercise = ExerciseResult.fromJson(data);

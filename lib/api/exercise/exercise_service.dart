@@ -11,6 +11,7 @@ Future<List<dynamic>> getExercises() async {
     if (response.statusCode == 200) {
       List<dynamic> data =
           response.data.map((e) => Exercise.fromMap(e)).toList();
+      data = data.where((e) => e.active_status == 1).toList();
       return data;
     } else {
       print('Get exercises failed with status code: ${response.statusCode}');
@@ -39,10 +40,23 @@ Future<Exercise?> getExercise(int id) async {
   }
 }
 
-Future<void> storeExercise(Exercise exercise) async {
+Future<void> storeExercise(Exercise exercise, int? event_id) async {
   // Store exercise in local storage
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('exercise', exercise.toJson());
+  if (event_id != null) {
+    await prefs.setString('event_id', event_id.toString());
+  }
+}
+
+Future<bool> checkEvent() async {
+  final prefs = await SharedPreferences.getInstance();
+  final event_id = prefs.getString('event_id');
+  if (event_id != null) {
+    prefs.remove('event_id');
+    return true;
+  }
+  return false;
 }
 
 class PostCommentRequest {

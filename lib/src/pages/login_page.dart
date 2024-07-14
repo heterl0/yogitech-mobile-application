@@ -181,17 +181,22 @@ class _LoginPageState extends State<LoginPage> {
 
         if (accessToken != null) {
           final user = await getUser();
-          if (user != null &&
-              (user.profile.first_name == null ||
-                  user.profile.last_name == null)) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PrelaunchSurveyPage(),
-              ),
-            );
-          } else {
-            Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
+          if (user != null && user.active_status == 1) {
+            if (user.profile.first_name == null ||
+                    user.profile.last_name == null) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PrelaunchSurveyPage(),
+                ),
+              );
+            } else {
+              Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
+            }
+          } else{
+            ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(trans.baned)),
+          );
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

@@ -5,6 +5,7 @@ import 'package:YogiTech/api/subscription/subscription_service.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/subscriptions.dart';
 import 'package:YogiTech/src/widgets/checkbox.dart';
+import 'package:YogiTech/utils/formatting.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';
@@ -47,68 +48,48 @@ class _SubscriptionState extends State<SubscriptionPage> {
     // _googlePayConfigFuture =
     //     PaymentConfiguration.fromAsset('default_google_pay_config.json');
     _account = widget.account;
-    _loadSub();
+    _loadUserSub();
   }
 
-  Future<void> _loadSub() async {
-    try {
-      final sub = await getSubscriptions();
-      final ussub = await getUserSubscriptions();
-      setState(() {
-        _subs = sub;
-        _userSubs = ussub;
-        _isLoading = false;
-
-        // if (_account!.is_staff == true) {
-        //   _subStatus = 'Admin';
-        //   _currendSub = _createFakeSubscription();
-        // } else {
-        _subStatus = _userSubs.isNotEmpty ? checkExpire(_userSubs.last) : null;
-        if (_userSubs.isNotEmpty && _userSubs.last?.activeStatus != 0) {
-          _currendSub = _userSubs.last;
-        } else {
-          _currendSub = null;
-        }
-        // }
-      });
-    } catch (e) {
-      // Handle errors, e.g., show a snackbar or error message
-      print('Error loading Subscription: $e');
-    }
-  }
-
-  UserSubscription _createFakeSubscription() {
-    // Create a fake subscription
-    final fakeSub = UserSubscription(
-      id: -1,
-      userId: _account!.id,
-      subscriptionId: 3,
-      subscriptionType: 1,
-      status: 1,
-      createdAt: DateTime.now().toString(),
-      expireDate: DateTime.now().toString(),
-      activeStatus: 1,
-    );
-    return fakeSub;
-  }
+  // UserSubscription _createFakeSubscription() {
+  //   // Create a fake subscription
+  //   final fakeSub = UserSubscription(
+  //     id: -1,
+  //     userId: _account!.id,
+  //     subscriptionId: 3,
+  //     subscriptionType: 1,
+  //     status: 1,
+  //     createdAt: DateTime.now().toString(),
+  //     expireDate: DateTime.now().toString(),
+  //     activeStatus: 1,
+  //   );
+  //   return fakeSub;
+  // }
 
   Future<void> _loadUserSub() async {
     setState(() {
       _isLoading = true;
     });
     try {
-      final sub = await getUserSubscriptions();
+      final sub = await getSubscriptions();
+      final ussub = await getUserSubscriptions();
       setState(() {
-        _userSubs = sub;
-        _isLoading = false;
+        _subs = sub;
+        _userSubs = ussub;
 
-        if (_userSubs.length > 0 &&
-            _userSubs[_userSubs.length - 1]?.activeStatus != 0) {
+        if ((_userSubs.length > 0) &&
+            (_userSubs[_userSubs.length - 1]?.activeStatus != 0) &&
+            (_account!.is_premium!)) {
           _currendSub = _userSubs[_userSubs.length - 1];
-          _subStatus = checkExpire(_currendSub!);
+          _subStatus = checkExpire(_currendSub!)!.message;
+          if (_subStatus == null && _currendSub!.activeStatus != 0) {
+            makeSubExpire(_currendSub!);
+            _currendSub = null;
+          }
         } else {
           _currendSub = null;
         }
+        _isLoading = false;
       });
     } catch (e) {
       print('Error loading UserSubscription: $e');
@@ -635,7 +616,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
           Column(
             children: [
               Text(
-                convertDuration(sub.durationInMonth, trans.locale) + 's',
+                convertDuration(sub.durationInMonth, trans.locale),
                 textAlign: TextAlign.center,
                 style: min_cap.copyWith(color: theme.colorScheme.onSurface),
               ),
@@ -803,18 +784,27 @@ class _SubscriptionState extends State<SubscriptionPage> {
     );
   }
 
-  String? checkExpire(UserSubscription usub) {
+  Future<UserSubscription?> makeSubExpire(UserSubscription usub) async {
+    final userSubscription = await expiredSubscription(usub.id!);
+    if (userSubscription != null) {
+      widget.fetchAccount!();
+      final account = await retrieveAccount();
+      _loadUserSub();
+      setState(() {
+        _account = account;
+      });
+    }
+  }
+
+  CheckDateResult? checkExpire(UserSubscription usub) {
     DateTime now = DateTime.now();
     final trans = AppLocalizations.of(context)!;
     String? expireDateStr = usub.expireDate;
-    String checkDateExpired = format.checkDateExpired(
+    CheckDateResult checkDateExpired = format.checkDateExpired(
         usub.createdAt.toString(), expireDateStr.toString(), trans);
     print(checkDateExpired);
-    bool check = checkDateExpired.startsWith(RegExp(r'[0-9]'));
-    if (check) {
-      return checkDateExpired;
-    }
-    return null;
+    bool check = (checkDateExpired.status == 1);
+    return checkDateExpired;
   }
 
   String convertDuration(double durationInMonths, String local) {

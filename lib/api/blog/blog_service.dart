@@ -9,6 +9,7 @@ Future<List<dynamic>> getBlogs() async {
     final Response response = await DioInstance.get(url);
     if (response.statusCode == 200) {
       List<dynamic> data = response.data.map((e) => Blog.fromMap(e)).toList();
+      data = data.where((blog)=> blog.active_status==1).toList();
       return data;
     } else {
       print('Get blogs failed with status code: ${response.statusCode}');

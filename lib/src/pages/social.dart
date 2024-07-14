@@ -1,14 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:ffi';
 
 import 'package:YogiTech/api/social/social_service.dart';
 import 'package:YogiTech/src/models/notification.dart' as n;
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/models/account.dart';
-import 'package:YogiTech/src/pages/friend_profile.dart';
-import 'package:YogiTech/src/pages/friendlist.dart';
 import 'package:YogiTech/src/pages/notification_detail.dart';
-import 'package:YogiTech/src/pages/notifications.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/utils/formatting.dart';
@@ -212,126 +208,130 @@ class NewsListItem extends StatelessWidget {
     timeago.setLocaleMessages(trans.locale,
         trans.locale == 'vi' ? timeago.ViMessages() : timeago.EnMessages());
     // trans.locale == 'vi'? timeago.ViMessages():timeago.EnMessages();
-    bool check = !checkDateExpired(notification.created_at,notification.time, trans).startsWith(RegExp(r'[0-9]'));
-    return check? GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(12),
-          margin: const EdgeInsets.only(bottom: 12),
-          decoration: ShapeDecoration(
-            shape: RoundedRectangleBorder(
-              side: BorderSide(width: 1, color: stroke),
-              borderRadius: BorderRadius.circular(16),
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              (!notification.is_admin)
-                  ? ((notification.profile.avatar != null) &&
-                          notification.profile.avatar != '')
-                      ? Container(
-                          width: 60,
-                          height: 60,
-                          child: CircleAvatar(
-                            radius: 80,
-                            backgroundImage: CachedNetworkImageProvider(
-                                notification.profile.avatar.toString()),
-                            backgroundColor: Colors.transparent,
-                          ))
-                      : Container(
-                          width: 60, // 2 * radius + 8 (border width) * 2
-                          height: 60, // Matching the ratio as per Figma
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: CircleAvatar(
-                            radius: 78,
-                            backgroundImage:
-                                AssetImage('assets/images/gradient.jpg'),
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                notification.profile.first_name != null
-                                    ? notification.profile.first_name![0]
-                                        .toUpperCase()
-                                    : ':)',
-                                style: TextStyle(
-                                  fontSize: 36, // Adjust the size as needed
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+    bool check =
+        !(checkDateExpired(notification.created_at, notification.time, trans).status==1);
+    return check
+        ? GestureDetector(
+            onTap: onTap,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(width: 1, color: stroke),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  (!notification.is_admin)
+                      ? ((notification.profile.avatar != null) &&
+                              notification.profile.avatar != '')
+                          ? Container(
+                              width: 60,
+                              height: 60,
+                              child: CircleAvatar(
+                                radius: 80,
+                                backgroundImage: CachedNetworkImageProvider(
+                                    notification.profile.avatar.toString()),
+                                backgroundColor: Colors.transparent,
+                              ))
+                          : Container(
+                              width: 60, // 2 * radius + 8 (border width) * 2
+                              height: 60, // Matching the ratio as per Figma
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              child: CircleAvatar(
+                                radius: 78,
+                                backgroundImage:
+                                    AssetImage('assets/images/gradient.jpg'),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    notification.profile.first_name != null
+                                        ? notification.profile.first_name![0]
+                                            .toUpperCase()
+                                        : ':)',
+                                    style: TextStyle(
+                                      fontSize: 36, // Adjust the size as needed
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ),
+                            )
+                      : Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.transparent,
+                            border: Border.all(
+                              color: Colors.blue, // Color of the border
+                              width: 1.0, // Width of the border
+                            ),
+                            image: DecorationImage(
+                              image: AssetImage('assets/icons/yogiAvatar.png'),
+                              fit: BoxFit
+                                  .cover, // This ensures the image covers the circle properly
                             ),
                           ),
-                        )
-                  : Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.transparent,
-                        border: Border.all(
-                          color: Colors.blue, // Color of the border
-                          width: 1.0, // Width of the border
                         ),
-                        image: DecorationImage(
-                          image: AssetImage('assets/icons/yogiAvatar.png'),
-                          fit: BoxFit
-                              .cover, // This ensures the image covers the circle properly
-                        ),
-                      ),
-                    ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        notification.is_admin
-                            ? Expanded(
-                                child: ShaderMask(
-                                shaderCallback: (bounds) {
-                                  return gradient.createShader(bounds);
-                                },
-                                child: Text(
-                                  'YogiTech',
-                                  style: min_cap.copyWith(color: active),
-                                ),
-                              ))
-                            : Expanded(
-                                child: Text(
-                                  '${notification.profile.first_name} ${notification.profile.last_name}',
-                                  textAlign: TextAlign.start,
-                                  style: min_cap.copyWith(color: primary),
-                                ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            notification.is_admin
+                                ? Expanded(
+                                    child: ShaderMask(
+                                    shaderCallback: (bounds) {
+                                      return gradient.createShader(bounds);
+                                    },
+                                    child: Text(
+                                      'YogiTech',
+                                      style: min_cap.copyWith(color: active),
+                                    ),
+                                  ))
+                                : Expanded(
+                                    child: Text(
+                                      '${notification.profile.first_name} ${notification.profile.last_name}',
+                                      textAlign: TextAlign.start,
+                                      style: min_cap.copyWith(color: primary),
+                                    ),
+                                  ),
+                            Expanded(
+                              child: Text(
+                                timeago.format(dateTime, locale: trans.locale),
+                                textAlign: TextAlign.end,
+                                style: min_cap.copyWith(color: text),
                               ),
-                        Expanded(
-                          child: Text(
-                            timeago.format(dateTime, locale: trans.locale),
-                            textAlign: TextAlign.end,
-                            style: min_cap.copyWith(color: text),
-                          ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          notification.title,
+                          style:
+                              h3.copyWith(color: theme.colorScheme.onPrimary),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 6),
-                    Text(
-                      notification.title,
-                      style: h3.copyWith(color: theme.colorScheme.onPrimary),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        )): SizedBox();
+            ))
+        : SizedBox();
   }
 }
