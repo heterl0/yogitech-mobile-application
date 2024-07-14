@@ -97,12 +97,20 @@ class CustomCard extends StatelessWidget {
           ),
           if (topRightIcon != null)
             Positioned(
-              top: 16, // Điều chỉnh vị trí của icon
-              right: 20, // Điều chỉnh vị trí của icon
-              child: SizedBox(
-                width: 24,
-                height: 24,
-                child: topRightIcon,
+              top: 17,
+              right: 16,
+              child: Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surface, // Màu nền
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(8)), // Bo góc
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(left: 6, bottom: 6),
+                  child: topRightIcon,
+                ),
               ),
             ),
         ],

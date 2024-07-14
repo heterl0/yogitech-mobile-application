@@ -103,7 +103,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
         _isLoading = false;
 
         if (_userSubs.length > 0 &&
-          _userSubs[_userSubs.length - 1]?.activeStatus != 0) {
+            _userSubs[_userSubs.length - 1]?.activeStatus != 0) {
           _currendSub = _userSubs[_userSubs.length - 1];
           _subStatus = checkExpire(_currendSub!);
         } else {
@@ -344,7 +344,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                     height: 86,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/images/MoonPhase.png'),
+                        image: AssetImage('assets/images/Crown_.png'),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -359,7 +359,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                         SizedBox(
                           child: Text(
                             trans.upgradeYourSub,
-                            style: h3.copyWith(color: active),
+                            style: bd_text.copyWith(color: active),
                           ),
                         ),
                       ],
@@ -536,7 +536,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                           final account = await retrieveAccount();
                           setState(() {
                             _loadUserSub();
-                            
+
                             _account = account;
                           });
                           Navigator.pop(context); // Close the bottom sheet
