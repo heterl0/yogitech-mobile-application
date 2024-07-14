@@ -10,7 +10,6 @@ import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 Future<List<Pose>> getPoses() async {
   try {
@@ -90,54 +89,80 @@ class _PersonalizedExerciseCreatePageState
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(AppLocalizations.of(context)!.selectPoses),
-          content: Container(
+          content: SizedBox(
             width: double.maxFinite,
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: _poses.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 3 / 4,
-              ),
-              itemBuilder: (context, index) {
-                final pose = _poses[index];
-                final isSelected = _selectedPoses.contains(pose);
-                final TextEditingController _durationController =
-                    TextEditingController();
-
-                return GestureDetector(
-                  onTap: () => _onPoseSelected(pose),
-                  child: GridTile(
-                    header: GridTileBar(
-                      title: Text(pose.name),
-                      subtitle: Text(pose.level.toString()),
-                      backgroundColor:
-                          isSelected ? Colors.black45 : Colors.transparent,
-                    ),
-                    footer: GridTileBar(
-                      title: Text('${pose.calories} calories'),
-                      backgroundColor: Colors.black45,
-                    ),
-                    child: Column(
-                      children: [
-                        Image.network(
-                          pose.image_url,
-                          fit: BoxFit.cover,
-                        ),
-                        TextField(
-                          controller: _durationController,
-                          decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)!.duration,
-                          ),
-                          keyboardType: TextInputType.number,
-                          onChanged: (value) {
-                            pose.duration = int.tryParse(value)!;
-                          },
-                        ),
-                      ],
-                    ),
+            child: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return GridView.builder(
+                  shrinkWrap: true,
+                  // physics: NeverScrollableScrollPhysics(),
+                  itemCount: _poses.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 3 / 6,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
                   ),
+                  itemBuilder: (context, index) {
+                    final pose = _poses[index];
+                    final isSelected = _selectedPoses.contains(pose);
+                    final TextEditingController _durationController =
+                        TextEditingController();
+
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _onPoseSelected(pose);
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: isSelected ? primary : Colors.transparent,
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: GridTile(
+                          header: GridTileBar(
+                            title: Text(pose.name),
+                            subtitle: Text(pose.level.toString()),
+                            trailing: isSelected
+                                ? Icon(Icons.check, color: primary)
+                                : null, // Added checkmark icon
+                          ),
+                          footer: GridTileBar(
+                            title: Text('${pose.calories} calories'),
+                            backgroundColor: primary,
+                          ),
+                          child: Column(
+                            children: [
+                              ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                                child: Image.network(
+                                  pose.image_url,
+                                  fit: BoxFit.cover,
+                                  height: 100,
+                                ),
+                              ),
+                              TextField(
+                                controller: _durationController,
+                                decoration: InputDecoration(
+                                  labelText:
+                                      AppLocalizations.of(context)!.duration,
+                                ),
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  pose.duration = int.tryParse(value) ?? 0;
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -197,12 +222,20 @@ class _PersonalizedExerciseCreatePageState
               ),
               const SizedBox(height: 12),
               Wrap(
-                spacing: 8.0,
-                runSpacing: 4.0,
+                spacing: 4.0,
+                runSpacing: 2.0,
                 children: _selectedPoses
                     .map((pose) => Chip(
-                          label:
-                              Text('${pose.name} (${pose.duration} seconds)'),
+                          backgroundColor: primary,
+                          padding: EdgeInsets.all(4),
+                          side: BorderSide(width: 0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(24))),
+                          label: Text(
+                            '${pose.name} (${pose.duration} ${trans.seconds})',
+                            style: bd_text.copyWith(color: active),
+                          ),
                           onDeleted: () {
                             setState(() {
                               _selectedPoses.remove(pose);

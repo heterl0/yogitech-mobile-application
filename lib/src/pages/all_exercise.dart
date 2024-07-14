@@ -106,8 +106,7 @@ class BlogState extends State<AllExercise> {
           IconButton(
             icon: Icon(Icons.tune_outlined, color: theme.colorScheme.onSurface),
             onPressed: () {
-              pushWithoutNavBar(context,
-                  MaterialPageRoute(builder: (context) => FilterPage()));
+              pushScreenWithNavBar(context, FilterPage());
             },
           ),
         ],
