@@ -49,12 +49,14 @@ Future<void> storeExercise(Exercise exercise, int? event_id) async {
   }
 }
 
-Future<void> checkEvent() async {
+Future<bool> checkEvent() async {
   final prefs = await SharedPreferences.getInstance();
   final event_id = prefs.getString('event_id');
   if (event_id != null) {
     prefs.remove('event_id');
+    return true;
   }
+  return false;
 }
 
 class PostCommentRequest {
