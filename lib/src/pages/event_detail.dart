@@ -42,7 +42,7 @@ class _EventDetailState extends State<EventDetail>
   bool isLoading = false;
   bool _isJoin = false;
   CandidateEvent? _candidateEvent;
-  String? _expired;
+  CheckDateResult? _expired;
 
   @override
   void initState() {
@@ -177,9 +177,9 @@ class _EventDetailState extends State<EventDetail>
                   ),
               ],
             ),
-            bottomNavigationBar: (!_expired!.startsWith(RegExp(r'[0-9]')))
+            bottomNavigationBar: (!(_expired!.status==1))
                 ? CustomBottomBar(
-                    buttonTitle: _expired.toString(),
+                    buttonTitle: _expired!.message,
                     style: ButtonStyleType.Tertiary,
                   )
                 : _isJoin
@@ -224,7 +224,7 @@ class _EventDetailState extends State<EventDetail>
       backgroundColor: theme.colorScheme.onSecondary,
       pinned: true,
       centerTitle: true,
-      title: Text(_expired!,
+      title: Text(_expired!.message,
           style: h2.copyWith(color: theme.colorScheme.onSurface)),
       expandedHeight: 320,
       flexibleSpace: FlexibleSpaceBar(
@@ -403,7 +403,7 @@ class _EventDetailState extends State<EventDetail>
         children: candidates.asMap().entries.map((entry) {
           int index = entry.key;
           CandidateEvent item = entry.value as CandidateEvent;
-          return item.active_status == 1
+          return ((item.active_status == 1) && (item.profile.active_status==1))
               ? GestureDetector(
                   onTap: () {
                     if (item.user != _account!.id) {

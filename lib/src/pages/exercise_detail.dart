@@ -39,6 +39,8 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
   late bool _isLoading = false;
   late int user_id = -1;
   final TextEditingController commentController = TextEditingController();
+
+  List<ExtendComment> exComments = [];
   @override
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
@@ -108,8 +110,9 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
     _account = widget.account;
     setState(() {
       _exercise = exercise;
-      _isLoading = false;
       user_id = _account!.id;
+      exComments = makeExtentComment(_exercise!.comments);
+      _isLoading = false;
     });
   }
 
@@ -167,8 +170,10 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           const SizedBox(height: 16),
           _buildCommentSection(trans),
           const SizedBox(height: 16),
-          ..._exercise!.comments.map(
-            (comment) => _buildComment(context, comment),
+          ...exComments.map(
+            (comment) => comment.comment.active_status == 1
+                ? _buildComment(context, comment)
+                : Container(),
           ),
         ],
       ),
@@ -412,15 +417,16 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
 
   Widget _buildComment(
     BuildContext context,
-    Comment comment,
+    ExtendComment exComment,
   ) {
+    Comment comment = exComment.comment;
     bool isLike = comment.hasUserVoted(user_id);
     Locale locale = Localizations.localeOf(context);
     final name = comment.user.profile.first_name != null
         ? "${comment.user.profile.last_name} ${comment.user.profile.first_name}"
         : comment.user.username;
     final theme = Theme.of(context);
-    bool adminReply = true; // Admin có rep hay không?
+    List<Comment> repComment = exComment.replies;
 
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
@@ -438,149 +444,174 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  (comment.user.profile.avatar_url != null &&
-                          comment.user.profile.avatar_url != '')
-                      ? Container(
-                          width: 44,
-                          height: 44,
-                          decoration: ShapeDecoration(
-                            image: DecorationImage(
-                              image: CachedNetworkImageProvider(
-                                  comment.user.profile.avatar_url ?? ''),
-                              fit: BoxFit.cover,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(80),
-                            ),
-                          ),
-                        )
-                      : Container(
-                          width: 44,
-                          height: 44,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.transparent,
-                            border: Border.all(
-                              color: primary,
-                              width: 1.0,
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              comment.user.username != ''
-                                  ? comment.user.username[0].toUpperCase()
-                                  : ':)',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: primary,
+                  Padding(
+                      padding: const EdgeInsets.all(4.0), // Adjust the value as needed
+                      child: (comment.user.profile.avatar_url != null &&
+                              comment.user.profile.avatar_url != '')
+                          ? Container(
+                              width: 52,
+                              height: 52,
+                              decoration: ShapeDecoration(
+                                image: DecorationImage(
+                                  image: CachedNetworkImageProvider(
+                                      comment.user.profile.avatar_url ?? ''),
+                                  fit: BoxFit.cover,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(80),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
+                            )
+                          : Container(
+                              width: 52,
+                              height: 52,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.transparent,
+                                border: Border.all(
+                                  color: primary,
+                                  width: 1.0,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  comment.user.username != ''
+                                      ? comment.user.username[0].toUpperCase()
+                                      : ':)',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: primary,
+                                  ),
+                                ),
+                              ),
+                            )),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
-                              child: Text(
-                                name,
-                                textAlign: TextAlign.start,
-                                style: min_cap.copyWith(color: primary),
-                              ),
+                            Text(
+                              name,
+                              textAlign: TextAlign.start,
+                              style: min_cap.copyWith(color: primary),
                             ),
-                            Expanded(
-                              child: Text(
-                                formatDateTime(
-                                    comment.created_at, locale.languageCode),
-                                textAlign: TextAlign.end,
-                                style: min_cap.copyWith(color: text),
-                              ),
+                            Text(
+                              formatDateTime(
+                                  comment.created_at, locale.languageCode),
+                              textAlign: TextAlign.end,
+                              style: min_cap.copyWith(color: text),
                             ),
                           ],
                         ),
-                        Text(
-                          comment.text,
-                          style: bd_text.copyWith(
-                              color: theme.colorScheme.onPrimary),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 8.0), // Adjust the value as needed
+                              child: Text(
+                                comment.text,
+                                style: min_cap.copyWith(color: text),
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () async {
+                                    if (isLike) {
+                                      Vote? vote = comment.getUserVote(user_id);
+                                      if (vote != null) {
+                                        await deleteVote(vote.id);
+                                        setState(() {
+                                          comment.votes.remove(vote);
+                                          isLike = false;
+                                        });
+                                      }
+                                    } else {
+                                      Vote? vote = await postVote(comment.id);
+                                      setState(() {
+                                        isLike = vote != null;
+                                        comment.votes.add(vote!);
+                                      });
+                                    }
+                                  },
+                                  iconSize: 24,
+                                  icon: isLike
+                                      ? const Icon(
+                                          Icons.favorite,
+                                          color: primary,
+                                        )
+                                      : const Icon(
+                                          Icons.favorite_border_outlined,
+                                          color: text,
+                                        ),
+                                ),
+                                Text(
+                                  '${comment.votes.length} vote',
+                                  textAlign: TextAlign.end,
+                                  style: min_cap.copyWith(color: text),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                  IconButton(
-                    onPressed: () async {
-                      if (isLike) {
-                        Vote? vote = comment.getUserVote(user_id);
-                        if (vote != null) {
-                          await deleteVote(vote.id);
-                          setState(() {
-                            comment.votes.remove(vote);
-                            isLike = false;
-                          });
-                        }
-                      } else {
-                        Vote? vote = await postVote(comment.id);
-                        setState(() {
-                          isLike = vote != null;
-                          comment.votes.add(vote!);
-                        });
-                      }
-                    },
-                    icon: isLike
-                        ? const Icon(
-                            Icons.favorite,
-                            color: primary,
-                          )
-                        : const Icon(
-                            Icons.favorite_border_outlined,
-                            color: text,
-                          ),
-                  ),
                 ],
               ),
+
               // Nếu có parent_comment, hiển thị reply của admin bên dưới
-              if (adminReply) ...[
-                Divider(
-                  color: stroke,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Admin',
-                            style: min_cap.copyWith(color: primary),
-                          ),
-                          Text(
-                            '30/12/2024',
-                            textAlign: TextAlign.end,
-                            style: min_cap.copyWith(color: text),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        'Admin reply here...',
-                        style: bd_text.copyWith(
-                            color: theme.colorScheme.onPrimary),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              repComment.length > 0
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Divider(
+                          color: stroke,
+                        ),
+                        ...repComment.map((comment) => Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Admin', // Replace with dynamic data based on repComment[index]
+                                        style: min_cap.copyWith(color: primary),
+                                      ),
+                                      Text(
+                                        formatDateTime(
+                                            comment.created_at,
+                                            locale
+                                                .languageCode), // Replace with dynamic data based on repComment[index]
+                                        textAlign: TextAlign.end,
+                                        style: min_cap.copyWith(color: text),
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    comment
+                                        .text, // Replace with dynamic data based on repComment[index]
+                                    style: bd_text.copyWith(
+                                      color: theme.colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ))
+                      ],
+                    )
+                  : Container()
             ],
           ),
         );
@@ -607,5 +638,37 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       print('Failed to post comment');
     }
     // await postComment(request);
+  }
+
+  List<ExtendComment> makeExtentComment(List<Comment> comments) {
+    Map<int, ExtendComment> extendMap = {};
+
+    for (var comment in comments) {
+      if (comment.parent_comment == null) {
+        extendMap[comment.id] =
+            ExtendComment(id: comment.id, comment: comment, replies: []);
+      } else {
+        if (extendMap.containsKey(comment.parent_comment!)) {
+          extendMap[comment.parent_comment!]!.addReply(comment);
+        }
+      }
+    }
+    return extendMap.values.toList();
+  }
+}
+
+class ExtendComment {
+  int id;
+  Comment comment;
+  List<Comment> replies;
+
+  ExtendComment({
+    required this.id,
+    required this.comment,
+    List<Comment>? replies,
+  }) : replies = replies ?? [];
+
+  void addReply(Comment reply) {
+    replies.add(reply);
   }
 }
