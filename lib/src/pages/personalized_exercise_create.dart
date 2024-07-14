@@ -1,6 +1,7 @@
 import 'package:YogiTech/api/dioInstance.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';
 import 'package:YogiTech/src/models/pose.dart';
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:YogiTech/src/widgets/dropdown_field.dart';
 import 'package:YogiTech/utils/formatting.dart';
 import 'package:dio/dio.dart';
@@ -84,11 +85,18 @@ class _PersonalizedExerciseCreatePageState
   }
 
   void _showPoseSelectionDialog() {
+    final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context)!.selectPoses),
+          title: Text(
+            trans.selectPoses,
+            style: h3.copyWith(color: theme.colorScheme.onPrimary),
+          ),
+          elevation: appElevation,
+          backgroundColor: theme.colorScheme.onSecondary,
           content: SizedBox(
             width: double.maxFinite,
             child: StatefulBuilder(
@@ -99,15 +107,16 @@ class _PersonalizedExerciseCreatePageState
                   itemCount: _poses.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 3 / 6,
+                    childAspectRatio: 3 / 5,
                     crossAxisSpacing: 8,
                     mainAxisSpacing: 8,
                   ),
                   itemBuilder: (context, index) {
                     final pose = _poses[index];
                     final isSelected = _selectedPoses.contains(pose);
+                    // Create a TextEditingController for duration
                     final TextEditingController _durationController =
-                        TextEditingController();
+                        TextEditingController(text: pose.duration.toString());
 
                     return GestureDetector(
                       onTap: () {
@@ -121,43 +130,69 @@ class _PersonalizedExerciseCreatePageState
                             color: isSelected ? primary : Colors.transparent,
                             width: 2.0,
                           ),
-                          borderRadius: BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: GridTile(
                           header: GridTileBar(
-                            title: Text(pose.name),
-                            subtitle: Text(pose.level.toString()),
+                            title: Text(
+                              '${pose.level}',
+                              style: min_cap.copyWith(color: primary),
+                            ),
                             trailing: isSelected
                                 ? Icon(Icons.check, color: primary)
                                 : null, // Added checkmark icon
                           ),
-                          footer: GridTileBar(
-                            title: Text('${pose.calories} calories'),
-                            backgroundColor: primary,
+                          footer: Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 8, left: 8, right: 8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${trans.duration} (${trans.seconds})',
+                                  style: min_cap.copyWith(color: primary),
+                                ),
+                                SizedBox(height: 8),
+                                BoxInputField(
+                                  isSmall: true,
+                                  controller: _durationController,
+                                  keyboardType: TextInputType.number,
+                                  onChanged: (value) => {
+                                    setState(() {
+                                      pose.duration = int.tryParse(value) ?? 0;
+                                    }),
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
-                          child: Column(
-                            children: [
-                              ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                                child: Image.network(
-                                  pose.image_url,
-                                  fit: BoxFit.cover,
-                                  height: 100,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                  child: Image.network(
+                                    pose.image_url,
+                                    fit: BoxFit.cover,
+                                    height: 80,
+                                  ),
                                 ),
-                              ),
-                              TextField(
-                                controller: _durationController,
-                                decoration: InputDecoration(
-                                  labelText:
-                                      AppLocalizations.of(context)!.duration,
+                                SizedBox(height: 8),
+                                Text(
+                                  pose.name,
+                                  style: bd_text.copyWith(
+                                      color: primary, height: 1.2),
+                                  textAlign: TextAlign.left,
                                 ),
-                                keyboardType: TextInputType.number,
-                                onChanged: (value) {
-                                  pose.duration = int.tryParse(value) ?? 0;
-                                },
-                              ),
-                            ],
+                                Text(
+                                  '${pose.calories} ${trans.calorie}',
+                                  style: min_cap.copyWith(color: text),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -168,8 +203,9 @@ class _PersonalizedExerciseCreatePageState
             ),
           ),
           actions: [
-            TextButton(
-              child: Text(AppLocalizations.of(context)!.choose),
+            CustomButton(
+              title: trans.choose,
+              style: ButtonStyleType.Primary,
               onPressed: () {
                 setState(() {});
                 Navigator.of(context).pop();
@@ -245,9 +281,10 @@ class _PersonalizedExerciseCreatePageState
                     .toList(),
               ),
               const SizedBox(height: 12),
-              ElevatedButton(
+              CustomButton(
+                title: trans.selectPoses,
+                style: ButtonStyleType.Tertiary,
                 onPressed: _showPoseSelectionDialog,
-                child: Text(trans.selectPoses),
               ),
               const SizedBox(height: 12),
               Text(
