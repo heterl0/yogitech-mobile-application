@@ -24,9 +24,14 @@ class ExerciseDetail extends StatefulWidget {
   final Account? account;
   final VoidCallback? fetchAccount;
   final Exercise? exercise;
+  final int? event_id;
 
   const ExerciseDetail(
-      {super.key, this.exercise, this.account, this.fetchAccount});
+      {super.key,
+      this.exercise,
+      this.account,
+      this.fetchAccount,
+      this.event_id});
 
   @override
   _ExerciseDetailState createState() => _ExerciseDetailState();
@@ -75,7 +80,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         onPressed: () async {
           bool? isPremium = _account?.is_premium ?? false;
           if (_account != null && (isPremium || !_exercise!.is_premium)) {
-            await storeExercise(_exercise!);
+            await storeExercise(_exercise!, widget.event_id);
             const platform = MethodChannel('com.example.yogitech');
             final result = await platform.invokeMethod('exerciseActivity');
             final methodChannel = MethodChannelHandler(
@@ -447,7 +452,8 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                      padding: const EdgeInsets.all(4.0), // Adjust the value as needed
+                      padding: const EdgeInsets.all(
+                          4.0), // Adjust the value as needed
                       child: (comment.user.profile.avatar_url != null &&
                               comment.user.profile.avatar_url != '')
                           ? Container(
