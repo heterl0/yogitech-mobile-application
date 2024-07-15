@@ -44,7 +44,6 @@ class _PersonalizedExerciseCreatePageState
   final TextEditingController _difficultyController = TextEditingController();
   final TextEditingController _caloriesController = TextEditingController();
   final TextEditingController _benefitsController = TextEditingController();
-  final TextEditingController _pointController = TextEditingController();
 
   final Map<int, int> poseDurations = {}; // Khởi tạo map rỗng
 
@@ -53,7 +52,6 @@ class _PersonalizedExerciseCreatePageState
     final level = levelMap.entries
         .firstWhere((entry) => entry.value == _difficultyController.text)
         .key;
-    final point = int.tryParse(_pointController.text) ?? 0;
 
     final exerciseData = {
       "title": title,
@@ -68,7 +66,7 @@ class _PersonalizedExerciseCreatePageState
           "", // You might want to handle description input separately
       "calories": _caloriesController.text,
       "number_poses": _selectedPoses.length,
-      "point": point,
+      "point": 0,
       "is_premium": false, // Adjust as needed
       "active_status": 1, // Adjust as needed
       "video": "", // You might want to handle video uploads separately
@@ -112,7 +110,7 @@ class _PersonalizedExerciseCreatePageState
     _difficultyController.dispose();
     _caloriesController.dispose();
     _benefitsController.dispose();
-    _pointController.dispose();
+
     super.dispose();
   }
 
@@ -166,7 +164,7 @@ class _PersonalizedExerciseCreatePageState
                     final pose = _poses[index];
                     final isSelected = _selectedPoses.contains(pose);
                     final durationController = TextEditingController(
-                      text: poseDurations[pose.id]?.toString() ??
+                      text: pose.duration.toString() ??
                           '0', // Lấy duration từ map nếu có, không thì là 0
                     );
                     return GestureDetector(
@@ -348,15 +346,6 @@ class _PersonalizedExerciseCreatePageState
                 onPressed: _showPoseSelectionDialog,
               ),
               const SizedBox(height: 12),
-              Text(
-                trans.point,
-                style: h3.copyWith(color: theme.colorScheme.onPrimary),
-              ),
-              const SizedBox(height: 12),
-              BoxInputField(
-                controller: _pointController,
-                keyboardType: TextInputType.number,
-              ),
             ],
           ),
         ),

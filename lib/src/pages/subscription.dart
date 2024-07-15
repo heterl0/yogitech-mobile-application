@@ -693,9 +693,18 @@ class _SubscriptionState extends State<SubscriptionPage> {
   Widget _buildCheckboxItem(Subscription sub) {
     bool value = (_selectedSub == sub);
     return Checkbox(
-      activeColor: Color(0xFF0D1F29), // Background color when checked
-      checkColor: Color(0xFF4095D0), // Tick color when checked
+      activeColor: WidgetStateColor.resolveWith((states) {
+        final ThemeData theme = Theme.of(context);
+        return theme.brightness == Brightness.light
+            ? elevationLight
+            : elevationDark;
+      }), // Background color when checked
+      checkColor: primary, // Tick color when checked
       value: value,
+      side: BorderSide(
+        color: stroke,
+        width: 1,
+      ),
 
       onChanged: _currendSub != null
           ? null
