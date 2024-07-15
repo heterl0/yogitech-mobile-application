@@ -163,9 +163,12 @@ class _PersonalizedExerciseCreatePageState
                   itemBuilder: (context, index) {
                     final pose = _poses[index];
                     final isSelected = _selectedPoses.contains(pose);
+
+                    // Lấy duration từ map poseDurations hoặc mặc định là 30 giây
+                    final duration = poseDurations[pose.id] ?? 30;
+
                     final durationController = TextEditingController(
-                      text: pose.duration.toString() ??
-                          '0', // Lấy duration từ map nếu có, không thì là 0
+                      text: duration.toString(),
                     );
                     return GestureDetector(
                       onTap: () {
@@ -206,12 +209,11 @@ class _PersonalizedExerciseCreatePageState
                                   isSmall: true,
                                   controller: durationController,
                                   keyboardType: TextInputType.number,
-                                  onChanged: (value) => {
+                                  onChanged: (value) {
                                     setState(() {
                                       poseDurations[pose.id] =
-                                          int.tryParse(value) ??
-                                              0; // Cập nhật duration trong map
-                                    }),
+                                          int.tryParse(value) ?? 0;
+                                    });
                                   },
                                 ),
                               ],
