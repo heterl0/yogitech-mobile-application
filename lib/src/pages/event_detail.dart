@@ -53,6 +53,7 @@ class _EventDetailState extends State<EventDetail>
     _tabController = TabController(length: 2, vsync: this);
     _fetchEventDetails(null);
     _fetchUsers();
+
   }
 
   @override
@@ -60,6 +61,7 @@ class _EventDetailState extends State<EventDetail>
     _tabController.dispose();
     super.dispose();
   }
+  
 
   Future<void> _fetchUsers() async {
     if (_event == null || _account == null) return;
@@ -395,7 +397,7 @@ class _EventDetailState extends State<EventDetail>
         .where((candidate) => candidate.active_status != 0)
         .toList();
     candidates
-        .sort((a, b) => (a.event_point ?? 0).compareTo(b.event_point ?? 0));
+        .sort((a, b) => (b.event_point ?? 0).compareTo(a.event_point ?? 0));
 
     return SingleChildScrollView(
       child: Column(
@@ -522,7 +524,9 @@ class _EventDetailState extends State<EventDetail>
 
   Widget _buildListExerciseContent(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
-    return GridView.builder(
+    return
+      _isJoin?
+     GridView.builder(
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -545,13 +549,16 @@ class _EventDetailState extends State<EventDetail>
                   exercise: exercise,
                   account: _account,
                   fetchAccount: widget.fetchAccount,
-                  event_id: _event!.id,
+                  event: _event,
+                  fetchEvent: ()=>{_fetchEventDetails(_event!.id)},
                 ),
               ),
             );
           },
         );
       },
+    ): Padding(padding:  const EdgeInsets.all(20),
+      child: Text(trans.needToJoin),
     );
   }
 

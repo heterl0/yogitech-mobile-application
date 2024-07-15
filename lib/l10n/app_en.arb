@@ -241,5 +241,6 @@
   "createExercise": "Create exercise",
   "title": "Title",
   "benefits": "Benefits",
-  "selectPoses" :"Select poses"
+  "selectPoses" :"Select poses",
+  "needToJoin":"You need to join the event to see exercises in this event."
 }

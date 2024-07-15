@@ -14,7 +14,8 @@ class MethodChannelHandler {
   late BuildContext context;
   final Account? account;
   final VoidCallback? fetchAccount;
-  MethodChannelHandler({this.account, this.fetchAccount}) {
+  final VoidCallback? fetchEvent;
+  MethodChannelHandler({this.account, this.fetchAccount, this.fetchEvent}) {
     _channel.setMethodCallHandler(_methodCallHandler);
   }
 
@@ -30,6 +31,9 @@ class MethodChannelHandler {
         final exercise = ExerciseResult.fromJson(data);
         print('Exercise: ${exercise.toJson()}');
         fetchAccount?.call();
+        if(fetchEvent!=null){
+          fetchEvent!.call();
+        }
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (context) => Result(
