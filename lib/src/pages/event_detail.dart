@@ -230,7 +230,7 @@ class _EventDetailState extends State<EventDetail>
       backgroundColor: theme.colorScheme.onSecondary,
       pinned: true,
       centerTitle: true,
-      title: Text(_expired!,
+      title: Text(_expired!.toString(),
           style: h2.copyWith(color: theme.colorScheme.onSurface, shadows: [
             Shadow(
               blurRadius: 8,

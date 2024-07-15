@@ -524,7 +524,9 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                                   left: 8.0), // Adjust the value as needed
                               child: Text(
                                 comment.text,
-                                style: min_cap.copyWith(color: text),
+                                style: bd_text.copyWith(
+                                  color: theme.colorScheme.onPrimary,
+                                ),
                               ),
                             ),
                             Row(

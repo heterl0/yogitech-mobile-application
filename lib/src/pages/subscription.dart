@@ -522,27 +522,31 @@ class _SubscriptionState extends State<SubscriptionPage> {
                           });
                           Navigator.pop(context); // Close the bottom sheet
                         } else {
-                          _showCustomPopup(context, 'Error',
-                              'Subscription failed: User subscription is null');
+                          _showCustomPopup(
+                              context, trans.error, trans.userSubIsNull);
                         }
                       } else {
                         if (!(sub.gemPrice != null)) {
-                          trans.locale == 'en'
-                              ? _showCustomPopup(context, 'Error',
-                                  'This subscription is not allow Gem payment menthod.')
-                              : _showCustomPopup(context, 'Lỗi',
-                                  'Gói đăng ký này không có phương thức thanh toán bằng Gem.');
+                          _showCustomPopup(
+                              context, trans.error, trans.notAllowMenthod);
+                          // trans.locale == 'en'
+                          //     ? _showCustomPopup(context, trans.error,
+                          //         'This subscription is not allow Gem payment menthod.')
+                          //     : _showCustomPopup(context, trans.error,
+                          //         'Gói đăng ký này không có phương thức thanh toán bằng Gem.');
                         } else {
-                          trans.locale == 'en'
-                              ? _showCustomPopup(context, 'Error',
-                                  'Not enough Gem for subscription.')
-                              : _showCustomPopup(context, 'Lỗi',
-                                  'Bạn không có đủ Gem để đăng ký.');
+                          _showCustomPopup(
+                              context, trans.error, trans.notEnoughGem);
+                          // trans.locale == 'en'
+                          //     ? _showCustomPopup(context, trans.error,
+                          //         'Not enough Gem for subscription.')
+                          //     : _showCustomPopup(context, trans.error,
+                          //         'Bạn không có đủ Gem để đăng ký.');
                         }
                       }
                     } catch (error) {
-                      _showCustomPopup(
-                          context, trans.error, 'Subscription failed: $error');
+                      _showCustomPopup(context, trans.error,
+                          ' ${trans.subscriptionFailed}: $error');
                     }
                   } else {
                     _showCustomPopup(context, trans.error, trans.waitToEndPlan);
@@ -750,19 +754,20 @@ class _SubscriptionState extends State<SubscriptionPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          elevation: appElevation,
           backgroundColor: theme.colorScheme.surface, // Custom background color
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20), // Custom border radius
+            borderRadius: BorderRadius.circular(24), // Custom border radius
           ),
           title: Text(
             title,
-            style: theme.textTheme.headlineLarge?.copyWith(
+            style: h3.copyWith(
               color: theme.colorScheme.onSurface, // Custom title style
             ),
           ),
           content: Text(
             message,
-            style: theme.textTheme.headlineSmall?.copyWith(
+            style: bd_text.copyWith(
               color: theme.colorScheme.onSurface, // Custom content style
             ),
           ),
