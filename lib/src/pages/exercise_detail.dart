@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';

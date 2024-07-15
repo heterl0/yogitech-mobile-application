@@ -45,16 +45,10 @@ class _SocialPageState extends State<SocialPage> {
   Future<void> fetchNotification() async {
     try {
       final notifications = await getNotifications();
-      if (notifications != null) {
-        setState(() {
-          _notifications = notifications.cast<n.Notification>();
-          _notifications!.sort((a, b) => b.time.compareTo(a.time));
-        });
-      } else {
-        setState(() {
-          _notifications = [];
-        });
-      }
+      setState(() {
+        _notifications = notifications.cast<n.Notification>();
+        _notifications!.sort((a, b) => b.time.compareTo(a.time));
+      });
     } catch (e) {
       // Handle any errors here
       setState(() {
@@ -146,8 +140,6 @@ class NewsFeed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final trans = AppLocalizations.of(context)!;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -209,7 +201,9 @@ class NewsListItem extends StatelessWidget {
         trans.locale == 'vi' ? timeago.ViMessages() : timeago.EnMessages());
     // trans.locale == 'vi'? timeago.ViMessages():timeago.EnMessages();
     bool check =
-        !(checkDateExpired(notification.created_at, notification.time, trans).status==1);
+        !(checkDateExpired(notification.created_at, notification.time, trans)
+                .status ==
+            1);
     return check
         ? GestureDetector(
             onTap: onTap,

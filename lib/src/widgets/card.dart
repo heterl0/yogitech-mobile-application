@@ -97,18 +97,18 @@ class CustomCard extends StatelessWidget {
           ),
           if (topRightIcon != null)
             Positioned(
-              top: 17,
-              right: 16,
+              top: 0,
+              right: 0,
               child: Container(
                 width: 28,
                 height: 28,
                 decoration: BoxDecoration(
                   color: theme.colorScheme.surface, // Màu nền
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(8)), // Bo góc
+                  borderRadius: BorderRadius.all(Radius.circular(8)), // Bo góc
+                  border: Border.all(color: stroke),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.only(left: 6, bottom: 6),
+                  padding: EdgeInsets.all(4),
                   child: topRightIcon,
                 ),
               ),
