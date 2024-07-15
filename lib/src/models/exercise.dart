@@ -1,8 +1,31 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/pose.dart';
+
+Future<void> postExercise(Exercise exercise) async {
+  final dio = Dio(); // Add your base URL here
+  try {
+    final response = await dio.post('/api/v1/exercises/',
+        data: exercise.toMap(),
+        options: Options(headers: {
+          'Content-Type': 'application/json'
+        })); // Adjust headers if needed
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print('Exercise posted successfully: ${response.data}');
+    } else {
+      print('API Error: Unexpected status code ${response.statusCode}');
+    }
+  } on DioException catch (e) {
+    if (e.response != null) {
+      print('API Error: ${e.response?.data}');
+    } else {
+      print('Network Error: $e');
+    }
+  }
+}
 
 class PoseWithTime {
   Pose pose;

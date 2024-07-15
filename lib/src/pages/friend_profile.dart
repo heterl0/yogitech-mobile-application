@@ -31,7 +31,6 @@ class FriendProfile extends StatefulWidget {
 
 class _nameState extends State<FriendProfile> {
   Uint8List? _imageBytes;
-  Account? _account;
   SocialProfile? _soProfile;
   bool isFollow = false; // Khai báo biến ở đây
 
@@ -39,7 +38,6 @@ class _nameState extends State<FriendProfile> {
   void initState() {
     super.initState();
     setState(() {
-      _account = widget.account;
       _soProfile = widget.profile;
       isFollow = widget.account!.isFollowing(widget.profile.user_id ?? -1);
     });

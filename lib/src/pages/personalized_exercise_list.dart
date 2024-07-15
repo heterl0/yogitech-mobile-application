@@ -1,4 +1,4 @@
-import 'package:YogiTech/src/pages/personalized_exercise_create.dart';
+import 'package:YogiTech/src/pages/personalized_exercise_create_update.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:YogiTech/api/dioInstance.dart';
@@ -11,23 +11,12 @@ import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
-Future<List<Pose>> getPoses() async {
-  try {
-    final url = formatApiUrl('/api/v1/poses/');
-    final Response response = await DioInstance.get(url);
-    if (response.statusCode == 200) {
-      List<Pose> data =
-          (response.data as List).map((e) => Pose.fromMap(e)).toList();
-      return data;
-    } else {
-      print('Get poses failed with status code: ${response.statusCode}');
-      return [];
-    }
-  } catch (e) {
-    print('Get poses error: $e');
-    return [];
-  }
-}
+// Mock data for poses
+final List<Exercise> mockPoses = [
+  Exercise(name: 'Exercise 1', level: 'Beginner', duration: '10 min'),
+  Exercise(name: 'Exercise 2', level: 'Intermediate', duration: '20 min'),
+  Exercise(name: 'Exercise 3', level: 'Advanced', duration: '30 min'),
+];
 
 class PersonalizedExercisePage extends StatefulWidget {
   const PersonalizedExercisePage({super.key});
@@ -38,15 +27,13 @@ class PersonalizedExercisePage extends StatefulWidget {
 }
 
 class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
-  // bool _isNotSearching = true;
   final TextEditingController _searchController = TextEditingController();
-  List<Pose> _poses = [];
-  List<Pose> _filteredPoses = [];
+  List<Exercise> _poses = mockPoses;
+  List<Exercise> _filteredPoses = mockPoses;
 
   @override
   void initState() {
     super.initState();
-    _fetchPoses();
     _searchController.addListener(_filterPoses);
   }
 
@@ -54,14 +41,6 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
-  }
-
-  Future<void> _fetchPoses() async {
-    final poses = await getPoses();
-    setState(() {
-      _poses = poses;
-      _filteredPoses = poses;
-    });
   }
 
   void _filterPoses() {
@@ -75,7 +54,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
       });
     } else {
       setState(() {
-        _filteredPoses = [];
+        _filteredPoses = _poses;
       });
     }
   }
@@ -95,25 +74,18 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
           margin: const EdgeInsets.all(24.0),
           child: Column(
             children: [
-              // Danh sách đầu tiên
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: _filteredPoses.length,
-                    itemBuilder: (context, index) {
-                      final pose = _filteredPoses[index];
-                      return ListItem(
-                        image: pose.image_url,
-                        difficulty: pose.level.toString(),
-                        poseName: pose.name,
-                        calories: pose.calories.toString(),
-                      );
-                    },
-                  ),
-                ],
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: _filteredPoses.length,
+                itemBuilder: (context, index) {
+                  final pose = _filteredPoses[index];
+                  return ListItem(
+                    level: pose.level,
+                    title: pose.name,
+                    duration: pose.duration,
+                  );
+                },
               ),
             ],
           ),
@@ -160,17 +132,15 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
 }
 
 class ListItem extends StatelessWidget {
-  final String? image;
-  final String? difficulty;
-  final String? poseName;
-  final String? calories;
+  final String? level;
+  final String? title;
+  final String? duration;
 
   const ListItem({
     super.key,
-    this.image,
-    this.difficulty,
-    this.poseName,
-    this.calories,
+    this.level,
+    this.title,
+    this.duration,
   });
 
   @override
@@ -191,39 +161,17 @@ class ListItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: stroke,
-              image: image != null
-                  ? DecorationImage(
-                      image: NetworkImage(image!),
-                      fit: BoxFit.cover,
-                    )
-                  : null,
-            ),
-            child: image == null
-                ? Icon(
-                    Icons.image,
-                    color: Colors.white,
-                    size: 30,
-                  )
-                : null,
-          ),
           SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(difficulty ?? 'N/A',
-                    style: min_cap.copyWith(color: primary)),
+                Text(level ?? 'N/A', style: min_cap.copyWith(color: primary)),
                 SizedBox(width: 8),
-                Text(poseName ?? 'N/A',
+                Text(title ?? 'N/A',
                     style: h3.copyWith(color: theme.colorScheme.onPrimary)),
-                Text('Calories: ${calories ?? 'N/A'}',
+                Text('Duration: ${duration ?? 'N/A'}',
                     style: min_cap.copyWith(color: text)),
               ],
             ),
@@ -232,4 +180,12 @@ class ListItem extends StatelessWidget {
       ),
     );
   }
+}
+
+class Exercise {
+  final String name;
+  final String level;
+  final String duration;
+
+  Exercise({required this.name, required this.level, required this.duration});
 }

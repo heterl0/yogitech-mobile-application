@@ -63,7 +63,7 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
                 ?.call(value); // Notify parent widget of state change
           });
         },
-        fillColor: MaterialStateColor.resolveWith((states) {
+        fillColor: WidgetStateColor.resolveWith((states) {
           final ThemeData theme = Theme.of(context);
           return theme.brightness == Brightness.light
               ? elevationLight

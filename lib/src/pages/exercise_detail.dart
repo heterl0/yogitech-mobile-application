@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';
@@ -527,7 +526,9 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                                   left: 8.0), // Adjust the value as needed
                               child: Text(
                                 comment.text,
-                                style: min_cap.copyWith(color: text),
+                                style: bd_text.copyWith(
+                                  color: theme.colorScheme.onPrimary,
+                                ),
                               ),
                             ),
                             Row(

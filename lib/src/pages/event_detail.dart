@@ -4,7 +4,6 @@ import 'package:YogiTech/src/pages/friend_profile.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/event/event_service.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';
 import 'package:YogiTech/src/models/account.dart';
@@ -200,7 +199,6 @@ class _EventDetailState extends State<EventDetail>
 
   Widget _buildCustomTopBar(BuildContext context) {
     final theme = Theme.of(context);
-    final trans = AppLocalizations.of(context)!;
 
     return SliverAppBar(
       toolbarHeight: 80,
@@ -214,6 +212,13 @@ class _EventDetailState extends State<EventDetail>
         padding: const EdgeInsets.only(left: 16),
         child: IconButton(
           icon: Icon(
+            shadows: [
+              Shadow(
+                blurRadius: 8,
+                color: theme.colorScheme.onSecondary,
+                offset: Offset(0, 0),
+              )
+            ],
             Icons.arrow_back,
             color: theme.colorScheme.onSurface,
           ),
@@ -227,8 +232,14 @@ class _EventDetailState extends State<EventDetail>
       backgroundColor: theme.colorScheme.onSecondary,
       pinned: true,
       centerTitle: true,
-      title: Text(_expired!.message,
-          style: h2.copyWith(color: theme.colorScheme.onSurface)),
+      title: Text(_expired!.toString(),
+          style: h2.copyWith(color: theme.colorScheme.onSurface, shadows: [
+            Shadow(
+              blurRadius: 8,
+              color: theme.colorScheme.onSecondary,
+              offset: Offset(0, 0),
+            )
+          ])),
       expandedHeight: 320,
       flexibleSpace: FlexibleSpaceBar(
         background: CachedNetworkImage(

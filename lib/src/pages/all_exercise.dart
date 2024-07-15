@@ -1,13 +1,10 @@
 import 'package:YogiTech/src/pages/homepage.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/models/account.dart';
-import 'package:YogiTech/src/models/exercise.dart';
 import 'package:YogiTech/src/models/pose.dart';
 import 'package:YogiTech/src/pages/exercise_detail.dart';
 import 'package:YogiTech/src/pages/filter.dart';
@@ -34,7 +31,6 @@ class AllExercise extends StatefulWidget {
 
 class BlogState extends State<AllExercise> {
   List<dynamic> _exercises = [];
-  bool _isNotSearching = true;
   bool _isLoading = false;
   final TextEditingController _searchController = TextEditingController();
   Account? _account;
@@ -120,7 +116,6 @@ class BlogState extends State<AllExercise> {
               // Thực hiện hành động tìm kiếm khi biểu tượng được nhấn
               setState(() {
                 _fetchExercise(_searchController.text.trim());
-                _isNotSearching = true;
               });
             },
           ),
@@ -132,7 +127,6 @@ class BlogState extends State<AllExercise> {
           onSubmitted: (value) {
             setState(() {
               _fetchExercise(value.trim());
-              _isNotSearching = true;
             });
           },
         ),
@@ -141,7 +135,6 @@ class BlogState extends State<AllExercise> {
             icon: Icon(Icons.close, color: theme.colorScheme.onSurface),
             onPressed: () {
               setState(() {
-                _isNotSearching = true;
                 _fetchExercise('');
                 _searchController.clear();
                 Navigator.push(

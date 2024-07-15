@@ -75,8 +75,6 @@ class _NotificationDetailState extends State<NotificationDetail> {
   }
 
   Widget _buildMainContent(BuildContext context) {
-    final trans = AppLocalizations.of(context)!;
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -103,7 +101,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
   }
 
   Widget _buildTitle(BuildContext context) {
-    final theme = Theme.of(context);
+    Theme.of(context);
 
     return Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -119,7 +117,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    final theme = Theme.of(context);
+    Theme.of(context);
     DateTime dateTime = DateTime.parse(_noti!.time).toUtc().toLocal();
 
     return GestureDetector(

@@ -544,44 +544,44 @@ class _ProfilePageState extends State<ProfilePage> {
                                   )),
                                 ),
                               ),
-                              if (!(_account?.is_premium ?? false))
-                                Positioned.fill(
-                                  child: BackdropFilter(
-                                    filter:
-                                        ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                                    child: GestureDetector(
-                                      onTap: () => {
-                                        showPremiumDialog(context, _account!,
-                                            widget.fetchAccount),
-                                      },
-                                      child: Container(
-                                        color: theme.colorScheme.onSecondary
-                                            .withOpacity(0.8),
-                                        child: Center(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.lock_outline,
-                                                color:
-                                                    theme.colorScheme.onPrimary,
-                                                size: 40,
-                                              ),
-                                              SizedBox(height: 8),
-                                              Text(
-                                                trans.premiumFeature,
-                                                style: h2.copyWith(
-                                                    color: theme
-                                                        .colorScheme.onPrimary),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                              // if (!(_account?.is_premium ?? false))
+                              //   Positioned.fill(
+                              //     child: BackdropFilter(
+                              //       filter:
+                              //           ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                              //       child: GestureDetector(
+                              //         onTap: () => {
+                              //           showPremiumDialog(context, _account!,
+                              //               widget.fetchAccount),
+                              //         },
+                              //         child: Container(
+                              //           color: theme.colorScheme.onSecondary
+                              //               .withOpacity(0.8),
+                              //           child: Center(
+                              //             child: Column(
+                              //               mainAxisAlignment:
+                              //                   MainAxisAlignment.center,
+                              //               children: [
+                              //                 Icon(
+                              //                   Icons.lock_outline,
+                              //                   color:
+                              //                       theme.colorScheme.onPrimary,
+                              //                   size: 40,
+                              //                 ),
+                              //                 SizedBox(height: 8),
+                              //                 Text(
+                              //                   trans.premiumFeature,
+                              //                   style: h2.copyWith(
+                              //                       color: theme
+                              //                           .colorScheme.onPrimary),
+                              //                 ),
+                              //               ],
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ),
                             ],
                           ),
                         ),
