@@ -43,60 +43,12 @@ class _PersonalizedExerciseCreatePageState
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _difficultyController = TextEditingController();
   final TextEditingController _caloriesController = TextEditingController();
+
   final TextEditingController _benefitsController = TextEditingController();
-
-  final Map<int, int> poseDurations = {}; // Khởi tạo map rỗng
-
-  Future<void> _createExercise() async {
-    final title = _titleController.text;
-    final level = levelMap.entries
-        .firstWhere((entry) => entry.value == _difficultyController.text)
-        .key;
-
-    final exerciseData = {
-      "title": title,
-      "image": "", // You might want to handle image uploads separately
-      "level": level,
-      "pose": _selectedPoses.map((p) => p.id).toList(),
-      "time": _selectedPoses
-          .map((p) => poseDurations[p.id] ?? 0)
-          .toList(), // Lấy duration từ map
-      "benefit": _benefitsController.text,
-      "description":
-          "", // You might want to handle description input separately
-      "calories": _caloriesController.text,
-      "number_poses": _selectedPoses.length,
-      "point": 0,
-      "is_premium": false, // Adjust as needed
-      "active_status": 1, // Adjust as needed
-      "video": "", // You might want to handle video uploads separately
-      "durations": _selectedPoses.fold<int>(
-          0, (sum, p) => sum + (poseDurations[p.id] ?? 0)),
-      "duration": null, // or you can remove this line
-    };
-
-    try {
-      final response =
-          await DioInstance.post('/api/v1/exercises/', data: exerciseData);
-      if (response.statusCode == 201) {
-        // 201 Created for successful creation
-        // Exercise created successfully
-        // You might want to navigate to a different screen or show a success message
-      } else {
-        // Handle errors
-      }
-    } catch (e) {
-      // Handle network or API errors
-    }
-  }
+  final TextEditingController _pointController = TextEditingController();
 
   List<Pose> _poses = [];
   List<Pose> _selectedPoses = [];
-  final Map<int, String> levelMap = {
-    1: 'Beginner',
-    2: 'Intermediate',
-    3: 'Advanced',
-  };
 
   @override
   void initState() {
@@ -109,8 +61,9 @@ class _PersonalizedExerciseCreatePageState
     _titleController.dispose();
     _difficultyController.dispose();
     _caloriesController.dispose();
-    _benefitsController.dispose();
 
+    _benefitsController.dispose();
+    _pointController.dispose();
     super.dispose();
   }
 
@@ -123,11 +76,8 @@ class _PersonalizedExerciseCreatePageState
 
   void _onPoseSelected(Pose pose) {
     setState(() {
-      final existingPoseIndex =
-          _selectedPoses.indexWhere((p) => p.id == pose.id);
-      if (existingPoseIndex != -1) {
-        _selectedPoses.removeAt(existingPoseIndex);
-        poseDurations.remove(pose.id); // Xóa duration khỏi map khi bỏ chọn
+      if (_selectedPoses.contains(pose)) {
+        _selectedPoses.remove(pose);
       } else {
         _selectedPoses.add(pose);
       }
@@ -153,6 +103,7 @@ class _PersonalizedExerciseCreatePageState
               builder: (BuildContext context, StateSetter setState) {
                 return GridView.builder(
                   shrinkWrap: true,
+                  // physics: NeverScrollableScrollPhysics(),
                   itemCount: _poses.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -163,13 +114,10 @@ class _PersonalizedExerciseCreatePageState
                   itemBuilder: (context, index) {
                     final pose = _poses[index];
                     final isSelected = _selectedPoses.contains(pose);
+                    // Create a TextEditingController for duration
+                    final TextEditingController _durationController =
+                        TextEditingController(text: pose.duration.toString());
 
-                    // Lấy duration từ map poseDurations hoặc mặc định là 30 giây
-                    final duration = poseDurations[pose.id] ?? 30;
-
-                    final durationController = TextEditingController(
-                      text: duration.toString(),
-                    );
                     return GestureDetector(
                       onTap: () {
                         setState(() {
@@ -192,7 +140,7 @@ class _PersonalizedExerciseCreatePageState
                             ),
                             trailing: isSelected
                                 ? Icon(Icons.check, color: primary)
-                                : null,
+                                : null, // Added checkmark icon
                           ),
                           footer: Padding(
                             padding: const EdgeInsets.only(
@@ -207,13 +155,12 @@ class _PersonalizedExerciseCreatePageState
                                 SizedBox(height: 8),
                                 BoxInputField(
                                   isSmall: true,
-                                  controller: durationController,
+                                  controller: _durationController,
                                   keyboardType: TextInputType.number,
-                                  onChanged: (value) {
+                                  onChanged: (value) => {
                                     setState(() {
-                                      poseDurations[pose.id] =
-                                          int.tryParse(value) ?? 0;
-                                    });
+                                      pose.duration = int.tryParse(value) ?? 0;
+                                    }),
                                   },
                                 ),
                               ],
@@ -274,8 +221,6 @@ class _PersonalizedExerciseCreatePageState
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
-    final List<String> levelItems = levelMap.values.toList();
-
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
@@ -304,13 +249,7 @@ class _PersonalizedExerciseCreatePageState
               const SizedBox(height: 12),
               CustomDropdownFormField(
                 controller: _difficultyController,
-                items: levelItems,
-                placeholder: _difficultyController.text.isEmpty
-                    ? trans.selectLevel
-                    : _difficultyController.text,
-                onTap: () {
-                  // Optional: handle dropdown tap
-                },
+                items: ['Dễ', 'Thường', 'Khó'],
               ),
               const SizedBox(height: 12),
               Text(
@@ -347,14 +286,13 @@ class _PersonalizedExerciseCreatePageState
                 style: ButtonStyleType.Tertiary,
                 onPressed: _showPoseSelectionDialog,
               ),
-              const SizedBox(height: 12),
             ],
           ),
         ),
       ),
       bottomNavigationBar: CustomBottomBar(
         buttonTitle: trans.create,
-        onPressed: _createExercise, // Gắn hàm _createExercise
+        onPressed: () {},
       ),
     );
   }
