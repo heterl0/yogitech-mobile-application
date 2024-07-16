@@ -29,6 +29,9 @@ class _BlogDetailState extends State<BlogDetail> {
   late bool isLoading = false;
   late BlogVote? blogVote = null;
 
+  late int _like = 0;
+  late int _disLike = 0;
+
   @override
   void initState() {
     super.initState();
@@ -42,7 +45,7 @@ class _BlogDetailState extends State<BlogDetail> {
       backgroundColor: theme.colorScheme.surface,
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
-        postActions: [_buildDislikeButton(), _buildLikeButton()],
+        postActions: [_buildDislikeButton(_disLike), _buildLikeButton(_like)],
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
@@ -60,13 +63,21 @@ class _BlogDetailState extends State<BlogDetail> {
       this.blog = blog;
       userId = account?.id;
       isLoading = false;
-    });
 
-    if (blog != null) {
-      setState(() {
+      if (blog != null) {
+        _like = 0;
+        _disLike = 0;
+        for (var i = 0; i < blog.votes.length; i++) {
+          BlogVote vote = blog.votes[i];
+          if (vote.vote_value == 1) {
+            _like++;
+          } else {
+            _disLike++;
+          }
+        }
         blogVote = blog.getUserVote(account?.id ?? -1);
-      });
-    }
+      }
+    });
   }
 
   Widget _buildBody(BuildContext context) {
@@ -80,101 +91,146 @@ class _BlogDetailState extends State<BlogDetail> {
     );
   }
 
-  Widget _buildLikeButton() {
+  Widget _buildLikeButton(int likeCount) {
     final theme = Theme.of(context);
 
     if (blogVote == null) {
-      return IconButton(
-        icon: Icon(
-          Icons.thumb_up_outlined,
-          color: theme.colorScheme.onSurface,
-        ),
-        onPressed: () async {
-          // Khi người dùng nhấn like, cập nhật userFeedback và gọi setState để rebuild UI
-          final BlogVote? blogVote = await voteBlog(widget.id, 1);
-          setState(() {
-            this.blogVote = blogVote;
-          });
-        },
+      return Row(
+        children: [
+          IconButton(
+            icon: Icon(
+              Icons.thumb_up_outlined,
+              color: theme.colorScheme.onSurface,
+            ),
+            onPressed: () async {
+              // Khi người dùng nhấn like, cập nhật userFeedback và gọi setState để rebuild UI
+              final BlogVote? blogVote = await voteBlog(widget.id, 1);
+              setState(() {
+                checkBlogVote(blogVote);
+                this.blogVote = blogVote;
+                
+                print(blogVote);
+              });
+            },
+          ),
+          Text('$_like')
+        ],
       );
     }
 
     if (blogVote?.vote_value == -1) {
-      return IconButton(
-        icon: Icon(
-          Icons.thumb_up_outlined,
-          color: theme.colorScheme.onSurface,
-        ),
-        onPressed: () async {
-          final BlogVote? blogVote = await updateVoteBlog(this.blogVote!.id, 1);
-          setState(() {
-            this.blogVote = blogVote;
-          });
-        },
+      return Row(
+        children: [
+          IconButton(
+            icon: Icon(
+              Icons.thumb_up_outlined,
+              color: theme.colorScheme.onSurface,
+            ),
+            onPressed: () async {
+              final BlogVote? blogVote =
+                  await updateVoteBlog(this.blogVote!.id, 1);
+              setState(() {
+                checkBlogVote(blogVote);
+                this.blogVote = blogVote;
+                
+              });
+            },
+          ),
+          Text('$likeCount')
+        ],
       );
     } else {
-      return IconButton(
-        icon: Icon(
-          Icons.thumb_up_rounded,
-          color: primary,
-        ),
-        onPressed: () async {
-          final bool? result = await removeVoteBlog(blogVote!.id);
-          if (result == true) {
-            setState(() {
-              blogVote = null;
-            });
-          }
-        },
+      return Row(
+        children: [
+          IconButton(
+            icon: Icon(
+              Icons.thumb_up_rounded,
+              color: primary,
+            ),
+            onPressed: () async {
+              final bool? result = await removeVoteBlog(blogVote!.id);
+              if (result == true) {
+                setState(() {
+                  checkBlogVote(blogVote);
+                  blogVote = null;
+                  
+                });
+              }
+            },
+          ),
+          Text('$likeCount')
+        ],
       );
     }
   }
 
-  Widget _buildDislikeButton() {
+  Widget _buildDislikeButton(int dislikeCount) {
     final theme = Theme.of(context);
+
     if (blogVote == null) {
-      return IconButton(
-        icon: Icon(
-          Icons.thumb_down_outlined,
-          color: theme.colorScheme.onSurface,
-        ),
-        onPressed: () async {
-          // Khi người dùng nhấn dislike, cập nhật userFeedback và gọi setState để rebuild UI
-          final BlogVote? blogVote = await voteBlog(widget.id, -1);
-          setState(() {
-            this.blogVote = blogVote;
-          });
-        },
+      return Row(
+        children: [
+          IconButton(
+            icon: Icon(
+              Icons.thumb_down_outlined,
+              color: theme.colorScheme.onSurface,
+            ),
+            onPressed: () async {
+              // Khi người dùng nhấn dislike, cập nhật userFeedback và gọi setState để rebuild UI
+              final BlogVote? blogVote = await voteBlog(widget.id, -1);
+              setState(() {
+                checkBlogVote(blogVote);
+                this.blogVote = blogVote;
+                
+              });
+            },
+          ),
+          Text('$dislikeCount')
+        ],
       );
     }
     if (blogVote?.vote_value == 1) {
-      return IconButton(
-        icon: Icon(
-          Icons.thumb_down_outlined,
-          color: theme.colorScheme.onSurface,
-        ),
-        onPressed: () async {
-          final BlogVote? blogVote =
-              await updateVoteBlog(this.blogVote!.id, -1);
-          setState(() {
-            this.blogVote = blogVote;
-          });
-        },
+      return Row(
+        children: [
+          IconButton(
+            icon: Icon(
+              Icons.thumb_down_outlined,
+              color: theme.colorScheme.onSurface,
+            ),
+            onPressed: () async {
+              final BlogVote? blogVote =
+                  await updateVoteBlog(this.blogVote!.id, -1);
+              setState(() {
+                checkBlogVote(blogVote);
+                this.blogVote = blogVote;
+                
+              });
+            },
+          ),
+          Text('$dislikeCount')
+        ],
       );
     } else {
-      return IconButton(
-        icon: Icon(
-          Icons.thumb_down_alt_rounded,
-          color: error,
-        ),
-        onPressed: () async {
-          final bool? result = await removeVoteBlog(blogVote!.id);
-          if (result == true) {
-            setState(() {
-              blogVote = null;
-            });
-          }
-        },
+      return Row(
+        children: [
+          IconButton(
+            icon: Icon(
+              Icons.thumb_down_alt_rounded,
+              color: error,
+            ),
+            onPressed: () async {
+              final bool? result = await removeVoteBlog(blogVote!.id);
+              if (result == true) {
+                setState(() {
+                  checkBlogVote(blogVote);
+                  blogVote = null;
+                  
+                });
+              }
+            },
+          ),
+          Text('$dislikeCount')
+        ],
       );
     }
   }
@@ -253,5 +309,15 @@ class _BlogDetailState extends State<BlogDetail> {
       blog?.description ?? '',
       textStyle: TextStyle(fontFamily: 'ReadexPro', fontSize: 20, height: 1.2),
     );
+  }
+
+  int checkBlogVote(BlogVote? myVote){
+    if(blogVote!=null && myVote!.vote_value!=0 ){
+      _like = _like + myVote.vote_value;
+      _disLike = _disLike - myVote.vote_value;
+    }else{
+      myVote!.vote_value==1? _like++:_disLike++;
+    }
+    return 0;
   }
 }

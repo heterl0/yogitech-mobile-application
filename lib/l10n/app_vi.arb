@@ -247,5 +247,7 @@
   "createExercise": "Tạo bài tập",
   "title": "Tiêu đề",
   "benefits": "Các lợi ích",
-  "selectPoses" :"Chọn các tư thế"
+  "selectPoses" :"Chọn các tư thế",
+  "needToJoin":"Bạn cần phải tham gia sự kiện trước khi có thể xem các bài tập trong sự kiện này."
+
 }

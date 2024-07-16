@@ -1,4 +1,5 @@
 import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/models/event.dart';
 import 'package:YogiTech/src/shared/premium_dialog.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:YogiTech/utils/method_channel_handler.dart';
@@ -23,14 +24,16 @@ class ExerciseDetail extends StatefulWidget {
   final Account? account;
   final VoidCallback? fetchAccount;
   final Exercise? exercise;
-  final int? event_id;
+  final Event? event;
+  final VoidCallback? fetchEvent;
 
   const ExerciseDetail(
       {super.key,
       this.exercise,
       this.account,
       this.fetchAccount,
-      this.event_id});
+      this.event,
+      this.fetchEvent});
 
   @override
   _ExerciseDetailState createState() => _ExerciseDetailState();
@@ -79,11 +82,11 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         onPressed: () async {
           bool? isPremium = _account?.is_premium ?? false;
           if (_account != null && (isPremium || !_exercise!.is_premium)) {
-            await storeExercise(_exercise!, widget.event_id);
+            await storeExercise(_exercise!, widget.event!.id);
             const platform = MethodChannel('com.example.yogitech');
             final result = await platform.invokeMethod('exerciseActivity');
             final methodChannel = MethodChannelHandler(
-                account: _account, fetchAccount: widget.fetchAccount);
+                account: _account, fetchAccount: widget.fetchAccount, fetchEvent: widget.fetchEvent!);
             methodChannel.context = context;
 
             ScaffoldMessenger.of(context).showSnackBar(
