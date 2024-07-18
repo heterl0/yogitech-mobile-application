@@ -69,8 +69,6 @@ class PoseLandmarkerHelper(
         val modelName =
             when (currentModel) {
                 MODEL_POSE_LANDMARKER_FULL -> "pose_landmarker_full.task"
-                MODEL_POSE_LANDMARKER_LITE -> "pose_landmarker_lite.task"
-                MODEL_POSE_LANDMARKER_HEAVY -> "pose_landmarker_heavy.task"
                 else -> "pose_landmarker_full.task"
             }
 

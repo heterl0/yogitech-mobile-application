@@ -82,11 +82,17 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         onPressed: () async {
           bool? isPremium = _account?.is_premium ?? false;
           if (_account != null && (isPremium || !_exercise!.is_premium)) {
-            await storeExercise(_exercise!, widget.event!.id);
+            if (widget.event != null) {
+              await storeExercise(_exercise!, widget.event!.id);
+            } else {
+              await storeExercise(_exercise!, null);
+            }
             const platform = MethodChannel('com.example.yogitech');
-            final result = await platform.invokeMethod('exerciseActivity');
+            await platform.invokeMethod('exerciseActivity');
             final methodChannel = MethodChannelHandler(
-                account: _account, fetchAccount: widget.fetchAccount, fetchEvent: widget.fetchEvent!);
+                account: _account,
+                fetchAccount: widget.fetchAccount,
+                fetchEvent: widget.fetchEvent!);
             methodChannel.context = context;
 
             ScaffoldMessenger.of(context).showSnackBar(
