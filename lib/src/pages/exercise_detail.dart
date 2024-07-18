@@ -86,14 +86,16 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
             const platform = MethodChannel('com.example.yogitech');
             final result = await platform.invokeMethod('exerciseActivity');
             final methodChannel = MethodChannelHandler(
-                account: _account, fetchAccount: widget.fetchAccount, fetchEvent: widget.fetchEvent!);
+                account: _account,
+                fetchAccount: widget.fetchAccount,
+                fetchEvent: widget.fetchEvent!);
             methodChannel.context = context;
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  content: Text(
-                      'You do not have access to this exercise. Upgrade to premium to access.')),
-            );
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   const SnackBar(
+            //       content: Text(
+            //           'You do not have access to this exercise. Upgrade to premium to access.')),
+            // );
           } else {
             showPremiumDialog(context, _account!, widget.fetchAccount);
           }

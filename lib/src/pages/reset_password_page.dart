@@ -1,4 +1,5 @@
 import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -112,9 +113,14 @@ class ResetPasswordPage extends StatelessWidget {
   void _handleSendOTP(
       BuildContext context, String email, AppLocalizations trans) {
     // Xử lý sự kiện gửi OTP
+    final theme = Theme.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${trans.sendOTP} $email'),
+        backgroundColor: theme.colorScheme.onSecondary,
+        content: Text(
+          '${trans.sendOTP} $email',
+          style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+        ),
       ),
     );
   }

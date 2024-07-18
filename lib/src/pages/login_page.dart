@@ -165,6 +165,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _handleGoogleSignIn(AppLocalizations trans) async {
+    final theme = Theme.of(context);
     setState(() {
       _isLoading = true;
     });
@@ -195,26 +196,43 @@ class _LoginPageState extends State<LoginPage> {
             }
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(trans.baned)),
+              SnackBar(
+                content: Text(
+                  trans.baned,
+                  style: bd_text.copyWith(color: active),
+                ),
+                backgroundColor: error,
+              ),
             );
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Please continue your login using email')),
+            SnackBar(
+              backgroundColor: theme.colorScheme.onSecondary,
+              content: Text(
+                'Please continue your login using email',
+                style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+              ),
+            ),
           );
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text('An error occurred. Please try again later. $e')),
+            backgroundColor: theme.colorScheme.onSecondary,
+            content: Text(
+              'An error occurred. Please try again later. $e',
+              style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+            ),
+          ),
         );
       }
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text(
-          'Failed to sign in: $error',
-        )),
+            backgroundColor: theme.colorScheme.onSecondary,
+            content: Text('Failed to sign in: $error',
+                style: bd_text.copyWith(color: theme.colorScheme.onSurface))),
       );
     }
 
@@ -224,6 +242,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _handleLogin(BuildContext context) async {
+    final theme = Theme.of(context);
     String enteredEmail = emailController.text;
     String enteredPassword = passwordController.text;
     final trans = AppLocalizations.of(context)!;
@@ -232,7 +251,10 @@ class _LoginPageState extends State<LoginPage> {
     });
     if (enteredEmail.isEmpty || enteredPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(trans.dontEmpty)),
+        SnackBar(
+            backgroundColor: theme.colorScheme.onSecondary,
+            content: Text(trans.dontEmpty,
+                style: bd_text.copyWith(color: theme.colorScheme.onSurface))),
       );
       setState(() {
         _isLoading = false;
@@ -260,20 +282,35 @@ class _LoginPageState extends State<LoginPage> {
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(trans.baned)),
+            SnackBar(
+                backgroundColor: theme.colorScheme.onSecondary,
+                content: Text(
+                  trans.baned,
+                  style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+                )),
           );
         }
       } else if (accessToken['status'] == 403) {
         Navigator.pushReplacementNamed(context, AppRoutes.verifyEmail);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(trans.doesntexist)),
+          SnackBar(
+              backgroundColor: theme.colorScheme.onSecondary,
+              content: Text(
+                trans.doesntexist,
+                style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+              )),
         );
       }
     } catch (e) {
       print('Error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$e')),
+        SnackBar(
+            backgroundColor: theme.colorScheme.onSecondary,
+            content: Text(
+              '$e',
+              style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+            )),
       );
     }
     setState(() {

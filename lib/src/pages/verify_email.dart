@@ -71,11 +71,16 @@ class VerifyEmail extends StatelessWidget {
   }
 
   void _handleSendOTP(BuildContext context, String login) {
+    final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     // Xử lý sự kiện gửi OTP
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${trans.returnLogin} $login'),
+        backgroundColor: theme.colorScheme.onSecondary,
+        content: Text(
+          '${trans.returnLogin} $login',
+          style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+        ),
       ),
     );
   }

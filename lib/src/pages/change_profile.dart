@@ -437,7 +437,12 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     if (newPassword.text != confirmNewPassword.text) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(trans.passwordsDoNotMatch),
+                          backgroundColor: theme.colorScheme.onSecondary,
+                          content: Text(
+                            trans.passwordsDoNotMatch,
+                            style: bd_text.copyWith(
+                                color: theme.colorScheme.onSurface),
+                          ),
                         ),
                       );
                       return;
@@ -452,14 +457,24 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     if (result) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(trans.passwordChangeFailed),
+                          backgroundColor: theme.colorScheme.onSecondary,
+                          content: Text(
+                            trans.passwordChangeFailed,
+                            style: bd_text.copyWith(
+                                color: theme.colorScheme.onSurface),
+                          ),
                         ),
                       );
                       Navigator.pop(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(trans.passwordChangedSuccessfully),
+                          backgroundColor: theme.colorScheme.onSecondary,
+                          content: Text(
+                            trans.passwordChangedSuccessfully,
+                            style: bd_text.copyWith(
+                                color: theme.colorScheme.onSurface),
+                          ),
                         ),
                       );
                     }
