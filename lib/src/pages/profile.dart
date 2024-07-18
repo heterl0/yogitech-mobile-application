@@ -71,6 +71,15 @@ class _ProfilePageState extends State<ProfilePage>
     FlSpot(5, 3000),
   ];
 
+  List<FlSpot> sampleDataCalories = [
+    FlSpot(0, 2000), // x = thời gian (ví dụ: ngày), y = kinh nghiệm
+    FlSpot(1, 2200),
+    FlSpot(2, 2400),
+    FlSpot(3, 2600),
+    FlSpot(4, 2800),
+    FlSpot(5, 3000),
+  ];
+
   void refreshProfile() {
     // Gọi API để lấy lại dữ liệu hồ sơ sau khi cập nhật BMI
     widget.fetchAccount?.call();
@@ -523,14 +532,14 @@ class _ProfilePageState extends State<ProfilePage>
                                 ],
                               ),
                               Container(
-                                padding: EdgeInsets.only(top: 80),
-                                height: 240,
+                                padding: EdgeInsets.only(top: 60),
+                                height: 320,
                                 child: TabBarView(
                                   controller: _tabController,
                                   children: [
                                     _buildLineChart(sampleDataPoints),
                                     _buildLineChart(sampleDataExp),
-                                    _buildLineChart(sampleDataExp),
+                                    _buildLineChart(sampleDataCalories),
                                   ],
                                 ),
                               ),

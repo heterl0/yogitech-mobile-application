@@ -73,10 +73,10 @@ class _PersonalizedExerciseCreatePageState
     setState(() {
       _poses = poses;
       // Initialize TextEditingController for each pose
-      _poses.forEach((pose) {
+      for (var pose in _poses) {
         _durationControllers[pose.id] =
             TextEditingController(text: pose.duration.toString());
-      });
+      }
     });
   }
 
@@ -90,9 +90,39 @@ class _PersonalizedExerciseCreatePageState
     });
   }
 
-  void _showPoseSelectionDialog() {
-    final theme = Theme.of(context);
+  Future<void> _showPoseSelectionDialog() async {
     final trans = AppLocalizations.of(context)!;
+    final Map<int, String> levelMapping = {
+      1: trans.beginner,
+      2: trans.intermediate,
+      3: trans.advanced,
+    };
+    final theme = Theme.of(context);
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Ngăn người dùng tắt hộp thoại khi đang tải
+      builder: (BuildContext context) {
+        return AlertDialog(
+            title: Text(
+              trans.selectPoses,
+              style: h3.copyWith(color: theme.colorScheme.onPrimary),
+            ),
+            elevation: appElevation,
+            backgroundColor: theme.colorScheme.onSecondary,
+            content: SizedBox(
+              width: double.maxFinite,
+              child: Center(
+                child:
+                    CircularProgressIndicator(), // Hiển thị vòng tròn loading
+              ),
+            ));
+      },
+    );
+
+    if (_poses.isEmpty) {
+      await _fetchPoses(); // Đợi tải dữ liệu xong
+    }
+    Navigator.of(context).pop();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -112,7 +142,7 @@ class _PersonalizedExerciseCreatePageState
                   itemCount: _poses.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 3 / 5,
+                    childAspectRatio: 6 / 11,
                     crossAxisSpacing: 8,
                     mainAxisSpacing: 8,
                   ),
@@ -138,7 +168,7 @@ class _PersonalizedExerciseCreatePageState
                         child: GridTile(
                           header: GridTileBar(
                             title: Text(
-                              '${pose.level}',
+                              levelMapping[pose.level]!,
                               style: min_cap.copyWith(color: primary),
                             ),
                             trailing: isSelected
