@@ -13,8 +13,9 @@ class BoxInputField extends StatefulWidget {
   final String? errorText;
   final RegExp? regExp;
   final VoidCallback? onTap;
-  final ValueChanged<String>? onChanged; // Updated
+  final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
+  final bool isSmall; // Thêm thuộc tính này
 
   const BoxInputField(
       {super.key,
@@ -28,8 +29,9 @@ class BoxInputField extends StatefulWidget {
       this.inputFormatters,
       this.regExp,
       this.onTap,
-      this.onChanged, // Updated
+      this.onChanged,
       this.errorText = 'Invalid input',
+      this.isSmall = false, // Giá trị mặc định là false
       this.onSubmitted});
 
   @override
@@ -59,7 +61,8 @@ class _BoxInputFieldState extends State<BoxInputField> {
   }
 
   OutlineInputBorder get circleBorder => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(44),
+        borderRadius: BorderRadius.circular(
+            widget.isSmall ? 30 : 44), // Thay đổi kích thước borderRadius
       );
 
   Color getBorderColor(BuildContext context) {
@@ -84,89 +87,98 @@ class _BoxInputFieldState extends State<BoxInputField> {
 
     _hasError = errorText != null;
 
-    return TextField(
-      focusNode: _focusNode,
-      readOnly: widget.readOnly,
-      onTap: widget.onTap,
-      controller: widget.controller,
-      style: TextStyle(
-        fontFamily: 'ReadexPro',
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        color: theme.colorScheme.onSurface,
-      ),
-      obscureText: widget.password && !_showPassword,
-      keyboardType: widget.keyboardType,
-      inputFormatters: widget.inputFormatters,
-      onChanged: widget.onChanged, // Updated
-      onSubmitted: widget.onSubmitted,
-      decoration: InputDecoration(
-        hintText: widget.placeholder,
-        hintStyle: TextStyle(
+    final fontSize = widget.isSmall ? 14.0 : 16.0;
+    final contentPadding = widget.isSmall
+        ? const EdgeInsets.symmetric(vertical: 10, horizontal: 12)
+        : const EdgeInsets.symmetric(vertical: 14, horizontal: 16);
+    final iconSize = widget.isSmall ? 16.0 : 24.0;
+    final height = widget.isSmall ? 40.0 : 50.0;
+
+    return SizedBox(
+      height: height, // Đặt chiều cao của SizedBox
+      child: TextField(
+        focusNode: _focusNode,
+        readOnly: widget.readOnly,
+        onTap: widget.onTap,
+        controller: widget.controller,
+        style: TextStyle(
           fontFamily: 'ReadexPro',
-          fontSize: 16,
+          fontSize: fontSize,
           fontWeight: FontWeight.w400,
-          color: theme.colorScheme.onSurface.withOpacity(0.6),
+          color: theme.colorScheme.onSurface,
         ),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-        filled: true,
-        fillColor: theme.colorScheme.surface,
-        prefixIcon: widget.leading != null
-            ? SizedBox(
-                width: 24,
-                height: 24,
-                child: IconTheme(
-                  data: IconThemeData(color: getBorderColor(context)),
-                  child: widget.leading!,
-                ),
-              )
-            : null,
-        suffixIcon: widget.password
-            ? GestureDetector(
-                child: SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: Icon(
-                    _showPassword ? Icons.visibility : Icons.visibility_off,
-                    color: getBorderColor(context),
-                    size: 18, // Chỉnh kích thước của icon
+        obscureText: widget.password && !_showPassword,
+        keyboardType: widget.keyboardType,
+        inputFormatters: widget.inputFormatters,
+        onChanged: widget.onChanged,
+        onSubmitted: widget.onSubmitted,
+        decoration: InputDecoration(
+          hintText: widget.placeholder,
+          hintStyle: TextStyle(
+            fontFamily: 'ReadexPro',
+            fontSize: fontSize,
+            fontWeight: FontWeight.w400,
+            color: theme.colorScheme.onSurface.withOpacity(0.6),
+          ),
+          contentPadding: contentPadding,
+          filled: true,
+          fillColor: theme.colorScheme.surface,
+          prefixIcon: widget.leading != null
+              ? SizedBox(
+                  width: iconSize,
+                  height: iconSize,
+                  child: IconTheme(
+                    data: IconThemeData(color: getBorderColor(context)),
+                    child: widget.leading!,
                   ),
-                ),
-                onTap: () {
-                  setState(() {
-                    _showPassword = !_showPassword;
-                  });
-                },
-              )
-            : (widget.trailing != null
-                ? SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: IconTheme(
-                      data: IconThemeData(color: getBorderColor(context)),
-                      child: widget.trailing!,
+                )
+              : null,
+          suffixIcon: widget.password
+              ? GestureDetector(
+                  child: SizedBox(
+                    width: iconSize,
+                    height: iconSize,
+                    child: Icon(
+                      _showPassword ? Icons.visibility : Icons.visibility_off,
+                      color: getBorderColor(context),
+                      size: iconSize,
                     ),
-                  )
-                : null),
-        border: circleBorder.copyWith(
-          borderSide: BorderSide(color: theme.colorScheme.secondary),
-        ),
-        focusedBorder: circleBorder.copyWith(
-          borderSide: BorderSide(color: theme.primaryColor),
-        ),
-        errorBorder: circleBorder.copyWith(
-          borderSide: BorderSide(color: theme.colorScheme.error),
-        ),
-        enabledBorder: circleBorder.copyWith(
-          borderSide: BorderSide(color: theme.colorScheme.secondary),
-        ),
-        errorText: errorText,
-        errorStyle: TextStyle(
-          fontFamily: 'ReadexPro',
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-          color: theme.colorScheme.error,
+                  ),
+                  onTap: () {
+                    setState(() {
+                      _showPassword = !_showPassword;
+                    });
+                  },
+                )
+              : (widget.trailing != null
+                  ? SizedBox(
+                      width: iconSize,
+                      height: iconSize,
+                      child: IconTheme(
+                        data: IconThemeData(color: getBorderColor(context)),
+                        child: widget.trailing!,
+                      ),
+                    )
+                  : null),
+          border: circleBorder.copyWith(
+            borderSide: BorderSide(color: theme.colorScheme.secondary),
+          ),
+          focusedBorder: circleBorder.copyWith(
+            borderSide: BorderSide(color: theme.primaryColor),
+          ),
+          errorBorder: circleBorder.copyWith(
+            borderSide: BorderSide(color: theme.colorScheme.error),
+          ),
+          enabledBorder: circleBorder.copyWith(
+            borderSide: BorderSide(color: theme.colorScheme.secondary),
+          ),
+          errorText: errorText,
+          errorStyle: TextStyle(
+            fontFamily: 'ReadexPro',
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            color: theme.colorScheme.error,
+          ),
         ),
       ),
     );

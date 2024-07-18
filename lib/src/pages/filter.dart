@@ -1,5 +1,3 @@
-import 'package:YogiTech/src/pages/homepage.dart';
-import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/api/pose/pose_service.dart';
@@ -11,7 +9,6 @@ import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';
 import 'package:YogiTech/src/widgets/dropdown_field.dart'; // Import DropdownField
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class FilterPage extends StatefulWidget {
   const FilterPage({super.key});

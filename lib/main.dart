@@ -39,6 +39,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:YogiTech/l10n/l10n.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import 'dart:async';
 import 'package:timezone/data/latest.dart' as tz;
@@ -121,17 +122,39 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    _loadSettings();
+  }
+
+  // Hàm lưu cài đặt
+  void _saveSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkMode', _themeMode == ThemeMode.dark);
+    await prefs.setString('locale', _locale.languageCode); // Lưu language code
+  }
+
+  // Hàm tải cài đặt
+  void _loadSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _themeMode = prefs.getBool('isDarkMode') ?? false
+          ? ThemeMode.dark
+          : ThemeMode.light;
+      final localeCode = prefs.getString('locale') ?? 'vi'; // Lấy language code
+      _locale = Locale(localeCode);
+    });
   }
 
   void _toggleTheme(bool isDarkMode) {
     setState(() {
       _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
+      _saveSettings(); // Save settings after changing theme
     });
   }
 
   void _changeLanguage(bool isVietnamese) {
     setState(() {
       _locale = isVietnamese ? Locale('vi') : Locale('en');
+      _saveSettings();
     });
   }
 

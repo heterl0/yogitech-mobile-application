@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:YogiTech/api/social/social_service.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/social.dart';

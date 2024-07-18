@@ -117,6 +117,7 @@ class _BlogDetailState extends State<BlogDetail> {
         ],
       );
     }
+
     if (blogVote?.vote_value == -1) {
       return Row(
         children: [
@@ -235,20 +236,6 @@ class _BlogDetailState extends State<BlogDetail> {
   }
 
   Widget _buildImage() {
-    // return Padding(
-    //   padding: const EdgeInsets.only(top: 20),
-    //   child: Container(
-    //     width: double.infinity,
-    //     height: 360,
-    //     decoration: BoxDecoration(
-    //       image: DecorationImage(
-    //         image:CachedNetworkImageProvider(blog?.image_url ?? ''),
-    //         fit: BoxFit.cover,
-    //       ),
-    //     ),
-    //   ),
-    // );
-
     return Padding(
       padding: const EdgeInsets.only(top: 90),
       child: AspectRatio(

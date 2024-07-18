@@ -277,7 +277,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                                 SizedBox(height: 8.0),
                                 CustomDropdownFormField(
                                   controller: gender,
-                                  items: [
+                                  items: const [
                                     'Female',
                                     'Male',
                                     'Other',
@@ -336,7 +336,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   }
 
   Future<void> _changeProfile(BuildContext context) async {
-    final trans = AppLocalizations.of(context)!;
     DateTime? birthdate = birthday.text.isNotEmpty
         ? DateFormat('dd-MM-yyyy').parse(birthday.text)
         : null;
@@ -437,7 +436,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                       );
                       return;
                     }
-
                     PasswordChangeRequest request = PasswordChangeRequest(
                       currentPassword: currentPassword.text,
                       newPassword: newPassword.text,
@@ -448,14 +446,14 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     if (result) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(trans.passwordChangedSuccessfully),
+                          content: Text(trans.passwordChangeFailed),
                         ),
                       );
                       Navigator.pop(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(trans.passwordChangeFailed),
+                          content: Text(trans.passwordChangedSuccessfully),
                         ),
                       );
                     }

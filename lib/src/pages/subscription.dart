@@ -77,12 +77,12 @@ class _SubscriptionState extends State<SubscriptionPage> {
         _subs = sub;
         _userSubs = ussub;
 
-        if ((_userSubs.length > 0)
-          && (_userSubs[_userSubs.length - 1]?.activeStatus != 0 )
-          && (_account!.is_premium!)) {
+        if ((_userSubs.length > 0) &&
+            (_userSubs[_userSubs.length - 1]?.activeStatus != 0) &&
+            (_account!.is_premium!)) {
           _currendSub = _userSubs[_userSubs.length - 1];
           _subStatus = checkExpire(_currendSub!)!.message;
-          if(_subStatus==null && _currendSub!.activeStatus !=0){
+          if (_subStatus == null && _currendSub!.activeStatus != 0) {
             makeSubExpire(_currendSub!);
             _currendSub = null;
           }
@@ -325,7 +325,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                     height: 86,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/images/MoonPhase.png'),
+                        image: AssetImage('assets/images/Crown_.png'),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -340,7 +340,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                         SizedBox(
                           child: Text(
                             trans.upgradeYourSub,
-                            style: h3.copyWith(color: active),
+                            style: bd_text.copyWith(color: active),
                           ),
                         ),
                       ],
@@ -517,32 +517,36 @@ class _SubscriptionState extends State<SubscriptionPage> {
                           final account = await retrieveAccount();
                           setState(() {
                             _loadUserSub();
-                            
+
                             _account = account;
                           });
                           Navigator.pop(context); // Close the bottom sheet
                         } else {
-                          _showCustomPopup(context, 'Error',
-                              'Subscription failed: User subscription is null');
+                          _showCustomPopup(
+                              context, trans.error, trans.userSubIsNull);
                         }
                       } else {
                         if (!(sub.gemPrice != null)) {
-                          trans.locale == 'en'
-                              ? _showCustomPopup(context, 'Error',
-                                  'This subscription is not allow Gem payment menthod.')
-                              : _showCustomPopup(context, 'Lỗi',
-                                  'Gói đăng ký này không có phương thức thanh toán bằng Gem.');
+                          _showCustomPopup(
+                              context, trans.error, trans.notAllowMenthod);
+                          // trans.locale == 'en'
+                          //     ? _showCustomPopup(context, trans.error,
+                          //         'This subscription is not allow Gem payment menthod.')
+                          //     : _showCustomPopup(context, trans.error,
+                          //         'Gói đăng ký này không có phương thức thanh toán bằng Gem.');
                         } else {
-                          trans.locale == 'en'
-                              ? _showCustomPopup(context, 'Error',
-                                  'Not enough Gem for subscription.')
-                              : _showCustomPopup(context, 'Lỗi',
-                                  'Bạn không có đủ Gem để đăng ký.');
+                          _showCustomPopup(
+                              context, trans.error, trans.notEnoughGem);
+                          // trans.locale == 'en'
+                          //     ? _showCustomPopup(context, trans.error,
+                          //         'Not enough Gem for subscription.')
+                          //     : _showCustomPopup(context, trans.error,
+                          //         'Bạn không có đủ Gem để đăng ký.');
                         }
                       }
                     } catch (error) {
-                      _showCustomPopup(
-                          context, trans.error, 'Subscription failed: $error');
+                      _showCustomPopup(context, trans.error,
+                          ' ${trans.subscriptionFailed}: $error');
                     }
                   } else {
                     _showCustomPopup(context, trans.error, trans.waitToEndPlan);
@@ -616,7 +620,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
           Column(
             children: [
               Text(
-                convertDuration(sub.durationInMonth, trans.locale) ,
+                convertDuration(sub.durationInMonth, trans.locale),
                 textAlign: TextAlign.center,
                 style: min_cap.copyWith(color: theme.colorScheme.onSurface),
               ),
@@ -689,9 +693,18 @@ class _SubscriptionState extends State<SubscriptionPage> {
   Widget _buildCheckboxItem(Subscription sub) {
     bool value = (_selectedSub == sub);
     return Checkbox(
-      activeColor: Color(0xFF0D1F29), // Background color when checked
-      checkColor: Color(0xFF4095D0), // Tick color when checked
+      activeColor: WidgetStateColor.resolveWith((states) {
+        final ThemeData theme = Theme.of(context);
+        return theme.brightness == Brightness.light
+            ? elevationLight
+            : elevationDark;
+      }), // Background color when checked
+      checkColor: primary, // Tick color when checked
       value: value,
+      side: BorderSide(
+        color: stroke,
+        width: 1,
+      ),
 
       onChanged: _currendSub != null
           ? null
@@ -750,19 +763,20 @@ class _SubscriptionState extends State<SubscriptionPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          elevation: appElevation,
           backgroundColor: theme.colorScheme.surface, // Custom background color
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20), // Custom border radius
+            borderRadius: BorderRadius.circular(24), // Custom border radius
           ),
           title: Text(
             title,
-            style: theme.textTheme.headlineLarge?.copyWith(
+            style: h3.copyWith(
               color: theme.colorScheme.onSurface, // Custom title style
             ),
           ),
           content: Text(
             message,
-            style: theme.textTheme.headlineSmall?.copyWith(
+            style: bd_text.copyWith(
               color: theme.colorScheme.onSurface, // Custom content style
             ),
           ),
@@ -785,16 +799,16 @@ class _SubscriptionState extends State<SubscriptionPage> {
   }
 
   Future<UserSubscription?> makeSubExpire(UserSubscription usub) async {
-    final userSubscription =
-      await expiredSubscription(usub.id!);
-      if (userSubscription != null) {
-        widget.fetchAccount!();
-        final account = await retrieveAccount();
-        _loadUserSub();
-        setState(() {
-          _account = account;
-        });
-  }}
+    final userSubscription = await expiredSubscription(usub.id!);
+    if (userSubscription != null) {
+      widget.fetchAccount!();
+      final account = await retrieveAccount();
+      _loadUserSub();
+      setState(() {
+        _account = account;
+      });
+    }
+  }
 
   CheckDateResult? checkExpire(UserSubscription usub) {
     DateTime now = DateTime.now();
@@ -803,7 +817,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
     CheckDateResult checkDateExpired = format.checkDateExpired(
         usub.createdAt.toString(), expireDateStr.toString(), trans);
     print(checkDateExpired);
-    bool check = (checkDateExpired.status==1);
+    bool check = (checkDateExpired.status == 1);
     return checkDateExpired;
   }
 
