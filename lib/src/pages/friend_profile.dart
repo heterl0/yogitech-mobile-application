@@ -70,7 +70,9 @@ class _nameState extends State<FriendProfile> {
                 style: h2.copyWith(color: active),
               ),
             ),
-
+            SizedBox(
+              height: 8,
+            ),
             Row(
               children: [
                 Column(
@@ -120,10 +122,14 @@ class _nameState extends State<FriendProfile> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 16),
                     Text(
-                      'Avatar',
-                      style: bd_text.copyWith(color: text),
+                      'EXP',
+                      style: min_cap.copyWith(color: text, height: 1),
+                    ),
+                    Text(
+                      widget.profile.exp.toString(),
+                      style: h1.copyWith(color: primary, height: 1),
                     ),
                   ],
                 ),
@@ -132,15 +138,25 @@ class _nameState extends State<FriendProfile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        'EXP',
-                        style: min_cap.copyWith(color: text, height: 1),
+                      Container(
+                        width: 96,
+                        height: 96,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/Fire.png'),
+                          ),
+                        ),
                       ),
                       Text(
-                        widget.profile.exp.toString(),
+                        widget.profile.streak.toString(),
                         style: h1.copyWith(color: primary, height: 1),
                       ),
-                      SizedBox(height: 36), // Khoảng cách giữa các phần tử
+                      Text(
+                        trans.dayStreak,
+                        style: bd_text.copyWith(color: text, height: 1),
+                      ),
+
+                      SizedBox(height: 12), // Khoảng cách giữa các phần tử
                       Row(
                         children: [
                           Expanded(
@@ -188,23 +204,6 @@ class _nameState extends State<FriendProfile> {
                 ),
               ],
             ),
-
-            const SizedBox(height: 20.0),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.all(0.0),
-                    height: 160,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xFF8D8E99)),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20.0), // Added space for better layout
           ],
         ),
       ),

@@ -148,7 +148,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(trans.sendResetPasswordTo + ' $email'),
-            backgroundColor: Colors.green,
+            backgroundColor: green,
           ),
         );
         pushWithNavBar(

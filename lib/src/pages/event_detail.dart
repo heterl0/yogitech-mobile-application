@@ -52,7 +52,6 @@ class _EventDetailState extends State<EventDetail>
     _tabController = TabController(length: 2, vsync: this);
     _fetchEventDetails(null);
     _fetchUsers();
-
   }
 
   @override
@@ -60,7 +59,6 @@ class _EventDetailState extends State<EventDetail>
     _tabController.dispose();
     super.dispose();
   }
-  
 
   Future<void> _fetchUsers() async {
     if (_event == null || _account == null) return;
@@ -271,6 +269,15 @@ class _EventDetailState extends State<EventDetail>
           TabBar(
             dividerColor: Colors.transparent,
             controller: _tabController,
+            indicator: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: primary,
+                  width: 2.0,
+                ),
+              ),
+            ),
+            unselectedLabelColor: text,
             tabs: [
               Tab(child: Text(trans.leaderboard, style: h3)),
               Tab(child: Text(trans.listOfExercises, style: h3)),
@@ -535,42 +542,43 @@ class _EventDetailState extends State<EventDetail>
 
   Widget _buildListExerciseContent(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
-    return
-      _isJoin?
-     GridView.builder(
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 19 / 20,
-      ),
-      padding: EdgeInsets.all(0),
-      itemCount: _event!.exercises.length,
-      itemBuilder: (context, index) {
-        final exercise = _event!.exercises[index];
-        return CustomCard(
-          title: exercise.title,
-          subtitle:
-              '${exercise.calories} ${trans.calorie} / ${exercise.durations} ${trans.seconds}',
-          imageUrl: exercise.image_url,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ExerciseDetail(
-                  exercise: exercise,
-                  account: _account,
-                  fetchAccount: widget.fetchAccount,
-                  event: _event,
-                  fetchEvent: ()=>{_fetchEventDetails(_event!.id)},
-                ),
-              ),
-            );
-          },
-        );
-      },
-    ): Padding(padding:  const EdgeInsets.all(20),
-      child: Text(trans.needToJoin),
-    );
+    return _isJoin
+        ? GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 19 / 20,
+            ),
+            padding: EdgeInsets.all(0),
+            itemCount: _event!.exercises.length,
+            itemBuilder: (context, index) {
+              final exercise = _event!.exercises[index];
+              return CustomCard(
+                title: exercise.title,
+                subtitle:
+                    '${exercise.calories} ${trans.calorie} / ${exercise.durations} ${trans.seconds}',
+                imageUrl: exercise.image_url,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ExerciseDetail(
+                        exercise: exercise,
+                        account: _account,
+                        fetchAccount: widget.fetchAccount,
+                        event: _event,
+                        fetchEvent: () => {_fetchEventDetails(_event!.id)},
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          )
+        : Padding(
+            padding: const EdgeInsets.all(20),
+            child: Text(trans.needToJoin),
+          );
   }
 
   JoinEvent getCandidateByUser() {

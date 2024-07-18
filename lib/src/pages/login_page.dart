@@ -183,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
           final user = await getUser();
           if (user != null && user.active_status == 1) {
             if (user.profile.first_name == null ||
-                    user.profile.last_name == null) {
+                user.profile.last_name == null) {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -193,10 +193,10 @@ class _LoginPageState extends State<LoginPage> {
             } else {
               Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
             }
-          } else{
+          } else {
             ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(trans.baned)),
-          );
+              SnackBar(content: Text(trans.baned)),
+            );
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

@@ -43,12 +43,13 @@ class _PersonalizedExerciseCreatePageState
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _difficultyController = TextEditingController();
   final TextEditingController _caloriesController = TextEditingController();
-
   final TextEditingController _benefitsController = TextEditingController();
   final TextEditingController _pointController = TextEditingController();
 
   List<Pose> _poses = [];
   List<Pose> _selectedPoses = [];
+  Map<int, TextEditingController> _durationControllers = {};
+  int _selectedLevel = 999; // Default to beginner
 
   @override
   void initState() {
@@ -61,9 +62,9 @@ class _PersonalizedExerciseCreatePageState
     _titleController.dispose();
     _difficultyController.dispose();
     _caloriesController.dispose();
-
     _benefitsController.dispose();
     _pointController.dispose();
+    _durationControllers.values.forEach((controller) => controller.dispose());
     super.dispose();
   }
 
@@ -71,6 +72,11 @@ class _PersonalizedExerciseCreatePageState
     final poses = await getPoses();
     setState(() {
       _poses = poses;
+      // Initialize TextEditingController for each pose
+      _poses.forEach((pose) {
+        _durationControllers[pose.id] =
+            TextEditingController(text: pose.duration.toString());
+      });
     });
   }
 
@@ -103,7 +109,6 @@ class _PersonalizedExerciseCreatePageState
               builder: (BuildContext context, StateSetter setState) {
                 return GridView.builder(
                   shrinkWrap: true,
-                  // physics: NeverScrollableScrollPhysics(),
                   itemCount: _poses.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -114,9 +119,7 @@ class _PersonalizedExerciseCreatePageState
                   itemBuilder: (context, index) {
                     final pose = _poses[index];
                     final isSelected = _selectedPoses.contains(pose);
-                    // Create a TextEditingController for duration
-                    final TextEditingController _durationController =
-                        TextEditingController(text: pose.duration.toString());
+                    final durationController = _durationControllers[pose.id]!;
 
                     return GestureDetector(
                       onTap: () {
@@ -155,12 +158,12 @@ class _PersonalizedExerciseCreatePageState
                                 SizedBox(height: 8),
                                 BoxInputField(
                                   isSmall: true,
-                                  controller: _durationController,
+                                  controller: durationController,
                                   keyboardType: TextInputType.number,
-                                  onChanged: (value) => {
+                                  onChanged: (value) {
                                     setState(() {
                                       pose.duration = int.tryParse(value) ?? 0;
-                                    }),
+                                    });
                                   },
                                 ),
                               ],
@@ -221,6 +224,11 @@ class _PersonalizedExerciseCreatePageState
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+    final Map<String, int> levelMapping = {
+      trans.beginner: 1,
+      trans.intermediate: 2,
+      trans.advanced: 3,
+    };
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
@@ -249,7 +257,16 @@ class _PersonalizedExerciseCreatePageState
               const SizedBox(height: 12),
               CustomDropdownFormField(
                 controller: _difficultyController,
-                items: ['Dễ', 'Thường', 'Khó'],
+                items: [trans.beginner, trans.intermediate, trans.advanced],
+                placeholder: trans.selectLevel,
+                onChanged: (value) {
+                  setState(() {
+                    print('Giá trị là ${value}');
+                    if (value != null && levelMapping.containsKey(value)) {
+                      _selectedLevel = levelMapping[value]!;
+                    }
+                  });
+                },
               ),
               const SizedBox(height: 12),
               Text(
@@ -263,8 +280,9 @@ class _PersonalizedExerciseCreatePageState
                 children: _selectedPoses
                     .map((pose) => Chip(
                           backgroundColor: primary,
+                          deleteIconColor: active,
                           padding: EdgeInsets.all(4),
-                          side: BorderSide(width: 0),
+                          side: BorderSide(width: 0, color: primary),
                           shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(24))),
@@ -292,7 +310,10 @@ class _PersonalizedExerciseCreatePageState
       ),
       bottomNavigationBar: CustomBottomBar(
         buttonTitle: trans.create,
-        onPressed: () {},
+        onPressed: () {
+          print('Selected Level: $_selectedLevel');
+          // Handle create exercise logic here
+        },
       ),
     );
   }
