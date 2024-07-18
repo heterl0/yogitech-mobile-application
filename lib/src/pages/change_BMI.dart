@@ -81,7 +81,6 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
   }
 
   Future<void> _recalculateBMI() async {
-    final theme = Theme.of(context);
     _calculateBMI();
 
     double? weight = weightController.text.isNotEmpty

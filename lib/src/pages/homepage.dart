@@ -389,7 +389,7 @@ class StreakValue extends StatelessWidget {
           pushWithoutNavBar(
             context,
             MaterialPageRoute(
-              builder: (context) => Streak(),
+              builder: (context) => Streak(currentStreak: streakValue),
             ),
           );
         },

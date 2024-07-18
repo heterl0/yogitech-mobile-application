@@ -1,13 +1,8 @@
 import 'package:YogiTech/src/pages/personalized_exercise_create_update.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import 'package:YogiTech/api/dioInstance.dart';
-import 'package:YogiTech/src/models/pose.dart';
-import 'package:YogiTech/utils/formatting.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
-import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
