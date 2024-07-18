@@ -169,7 +169,7 @@ class _EventDetailState extends State<EventDetail>
                   SliverFillRemaining(
                     hasScrollBody: false,
                     child: Container(
-                      color: Colors.black54,
+                      color: theme.colorScheme.surface,
                       child: Center(
                         child: CircularProgressIndicator(),
                       ),
@@ -336,7 +336,7 @@ class _EventDetailState extends State<EventDetail>
                 children: [
                   Text(
                     "${trans.start}:",
-                    style: bd_text.copyWith(color: Colors.white),
+                    style: bd_text.copyWith(color: active),
                   ),
                   Text(
                     ' $startDay',
@@ -350,7 +350,7 @@ class _EventDetailState extends State<EventDetail>
                 children: [
                   Text(
                     "${trans.end}:",
-                    style: bd_text.copyWith(color: Colors.white),
+                    style: bd_text.copyWith(color: active),
                   ),
                   Text(
                     ' $endDay',
@@ -371,7 +371,7 @@ class _EventDetailState extends State<EventDetail>
                 children: [
                   Text(
                     trans.numOfExercise,
-                    style: bd_text.copyWith(color: Colors.white),
+                    style: bd_text.copyWith(color: active),
                   ),
                   Text(
                     ' ${_event!.exercises.length}',
@@ -385,7 +385,7 @@ class _EventDetailState extends State<EventDetail>
                 children: [
                   Text(
                     trans.numOfCandidate,
-                    style: bd_text.copyWith(color: Colors.white),
+                    style: bd_text.copyWith(color: active),
                   ),
                   Text(
                     ' ${_event!.event_candidate.length}',
@@ -504,7 +504,7 @@ class _EventDetailState extends State<EventDetail>
                                           style: TextStyle(
                                             fontSize:
                                                 28, // Adjust the size as needed
-                                            color: Colors.white,
+                                            color: active,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),

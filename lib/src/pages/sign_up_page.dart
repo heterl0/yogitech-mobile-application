@@ -38,7 +38,7 @@ class _SignUpState extends State<SignUp> {
         leading: IconButton(
           iconSize: 32.0,
           icon: Icon(Icons.arrow_back,
-              color: Colors.white), // Màu của biểu tượng mũi tên là màu trắng
+              color: active), // Màu của biểu tượng mũi tên là màu trắng
           onPressed: () {
             Navigator.pop(context);
           },

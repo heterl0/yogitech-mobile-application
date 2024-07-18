@@ -113,7 +113,7 @@ class _nameState extends State<FriendProfile> {
                                         : ':)',
                                     style: TextStyle(
                                       fontSize: 74, // Adjust the size as needed
-                                      color: Colors.white,
+                                      color: active,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

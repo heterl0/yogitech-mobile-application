@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:YogiTech/src/pages/view_avatar.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -135,7 +136,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                           shape: BoxShape.circle,
                           color: Colors.transparent,
                           border: Border.all(
-                            color: Colors.blue,
+                            color: primary,
                             width: 3.0,
                           ),
                         ),
@@ -147,7 +148,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                             style: TextStyle(
                               fontSize: 40,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: active,
                             ),
                           ),
                         ),
@@ -370,10 +371,15 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   }
 
   void _showSnackBar(bool success) {
+    final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(success ? trans.updateSuccess : trans.updateFail),
+        backgroundColor: theme.colorScheme.onSecondary,
+        content: Text(
+          success ? trans.updateSuccess : trans.updateFail,
+          style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+        ),
         duration: Duration(seconds: 2),
       ),
     );

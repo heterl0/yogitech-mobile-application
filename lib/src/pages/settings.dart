@@ -150,7 +150,7 @@ class SettingItem extends StatelessWidget {
                     },
                     child: Icon(
                       icon,
-                      color: Colors.white,
+                      color: active,
                       size: 36,
                     ),
                   ),

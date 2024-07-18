@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -19,7 +20,7 @@ class AvatarViewPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: active),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),

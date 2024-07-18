@@ -127,6 +127,7 @@ class _PersonalizedExerciseCreatePageState
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          contentPadding: EdgeInsets.all(16),
           title: Text(
             trans.selectPoses,
             style: h3.copyWith(color: theme.colorScheme.onPrimary),

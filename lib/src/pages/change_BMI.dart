@@ -106,7 +106,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('BMI updated successfully'),
-              backgroundColor: Colors.green,
+              backgroundColor: green,
             ),
           );
         } else {
