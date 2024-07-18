@@ -63,7 +63,7 @@ class MainViewModel : ViewModel() {
 
     private val _eventTrigger = MutableLiveData<Int>()
     val eventTrigger: LiveData<Int> = _eventTrigger
-
+    var pauseCamera: MutableLiveData<Boolean> = MutableLiveData()
     fun triggerEvent() {
         _eventTrigger.value = currentIndex + 1;
         currentIndex += 1;

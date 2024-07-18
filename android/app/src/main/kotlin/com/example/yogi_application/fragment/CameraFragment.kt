@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
 import com.example.yogi_application.PoseLandmarkerHelper
@@ -233,7 +234,14 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+//        viewModel.pauseCamera.observe(viewLifecycleOwner, Observer
+//        { shouldPause ->
+//            if (shouldPause) {
+//                onPause()
+//            } else {
+//                onResume()
+//            }
+//        })
         // Initialize our background executor
         backgroundExecutor = Executors.newSingleThreadExecutor()
 

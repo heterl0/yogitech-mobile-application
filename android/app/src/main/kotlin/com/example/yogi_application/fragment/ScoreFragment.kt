@@ -7,8 +7,12 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.yogi_application.BuildConfig
@@ -40,11 +44,72 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
         savedInstanceState: Bundle?
     ): View {
         _fragmentScoreBinding = FragmentScoreBinding.inflate(inflater, container, false);
+        setHasOptionsMenu(true)  // Enable options menu in fragment
+
         return _fragmentScoreBinding!!.root;
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_pause, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_resume -> {
+                // Handle resume action
+                resumeTimer()
+                true
+            }
+            R.id.menu_exit -> {
+                // Handle exit action
+                exitFragment()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun resumeTimer() {
+        // Logic to resume the timer
+        viewModel.pauseCamera.value = false
+    }
+
+    private fun exitFragment() {
+        // Logic to exit the fragment
+        requireActivity().supportFragmentManager.popBackStack()
+        requireActivity().finish()
+    }
+
+    private fun showPopupMenu(view: View) {
+        val popup = PopupMenu(requireContext(), view)
+        val inflater: MenuInflater = popup.menuInflater
+        viewModel.pauseCamera.value = true
+        inflater.inflate(R.menu.menu_pause, popup.menu)
+        popup.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menu_resume -> {
+                    resumeTimer()
+                    true
+                }
+                R.id.menu_exit -> {
+                    exitFragment()
+                    true
+                }
+                else -> false
+            }
+        }
+        popup.show()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _fragmentScoreBinding!!.pauseButton.setOnClickListener {
+            showPopupMenu(it)
+            Log.d("NoTag", "123")
+        }
+        Log.d("NoTag", "123")
+
         val gradientTextView = _fragmentScoreBinding!!.result;
         // 1. Get Reference to the TextView
         val paint = gradientTextView.paint
