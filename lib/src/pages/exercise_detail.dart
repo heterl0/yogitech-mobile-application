@@ -92,7 +92,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
             final methodChannel = MethodChannelHandler(
                 account: _account,
                 fetchAccount: widget.fetchAccount,
-                fetchEvent: widget.fetchEvent!);
+                fetchEvent: widget.fetchEvent ?? () {});
             methodChannel.context = context;
 
             // ScaffoldMessenger.of(context).showSnackBar(
@@ -407,9 +407,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       children: [
         Expanded(
           child: BoxInputField(
-            controller: commentController,
-            placeholder: trans.yourComment
-          ),
+              controller: commentController, placeholder: trans.yourComment),
         ),
         IconButton(
           onPressed: () async {
@@ -646,7 +644,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       commentController.clear();
       setState(() {
         _exercise!.comments.add(comment);
-              fetchExercise();
+        fetchExercise();
       });
     } else {
       print('Failed to post comment');
