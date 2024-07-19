@@ -53,6 +53,7 @@ class _ProfilePageState extends State<ProfilePage>
   late TabController _tabController;
   final int initialTabIndex = 0;
 
+  List<double> monthInChart = [];
   List<FlSpot> expDataPoints = [];
   List<FlSpot> pointDataPoints = [];
   List<FlSpot> caloriesDataPoints = [];
@@ -68,26 +69,31 @@ class _ProfilePageState extends State<ProfilePage>
     print('Dữ liệu lấy về là ${data}');
     if (data != null && data is List) {
       setState(() {
+        monthInChart = data
+            .map((item) => double.parse(item['date'].split('-')[1]))
+            .toList();
         expDataPoints = data
             .map((item) => FlSpot(
-                  double.parse(item['date'].split('-')[2]), // Ngày trong tháng
-                  item['total_exp'].toDouble(), // EXP
+                  // Chuyển đổi ngày tháng thành dạng dd/mm
+                  double.parse(item['date'].split('-')[2]),
+                  item['total_exp'].toDouble(),
                 ))
             .toList();
         pointDataPoints = data
             .map((item) => FlSpot(
-                  double.parse(item['date'].split('-')[2]), // Ngày trong tháng
-                  item['total_point'].toDouble(), // Điểm
+                  double.parse(item['date'].split('-')[2]),
+                  item['total_point'].toDouble(),
                 ))
             .toList();
         caloriesDataPoints = data
             .map((item) => FlSpot(
-                  double.parse(item['date'].split('-')[2]), // Ngày trong tháng
-                  item['total_calories'].toDouble(), // Calories
+                  double.parse(item['date'].split('-')[2]),
+                  item['total_calories'].toDouble(),
                 ))
             .toList();
       });
     }
+    print('Các tháng lấy được ${monthInChart}');
   }
 
   Future<void> _logout() async {
@@ -542,9 +548,15 @@ class _ProfilePageState extends State<ProfilePage>
                                 child: TabBarView(
                                   controller: _tabController,
                                   children: [
-                                    _buildLineChart(pointDataPoints),
-                                    _buildLineChart(expDataPoints),
-                                    _buildLineChart(caloriesDataPoints),
+                                    _buildLineChart(pointDataPoints, trans.days,
+                                        'EXP', monthInChart),
+                                    _buildLineChart(expDataPoints, trans.days,
+                                        trans.point, monthInChart),
+                                    _buildLineChart(
+                                        caloriesDataPoints,
+                                        trans.days,
+                                        trans.calorie,
+                                        monthInChart),
                                   ],
                                 ),
                               ),
@@ -695,16 +707,68 @@ class _ProfilePageState extends State<ProfilePage>
   }
 }
 
-Widget _buildLineChart(List<FlSpot> data) {
+Widget _buildLineChart(List<FlSpot> data, String xLabel, String yLabel,
+    List<double> monthInChart) {
+  print('Tháng lấy được: ${monthInChart}');
   return LineChart(
     LineChartData(
       borderData: FlBorderData(show: false),
-      // ... (Your chart configuration here - adjust as needed)
+      titlesData: FlTitlesData(
+        leftTitles: AxisTitles(
+          axisNameWidget: Padding(
+            padding: const EdgeInsets.only(right: 0),
+            child: Text(
+              yLabel,
+              style: min_cap.copyWith(color: text),
+            ),
+          ),
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 40,
+            getTitlesWidget: (value, meta) {
+              return Text(
+                value.toString(),
+                style: min_cap.copyWith(color: text),
+              );
+            },
+          ),
+        ),
+        bottomTitles: AxisTitles(
+          axisNameWidget: Text(
+            xLabel,
+            style: min_cap.copyWith(color: text),
+          ),
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: (value, meta) {
+              final intValue = value.toInt();
+              int index = data.indexWhere((spot) => spot.x.toInt() == intValue);
+              final month = monthInChart[index].toInt();
+              return Padding(
+                  padding: EdgeInsets.only(top: 4),
+                  child: Text(
+                    '${value.floor().toString()}/$month',
+                    style: min_cap.copyWith(color: text),
+                  ));
+            },
+          ),
+        ),
+        topTitles: AxisTitles(
+            axisNameWidget: SizedBox(
+          height: 4,
+        )),
+        rightTitles: AxisTitles(
+            axisNameWidget: SizedBox(
+          width: 4,
+        )),
+      ),
+      gridData: FlGridData(show: true),
       lineBarsData: [
         LineChartBarData(
           spots: data,
-          isCurved: true,
-          dotData: FlDotData(show: false), // Remove dots for this example
+          barWidth: 4,
+          isStrokeCapRound: true,
+          dotData: FlDotData(show: false),
           belowBarData: BarAreaData(
             show: true,
             gradient: LinearGradient(
