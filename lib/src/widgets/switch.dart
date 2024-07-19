@@ -74,9 +74,7 @@ class _CustomSwitchState extends State<CustomSwitch> {
                   });
                 }
               : null, // Set onChanged to null if widget is disabled
-          activeColor: theme.brightness == Brightness.light
-              ? elevationLight
-              : elevationDark,
+          activeColor: theme.scaffoldBackgroundColor,
           activeTrackColor: primary,
           inactiveThumbColor: theme.scaffoldBackgroundColor,
           inactiveTrackColor: text,

@@ -53,37 +53,41 @@ class _ProfilePageState extends State<ProfilePage>
   late TabController _tabController;
   final int initialTabIndex = 0;
 
-  List<FlSpot> sampleDataPoints = [
-    FlSpot(0, 1000), // x = thời gian (ví dụ: ngày), y = điểm
-    FlSpot(1, 1200),
-    FlSpot(2, 1400),
-    FlSpot(3, 1600),
-    FlSpot(4, 1800),
-    FlSpot(5, 2000),
-  ];
-
-  List<FlSpot> sampleDataExp = [
-    FlSpot(0, 2000), // x = thời gian (ví dụ: ngày), y = kinh nghiệm
-    FlSpot(1, 2200),
-    FlSpot(2, 2400),
-    FlSpot(3, 2600),
-    FlSpot(4, 2800),
-    FlSpot(5, 3000),
-  ];
-
-  List<FlSpot> sampleDataCalories = [
-    FlSpot(0, 2000), // x = thời gian (ví dụ: ngày), y = kinh nghiệm
-    FlSpot(1, 2200),
-    FlSpot(2, 2400),
-    FlSpot(3, 2600),
-    FlSpot(4, 2800),
-    FlSpot(5, 3000),
-  ];
+  List<FlSpot> expDataPoints = [];
+  List<FlSpot> pointDataPoints = [];
+  List<FlSpot> caloriesDataPoints = [];
 
   void refreshProfile() {
     // Gọi API để lấy lại dữ liệu hồ sơ sau khi cập nhật BMI
     widget.fetchAccount?.call();
     _fetchUserProfile();
+  }
+
+  Future<void> _fetchSevenRecentDays() async {
+    final data = await getSevenRecentDays();
+    print('Dữ liệu lấy về là ${data}');
+    if (data != null && data is List) {
+      setState(() {
+        expDataPoints = data
+            .map((item) => FlSpot(
+                  double.parse(item['date'].split('-')[2]), // Ngày trong tháng
+                  item['total_exp'].toDouble(), // EXP
+                ))
+            .toList();
+        pointDataPoints = data
+            .map((item) => FlSpot(
+                  double.parse(item['date'].split('-')[2]), // Ngày trong tháng
+                  item['total_point'].toDouble(), // Điểm
+                ))
+            .toList();
+        caloriesDataPoints = data
+            .map((item) => FlSpot(
+                  double.parse(item['date'].split('-')[2]), // Ngày trong tháng
+                  item['total_calories'].toDouble(), // Calories
+                ))
+            .toList();
+      });
+    }
   }
 
   Future<void> _logout() async {
@@ -105,6 +109,7 @@ class _ProfilePageState extends State<ProfilePage>
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _fetchUserProfile();
+    _fetchSevenRecentDays(); // Lấy dữ liệu biểu đồ
   }
 
   @override
@@ -537,9 +542,9 @@ class _ProfilePageState extends State<ProfilePage>
                                 child: TabBarView(
                                   controller: _tabController,
                                   children: [
-                                    _buildLineChart(sampleDataPoints),
-                                    _buildLineChart(sampleDataExp),
-                                    _buildLineChart(sampleDataCalories),
+                                    _buildLineChart(pointDataPoints),
+                                    _buildLineChart(expDataPoints),
+                                    _buildLineChart(caloriesDataPoints),
                                   ],
                                 ),
                               ),
@@ -693,6 +698,7 @@ class _ProfilePageState extends State<ProfilePage>
 Widget _buildLineChart(List<FlSpot> data) {
   return LineChart(
     LineChartData(
+      borderData: FlBorderData(show: false),
       // ... (Your chart configuration here - adjust as needed)
       lineBarsData: [
         LineChartBarData(
@@ -703,8 +709,8 @@ Widget _buildLineChart(List<FlSpot> data) {
             show: true,
             gradient: LinearGradient(
               colors: [
-                Colors.blue.withOpacity(0.2),
-                Colors.blue.withOpacity(0.0),
+                primary.withOpacity(0.2),
+                darkblue.withOpacity(0.0),
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
