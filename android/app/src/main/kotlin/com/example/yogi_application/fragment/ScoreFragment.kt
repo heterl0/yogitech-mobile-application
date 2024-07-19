@@ -119,8 +119,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
                 if (!isWaitingRunning) {
                     if (BuildConfig.DEV_MODE == true) {
                         if (!isTimerRunning) {
-                            Log.d("hasResult", "123")
-                            var duration = 10000;
+                            var duration = 1000;
                             startCountDownTimer(duration)
                         }
                     } else {
@@ -180,7 +179,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
                 }
                 viewModel.triggerEvent();
                 var duration = 10000
-                if (BuildConfig.DEV_MODE == true) duration = 10000;
+                if (BuildConfig.DEV_MODE == true) duration = 1000;
                 startWaitingTimer(duration);
             }
         }.start()
