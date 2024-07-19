@@ -45,6 +45,7 @@ class _BlogDetailState extends State<BlogDetail> {
       backgroundColor: theme.colorScheme.surface,
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
+        style: widthStyle.Small,
         postActions: [_buildDislikeButton(_disLike), _buildLikeButton(_like)],
       ),
       body: isLoading
@@ -108,12 +109,15 @@ class _BlogDetailState extends State<BlogDetail> {
               setState(() {
                 checkBlogVote(blogVote);
                 this.blogVote = blogVote;
-                
+
                 print(blogVote);
               });
             },
           ),
-          Text('$_like')
+          Text(
+            '$_like',
+            style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+          ),
         ],
       );
     }
@@ -132,11 +136,13 @@ class _BlogDetailState extends State<BlogDetail> {
               setState(() {
                 checkBlogVote(blogVote);
                 this.blogVote = blogVote;
-                
               });
             },
           ),
-          Text('$likeCount')
+          Text(
+            '$likeCount',
+            style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+          ),
         ],
       );
     } else {
@@ -153,12 +159,14 @@ class _BlogDetailState extends State<BlogDetail> {
                 setState(() {
                   checkBlogVote(blogVote);
                   blogVote = null;
-                  
                 });
               }
             },
           ),
-          Text('$likeCount')
+          Text(
+            '$likeCount',
+            style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+          ),
         ],
       );
     }
@@ -181,11 +189,13 @@ class _BlogDetailState extends State<BlogDetail> {
               setState(() {
                 checkBlogVote(blogVote);
                 this.blogVote = blogVote;
-                
               });
             },
           ),
-          Text('$dislikeCount')
+          Text(
+            '$dislikeCount',
+            style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+          ),
         ],
       );
     }
@@ -203,11 +213,13 @@ class _BlogDetailState extends State<BlogDetail> {
               setState(() {
                 checkBlogVote(blogVote);
                 this.blogVote = blogVote;
-                
               });
             },
           ),
-          Text('$dislikeCount')
+          Text(
+            '$dislikeCount',
+            style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+          ),
         ],
       );
     } else {
@@ -224,12 +236,14 @@ class _BlogDetailState extends State<BlogDetail> {
                 setState(() {
                   checkBlogVote(blogVote);
                   blogVote = null;
-                  
                 });
               }
             },
           ),
-          Text('$dislikeCount')
+          Text(
+            '$dislikeCount',
+            style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+          ),
         ],
       );
     }
@@ -307,16 +321,20 @@ class _BlogDetailState extends State<BlogDetail> {
     // );
     return HtmlWidget(
       blog?.description ?? '',
-      textStyle: TextStyle(fontFamily: 'ReadexPro', fontSize: 20, height: 1.2),
+      textStyle: TextStyle(
+        fontFamily: 'ReadexPro',
+        fontSize: 18,
+        height: 1.2,
+      ),
     );
   }
 
-  int checkBlogVote(BlogVote? myVote){
-    if(blogVote!=null && myVote!.vote_value!=0 ){
+  int checkBlogVote(BlogVote? myVote) {
+    if (blogVote != null && myVote!.vote_value != 0) {
       _like = _like + myVote.vote_value;
       _disLike = _disLike - myVote.vote_value;
-    }else{
-      myVote!.vote_value==1? _like++:_disLike++;
+    } else {
+      myVote!.vote_value == 1 ? _like++ : _disLike++;
     }
     return 0;
   }

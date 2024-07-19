@@ -95,11 +95,11 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                 fetchEvent: widget.fetchEvent!);
             methodChannel.context = context;
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  content: Text(
-                      'You do not have access to this exercise. Upgrade to premium to access.')),
-            );
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   const SnackBar(
+            //       content: Text(
+            //           'You do not have access to this exercise. Upgrade to premium to access.')),
+            // );
           } else {
             showPremiumDialog(context, _account!, widget.fetchAccount);
           }

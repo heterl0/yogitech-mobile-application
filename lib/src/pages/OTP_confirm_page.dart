@@ -1,3 +1,5 @@
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -27,7 +29,7 @@ class OTP_Page extends StatelessWidget {
             Text(
               trans.otpConfirm,
               style: TextStyle(
-                color: Colors.white,
+                color: active,
                 fontSize: 40.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -38,7 +40,7 @@ class OTP_Page extends StatelessWidget {
               controller: OTPcontroller,
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Colors.white.withOpacity(0),
+                fillColor: active.withOpacity(0),
                 hintText: 'OTP',
                 hintStyle: TextStyle(color: Color(0xFF8D8E99)),
                 border: OutlineInputBorder(
@@ -46,7 +48,7 @@ class OTP_Page extends StatelessWidget {
                   borderSide: BorderSide(color: Color(0xFF8D8E99)),
                 ),
               ),
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: active),
             ),
             SizedBox(height: 16.0),
             Align(
@@ -93,7 +95,7 @@ class OTP_Page extends StatelessWidget {
                     child: Text(
                       trans.confirm,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: active,
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0,
                       ),
@@ -110,12 +112,17 @@ class OTP_Page extends StatelessWidget {
   }
 
   void _handleSendOTP(BuildContext context, String email) {
+    final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
     // Xử lý sự kiện gửi OTP
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${trans.sendOTP} $email'),
+        backgroundColor: theme.colorScheme.onSecondary,
+        content: Text(
+          '${trans.sendOTP} $email',
+          style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+        ),
       ),
     );
   }

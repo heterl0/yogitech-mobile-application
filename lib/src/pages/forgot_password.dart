@@ -33,7 +33,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         leading: IconButton(
           iconSize: 32.0,
           icon: Icon(Icons.arrow_back,
-              color: Colors.white), // Màu của biểu tượng mũi tên là màu trắng
+              color: active), // Màu của biểu tượng mũi tên là màu trắng
           onPressed: () {
             Navigator.pop(context);
           },
@@ -128,8 +128,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(trans
-              .enterEmail), // Giả sử trans.enterEmail là thông báo "Vui lòng nhập email"
+          content: Text(
+            trans.enterEmail,
+            style: bd_text.copyWith(color: active),
+          ),
           backgroundColor: error,
         ),
       );
@@ -147,8 +149,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       if (response['status'] == 204) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(trans.sendResetPasswordTo + ' $email'),
-            backgroundColor: Colors.green,
+            content: Text(
+              trans.sendResetPasswordTo + ' $email',
+              style: bd_text.copyWith(color: active),
+            ),
+            backgroundColor: green,
           ),
         );
         pushWithNavBar(
@@ -156,7 +161,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(trans.invalidEmail),
+            content: Text(
+              trans.invalidEmail,
+              style: bd_text.copyWith(color: active),
+            ),
             backgroundColor: error,
           ),
         );
@@ -164,7 +172,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Error: ${e.toString()}"),
+          content: Text(
+            "Error: ${e.toString()}",
+            style: bd_text.copyWith(color: active),
+          ),
           backgroundColor: error,
         ),
       );

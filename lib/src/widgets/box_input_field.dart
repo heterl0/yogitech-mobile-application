@@ -105,7 +105,7 @@ class _BoxInputFieldState extends State<BoxInputField> {
           fontFamily: 'ReadexPro',
           fontSize: fontSize,
           fontWeight: FontWeight.w400,
-          color: theme.colorScheme.onSurface,
+          color: theme.colorScheme.onPrimary,
         ),
         obscureText: widget.password && !_showPassword,
         keyboardType: widget.keyboardType,

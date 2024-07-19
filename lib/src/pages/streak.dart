@@ -7,7 +7,8 @@ import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Streak extends StatefulWidget {
-  const Streak({super.key});
+  final String currentStreak;
+  const Streak({super.key, this.currentStreak = '0'});
 
   @override
   _StreakState createState() => _StreakState();
@@ -150,7 +151,7 @@ class _StreakState extends State<Streak> {
             return gradient.createShader(bounds);
           },
           child: Text(
-            streakData['number_of_dates'].toString(),
+            widget.currentStreak,
             style: TextStyle(
               color: active,
               fontSize: 60,

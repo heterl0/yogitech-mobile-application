@@ -153,7 +153,12 @@ class _ReminderPageState extends State<ReminderPage> {
         } else {
           // Hiển thị thông báo lỗi nếu không có ngày nào được chọn
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(trans.noDays)),
+            SnackBar(
+                backgroundColor: theme.colorScheme.onSecondary,
+                content: Text(
+                  trans.noDays,
+                  style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+                )),
           );
         }
       }
