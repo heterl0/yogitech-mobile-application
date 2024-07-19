@@ -50,10 +50,6 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
         return _fragmentScoreBinding!!.root;
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_pause, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
