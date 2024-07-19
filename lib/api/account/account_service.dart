@@ -364,3 +364,20 @@ Future<dynamic> getStreakInMonth(int month, int year) async {
     return null;
   }
 }
+
+Future<dynamic> getSevenRecentDays() async {
+  try {
+    final url = formatApiUrl('/api/v1/statistic-seven-recent-days/');
+    final Response response = await DioInstance.get(url);
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      print(
+          'Get seven recent days failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Get seven recent days error: $e');
+    return null;
+  }
+}
