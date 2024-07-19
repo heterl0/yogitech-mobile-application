@@ -113,8 +113,8 @@ class _StreakState extends State<Streak> {
               children: [
                 _buildStreakInfo(trans),
                 SizedBox(height: 16),
-                _buildMonthInfo(context),
-                SizedBox(height: 16),
+                // _buildMonthInfo(context),
+                // SizedBox(height: 16),
                 _buildAdditionalInfo(context),
                 SizedBox(height: 16),
                 _buildCalendar(context),
@@ -239,7 +239,7 @@ class _StreakState extends State<Streak> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Expanded(
-          flex: 2,
+          flex: 4,
           child: Container(
             height: 60,
             decoration: BoxDecoration(
@@ -307,17 +307,20 @@ class _StreakState extends State<Streak> {
         Expanded(
           flex: 3,
           child: Text(
-            DateFormat('MMMM y', Localizations.localeOf(context).toString())
+            DateFormat('MM/y', Localizations.localeOf(context).toString())
                 .format(_currentDate),
-            style: h2.copyWith(color: theme.colorScheme.onSurface, height: 1),
+            style: h3.copyWith(color: theme.colorScheme.onSurface, height: 1),
           ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.end,
-          //   children: [
-          //     _buildMonthControlBack(),
-          //     _buildMonthControlForward(),
-          //   ],
-          // ),
+        ),
+        Expanded(
+          flex: 3,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _buildMonthControlBack(),
+              _buildMonthControlForward(),
+            ],
+          ),
         )
       ],
     );
