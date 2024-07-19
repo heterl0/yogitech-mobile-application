@@ -402,10 +402,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         Expanded(
           child: BoxInputField(
             controller: commentController,
-            placeholder: trans.yourComment,
-            onSubmitted: (value) async {
-              await postAComment();
-            },
+            placeholder: trans.yourComment
           ),
         ),
         IconButton(
@@ -643,6 +640,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       commentController.clear();
       setState(() {
         _exercise!.comments.add(comment);
+              fetchExercise();
       });
     } else {
       print('Failed to post comment');
