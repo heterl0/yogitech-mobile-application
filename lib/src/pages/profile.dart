@@ -697,14 +697,15 @@ Widget _buildLineChart(List<FlSpot> data) {
       lineBarsData: [
         LineChartBarData(
           spots: data,
+
           isCurved: true,
           dotData: FlDotData(show: false), // Remove dots for this example
           belowBarData: BarAreaData(
             show: true,
             gradient: LinearGradient(
               colors: [
-                Colors.blue.withOpacity(0.2),
-                Colors.blue.withOpacity(0.0),
+                primary.withOpacity(0.2),
+                darkblue.withOpacity(0.0),
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
