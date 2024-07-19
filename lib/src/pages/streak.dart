@@ -256,9 +256,7 @@ class _StreakState extends State<Streak> {
                     style: h3.copyWith(color: active, height: 1.2),
                   ),
                   Text(
-                    trans.locale == "en"
-                        ? 'in this month.'
-                        : 'trong tháng này.',
+                    trans.inThisMonth,
                     style: min_cap.copyWith(
                       color: active,
                     ),
@@ -349,14 +347,14 @@ class _StreakState extends State<Streak> {
     return Container(
       margin: EdgeInsets.all(4.0),
       decoration: BoxDecoration(
-        border: Border.all(color: isStreakDay ? primary : stroke),
-        borderRadius: BorderRadius.circular(16.0),
-      ),
+          border: Border.all(color: isStreakDay ? primary : stroke),
+          borderRadius: BorderRadius.circular(16.0),
+          color: isStreakDay ? primary : Colors.transparent),
       child: Center(
         child: Text(
           date.day.toString(),
           style: bd_text.copyWith(
-              color: isStreakDay ? primary : theme.colorScheme.onSurface),
+              color: isStreakDay ? active : theme.colorScheme.onSurface),
         ),
       ),
     );
