@@ -14,7 +14,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:background="@drawable/icon_button_background"
         android:contentDescription="@null"
-        android:src="@drawable/ic_baseline_add_24"
+        android:src="@drawable/list"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@android:color/white" />

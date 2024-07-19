@@ -234,14 +234,14 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        viewModel.pauseCamera.observe(viewLifecycleOwner, Observer
-//        { shouldPause ->
-//            if (shouldPause) {
-//                onPause()
-//            } else {
-//                onResume()
-//            }
-//        })
+        viewModel.pauseCamera.observe(viewLifecycleOwner, Observer
+        { shouldPause ->
+            if (shouldPause) {
+                onPause()
+            } else {
+                onResume()
+            }
+        })
         // Initialize our background executor
         backgroundExecutor = Executors.newSingleThreadExecutor()
 
