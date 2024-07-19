@@ -7,8 +7,12 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.yogi_application.BuildConfig
@@ -30,7 +34,8 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
     private val viewModel: MainViewModel by activityViewModels()
 
     private val scoreList: MutableList<Float> = mutableListOf<Float>();
-
+    private var timeLeftInMillis: Long = 0
+    private var isCountDown = true
 
     private var countDownTimer: CountDownTimer? = null
     var startTime: Long? = null
@@ -40,11 +45,43 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
         savedInstanceState: Bundle?
     ): View {
         _fragmentScoreBinding = FragmentScoreBinding.inflate(inflater, container, false);
+        setHasOptionsMenu(true)  // Enable options menu in fragment
+
         return _fragmentScoreBinding!!.root;
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_pause, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _fragmentScoreBinding!!.pauseButton.setOnClickListener {
+            viewModel.pauseCamera.value = true;
+        }
+
+        viewModel.pauseCamera.observe(viewLifecycleOwner) {
+            isPause -> if (!isPause) {
+
+                val rawMod = timeLeftInMillis % 1000 // Calculate the raw modulus
+                val roundFactor = if (rawMod >= 1000 / 2) 1000 else 0 // Round up or down
+                val value = ((timeLeftInMillis / 1000) * 1000 + roundFactor).toInt()
+                if (roundFactor != 0) {
+                    if (isCountDown) {
+                        isTimerRunning = false
+                        startCountDownTimer(value);
+                    } else {
+                        isWaitingRunning = false
+                        startWaitingTimer(value);
+                    }
+                }
+            } else {
+                countDownTimer?.cancel();
+            }
+        }
+
         val gradientTextView = _fragmentScoreBinding!!.result;
         // 1. Get Reference to the TextView
         val paint = gradientTextView.paint
@@ -64,9 +101,14 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
         )
         // 4. Apply Shader to TextView
         paint.shader = textShader
+        triggerObserve()
 
+    }
+
+    private fun triggerObserve() {
+        Log.d("Trigger Again", "triggerObserve: ")
         viewModel.feedbackResult.observe(viewLifecycleOwner) {
-            result -> when(result) {
+                result -> when(result) {
             is FeedbackResult.Error -> {
                 _fragmentScoreBinding!!.description.text = result.message;
             }
@@ -77,7 +119,9 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
                 if (!isWaitingRunning) {
                     if (BuildConfig.DEV_MODE == true) {
                         if (!isTimerRunning) {
-                            startCountDownTimer()
+                            Log.d("hasResult", "123")
+                            var duration = 10000;
+                            startCountDownTimer(duration)
                         }
                     } else {
                         if (result.data?.isValid == false) {
@@ -93,26 +137,27 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
                                 scoreList.add(result.data?.score!!)
                             }
                             if (result.data?.score!! > 80 && !isTimerRunning && !isWaitingRunning) {
-                                startCountDownTimer()
+                                var duration = viewModel.exercise?.poses?.get(viewModel.currentIndex)?.duration!! * 1000
+                                startCountDownTimer(duration)
                             }
                         }
                     }
                 }
             }
-            }
+        }
         }
 
     }
 
-    private fun startCountDownTimer() {
+    private fun startCountDownTimer(duration: Int) {
         if (isTimerRunning) return
+        isCountDown = true;
         countDownTimer?.cancel()
         isTimerRunning = true
-        var duration = viewModel.exercise?.poses?.get(viewModel.currentIndex)?.duration!! * 1000
-        if (BuildConfig.DEV_MODE == true) duration = 1000;
         countDownTimer = object : CountDownTimer(duration.toLong(), 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
+                timeLeftInMillis = millisUntilFinished
                 val secondsRemaining = millisUntilFinished / 1000
                 _fragmentScoreBinding!!.timer.text = "00:$secondsRemaining"
             }
@@ -122,7 +167,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
                 isTimerRunning = false
                 val currentIndex = viewModel.currentIndex
                 if (currentIndex < viewModel.exercise?.poses?.size!!) {
-                    Log.d("NoTag", currentIndex.toString())
+                    Log.d("currentIndex", currentIndex.toString())
                     val second = (System.currentTimeMillis() - startTime!!) / 1000.0
                     val poseLogResult: PoseLogResult = PoseLogResult(
                         viewModel.exercise?.poses?.get(currentIndex)?.pose?.id!!,
@@ -134,22 +179,26 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
                     viewModel.poseLogResults.add(poseLogResult)
                 }
                 viewModel.triggerEvent();
-                startWaitingTimer();
+                var duration = 10000
+                if (BuildConfig.DEV_MODE == true) duration = 10000;
+                startWaitingTimer(duration);
             }
         }.start()
     }
 
-    private fun startWaitingTimer() {
+    private fun startWaitingTimer(duration: Int) {
         if (isWaitingRunning) return
+        isCountDown = false
         countDownTimer?.cancel()
         isWaitingRunning = true
 //        val duration = viewModel.exercise?.poses?.get(viewModel.currentIndex)?.duration!! * 1000
-        var duration = 10000
-        if (BuildConfig.DEV_MODE == true) duration = 1000;
+
         countDownTimer = object : CountDownTimer(duration.toLong(), 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
                 val secondsRemaining = millisUntilFinished / 1000
+                timeLeftInMillis = millisUntilFinished
+
                 _fragmentScoreBinding!!.timer.text = "00:$secondsRemaining"
                 _fragmentScoreBinding!!.result.text = "Take a rest";
                 _fragmentScoreBinding!!.description.text = "Breath slowly."

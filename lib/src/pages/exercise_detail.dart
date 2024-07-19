@@ -82,9 +82,13 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         onPressed: () async {
           bool? isPremium = _account?.is_premium ?? false;
           if (_account != null && (isPremium || !_exercise!.is_premium)) {
-            await storeExercise(_exercise!, widget.event!.id);
+            if (widget.event != null) {
+              await storeExercise(_exercise!, widget.event!.id);
+            } else {
+              await storeExercise(_exercise!, null);
+            }
             const platform = MethodChannel('com.example.yogitech');
-            final result = await platform.invokeMethod('exerciseActivity');
+            await platform.invokeMethod('exerciseActivity');
             final methodChannel = MethodChannelHandler(
                 account: _account,
                 fetchAccount: widget.fetchAccount,
@@ -404,10 +408,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         Expanded(
           child: BoxInputField(
             controller: commentController,
-            placeholder: trans.yourComment,
-            onSubmitted: (value) async {
-              await postAComment();
-            },
+            placeholder: trans.yourComment
           ),
         ),
         IconButton(
@@ -645,6 +646,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       commentController.clear();
       setState(() {
         _exercise!.comments.add(comment);
+              fetchExercise();
       });
     } else {
       print('Failed to post comment');
