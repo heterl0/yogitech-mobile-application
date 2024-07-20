@@ -37,21 +37,12 @@
             />
         </LinearLayout>
 
-
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/linearLayout"
-            app:menu="@menu/menu_bottom_nav" />
-
-        <View
-            android:id="@+id/view"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/navigation"
-            android:background="@android:color/darker_gray" />
+<!--        <View-->
+<!--            android:id="@+id/view"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="1dp"-->
+<!--            android:layout_below="@id/navigation"-->
+<!--            android:background="@android:color/darker_gray" />-->
 
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
