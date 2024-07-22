@@ -52,6 +52,7 @@ class _ProfilePageState extends State<ProfilePage>
   bool _isLoading = false;
   late TabController _tabController;
   final int initialTabIndex = 0;
+  bool _isChartDataLoading = true; // Flag to indicate chart data loading
 
   List<double> monthInChart = [];
   List<FlSpot> expDataPoints = [];
@@ -115,7 +116,12 @@ class _ProfilePageState extends State<ProfilePage>
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _fetchUserProfile();
-    _fetchSevenRecentDays(); // Lấy dữ liệu biểu đồ
+    _fetchSevenRecentDays().then((_) {
+      setState(() {
+        _isChartDataLoading =
+            false; // Data is loaded, stop showing the indicator
+      });
+    });
   }
 
   @override
@@ -545,20 +551,25 @@ class _ProfilePageState extends State<ProfilePage>
                               Container(
                                 padding: EdgeInsets.only(top: 60),
                                 height: 320,
-                                child: TabBarView(
-                                  controller: _tabController,
-                                  children: [
-                                    _buildLineChart(pointDataPoints, trans.days,
-                                        'EXP', monthInChart),
-                                    _buildLineChart(expDataPoints, trans.days,
-                                        trans.point, monthInChart),
-                                    _buildLineChart(
-                                        caloriesDataPoints,
-                                        trans.days,
-                                        trans.calorie,
-                                        monthInChart),
-                                  ],
-                                ),
+                                child: _isChartDataLoading
+                                    ? Center(child: CircularProgressIndicator())
+                                    : TabBarView(
+                                        controller: _tabController,
+                                        children: [
+                                          _buildLineChart(pointDataPoints,
+                                              trans.days, 'EXP', monthInChart),
+                                          _buildLineChart(
+                                              expDataPoints,
+                                              trans.days,
+                                              trans.point,
+                                              monthInChart),
+                                          _buildLineChart(
+                                              caloriesDataPoints,
+                                              trans.days,
+                                              trans.calorie,
+                                              monthInChart),
+                                        ],
+                                      ),
                               ),
 
                               // Padding(

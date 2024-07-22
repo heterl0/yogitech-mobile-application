@@ -70,7 +70,7 @@ class _ReminderPageState extends State<ReminderPage> {
     for (var item in _selectedTimes) {
       if (item['isEnabled']) {
         for (var day in item['days']) {
-          await LocalNotification.showWeeklyAtDayAndTime(
+          await LocalNotificationService.showWeeklyAtDayAndTime(
             id: item['id'],
             title: trans.yourReminder,
             body: trans.yourReminderDetail,
@@ -80,7 +80,7 @@ class _ReminderPageState extends State<ReminderPage> {
           );
         }
       } else {
-        await LocalNotification.cancel(item['id']);
+        await LocalNotificationService.cancel(item['id']);
       }
     }
   }
@@ -114,7 +114,7 @@ class _ReminderPageState extends State<ReminderPage> {
       if (result.containsKey('delete')) {
         if (index != null) {
           // Xóa nhắc nhở
-          await LocalNotification.cancel(_selectedTimes[index]['id']);
+          await LocalNotificationService.cancel(_selectedTimes[index]['id']);
           setState(() {
             _selectedTimes.removeAt(index);
           });
