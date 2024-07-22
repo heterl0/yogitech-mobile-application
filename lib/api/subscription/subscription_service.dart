@@ -124,6 +124,7 @@ Future<UserSubscription?> expiredSubscription(int id) async {
     };
     final Response response = await DioInstance.patch(url, data: data);
     if (response.statusCode == 200) {
+      print('expried');
       PatchUserAccountRequest ac = new PatchUserAccountRequest(isPremium:false);
       final account = await patchUserAccount(ac);
       if (account != null)  {
