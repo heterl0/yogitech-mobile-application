@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:YogiTech/api/blog/blog_service.dart';
 import 'package:YogiTech/src/models/exercise.dart';
 import 'package:YogiTech/src/pages/_onbroading.dart';
@@ -214,56 +215,82 @@ class _HomePageState extends State<HomePage> {
                 //             ),
                 //           ),
                 //         }),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                  child: Container(
-                    height: 160, // Chiều cao của khung viền
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: primary, width: 2),
+                // Padding(
+                //   padding:
+                //       const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                //   child: Container(
+                //     height: 160, // Chiều cao của khung viền
+                //     decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(16),
+                //       border: Border.all(color: primary, width: 2),
+                //     ),
+                //     child: Row(
+                //       children: [
+                //         Expanded(
+                //             flex: 2,
+                //             child: Padding(
+                //               padding: EdgeInsets.only(
+                //                   left: 16, top: 16, bottom: 16),
+                //               child: Column(
+                //                 mainAxisAlignment:
+                //                     MainAxisAlignment.spaceBetween,
+                //                 crossAxisAlignment: CrossAxisAlignment.start,
+                //                 children: [
+                //                   Text(
+                //                     trans.tryThisExercise,
+                //                     textAlign: TextAlign.left,
+                //                     style: bd_text.copyWith(
+                //                         color: theme.colorScheme.onPrimary),
+                //                   ),
+                //                   Text(
+                //                     trans.forBeginner,
+                //                     textAlign: TextAlign.left,
+                //                     style: h3.copyWith(
+                //                         color: theme.colorScheme.onPrimary),
+                //                   ),
+                //                   const Spacer(),
+                //                   Text(
+                //                     'Warrior 2 pose!',
+                //                     textAlign: TextAlign.left,
+                //                     style: h3.copyWith(color: primary),
+                //                   ),
+                //                 ],
+                //               ),
+                //             )),
+                //         const Expanded(
+                //           flex: 2,
+                //           child: Image(
+                //               image: AssetImage(
+                //                   'assets/images/ads_exercise_for_beginner.png')),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+
+                CarouselSlider(
+                  items: [
+                    _buildCarouselItem(
+                      title: trans.tryThisExercise,
+                      subtitle: trans.forBeginner,
+                      poseName: 'Warrior 2 pose!',
+                      imagePath: 'assets/images/ads_exercise_for_beginner.png',
                     ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: 16, top: 16, bottom: 16),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    trans.tryThisExercise,
-                                    textAlign: TextAlign.left,
-                                    style: bd_text.copyWith(
-                                        color: theme.colorScheme.onPrimary),
-                                  ),
-                                  Text(
-                                    trans.forBeginner,
-                                    textAlign: TextAlign.left,
-                                    style: h3.copyWith(
-                                        color: theme.colorScheme.onPrimary),
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                    'Warrior 2 pose!',
-                                    textAlign: TextAlign.left,
-                                    style: h3.copyWith(color: primary),
-                                  ),
-                                ],
-                              ),
-                            )),
-                        const Expanded(
-                          flex: 2,
-                          child: Image(
-                              image: AssetImage(
-                                  'assets/images/ads_exercise_for_beginner.png')),
-                        ),
-                      ],
+                    _buildCarouselItem(
+                      // Ví dụ cho mục "Thử thách yoga"
+                      title: "30 ngày thử thách Yoga",
+                      subtitle: "Tăng cường sức khỏe và sự dẻo dai!",
+                      poseName: "Tham gia ngay hôm nay!",
+                      imagePath:
+                          'assets/images/30_day_yoga_challenge.png', // Chỉnh sửa đường dẫn
                     ),
+                    // ... các mục carousel khác
+                  ],
+                  options: CarouselOptions(
+                    height: 160, // Adjust height as needed
+                    viewportFraction: 1, // Make items take full width
+                    autoPlay: true, // Enable auto-playing if desired
+                    // ... other CarouselOptions as needed
                   ),
                 ),
                 // Placeholder for ad content
@@ -370,6 +397,46 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ));
+  }
+
+  Widget _buildCarouselItem({
+    required String title,
+    required String subtitle,
+    required String poseName,
+    required String imagePath,
+  }) {
+    final theme = Theme.of(context);
+    return Container(
+      // ... code định dạng (giống như Container hiện tại của bạn)
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: EdgeInsets.only(left: 16, top: 16, bottom: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,
+                      style:
+                          bd_text.copyWith(color: theme.colorScheme.onPrimary)),
+                  Text(subtitle,
+                      style: h3.copyWith(color: theme.colorScheme.onPrimary)),
+                  const Spacer(),
+                  Text(poseName, style: h3.copyWith(color: primary)),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Image.asset(
+                imagePath), // Sử dụng Image.asset thay vì AssetImage
+          ),
+        ],
+      ),
+    );
   }
 }
 

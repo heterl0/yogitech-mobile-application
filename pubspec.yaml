@@ -69,6 +69,7 @@ dependencies:
   rxdart: ^0.27.7
   timezone: ^0.9.4
   smooth_page_indicator: ^1.1.0
+  carousel_slider: ^4.2.1
 
 # flutter_native_splash:
 #   android: true

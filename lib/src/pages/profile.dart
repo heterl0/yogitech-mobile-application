@@ -336,6 +336,8 @@ class _ProfilePageState extends State<ProfilePage>
                                         MaterialPageRoute(
                                           builder: (context) => FriendListPage(
                                             initialTabIndex: 0,
+                                            account: _account,
+                                            onProfileUpdated: refreshProfile,
                                           ),
                                         ),
                                       );
