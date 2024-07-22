@@ -499,7 +499,7 @@ class FriendListItem extends StatelessWidget {
                           name != '' ? name[0].toUpperCase() : ':)',
                           style: TextStyle(
                             fontSize: 36, // Adjust the size as needed
-                            color: Colors.white,
+                            color: active,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

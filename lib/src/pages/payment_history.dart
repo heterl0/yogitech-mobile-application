@@ -55,7 +55,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
       //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
       //             children: [
       //               IconButton(
-      //                 icon: Icon(Icons.arrow_back, color: Colors.white),
+      //                 icon: Icon(Icons.arrow_back, color: active),
       //                 onPressed: () {
       //                   Navigator.of(context).pop();
       //                 },
@@ -120,9 +120,11 @@ class _PaymentHistoryState extends State<PaymentHistory> {
     );
 
     final local = Localizations.localeOf(context);
-    String startDay = DateFormat.yMMMd(local.languageCode).add_Hm()
+    String startDay = DateFormat.yMMMd(local.languageCode)
+        .add_Hm()
         .format(DateTime.parse('${usub.createdAt}').toUtc().toLocal());
-    String endDay = DateFormat.yMMMd(local.languageCode).add_Hm()
+    String endDay = DateFormat.yMMMd(local.languageCode)
+        .add_Hm()
         .format(DateTime.parse('${usub.expireDate}').toUtc().toLocal());
 
     final theme = Theme.of(context);

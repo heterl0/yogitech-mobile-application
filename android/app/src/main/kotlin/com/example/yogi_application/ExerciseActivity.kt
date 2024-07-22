@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.yogi_application.databinding.ActivityMainBinding
+import com.example.yogi_application.fragment.CustomDialogFragment
 import com.example.yogi_application.model.Exercise
 import com.example.yogi_application.model.ExerciseFeedback
 import com.example.yogi_application.network.FeedbackApiService
@@ -33,17 +36,27 @@ class ExerciseActivity : AppCompatActivity() {
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
+
+
         ServiceBuilder.setToken(accessToken)
 
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
         val navController = navHostFragment.navController
-        activityMainBinding.navigation.setupWithNavController(navController)
-        activityMainBinding.navigation.setOnNavigationItemReselectedListener {
-            // ignore the reselection
-        }
+//        activityMainBinding.navigation.setupWithNavController(navController)
+//        activityMainBinding.navigation.setOnNavigationItemReselectedListener {
+//            // ignore the reselection
+//        }
 
+        val dialog = CustomDialogFragment()
+        viewModel.pauseCamera.observe(this, Observer { shouldPause ->
+            if (shouldPause) {
+                dialog.show(supportFragmentManager, "CustomDialog")
+            } else {
+                dialog.dismiss()
+            }
+        })
         val scoreFragment = supportFragmentManager.findFragmentById(R.id.fragment_score)
 
     }

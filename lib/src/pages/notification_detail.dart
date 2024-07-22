@@ -181,7 +181,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
                                     : ':)',
                                 style: TextStyle(
                                   fontSize: 36, // Adjust the size as needed
-                                  color: Colors.white,
+                                  color: active,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -220,7 +220,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
                           child: Text(
                             '${DateFormat('HH:mm dd/MM/yyyy').format(dateTime)}',
                             textAlign: TextAlign.start,
-                            style: bd_text.copyWith(color: Colors.white),
+                            style: bd_text.copyWith(color: active),
                           ),
                         ),
                         // Expanded(

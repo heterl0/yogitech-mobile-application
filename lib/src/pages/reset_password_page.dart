@@ -1,6 +1,7 @@
+import 'package:YogiTech/src/shared/app_colors.dart';
+import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class ResetPasswordPage extends StatelessWidget {
   final TextEditingController newPassword = TextEditingController();
@@ -29,7 +30,7 @@ class ResetPasswordPage extends StatelessWidget {
             Text(
               trans.resetPassword,
               style: TextStyle(
-                color: Colors.white,
+                color: active,
                 fontSize: 40.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -40,7 +41,7 @@ class ResetPasswordPage extends StatelessWidget {
               controller: newPassword,
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Colors.white.withOpacity(0),
+                fillColor: active.withOpacity(0),
                 hintText: trans.newPassword,
                 hintStyle: TextStyle(color: Color(0xFF8D8E99)),
                 border: OutlineInputBorder(
@@ -48,14 +49,14 @@ class ResetPasswordPage extends StatelessWidget {
                   borderSide: BorderSide(color: Color(0xFF8D8E99)),
                 ),
               ),
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: active),
             ),
             SizedBox(height: 16.0),
             TextField(
               controller: confirmNewPassword,
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Colors.white.withOpacity(0),
+                fillColor: active.withOpacity(0),
                 hintText: trans.confirmNewPassword,
                 hintStyle: TextStyle(color: Color(0xFF8D8E99)),
                 border: OutlineInputBorder(
@@ -63,7 +64,7 @@ class ResetPasswordPage extends StatelessWidget {
                   borderSide: BorderSide(color: Color(0xFF8D8E99)),
                 ),
               ),
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: active),
             ),
             SizedBox(
               height: 16.0,
@@ -94,7 +95,7 @@ class ResetPasswordPage extends StatelessWidget {
                     child: Text(
                       trans.reset,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: active,
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0,
                       ),
@@ -109,11 +110,17 @@ class ResetPasswordPage extends StatelessWidget {
     );
   }
 
-  void _handleSendOTP(BuildContext context, String email,AppLocalizations trans) {
+  void _handleSendOTP(
+      BuildContext context, String email, AppLocalizations trans) {
     // Xử lý sự kiện gửi OTP
+    final theme = Theme.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${trans.sendOTP} $email'),
+        backgroundColor: theme.colorScheme.onSecondary,
+        content: Text(
+          '${trans.sendOTP} $email',
+          style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+        ),
       ),
     );
   }

@@ -38,7 +38,7 @@ class _SignUpState extends State<SignUp> {
         leading: IconButton(
           iconSize: 32.0,
           icon: Icon(Icons.arrow_back,
-              color: Colors.white), // Màu của biểu tượng mũi tên là màu trắng
+              color: active), // Màu của biểu tượng mũi tên là màu trắng
           onPressed: () {
             Navigator.pop(context);
           },
@@ -138,6 +138,7 @@ class _SignUpState extends State<SignUp> {
     setState(() {
       _isLoading = true;
     });
+    final theme = Theme.of(context);
     String enteredUsername = usernameController.text;
     String enteredEmail = emailController.text;
     String enteredPassword = passwordController.text;
@@ -151,7 +152,11 @@ class _SignUpState extends State<SignUp> {
           .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Please fill in all fields'),
+          backgroundColor: theme.colorScheme.onSecondary,
+          content: Text(
+            'Please fill in all fields',
+            style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+          ),
         ),
       );
       setState(() {
@@ -165,7 +170,11 @@ class _SignUpState extends State<SignUp> {
           .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Passwords do not match'),
+          backgroundColor: theme.colorScheme.onSecondary,
+          content: Text(
+            'Passwords do not match',
+            style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+          ),
         ),
       );
       setState(() {
@@ -210,9 +219,13 @@ class _SignUpState extends State<SignUp> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(concatenatedErrors.isEmpty
-                ? 'Failed to register'
-                : concatenatedErrors),
+            backgroundColor: theme.colorScheme.onSecondary,
+            content: Text(
+              concatenatedErrors.isEmpty
+                  ? 'Failed to register'
+                  : concatenatedErrors,
+              style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+            ),
           ),
         );
         setState(() {
@@ -224,7 +237,11 @@ class _SignUpState extends State<SignUp> {
           .hideCurrentSnackBar(); // Ẩn các thông báo hiện tại
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error occurs, please try later'),
+          backgroundColor: theme.colorScheme.onSecondary,
+          content: Text(
+            'Error occurs, please try later',
+            style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+          ),
         ),
       );
       setState(() {

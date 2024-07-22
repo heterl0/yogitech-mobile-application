@@ -45,33 +45,55 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage>
+    with SingleTickerProviderStateMixin {
   Profile? _profile;
   Account? _account;
   bool _isLoading = false;
+  late TabController _tabController;
+  final int initialTabIndex = 0;
 
-  List<FlSpot> sampleDataPoints = [
-    FlSpot(0, 1000), // x = thời gian (ví dụ: ngày), y = điểm
-    FlSpot(1, 1200),
-    FlSpot(2, 1400),
-    FlSpot(3, 1600),
-    FlSpot(4, 1800),
-    FlSpot(5, 2000),
-  ];
-
-  List<FlSpot> sampleDataExp = [
-    FlSpot(0, 2000), // x = thời gian (ví dụ: ngày), y = kinh nghiệm
-    FlSpot(1, 2200),
-    FlSpot(2, 2400),
-    FlSpot(3, 2600),
-    FlSpot(4, 2800),
-    FlSpot(5, 3000),
-  ];
+  List<double> monthInChart = [];
+  List<FlSpot> expDataPoints = [];
+  List<FlSpot> pointDataPoints = [];
+  List<FlSpot> caloriesDataPoints = [];
 
   void refreshProfile() {
     // Gọi API để lấy lại dữ liệu hồ sơ sau khi cập nhật BMI
     widget.fetchAccount?.call();
     _fetchUserProfile();
+  }
+
+  Future<void> _fetchSevenRecentDays() async {
+    final data = await getSevenRecentDays();
+    print('Dữ liệu lấy về là ${data}');
+    if (data != null && data is List) {
+      setState(() {
+        monthInChart = data
+            .map((item) => double.parse(item['date'].split('-')[1]))
+            .toList();
+        expDataPoints = data
+            .map((item) => FlSpot(
+                  // Chuyển đổi ngày tháng thành dạng dd/mm
+                  double.parse(item['date'].split('-')[2]),
+                  item['total_exp'].toDouble(),
+                ))
+            .toList();
+        pointDataPoints = data
+            .map((item) => FlSpot(
+                  double.parse(item['date'].split('-')[2]),
+                  item['total_point'].toDouble(),
+                ))
+            .toList();
+        caloriesDataPoints = data
+            .map((item) => FlSpot(
+                  double.parse(item['date'].split('-')[2]),
+                  item['total_calories'].toDouble(),
+                ))
+            .toList();
+      });
+    }
+    print('Các tháng lấy được ${monthInChart}');
   }
 
   Future<void> _logout() async {
@@ -91,7 +113,15 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 3, vsync: this);
     _fetchUserProfile();
+    _fetchSevenRecentDays(); // Lấy dữ liệu biểu đồ
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -291,14 +321,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   InfoCard(
-                                    title: trans.calorie,
-                                    subtitle: trans.totalCalories,
-                                    iconPath: 'assets/icons/info.png',
+                                    title: trans.friends,
+                                    subtitle: trans.listFriend,
+                                    icon: Icons.people_alt_outlined,
                                     onTap: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => Calorie(),
+                                          builder: (context) => FriendListPage(
+                                            initialTabIndex: 0,
+                                          ),
                                         ),
                                       );
                                     },
@@ -307,7 +339,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   InfoCard(
                                     title: trans.social,
                                     subtitle: trans.yourFriends,
-                                    iconPath: 'assets/icons/diversity_2.png',
+                                    icon: Icons.diversity_2_outlined,
                                     onTap: () {
                                       Navigator.push(
                                         context,
@@ -329,8 +361,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           InfoCard(
                                             title: trans.personalizedExercise,
                                             subtitle: trans.customizeExercise,
-                                            iconPath:
-                                                'assets/icons/tune_setting.png',
+                                            icon: Icons.tune_outlined,
                                             onTap: () {
                                               Navigator.push(
                                                 context,
@@ -478,72 +509,125 @@ class _ProfilePageState extends State<ProfilePage> {
                           borderRadius: BorderRadius.all(Radius.circular(16)),
                           child: Stack(
                             children: [
-                              Padding(
-                                padding: EdgeInsets.all(8),
-                                child: AspectRatio(
-                                  aspectRatio: 16 / 9,
-                                  child: LineChart(LineChartData(
-                                    borderData: FlBorderData(show: false),
-                                    gridData: FlGridData(
-                                      show: true,
-                                      drawVerticalLine: false,
-                                      drawHorizontalLine: true,
-                                      getDrawingHorizontalLine: (value) {
-                                        return FlLine(
-                                          color: stroke,
-                                          strokeWidth: 1,
-                                        );
-                                      },
+                              TabBar(
+                                dividerColor: Colors.transparent,
+                                controller: _tabController,
+                                indicator: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: primary,
+                                      width: 2.0,
                                     ),
-                                    lineBarsData: [
-                                      LineChartBarData(
-                                        spots: sampleDataPoints,
-                                        isCurved: true,
-                                        color: green,
-                                        barWidth: 4,
-                                      ),
-                                      LineChartBarData(
-                                        spots: sampleDataExp,
-                                        isCurved: true,
-                                        gradient: gradient,
-                                        barWidth: 4,
-                                      ),
-                                    ],
-                                    titlesData: FlTitlesData(
-                                      leftTitles: AxisTitles(
-                                        sideTitles: SideTitles(
-                                          getTitlesWidget: (value, meta) {
-                                            return Text(
-                                              value.toString(),
-                                              style:
-                                                  min_cap.copyWith(color: text),
-                                              textAlign: TextAlign.center,
-                                            );
-                                          },
-                                          reservedSize: 60,
-                                          showTitles: true,
-                                        ),
-                                      ),
-                                      bottomTitles: AxisTitles(
-                                        drawBelowEverything: true,
-                                        sideTitles: SideTitles(
-                                            getTitlesWidget: (value, meta) {
-                                              return Text(
-                                                value.toString(),
-                                                style: min_cap.copyWith(
-                                                    color: text),
-                                                textAlign: TextAlign.center,
-                                              );
-                                            },
-                                            showTitles: true,
-                                            reservedSize: 48),
-                                      ),
-                                      topTitles: AxisTitles(),
-                                      rightTitles: AxisTitles(),
+                                  ),
+                                ),
+                                unselectedLabelColor: text,
+                                tabs: [
+                                  Tab(
+                                    child: Text(
+                                      'EXP',
+                                      style: h3,
                                     ),
-                                  )),
+                                  ),
+                                  Tab(
+                                    child: Text(
+                                      trans.point,
+                                      style: h3,
+                                    ),
+                                  ),
+                                  Tab(
+                                    child: Text(
+                                      trans.calorie,
+                                      style: h3,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(top: 60),
+                                height: 320,
+                                child: TabBarView(
+                                  controller: _tabController,
+                                  children: [
+                                    _buildLineChart(pointDataPoints, trans.days,
+                                        'EXP', monthInChart),
+                                    _buildLineChart(expDataPoints, trans.days,
+                                        trans.point, monthInChart),
+                                    _buildLineChart(
+                                        caloriesDataPoints,
+                                        trans.days,
+                                        trans.calorie,
+                                        monthInChart),
+                                  ],
                                 ),
                               ),
+
+                              // Padding(
+                              //   padding: EdgeInsets.all(8),
+                              //   child: AspectRatio(
+                              //     aspectRatio: 16 / 9,
+                              //     child: LineChart(LineChartData(
+                              //       borderData: FlBorderData(show: false),
+                              //       gridData: FlGridData(
+                              //         show: true,
+                              //         drawVerticalLine: false,
+                              //         drawHorizontalLine: true,
+                              //         getDrawingHorizontalLine: (value) {
+                              //           return FlLine(
+                              //             color: stroke,
+                              //             strokeWidth: 1,
+                              //           );
+                              //         },
+                              //       ),
+                              //       lineBarsData: [
+                              //         LineChartBarData(
+                              //           spots: sampleDataPoints,
+                              //           isCurved: true,
+                              //           color: green,
+                              //           barWidth: 4,
+                              //         ),
+                              //         LineChartBarData(
+                              //           spots: sampleDataExp,
+                              //           isCurved: true,
+                              //           gradient: gradient,
+                              //           barWidth: 4,
+                              //         ),
+                              //       ],
+                              //       titlesData: FlTitlesData(
+                              //         leftTitles: AxisTitles(
+                              //           sideTitles: SideTitles(
+                              //             getTitlesWidget: (value, meta) {
+                              //               return Text(
+                              //                 value.toString(),
+                              //                 style:
+                              //                     min_cap.copyWith(color: text),
+                              //                 textAlign: TextAlign.center,
+                              //               );
+                              //             },
+                              //             reservedSize: 60,
+                              //             showTitles: true,
+                              //           ),
+                              //         ),
+                              //         bottomTitles: AxisTitles(
+                              //           drawBelowEverything: true,
+                              //           sideTitles: SideTitles(
+                              //               getTitlesWidget: (value, meta) {
+                              //                 return Text(
+                              //                   value.toString(),
+                              //                   style: min_cap.copyWith(
+                              //                       color: text),
+                              //                   textAlign: TextAlign.center,
+                              //                 );
+                              //               },
+                              //               showTitles: true,
+                              //               reservedSize: 48),
+                              //         ),
+                              //         topTitles: AxisTitles(),
+                              //         rightTitles: AxisTitles(),
+                              //       ),
+                              //     )),
+                              //   ),
+                              // ),
+
                               // if (!(_account?.is_premium ?? false))
                               //   Positioned.fill(
                               //     child: BackdropFilter(
@@ -623,18 +707,97 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
+Widget _buildLineChart(List<FlSpot> data, String xLabel, String yLabel,
+    List<double> monthInChart) {
+  print('Tháng lấy được: ${monthInChart}');
+  return LineChart(
+    LineChartData(
+      borderData: FlBorderData(show: false),
+      titlesData: FlTitlesData(
+        leftTitles: AxisTitles(
+          axisNameWidget: Padding(
+            padding: const EdgeInsets.only(right: 0),
+            child: Text(
+              yLabel,
+              style: min_cap.copyWith(color: text),
+            ),
+          ),
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 40,
+            getTitlesWidget: (value, meta) {
+              return Text(
+                value.toString(),
+                style: min_cap.copyWith(color: text),
+              );
+            },
+          ),
+        ),
+        bottomTitles: AxisTitles(
+          axisNameWidget: Text(
+            xLabel,
+            style: min_cap.copyWith(color: text),
+          ),
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: (value, meta) {
+              final intValue = value.toInt();
+              int index = data.indexWhere((spot) => spot.x.toInt() == intValue);
+              final month = monthInChart[index].toInt();
+              return Padding(
+                  padding: EdgeInsets.only(top: 4),
+                  child: Text(
+                    '${value.floor().toString()}/$month',
+                    style: min_cap.copyWith(color: text),
+                  ));
+            },
+          ),
+        ),
+        topTitles: AxisTitles(
+            axisNameWidget: SizedBox(
+          height: 4,
+        )),
+        rightTitles: AxisTitles(
+            axisNameWidget: SizedBox(
+          width: 4,
+        )),
+      ),
+      gridData: FlGridData(show: true),
+      lineBarsData: [
+        LineChartBarData(
+          spots: data,
+          barWidth: 4,
+          isStrokeCapRound: true,
+          dotData: FlDotData(show: false),
+          belowBarData: BarAreaData(
+            show: true,
+            gradient: LinearGradient(
+              colors: [
+                primary.withOpacity(0.2),
+                darkblue.withOpacity(0.0),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 // Widget dùng chung cho Calorie, Social và Personalized Exercise
 class InfoCard extends StatelessWidget {
   final String title;
   final String subtitle;
-  final String iconPath;
+  final IconData icon;
   final VoidCallback onTap;
 
   const InfoCard({
     super.key,
     required this.title,
     required this.subtitle,
-    required this.iconPath,
+    required this.icon,
     required this.onTap,
   });
 
@@ -668,11 +831,16 @@ class InfoCard extends StatelessWidget {
                 ),
               ],
             ),
-            Image.asset(
-              iconPath,
-              width: 20,
-              height: 20,
+            Icon(
+              icon,
+              size: 20,
+              color: stroke,
             ),
+            // Image.asset(
+            //   icon,
+            //   width: 20,
+            //   height: 20,
+            // ),
           ],
         ),
       ),

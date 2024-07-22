@@ -31,7 +31,7 @@ class MethodChannelHandler {
         final exercise = ExerciseResult.fromJson(data);
         print('Exercise: ${exercise.toJson()}');
         fetchAccount?.call();
-        if(fetchEvent!=null){
+        if (fetchEvent != null) {
           fetchEvent!.call();
         }
         Navigator.of(context).push(

@@ -105,15 +105,21 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
           print('BMI updated successfully');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('BMI updated successfully'),
-              backgroundColor: Colors.green,
+              content: Text(
+                'BMI updated successfully',
+                style: bd_text.copyWith(color: active),
+              ),
+              backgroundColor: green,
             ),
           );
         } else {
           print('Failed to update BMI');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Failed to update BMI'),
+              content: Text(
+                'Failed to update BMI',
+                style: bd_text.copyWith(color: active),
+              ),
               backgroundColor: error,
             ),
           );

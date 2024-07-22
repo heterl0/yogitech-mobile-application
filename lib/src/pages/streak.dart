@@ -7,7 +7,8 @@ import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Streak extends StatefulWidget {
-  const Streak({super.key});
+  final String currentStreak;
+  const Streak({super.key, this.currentStreak = '0'});
 
   @override
   _StreakState createState() => _StreakState();
@@ -112,8 +113,8 @@ class _StreakState extends State<Streak> {
               children: [
                 _buildStreakInfo(trans),
                 SizedBox(height: 16),
-                _buildMonthInfo(context),
-                SizedBox(height: 16),
+                // _buildMonthInfo(context),
+                // SizedBox(height: 16),
                 _buildAdditionalInfo(context),
                 SizedBox(height: 16),
                 _buildCalendar(context),
@@ -150,7 +151,7 @@ class _StreakState extends State<Streak> {
             return gradient.createShader(bounds);
           },
           child: Text(
-            streakData['number_of_dates'].toString(),
+            widget.currentStreak,
             style: TextStyle(
               color: active,
               fontSize: 60,
@@ -187,13 +188,13 @@ class _StreakState extends State<Streak> {
       width: double.infinity,
       alignment: Alignment.center,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text(
-            DateFormat('MMMM y', Localizations.localeOf(context).toString())
-                .format(_currentDate),
-            style: h2.copyWith(color: theme.colorScheme.onSurface),
-          ),
+          // Text(
+          //   DateFormat('MMMM y', Localizations.localeOf(context).toString())
+          //       .format(_currentDate),
+          //   style: h2.copyWith(color: theme.colorScheme.onSurface, height: 1),
+          // ),
           Row(
             children: [
               _buildMonthControlBack(),
@@ -238,6 +239,7 @@ class _StreakState extends State<Streak> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Expanded(
+          flex: 4,
           child: Container(
             height: 60,
             decoration: BoxDecoration(
@@ -251,13 +253,11 @@ class _StreakState extends State<Streak> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '$streakDaysCount ${(streakDaysCount == 1) && (trans.locale == "en") ? "day" : trans.days}',
+                    '$streakDaysCount ${(streakDaysCount == 1) && (trans.locale == "en") ? "day" : trans.day}',
                     style: h3.copyWith(color: active, height: 1.2),
                   ),
                   Text(
-                    trans.locale == "en"
-                        ? 'in this month.'
-                        : 'trong tháng này.',
+                    trans.inThisMonth,
                     style: min_cap.copyWith(
                       color: active,
                     ),
@@ -268,41 +268,60 @@ class _StreakState extends State<Streak> {
           ),
         ),
         SizedBox(width: 16),
+
+        // Expanded(
+        //   child: Container(
+        //     height: 60,
+        //     decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(16),
+        //       border: Border.all(
+        //         color: stroke,
+        //       ),
+        //     ),
+        //     child: Padding(
+        //       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        //       child: Column(
+        //         crossAxisAlignment: CrossAxisAlignment.start,
+        //         mainAxisAlignment: MainAxisAlignment.center,
+        //         children: [
+        //           Text(
+        //             _lastStreakStartDate != null
+        //                 ? DateFormat.yMMMd(
+        //                         Localizations.localeOf(context).toString())
+        //                     .format(_lastStreakStartDate!)
+        //                 : 'N/A',
+        //             style: h3.copyWith(
+        //                 color: theme.colorScheme.onPrimary, height: 1.2),
+        //           ),
+        //           Text(
+        //             trans.beginOfTheStreak,
+        //             style: min_cap.copyWith(
+        //               color: theme.colorScheme.onSurface,
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // ),
         Expanded(
-          child: Container(
-            height: 60,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: stroke,
-              ),
-            ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    _lastStreakStartDate != null
-                        ? DateFormat.yMMMd(
-                                Localizations.localeOf(context).toString())
-                            .format(_lastStreakStartDate!)
-                        : 'N/A',
-                    style: h3.copyWith(
-                        color: theme.colorScheme.onPrimary, height: 1.2),
-                  ),
-                  Text(
-                    trans.beginOfTheStreak,
-                    style: min_cap.copyWith(
-                      color: theme.colorScheme.onSurface,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          flex: 3,
+          child: Text(
+            DateFormat('MM/y', Localizations.localeOf(context).toString())
+                .format(_currentDate),
+            style: h3.copyWith(color: theme.colorScheme.onSurface, height: 1),
           ),
         ),
+        Expanded(
+          flex: 3,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _buildMonthControlBack(),
+              _buildMonthControlForward(),
+            ],
+          ),
+        )
       ],
     );
   }
@@ -348,14 +367,14 @@ class _StreakState extends State<Streak> {
     return Container(
       margin: EdgeInsets.all(4.0),
       decoration: BoxDecoration(
-        border: Border.all(color: isStreakDay ? primary : stroke),
-        borderRadius: BorderRadius.circular(16.0),
-      ),
+          border: Border.all(color: isStreakDay ? primary : stroke),
+          borderRadius: BorderRadius.circular(16.0),
+          color: isStreakDay ? primary : Colors.transparent),
       child: Center(
         child: Text(
           date.day.toString(),
           style: bd_text.copyWith(
-              color: isStreakDay ? primary : theme.colorScheme.onSurface),
+              color: isStreakDay ? active : theme.colorScheme.onSurface),
         ),
       ),
     );
