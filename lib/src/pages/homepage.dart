@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:YogiTech/api/blog/blog_service.dart';
 import 'package:YogiTech/src/models/exercise.dart';
 import 'package:YogiTech/src/pages/_onbroading.dart';
@@ -199,7 +200,7 @@ class _HomePageState extends State<HomePage> {
               ),
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 24),
+            padding: EdgeInsets.symmetric(vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -214,56 +215,102 @@ class _HomePageState extends State<HomePage> {
                 //             ),
                 //           ),
                 //         }),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                  child: Container(
-                    height: 160, // Chiều cao của khung viền
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: primary, width: 2),
+                // Padding(
+                //   padding:
+                //       const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                //   child: Container(
+                //     height: 160, // Chiều cao của khung viền
+                //     decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(16),
+                //       border: Border.all(color: primary, width: 2),
+                //     ),
+                //     child: Row(
+                //       children: [
+                //         Expanded(
+                //             flex: 2,
+                //             child: Padding(
+                //               padding: EdgeInsets.only(
+                //                   left: 16, top: 16, bottom: 16),
+                //               child: Column(
+                //                 mainAxisAlignment:
+                //                     MainAxisAlignment.spaceBetween,
+                //                 crossAxisAlignment: CrossAxisAlignment.start,
+                //                 children: [
+                //                   Text(
+                //                     trans.tryThisExercise,
+                //                     textAlign: TextAlign.left,
+                //                     style: bd_text.copyWith(
+                //                         color: theme.colorScheme.onPrimary),
+                //                   ),
+                //                   Text(
+                //                     trans.forBeginner,
+                //                     textAlign: TextAlign.left,
+                //                     style: h3.copyWith(
+                //                         color: theme.colorScheme.onPrimary),
+                //                   ),
+                //                   const Spacer(),
+                //                   Text(
+                //                     'Warrior 2 pose!',
+                //                     textAlign: TextAlign.left,
+                //                     style: h3.copyWith(color: primary),
+                //                   ),
+                //                 ],
+                //               ),
+                //             )),
+                //         const Expanded(
+                //           flex: 2,
+                //           child: Image(
+                //               image: AssetImage(
+                //                   'assets/images/ads_exercise_for_beginner.png')),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+
+                CarouselSlider(
+                  items: [
+                    _buildCarouselItem(
+                      title: trans.tryThisExercise,
+                      subtitle: trans.forBeginner,
+                      poseName: 'Warrior 2 pose!',
+                      imagePath:
+                          'assets/images/ads_exercise_for_beginner.png', // Hình ảnh tư thế Warrior 2
                     ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: 16, top: 16, bottom: 16),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    trans.tryThisExercise,
-                                    textAlign: TextAlign.left,
-                                    style: bd_text.copyWith(
-                                        color: theme.colorScheme.onPrimary),
-                                  ),
-                                  Text(
-                                    trans.forBeginner,
-                                    textAlign: TextAlign.left,
-                                    style: h3.copyWith(
-                                        color: theme.colorScheme.onPrimary),
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                    'Warrior 2 pose!',
-                                    textAlign: TextAlign.left,
-                                    style: h3.copyWith(color: primary),
-                                  ),
-                                ],
-                              ),
-                            )),
-                        const Expanded(
-                          flex: 2,
-                          child: Image(
-                              image: AssetImage(
-                                  'assets/images/ads_exercise_for_beginner.png')),
-                        ),
-                      ],
+                    _buildCarouselItem(
+                      title: "30 Ngày Thử Thách Yoga",
+                      subtitle: "Tăng cường sức khỏe và sự dẻo dai!",
+                      poseName: "Tham gia ngay!",
+                      imagePath:
+                          'assets/images/Muscle.png', // Hình ảnh minh họa thử thách
                     ),
+                    _buildCarouselItem(
+                      title: "Yoga đã thay đổi cuộc sống của tôi",
+                      subtitle: "Câu chuyện truyền cảm hứng của Minh Anh",
+                      poseName: "Chia sẻ hành trình của bạn!",
+                      imagePath:
+                          'assets/images/Fire.png', // Hình ảnh người tập yoga
+                    ),
+                    _buildCarouselItem(
+                      title: "Ưu đãi đặc biệt dành cho thành viên mới!",
+                      subtitle: "Nhận ngay 2 buổi tập cá nhân miễn phí",
+                      poseName: "Đăng ký gói Premium ngay!",
+                      imagePath:
+                          'assets/images/Crown.png', // Hình ảnh quà tặng hoặc giảm giá
+                    ),
+                    _buildCarouselItem(
+                      title: "Mẹo Yoga cho người mới bắt đầu",
+                      subtitle: "5 tư thế cơ bản giúp bạn làm quen với Yoga",
+                      poseName: "Khám phá ngay!",
+                      imagePath:
+                          'assets/images/Universe.png', // Hình ảnh minh họa các tư thế
+                    ),
+                  ],
+                  options: CarouselOptions(
+                    height: 240, // Adjust height as needed
+                    viewportFraction: 1, // Make items take full width
+                    autoPlay: true, // Enable auto-playing if desired
+                    // ... other CarouselOptions as needed
                   ),
                 ),
                 // Placeholder for ad content
@@ -370,6 +417,44 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ));
+  }
+
+  Widget _buildCarouselItem({
+    required String title,
+    required String subtitle,
+    required String poseName,
+    required String imagePath,
+  }) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: EdgeInsets.all(12),
+      child: Row(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(left: 16, top: 16, bottom: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,
+                      style:
+                          bd_text.copyWith(color: theme.colorScheme.onPrimary)),
+                  Text(subtitle,
+                      style: h3.copyWith(color: theme.colorScheme.onPrimary)),
+                  const Spacer(),
+                  Text(poseName, style: bd_text.copyWith(color: primary)),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Image.asset(
+                imagePath), // Sử dụng Image.asset thay vì AssetImage
+          ),
+        ],
+      ),
+    );
   }
 }
 
