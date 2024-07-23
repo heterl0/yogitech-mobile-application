@@ -11,7 +11,7 @@ import 'package:rxdart/rxdart.dart';
 // id+10: Thông báo bạn bè
 // ????: Các nhắc nhở do người dùng thiết lập
 
-class LocalNotification {
+class LocalNotificationService {
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   static final onClickNotification = BehaviorSubject<String>();

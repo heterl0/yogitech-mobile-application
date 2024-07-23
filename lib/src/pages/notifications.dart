@@ -124,7 +124,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       print(_notifications);
       if (_notifications != null) {
         for (var notification in _notifications!) {
-          LocalNotification.showFriendNotification(
+          LocalNotificationService.showFriendNotification(
             id: notification.id + 10,
             title: notification.title,
             body: notification.body,
@@ -136,7 +136,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       print('Hủy thông báo của bạn bè');
       if (_notifications != null) {
         for (var notification in _notifications!) {
-          LocalNotification.cancel(notification.id);
+          LocalNotificationService.cancel(notification.id);
         }
       }
     }
@@ -145,7 +145,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   void _handleStreakSaverNotifications(bool isStreakSaverOn) {
     if (isStreakSaverOn) {
       print('Bật bảo vệ chuỗi');
-      LocalNotification.showPeriodicNotification(
+      LocalNotificationService.showPeriodicNotification(
         title: AppLocalizations.of(context)!.streakSaver,
         body: AppLocalizations.of(context)!.yourReminderDetail,
         repeat: RepeatInterval.daily,
@@ -153,7 +153,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       );
     } else {
       print('Hủy bảo vệ chuỗi');
-      LocalNotification.cancel(1);
+      LocalNotificationService.cancel(1);
     }
   }
 }

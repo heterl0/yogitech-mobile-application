@@ -54,7 +54,7 @@ void main() async {
   tz.setLocalLocation(
       tz.getLocation('Asia/Ho_Chi_Minh')); // Đặt múi giờ Việt Nam
   // Khởi tạo các dịch vụ hoặc các thành phần cần thiết khác
-  await LocalNotification().init();
+  await LocalNotificationService().init();
   HttpOverrides.global = MyHttpOverrides();
 
   // Loại bỏ splash screen ngay lập tức
