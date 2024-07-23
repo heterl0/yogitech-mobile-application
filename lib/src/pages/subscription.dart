@@ -76,13 +76,15 @@ class _SubscriptionState extends State<SubscriptionPage> {
       setState(() {
         _subs = sub;
         _userSubs = ussub;
+        print(_userSubs);
 
         if ((_userSubs.length > 0) &&
             (_userSubs[_userSubs.length - 1]?.activeStatus != 0) &&
             (_account!.is_premium!)) {
           _currendSub = _userSubs[_userSubs.length - 1];
           _subStatus = checkExpire(_currendSub!)!.message;
-          if (_subStatus == null && _currendSub!.activeStatus != 0) {
+          if (_subStatus == null && (_currendSub!.activeStatus != 0 || _account?.is_premium==true)) {
+            print('ex');
             makeSubExpire(_currendSub!);
             _currendSub = null;
           }
