@@ -1,5 +1,6 @@
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/event.dart';
+import 'package:YogiTech/src/pages/tutorial.dart';
 import 'package:YogiTech/src/shared/premium_dialog.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:YogiTech/utils/method_channel_handler.dart';
@@ -19,6 +20,7 @@ import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:YogiTech/src/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:YogiTech/utils/formatting.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class ExerciseDetail extends StatefulWidget {
   final Account? account;
@@ -81,28 +83,32 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         buttonTitle: trans.doExercise,
         onPressed: () async {
           bool? isPremium = _account?.is_premium ?? false;
-          if (_account != null && (isPremium || !_exercise!.is_premium)) {
-            if (widget.event != null) {
-              await storeExercise(_exercise!, widget.event!.id);
-            } else {
-              await storeExercise(_exercise!, null);
-            }
-            const platform = MethodChannel('com.example.yogitech');
-            await platform.invokeMethod('exerciseActivity');
-            final methodChannel = MethodChannelHandler(
-                account: _account,
-                fetchAccount: widget.fetchAccount,
-                fetchEvent: widget.fetchEvent ?? () {});
-            methodChannel.context = context;
+          pushWithoutNavBar(
+            context,
+            MaterialPageRoute(builder: (context) => Tutorial()),
+          ); // Thay NewPage() bằng trang bạn muốn chuyển tới);
+          // if (_account != null && (isPremium || !_exercise!.is_premium)) {
+          //   if (widget.event != null) {
+          //     await storeExercise(_exercise!, widget.event!.id);
+          //   } else {
+          //     await storeExercise(_exercise!, null);
+          //   }
+          //   const platform = MethodChannel('com.example.yogitech');
+          //   await platform.invokeMethod('exerciseActivity');
+          //   final methodChannel = MethodChannelHandler(
+          //       account: _account,
+          //       fetchAccount: widget.fetchAccount,
+          //       fetchEvent: widget.fetchEvent ?? () {});
+          //   methodChannel.context = context;
 
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //   const SnackBar(
-            //       content: Text(
-            //           'You do not have access to this exercise. Upgrade to premium to access.')),
-            // );
-          } else {
-            showPremiumDialog(context, _account!, widget.fetchAccount);
-          }
+          //   // ScaffoldMessenger.of(context).showSnackBar(
+          //   //   const SnackBar(
+          //   //       content: Text(
+          //   //           'You do not have access to this exercise. Upgrade to premium to access.')),
+          //   // );
+          // } else {
+          //   showPremiumDialog(context, _account!, widget.fetchAccount);
+          // }
         },
       ),
     );
