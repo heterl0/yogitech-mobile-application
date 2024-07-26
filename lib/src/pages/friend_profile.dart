@@ -107,10 +107,10 @@ class _nameState extends State<FriendProfile> {
                               ? Align(
                                   alignment: Alignment.center,
                                   child: Text(
-                                    _soProfile!.first_name!.isNotEmpty
+                                    _soProfile!.first_name != null
                                         ? _soProfile!.first_name![0]
                                             .toUpperCase()
-                                        : ':)',
+                                        : name[0].toUpperCase(),
                                     style: TextStyle(
                                       fontSize: 74, // Adjust the size as needed
                                       color: active,

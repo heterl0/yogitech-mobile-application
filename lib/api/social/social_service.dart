@@ -30,7 +30,7 @@ Future<Account?> followUser(int userId) async {
 Future<Account?> unfollowUser(int userId) async {
   try {
     final url = formatApiUrl('/api/v1/social/unfollow/$userId/');
-    final Response response = await DioInstance.delete(url);
+    await DioInstance.delete(url);
     final account = await getUser();
     if (account != null) {
       await storeAccount(account);
@@ -49,7 +49,7 @@ Future<List<dynamic>> getFollowersById(int userId) async {
     if (response.statusCode == 200) {
       List<dynamic> data =
           response.data.map((e) => Account.fromMap(e)).toList();
-      data = data.where((ac)=> ac.active_status==1).toList();
+      data = data.where((ac) => ac.active_status == 1).toList();
       return data;
     } else {
       print('Get followers failed with status code: ${response.statusCode}');
@@ -85,8 +85,8 @@ Future<List<dynamic>> getFollowers() async {
     final Response response = await DioInstance.get(url);
     if (response.statusCode == 200) {
       List<dynamic> data =
-          response.data.map((e) => Account.fromMap(e)).toList();
-      data = data.where((ac)=> ac.active_status==1).toList();
+          response.data.map((e) => SocialProfile.fromMap(e)).toList();
+      data = data.where((ac) => ac.active_status == 1).toList();
       return data;
     } else {
       print('Get followers failed with status code: ${response.statusCode}');
@@ -104,8 +104,8 @@ Future<List<dynamic>> getFollowing() async {
     final Response response = await DioInstance.get(url);
     if (response.statusCode == 200) {
       List<dynamic> data =
-          response.data.map((e) => Account.fromMap(e)).toList();
-      data = data.where((ac)=> ac.active_status==1).toList();
+          response.data.map((e) => SocialProfile.fromMap(e)).toList();
+      data = data.where((ac) => ac.active_status == 1).toList();
       return data;
     } else {
       print('Get following failed with status code: ${response.statusCode}');
