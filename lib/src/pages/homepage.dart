@@ -306,7 +306,14 @@ class _HomePageState extends State<HomePage> {
                         subtitle: trans.fiveBasicPoses,
                         poseName: trans.exploreNow,
                         imagePath: 'assets/images/Universe.png',
-                        onTap: () {}),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    AllExercise()), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                          );
+                        }),
                   ],
                   options: CarouselOptions(
                     height: 240, // Adjust height as needed

@@ -122,6 +122,18 @@ class _PersonalizedExerciseCreatePageState
     if (_poses.isEmpty) {
       await _fetchPoses(); // Đợi tải dữ liệu xong
     }
+
+// Sắp xếp lại danh sách _poses
+    _poses.sort((a, b) {
+      if (_selectedPoses.contains(a) && !_selectedPoses.contains(b)) {
+        return -1; // Đưa pose đã chọn lên trước
+      } else if (!_selectedPoses.contains(a) && _selectedPoses.contains(b)) {
+        return 1; // Đưa pose chưa chọn xuống sau
+      } else {
+        return 0; // Giữ nguyên thứ tự nếu cả hai đều đã chọn hoặc chưa chọn
+      }
+    });
+
     Navigator.of(context).pop();
     showDialog(
       context: context,
@@ -145,6 +157,8 @@ class _PersonalizedExerciseCreatePageState
                     final pose = _poses[index];
                     final isSelected = _selectedPoses.contains(pose);
                     final durationController = _durationControllers[pose.id]!;
+                    final poseNumber =
+                        _selectedPoses.indexOf(pose) + 1; // Tính số thứ tự
 
                     return GestureDetector(
                       onTap: () {
@@ -208,6 +222,18 @@ class _PersonalizedExerciseCreatePageState
                                 ),
                               ),
                             ),
+                            if (isSelected) // Chỉ hiển thị cho các tư thế đã chọn
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: primary, // Màu nền nổi bật
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  '$poseNumber',
+                                  style: min_cap.copyWith(color: active),
+                                ),
+                              ),
                           ],
                         ),
                       ),
