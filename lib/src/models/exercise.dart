@@ -91,7 +91,7 @@ class Exercise {
   int id;
   String title;
   String image_url;
-  String video_url;
+  String? video_url;
   int? durations;
   int level;
   String benefit;
@@ -111,7 +111,7 @@ class Exercise {
     required this.id,
     required this.title,
     required this.image_url,
-    required this.video_url,
+    this.video_url,
     required this.durations,
     required this.level,
     required this.benefit,
@@ -198,7 +198,7 @@ class Exercise {
       id: map['id'] as int,
       title: map['title'] as String,
       image_url: map['image_url'] as String,
-      video_url: map['video_url'] as String,
+      video_url: map['video_url'] != null ? map['video_url'] as String : "",
       durations: map['durations'] ?? 0,
       level: map['level'] as int,
       benefit: map['benefit'] as String,

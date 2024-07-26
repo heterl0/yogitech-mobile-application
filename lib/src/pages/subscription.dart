@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:YogiTech/api/auth/auth_service.dart';
@@ -6,6 +7,7 @@ import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/subscriptions.dart';
 import 'package:YogiTech/src/widgets/checkbox.dart';
 import 'package:YogiTech/utils/formatting.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';
@@ -14,6 +16,7 @@ import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
@@ -83,7 +86,9 @@ class _SubscriptionState extends State<SubscriptionPage> {
             (_account!.is_premium!)) {
           _currendSub = _userSubs[_userSubs.length - 1];
           _subStatus = checkExpire(_currendSub!)!.message;
-          if (_subStatus == null && (_currendSub!.activeStatus != 0 || _account?.is_premium==true)) {
+          if (_subStatus == null &&
+              (_currendSub!.activeStatus != 0 ||
+                  _account?.is_premium == true)) {
             print('ex');
             makeSubExpire(_currendSub!);
             _currendSub = null;
@@ -512,8 +517,25 @@ class _SubscriptionState extends State<SubscriptionPage> {
                     try {
                       if (sub.gemPrice != null &&
                           ((_account?.profile.point)! >= sub.gemPrice!)) {
+                        // Hash data
+                        Map<String, dynamic> paymentData = {
+                          'subscription': subscriptionId,
+                          'subscription_type': 1,
+                          'user': _account!.id,
+                        };
+                        String dataString =
+                            jsonEncode(paymentData); // Convert to JSON string
+                        // Use Hmac (Hash-based Message Authentication Code) for security
+                        print(dataString);
+                        List<int> key = utf8.encode(dotenv
+                            .env['PAYMENT_SECRET_KEY']!); // Your backend key
+                        List<int> bytes = utf8.encode(dataString);
+                        Hmac hmacSha256 = Hmac(sha256, key); // HMAC-SHA256
+                        Digest digest = hmacSha256.convert(bytes);
+                        String secretKey = digest.toString();
+                        print(secretKey);
                         final userSubscription =
-                            await subscribe(subscriptionId, 1);
+                            await subscribe(subscriptionId, 1, secretKey);
                         if (userSubscription != null) {
                           widget.fetchAccount!();
                           final account = await retrieveAccount();
