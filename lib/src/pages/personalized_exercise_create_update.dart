@@ -103,19 +103,19 @@ class _PersonalizedExerciseCreatePageState
       barrierDismissible: false, // Ngăn người dùng tắt hộp thoại khi đang tải
       builder: (BuildContext context) {
         return AlertDialog(
-            title: Text(
-              trans.selectPoses,
-              style: h3.copyWith(color: theme.colorScheme.onPrimary),
+          title: Text(
+            trans.selectPoses,
+            style: h3.copyWith(color: theme.colorScheme.onPrimary),
+          ),
+          elevation: appElevation,
+          backgroundColor: theme.colorScheme.onSecondary,
+          content: SizedBox(
+            width: double.maxFinite,
+            child: Center(
+              child: CircularProgressIndicator(), // Hiển thị vòng tròn loading
             ),
-            elevation: appElevation,
-            backgroundColor: theme.colorScheme.onSecondary,
-            content: SizedBox(
-              width: double.maxFinite,
-              child: Center(
-                child:
-                    CircularProgressIndicator(), // Hiển thị vòng tròn loading
-              ),
-            ));
+          ),
+        );
       },
     );
 
@@ -138,15 +138,9 @@ class _PersonalizedExerciseCreatePageState
             width: double.maxFinite,
             child: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-                return GridView.builder(
+                return ListView.builder(
                   shrinkWrap: true,
                   itemCount: _poses.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 6 / 11,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                  ),
                   itemBuilder: (context, index) {
                     final pose = _poses[index];
                     final isSelected = _selectedPoses.contains(pose);
@@ -159,6 +153,8 @@ class _PersonalizedExerciseCreatePageState
                         });
                       },
                       child: Container(
+                        margin: EdgeInsets.only(
+                            bottom: 8), // Khoảng cách giữa các hàng
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: isSelected ? primary : Colors.transparent,
@@ -166,68 +162,53 @@ class _PersonalizedExerciseCreatePageState
                           ),
                           borderRadius: BorderRadius.circular(16.0),
                         ),
-                        child: GridTile(
-                          header: GridTileBar(
-                            title: Text(
-                              levelMapping[pose.level]!,
-                              style: min_cap.copyWith(color: primary),
+                        child: Row(
+                          children: [
+                            Image.network(
+                              pose.image_url,
+                              fit: BoxFit.cover,
+
+                              width: 80, // Đặt chiều rộng cố định cho hình ảnh
                             ),
-                            trailing: isSelected
-                                ? Icon(Icons.check, color: primary)
-                                : null, // Added checkmark icon
-                          ),
-                          footer: Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 8, left: 8, right: 8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${trans.duration} (${trans.seconds})',
-                                  style: min_cap.copyWith(color: primary),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      pose.name,
+                                      style: bd_text.copyWith(
+                                          color: primary, height: 1.2),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      '${pose.calories} ${trans.calorie}',
+                                      style: min_cap.copyWith(color: text),
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      '${trans.duration} (${trans.seconds})',
+                                      style: min_cap.copyWith(color: primary),
+                                    ),
+                                    SizedBox(height: 4),
+                                    BoxInputField(
+                                      isSmall: true,
+                                      controller: durationController,
+                                      keyboardType: TextInputType.number,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          pose.duration =
+                                              int.tryParse(value) ?? 0;
+                                        });
+                                      },
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(height: 8),
-                                BoxInputField(
-                                  isSmall: true,
-                                  controller: durationController,
-                                  keyboardType: TextInputType.number,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      pose.duration = int.tryParse(value) ?? 0;
-                                    });
-                                  },
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(8)),
-                                  child: Image.network(
-                                    pose.image_url,
-                                    fit: BoxFit.cover,
-                                    height: 80,
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  pose.name,
-                                  style: bd_text.copyWith(
-                                      color: primary, height: 1.2),
-                                  textAlign: TextAlign.left,
-                                ),
-                                Text(
-                                  '${pose.calories} ${trans.calorie}',
-                                  style: min_cap.copyWith(color: text),
-                                ),
-                              ],
-                            ),
-                          ),
+                          ],
                         ),
                       ),
                     );

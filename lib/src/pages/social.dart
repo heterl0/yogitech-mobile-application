@@ -265,10 +265,6 @@ class NewsListItem extends StatelessWidget {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.transparent,
-                            border: Border.all(
-                              color: Colors.blue, // Color of the border
-                              width: 1.0, // Width of the border
-                            ),
                             image: DecorationImage(
                               image: AssetImage('assets/icons/yogiAvatar.png'),
                               fit: BoxFit
