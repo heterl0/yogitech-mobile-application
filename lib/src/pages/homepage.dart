@@ -205,15 +205,15 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomButton(
-                    title: 'title',
-                    style: ButtonStyleType.Primary,
-                    onPressed: () => {
-                          pushWithoutNavBar(
-                            context,
-                            MaterialPageRoute(builder: (context) => Tutorial()),
-                          ) // Thay NewPage() bằng trang bạn muốn chuyển tới);
-                        }),
+                // CustomButton(
+                //     title: 'title',
+                //     style: ButtonStyleType.Primary,
+                //     onPressed: () => {
+                //           pushWithoutNavBar(
+                //             context,
+                //             MaterialPageRoute(builder: (context) => Tutorial()),
+                //           ) // Thay NewPage() bằng trang bạn muốn chuyển tới);
+                //         }),
                 // Padding(
                 //   padding:
                 //       const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -270,40 +270,43 @@ class _HomePageState extends State<HomePage> {
                 CarouselSlider(
                   items: [
                     _buildCarouselItem(
-                      title: trans.tryThisExercise,
-                      subtitle: trans.forBeginner,
-                      poseName: 'Warrior 2 pose!',
-                      imagePath:
-                          'assets/images/ads_exercise_for_beginner.png', // Hình ảnh tư thế Warrior 2
-                    ),
+                        title: trans.tryThisExercise,
+                        subtitle: trans.forBeginner,
+                        poseName: 'Warrior 2 pose!',
+                        imagePath:
+                            'assets/images/ads_exercise_for_beginner.png',
+                        onTap: () {}),
                     _buildCarouselItem(
-                      title: "30 Ngày Thử Thách Yoga",
-                      subtitle: "Tăng cường sức khỏe và sự dẻo dai!",
-                      poseName: "Tham gia ngay!",
-                      imagePath:
-                          'assets/images/Muscle.png', // Hình ảnh minh họa thử thách
-                    ),
+                        title: trans.thirtyDayYogaChallenge,
+                        subtitle: trans.improveHealthAndFlexibility,
+                        poseName: trans.joinNow,
+                        imagePath: 'assets/images/Muscle.png',
+                        onTap: () {}),
                     _buildCarouselItem(
-                      title: "Yoga đã thay đổi cuộc sống của tôi",
-                      subtitle: "Câu chuyện truyền cảm hứng của Minh Anh",
-                      poseName: "Chia sẻ hành trình của bạn!",
-                      imagePath:
-                          'assets/images/Fire.png', // Hình ảnh người tập yoga
-                    ),
+                        title: trans.yogaChangedMyLife,
+                        subtitle: trans.minhAnhInspirationalStory,
+                        poseName: trans.shareYourJourney,
+                        imagePath: 'assets/images/Fire.png',
+                        onTap: () {}),
                     _buildCarouselItem(
-                      title: "Ưu đãi đặc biệt dành cho thành viên mới!",
-                      subtitle: "Nhận ngay 2 buổi tập cá nhân miễn phí",
-                      poseName: "Đăng ký gói Premium ngay!",
-                      imagePath:
-                          'assets/images/Crown.png', // Hình ảnh quà tặng hoặc giảm giá
-                    ),
+                        title: trans.specialOfferForNewMembers,
+                        subtitle: trans.receiveTwoFreeSessions,
+                        poseName: trans.subscribePremiumNow,
+                        imagePath: 'assets/images/Crown.png',
+                        onTap: () {
+                          pushWithoutNavBar(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SubscriptionPage(
+                                      account: _account,
+                                      fetchAccount: widget.fetchAccount)));
+                        }),
                     _buildCarouselItem(
-                      title: "Mẹo Yoga cho người mới bắt đầu",
-                      subtitle: "5 tư thế cơ bản giúp bạn làm quen với Yoga",
-                      poseName: "Khám phá ngay!",
-                      imagePath:
-                          'assets/images/Universe.png', // Hình ảnh minh họa các tư thế
-                    ),
+                        title: trans.yogaTipsForBeginners,
+                        subtitle: trans.fiveBasicPoses,
+                        poseName: trans.exploreNow,
+                        imagePath: 'assets/images/Universe.png',
+                        onTap: () {}),
                   ],
                   options: CarouselOptions(
                     height: 240, // Adjust height as needed
@@ -423,35 +426,54 @@ class _HomePageState extends State<HomePage> {
     required String subtitle,
     required String poseName,
     required String imagePath,
+    required VoidCallback onTap, // Thêm tham số onTap
   }) {
     final theme = Theme.of(context);
-    return Padding(
-      padding: EdgeInsets.all(12),
-      child: Row(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(left: 16, top: 16, bottom: 16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title,
+    return GestureDetector(
+      onTap: onTap, // Gọi hàm khi bấm vào item
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
                       style:
-                          bd_text.copyWith(color: theme.colorScheme.onPrimary)),
-                  Text(subtitle,
-                      style: h3.copyWith(color: theme.colorScheme.onPrimary)),
-                  const Spacer(),
-                  Text(poseName, style: bd_text.copyWith(color: primary)),
-                ],
+                          bd_text.copyWith(color: theme.colorScheme.onPrimary),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      poseName,
+                      style: bd_text.copyWith(color: primary),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: Image.asset(
-                imagePath), // Sử dụng Image.asset thay vì AssetImage
-          ),
-        ],
+            SizedBox(width: 16),
+            SizedBox(
+              width: 100,
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(width: 16),
+          ],
+        ),
       ),
     );
   }
