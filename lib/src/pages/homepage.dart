@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/pages/tutorial.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:YogiTech/api/blog/blog_service.dart';
 import 'package:YogiTech/src/models/exercise.dart';
@@ -204,17 +205,15 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // CustomButton(
-                //     title: 'title',
-                //     style: ButtonStyleType.Primary,
-                //     onPressed: () => {
-                //           pushWithoutNavBar(
-                //             context,
-                //             MaterialPageRoute(
-                //               builder: (context) => PrelaunchSurveyPage(),
-                //             ),
-                //           ),
-                //         }),
+                CustomButton(
+                    title: 'title',
+                    style: ButtonStyleType.Primary,
+                    onPressed: () => {
+                          pushWithoutNavBar(
+                            context,
+                            MaterialPageRoute(builder: (context) => Tutorial()),
+                          ) // Thay NewPage() bằng trang bạn muốn chuyển tới);
+                        }),
                 // Padding(
                 //   padding:
                 //       const EdgeInsets.symmetric(horizontal: 24, vertical: 16),

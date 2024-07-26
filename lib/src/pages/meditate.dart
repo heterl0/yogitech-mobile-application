@@ -35,6 +35,7 @@ class _MeditateState extends State<Meditate> {
   void initState() {
     super.initState();
     _initSharedPreferences();
+    _updateStreakData();
   }
 
   Future<void> _initSharedPreferences() async {

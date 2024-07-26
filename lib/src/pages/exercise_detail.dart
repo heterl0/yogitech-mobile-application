@@ -20,7 +20,6 @@ import 'package:YogiTech/src/widgets/box_input_field.dart';
 import 'package:YogiTech/src/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:YogiTech/utils/formatting.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class ExerciseDetail extends StatefulWidget {
   final Account? account;
@@ -83,32 +82,29 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         buttonTitle: trans.doExercise,
         onPressed: () async {
           bool? isPremium = _account?.is_premium ?? false;
-          pushWithoutNavBar(
-            context,
-            MaterialPageRoute(builder: (context) => Tutorial()),
-          ); // Thay NewPage() bằng trang bạn muốn chuyển tới);
-          // if (_account != null && (isPremium || !_exercise!.is_premium)) {
-          //   if (widget.event != null) {
-          //     await storeExercise(_exercise!, widget.event!.id);
-          //   } else {
-          //     await storeExercise(_exercise!, null);
-          //   }
-          //   const platform = MethodChannel('com.example.yogitech');
-          //   await platform.invokeMethod('exerciseActivity');
-          //   final methodChannel = MethodChannelHandler(
-          //       account: _account,
-          //       fetchAccount: widget.fetchAccount,
-          //       fetchEvent: widget.fetchEvent ?? () {});
-          //   methodChannel.context = context;
 
-          //   // ScaffoldMessenger.of(context).showSnackBar(
-          //   //   const SnackBar(
-          //   //       content: Text(
-          //   //           'You do not have access to this exercise. Upgrade to premium to access.')),
-          //   // );
-          // } else {
-          //   showPremiumDialog(context, _account!, widget.fetchAccount);
-          // }
+          if (_account != null && (isPremium || !_exercise!.is_premium)) {
+            if (widget.event != null) {
+              await storeExercise(_exercise!, widget.event!.id);
+            } else {
+              await storeExercise(_exercise!, null);
+            }
+            const platform = MethodChannel('com.example.yogitech');
+            await platform.invokeMethod('exerciseActivity');
+            final methodChannel = MethodChannelHandler(
+                account: _account,
+                fetchAccount: widget.fetchAccount,
+                fetchEvent: widget.fetchEvent ?? () {});
+            methodChannel.context = context;
+
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   const SnackBar(
+            //       content: Text(
+            //           'You do not have access to this exercise. Upgrade to premium to access.')),
+            // );
+          } else {
+            showPremiumDialog(context, _account!, widget.fetchAccount);
+          }
         },
       ),
     );
@@ -224,20 +220,29 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '$minute ${trans.minutes}',
+          '${trans.duration}: ',
           style: bd_text.copyWith(color: text),
+        ),
+        Text(
+          '$minute ${trans.minutes}',
+          style: bd_text.copyWith(color: primary),
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: Text(
-            level == 1
-                ? trans.beginner
-                : level == 2
-                    ? trans.advance
-                    : trans.professional,
-            style: bd_text.copyWith(color: primary),
-          ),
-        ),
+            child: Row(
+          children: [
+            Text(
+              '${trans.level}: ',
+              style: bd_text.copyWith(color: text),
+            ),
+            Text(
+              level == 1
+                  ? trans.beginner
+                  : (level == 2 ? trans.advance : trans.professional),
+              style: bd_text.copyWith(color: primary),
+            ),
+          ],
+        )),
       ],
     );
   }
@@ -318,19 +323,21 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                   style: h3.copyWith(color: theme.colorScheme.onPrimary),
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Wrap(
+                  spacing: 4,
+                  alignment: WrapAlignment.spaceBetween,
+                  runSpacing: 4,
                   children: [
                     Text(
-                      '${trans.duration}: ${pose.duration}',
+                      '${trans.duration}: ${pose.duration} ${trans.seconds}.',
                       style: bd_text.copyWith(color: primary),
                     ),
                     Text(
-                      '${trans.level}: ${pose.level}',
+                      '${trans.burned}: ${pose.calories} ${trans.calorie}.',
                       style: bd_text.copyWith(color: primary),
                     ),
                     Text(
-                      '${trans.calorie}: ${pose.calories}',
+                      '${trans.level}: ${pose.level == 1 ? trans.beginner : (pose.level == 2 ? trans.advance : trans.professional)}.',
                       style: bd_text.copyWith(color: primary),
                     ),
                   ],
