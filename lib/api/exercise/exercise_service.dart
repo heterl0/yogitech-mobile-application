@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/models/pose.dart';
 import 'package:dio/dio.dart';
 import 'package:YogiTech/api/dioInstance.dart';
 import 'package:YogiTech/src/models/exercise.dart';
@@ -168,5 +169,137 @@ Future<bool> isExerciseToday() async {
   } catch (e) {
     print('Check exercise log error: $e');
     return false;
+  }
+}
+
+class PostPersonalExerciseRequest {
+  String title;
+  int level;
+  List<Pose> poses;
+  List<int> duration;
+
+  PostPersonalExerciseRequest({
+    required this.title,
+    required this.level,
+    required this.poses,
+    required this.duration,
+  });
+}
+
+Future<dynamic> postPersonalExercise(
+    PostPersonalExerciseRequest request) async {
+  try {
+    final url = formatApiUrl('/api/v1/exercises/');
+    final pose = request.poses.map((e) => e.id).toList();
+    final time = pose.map((e) => 0).toList();
+    int durations = 0;
+    for (int i = 0; i < request.poses.length; i++) {
+      durations += request.duration[i];
+    }
+    double calories = 0;
+    for (int i = 0; i < request.poses.length; i++) {
+      Pose pose = request.poses[i];
+      calories +=
+          int.parse(pose.calories) * request.duration[i] / pose.duration;
+    }
+    final Response response = await DioInstance.post(url, data: {
+      "title": request.title,
+      "level": request.level,
+      "poses": pose,
+      "time": time,
+      "durations": durations,
+      "calories": calories,
+      "duration": request.duration,
+      "point": 1,
+      "number_poses": request.poses.length,
+      "is_premium": true,
+    });
+    if (response.statusCode == 201) {
+      return Exercise.fromMap(response.data);
+    } else {
+      print('Create exercise failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Create exercise  error: $e');
+    return null;
+  }
+}
+
+Future<dynamic> getPersonalExercise() async {
+  try {
+    final url = formatApiUrl('/api/v1/exercise-personal/');
+    final Response response = await DioInstance.get(url);
+    if (response.statusCode == 200) {
+      List<dynamic> data =
+          response.data.map((e) => Exercise.fromMap(e)).toList();
+      data = data.where((e) => e.active_status == 1).toList();
+      return data;
+    } else {
+      print('Get exercises failed with status code: ${response.statusCode}');
+      return [];
+    }
+  } catch (e) {
+    print('Get exercises error: $e');
+    return [];
+  }
+}
+
+Future<dynamic> patchDisablePersonalExercise(int id) async {
+  try {
+    final url = formatApiUrl('/api/v1/exercises/$id/');
+    final Response response = await DioInstance.patch(url, data: {
+      "active_status": 0,
+    });
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      print(
+          'Disable personal exercise failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Disable personal exercise error: $e');
+    return null;
+  }
+}
+
+Future<dynamic> patchUpdatePersonalExercise(
+    int id, PostPersonalExerciseRequest request) async {
+  try {
+    final url = formatApiUrl('/api/v1/exercises/$id/');
+    final pose = request.poses.map((e) => e.id).toList();
+    final time = pose.map((e) => 0).toList();
+    int durations = 0;
+    for (int i = 0; i < request.poses.length; i++) {
+      durations += request.duration[i];
+    }
+    double calories = 0;
+    for (int i = 0; i < request.poses.length; i++) {
+      Pose pose = request.poses[i];
+      calories +=
+          int.parse(pose.calories) * request.duration[i] / pose.duration;
+    }
+    final Response response = await DioInstance.patch(url, data: {
+      "title": request.title,
+      "level": request.level,
+      "poses": pose,
+      "time": time,
+      "durations": durations,
+      "calories": calories,
+      "duration": request.duration,
+      "point": 1,
+      "number_poses": request.poses.length,
+      "is_premium": true,
+    });
+    if (response.statusCode == 200) {
+      return Exercise.fromMap(response.data);
+    } else {
+      print('Update exercise failed with status code: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Update exercise  error: $e');
+    return null;
   }
 }
