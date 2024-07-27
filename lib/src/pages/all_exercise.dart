@@ -137,12 +137,13 @@ class BlogState extends State<AllExercise> {
               setState(() {
                 _fetchExercise('');
                 _searchController.clear();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          HomePage()), // Thay NewPage() bằng trang bạn muốn chuyển tới
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) =>
+                //           HomePage()), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                // );
+                Navigator.pop(context);
               });
             },
           ),

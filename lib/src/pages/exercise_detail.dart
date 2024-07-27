@@ -1,5 +1,6 @@
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/event.dart';
+import 'package:YogiTech/src/pages/tutorial.dart';
 import 'package:YogiTech/src/shared/premium_dialog.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:YogiTech/utils/method_channel_handler.dart';
@@ -81,6 +82,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         buttonTitle: trans.doExercise,
         onPressed: () async {
           bool? isPremium = _account?.is_premium ?? false;
+
           if (_account != null && (isPremium || !_exercise!.is_premium)) {
             if (widget.event != null) {
               await storeExercise(_exercise!, widget.event!.id);
@@ -218,20 +220,29 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '$minute ${trans.minutes}',
+          '${trans.duration}: ',
           style: bd_text.copyWith(color: text),
+        ),
+        Text(
+          '$minute ${trans.minutes}',
+          style: bd_text.copyWith(color: primary),
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: Text(
-            level == 1
-                ? trans.beginner
-                : level == 2
-                    ? trans.advance
-                    : trans.professional,
-            style: bd_text.copyWith(color: primary),
-          ),
-        ),
+            child: Row(
+          children: [
+            Text(
+              '${trans.level}: ',
+              style: bd_text.copyWith(color: text),
+            ),
+            Text(
+              level == 1
+                  ? trans.beginner
+                  : (level == 2 ? trans.advance : trans.professional),
+              style: bd_text.copyWith(color: primary),
+            ),
+          ],
+        )),
       ],
     );
   }
@@ -312,19 +323,21 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                   style: h3.copyWith(color: theme.colorScheme.onPrimary),
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Wrap(
+                  spacing: 4,
+                  alignment: WrapAlignment.spaceBetween,
+                  runSpacing: 4,
                   children: [
                     Text(
-                      '${trans.duration}: ${pose.duration}',
+                      '${trans.duration}: ${pose.duration} ${trans.seconds}.',
                       style: bd_text.copyWith(color: primary),
                     ),
                     Text(
-                      '${trans.level}: ${pose.level}',
+                      '${trans.burned}: ${pose.calories} ${trans.calorie}.',
                       style: bd_text.copyWith(color: primary),
                     ),
                     Text(
-                      '${trans.calorie}: ${pose.calories}',
+                      '${trans.level}: ${pose.level == 1 ? trans.beginner : (pose.level == 2 ? trans.advance : trans.professional)}.',
                       style: bd_text.copyWith(color: primary),
                     ),
                   ],
