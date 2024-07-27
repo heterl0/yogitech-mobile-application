@@ -1,5 +1,7 @@
 import 'package:YogiTech/api/dioInstance.dart';
+import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';
+import 'package:YogiTech/src/models/exercise.dart';
 import 'package:YogiTech/src/models/pose.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:YogiTech/src/widgets/dropdown_field.dart';
@@ -31,7 +33,8 @@ Future<List<Pose>> getPoses() async {
 }
 
 class PersonalizedExerciseCreatePage extends StatefulWidget {
-  const PersonalizedExerciseCreatePage({super.key});
+  final Exercise? exercise;
+  const PersonalizedExerciseCreatePage({super.key, this.exercise});
 
   @override
   _PersonalizedExerciseCreatePageState createState() =>
@@ -48,13 +51,23 @@ class _PersonalizedExerciseCreatePageState
 
   List<Pose> _poses = [];
   List<Pose> _selectedPoses = [];
-  Map<int, TextEditingController> _durationControllers = {};
+  final Map<int, TextEditingController> _durationControllers = {};
   int _selectedLevel = 999; // Default to beginner
 
   @override
   void initState() {
     super.initState();
-    _fetchPoses();
+    if (widget.exercise != null) {
+      _titleController.text = widget.exercise!.title;
+      _selectedLevel = widget.exercise!.level;
+
+      _selectedPoses = widget.exercise!.poses
+          .map((poseWithTime) => poseWithTime.pose)
+          .toList();
+
+      print('Các pose lấy về: ${widget.exercise!.poses}');
+    }
+    // _fetchPoses();
   }
 
   @override
@@ -258,6 +271,64 @@ class _PersonalizedExerciseCreatePageState
     );
   }
 
+  Future<void> _saveExercise() async {
+    final trans = AppLocalizations.of(context)!;
+    // Lấy thông tin từ các trường nhập liệu
+    final title = _titleController.text;
+
+    // Kiểm tra xem các trường bắt buộc đã được điền chưa
+    if (title.isEmpty || _selectedPoses.isEmpty || _selectedLevel == 999) {
+      // Hiển thị thông báo lỗi hoặc xử lý tùy theo yêu cầu
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Lỗi')),
+      );
+      return; // Thoát khỏi hàm nếu thiếu thông tin
+    }
+
+    // Lấy danh sách thời lượng từ các controller
+    final durations = _selectedPoses
+        .map((pose) => int.tryParse(_durationControllers[pose.id]!.text) ?? 0)
+        .toList();
+
+    print('Các thời lượng: ${durations}');
+
+    // Tạo đối tượng PostPersonalExerciseRequest
+    final request = PostPersonalExerciseRequest(
+      title: title,
+      level: _selectedLevel,
+      poses: _selectedPoses,
+      duration: durations,
+    );
+
+    if (widget.exercise != null) {
+      final updatedExercise =
+          await patchUpdatePersonalExercise(widget.exercise!.id, request);
+      if (updatedExercise != null) {
+        // Cập nhật thành công
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Cập nhật thành công!')));
+        Navigator.of(context).pop(
+            updatedExercise); // Quay về trang trước và trả về exercise đã cập nhật
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Cập nhật thất bại!')));
+      }
+    } else {
+      // Create new exercise
+      final exercise = await postPersonalExercise(request);
+      if (exercise != null) {
+        // Xử lý khi tạo thành công (ví dụ: chuyển hướng, hiển thị thông báo)
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('trans.createExerciseSuccessfully')));
+        Navigator.pop(context); // Hoặc chuyển hướng đến trang khác
+      } else {
+        // Xử lý khi tạo thất bại
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('trans.createExerciseFailed')));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -267,10 +338,19 @@ class _PersonalizedExerciseCreatePageState
       trans.intermediate: 2,
       trans.advanced: 3,
     };
+    final Map<int, String> reverseLevelMapping = {
+      1: trans.beginner,
+      2: trans.intermediate,
+      3: trans.advanced,
+    };
+
+    _difficultyController.text = reverseLevelMapping[_selectedLevel] ?? '';
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
-        title: trans.createExercise,
+        title: widget.exercise == null
+            ? trans.createExercise
+            : trans.updateExercise,
         style: widthStyle.Large,
       ),
       body: SingleChildScrollView(
@@ -347,9 +427,12 @@ class _PersonalizedExerciseCreatePageState
         ),
       ),
       bottomNavigationBar: CustomBottomBar(
-        buttonTitle: trans.create,
+        buttonTitle:
+            widget.exercise == null ? trans.create : trans.updateExercise,
         onPressed: () {
-          print('Selected Level: $_selectedLevel');
+          print('Các pose khi được update: ${_selectedPoses}');
+          _saveExercise();
+
           // Handle create exercise logic here
         },
       ),

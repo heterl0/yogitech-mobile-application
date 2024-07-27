@@ -200,15 +200,15 @@ Future<dynamic> postPersonalExercise(
     for (int i = 0; i < request.poses.length; i++) {
       Pose pose = request.poses[i];
       calories +=
-          int.parse(pose.calories) * request.duration[i] / pose.duration;
+          double.parse(pose.calories) * request.duration[i] / pose.duration;
     }
     final Response response = await DioInstance.post(url, data: {
       "title": request.title,
       "level": request.level,
-      "poses": pose,
+      "pose": pose,
       "time": time,
       "durations": durations,
-      "calories": calories,
+      "calories": calories.toStringAsFixed(2),
       "duration": request.duration,
       "point": 1,
       "number_poses": request.poses.length,
@@ -221,18 +221,26 @@ Future<dynamic> postPersonalExercise(
       return null;
     }
   } catch (e) {
+    if (e is DioException) {
+      print(e.response!.data);
+    }
     print('Create exercise  error: $e');
     return null;
   }
 }
 
-Future<dynamic> getPersonalExercise() async {
+Future<List<Exercise>> getPersonalExercise() async {
+  // Thay dynamic thành List<Exercise>
   try {
     final url = formatApiUrl('/api/v1/exercise-personal/');
     final Response response = await DioInstance.get(url);
+
     if (response.statusCode == 200) {
-      List<dynamic> data =
-          response.data.map((e) => Exercise.fromMap(e)).toList();
+      // Chuyển đổi từng phần tử thành Exercise
+      List<Exercise> data = (response.data as List)
+          .map((e) => Exercise.fromMap(e as Map<String, dynamic>))
+          .toList();
+
       data = data.where((e) => e.active_status == 1).toList();
       return data;
     } else {
@@ -278,12 +286,12 @@ Future<dynamic> patchUpdatePersonalExercise(
     for (int i = 0; i < request.poses.length; i++) {
       Pose pose = request.poses[i];
       calories +=
-          int.parse(pose.calories) * request.duration[i] / pose.duration;
+          double.parse(pose.calories) * request.duration[i] / pose.duration;
     }
     final Response response = await DioInstance.patch(url, data: {
       "title": request.title,
       "level": request.level,
-      "poses": pose,
+      "pose": pose,
       "time": time,
       "durations": durations,
       "calories": calories,
