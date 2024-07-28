@@ -1,6 +1,5 @@
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/event.dart';
-import 'package:YogiTech/src/pages/tutorial.dart';
 import 'package:YogiTech/src/shared/premium_dialog.dart';
 import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:YogiTech/utils/method_channel_handler.dart';
@@ -152,8 +151,8 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: CachedNetworkImageProvider(
-                  _exercise!
-                      .image_url, // Thay thế URL mặc định nếu _exercise!.image_url null
+                  _exercise!.image_url ??
+                      "", // Thay thế URL mặc định nếu _exercise!.image_url null
                 ),
                 fit: BoxFit.cover,
               ),
@@ -238,7 +237,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
             Text(
               level == 1
                   ? trans.beginner
-                  : (level == 2 ? trans.advance : trans.professional),
+                  : (level == 2 ? trans.intermediate : trans.advanced),
               style: bd_text.copyWith(color: primary),
             ),
           ],
@@ -337,7 +336,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                       style: bd_text.copyWith(color: primary),
                     ),
                     Text(
-                      '${trans.level}: ${pose.level == 1 ? trans.beginner : (pose.level == 2 ? trans.advance : trans.professional)}.',
+                      '${trans.level}: ${pose.level == 1 ? trans.beginner : (pose.level == 2 ? trans.intermediate : trans.advanced)}.',
                       style: bd_text.copyWith(color: primary),
                     ),
                   ],

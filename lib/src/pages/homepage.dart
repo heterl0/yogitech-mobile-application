@@ -336,7 +336,7 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     children: [
                       if (jsonList != null)
-                        for (final exercise in jsonList)
+                        for (final exercise in jsonList.take(5))
                           CustomCard(
                             topRightIcon: exercise.is_premium
                                 ? Image.asset('assets/images/Crown.png')
@@ -396,7 +396,7 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     children: [
                       if (jsonListSort != null)
-                        for (final exercise in jsonListSort)
+                        for (final exercise in jsonListSort.take(5))
                           CustomCard(
                             topRightIcon: exercise.is_premium
                                 ? Image.asset('assets/images/Crown.png')
