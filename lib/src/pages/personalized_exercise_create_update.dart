@@ -97,27 +97,20 @@ class _PersonalizedExerciseCreatePageState
 
   void _onPoseSelected(Pose pose) {
     setState(() {
-      print('_onPoseSelected được gọi');
       if (_selectedPoses.contains(pose)) {
         _selectedPoses.remove(pose);
-        _durationControllers.remove(pose.id);
       } else {
         _selectedPoses.add(pose);
-        if (!_durationControllers.containsKey(pose.id)) {
-          _durationControllers[pose.id] =
-              TextEditingController(text: pose.duration.toString());
-        }
+        // if (!_durationControllers.containsKey(pose.id)) {
+        //   _durationControllers[pose.id] =
+        //       TextEditingController(text: pose.duration.toString());
+        // }
       }
     });
   }
 
   Future<void> _showPoseSelectionDialog() async {
     final trans = AppLocalizations.of(context)!;
-    final Map<int, String> levelMapping = {
-      1: trans.beginner,
-      2: trans.intermediate,
-      3: trans.advanced,
-    };
     final theme = Theme.of(context);
     showDialog(
       context: context,
@@ -144,17 +137,6 @@ class _PersonalizedExerciseCreatePageState
       await _fetchPoses(); // Wait for data to load
     }
 
-    // Sort poses so that selected poses appear first
-    _poses.sort((a, b) {
-      if (_selectedPoses.contains(a) && !_selectedPoses.contains(b)) {
-        return -1; // Selected poses come first
-      } else if (!_selectedPoses.contains(a) && _selectedPoses.contains(b)) {
-        return 1; // Unselected poses come after
-      } else {
-        return 0; // Maintain order if both are selected or unselected
-      }
-    });
-
     Navigator.of(context).pop();
     showDialog(
       context: context,
@@ -171,17 +153,27 @@ class _PersonalizedExerciseCreatePageState
             width: double.maxFinite,
             child: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
+                // Sort poses so that selected poses appear first
+                _poses.sort((a, b) {
+                  if (_selectedPoses.contains(a) &&
+                      !_selectedPoses.contains(b)) {
+                    return -1; // Selected poses come first
+                  } else if (!_selectedPoses.contains(a) &&
+                      _selectedPoses.contains(b)) {
+                    return 1; // Unselected poses come after
+                  } else {
+                    return 0; // Maintain order if both are selected or unselected
+                  }
+                });
+
                 return ListView.builder(
                   shrinkWrap: true,
                   itemCount: _poses.length,
                   itemBuilder: (context, index) {
                     final pose = _poses[index];
                     final isSelected = _selectedPoses.contains(pose);
-                    print(
-                        'Các pose còn nằm trong _selectedPoses: ${_selectedPoses}');
                     final durationController = _durationControllers[pose.id]!;
-                    final poseNumber =
-                        _selectedPoses.indexOf(pose) + 1; // Get pose number
+                    final poseNumber = _selectedPoses.indexOf(pose) + 1;
 
                     return GestureDetector(
                       onTap: () {
@@ -190,8 +182,7 @@ class _PersonalizedExerciseCreatePageState
                         });
                       },
                       child: Container(
-                        margin:
-                            EdgeInsets.only(bottom: 8), // Margin between rows
+                        margin: EdgeInsets.only(bottom: 8),
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: isSelected ? primary : Colors.transparent,
@@ -204,7 +195,7 @@ class _PersonalizedExerciseCreatePageState
                             Image.network(
                               pose.image_url,
                               fit: BoxFit.cover,
-                              width: 80, // Fixed width for image
+                              width: 80,
                             ),
                             Expanded(
                               child: Padding(
@@ -234,21 +225,20 @@ class _PersonalizedExerciseCreatePageState
                                       controller: durationController,
                                       keyboardType: TextInputType.number,
                                       onChanged: (value) {
-                                        setState(() {
-                                          pose.duration =
-                                              int.tryParse(value) ?? 0;
-                                        });
+                                        final newDuration =
+                                            int.tryParse(value) ?? 0;
+                                        pose.duration = newDuration;
                                       },
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-                            if (isSelected) // Show only for selected poses
+                            if (isSelected)
                               Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: primary, // Highlight background color
+                                  color: primary,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
