@@ -136,8 +136,9 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
                   final result = await pushWithoutNavBar(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          PersonalizedExerciseCreatePage(exercise: exercise),
+                      builder: (context) => PersonalizedExerciseCreatePage(
+                        exercise: exercise,
+                      ),
                     ),
                   );
                   if (result == true) {
