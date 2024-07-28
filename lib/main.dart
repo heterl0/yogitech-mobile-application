@@ -1,3 +1,4 @@
+import 'package:YogiTech/api/account/account_service.dart';
 import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:YogiTech/services/notifi_service.dart';
 import 'package:YogiTech/src/models/social.dart';
@@ -80,6 +81,7 @@ Future<String?> checkToken() async {
     final accessToken = tokens['access'];
     if (accessToken != null) {
       DioInstance.setAccessToken(accessToken);
+      await getUser();
     }
     return accessToken;
   } catch (error) {

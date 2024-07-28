@@ -26,10 +26,10 @@ class AllExercise extends StatefulWidget {
       this.fetchAccount});
 
   @override
-  BlogState createState() => BlogState();
+  AllExerciseState createState() => AllExerciseState();
 }
 
-class BlogState extends State<AllExercise> {
+class AllExerciseState extends State<AllExercise> {
   List<dynamic> _exercises = [];
   bool _isLoading = false;
   final TextEditingController _searchController = TextEditingController();
