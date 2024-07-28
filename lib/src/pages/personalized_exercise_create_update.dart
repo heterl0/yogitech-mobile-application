@@ -114,7 +114,7 @@ class _PersonalizedExerciseCreatePageState
       }
 
       // Cập nhật lại _selectedPoses
-      _selectedPoses = _poses.where((p) => _selectedPoses.contains(p)).toList();
+      // _selectedPoses = _poses.where((p) => _selectedPoses.contains(p)).toList();
     });
   }
 
@@ -328,8 +328,8 @@ class _PersonalizedExerciseCreatePageState
         // Update successful
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(trans.updateSuccess)));
-        Navigator.of(context).pop(
-            updatedExercise); // Return to previous screen with updated exercise
+        Navigator.pop(
+            context, true); // Return to previous screen with updated exercise
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(trans.updateFail)));
@@ -341,7 +341,7 @@ class _PersonalizedExerciseCreatePageState
         // Handle successful creation (e.g., navigate, show message)
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('trans.createExerciseSuccessfully')));
-        Navigator.pop(context); // Or navigate to another page
+        Navigator.pop(context, true); // Or navigate to another page
       } else {
         // Handle creation failure
         ScaffoldMessenger.of(context).showSnackBar(
@@ -422,7 +422,7 @@ class _PersonalizedExerciseCreatePageState
                     return Text('Error loading poses');
                   } else {
                     return Wrap(
-                      spacing: 8.0,
+                      spacing: 12.0,
                       runSpacing: 0,
                       children: _selectedPoses.asMap().entries.map((entry) {
                         final pose = entry.value;

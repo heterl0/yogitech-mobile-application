@@ -1,5 +1,6 @@
 import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:YogiTech/src/models/exercise.dart';
+import 'package:YogiTech/src/pages/exercise_detail.dart';
 import 'package:YogiTech/src/pages/personalized_exercise_create_update.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
@@ -17,23 +18,28 @@ class PersonalizedExercisePage extends StatefulWidget {
 }
 
 class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
-  late Future<dynamic> _exercises;
+  late Future<List<Exercise>> _exerciseFuture;
 
   @override
   void initState() {
     super.initState();
-    _exercises = getPersonalExercise();
-    _printExercises(); // Gọi hàm để in exercises
+    _exerciseFuture = _fetchExercises();
   }
 
-  // Hàm async để in giá trị exercises
-  Future<void> _printExercises() async {
+  Future<List<Exercise>> _fetchExercises() async {
     try {
-      List<Exercise> exercises = await _exercises; // Đợi kết quả từ Future
-      print('Exercises: $exercises'); // In ra danh sách exercises
+      final exercises = await getPersonalExercise();
+      return exercises;
     } catch (e) {
-      print('Error: $e');
+      print('Error fetching exercises: $e');
+      return [];
     }
+  }
+
+  Future<void> _refreshExercises() async {
+    setState(() {
+      _exerciseFuture = _fetchExercises();
+    });
   }
 
   @override
@@ -46,42 +52,28 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
         title: trans.yourExercise,
         style: widthStyle.Large,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(24.0),
-          padding: EdgeInsets.only(bottom: 52),
-          child: FutureBuilder<dynamic>(
-            future: _exercises,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(
-                    child: Text(
-                  trans.errorLoadingExercises,
-                  style: bd_text.copyWith(color: text),
-                ));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(
-                    child: Text(trans.noExercisesFound,
-                        style: bd_text.copyWith(color: text)));
-              } else {
-                final exercises = snapshot.data!;
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: exercises.length,
-                  itemBuilder: (context, index) {
-                    final exercise = exercises[index];
-                    return _buildExerciseItem(exercise);
-                  },
-                );
-              }
-            },
-          ),
-        ),
+      body: FutureBuilder<List<Exercise>>(
+        future: _exerciseFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text(trans.errorLoadingExercises));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text(trans.noExercisesFound));
+          } else {
+            return ListView.builder(
+              padding: const EdgeInsets.all(24.0),
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                final exercise = snapshot.data![index];
+                return _buildExerciseItem(exercise);
+              },
+            );
+          }
+        },
       ),
-      floatingActionButton: _buildFloatingActionButton(context),
+      floatingActionButton: _buildFloatingActionButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
@@ -91,65 +83,122 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
     final theme = Theme.of(context);
     return Card(
       elevation: appElevation,
-      child: ListTile(
-        contentPadding: EdgeInsets.only(right: 0, left: 16),
-        title: Text(
-          exercise.title,
-          style: h3.copyWith(color: theme.colorScheme.onPrimary, height: 1.2),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 8,
+      child: InkWell(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+        onTap: () {
+          pushWithoutNavBar(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ExerciseDetail(exercise: exercise),
             ),
-            Row(
-              children: [
-                Text(
-                  '${trans.level}: ',
-                  style: bd_text.copyWith(color: text),
-                ),
-                Text(
-                  exercise.level == 1
-                      ? trans.beginner
-                      : (exercise.level == 2
-                          ? trans.intermediate
-                          : trans.advanced),
-                  style: bd_text.copyWith(color: primary),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text('${trans.duration}: ',
-                    style: bd_text.copyWith(color: text)),
-                Text('${exercise.durations} ${trans.seconds}',
-                    style: bd_text.copyWith(color: primary)),
-              ],
-            ),
-          ],
-        ),
-        trailing: IconButton(
-          icon: Icon(
-            Icons.edit,
-            color: text,
+          );
+        },
+        child: ListTile(
+          contentPadding: EdgeInsets.only(right: 0, left: 16),
+          title: Text(
+            exercise.title,
+            style: h3.copyWith(color: theme.colorScheme.onPrimary, height: 1.2),
           ),
-          onPressed: () {
-            pushWithoutNavBar(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PersonalizedExerciseCreatePage(
-                  exercise: exercise,
-                ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Text('${trans.level}: ',
+                      style: bd_text.copyWith(color: text)),
+                  Text(
+                    exercise.level == 1
+                        ? trans.beginner
+                        : (exercise.level == 2
+                            ? trans.intermediate
+                            : trans.advanced),
+                    style: bd_text.copyWith(color: primary),
+                  ),
+                ],
               ),
-            );
-          },
+              Row(
+                children: [
+                  Text('${trans.duration}: ',
+                      style: bd_text.copyWith(color: text)),
+                  Text('${exercise.durations} ${trans.seconds}',
+                      style: bd_text.copyWith(color: primary)),
+                ],
+              ),
+            ],
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: Icon(Icons.edit, color: text),
+                onPressed: () async {
+                  final result = await pushWithoutNavBar(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          PersonalizedExerciseCreatePage(exercise: exercise),
+                    ),
+                  );
+                  if (result == true) {
+                    _refreshExercises();
+                  }
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.delete, color: text),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      elevation: appElevation,
+                      backgroundColor: theme.colorScheme.onSecondary,
+                      title: Text(
+                        trans.deleteExercise,
+                        style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                      ),
+                      content: Text(
+                        trans.areYouSureDeleteExercise,
+                        style: bd_text.copyWith(
+                            color: theme.colorScheme.onPrimary),
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text(trans.cancel, style: bd_text),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        TextButton(
+                          child: Text(trans.delete, style: bd_text),
+                          onPressed: () async {
+                            Navigator.pop(context);
+                            final result =
+                                await patchDisablePersonalExercise(exercise.id);
+                            if (result != null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text(trans.deleteSuccessfully)),
+                              );
+                              _refreshExercises();
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(trans.deleteFailed)),
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildFloatingActionButton(BuildContext context) {
+  Widget _buildFloatingActionButton() {
     return FloatingActionButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       backgroundColor: Colors.transparent,
@@ -163,13 +212,16 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
         height: 60,
         child: InkWell(
           borderRadius: BorderRadius.circular(30),
-          onTap: () {
-            pushWithoutNavBar(
+          onTap: () async {
+            final result = await pushWithoutNavBar(
               context,
               MaterialPageRoute(
                 builder: (context) => PersonalizedExerciseCreatePage(),
               ),
             );
+            if (result == true) {
+              _refreshExercises();
+            }
           },
           child: const Icon(
             Icons.add,
