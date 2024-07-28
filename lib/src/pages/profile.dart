@@ -380,51 +380,51 @@ class _ProfilePageState extends State<ProfilePage>
                                               );
                                             },
                                           ),
-                                          // if (!(_account?.is_premium ?? false))
-                                          //   Positioned.fill(
-                                          //     child: BackdropFilter(
-                                          //       filter: ImageFilter.blur(
-                                          //           sigmaX: 5, sigmaY: 5),
-                                          //       child: GestureDetector(
-                                          //         onTap: () => {
-                                          //           showPremiumDialog(
-                                          //               context,
-                                          //               _account!,
-                                          //               widget.fetchAccount),
-                                          //         },
-                                          //         child: Container(
-                                          //           color: theme
-                                          //               .colorScheme.onSecondary
-                                          //               .withOpacity(0.8),
-                                          //           child: Center(
-                                          //             child: Row(
-                                          //               mainAxisAlignment:
-                                          //                   MainAxisAlignment
-                                          //                       .center,
-                                          //               children: [
-                                          //                 Icon(
-                                          //                   Icons.lock_outline,
-                                          //                   color: theme
-                                          //                       .colorScheme
-                                          //                       .onPrimary,
-                                          //                   size: 24,
-                                          //                 ),
-                                          //                 SizedBox(width: 8),
-                                          //                 Text(
-                                          //                   trans
-                                          //                       .premiumFeature,
-                                          //                   style: bd_text.copyWith(
-                                          //                       color: theme
-                                          //                           .colorScheme
-                                          //                           .onPrimary),
-                                          //                 ),
-                                          //               ],
-                                          //             ),
-                                          //           ),
-                                          //         ),
-                                          //       ),
-                                          //     ),
-                                          //   ),
+                                          if (!(_account?.is_premium ?? false))
+                                            Positioned.fill(
+                                              child: BackdropFilter(
+                                                filter: ImageFilter.blur(
+                                                    sigmaX: 5, sigmaY: 5),
+                                                child: GestureDetector(
+                                                  onTap: () => {
+                                                    showPremiumDialog(
+                                                        context,
+                                                        _account!,
+                                                        widget.fetchAccount),
+                                                  },
+                                                  child: Container(
+                                                    color: theme
+                                                        .colorScheme.onSecondary
+                                                        .withOpacity(0.8),
+                                                    child: Center(
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.lock_outline,
+                                                            color: theme
+                                                                .colorScheme
+                                                                .onPrimary,
+                                                            size: 24,
+                                                          ),
+                                                          SizedBox(width: 8),
+                                                          Text(
+                                                            trans
+                                                                .premiumFeature,
+                                                            style: bd_text.copyWith(
+                                                                color: theme
+                                                                    .colorScheme
+                                                                    .onPrimary),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                         ],
                                       )),
                                 ],
@@ -573,112 +573,44 @@ class _ProfilePageState extends State<ProfilePage>
                                         ],
                                       ),
                               ),
-
-                              // Padding(
-                              //   padding: EdgeInsets.all(8),
-                              //   child: AspectRatio(
-                              //     aspectRatio: 16 / 9,
-                              //     child: LineChart(LineChartData(
-                              //       borderData: FlBorderData(show: false),
-                              //       gridData: FlGridData(
-                              //         show: true,
-                              //         drawVerticalLine: false,
-                              //         drawHorizontalLine: true,
-                              //         getDrawingHorizontalLine: (value) {
-                              //           return FlLine(
-                              //             color: stroke,
-                              //             strokeWidth: 1,
-                              //           );
-                              //         },
-                              //       ),
-                              //       lineBarsData: [
-                              //         LineChartBarData(
-                              //           spots: sampleDataPoints,
-                              //           isCurved: true,
-                              //           color: green,
-                              //           barWidth: 4,
-                              //         ),
-                              //         LineChartBarData(
-                              //           spots: sampleDataExp,
-                              //           isCurved: true,
-                              //           gradient: gradient,
-                              //           barWidth: 4,
-                              //         ),
-                              //       ],
-                              //       titlesData: FlTitlesData(
-                              //         leftTitles: AxisTitles(
-                              //           sideTitles: SideTitles(
-                              //             getTitlesWidget: (value, meta) {
-                              //               return Text(
-                              //                 value.toString(),
-                              //                 style:
-                              //                     min_cap.copyWith(color: text),
-                              //                 textAlign: TextAlign.center,
-                              //               );
-                              //             },
-                              //             reservedSize: 60,
-                              //             showTitles: true,
-                              //           ),
-                              //         ),
-                              //         bottomTitles: AxisTitles(
-                              //           drawBelowEverything: true,
-                              //           sideTitles: SideTitles(
-                              //               getTitlesWidget: (value, meta) {
-                              //                 return Text(
-                              //                   value.toString(),
-                              //                   style: min_cap.copyWith(
-                              //                       color: text),
-                              //                   textAlign: TextAlign.center,
-                              //                 );
-                              //               },
-                              //               showTitles: true,
-                              //               reservedSize: 48),
-                              //         ),
-                              //         topTitles: AxisTitles(),
-                              //         rightTitles: AxisTitles(),
-                              //       ),
-                              //     )),
-                              //   ),
-                              // ),
-
-                              // if (!(_account?.is_premium ?? false))
-                              //   Positioned.fill(
-                              //     child: BackdropFilter(
-                              //       filter:
-                              //           ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                              //       child: GestureDetector(
-                              //         onTap: () => {
-                              //           showPremiumDialog(context, _account!,
-                              //               widget.fetchAccount),
-                              //         },
-                              //         child: Container(
-                              //           color: theme.colorScheme.onSecondary
-                              //               .withOpacity(0.8),
-                              //           child: Center(
-                              //             child: Column(
-                              //               mainAxisAlignment:
-                              //                   MainAxisAlignment.center,
-                              //               children: [
-                              //                 Icon(
-                              //                   Icons.lock_outline,
-                              //                   color:
-                              //                       theme.colorScheme.onPrimary,
-                              //                   size: 40,
-                              //                 ),
-                              //                 SizedBox(height: 8),
-                              //                 Text(
-                              //                   trans.premiumFeature,
-                              //                   style: h2.copyWith(
-                              //                       color: theme
-                              //                           .colorScheme.onPrimary),
-                              //                 ),
-                              //               ],
-                              //             ),
-                              //           ),
-                              //         ),
-                              //       ),
-                              //     ),
-                              //   ),
+                              if (!(_account?.is_premium ?? false))
+                                Positioned.fill(
+                                  child: BackdropFilter(
+                                    filter:
+                                        ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                                    child: GestureDetector(
+                                      onTap: () => {
+                                        showPremiumDialog(context, _account!,
+                                            widget.fetchAccount),
+                                      },
+                                      child: Container(
+                                        color: theme.colorScheme.onSecondary
+                                            .withOpacity(0.8),
+                                        child: Center(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.lock_outline,
+                                                color:
+                                                    theme.colorScheme.onPrimary,
+                                                size: 40,
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(
+                                                trans.premiumFeature,
+                                                style: h2.copyWith(
+                                                    color: theme
+                                                        .colorScheme.onPrimary),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                             ],
                           ),
                         ),

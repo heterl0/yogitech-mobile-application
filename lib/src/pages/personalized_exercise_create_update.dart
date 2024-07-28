@@ -45,9 +45,6 @@ class _PersonalizedExerciseCreatePageState
     extends State<PersonalizedExerciseCreatePage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _difficultyController = TextEditingController();
-  final TextEditingController _caloriesController = TextEditingController();
-  final TextEditingController _benefitsController = TextEditingController();
-  final TextEditingController _pointController = TextEditingController();
 
   List<Pose> _poses = [];
   List<Pose> _selectedPoses = [];
@@ -78,9 +75,6 @@ class _PersonalizedExerciseCreatePageState
   void dispose() {
     _titleController.dispose();
     _difficultyController.dispose();
-    _caloriesController.dispose();
-    _benefitsController.dispose();
-    _pointController.dispose();
     _durationControllers.values.forEach((controller) => controller.dispose());
     super.dispose();
   }
@@ -103,8 +97,10 @@ class _PersonalizedExerciseCreatePageState
 
   void _onPoseSelected(Pose pose) {
     setState(() {
+      print('_onPoseSelected được gọi');
       if (_selectedPoses.contains(pose)) {
         _selectedPoses.remove(pose);
+        _durationControllers.remove(pose.id);
       } else {
         _selectedPoses.add(pose);
         if (!_durationControllers.containsKey(pose.id)) {
@@ -112,9 +108,6 @@ class _PersonalizedExerciseCreatePageState
               TextEditingController(text: pose.duration.toString());
         }
       }
-
-      // Cập nhật lại _selectedPoses
-      // _selectedPoses = _poses.where((p) => _selectedPoses.contains(p)).toList();
     });
   }
 
@@ -184,6 +177,8 @@ class _PersonalizedExerciseCreatePageState
                   itemBuilder: (context, index) {
                     final pose = _poses[index];
                     final isSelected = _selectedPoses.contains(pose);
+                    print(
+                        'Các pose còn nằm trong _selectedPoses: ${_selectedPoses}');
                     final durationController = _durationControllers[pose.id]!;
                     final poseNumber =
                         _selectedPoses.indexOf(pose) + 1; // Get pose number

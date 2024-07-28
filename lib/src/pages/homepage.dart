@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/pages/blog_detail.dart';
 import 'package:YogiTech/src/pages/tutorial.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:YogiTech/api/blog/blog_service.dart';
@@ -274,22 +275,43 @@ class _HomePageState extends State<HomePage> {
                     _buildCarouselItem(
                         title: trans.tryThisExercise,
                         subtitle: trans.forBeginner,
-                        poseName: 'Warrior 2 pose!',
+                        poseName: 'Yoga Beginners',
                         imagePath:
                             'assets/images/ads_exercise_for_beginner.png',
-                        onTap: () {}),
-                    _buildCarouselItem(
-                        title: trans.thirtyDayYogaChallenge,
-                        subtitle: trans.improveHealthAndFlexibility,
-                        poseName: trans.joinNow,
-                        imagePath: 'assets/images/Muscle.png',
-                        onTap: () {}),
+                        onTap: () {
+                          final exercise = jsonList.first;
+                          pushWithoutNavBar(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ExerciseDetail(
+                                exercise: exercise,
+                                account: _account,
+                                fetchAccount: widget.fetchAccount,
+                              ),
+                            ),
+                          );
+                        }),
+                    // _buildCarouselItem(
+                    //     title: trans.thirtyDayYogaChallenge,
+                    //     subtitle: trans.improveHealthAndFlexibility,
+                    //     poseName: trans.joinNow,
+                    //     imagePath: 'assets/images/Muscle.png',
+                    //     onTap: () {}),
                     _buildCarouselItem(
                         title: trans.yogaChangedMyLife,
                         subtitle: trans.minhAnhInspirationalStory,
                         poseName: trans.shareYourJourney,
                         imagePath: 'assets/images/Fire.png',
-                        onTap: () {}),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BlogDetail(
+                                id: 9,
+                              ),
+                            ),
+                          );
+                        }),
                     _buildCarouselItem(
                         title: trans.specialOfferForNewMembers,
                         subtitle: trans.receiveTwoFreeSessions,
