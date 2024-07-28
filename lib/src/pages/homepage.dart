@@ -165,8 +165,8 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                AllExercise(searchString: searchValue),
+                            builder: (context) => AllExercise(
+                                searchString: searchValue, account: _account),
                           ),
                         );
                       });
@@ -180,8 +180,10 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              AllExercise(searchString: searchValue),
+                          builder: (context) => AllExercise(
+                            searchString: searchValue,
+                            account: _account,
+                          ),
                         ),
                       );
                     });
@@ -310,8 +312,9 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    AllExercise()), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                                builder: (context) => AllExercise(
+                                      account: _account,
+                                    )), // Thay NewPage() bằng trang bạn muốn chuyển tới
                           );
                         }),
                   ],
@@ -382,8 +385,9 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    AllExercise()), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                                builder: (context) => AllExercise(
+                                      account: _account,
+                                    )), // Thay NewPage() bằng trang bạn muốn chuyển tới
                           );
                         },
                       ),

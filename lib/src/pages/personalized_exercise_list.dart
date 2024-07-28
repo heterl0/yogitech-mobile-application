@@ -1,4 +1,6 @@
+import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/exercise/exercise_service.dart';
+import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/exercise.dart';
 import 'package:YogiTech/src/pages/exercise_detail.dart';
 import 'package:YogiTech/src/pages/personalized_exercise_create_update.dart';
@@ -19,11 +21,13 @@ class PersonalizedExercisePage extends StatefulWidget {
 
 class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
   late Future<List<Exercise>> _exerciseFuture;
+  late Account account;
 
   @override
   void initState() {
     super.initState();
     _exerciseFuture = _fetchExercises();
+    getAccount();
   }
 
   Future<List<Exercise>> _fetchExercises() async {
@@ -34,6 +38,13 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
       print('Error fetching exercises: $e');
       return [];
     }
+  }
+
+  Future<void> getAccount() async {
+    final Account? _account = await retrieveAccount();
+    setState(() {
+      account = _account!;
+    });
   }
 
   Future<void> _refreshExercises() async {
@@ -89,7 +100,10 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
           pushWithoutNavBar(
             context,
             MaterialPageRoute(
-              builder: (context) => ExerciseDetail(exercise: exercise),
+              builder: (context) => ExerciseDetail(
+                exercise: exercise,
+                account: account,
+              ),
             ),
           );
         },
