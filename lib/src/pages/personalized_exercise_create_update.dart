@@ -53,6 +53,7 @@ class _PersonalizedExerciseCreatePageState
   List<Pose> _selectedPoses = [];
   final Map<int, TextEditingController> _durationControllers = {};
   int _selectedLevel = 999; // Default to beginner
+  late Future<void> _posesFuture;
 
   @override
   void initState() {
@@ -65,9 +66,12 @@ class _PersonalizedExerciseCreatePageState
           .map((poseWithTime) => poseWithTime.pose)
           .toList();
 
-      print('Các pose lấy về: ${widget.exercise!.poses}');
+      print('Durations for selected poses:');
+      for (var poseWithTime in widget.exercise!.poses) {
+        print('${poseWithTime.pose.name}: ${poseWithTime.duration}');
+      }
     }
-    // _fetchPoses();
+    _posesFuture = _fetchPoses();
   }
 
   @override
@@ -84,12 +88,16 @@ class _PersonalizedExerciseCreatePageState
   Future<void> _fetchPoses() async {
     final poses = await getPoses();
     setState(() {
-      _poses = poses;
-      // Initialize TextEditingController for each pose
-      for (var pose in _poses) {
-        _durationControllers[pose.id] =
-            TextEditingController(text: pose.duration.toString());
+      final poseDurationMap = <int, int>{};
+      for (var poseWithTime in widget.exercise?.poses ?? []) {
+        poseDurationMap[poseWithTime.pose.id] = poseWithTime.duration;
       }
+      _poses = poses.map((pose) {
+        final duration = poseDurationMap[pose.id] ?? pose.duration;
+        _durationControllers[pose.id] =
+            TextEditingController(text: duration.toString());
+        return pose;
+      }).toList();
     });
   }
 
@@ -99,7 +107,14 @@ class _PersonalizedExerciseCreatePageState
         _selectedPoses.remove(pose);
       } else {
         _selectedPoses.add(pose);
+        if (!_durationControllers.containsKey(pose.id)) {
+          _durationControllers[pose.id] =
+              TextEditingController(text: pose.duration.toString());
+        }
       }
+
+      // Cập nhật lại _selectedPoses
+      _selectedPoses = _poses.where((p) => _selectedPoses.contains(p)).toList();
     });
   }
 
@@ -113,7 +128,7 @@ class _PersonalizedExerciseCreatePageState
     final theme = Theme.of(context);
     showDialog(
       context: context,
-      barrierDismissible: false, // Ngăn người dùng tắt hộp thoại khi đang tải
+      barrierDismissible: false, // Prevent users from dismissing the dialog
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
@@ -125,7 +140,7 @@ class _PersonalizedExerciseCreatePageState
           content: SizedBox(
             width: double.maxFinite,
             child: Center(
-              child: CircularProgressIndicator(), // Hiển thị vòng tròn loading
+              child: CircularProgressIndicator(), // Loading indicator
             ),
           ),
         );
@@ -133,17 +148,17 @@ class _PersonalizedExerciseCreatePageState
     );
 
     if (_poses.isEmpty) {
-      await _fetchPoses(); // Đợi tải dữ liệu xong
+      await _fetchPoses(); // Wait for data to load
     }
 
-// Sắp xếp lại danh sách _poses
+    // Sort poses so that selected poses appear first
     _poses.sort((a, b) {
       if (_selectedPoses.contains(a) && !_selectedPoses.contains(b)) {
-        return -1; // Đưa pose đã chọn lên trước
+        return -1; // Selected poses come first
       } else if (!_selectedPoses.contains(a) && _selectedPoses.contains(b)) {
-        return 1; // Đưa pose chưa chọn xuống sau
+        return 1; // Unselected poses come after
       } else {
-        return 0; // Giữ nguyên thứ tự nếu cả hai đều đã chọn hoặc chưa chọn
+        return 0; // Maintain order if both are selected or unselected
       }
     });
 
@@ -171,7 +186,7 @@ class _PersonalizedExerciseCreatePageState
                     final isSelected = _selectedPoses.contains(pose);
                     final durationController = _durationControllers[pose.id]!;
                     final poseNumber =
-                        _selectedPoses.indexOf(pose) + 1; // Tính số thứ tự
+                        _selectedPoses.indexOf(pose) + 1; // Get pose number
 
                     return GestureDetector(
                       onTap: () {
@@ -180,8 +195,8 @@ class _PersonalizedExerciseCreatePageState
                         });
                       },
                       child: Container(
-                        margin: EdgeInsets.only(
-                            bottom: 8), // Khoảng cách giữa các hàng
+                        margin:
+                            EdgeInsets.only(bottom: 8), // Margin between rows
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: isSelected ? primary : Colors.transparent,
@@ -194,8 +209,7 @@ class _PersonalizedExerciseCreatePageState
                             Image.network(
                               pose.image_url,
                               fit: BoxFit.cover,
-
-                              width: 80, // Đặt chiều rộng cố định cho hình ảnh
+                              width: 80, // Fixed width for image
                             ),
                             Expanded(
                               child: Padding(
@@ -235,11 +249,11 @@ class _PersonalizedExerciseCreatePageState
                                 ),
                               ),
                             ),
-                            if (isSelected) // Chỉ hiển thị cho các tư thế đã chọn
+                            if (isSelected) // Show only for selected poses
                               Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: primary, // Màu nền nổi bật
+                                  color: primary, // Highlight background color
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
@@ -273,26 +287,26 @@ class _PersonalizedExerciseCreatePageState
 
   Future<void> _saveExercise() async {
     final trans = AppLocalizations.of(context)!;
-    // Lấy thông tin từ các trường nhập liệu
+    // Get information from input fields
     final title = _titleController.text;
 
-    // Kiểm tra xem các trường bắt buộc đã được điền chưa
+    // Check if required fields are filled
     if (title.isEmpty || _selectedPoses.isEmpty || _selectedLevel == 999) {
-      // Hiển thị thông báo lỗi hoặc xử lý tùy theo yêu cầu
+      // Show error message or handle according to requirements
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Lỗi')),
+        SnackBar(content: Text('trans.missingInformation')),
       );
-      return; // Thoát khỏi hàm nếu thiếu thông tin
+      return; // Exit function if information is missing
     }
 
-    // Lấy danh sách thời lượng từ các controller
+    // Get durations from controllers
     final durations = _selectedPoses
         .map((pose) => int.tryParse(_durationControllers[pose.id]!.text) ?? 0)
         .toList();
 
-    print('Các thời lượng: ${durations}');
+    print('Durations: ${durations}');
 
-    // Tạo đối tượng PostPersonalExerciseRequest
+    // Create PostPersonalExerciseRequest object
     final request = PostPersonalExerciseRequest(
       title: title,
       level: _selectedLevel,
@@ -300,29 +314,36 @@ class _PersonalizedExerciseCreatePageState
       duration: durations,
     );
 
+    // In ra các duration của pose
+    print('Durations being sent in the request:');
+    for (var i = 0; i < request.poses.length; i++) {
+      print(
+          '${request.poses[i].name}: ${request.duration[i]}'); // Lấy duration từ request
+    }
+
     if (widget.exercise != null) {
       final updatedExercise =
           await patchUpdatePersonalExercise(widget.exercise!.id, request);
       if (updatedExercise != null) {
-        // Cập nhật thành công
+        // Update successful
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Cập nhật thành công!')));
+            .showSnackBar(SnackBar(content: Text(trans.updateSuccess)));
         Navigator.of(context).pop(
-            updatedExercise); // Quay về trang trước và trả về exercise đã cập nhật
+            updatedExercise); // Return to previous screen with updated exercise
       } else {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Cập nhật thất bại!')));
+            .showSnackBar(SnackBar(content: Text(trans.updateFail)));
       }
     } else {
       // Create new exercise
       final exercise = await postPersonalExercise(request);
       if (exercise != null) {
-        // Xử lý khi tạo thành công (ví dụ: chuyển hướng, hiển thị thông báo)
+        // Handle successful creation (e.g., navigate, show message)
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('trans.createExerciseSuccessfully')));
-        Navigator.pop(context); // Hoặc chuyển hướng đến trang khác
+        Navigator.pop(context); // Or navigate to another page
       } else {
-        // Xử lý khi tạo thất bại
+        // Handle creation failure
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('trans.createExerciseFailed')));
       }
@@ -379,7 +400,7 @@ class _PersonalizedExerciseCreatePageState
                 placeholder: trans.selectLevel,
                 onChanged: (value) {
                   setState(() {
-                    print('Giá trị là ${value}');
+                    print('Selected value: $value');
                     if (value != null && levelMapping.containsKey(value)) {
                       _selectedLevel = levelMapping[value]!;
                     }
@@ -392,11 +413,23 @@ class _PersonalizedExerciseCreatePageState
                 style: h3.copyWith(color: theme.colorScheme.onPrimary),
               ),
               const SizedBox(height: 12),
-              Wrap(
-                spacing: 4.0,
-                runSpacing: 2.0,
-                children: _selectedPoses
-                    .map((pose) => Chip(
+              FutureBuilder<void>(
+                future: _posesFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Text('Error loading poses');
+                  } else {
+                    return Wrap(
+                      spacing: 8.0,
+                      runSpacing: 0,
+                      children: _selectedPoses.asMap().entries.map((entry) {
+                        final pose = entry.value;
+                        final durationController =
+                            _durationControllers[pose.id]!;
+
+                        return Chip(
                           backgroundColor: primary,
                           deleteIconColor: active,
                           padding: EdgeInsets.all(4),
@@ -405,7 +438,7 @@ class _PersonalizedExerciseCreatePageState
                               borderRadius:
                                   BorderRadius.all(Radius.circular(24))),
                           label: Text(
-                            '${pose.name} (${pose.duration} ${trans.seconds})',
+                            '${pose.name} (${durationController.text} ${trans.seconds})',
                             style: bd_text.copyWith(color: active),
                           ),
                           onDeleted: () {
@@ -413,8 +446,11 @@ class _PersonalizedExerciseCreatePageState
                               _selectedPoses.remove(pose);
                             });
                           },
-                        ))
-                    .toList(),
+                        );
+                      }).toList(),
+                    );
+                  }
+                },
               ),
               const SizedBox(height: 12),
               CustomButton(
@@ -430,10 +466,8 @@ class _PersonalizedExerciseCreatePageState
         buttonTitle:
             widget.exercise == null ? trans.create : trans.updateExercise,
         onPressed: () {
-          print('Các pose khi được update: ${_selectedPoses}');
+          print('Selected poses on update: ${_selectedPoses}');
           _saveExercise();
-
-          // Handle create exercise logic here
         },
       ),
     );
