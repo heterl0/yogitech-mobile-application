@@ -22,6 +22,8 @@ import com.example.yogi_application.MainViewModel
 import com.example.yogi_application.R
 import com.example.yogi_application.databinding.FragmentScoreBinding
 import com.example.yogi_application.model.PoseLogResult
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.Locale
 
 class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListener {
@@ -61,7 +63,8 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
             // Set default language to English
-            val result = tts.setLanguage(localeEN)
+            val result = tts.setLanguage(localeVI)
+
 
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e("TTS", "Language not supported")
@@ -155,7 +158,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                             _fragmentScoreBinding!!.description.text =
                                 getString(R.string.adjust)
                             if (isGiveSuggest == false) {
-                                speak(getString(R.string.adjust), localeEN);
+                                speak(getString(R.string.adjust), localeVI);
                                 isGiveSuggest = true;
                             }
                         } else {
@@ -256,12 +259,15 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
 
     fun calculateMean(numbers: List<Float>): Float {
         if (numbers.isEmpty()) {
-//            throw IllegalArgumentException("The list cannot be empty")
             return 0.toFloat()
         }
+
         val sum = numbers.sum()
-        val mean =  sum / numbers.size
-        return String.format("%.2f", mean).toFloat()
+        val mean = sum / numbers.size
+
+        // Use BigDecimal for precise rounding and convert it back to float
+        val meanBigDecimal = BigDecimal(mean.toString()).setScale(2, RoundingMode.HALF_UP)
+        return meanBigDecimal.toFloat()
     }
 }
 
