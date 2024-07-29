@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="skip_button">Bỏ qua</string>
+    <string name="resume">Tiếp tục</string>
+    <string name="exit">Thoát</string>
+    <string name="for_your_result">Kết quả của bạn</string>
+    <string name="full_body">Giữ cho cơ thể của bạn hoàn toàn hiển thị trong khung hình</string>
+    <string name="one">100%</string>
+    <string name="adjust">Điều chỉnh cơ thể của bạn hoàn toàn trong màn hình</string>
+</resources>

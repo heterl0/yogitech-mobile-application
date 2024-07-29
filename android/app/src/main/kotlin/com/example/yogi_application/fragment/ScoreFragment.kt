@@ -122,7 +122,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
                         if (result.data?.isValid == false) {
                             _fragmentScoreBinding!!.result.text = "0%";
                             _fragmentScoreBinding!!.description.text =
-                                "Adjust your body full in screen"
+                                getString(R.string.adjust)
                         } else {
                             _fragmentScoreBinding!!.result.text =
                                 "${result.data?.score?.toInt().toString()}%";

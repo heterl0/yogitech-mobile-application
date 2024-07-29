@@ -19,9 +19,12 @@ class MainActivity: FlutterActivity() {
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             when (call.method) {
                 "exerciseActivity" -> {
-                    val intent = Intent(this, ExerciseActivity::class.java)
-                    startActivityForResult(intent, 0)
-                    result.success("Activity started") // More informative success message
+//                    val intent = Intent(this, ExerciseActivity::class.java)
+//                    startActivityForResult(intent, 0)
+//                    result.success("Activity started") // More informative success message
+
+                    val intent = Intent(this, ViewTutorialActivity::class.java)
+                    startActivity(intent)
                 }
                 else -> {
                     result.notImplemented()

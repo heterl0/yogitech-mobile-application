@@ -69,6 +69,18 @@
                 android:value="true" />
         </activity>
 
+        <activity
+            android:screenOrientation="landscape"
+            android:name=".ViewTutorialActivity"
+            android:exported="true">
+
+            <!-- Declare notch support -->
+            <meta-data
+                android:name="android.notch_support"
+                android:value="true" />
+        </activity>
+
+
 
         <meta-data
             android:name="flutterEmbedding"

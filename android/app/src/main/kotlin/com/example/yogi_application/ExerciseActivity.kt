@@ -19,6 +19,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.Locale
 
 class ExerciseActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityMainBinding
@@ -30,6 +31,10 @@ class ExerciseActivity : AppCompatActivity() {
 
         // Retrieve the tokens using the same keys but prefixed with "flutter."
         val accessToken = prefs.getString("flutter.accessToken", "default_value")
+        val locale = prefs.getString("flutter.locale", "vi")
+        if (locale != null) {
+            setLocale(this, locale)
+        };
         val flutterEngine = (application as YogiApplication).flutterEngine
         viewModel.flutterEngine =flutterEngine
 
@@ -87,5 +92,14 @@ class ExerciseActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         finish()
+    }
+
+    private fun setLocale(context: Context, language: String) {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val resources = context.resources
+        val configuration = resources.configuration
+        configuration.setLocale(locale)
+        resources.updateConfiguration(configuration, resources.displayMetrics)
     }
 }
