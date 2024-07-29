@@ -105,7 +105,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/video/
     - assets/images/
     - assets/icons/
     - assets/audios/
