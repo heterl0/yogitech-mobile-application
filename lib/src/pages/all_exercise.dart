@@ -194,7 +194,7 @@ class AllExerciseState extends State<AllExercise> {
                       : null,
                   title: ex.title,
                   caption: ex.description.replaceAll(RegExp(r'<[^>]*>'), ''),
-                  imageUrl: ex.image_url,
+                  imageUrl: ex.image_url ?? 'assets/images/Null_Exercise.png',
                   onTap: () {
                     pushWithoutNavBar(
                       context,

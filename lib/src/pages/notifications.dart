@@ -87,26 +87,26 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       },
                     ),
                     CustomSwitch(
-                      title: trans.friendsActivities,
+                      title: trans.newActivities,
                       value: _friendActivitiesOn,
                       onChanged: (newValue) async {
                         setState(() {
                           _friendActivitiesOn = newValue;
                         });
                         await _saveSwitchState('friendActivitiesOn', newValue);
-                        _handleFriendsNotifications(_friendActivitiesOn);
+                        _handleNewActivitiesNotifications(_friendActivitiesOn);
                       },
                     ),
-                    CustomSwitch(
-                      title: trans.newEvent,
-                      value: _newEventOn,
-                      onChanged: (newValue) async {
-                        setState(() {
-                          _newEventOn = newValue;
-                        });
-                        await _saveSwitchState('newEventOn', newValue);
-                      },
-                    ),
+                    // CustomSwitch(
+                    //   title: trans.newEvent,
+                    //   value: _newEventOn,
+                    //   onChanged: (newValue) async {
+                    //     setState(() {
+                    //       _newEventOn = newValue;
+                    //     });
+                    //     await _saveSwitchState('newEventOn', newValue);
+                    //   },
+                    // ),
                   ],
                 ),
               ),
@@ -118,18 +118,24 @@ class _NotificationsPageState extends State<NotificationsPage> {
     );
   }
 
-  void _handleFriendsNotifications(bool isFriendsOn) {
+  void _handleNewActivitiesNotifications(bool isFriendsOn) {
+    final now = DateTime.now();
+
     if (isFriendsOn) {
-      print('Bật thông báo của bạn bè');
-      print(_notifications);
+      print('Bật thông báo các hoạt động');
       if (_notifications != null) {
         for (var notification in _notifications!) {
-          LocalNotificationService.showFriendNotification(
-            id: notification.id + 10,
-            title: notification.title,
-            body: notification.body,
-            payload: 'friend_notification_${notification.id}',
-          );
+          final notificationTime = DateTime.parse(notification.time);
+          if (notificationTime.isAfter(now)) {
+            print('Thông báo: ${notification}');
+            LocalNotificationService.showActivitiesNotification(
+              id: notification.id + 10,
+              title: notification.title,
+              body: notification.body,
+              scheduledTime: notificationTime,
+              payload: 'friend_notification_${notification.id}',
+            );
+          }
         }
       }
     } else {

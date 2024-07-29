@@ -171,7 +171,7 @@
   "yourReminder":"Nhắc nhở tùy chỉnh",
   "yourReminderDetail":"Đã tới lúc luyện tập rồi, bạn nhớ chứ?",
   "streakSaver": "Bảo vệ chuỗi",
-  "friendsActivities": "Hoạt động của bạn bè",
+  "newActivities": "Hoạt động mới",
   "newEvent": "Sự kiện mới",
   "editProfile": "Điều chỉnh hồ sơ",
   "changeAvatar": "Đổi ảnh đại diện",
@@ -271,6 +271,13 @@
   "title": "Tiêu đề",
   "benefits": "Các lợi ích",
   "selectPoses" :"Chọn các tư thế",
-  "needToJoin":"Bạn cần phải tham gia sự kiện trước khi có thể xem các bài tập trong sự kiện này."
-
+  "needToJoin":"Bạn cần phải tham gia sự kiện trước khi có thể xem các bài tập trong sự kiện này.",
+  "usingEmail":"Tiếp tục đăng nhập bằng Email",
+  "anError":"Có lỗi xảy ra, xin vui lòng thử lại sau.",
+  "failSignIn":"Lỗi đăng nhập:",
+  "missingInfor": "Thiếu thông tin",
+  "createSuccess":"Tạo thành công",
+  "createFail":"Tạo thất bại",
+  "passDonotMatch":"Mật khẩu không khớp",
+  "failRegister":"Đăng ký thất bại"
 }

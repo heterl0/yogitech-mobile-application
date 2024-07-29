@@ -210,7 +210,7 @@ class _LoginPageState extends State<LoginPage> {
             SnackBar(
               backgroundColor: theme.colorScheme.onSecondary,
               content: Text(
-                'Please continue your login using email',
+                trans.usingEmail,
                 style: bd_text.copyWith(color: theme.colorScheme.onSurface),
               ),
             ),
@@ -221,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
           SnackBar(
             backgroundColor: theme.colorScheme.onSecondary,
             content: Text(
-              'An error occurred. Please try again later. $e',
+              '${trans.anError} $e',
               style: bd_text.copyWith(color: theme.colorScheme.onSurface),
             ),
           ),
@@ -231,7 +231,7 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             backgroundColor: theme.colorScheme.onSecondary,
-            content: Text('Failed to sign in: $error',
+            content: Text('${trans.failSignIn} $error',
                 style: bd_text.copyWith(color: theme.colorScheme.onSurface))),
       );
     }

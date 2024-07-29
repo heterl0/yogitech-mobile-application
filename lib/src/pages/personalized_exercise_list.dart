@@ -191,12 +191,19 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
                             if (result != null) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                    content: Text(trans.deleteSuccessfully)),
+                                    backgroundColor: green,
+                                    content: Text(trans.deleteSuccessfully,
+                                        style:
+                                            bd_text.copyWith(color: active))),
                               );
                               _refreshExercises();
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(trans.deleteFailed)),
+                                SnackBar(
+                                    backgroundColor: error,
+                                    content: Text(trans.deleteFailed,
+                                        style:
+                                            bd_text.copyWith(color: active))),
                               );
                             }
                           },

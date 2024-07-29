@@ -81,6 +81,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
   }
 
   Future<void> _recalculateBMI() async {
+    final trans = AppLocalizations.of(context)!;
     _calculateBMI();
 
     double? weight = weightController.text.isNotEmpty
@@ -102,22 +103,21 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
         ));
         if (updatedProfile != null) {
           widget.onBMIUpdated();
-          print('BMI updated successfully');
+
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'BMI updated successfully',
+                trans.updateSuccess,
                 style: bd_text.copyWith(color: active),
               ),
               backgroundColor: green,
             ),
           );
         } else {
-          print('Failed to update BMI');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'Failed to update BMI',
+                trans.updateFail,
                 style: bd_text.copyWith(color: active),
               ),
               backgroundColor: error,

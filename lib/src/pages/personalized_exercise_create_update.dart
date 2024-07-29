@@ -271,6 +271,7 @@ class _PersonalizedExerciseCreatePageState
   }
 
   Future<void> _saveExercise() async {
+    final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     // Get information from input fields
     final title = _titleController.text;
@@ -279,7 +280,10 @@ class _PersonalizedExerciseCreatePageState
     if (title.isEmpty || _selectedPoses.isEmpty || _selectedLevel == 999) {
       // Show error message or handle according to requirements
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('trans.missingInformation')),
+        SnackBar(
+            backgroundColor: error,
+            content: Text(trans.missingInfor,
+                style: bd_text.copyWith(color: active))),
       );
       return; // Exit function if information is missing
     }
@@ -311,26 +315,34 @@ class _PersonalizedExerciseCreatePageState
           await patchUpdatePersonalExercise(widget.exercise!.id, request);
       if (updatedExercise != null) {
         // Update successful
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(trans.updateSuccess)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: green,
+            content: Text(trans.updateSuccess,
+                style: bd_text.copyWith(color: active))));
         Navigator.pop(
             context, true); // Return to previous screen with updated exercise
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(trans.updateFail)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: error,
+            content: Text(trans.updateFail,
+                style: bd_text.copyWith(color: active))));
       }
     } else {
       // Create new exercise
       final exercise = await postPersonalExercise(request);
       if (exercise != null) {
         // Handle successful creation (e.g., navigate, show message)
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('trans.createExerciseSuccessfully')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: green,
+            content: Text(trans.createSuccess,
+                style: bd_text.copyWith(color: active))));
         Navigator.pop(context, true); // Or navigate to another page
       } else {
         // Handle creation failure
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('trans.createExerciseFailed')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: error,
+            content: Text(trans.createFail,
+                style: bd_text.copyWith(color: active))));
       }
     }
   }
