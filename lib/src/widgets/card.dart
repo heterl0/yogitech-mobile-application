@@ -50,14 +50,20 @@ class CustomCard extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
                       child: CachedNetworkImage(
-                        imageUrl: imageUrl!,
+                        imageUrl: imageUrl ?? '',
                         placeholder: (context, url) =>
                             Center(child: CircularProgressIndicator()),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        errorWidget: (context, url, error) => Image.asset(
+                          'assets/images/Null_Exercise.png',
+                          fit: BoxFit.cover,
+                          height: 90, // Fixed height
+                          width: double
+                              .infinity, // Ensure the image occupies the full width
+                        ),
                         fit: BoxFit.cover,
-                        height: 90, // Chiều cao cố định của ảnh
+                        height: 90, // Fixed height
                         width: double
-                            .infinity, // Đảm bảo ảnh chiếm toàn bộ chiều ngang
+                            .infinity, // Ensure the image occupies the full width
                       ),
                     ),
                   ),

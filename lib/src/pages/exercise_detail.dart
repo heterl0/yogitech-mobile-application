@@ -146,7 +146,10 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
     return Padding(
         padding: const EdgeInsets.only(top: 90),
         child: AspectRatio(
-          aspectRatio: 16 / 9,
+          aspectRatio:
+              (_exercise!.image_url == null || _exercise!.image_url!.isEmpty)
+                  ? 16 / 1
+                  : 16 / 9,
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -163,7 +166,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
 
   Widget _buildMainContent(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
-
+    print('id bài tập ${_exercise!.id}');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -180,9 +183,11 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           const SizedBox(height: 16),
           _buildPoses(trans, context),
           const SizedBox(height: 16),
-          _buildTitle2(context, trans.comment),
+          if (_exercise!.image_url != null && _exercise!.image_url!.isNotEmpty)
+            _buildTitle2(context, trans.comment),
           const SizedBox(height: 16),
-          _buildCommentSection(trans),
+          if (_exercise!.image_url != null && _exercise!.image_url!.isNotEmpty)
+            _buildCommentSection(trans),
           const SizedBox(height: 16),
           ...exComments.map(
             (comment) => comment.comment.active_status == 1

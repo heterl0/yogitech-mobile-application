@@ -250,6 +250,7 @@ class _BlogDetailState extends State<BlogDetail> {
   }
 
   Widget _buildImage() {
+    print('id bài blog ${blog?.id}');
     return Padding(
       padding: const EdgeInsets.only(top: 90),
       child: AspectRatio(

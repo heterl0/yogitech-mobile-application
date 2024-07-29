@@ -3,7 +3,6 @@ import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:YogiTech/src/custombar/bottombar.dart';
 import 'package:YogiTech/src/models/exercise.dart';
 import 'package:YogiTech/src/models/pose.dart';
-import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:YogiTech/src/widgets/dropdown_field.dart';
 import 'package:YogiTech/utils/formatting.dart';
 import 'package:dio/dio.dart';
@@ -12,7 +11,9 @@ import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/widgets/box_input_field.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 Future<List<Pose>> getPoses() async {
   try {
@@ -45,15 +46,11 @@ class _PersonalizedExerciseCreatePageState
     extends State<PersonalizedExerciseCreatePage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _difficultyController = TextEditingController();
-  final TextEditingController _caloriesController = TextEditingController();
-  final TextEditingController _benefitsController = TextEditingController();
-  final TextEditingController _pointController = TextEditingController();
 
   List<Pose> _poses = [];
   List<Pose> _selectedPoses = [];
   final Map<int, TextEditingController> _durationControllers = {};
   int _selectedLevel = 999; // Default to beginner
-  late Future<void> _posesFuture;
 
   @override
   void initState() {
@@ -67,26 +64,20 @@ class _PersonalizedExerciseCreatePageState
           .toList();
 
       print('Durations for selected poses:');
-      for (var poseWithTime in widget.exercise!.poses) {
-        print('${poseWithTime.pose.name}: ${poseWithTime.duration}');
+      for (var poseWithTime in _selectedPoses) {
+        print('${poseWithTime.name}: ${poseWithTime.duration}');
       }
     }
-    _posesFuture = _fetchPoses();
+    // _fetchPoses();
+    _loadPoses();
   }
 
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _difficultyController.dispose();
-    _caloriesController.dispose();
-    _benefitsController.dispose();
-    _pointController.dispose();
-    _durationControllers.values.forEach((controller) => controller.dispose());
-    super.dispose();
-  }
-
-  Future<void> _fetchPoses() async {
+  Future<void> _loadPoses() async {
     final poses = await getPoses();
+    _updatePoses(poses);
+  }
+
+  void _updatePoses(List<Pose> poses) {
     setState(() {
       final poseDurationMap = <int, int>{};
       for (var poseWithTime in widget.exercise?.poses ?? []) {
@@ -98,192 +89,42 @@ class _PersonalizedExerciseCreatePageState
             TextEditingController(text: duration.toString());
         return pose;
       }).toList();
-    });
+    }); // In sau khi các tư thế đã được tải
   }
 
-  void _onPoseSelected(Pose pose) {
-    setState(() {
-      if (_selectedPoses.contains(pose)) {
-        _selectedPoses.remove(pose);
-      } else {
-        _selectedPoses.add(pose);
-        if (!_durationControllers.containsKey(pose.id)) {
-          _durationControllers[pose.id] =
-              TextEditingController(text: pose.duration.toString());
-        }
-      }
-
-      // Cập nhật lại _selectedPoses
-      // _selectedPoses = _poses.where((p) => _selectedPoses.contains(p)).toList();
-    });
-  }
-
-  Future<void> _showPoseSelectionDialog() async {
-    final trans = AppLocalizations.of(context)!;
-    final Map<int, String> levelMapping = {
-      1: trans.beginner,
-      2: trans.intermediate,
-      3: trans.advanced,
-    };
-    final theme = Theme.of(context);
-    showDialog(
-      context: context,
-      barrierDismissible: false, // Prevent users from dismissing the dialog
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            trans.selectPoses,
-            style: h3.copyWith(color: theme.colorScheme.onPrimary),
-          ),
-          elevation: appElevation,
-          backgroundColor: theme.colorScheme.onSecondary,
-          content: SizedBox(
-            width: double.maxFinite,
-            child: Center(
-              child: CircularProgressIndicator(), // Loading indicator
-            ),
-          ),
-        );
-      },
-    );
-
-    if (_poses.isEmpty) {
-      await _fetchPoses(); // Wait for data to load
+  Future<List<Pose>> _fetchPoses() {
+    if (_poses.isNotEmpty) {
+      return Future.value(_poses); // Trả về ngay lập tức nếu đã có dữ liệu
+    } else {
+      return getPoses(); // Lấy dữ liệu từ API nếu chưa có
     }
-
-    // Sort poses so that selected poses appear first
-    _poses.sort((a, b) {
-      if (_selectedPoses.contains(a) && !_selectedPoses.contains(b)) {
-        return -1; // Selected poses come first
-      } else if (!_selectedPoses.contains(a) && _selectedPoses.contains(b)) {
-        return 1; // Unselected poses come after
-      } else {
-        return 0; // Maintain order if both are selected or unselected
-      }
-    });
-
-    Navigator.of(context).pop();
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.all(16),
-          title: Text(
-            trans.selectPoses,
-            style: h3.copyWith(color: theme.colorScheme.onPrimary),
-          ),
-          elevation: appElevation,
-          backgroundColor: theme.colorScheme.onSecondary,
-          content: SizedBox(
-            width: double.maxFinite,
-            child: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _poses.length,
-                  itemBuilder: (context, index) {
-                    final pose = _poses[index];
-                    final isSelected = _selectedPoses.contains(pose);
-                    final durationController = _durationControllers[pose.id]!;
-                    final poseNumber =
-                        _selectedPoses.indexOf(pose) + 1; // Get pose number
-
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _onPoseSelected(pose);
-                        });
-                      },
-                      child: Container(
-                        margin:
-                            EdgeInsets.only(bottom: 8), // Margin between rows
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: isSelected ? primary : Colors.transparent,
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: Row(
-                          children: [
-                            Image.network(
-                              pose.image_url,
-                              fit: BoxFit.cover,
-                              width: 80, // Fixed width for image
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      pose.name,
-                                      style: bd_text.copyWith(
-                                          color: primary, height: 1.2),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      '${pose.calories} ${trans.calorie}',
-                                      style: min_cap.copyWith(color: text),
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      '${trans.duration} (${trans.seconds})',
-                                      style: min_cap.copyWith(color: primary),
-                                    ),
-                                    SizedBox(height: 4),
-                                    BoxInputField(
-                                      isSmall: true,
-                                      controller: durationController,
-                                      keyboardType: TextInputType.number,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          pose.duration =
-                                              int.tryParse(value) ?? 0;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            if (isSelected) // Show only for selected poses
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: primary, // Highlight background color
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(
-                                  '$poseNumber',
-                                  style: min_cap.copyWith(color: active),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-          actions: [
-            CustomButton(
-              title: trans.choose,
-              style: ButtonStyleType.Primary,
-              onPressed: () {
-                setState(() {});
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _difficultyController.dispose();
+    _durationControllers.values.forEach((controller) => controller.dispose());
+    super.dispose();
+  }
+
+  // Future<List<Pose>> _fetchPoses() async {
+  //   final poses = await getPoses();
+  //   setState(() {
+  //     final poseDurationMap = <int, int>{};
+  //     for (var poseWithTime in widget.exercise?.poses ?? []) {
+  //       poseDurationMap[poseWithTime.pose.id] = poseWithTime.duration;
+  //     }
+  //     _poses = poses.map((pose) {
+  //       final duration = poseDurationMap[pose.id] ?? pose.duration;
+  //       _durationControllers[pose.id] =
+  //           TextEditingController(text: duration.toString());
+  //       return pose;
+  //     }).toList();
+  //   });
+
+  //   return poses; // Thêm câu lệnh return ở đây
+  // }
 
   Future<void> _saveExercise() async {
     final trans = AppLocalizations.of(context)!;
@@ -294,7 +135,10 @@ class _PersonalizedExerciseCreatePageState
     if (title.isEmpty || _selectedPoses.isEmpty || _selectedLevel == 999) {
       // Show error message or handle according to requirements
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('trans.missingInformation')),
+        SnackBar(
+            backgroundColor: error,
+            content: Text(trans.missingInfor,
+                style: bd_text.copyWith(color: active))),
       );
       return; // Exit function if information is missing
     }
@@ -314,38 +158,39 @@ class _PersonalizedExerciseCreatePageState
       duration: durations,
     );
 
-    // In ra các duration của pose
-    print('Durations being sent in the request:');
-    for (var i = 0; i < request.poses.length; i++) {
-      print(
-          '${request.poses[i].name}: ${request.duration[i]}'); // Lấy duration từ request
-    }
-
     if (widget.exercise != null) {
       final updatedExercise =
           await patchUpdatePersonalExercise(widget.exercise!.id, request);
       if (updatedExercise != null) {
         // Update successful
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(trans.updateSuccess)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: green,
+            content: Text(trans.updateSuccess,
+                style: bd_text.copyWith(color: active))));
         Navigator.pop(
             context, true); // Return to previous screen with updated exercise
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(trans.updateFail)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: error,
+            content: Text(trans.updateFail,
+                style: bd_text.copyWith(color: active))));
       }
     } else {
       // Create new exercise
       final exercise = await postPersonalExercise(request);
       if (exercise != null) {
         // Handle successful creation (e.g., navigate, show message)
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('trans.createExerciseSuccessfully')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: green,
+            content: Text(trans.createSuccess,
+                style: bd_text.copyWith(color: active))));
         Navigator.pop(context, true); // Or navigate to another page
       } else {
         // Handle creation failure
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('trans.createExerciseFailed')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: error,
+            content: Text(trans.createFail,
+                style: bd_text.copyWith(color: active))));
       }
     }
   }
@@ -374,101 +219,194 @@ class _PersonalizedExerciseCreatePageState
             : trans.updateExercise,
         style: widthStyle.Large,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                trans.title,
-                style: h3.copyWith(color: theme.colorScheme.onPrimary),
+      body: FutureBuilder<List<Pose>>(
+        future: _fetchPoses(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('${trans.error}: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('Không có pose'));
+          } else {
+            _poses = snapshot.data!;
+            return SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.all(24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      trans.title,
+                      style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                    ),
+                    const SizedBox(height: 12),
+                    BoxInputField(
+                      controller: _titleController,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      trans.level,
+                      style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                    ),
+                    const SizedBox(height: 12),
+                    CustomDropdownFormField(
+                      controller: _difficultyController,
+                      items: [
+                        trans.beginner,
+                        trans.intermediate,
+                        trans.advanced
+                      ],
+                      placeholder: trans.selectLevel,
+                      onChanged: (value) {
+                        setState(() {
+                          print('Selected value: $value');
+                          if (value != null &&
+                              levelMapping.containsKey(value)) {
+                            _selectedLevel = levelMapping[value]!;
+                          }
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      trans.poses,
+                      style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                    ),
+                    const SizedBox(height: 12),
+                    MultiSelectDialogField<Pose>(
+                      checkColor: active,
+                      searchTextStyle: TextStyle(
+                        fontFamily: 'ReadexPro',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                      searchHint: trans.search,
+                      searchHintStyle: TextStyle(
+                        fontFamily: 'ReadexPro',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: theme.colorScheme.onSurface.withOpacity(0.6),
+                      ),
+                      cancelText: Text(
+                        trans.cancel,
+                        style: bd_text.copyWith(color: primary),
+                      ),
+                      confirmText: Text(
+                        trans.choose,
+                        style: bd_text.copyWith(color: primary),
+                      ),
+                      title: Text(trans.selectPoses,
+                          style: h3.copyWith(
+                            color: theme.colorScheme.onPrimary,
+                          )),
+                      buttonText: Text(
+                        trans.selectPoses,
+                        style: bd_text.copyWith(
+                            color:
+                                theme.colorScheme.onSurface.withOpacity(0.6)),
+                      ),
+                      chipDisplay: MultiSelectChipDisplay.none(),
+                      separateSelectedItems: true,
+                      searchable: true,
+                      selectedColor: primary,
+                      selectedItemsTextStyle: TextStyle(
+                        color: active,
+                        fontFamily: 'ReadexPro',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      unselectedColor: stroke,
+                      itemsTextStyle: TextStyle(
+                        color: theme.colorScheme.onSurface,
+                        fontFamily: 'ReadexPro',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      backgroundColor: theme.colorScheme.surface,
+                      items: _poses
+                          .map((e) => MultiSelectItem<Pose>(e, e.name))
+                          .toList(),
+                      listType: MultiSelectListType.CHIP,
+                      initialValue: _selectedPoses,
+                      onConfirm: (List<Pose> values) {
+                        setState(() {
+                          _selectedPoses = values;
+                        });
+                      },
+                    ),
+                    Column(
+                      children: [
+                        for (int i = 0; i < _selectedPoses.length; i++)
+                          buildPoseWidget(_selectedPoses[i])
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 12),
-              BoxInputField(
-                controller: _titleController,
-              ),
-              const SizedBox(height: 12),
-              Text(
-                trans.level,
-                style: h3.copyWith(color: theme.colorScheme.onPrimary),
-              ),
-              const SizedBox(height: 12),
-              CustomDropdownFormField(
-                controller: _difficultyController,
-                items: [trans.beginner, trans.intermediate, trans.advanced],
-                placeholder: trans.selectLevel,
-                onChanged: (value) {
-                  setState(() {
-                    print('Selected value: $value');
-                    if (value != null && levelMapping.containsKey(value)) {
-                      _selectedLevel = levelMapping[value]!;
-                    }
-                  });
-                },
-              ),
-              const SizedBox(height: 12),
-              Text(
-                trans.poses,
-                style: h3.copyWith(color: theme.colorScheme.onPrimary),
-              ),
-              const SizedBox(height: 12),
-              FutureBuilder<void>(
-                future: _posesFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Text('Error loading poses');
-                  } else {
-                    return Wrap(
-                      spacing: 12.0,
-                      runSpacing: 0,
-                      children: _selectedPoses.asMap().entries.map((entry) {
-                        final pose = entry.value;
-                        final durationController =
-                            _durationControllers[pose.id]!;
-
-                        return Chip(
-                          backgroundColor: primary,
-                          deleteIconColor: active,
-                          padding: EdgeInsets.all(4),
-                          side: BorderSide(width: 0, color: primary),
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(24))),
-                          label: Text(
-                            '${pose.name} (${durationController.text} ${trans.seconds})',
-                            style: bd_text.copyWith(color: active),
-                          ),
-                          onDeleted: () {
-                            setState(() {
-                              _selectedPoses.remove(pose);
-                            });
-                          },
-                        );
-                      }).toList(),
-                    );
-                  }
-                },
-              ),
-              const SizedBox(height: 12),
-              CustomButton(
-                title: trans.selectPoses,
-                style: ButtonStyleType.Tertiary,
-                onPressed: _showPoseSelectionDialog,
-              ),
-            ],
-          ),
-        ),
+            );
+          }
+        },
       ),
       bottomNavigationBar: CustomBottomBar(
         buttonTitle:
             widget.exercise == null ? trans.create : trans.updateExercise,
         onPressed: () {
-          print('Selected poses on update: ${_selectedPoses}');
           _saveExercise();
         },
+      ),
+    );
+  }
+
+  buildPoseWidget(Pose pose) {
+    final trans = AppLocalizations.of(context)!;
+    final durationController = _durationControllers[pose.id]!;
+    return Container(
+      margin: EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          Image.network(
+            pose.image_url,
+            fit: BoxFit.cover,
+            width: 80,
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    pose.name,
+                    style: bd_text.copyWith(color: primary, height: 1.2),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    '${pose.calories} ${trans.calorie}',
+                    style: min_cap.copyWith(color: text),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    '${trans.duration} (${trans.seconds})',
+                    style: min_cap.copyWith(color: primary),
+                  ),
+                  SizedBox(height: 4),
+                  BoxInputField(
+                    isSmall: true,
+                    controller: durationController,
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      final newDuration = int.tryParse(value) ?? 0;
+                      pose.duration = newDuration;
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
