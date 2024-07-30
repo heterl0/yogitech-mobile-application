@@ -252,7 +252,7 @@ class _LoginPageState extends State<LoginPage> {
     if (enteredEmail.isEmpty || enteredPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            backgroundColor: theme.colorScheme.onSecondary,
+            backgroundColor: error,
             content: Text(trans.dontEmpty,
                 style: bd_text.copyWith(color: theme.colorScheme.onSurface))),
       );

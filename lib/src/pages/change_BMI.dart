@@ -202,7 +202,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                   keyboardType: TextInputType.number,
                   onChanged: (_) => _calculateBMI(),
                 ),
-                SizedBox(height: 48.0),
+                SizedBox(height: 16.0),
                 CustomButton(
                     title: trans.recalculate,
                     onPressed: _recalculateBMI,
