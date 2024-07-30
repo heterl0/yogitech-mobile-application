@@ -141,11 +141,11 @@ class _MeditateState extends State<Meditate> {
         'subtitle': trans.soundMorningDescription,
         'asset': 'audios/morning.mp3'
       },
-      {
-        'title': trans.soundNature,
-        'subtitle': trans.soundNatureDescription,
-        'asset': 'audios/nature.mp3'
-      },
+      // {
+      //   'title': trans.soundNature,
+      //   'subtitle': trans.soundNatureDescription,
+      //   'asset': 'audios/nature.mp3'
+      // },
     ];
 
     return Padding(
