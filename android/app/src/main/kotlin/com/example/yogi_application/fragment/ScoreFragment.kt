@@ -5,6 +5,7 @@ import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -21,8 +22,17 @@ import com.example.yogi_application.MainViewModel
 import com.example.yogi_application.R
 import com.example.yogi_application.databinding.FragmentScoreBinding
 import com.example.yogi_application.model.PoseLogResult
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.util.Locale
 
-class ScoreFragment: Fragment(R.layout.fragment_score) {
+class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListener {
+
+    private lateinit var tts: TextToSpeech
+    private val localeEN = Locale("en", "US")
+    private val localeVI = Locale("vi", "VN")
+    private var isGiveSuggest = false;
+
     private var _fragmentScoreBinding: FragmentScoreBinding? = null
 
     private val fragmentCameraBinding
@@ -46,10 +56,34 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
     ): View {
         _fragmentScoreBinding = FragmentScoreBinding.inflate(inflater, container, false);
         setHasOptionsMenu(true)  // Enable options menu in fragment
-
+        tts = TextToSpeech(requireContext(), this)
         return _fragmentScoreBinding!!.root;
     }
 
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            // Set default language to English
+            val result = tts.setLanguage(localeVI)
+
+
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "Language not supported")
+            } else {
+                // Set the pitch and speech rate suitable for yoga instructions
+                tts.setPitch(1.0f) // Normal pitch
+                tts.setSpeechRate(0.8f) // Slightly slower speech rate
+            }
+        } else {
+            Log.e("TTS", "Initialization failed")
+        }
+    }
+
+
+
+    private fun speak(text: String, language: Locale) {
+        tts.language = language
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -122,7 +156,11 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
                         if (result.data?.isValid == false) {
                             _fragmentScoreBinding!!.result.text = "0%";
                             _fragmentScoreBinding!!.description.text =
-                                "Adjust your body full in screen"
+                                getString(R.string.adjust)
+                            if (isGiveSuggest == false) {
+                                speak(getString(R.string.adjust), localeVI);
+                                isGiveSuggest = true;
+                            }
                         } else {
                             _fragmentScoreBinding!!.result.text =
                                 "${result.data?.score?.toInt().toString()}%";
@@ -211,18 +249,25 @@ class ScoreFragment: Fragment(R.layout.fragment_score) {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        if (tts != null) {
+            tts.stop()
+            tts.shutdown()
+        }
         _fragmentScoreBinding = null
         countDownTimer?.cancel()
     }
 
     fun calculateMean(numbers: List<Float>): Float {
         if (numbers.isEmpty()) {
-//            throw IllegalArgumentException("The list cannot be empty")
             return 0.toFloat()
         }
+
         val sum = numbers.sum()
-        val mean =  sum / numbers.size
-        return String.format("%.2f", mean).toFloat()
+        val mean = sum / numbers.size
+
+        // Use BigDecimal for precise rounding and convert it back to float
+        val meanBigDecimal = BigDecimal(mean.toString()).setScale(2, RoundingMode.HALF_UP)
+        return meanBigDecimal.toFloat()
     }
 }
 

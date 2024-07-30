@@ -2,29 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/rounded_background"
-    android:padding="20dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_background"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:backgroundTint="@null"
+        >
     <Button
         android:id="@+id/btn_resume"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Resume"
-        android:background="@drawable/rounded_button"
+        android:text="@string/resume"
+        app:backgroundTint="@null"
+        android:background="@drawable/gradient_button"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
-
         />
 
     <Button
         android:id="@+id/btn_exit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Exit"
-        android:background="@drawable/rounded_button"
+        android:text="@string/exit"
+        app:backgroundTint="@null"
+        android:background="@drawable/gradient_button"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
         />
+
+    </LinearLayout>
 
 </LinearLayout>
