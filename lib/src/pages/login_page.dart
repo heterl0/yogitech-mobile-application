@@ -78,11 +78,11 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: Text(
                         trans.forgotPassword,
-                        style: bd_text.copyWith(color: theme.primaryColor),
+                        style: bd_text.copyWith(
+                            color: theme.primaryColor, height: 1),
                       ),
                     ),
                   ),
-                  SizedBox(height: 0.0),
                   CustomButton(
                     title: trans.login,
                     style: ButtonStyleType.Primary,
@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             child: Text(
                               trans.signUp,
-                              style: h3.copyWith(color: Colors.lightBlueAccent),
+                              style: h3.copyWith(color: primary),
                             ),
                           ),
                         ],

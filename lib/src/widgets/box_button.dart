@@ -54,7 +54,7 @@ class CustomButton extends StatelessWidget {
             ? Border.all(color: theme.colorScheme.onPrimary, width: 2)
             : null;
       } else if (style == ButtonStyleType.Quaternary) {
-        return Border.all(color: Colors.redAccent, width: 2); // Add border for Quaternary
+        return Border.all(color: error, width: 2); // Add border for Quaternary
       }
       return null;
     }
@@ -63,7 +63,7 @@ class CustomButton extends StatelessWidget {
       if (style == ButtonStyleType.Primary) {
         return active; // Use your defined active color for primary buttons
       } else if (style == ButtonStyleType.Quaternary) {
-        return Colors.redAccent; // Specific color for Quaternary
+        return error; // Specific color for Quaternary
       } else {
         return primary; // Use your defined gradient color for other styles
       }

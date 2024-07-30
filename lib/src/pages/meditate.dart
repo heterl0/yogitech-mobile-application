@@ -118,7 +118,9 @@ class _MeditateState extends State<Meditate> {
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(color: theme.colorScheme.surface),
-      child: _buildMainContent(),
+      child: SingleChildScrollView(
+        child: _buildMainContent(),
+      ),
     );
   }
 
@@ -176,33 +178,29 @@ class _MeditateState extends State<Meditate> {
             style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
           const SizedBox(height: 16),
-          Expanded(
-            child: SingleChildScrollView(
-              child: ListView.builder(
-                key: UniqueKey(),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: _tracks.length,
-                itemBuilder: (context, index) {
-                  return CheckBoxListTile(
-                    title: _tracks[index]['title'],
-                    subtitle: _tracks[index]['subtitle'],
-                    state: _selectedTrackIndex == index
-                        ? CheckState.Checked
-                        : CheckState.Unchecked,
-                    onChanged: (value) {
-                      setState(() {
-                        if (value) {
-                          _selectedTrackIndex = index;
-                        } else {
-                          _selectedTrackIndex = null;
-                        }
-                      });
-                    },
-                  );
-                },
-              ),
-            ),
+          ListView(
+            // Thay thế Expanded bằng ListView
+            shrinkWrap:
+                true, // Cho phép ListView tự động co lại để vừa với nội dung
+            children: [
+              for (var index = 0; index < _tracks.length; index++)
+                CheckBoxListTile(
+                  title: _tracks[index]['title'],
+                  subtitle: _tracks[index]['subtitle'],
+                  state: _selectedTrackIndex == index
+                      ? CheckState.Checked
+                      : CheckState.Unchecked,
+                  onChanged: (value) {
+                    setState(() {
+                      if (value) {
+                        _selectedTrackIndex = index;
+                      } else {
+                        _selectedTrackIndex = null;
+                      }
+                    });
+                  },
+                ),
+            ],
           ),
         ],
       ),
@@ -218,10 +216,7 @@ class _MeditateState extends State<Meditate> {
           flex: 1,
           child: _buildStreakImage(),
         ),
-        Expanded(
-          flex: 2,
-          child: _buildStreakText(context),
-        ),
+        Expanded(flex: 2, child: _buildStreakText(context)),
       ],
     );
   }

@@ -8,7 +8,6 @@ import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/pages/change_profile.dart';
-import 'package:YogiTech/src/pages/calorie.dart';
 import 'package:YogiTech/src/pages/social.dart';
 import 'package:YogiTech/src/routing/app_routes.dart';
 import 'package:YogiTech/src/shared/styles.dart';

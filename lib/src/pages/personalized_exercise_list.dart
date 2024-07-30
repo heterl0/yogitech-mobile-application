@@ -145,7 +145,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                icon: Icon(Icons.edit, color: text),
+                icon: Icon(Icons.edit_outlined, color: text),
                 onPressed: () async {
                   final result = await pushWithoutNavBar(
                     context,
@@ -161,7 +161,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.delete, color: text),
+                icon: Icon(Icons.delete_outline, color: text),
                 onPressed: () {
                   showDialog(
                     context: context,

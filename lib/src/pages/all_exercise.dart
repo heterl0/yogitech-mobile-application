@@ -16,6 +16,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class AllExercise extends StatefulWidget {
   final String? searchString;
   final Muscle? selectedMuscle;
+  final String? category;
   final Account? account;
   final VoidCallback? fetchAccount;
   const AllExercise(
@@ -23,7 +24,8 @@ class AllExercise extends StatefulWidget {
       this.searchString,
       this.selectedMuscle,
       this.account,
-      this.fetchAccount});
+      this.fetchAccount,
+      this.category});
 
   @override
   AllExerciseState createState() => AllExerciseState();
@@ -94,6 +96,7 @@ class AllExerciseState extends State<AllExercise> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
@@ -154,29 +157,92 @@ class AllExerciseState extends State<AllExercise> {
   }
 
   Widget _buildBody(BuildContext context) {
+    Map<String, String> muscleMap = {
+      'Quadriceps': 'Cơ tứ đầu',
+      'Pelvis': 'Khung chậu',
+      'Neck': 'Cổ',
+      'Knees': 'Đầu gối',
+      'Interior Hips': 'Hông trong',
+      'Chest': 'Ngực',
+      'Feet Ankles': 'Bàn chân và mắt cá chân',
+      'Abs': 'Cơ bụng',
+      'Biceps': 'Cơ nhị đầu',
+      'Shoulder': 'Vai',
+      'Exterior Hips': 'Hông ngoài',
+      'Hamstrings': 'Cơ gân kheo',
+      'Gluteus': 'Cơ mông',
+      'Hip': 'Hông',
+      'Middle Back': 'Lưng giữa',
+      'Triceps': 'Cơ tam đầu',
+      'Upper Back': 'Lưng trên',
+      'Lower Back': 'Lưng dưới'
+    };
     final theme = Theme.of(context);
+    final trans = AppLocalizations.of(context)!;
+    final String categoryName = widget.category != null
+        ? (trans.locale == "en"
+            ? widget.category!
+            : muscleMap[widget.category!]!)
+        : ''; // Lấy tên danh mục dựa trên locale
     return Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(color: theme.colorScheme.surface),
-      child: _isLoading
-          ? Center(
-              child: CircularProgressIndicator()) // Show spinner when loading
-          : SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildBlogMainContent(),
-                ],
-              ),
-            ),
-    );
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(color: theme.colorScheme.surface),
+        child: _isLoading
+            ? Center(
+                child: CircularProgressIndicator()) // Show spinner when loading
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    if (categoryName
+                        .isNotEmpty) // Chỉ hiển thị Chip nếu có danh mục
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 12), // Thêm padding xung quanh Chip
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 36,
+                            ),
+                            Text(
+                              '${trans.category}:',
+                              style: bd_text.copyWith(
+                                  color: theme.colorScheme.onSurface),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12.0, vertical: 8.0),
+                              decoration: BoxDecoration(
+                                color: primary, // Màu nền
+                                borderRadius:
+                                    BorderRadius.circular(20.0), // Bo góc
+                              ),
+                              child: Text(
+                                categoryName,
+                                style: min_cap.copyWith(color: active),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    else
+                      SizedBox(
+                        height: 24,
+                      ),
+                    _buildBlogMainContent(),
+                  ],
+                ),
+              ));
   }
 
   Widget _buildBlogMainContent() {
     final trans = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
+      padding: const EdgeInsets.only(top: .0, left: 24.0, right: 24.0),
       child: _exercises.isNotEmpty
           ? GridView.builder(
               shrinkWrap: true,
