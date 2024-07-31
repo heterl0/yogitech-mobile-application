@@ -67,7 +67,10 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
         future: _exerciseFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+              color: primary2,
+            ));
           } else if (snapshot.hasError) {
             return Center(child: Text(trans.errorLoadingExercises));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -127,7 +130,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
                         : (exercise.level == 2
                             ? trans.intermediate
                             : trans.advanced),
-                    style: bd_text.copyWith(color: primary),
+                    style: bd_text.copyWith(color: primary2),
                   ),
                 ],
               ),
@@ -136,7 +139,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
                   Text('${trans.duration}: ',
                       style: bd_text.copyWith(color: text)),
                   Text('${exercise.durations} ${trans.seconds}',
-                      style: bd_text.copyWith(color: primary)),
+                      style: bd_text.copyWith(color: primary2)),
                 ],
               ),
             ],
@@ -228,7 +231,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
       child: Ink(
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
-          gradient: gradient,
+          gradient: gradient2,
         ),
         width: 60,
         height: 60,

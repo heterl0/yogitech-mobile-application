@@ -33,12 +33,14 @@ class _nameState extends State<FriendProfile> {
   Uint8List? _imageBytes;
   SocialProfile? _soProfile;
   bool isFollow = false; // Khai báo biến ở đây
+  Account? _account;
 
   @override
   void initState() {
     super.initState();
     setState(() {
       _soProfile = widget.profile;
+      _account = widget.account;
       isFollow = widget.account!.isFollowing(widget.profile.user_id ?? -1);
     });
   }
@@ -141,10 +143,10 @@ class _nameState extends State<FriendProfile> {
                       Container(
                         width: 96,
                         height: 96,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/images/Fire.png'),
-                          ),
+                              image:
+                                  const AssetImage('assets/images/Fire.png')),
                         ),
                       ),
                       Text(

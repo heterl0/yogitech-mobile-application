@@ -105,7 +105,11 @@ class AllExerciseState extends State<AllExercise> {
           IconButton(
             icon: Icon(Icons.tune_outlined, color: theme.colorScheme.onSurface),
             onPressed: () {
-              pushScreenWithNavBar(context, FilterPage());
+              pushScreenWithNavBar(
+                  context,
+                  FilterPage(
+                    account: _account,
+                  ));
             },
           ),
         ],
@@ -190,7 +194,9 @@ class AllExerciseState extends State<AllExercise> {
         decoration: BoxDecoration(color: theme.colorScheme.surface),
         child: _isLoading
             ? Center(
-                child: CircularProgressIndicator()) // Show spinner when loading
+                child: CircularProgressIndicator(
+                color: (!(_account?.is_premium ?? false)) ? primary : primary2,
+              )) // Show spinner when loading
             : SingleChildScrollView(
                 child: Column(
                   children: [
@@ -216,7 +222,9 @@ class AllExerciseState extends State<AllExercise> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 12.0, vertical: 8.0),
                               decoration: BoxDecoration(
-                                color: primary, // Màu nền
+                                color: (!(_account?.is_premium ?? false))
+                                    ? primary
+                                    : primary2, // Màu nền
                                 borderRadius:
                                     BorderRadius.circular(20.0), // Bo góc
                               ),
@@ -256,7 +264,9 @@ class AllExerciseState extends State<AllExercise> {
                 final ex = _exercises[index];
                 return CustomCard(
                   topRightIcon: ex.is_premium
-                      ? Image.asset('assets/images/Crown.png')
+                      ? (!(_account?.is_premium ?? false))
+                          ? Image.asset('assets/images/Crown.png')
+                          : Image.asset('assets/images/Crown2.png')
                       : null,
                   title: ex.title,
                   caption: ex.description.replaceAll(RegExp(r'<[^>]*>'), ''),

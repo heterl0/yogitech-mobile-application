@@ -119,7 +119,9 @@ class _SubscriptionState extends State<SubscriptionPage> {
               SizedBox(
                 width: 28,
                 height: 28,
-                child: Image.asset('assets/images/Emerald.png'),
+                child: (!(_account?.is_premium ?? false))
+                    ? Image.asset('assets/images/Emerald.png')
+                    : Image.asset('assets/images/Emerald2.png'),
               ),
               SizedBox(
                 width: 4,
@@ -146,7 +148,10 @@ class _SubscriptionState extends State<SubscriptionPage> {
           ],
         ),
         body: _isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? Center(
+                child: CircularProgressIndicator(
+                color: (!(_account?.is_premium ?? false)) ? primary : primary2,
+              ))
             : _buildBody(context),
         bottomNavigationBar: _buildBottomBar(context));
   }
@@ -223,7 +228,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
       return Container(
           padding: const EdgeInsets.all(12),
           decoration: ShapeDecoration(
-            gradient: gradient,
+            gradient: (!(_account?.is_premium ?? false)) ? gradient : gradient2,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
@@ -267,8 +272,8 @@ class _SubscriptionState extends State<SubscriptionPage> {
                     Row(
                       children: [
                         Container(
-                          width: 16,
-                          height: 16,
+                          width: 20,
+                          height: 20,
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage('assets/images/Emerald_.png'),
@@ -317,7 +322,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
       return Container(
         padding: const EdgeInsets.all(12),
         decoration: ShapeDecoration(
-          gradient: gradient,
+          gradient: (!(_account?.is_premium ?? false)) ? gradient : gradient2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -683,7 +688,9 @@ class _SubscriptionState extends State<SubscriptionPage> {
                       height: 18,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage('assets/images/Emerald.png'),
+                          image: (!(_account?.is_premium ?? false))
+                              ? AssetImage('assets/images/Emerald.png')
+                              : AssetImage('assets/images/Emerald2.png'),
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -707,7 +714,8 @@ class _SubscriptionState extends State<SubscriptionPage> {
                 Text(
                   '${sub.price.toInt().toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} VND',
                   style: h3.copyWith(
-                    color: primary,
+                    color:
+                        (!(_account?.is_premium ?? false)) ? primary : primary2,
                   ),
                 ),
               ],

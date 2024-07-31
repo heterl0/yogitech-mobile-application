@@ -110,7 +110,9 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(
                           width: 28,
                           height: 28,
-                          child: Image.asset('assets/images/Emerald.png'),
+                          child: (!(_account?.is_premium ?? false))
+                              ? Image.asset('assets/images/Emerald.png')
+                              : Image.asset('assets/images/Emerald2.png'),
                         ),
                         SizedBox(
                           width: 4,
@@ -126,9 +128,10 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ],
-                titleWidget: StreakValue(_account != null
-                    ? _account!.profile.streak.toString()
-                    : '0'),
+                titleWidget: StreakValue(
+                  _account != null ? _account!.profile.streak.toString() : '0',
+                  account: _account,
+                ),
                 postActions: [
                   IconButton(
                     icon:
@@ -149,7 +152,9 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       pushScreenWithNavBar(
                         context,
-                        FilterPage(),
+                        FilterPage(
+                          account: _account,
+                        ),
                       );
                     },
                   ),
@@ -312,7 +317,9 @@ class _HomePageState extends State<HomePage> {
                         title: trans.yogaChangedMyLife,
                         subtitle: trans.minhAnhInspirationalStory,
                         poseName: trans.shareYourJourney,
-                        imagePath: 'assets/images/Fire.png',
+                        imagePath: (!(_account?.is_premium ?? false))
+                            ? 'assets/images/Fire.png'
+                            : 'assets/images/Fire2.png',
                         onTap: () {
                           Navigator.push(
                             context,
@@ -327,7 +334,9 @@ class _HomePageState extends State<HomePage> {
                         title: trans.specialOfferForNewMembers,
                         subtitle: trans.receiveTwoFreeSessions,
                         poseName: trans.subscribePremiumNow,
-                        imagePath: 'assets/images/Crown.png',
+                        imagePath: (!(_account?.is_premium ?? false))
+                            ? 'assets/images/Crown.png'
+                            : 'assets/images/Crown2.png',
                         onTap: () {
                           pushWithoutNavBar(
                               context,
@@ -375,7 +384,9 @@ class _HomePageState extends State<HomePage> {
                         for (final exercise in jsonList.take(5))
                           CustomCard(
                             topRightIcon: exercise.is_premium
-                                ? Image.asset('assets/images/Crown.png')
+                                ? (!(_account?.is_premium ?? false))
+                                    ? Image.asset('assets/images/Crown.png')
+                                    : Image.asset('assets/images/Crown2.png')
                                 : null,
                             title: exercise.title,
                             imageUrl: exercise.image_url,
@@ -411,7 +422,10 @@ class _HomePageState extends State<HomePage> {
                           padding: EdgeInsets.symmetric(horizontal: 8),
                           child: Text(
                             trans.seeall,
-                            style: bd_text.copyWith(color: primary),
+                            style: bd_text.copyWith(
+                                color: (!(_account?.is_premium ?? false))
+                                    ? primary
+                                    : primary2),
                           ),
                         ),
                         onTap: () {
@@ -436,7 +450,9 @@ class _HomePageState extends State<HomePage> {
                         for (final exercise in jsonListSort.take(5))
                           CustomCard(
                             topRightIcon: exercise.is_premium
-                                ? Image.asset('assets/images/Crown.png')
+                                ? (!(_account?.is_premium ?? false))
+                                    ? Image.asset('assets/images/Crown.png')
+                                    : Image.asset('assets/images/Crown2.png')
                                 : null,
                             title: exercise.title,
                             // subtitle: exercise.durations ?? '0',
@@ -501,7 +517,10 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(height: 16),
                     Text(
                       poseName,
-                      style: bd_text.copyWith(color: primary),
+                      style: bd_text.copyWith(
+                          color: (!(_account?.is_premium ?? false))
+                              ? primary
+                              : primary2),
                     ),
                   ],
                 ),
@@ -526,8 +545,9 @@ class _HomePageState extends State<HomePage> {
 // Phải tạo Widget riêng chỉ nhằm mục đích áp dụng màu Gradient
 class StreakValue extends StatelessWidget {
   final String streakValue;
+  final Account? account;
 
-  const StreakValue(this.streakValue, {super.key});
+  const StreakValue(this.streakValue, {super.key, this.account});
 
   @override
   Widget build(BuildContext context) {
@@ -539,7 +559,10 @@ class StreakValue extends StatelessWidget {
           pushWithoutNavBar(
             context,
             MaterialPageRoute(
-              builder: (context) => Streak(currentStreak: streakValue),
+              builder: (context) => Streak(
+                currentStreak: streakValue,
+                account: account,
+              ),
             ),
           );
         },
@@ -556,7 +579,9 @@ class StreakValue extends StatelessWidget {
               height: 32,
               child: ShaderMask(
                 shaderCallback: (bounds) {
-                  return gradient.createShader(bounds);
+                  return (!(account?.is_premium ?? false))
+                      ? gradient.createShader(bounds)
+                      : gradient2.createShader(bounds);
                 },
                 child: Text(
                   streakValue,

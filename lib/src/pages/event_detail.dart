@@ -155,7 +155,10 @@ class _EventDetailState extends State<EventDetail>
     _expired = checkDateExpired(_event!.start_date, _event!.expire_date, trans);
 
     return isLoading
-        ? Center(child: CircularProgressIndicator())
+        ? Center(
+            child: CircularProgressIndicator(
+            color: (!(_account?.is_premium ?? false)) ? primary : primary2,
+          ))
         : Scaffold(
             extendBodyBehindAppBar: true,
             backgroundColor: theme.colorScheme.surface,
@@ -171,7 +174,11 @@ class _EventDetailState extends State<EventDetail>
                     child: Container(
                       color: theme.colorScheme.surface,
                       child: Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          color: (!(_account?.is_premium ?? false))
+                              ? primary
+                              : primary2,
+                        ),
                       ),
                     ),
                   ),
@@ -243,8 +250,10 @@ class _EventDetailState extends State<EventDetail>
         background: CachedNetworkImage(
           imageUrl: _event!.image_url,
           fit: BoxFit.cover,
-          placeholder: (context, url) =>
-              Center(child: CircularProgressIndicator()),
+          placeholder: (context, url) => Center(
+              child: CircularProgressIndicator(
+            color: (!(_account?.is_premium ?? false)) ? primary : primary2,
+          )),
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),
       ),
@@ -267,12 +276,14 @@ class _EventDetailState extends State<EventDetail>
           if (_event != null) _buildDescription(),
           const SizedBox(height: 16),
           TabBar(
+            labelColor: (!(_account?.is_premium ?? false)) ? primary : primary2,
             dividerColor: Colors.transparent,
             controller: _tabController,
             indicator: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: primary,
+                  color:
+                      (!(_account?.is_premium ?? false)) ? primary : primary2,
                   width: 2.0,
                 ),
               ),
@@ -313,6 +324,7 @@ class _EventDetailState extends State<EventDetail>
 
   Widget _buildRowWithText(BuildContext context, AppLocalizations trans) {
     final local = Localizations.localeOf(context);
+    final theme = Theme.of(context);
     String startDay = DateFormat.yMMMd(local.languageCode)
         .add_Hm()
         .format(DateTime.parse(_event!.start_date).toUtc().toLocal());
@@ -336,11 +348,14 @@ class _EventDetailState extends State<EventDetail>
                 children: [
                   Text(
                     "${trans.start}:",
-                    style: bd_text.copyWith(color: active),
+                    style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
                   ),
                   Text(
                     ' $startDay',
-                    style: bd_text.copyWith(color: primary),
+                    style: bd_text.copyWith(
+                        color: (!(_account?.is_premium ?? false))
+                            ? primary
+                            : primary2),
                   ),
                 ],
               ),
@@ -350,11 +365,14 @@ class _EventDetailState extends State<EventDetail>
                 children: [
                   Text(
                     "${trans.end}:",
-                    style: bd_text.copyWith(color: active),
+                    style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
                   ),
                   Text(
                     ' $endDay',
-                    style: bd_text.copyWith(color: primary),
+                    style: bd_text.copyWith(
+                        color: (!(_account?.is_premium ?? false))
+                            ? primary
+                            : primary2),
                   )
                 ],
               ),
@@ -362,8 +380,8 @@ class _EventDetailState extends State<EventDetail>
           ),
           const SizedBox(width: 12),
           Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -371,11 +389,14 @@ class _EventDetailState extends State<EventDetail>
                 children: [
                   Text(
                     trans.numOfExercise,
-                    style: bd_text.copyWith(color: active),
+                    style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
                   ),
                   Text(
                     ' ${_event!.exercises.length}',
-                    style: bd_text.copyWith(color: primary),
+                    style: bd_text.copyWith(
+                        color: (!(_account?.is_premium ?? false))
+                            ? primary
+                            : primary2),
                   ),
                 ],
               ),
@@ -385,11 +406,14 @@ class _EventDetailState extends State<EventDetail>
                 children: [
                   Text(
                     trans.numOfCandidate,
-                    style: bd_text.copyWith(color: active),
+                    style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
                   ),
                   Text(
                     ' ${_event!.event_candidate.length}',
-                    style: bd_text.copyWith(color: primary),
+                    style: bd_text.copyWith(
+                        color: (!(_account?.is_premium ?? false))
+                            ? primary
+                            : primary2),
                   ),
                 ],
               ),
@@ -443,7 +467,7 @@ class _EventDetailState extends State<EventDetail>
                     }
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 12.0),
+                    padding: EdgeInsets.only(bottom: 12.0),
                     child: SizedBox(
                       height: 48, // Điều chỉnh chiều cao cho mỗi hàng
                       child: Row(
@@ -453,16 +477,17 @@ class _EventDetailState extends State<EventDetail>
                           SizedBox(
                             width: 28,
                             height: 28,
-                            child: index == 0
-                                ? Image.asset('assets/icons/Warranty.png',
-                                    fit: BoxFit.fill)
-                                : Center(
-                                    child: Text(
-                                      (index + 1).toString(),
-                                      textAlign: TextAlign.center,
-                                      style: h3.copyWith(
-                                          color: theme.colorScheme.onSurface),
-                                    ),
+                            child: (index == 0)
+                                ? (!(_account?.is_premium ?? false)
+                                    ? Image.asset('assets/images/Warranty.png',
+                                        fit: BoxFit.fill)
+                                    : Image.asset('assets/images/Warranty2.png',
+                                        fit: BoxFit.fill))
+                                : Text(
+                                    (index + 1).toString(),
+                                    textAlign: TextAlign.center,
+                                    style: h3.copyWith(
+                                        color: theme.colorScheme.onSurface),
                                   ),
                           ),
                           const SizedBox(width: 8),
@@ -528,7 +553,10 @@ class _EventDetailState extends State<EventDetail>
                           Text(
                             '${item.event_point.toStringAsFixed(1)} ${trans.point}',
                             textAlign: TextAlign.right,
-                            style: h3.copyWith(color: primary),
+                            style: h3.copyWith(
+                                color: (!(_account?.is_premium ?? false))
+                                    ? primary
+                                    : primary2),
                           ),
                         ],
                       ),
@@ -577,7 +605,10 @@ class _EventDetailState extends State<EventDetail>
           )
         : Padding(
             padding: const EdgeInsets.all(20),
-            child: Text(trans.needToJoin),
+            child: Text(
+              trans.needToJoin,
+              style: bd_text.copyWith(color: text),
+            ),
           );
   }
 

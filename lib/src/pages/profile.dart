@@ -193,7 +193,10 @@ class _ProfilePageState extends State<ProfilePage>
           ],
         ),
         body: _isLoading // Check loading state
-            ? Center(child: CircularProgressIndicator())
+            ? Center(
+                child: CircularProgressIndicator(
+                color: (!(_account?.is_premium ?? false)) ? primary : primary2,
+              ))
             : SafeArea(
                 child: SingleChildScrollView(
                   child: Container(
@@ -202,7 +205,9 @@ class _ProfilePageState extends State<ProfilePage>
                       children: [
                         ShaderMask(
                           shaderCallback: (bounds) {
-                            return gradient.createShader(bounds);
+                            return (!(_account?.is_premium ?? false))
+                                ? gradient.createShader(bounds)
+                                : gradient2.createShader(bounds);
                           },
                           child: Text(
                             [
@@ -283,8 +288,11 @@ class _ProfilePageState extends State<ProfilePage>
                                                         color:
                                                             Colors.transparent,
                                                         border: Border.all(
-                                                          color:
-                                                              primary, // Màu của border
+                                                          color: (!(_account
+                                                                      ?.is_premium ??
+                                                                  false))
+                                                              ? primary
+                                                              : primary2, // Màu của border
                                                           width:
                                                               3.0, // Độ rộng của border
                                                         ),
@@ -486,7 +494,10 @@ class _ProfilePageState extends State<ProfilePage>
                                     title: 'EXP',
                                     value: _profile?.exp.toString() ?? '',
 // Replace with API data
-                                    valueColor: primary,
+                                    valueColor:
+                                        (!(_account?.is_premium ?? false))
+                                            ? primary
+                                            : primary2,
                                     isTitleFirst: true,
                                   ),
                                   StatCard(
@@ -517,12 +528,17 @@ class _ProfilePageState extends State<ProfilePage>
                           child: Stack(
                             children: [
                               TabBar(
+                                labelColor: (!(_account?.is_premium ?? false))
+                                    ? primary
+                                    : primary2,
                                 dividerColor: Colors.transparent,
                                 controller: _tabController,
                                 indicator: BoxDecoration(
                                   border: Border(
                                     bottom: BorderSide(
-                                      color: primary,
+                                      color: (!(_account?.is_premium ?? false))
+                                          ? primary
+                                          : primary2,
                                       width: 2.0,
                                     ),
                                   ),
@@ -553,22 +569,34 @@ class _ProfilePageState extends State<ProfilePage>
                                 padding: EdgeInsets.only(top: 60),
                                 height: 320,
                                 child: _isChartDataLoading
-                                    ? Center(child: CircularProgressIndicator())
+                                    ? Center(
+                                        child: CircularProgressIndicator(
+                                        color:
+                                            (!(_account?.is_premium ?? false))
+                                                ? primary
+                                                : primary2,
+                                      ))
                                     : TabBarView(
                                         controller: _tabController,
                                         children: [
-                                          _buildLineChart(pointDataPoints,
-                                              trans.days, 'EXP', monthInChart),
+                                          _buildLineChart(
+                                              pointDataPoints,
+                                              trans.days,
+                                              'EXP',
+                                              monthInChart,
+                                              _account),
                                           _buildLineChart(
                                               expDataPoints,
                                               trans.days,
                                               trans.point,
-                                              monthInChart),
+                                              monthInChart,
+                                              _account),
                                           _buildLineChart(
                                               caloriesDataPoints,
                                               trans.days,
                                               trans.calorie,
-                                              monthInChart),
+                                              monthInChart,
+                                              _account),
                                         ],
                                       ),
                               ),
@@ -652,8 +680,7 @@ class _ProfilePageState extends State<ProfilePage>
 }
 
 Widget _buildLineChart(List<FlSpot> data, String xLabel, String yLabel,
-    List<double> monthInChart) {
-  print('Tháng lấy được: ${monthInChart}');
+    List<double> monthInChart, Account? _account) {
   return LineChart(
     LineChartData(
       borderData: FlBorderData(show: false),
@@ -709,6 +736,7 @@ Widget _buildLineChart(List<FlSpot> data, String xLabel, String yLabel,
       gridData: FlGridData(show: true),
       lineBarsData: [
         LineChartBarData(
+          color: primary2,
           spots: data,
           barWidth: 4,
           isStrokeCapRound: true,
@@ -717,7 +745,7 @@ Widget _buildLineChart(List<FlSpot> data, String xLabel, String yLabel,
             show: true,
             gradient: LinearGradient(
               colors: [
-                primary.withOpacity(0.2),
+                primary2.withOpacity(0.2),
                 darkblue.withOpacity(0.0),
               ],
               begin: Alignment.topCenter,

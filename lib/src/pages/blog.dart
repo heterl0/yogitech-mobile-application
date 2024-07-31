@@ -102,7 +102,9 @@ class BlogState extends State<Blog> {
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
     return _isLoading
-        ? Center(child: CircularProgressIndicator())
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
         : Container(
             width: double.infinity,
             height: double.infinity,

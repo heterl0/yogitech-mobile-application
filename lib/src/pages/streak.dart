@@ -1,5 +1,6 @@
 import 'package:YogiTech/api/account/account_service.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
+import 'package:YogiTech/src/models/account.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
@@ -8,7 +9,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Streak extends StatefulWidget {
   final String currentStreak;
-  const Streak({super.key, this.currentStreak = '0'});
+  final Account? account;
+  const Streak({super.key, this.currentStreak = '0', this.account});
 
   @override
   _StreakState createState() => _StreakState();
@@ -17,6 +19,7 @@ class Streak extends StatefulWidget {
 class _StreakState extends State<Streak> {
   DateTime _currentDate = DateTime.now();
   DateTime? _lastStreakStartDate;
+  Account? _account;
   late Map<String, dynamic> streakData = {
     "number_of_dates": 0,
     "streak_dates": []
@@ -25,7 +28,8 @@ class _StreakState extends State<Streak> {
   @override
   void initState() {
     super.initState();
-    print("initState called");
+
+    _account = widget.account;
     _fetchStreakData();
   }
 
@@ -148,7 +152,9 @@ class _StreakState extends State<Streak> {
       children: [
         ShaderMask(
           shaderCallback: (bounds) {
-            return gradient.createShader(bounds);
+            return (!(_account?.is_premium ?? false))
+                ? gradient.createShader(bounds)
+                : gradient2.createShader(bounds);
           },
           child: Text(
             widget.currentStreak,
@@ -174,9 +180,11 @@ class _StreakState extends State<Streak> {
     return Container(
       width: 96,
       height: 96,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/Fire.png'),
+          image: (!(_account?.is_premium ?? false))
+              ? AssetImage('assets/images/Fire.png')
+              : AssetImage('assets/images/Fire2.png'),
         ),
       ),
     );
@@ -243,7 +251,8 @@ class _StreakState extends State<Streak> {
           child: Container(
             height: 60,
             decoration: BoxDecoration(
-              gradient: gradient,
+              gradient:
+                  (!(_account?.is_premium ?? false)) ? gradient : gradient2,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Padding(
@@ -367,9 +376,18 @@ class _StreakState extends State<Streak> {
     return Container(
       margin: EdgeInsets.all(4.0),
       decoration: BoxDecoration(
-          border: Border.all(color: isStreakDay ? primary : stroke),
+          border: Border.all(
+              color: isStreakDay
+                  ? (!(_account?.is_premium ?? false))
+                      ? primary
+                      : primary2
+                  : stroke),
           borderRadius: BorderRadius.circular(16.0),
-          color: isStreakDay ? primary : Colors.transparent),
+          color: isStreakDay
+              ? (!(_account?.is_premium ?? false))
+                  ? primary
+                  : primary2
+              : Colors.transparent),
       child: Center(
         child: Text(
           date.day.toString(),
