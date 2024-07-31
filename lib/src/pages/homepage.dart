@@ -209,6 +209,17 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // CustomButton(
+                //   title: 'title',
+                //   style: ButtonStyleType.Primary,
+                //   onPressed: () {
+                //     pushWithoutNavBar(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: (context) => PrelaunchSurveyPage()),
+                //     ); // Thay NewPage() bằng trang bạn muốn chuyển tới);
+                //   },
+                // ),
+                // CustomButton(
                 //     title: 'title',
                 //     style: ButtonStyleType.Primary,
                 //     onPressed: () => {

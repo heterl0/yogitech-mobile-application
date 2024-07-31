@@ -279,5 +279,9 @@
   "createSuccess":"Tạo thành công",
   "createFail":"Tạo thất bại",
   "passDonotMatch":"Mật khẩu không khớp",
-  "failRegister":"Đăng ký thất bại"
+  "failRegister":"Đăng ký thất bại",
+  "developmentFeature": "Tính năng đang được phát triển",
+  "featureInDevelopment": "Tính năng này sẽ được triển khai trong tương lai.",
+  "noHistory":"Chưa có lịch sử",
+  "noPose":"Chưa có tư thế"
 }

@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -20,9 +21,7 @@ class Meditate extends StatefulWidget {
 final List<Map<String, dynamic>> theTracks = [
   {'asset': 'audios/rain.mp3'},
   {'asset': 'audios/wave.mp3'},
-  {'asset': 'audios/morning.mp3'},
-  {'asset': 'audios/nature.mp3'},
-  {},
+  {'asset': 'audios/morning.mp3'}
 ];
 
 class _MeditateState extends State<Meditate> {
@@ -35,7 +34,6 @@ class _MeditateState extends State<Meditate> {
   void initState() {
     super.initState();
     _initSharedPreferences();
-    _updateStreakData();
   }
 
   Future<void> _initSharedPreferences() async {
@@ -54,10 +52,7 @@ class _MeditateState extends State<Meditate> {
     DateTime? lastMeditationDate =
         DateTime.tryParse(prefs?.getString('lastMeditationDate') ?? '');
 
-    int longestStreak = prefs?.getInt('longestStreak') ?? 0;
-
     if (lastMeditationDate != null) {
-      // Chuẩn hóa ngày để chỉ so sánh ngày (không phải thời gian)
       DateTime normalizedToday = DateTime(today.year, today.month, today.day);
       DateTime normalizedLastDate = DateTime(lastMeditationDate.year,
           lastMeditationDate.month, lastMeditationDate.day);
@@ -66,24 +61,14 @@ class _MeditateState extends State<Meditate> {
           normalizedToday.difference(normalizedLastDate).inDays;
 
       if (daysDifference == 1) {
-        // Ngày liên tiếp, tăng chuỗi
         currentStreak++;
       } else if (daysDifference > 1) {
-        // Có khoảng trống giữa các ngày thiền, đặt lại chuỗi
-        currentStreak = 1;
-      } // Không cần else, chuỗi giữ nguyên nếu đã thiền hôm nay
+        currentStreak = 0;
+      }
     } else {
-      // Lần thiền đầu tiên
       currentStreak = 1;
     }
 
-    // Cập nhật chuỗi dài nhất nếu cần
-    if (currentStreak > longestStreak) {
-      longestStreak = currentStreak;
-      await prefs?.setInt('longestStreak', longestStreak);
-    }
-
-    // Lưu dữ liệu đã cập nhật
     await prefs?.setInt('currentStreak', currentStreak);
     await prefs?.setString('lastMeditationDate', today.toIso8601String());
     _loadStreakData();
@@ -118,7 +103,9 @@ class _MeditateState extends State<Meditate> {
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(color: theme.colorScheme.surface),
-      child: _buildMainContent(),
+      child: SingleChildScrollView(
+        child: _buildMainContent(),
+      ),
     );
   }
 
@@ -140,11 +127,6 @@ class _MeditateState extends State<Meditate> {
         'title': trans.soundMorning,
         'subtitle': trans.soundMorningDescription,
         'asset': 'audios/morning.mp3'
-      },
-      {
-        'title': trans.soundNature,
-        'subtitle': trans.soundNatureDescription,
-        'asset': 'audios/nature.mp3'
       },
     ];
 
@@ -176,33 +158,27 @@ class _MeditateState extends State<Meditate> {
             style: h3.copyWith(color: theme.colorScheme.onPrimary),
           ),
           const SizedBox(height: 16),
-          Expanded(
-            child: SingleChildScrollView(
-              child: ListView.builder(
-                key: UniqueKey(),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: _tracks.length,
-                itemBuilder: (context, index) {
-                  return CheckBoxListTile(
-                    title: _tracks[index]['title'],
-                    subtitle: _tracks[index]['subtitle'],
-                    state: _selectedTrackIndex == index
-                        ? CheckState.Checked
-                        : CheckState.Unchecked,
-                    onChanged: (value) {
-                      setState(() {
-                        if (value) {
-                          _selectedTrackIndex = index;
-                        } else {
-                          _selectedTrackIndex = null;
-                        }
-                      });
-                    },
-                  );
-                },
-              ),
-            ),
+          ListView(
+            shrinkWrap: true,
+            children: [
+              for (var index = 0; index < _tracks.length; index++)
+                CheckBoxListTile(
+                  title: _tracks[index]['title'],
+                  subtitle: _tracks[index]['subtitle'],
+                  state: _selectedTrackIndex == index
+                      ? CheckState.Checked
+                      : CheckState.Unchecked,
+                  onChanged: (value) {
+                    setState(() {
+                      if (value) {
+                        _selectedTrackIndex = index;
+                      } else {
+                        _selectedTrackIndex = null;
+                      }
+                    });
+                  },
+                ),
+            ],
           ),
         ],
       ),
@@ -218,10 +194,7 @@ class _MeditateState extends State<Meditate> {
           flex: 1,
           child: _buildStreakImage(),
         ),
-        Expanded(
-          flex: 2,
-          child: _buildStreakText(context),
-        ),
+        Expanded(flex: 2, child: _buildStreakText(context)),
       ],
     );
   }
@@ -286,7 +259,7 @@ class _MeditateState extends State<Meditate> {
             ),
           ),
         );
-        await _updateStreakData();
+        _updateStreakData();
       },
       child: Ink(
         decoration: const BoxDecoration(

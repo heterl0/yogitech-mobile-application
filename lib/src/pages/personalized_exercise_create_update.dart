@@ -225,9 +225,13 @@ class _PersonalizedExerciseCreatePageState
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('${trans.error}: ${snapshot.error}'));
+            return Center(
+                child: Text('${trans.error}: ${snapshot.error}',
+                    style: bd_text.copyWith(color: text)));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Không có pose'));
+            return Center(
+                child:
+                    Text(trans.noPose, style: bd_text.copyWith(color: text)));
           } else {
             _poses = snapshot.data!;
             return SingleChildScrollView(
@@ -325,9 +329,7 @@ class _PersonalizedExerciseCreatePageState
                         fontWeight: FontWeight.w400,
                       ),
                       backgroundColor: theme.colorScheme.surface,
-                      items: _poses
-                          .map((e) => MultiSelectItem<Pose>(e, e.name))
-                          .toList(),
+                      items: _poses.map((e) => PoseMultiSelectItem(e)).toList(),
                       listType: MultiSelectListType.CHIP,
                       initialValue: _selectedPoses,
                       onConfirm: (List<Pose> values) {
@@ -408,6 +410,24 @@ class _PersonalizedExerciseCreatePageState
           ),
         ],
       ),
+    );
+  }
+}
+
+class PoseMultiSelectItem extends MultiSelectItem<Pose> {
+  PoseMultiSelectItem(Pose pose) : super(pose, pose.name);
+
+  Widget build(BuildContext context, bool isSelected, VoidCallback onTap) {
+    final trans = AppLocalizations.of(context)!;
+    return ListTile(
+      // Sử dụng ListTile để hiển thị thông tin
+      leading: Image.network(value.image_url,
+          width: 40, height: 40, fit: BoxFit.cover),
+      title: Text(value.name),
+      subtitle:
+          Text('${trans.calorie}: ${value.calories}'), // Hiển thị calories
+      trailing: isSelected ? Icon(Icons.check) : null,
+      onTap: onTap,
     );
   }
 }

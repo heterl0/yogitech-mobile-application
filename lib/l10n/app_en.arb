@@ -278,5 +278,9 @@
   "createSuccess":"Create successful",
   "createFail":"Create failed",
   "passDonotMatch":"Passwords do not match",
-  "failRegister":"Failed to register"
+  "failRegister":"Failed to register",
+  "developmentFeature": "Feature in Development",
+  "featureInDevelopment": "This feature is currently in development.",
+  "noHistory":"There are no history",
+  "noPose":"There are no pose"
 }

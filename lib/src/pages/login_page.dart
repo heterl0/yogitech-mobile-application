@@ -78,11 +78,11 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: Text(
                         trans.forgotPassword,
-                        style: bd_text.copyWith(color: theme.primaryColor),
+                        style: bd_text.copyWith(
+                            color: theme.primaryColor, height: 1),
                       ),
                     ),
                   ),
-                  SizedBox(height: 0.0),
                   CustomButton(
                     title: trans.login,
                     style: ButtonStyleType.Primary,
@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             child: Text(
                               trans.signUp,
-                              style: h3.copyWith(color: Colors.lightBlueAccent),
+                              style: h3.copyWith(color: primary),
                             ),
                           ),
                         ],
@@ -252,7 +252,7 @@ class _LoginPageState extends State<LoginPage> {
     if (enteredEmail.isEmpty || enteredPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            backgroundColor: theme.colorScheme.onSecondary,
+            backgroundColor: error,
             content: Text(trans.dontEmpty,
                 style: bd_text.copyWith(color: theme.colorScheme.onSurface))),
       );

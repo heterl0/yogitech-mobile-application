@@ -33,82 +33,29 @@ class _PaymentHistoryState extends State<PaymentHistory> {
     final trans = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
-      // appBar: PreferredSize(
-      //   preferredSize: Size.fromHeight(100),
-      //   child: ClipRRect(
-      //     borderRadius: BorderRadius.only(
-      //       bottomLeft: Radius.circular(24.0),
-      //       bottomRight: Radius.circular(24.0),
-      //     ),
-      //     child: AppBar(
-      //       automaticallyImplyLeading: false,
-      //       backgroundColor: theme.colorScheme.onSecondary,
-      //       bottom: PreferredSize(
-      //         preferredSize: Size.fromHeight(0),
-      //         child: Padding(
-      //           padding: const EdgeInsets.only(
-      //             bottom: 12.0,
-      //             right: 20.0,
-      //             left: 20.0,
-      //           ),
-      //           child: Row(
-      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //             children: [
-      //               IconButton(
-      //                 icon: Icon(Icons.arrow_back, color: active),
-      //                 onPressed: () {
-      //                   Navigator.of(context).pop();
-      //                 },
-      //               ),
-      //               Spacer(),
-      //               Text('Payment History', style: h2.copyWith(color: active)),
-      //               Spacer(
-      //                 flex: 2,
-      //               ), // Adjust the flex value to center the title properly
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // ),
       appBar: CustomAppBar(
         style: widthStyle.Large,
         title: trans.paymentHistory,
       ),
       body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: _userSubs!.length,
-            itemBuilder: (context, index) {
-              int reverseIndex = _userSubs!.length - 1 - index;
-              return buildPaymentRow(context, _userSubs![reverseIndex], trans);
-            },
-          )
-          // child: Column(
-          //   children: [
-
-          //     buildPaymentRow(
-          //       context,
-          //       image: 'assets/images/Sun.png',
-          //       title: 'Once a Year',
-          //       date: '01/01/2023',
-          //       amount: '1.000.000đ',
-          //       isGem: false,
-          //     ),
-          //     SizedBox(height: 16),
-          //     buildPaymentRow(
-          //       context,
-          //       image: 'assets/images/MoonPhase.png',
-          //       title: 'Once a Year',
-          //       date: '01/01/2023',
-          //       amount: '999',
-          //       isGem: true,
-          //     ),
-          //   ],
-          // ),
-          ),
+        padding: const EdgeInsets.all(16.0),
+        child: _userSubs!.isNotEmpty
+            ? ListView.builder(
+                shrinkWrap: true,
+                itemCount: _userSubs!.length,
+                itemBuilder: (context, index) {
+                  int reverseIndex = _userSubs!.length - 1 - index;
+                  return buildPaymentRow(
+                      context, _userSubs![reverseIndex], trans);
+                },
+              )
+            : Center(
+                child: Text(
+                  trans.noHistory,
+                  style: bd_text.copyWith(color: text),
+                ),
+              ),
+      ),
     );
   }
 

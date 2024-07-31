@@ -165,7 +165,9 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                         child: Text(
                           bmiResult.isNotEmpty
                               ? bmiResult
-                              : _profile?.bmi.toString() ?? 'BMI',
+                              : (_profile?.bmi != null
+                                  ? _profile!.bmi.toString()
+                                  : 'BMI'),
                           style: h1.copyWith(color: primary),
                         ),
                       ),
@@ -200,7 +202,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                   keyboardType: TextInputType.number,
                   onChanged: (_) => _calculateBMI(),
                 ),
-                SizedBox(height: 48.0),
+                SizedBox(height: 16.0),
                 CustomButton(
                     title: trans.recalculate,
                     onPressed: _recalculateBMI,

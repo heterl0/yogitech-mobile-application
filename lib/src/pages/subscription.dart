@@ -5,6 +5,7 @@ import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/subscription/subscription_service.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/subscriptions.dart';
+import 'package:YogiTech/src/shared/future_function_dialog.dart';
 import 'package:YogiTech/src/widgets/checkbox.dart';
 import 'package:YogiTech/utils/formatting.dart';
 import 'package:crypto/crypto.dart';
@@ -459,6 +460,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
     final trans = AppLocalizations.of(context)!;
     final price = '${sub.price}';
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       backgroundColor: theme.colorScheme.onSecondary,
       builder: (context) {
@@ -492,21 +494,24 @@ class _SubscriptionState extends State<SubscriptionPage> {
                             fit: BoxFit.cover,
                           )),
               ),
-              const SizedBox(height: 16),
               Text(
                 convertDuration(sub.durationInMonth, trans.locale),
                 textAlign: TextAlign.center,
-                style:
-                    h2.copyWith(color: theme.colorScheme.onPrimary, height: 1),
+                style: h2.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                ),
               ),
-              const SizedBox(height: 16),
               Text(
                 trans.subscriptionBy,
                 style: bd_text.copyWith(color: text),
                 textAlign: TextAlign.start,
               ),
               const SizedBox(height: 16),
-              CustomButton(title: price, style: ButtonStyleType.Primary),
+              CustomButton(
+                title: price,
+                style: ButtonStyleType.Primary,
+                onPressed: () => showDevelopmentDialog(context),
+              ),
               const SizedBox(height: 16),
               CustomButton(
                 title: '${sub.gemPrice} gems',
