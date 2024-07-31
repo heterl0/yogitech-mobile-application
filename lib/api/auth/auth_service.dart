@@ -75,6 +75,7 @@ Future<dynamic> loginGoogle(String authToken) async {
     print(response.data);
     if (response.statusCode == 200) {
       final tokens = response.data['tokens'];
+      print(tokens);
       final accessToken = tokens['access'];
       final refreshToken = tokens['refresh'];
       await saveTokens(accessToken, refreshToken);
@@ -87,6 +88,10 @@ Future<dynamic> loginGoogle(String authToken) async {
       return null;
     }
   } catch (e) {
+    if (e is DioException) {
+      print({'status': e.response!.statusCode, 'message': e.response!.data});
+      return null;
+    }
     return null;
   }
 }
