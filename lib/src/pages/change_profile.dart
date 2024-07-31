@@ -255,10 +255,17 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                                       lastDate: DateTime(2100),
                                     );
                                     if (pickedDate != null) {
-                                      setState(() {
-                                        birthday.text = DateFormat('dd-MM-yyyy')
-                                            .format(pickedDate);
-                                      });
+                                      if (pickedDate.isAfter(DateTime.now())) {
+                                        setState(() {
+                                          //'${trans.birthday} ${trans.mustInput}';
+                                        });
+                                      } else {
+                                        setState(() {
+                                          birthday.text =
+                                              DateFormat('dd-MM-yyyy')
+                                                  .format(pickedDate);
+                                        });
+                                      }
                                     }
                                   },
                                 ),
