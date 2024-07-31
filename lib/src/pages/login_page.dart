@@ -171,7 +171,6 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      await _googleSignIn.signIn();
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       GoogleSignInAuthentication googleSignInAuthentication =
           await googleUser!.authentication;
@@ -181,6 +180,7 @@ class _LoginPageState extends State<LoginPage> {
             await loginGoogle(googleSignInAuthentication.idToken ?? "");
 
         if (accessToken != null) {
+          _googleSignIn.signOut();
           final user = await getUser();
           if (user != null && user.active_status == 1) {
             if (user.profile.first_name == null ||
@@ -215,6 +215,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           );
+          _googleSignIn.signOut();
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -226,6 +227,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         );
+        _googleSignIn.signOut();
       }
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
