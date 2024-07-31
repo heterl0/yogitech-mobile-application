@@ -9,28 +9,21 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.MediaController
 import android.widget.VideoView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.yogi_application.databinding.ActivityMainBinding
 import java.util.Locale
 
 class ViewTutorialActivity: AppCompatActivity() {
-    private val viewModel : MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Access the SharedPreferences
-        val flutterEngine = (application as YogiApplication).flutterEngine
         val prefs = getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
         val locale = prefs.getString("flutter.locale", "vi")
         if (locale != null) {
             setLocale(this, locale)
         };
-        viewModel.flutterEngine = flutterEngine
         setContentView(R.layout.activity_view_tutorial)
 
         val videoView = findViewById<VideoView>(R.id.videoView);

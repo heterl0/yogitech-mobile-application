@@ -89,12 +89,12 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
               await storeExercise(_exercise!, null);
             }
             const platform = MethodChannel('com.example.yogitech');
-            await platform.invokeMethod('exerciseActivity');
             final methodChannel = MethodChannelHandler(
                 account: _account,
                 fetchAccount: widget.fetchAccount,
                 fetchEvent: widget.fetchEvent ?? () {});
             methodChannel.context = context;
+            await platform.invokeMethod('exerciseActivity');
 
             // ScaffoldMessenger.of(context).showSnackBar(
             //   const SnackBar(
