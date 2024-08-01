@@ -135,6 +135,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future<void> _handleSignUp(BuildContext context) async {
+    final trans = AppLocalizations.of(context)!;
     setState(() {
       _isLoading = true;
     });
@@ -154,7 +155,7 @@ class _SignUpState extends State<SignUp> {
         SnackBar(
           backgroundColor: theme.colorScheme.onSecondary,
           content: Text(
-            'Please fill in all fields',
+            trans.missingInfor,
             style: bd_text.copyWith(color: theme.colorScheme.onSurface),
           ),
         ),
@@ -172,7 +173,7 @@ class _SignUpState extends State<SignUp> {
         SnackBar(
           backgroundColor: theme.colorScheme.onSecondary,
           content: Text(
-            'Passwords do not match',
+            trans.passDonotMatch,
             style: bd_text.copyWith(color: theme.colorScheme.onSurface),
           ),
         ),
@@ -222,7 +223,7 @@ class _SignUpState extends State<SignUp> {
             backgroundColor: theme.colorScheme.onSecondary,
             content: Text(
               concatenatedErrors.isEmpty
-                  ? 'Failed to register'
+                  ? trans.failRegister
                   : concatenatedErrors,
               style: bd_text.copyWith(color: theme.colorScheme.onSurface),
             ),
@@ -239,7 +240,7 @@ class _SignUpState extends State<SignUp> {
         SnackBar(
           backgroundColor: theme.colorScheme.onSecondary,
           content: Text(
-            'Error occurs, please try later',
+            trans.anError,
             style: bd_text.copyWith(color: theme.colorScheme.onSurface),
           ),
         ),

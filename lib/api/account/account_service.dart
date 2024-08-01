@@ -11,6 +11,7 @@ Future<Account?> getUser() async {
     final url = formatApiUrl('/api/v1/users/me/');
     final Response response = await DioInstance.get(url);
     if (response.statusCode == 200) {
+      storeAccount(Account.fromMap(response.data));
       return Account.fromMap(response.data);
     } else {
       print(

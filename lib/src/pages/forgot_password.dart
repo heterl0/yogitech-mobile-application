@@ -150,7 +150,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              trans.sendResetPasswordTo + ' $email',
+              '${trans.sendResetPasswordTo} $email',
               style: bd_text.copyWith(color: active),
             ),
             backgroundColor: green,
@@ -173,7 +173,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            "Error: ${e.toString()}",
+            "${trans.error}: ${e.toString()}",
             style: bd_text.copyWith(color: active),
           ),
           backgroundColor: error,

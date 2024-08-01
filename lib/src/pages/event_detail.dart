@@ -285,7 +285,7 @@ class _EventDetailState extends State<EventDetail>
           ),
           Container(
             padding: EdgeInsets.only(top: 16),
-            height: 480,
+            height: 420,
             child: TabBarView(
               physics: BouncingScrollPhysics(),
               controller: _tabController,

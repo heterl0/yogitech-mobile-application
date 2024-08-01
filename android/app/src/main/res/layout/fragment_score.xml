@@ -17,7 +17,8 @@
         android:src="@drawable/list"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@android:color/white" />
+        app:tint="@android:color/white"
+        />
 
 
     <TextView
@@ -39,7 +40,7 @@
         android:layout_width="164dp"
         android:layout_height="wrap_content"
         android:gravity="start|center_horizontal"
-        android:text="For your Result"
+        android:text="@string/for_your_result"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -54,7 +55,7 @@
         android:layout_width="164dp"
         android:layout_height="wrap_content"
         android:gravity="start|center_horizontal"
-        android:text="Keep your face fully visible in the camera frame"
+        android:text="@string/full_body"
         android:textColor="@android:color/darker_gray"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +69,7 @@
     android:layout_width="164dp"
     android:layout_height="wrap_content"
     android:gravity="start|center_horizontal"
-    android:text="100%"
+    android:text="@string/one"
     android:textColor="@android:color/white"
     android:textSize="48sp"
         android:textStyle="bold"

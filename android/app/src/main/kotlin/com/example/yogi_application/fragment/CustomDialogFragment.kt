@@ -1,4 +1,8 @@
 package com.example.yogi_application.fragment
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Shader
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,12 +33,25 @@ class CustomDialogFragment : DialogFragment() {
             // Handle resume action
             dismiss()  // Close the dialog
             viewModel.pauseCamera.value = false
+
         }
 
         binding.btnExit.setOnClickListener {
             // Handle exit action
             activity?.finish()  // Close the activity
         }
+
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.setCancelable(true)
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setOnCancelListener {
+            dismiss()
+            viewModel.pauseCamera.value = false
+        }
+        return dialog
     }
 
     override fun onDestroyView() {

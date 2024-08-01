@@ -9,7 +9,6 @@ class Event {
   int id;
   String title;
   String image_url;
-  int status;
   String start_date;
   String expire_date;
   String description;
@@ -23,7 +22,6 @@ class Event {
     required this.id,
     required this.title,
     required this.image_url,
-    required this.status,
     required this.start_date,
     required this.expire_date,
     required this.description,
@@ -52,7 +50,6 @@ class Event {
       id: id ?? this.id,
       title: title ?? this.title,
       image_url: image_url ?? this.image_url,
-      status: status ?? this.status,
       start_date: start_date ?? this.start_date,
       expire_date: expire_date ?? this.expire_date,
       description: description ?? this.description,
@@ -69,7 +66,6 @@ class Event {
       'id': id,
       'title': title,
       'image_url': image_url,
-      'status': status,
       'start_date': start_date,
       'expire_date': expire_date,
       'description': description,
@@ -86,7 +82,6 @@ class Event {
       id: map['id'] as int,
       title: map['title'] as String,
       image_url: map['image_url'] as String,
-      status: map['status'] as int,
       start_date: map['start_date'] as String,
       expire_date: map['expire_date'] as String,
       description: map['description'] as String,
@@ -113,7 +108,7 @@ class Event {
 
   @override
   String toString() {
-    return 'Event(id: $id, title: $title, image_url: $image_url, status: $status, start_date: $start_date, expire_date: $expire_date, description: $description, active_status: $active_status, exercises: $exercises, event_candidate: $event_candidate, owner: $owner, created_at: $created_at)';
+    return 'Event(id: $id, title: $title, image_url: $image_url, start_date: $start_date, expire_date: $expire_date, description: $description, active_status: $active_status, exercises: $exercises, event_candidate: $event_candidate, owner: $owner, created_at: $created_at)';
   }
 
   @override
@@ -123,7 +118,6 @@ class Event {
     return other.id == id &&
         other.title == title &&
         other.image_url == image_url &&
-        other.status == status &&
         other.start_date == start_date &&
         other.expire_date == expire_date &&
         other.description == description &&
@@ -139,7 +133,6 @@ class Event {
     return id.hashCode ^
         title.hashCode ^
         image_url.hashCode ^
-        status.hashCode ^
         start_date.hashCode ^
         expire_date.hashCode ^
         description.hashCode ^
@@ -197,7 +190,7 @@ class CandidateEvent {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'user':user,
+      'user': user,
       'profile': profile.toMap(),
       'event_point': event_point,
       'active_status': active_status,

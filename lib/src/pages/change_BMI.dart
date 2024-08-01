@@ -81,6 +81,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
   }
 
   Future<void> _recalculateBMI() async {
+    final trans = AppLocalizations.of(context)!;
     _calculateBMI();
 
     double? weight = weightController.text.isNotEmpty
@@ -102,22 +103,21 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
         ));
         if (updatedProfile != null) {
           widget.onBMIUpdated();
-          print('BMI updated successfully');
+
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'BMI updated successfully',
+                trans.updateSuccess,
                 style: bd_text.copyWith(color: active),
               ),
               backgroundColor: green,
             ),
           );
         } else {
-          print('Failed to update BMI');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'Failed to update BMI',
+                trans.updateFail,
                 style: bd_text.copyWith(color: active),
               ),
               backgroundColor: error,
@@ -165,7 +165,9 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                         child: Text(
                           bmiResult.isNotEmpty
                               ? bmiResult
-                              : _profile?.bmi.toString() ?? 'BMI',
+                              : (_profile?.bmi != null
+                                  ? _profile!.bmi.toString()
+                                  : 'BMI'),
                           style: h1.copyWith(color: primary),
                         ),
                       ),
@@ -200,7 +202,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                   keyboardType: TextInputType.number,
                   onChanged: (_) => _calculateBMI(),
                 ),
-                SizedBox(height: 48.0),
+                SizedBox(height: 16.0),
                 CustomButton(
                     title: trans.recalculate,
                     onPressed: _recalculateBMI,

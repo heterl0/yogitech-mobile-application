@@ -110,11 +110,11 @@ class _CustomDropdownFormFieldState extends State<CustomDropdownFormField> {
                 widget.controller.text.isEmpty ? null : widget.controller.text,
             hint: Text(
               widget.placeholder,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'ReadexPro',
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
-                color: Colors.black,
+                color: theme.colorScheme.onPrimary,
               ),
             ),
             items: widget.items

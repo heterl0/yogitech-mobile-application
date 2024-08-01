@@ -1,31 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/models/pose.dart';
-
-Future<void> postExercise(Exercise exercise) async {
-  final dio = Dio(); // Add your base URL here
-  try {
-    final response = await dio.post('/api/v1/exercises/',
-        data: exercise.toMap(),
-        options: Options(headers: {
-          'Content-Type': 'application/json'
-        })); // Adjust headers if needed
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      print('Exercise posted successfully: ${response.data}');
-    } else {
-      print('API Error: Unexpected status code ${response.statusCode}');
-    }
-  } on DioException catch (e) {
-    if (e.response != null) {
-      print('API Error: ${e.response?.data}');
-    } else {
-      print('Network Error: $e');
-    }
-  }
-}
 
 class PoseWithTime {
   Pose pose;
@@ -90,12 +67,12 @@ class PoseWithTime {
 class Exercise {
   int id;
   String title;
-  String image_url;
-  String video_url;
+  String? image_url;
+  String? video_url;
   int? durations;
   int level;
-  String benefit;
-  String description;
+  String? benefit;
+  String? description;
   String calories;
   int number_poses;
   int point;
@@ -110,12 +87,12 @@ class Exercise {
   Exercise({
     required this.id,
     required this.title,
-    required this.image_url,
-    required this.video_url,
+    this.image_url,
+    this.video_url,
     required this.durations,
     required this.level,
-    required this.benefit,
-    required this.description,
+    this.benefit,
+    this.description,
     required this.calories,
     required this.number_poses,
     required this.point,
@@ -197,12 +174,13 @@ class Exercise {
     return Exercise(
       id: map['id'] as int,
       title: map['title'] as String,
-      image_url: map['image_url'] as String,
-      video_url: map['video_url'] as String,
+      image_url: map['image_url'] != null ? map['image_url'] as String : "",
+      video_url: map['video_url'] != null ? map['video_url'] as String : "",
       durations: map['durations'] ?? 0,
       level: map['level'] as int,
-      benefit: map['benefit'] as String,
-      description: map['description'] as String,
+      benefit: map['benefit'] != null ? map['benefit'] as String : "",
+      description:
+          map['description'] != null ? map['description'] as String : "",
       calories: map['calories'] as String,
       number_poses: map['number_poses'] as int,
       point: map['point'] as int,

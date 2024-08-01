@@ -135,7 +135,8 @@ class _FilterPageState extends State<FilterPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AllExercise(selectedMuscle: muscle),
+                  builder: (context) => AllExercise(
+                      selectedMuscle: muscle, category: selectedMuscle!),
                 ),
               );
               // Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(

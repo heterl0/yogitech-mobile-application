@@ -76,7 +76,7 @@ class _FriendListPageState extends State<FriendListPage>
     try {
       final account = await unfollowUser(id);
 
-      _following.removeWhere((element) => element.id == id);
+      _following.removeWhere((element) => element.user_id == id);
       setState(() {
         _following = _following;
       });
@@ -257,7 +257,6 @@ class _FriendListPageState extends State<FriendListPage>
                       followUserByUserId: followUserByUserId,
                       tab: 1,
                       account: widget.account,
-                      // following: _following,
                     ),
                   ],
                 ),
@@ -381,36 +380,25 @@ class FriendList extends StatelessWidget {
             physics: NeverScrollableScrollPhysics(),
             itemCount: friends.length,
             itemBuilder: (context, index) {
-              final friend = friends[index] as Account;
-              final name = friend.profile.first_name != null
-                  ? '${friend.profile.first_name} ${friend.profile.last_name}'
-                  : friend.username;
-
-              final SocialProfile friendProfile = SocialProfile(
-                avatar: friend.profile.avatar_url,
-                exp: friend.profile.exp,
-                username: friend.username,
-                first_name: friend.profile.first_name,
-                last_name: friend.profile.last_name,
-                level: friend.profile.level,
-                streak: friend.profile.streak,
-                user_id: friend.id,
-              );
+              final friend = friends[index] as SocialProfile;
+              final name = friend.first_name != null
+                  ? '${friend.first_name} ${friend.last_name}'
+                  : friend.username ?? 'N/A';
 
               final bool isFollowing = following != null
-                  ? following!.any((element) => element.id == friend.id)
+                  ? following!.any((element) => element.id == friend.user_id)
                   : false;
 
               return FriendListItem(
                 name: name,
-                avatarUrl: friend.profile.avatar_url ?? '',
-                exp: friend.profile.exp.toString(),
+                avatarUrl: friend.avatar ?? '',
+                exp: friend.exp.toString(),
                 onTap: () {
                   pushWithoutNavBar(
                     context,
                     MaterialPageRoute(
                       builder: (context) => FriendProfile(
-                        profile: friendProfile,
+                        profile: friend,
                         account: account,
                         unFollow: unFollow,
                         followUserByUserId: followUserByUserId,
@@ -426,7 +414,7 @@ class FriendList extends StatelessWidget {
                         ),
                         onPressed: () async {
                           if (unFollow != null) {
-                            await unFollow!(friend.id);
+                            await unFollow!(friend.user_id ?? -1);
                           }
                         },
                       )

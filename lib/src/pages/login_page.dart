@@ -78,11 +78,11 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: Text(
                         trans.forgotPassword,
-                        style: bd_text.copyWith(color: theme.primaryColor),
+                        style: bd_text.copyWith(
+                            color: theme.primaryColor, height: 1),
                       ),
                     ),
                   ),
-                  SizedBox(height: 0.0),
                   CustomButton(
                     title: trans.login,
                     style: ButtonStyleType.Primary,
@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             child: Text(
                               trans.signUp,
-                              style: h3.copyWith(color: Colors.lightBlueAccent),
+                              style: h3.copyWith(color: primary),
                             ),
                           ),
                         ],
@@ -171,7 +171,6 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      await _googleSignIn.signIn();
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       GoogleSignInAuthentication googleSignInAuthentication =
           await googleUser!.authentication;
@@ -181,6 +180,7 @@ class _LoginPageState extends State<LoginPage> {
             await loginGoogle(googleSignInAuthentication.idToken ?? "");
 
         if (accessToken != null) {
+          _googleSignIn.signOut();
           final user = await getUser();
           if (user != null && user.active_status == 1) {
             if (user.profile.first_name == null ||
@@ -210,28 +210,30 @@ class _LoginPageState extends State<LoginPage> {
             SnackBar(
               backgroundColor: theme.colorScheme.onSecondary,
               content: Text(
-                'Please continue your login using email',
+                trans.usingEmail,
                 style: bd_text.copyWith(color: theme.colorScheme.onSurface),
               ),
             ),
           );
+          _googleSignIn.signOut();
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: theme.colorScheme.onSecondary,
             content: Text(
-              'An error occurred. Please try again later. $e',
+              '${trans.anError} $e',
               style: bd_text.copyWith(color: theme.colorScheme.onSurface),
             ),
           ),
         );
+        _googleSignIn.signOut();
       }
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             backgroundColor: theme.colorScheme.onSecondary,
-            content: Text('Failed to sign in: $error',
+            content: Text('${trans.failSignIn} $error',
                 style: bd_text.copyWith(color: theme.colorScheme.onSurface))),
       );
     }
@@ -252,7 +254,7 @@ class _LoginPageState extends State<LoginPage> {
     if (enteredEmail.isEmpty || enteredPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            backgroundColor: theme.colorScheme.onSecondary,
+            backgroundColor: error,
             content: Text(trans.dontEmpty,
                 style: bd_text.copyWith(color: theme.colorScheme.onSurface))),
       );

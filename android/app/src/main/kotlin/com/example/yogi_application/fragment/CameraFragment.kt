@@ -210,7 +210,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 val exerciseLog: ExerciseLog = ExerciseLog(exercise?.id!!, 1, exercise?.poses?.size!!, viewModel.getScore(), null, viewModel.poseLogResults, totalTimeFinish.toInt(), event?.toInt())
                 // Jump to the main thread to use MethodChannel
 
-                Log.d("NoTag", exerciseLog.toJson());
+                Log.d("Result", exerciseLog.toJson());
                 Handler(Looper.getMainLooper()).post {
                     MethodChannel(
                         viewModel.flutterEngine?.dartExecutor?.binaryMessenger!!, // Use flutterEngine here

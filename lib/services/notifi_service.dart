@@ -83,11 +83,12 @@ class LocalNotificationService {
     }
   }
 
-  static Future showFriendNotification({
+  static Future showActivitiesNotification({
     required int id,
     required String title,
     required String body,
     required String payload,
+    required DateTime scheduledTime,
   }) async {
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails('yogi3', 'YogiTech',
@@ -97,8 +98,22 @@ class LocalNotificationService {
             ticker: 'ticker');
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
-    await _flutterLocalNotificationsPlugin
-        .show(id, title, body, notificationDetails, payload: payload);
+
+    // Convert the scheduledTime to the appropriate timezone
+    final tz.TZDateTime tzScheduledTime =
+        tz.TZDateTime.from(scheduledTime, tz.local);
+
+    await _flutterLocalNotificationsPlugin.zonedSchedule(
+      id,
+      title,
+      body,
+      tzScheduledTime,
+      notificationDetails,
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      payload: payload,
+    );
   }
 
   static Day _convertIntToDay(int day) {
