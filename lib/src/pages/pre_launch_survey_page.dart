@@ -192,20 +192,8 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                 ),
               ),
               SizedBox(height: 16.0),
-              Text(trans.firstName, style: h3.copyWith(color: active)),
-              SizedBox(height: 16.0),
-              BoxInputField(
-                controller: firstName,
-                placeholder: trans.firstName,
-              ),
-              if (_isSent1 && !_isValid['firstName']!)
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, top: 8),
-                  child: Text('${trans.firstName} ${trans.mustInput}',
-                      style: bd_text.copyWith(color: error)),
-                ),
-              SizedBox(height: 16.0),
-              Text(trans.lastName, style: h3.copyWith(color: active)),
+              Text(trans.lastName,
+                  style: h3.copyWith(color: theme.colorScheme.onPrimary)),
               SizedBox(height: 16.0),
               BoxInputField(
                 controller: lastName,
@@ -218,7 +206,22 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                       style: bd_text.copyWith(color: error)),
                 ),
               SizedBox(height: 16.0),
-              Text(trans.birthday, style: h3.copyWith(color: active)),
+              Text(trans.firstName,
+                  style: h3.copyWith(color: theme.colorScheme.onPrimary)),
+              SizedBox(height: 16.0),
+              BoxInputField(
+                controller: firstName,
+                placeholder: trans.firstName,
+              ),
+              if (_isSent1 && !_isValid['firstName']!)
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top: 8),
+                  child: Text('${trans.firstName} ${trans.mustInput}',
+                      style: bd_text.copyWith(color: error)),
+                ),
+              SizedBox(height: 16.0),
+              Text(trans.birthday,
+                  style: h3.copyWith(color: theme.colorScheme.onPrimary)),
               SizedBox(height: 16.0),
               BoxInputField(
                 controller: birthday,
@@ -325,7 +328,6 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                   child: Text('${trans.heightCm} ${trans.mustInput}',
                       style: bd_text.copyWith(color: error)),
                 ),
-              SizedBox(height: 16.0),
             ],
           ),
         ),
@@ -334,10 +336,12 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
   }
 
   Widget _buildWeightField(AppLocalizations trans) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(trans.weightKg, style: h3.copyWith(color: active)),
+        Text(trans.weightKg,
+            style: h3.copyWith(color: theme.colorScheme.onPrimary)),
         SizedBox(height: 12.0),
         BoxInputField(
           controller: weight,
@@ -352,10 +356,12 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
   }
 
   Widget _buildHeightField(AppLocalizations trans) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(trans.heightCm, style: h3.copyWith(color: active)),
+        Text(trans.heightCm,
+            style: h3.copyWith(color: theme.colorScheme.onPrimary)),
         SizedBox(height: 12.0),
         BoxInputField(
           controller: height,

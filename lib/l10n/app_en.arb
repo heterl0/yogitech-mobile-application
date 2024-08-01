@@ -282,5 +282,7 @@
   "developmentFeature": "Feature in Development",
   "featureInDevelopment": "This feature is currently in development.",
   "noHistory":"There are no history",
-  "noPose":"There are no pose"
+  "noPose":"There are no pose",
+  "noFuture" : "Your birth is invalidate!",
+  "updateBMI" : "Update new BMI"
 }

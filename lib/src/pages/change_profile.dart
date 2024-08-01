@@ -251,7 +251,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                                     DateTime? pickedDate = await showDatePicker(
                                       context: context,
                                       initialDate: DateTime.now(),
-                                      firstDate: DateTime(1900),
+                                      firstDate: DateTime(1920),
                                       lastDate: DateTime(2100),
                                     );
                                     if (pickedDate != null) {
@@ -344,6 +344,16 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   }
 
   Future<void> _changeProfile(BuildContext context) async {
+    // if (lastName.text.isEmpty || firstName.text.isEmpty) {
+    //   print('Họ và tên không được để trống.');
+
+    //   return;
+    // }
+
+    // if (phone.text.length != 10) {
+    //   print('Số điện thoại phải có 10 chữ số.');
+    //   return;
+    // }
     DateTime? birthdate = birthday.text.isNotEmpty
         ? DateFormat('dd-MM-yyyy').parse(birthday.text)
         : null;
@@ -454,6 +464,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                       );
                       return;
                     }
+
                     PasswordChangeRequest request = PasswordChangeRequest(
                       currentPassword: currentPassword.text,
                       newPassword: newPassword.text,
@@ -461,12 +472,13 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     );
 
                     bool result = await changePassword(request);
+
                     if (result) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           backgroundColor: theme.colorScheme.onSecondary,
                           content: Text(
-                            trans.passwordChangeFailed,
+                            trans.passwordChangedSuccessfully,
                             style: bd_text.copyWith(
                                 color: theme.colorScheme.onSurface),
                           ),
@@ -478,7 +490,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                         SnackBar(
                           backgroundColor: theme.colorScheme.onSecondary,
                           content: Text(
-                            trans.passwordChangedSuccessfully,
+                            trans.passwordChangeFailed,
                             style: bd_text.copyWith(
                                 color: theme.colorScheme.onSurface),
                           ),
