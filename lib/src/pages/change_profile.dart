@@ -38,7 +38,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   final TextEditingController phone = TextEditingController();
   final TextEditingController birthday = TextEditingController();
   final TextEditingController gender = TextEditingController();
-
   File? _image;
   Uint8List? _imageBytes;
   bool _isLoading = false;
@@ -169,6 +168,11 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
+    final Map<int, String> genderMap = {
+      0: trans.female,
+      1: trans.male,
+      2: trans.other,
+    };
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
@@ -226,7 +230,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                           FilteringTextInputFormatter.digitsOnly,
                         ],
                         regExp: phoneRegExp,
-                        errorText: "Invalid phone number",
                       ),
                       SizedBox(height: 16.0),
                       Row(
@@ -251,14 +254,21 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                                     DateTime? pickedDate = await showDatePicker(
                                       context: context,
                                       initialDate: DateTime.now(),
-                                      firstDate: DateTime(1900),
+                                      firstDate: DateTime(1920),
                                       lastDate: DateTime(2100),
                                     );
                                     if (pickedDate != null) {
-                                      setState(() {
-                                        birthday.text = DateFormat('dd-MM-yyyy')
-                                            .format(pickedDate);
-                                      });
+                                      if (pickedDate.isAfter(DateTime.now())) {
+                                        setState(() {
+                                          //'${trans.birthday} ${trans.mustInput}';
+                                        });
+                                      } else {
+                                        setState(() {
+                                          birthday.text =
+                                              DateFormat('dd-MM-yyyy')
+                                                  .format(pickedDate);
+                                        });
+                                      }
                                     }
                                   },
                                 ),
@@ -278,11 +288,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                                 SizedBox(height: 8.0),
                                 CustomDropdownFormField(
                                   controller: gender,
-                                  items: const [
-                                    'Female',
-                                    'Male',
-                                    'Other',
-                                  ],
+                                  items: ["Male", "Female", "Other"],
                                   placeholder: gender.text.isEmpty
                                       ? trans.sellectGender
                                       : gender.text,
@@ -337,6 +343,23 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   }
 
   Future<void> _changeProfile(BuildContext context) async {
+    final trans = AppLocalizations.of(context)!;
+    if (lastName.text.isEmpty || firstName.text.isEmpty) {
+      _showSnackBar(false, message: trans.firstAndLastName);
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    // Kiểm tra số điện thoại
+    if (!phoneRegExp.hasMatch(phone.text) || phone.text.length != 10) {
+      _showSnackBar(false, message: trans.formatPhone);
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
     DateTime? birthdate = birthday.text.isNotEmpty
         ? DateFormat('dd-MM-yyyy').parse(birthday.text)
         : null;
@@ -370,14 +393,14 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     }
   }
 
-  void _showSnackBar(bool success) {
+  void _showSnackBar(bool success, {String? message}) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: theme.colorScheme.onSecondary,
         content: Text(
-          success ? trans.updateSuccess : trans.updateFail,
+          message ?? (success ? trans.updateSuccess : trans.updateFail),
           style: bd_text.copyWith(color: theme.colorScheme.onSurface),
         ),
         duration: Duration(seconds: 2),
@@ -447,6 +470,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                       );
                       return;
                     }
+
                     PasswordChangeRequest request = PasswordChangeRequest(
                       currentPassword: currentPassword.text,
                       newPassword: newPassword.text,
@@ -454,12 +478,13 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                     );
 
                     bool result = await changePassword(request);
+
                     if (result) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           backgroundColor: theme.colorScheme.onSecondary,
                           content: Text(
-                            trans.passwordChangeFailed,
+                            trans.passwordChangedSuccessfully,
                             style: bd_text.copyWith(
                                 color: theme.colorScheme.onSurface),
                           ),
@@ -471,7 +496,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                         SnackBar(
                           backgroundColor: theme.colorScheme.onSecondary,
                           content: Text(
-                            trans.passwordChangedSuccessfully,
+                            trans.passwordChangeFailed,
                             style: bd_text.copyWith(
                                 color: theme.colorScheme.onSurface),
                           ),

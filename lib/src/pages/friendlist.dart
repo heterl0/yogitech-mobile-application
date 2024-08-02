@@ -15,6 +15,7 @@ class FriendListPage extends StatefulWidget {
   final int initialTabIndex;
   final VoidCallback? onProfileUpdated;
   late Account? account;
+
   FriendListPage(
       {super.key,
       required this.initialTabIndex,
@@ -179,14 +180,16 @@ class _FriendListPageState extends State<FriendListPage>
               titleWidget: BoxInputField(
                 controller: _searchController,
                 placeholder: trans.search,
-                trailing:
-                    Icon(Icons.search, color: theme.colorScheme.onSurface),
+                trailing: IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    setState(() async {
+                      await _searchFriend();
+                    });
+                  },
+                ),
                 keyboardType: TextInputType.text,
                 inputFormatters: const [],
-                // onChanged: (value) {
-                //   _filterFriends(value);
-                // },
-                // onTap: () {},
                 onSubmitted: (value) async {
                   await _searchFriend();
                 },
@@ -291,7 +294,7 @@ class _FriendListPageState extends State<FriendListPage>
                         avatarUrl: friend.avatar ?? '',
                         exp: friend.exp.toString(),
                         onTap: () {
-                          Navigator.push(
+                          pushWithoutNavBar(
                             context,
                             MaterialPageRoute(
                               builder: (context) => FriendProfile(

@@ -283,5 +283,9 @@
   "developmentFeature": "Tính năng đang được phát triển",
   "featureInDevelopment": "Tính năng này sẽ được triển khai trong tương lai.",
   "noHistory":"Chưa có lịch sử",
-  "noPose":"Chưa có tư thế"
+  "noPose":"Chưa có tư thế",
+  "noFuture": "Ngày sinh không hợp lệ!",
+  "updateBMI" : "Cập nhật BMI mới",
+  "firstAndLastName" : "Vui lòng điền đầy đủ họ và tên!",
+  "formatPhone" :"Vui lòng điền đúng định dạng số điện thoại!"
 }
