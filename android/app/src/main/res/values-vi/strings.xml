@@ -8,21 +8,21 @@
     <string name="one">100%</string>
     <string name="adjust">Điều chỉnh cơ thể của bạn hoàn toàn trong màn hình</string>
     <string name="goodJob">Làm tốt lắm!</string>
-    <string name="straightenyourlefelbow">Duỗi khuỷu tay trái của bạn</string>
-    <string name="straightenyourrightelebow">Duỗi khuỷu tay phải của bạn</string>
+    <string name="straightenyourleftelbow">Duỗi khuỷu tay trái của bạn</string>
+    <string name="straightenyourrightelbow">Duỗi khuỷu tay phải của bạn</string>
     <string name="straightenyourleftshoulder">Duỗi vai trái của bạn</string>
     <string name="straightenyourrightshoulder">Duỗi vai phải của bạn</string>
     <string name="straightenyourlefthip">Duỗi hông trái của bạn</string>
     <string name="straightenyourrighthip">Duỗi hông phải của bạn</string>
     <string name="straightenyourleftknee">Duỗi đầu gối trái của bạn</string>
     <string name="straightenyourrightknee">Duỗi đầu gối phải của bạn</string>
-    <string name="bendyoulleftelbow">Gập khuỷu tay trái của bạn</string>
-    <string name="bendyourrightelebow">Gập khuỷu tay phải của bạn</string>
-    <string name="bendyoulleftshoulder">Gập vai trái của bạn</string>
+    <string name="bendyourleftelbow">Gập khuỷu tay trái của bạn</string>
+    <string name="bendyourrightelbow">Gập khuỷu tay phải của bạn</string>
+    <string name="bendyourleftshoulder">Gập vai trái của bạn</string>
     <string name="bendyourrightshoulder">Gập vai phải của bạn</string>
-    <string name="bendyoullefthip">Gập hông trái của bạn</string>
+    <string name="bendyourlefthip">Gập hông trái của bạn</string>
     <string name="bendyourrighthip">Gập hông phải của bạn</string>
-    <string name="bendyoulleftknee">Gập đầu gối trái của bạn</string>
+    <string name="bendyourleftknee">Gập đầu gối trái của bạn</string>
     <string name="bendyourrightknee">Gập đầu gối phải của bạn</string>
     <string name="moveyourarmup">Di chuyển cánh tay của bạn lên trên.</string>
     <string name="moveyourarmdown">Di chuyển cánh tay của bạn xuống dưới.</string>
@@ -42,4 +42,8 @@
     <string name="moveyourhipleft">Di chuyển hông của bạn sang bên trái.</string>
     <string name="moveyourhipforward">Di chuyển hông của bạn về phía trước.</string>
     <string name="moveyourhipbackward">Di chuyển hông của bạn về phía sau.</string>
+    <string name="takeARest">Nghỉ ngơi</string>
+    <string name="breathSlowly">Thở từ từ!</string>
+    <string name="finishTheExercise">Chúc mừng!</string>
+    <string name="nextExercise">Bài tiếp theo!</string>
 </resources>

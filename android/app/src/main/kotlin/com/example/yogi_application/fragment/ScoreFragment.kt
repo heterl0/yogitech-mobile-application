@@ -31,8 +31,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
     private lateinit var tts: TextToSpeech
     private val localeEN = Locale("en", "US")
     private val localeVI = Locale("vi", "VN")
-    private var isGiveSuggest = false;
-
+    private var countDownThree = false;
     private var lastSpokenText: String? = null
 
     private var _fragmentScoreBinding: FragmentScoreBinding? = null
@@ -163,10 +162,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                             _fragmentScoreBinding!!.result.text = "0%";
                             _fragmentScoreBinding!!.description.text =
                                 getString(R.string.adjust)
-                            if (isGiveSuggest == false) {
-                                speak(getString(R.string.adjust), localeEN);
-                                isGiveSuggest = true;
-                            }
+                            speak(getString(R.string.adjust), localeEN);
                         } else {
                             _fragmentScoreBinding!!.result.text =
                                 "${result.data?.score?.toInt().toString()}%";
@@ -174,13 +170,16 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                             if (feedbacks?.size == 2) {
                                 var feedback1Name = feedbacks[0] // Replace with your actual string name
                                 feedback1Name = feedback1Name?.toLowerCase()?.replace(" ", "")?.replace(".", "")
+                                Log.d("feedback 1", "$feedback1Name");
                                 val feedback1ResId = resources.getIdentifier(feedback1Name, "string", context?.packageName)
                                 val feedback1 = getString(feedback1ResId)
                                 var feedback2Name = feedbacks[1] // Replace with your actual string name
                                 feedback2Name = feedback2Name?.toLowerCase()?.replace(" ", "")?.replace(".", "")
+                                Log.d("feedback 2", "$feedback2Name");
                                 val feedback2ResId = resources.getIdentifier(feedback2Name, "string", context?.packageName)
                                 val feedback2 = getString(feedback2ResId)
                                 val feedback = feedback1 + ", " + feedback2
+                                if (!countDownThree)
                                 if (viewModel.local == "en") {
                                     speak(feedback, localeEN);
                                 } else {
@@ -189,6 +188,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                                 _fragmentScoreBinding!!.description.text =
                                     feedback
                             } else {
+                                if (!countDownThree)
                                 if (viewModel.local == "en") {
                                     speak(getString(R.string.goodJob), localeEN);
                                 } else {
@@ -224,10 +224,24 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
             override fun onTick(millisUntilFinished: Long) {
                 timeLeftInMillis = millisUntilFinished
                 val secondsRemaining = millisUntilFinished / 1000
+                if (secondsRemaining.toInt() == 3) {
+                    countDownThree = true;
+                }
+                if (secondsRemaining.toInt() == 0) {
+                    countDownThree = false;
+                }
+                if (countDownThree) {
+                    if (viewModel.local == "en") {
+                        speak(secondsRemaining.toString(), localeEN);
+                    } else {
+                        speak(secondsRemaining.toString(), localeVI)
+                    }
+                }
                 _fragmentScoreBinding!!.timer.text = "00:$secondsRemaining"
             }
 
             override fun onFinish() {
+                countDownThree = false
                 _fragmentScoreBinding!!.timer.text = ""
                 isTimerRunning = false
                 val currentIndex = viewModel.currentIndex
@@ -242,6 +256,17 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                     startTime = null
                     scoreList.removeAll(scoreList);
                     viewModel.poseLogResults.add(poseLogResult)
+                    if (viewModel.local == "en") {
+                        speak(getString(R.string.takeARest), localeEN);
+                    } else {
+                        speak(getString(R.string.takeARest), localeVI)
+                    }
+                } else {
+                    if (viewModel.local == "en") {
+                        speak(getString(R.string.finishTheExercise), localeEN);
+                    } else {
+                        speak(getString(R.string.finishTheExercise), localeVI)
+                    }
                 }
                 viewModel.triggerEvent();
                 var duration = 10000
@@ -262,16 +287,32 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
 
             override fun onTick(millisUntilFinished: Long) {
                 val secondsRemaining = millisUntilFinished / 1000
+                if (secondsRemaining.toInt() == 3) {
+                    countDownThree = true;
+                }
+                if (countDownThree) {
+                    if (viewModel.local == "en") {
+                        speak(secondsRemaining.toString(), localeEN);
+                    } else {
+                        speak(secondsRemaining.toString(), localeVI)
+                    }
+                }
                 timeLeftInMillis = millisUntilFinished
 
                 _fragmentScoreBinding!!.timer.text = "00:$secondsRemaining"
-                _fragmentScoreBinding!!.result.text = "Take a rest";
-                _fragmentScoreBinding!!.description.text = "Breath slowly."
+                _fragmentScoreBinding!!.result.text = getString(R.string.takeARest);
+                _fragmentScoreBinding!!.description.text = getString(R.string.breathSlowly);
             }
 
             override fun onFinish() {
+                countDownThree = false
                 _fragmentScoreBinding!!.timer.text = ""
                 isWaitingRunning = false
+                if (viewModel.local == "en") {
+                    speak(getString(R.string.nextExercise), localeEN);
+                } else {
+                    speak(getString(R.string.nextExercise), localeVI)
+                }
             }
         }.start()
     }

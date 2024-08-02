@@ -8,21 +8,21 @@
     <string name="one">100%</string>
     <string name="adjust">Adjust your body full in screen</string>
     <string name="goodJob">Good Job!</string>
-    <string name="straightenyourlefelbow">Straighten your Left Elbow</string>
-    <string name="straightenyourrightelebow">Straighten your Right Elbow</string>
+    <string name="straightenyourleftelbow">Straighten your Left Elbow</string>
+    <string name="straightenyourrightelbow">Straighten your Right Elbow</string>
     <string name="straightenyourleftshoulder">Straighten your Left Shoulder</string>
     <string name="straightenyourrightshoulder">Straighten your Right Shoulder</string>
     <string name="straightenyourlefthip">Straighten your Left Hip</string>
     <string name="straightenyourrighthip">Straighten your Right Hip</string>
     <string name="straightenyourleftknee">Straighten your Left Knee</string>
     <string name="straightenyourrightknee">Straighten your Right Knee</string>
-    <string name="bendyoulleftelbow">Bend your Left Elbow</string>
-    <string name="bendyourrightelebow">Bend your Right Elbow</string>
-    <string name="bendyoulleftshoulder">Bend your Left Shoulder</string>
+    <string name="bendyourleftelbow">Bend your Left Elbow</string>
+    <string name="bendyourrightelbow">Bend your Right Elbow</string>
+    <string name="bendyourleftshoulder">Bend your Left Shoulder</string>
     <string name="bendyourrightshoulder">Bend your Right Shoulder</string>
-    <string name="bendyoullefthip">Bend your Left Hip</string>
+    <string name="bendyourlefthip">Bend your Left Hip</string>
     <string name="bendyourrighthip">Bend your Right Hip</string>
-    <string name="bendyoulleftknee">Bend your Left Knee</string>
+    <string name="bendyourleftknee">Bend your Left Knee</string>
     <string name="bendyourrightknee">Bend your Right Knee</string>
     <string name="moveyourarmup">Move your arm up.</string>
     <string name="moveyourarmdown">Move your arm down.</string>
@@ -42,5 +42,8 @@
     <string name="moveyourhipleft">Move your hip left.</string>
     <string name="moveyourhipforward">Move your hip forward.</string>
     <string name="moveyourhipbackward">Move your hip backward.</string>
-
+    <string name="takeARest">Take a rest</string>
+    <string name="breathSlowly">Breath slowly!</string>
+    <string name="finishTheExercise">Congratulation!</string>
+    <string name="nextExercise">The next Exercise!</string>
 </resources>
