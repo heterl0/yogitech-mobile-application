@@ -41,6 +41,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   File? _image;
   Uint8List? _imageBytes;
   bool _isLoading = false;
+   bool _isChangingPassword = false;
+  
 
   // Regular expression for Vietnamese phone numbers
   final RegExp phoneRegExp =
@@ -164,6 +166,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   }
 
   @override
+   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
@@ -173,172 +176,176 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
       1: trans.male,
       2: trans.other,
     };
+
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.editProfile,
         style: widthStyle.Large,
       ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Container(
-                margin: const EdgeInsets.all(24.0),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(child: _buildAvatar(context)),
-                      SizedBox(height: 8),
-                      CustomButton(
-                        title: trans.changeAvatar,
-                        style: ButtonStyleType.Tertiary,
-                        onPressed: _pickImage,
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        trans.lastName,
-                        style: h3.copyWith(color: theme.colorScheme.onPrimary),
-                      ),
-                      SizedBox(height: 8.0),
-                      BoxInputField(
-                        controller: lastName,
-                        placeholder: trans.yourLastName,
-                      ),
-                      SizedBox(height: 16.0),
-                      Text(
-                        trans.firstName,
-                        style: h3.copyWith(color: theme.colorScheme.onPrimary),
-                      ),
-                      SizedBox(height: 8.0),
-                      BoxInputField(
-                        controller: firstName,
-                        placeholder: trans.firstName,
-                      ),
-                      SizedBox(height: 16.0),
-                      Text(
-                        trans.phoneNumber,
-                        style: h3.copyWith(color: theme.colorScheme.onPrimary),
-                      ),
-                      SizedBox(height: 8.0),
-                      BoxInputField(
-                        controller: phone,
-                        placeholder: widget.account?.phone ?? '',
-                        keyboardType: TextInputType.phone,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        regExp: phoneRegExp,
-                      ),
-                      SizedBox(height: 16.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  trans.birthday,
-                                  style: h3.copyWith(
-                                      color: theme.colorScheme.onPrimary),
-                                ),
-                                SizedBox(height: 8.0),
-                                BoxInputField(
-                                  controller: birthday,
-                                  placeholder: trans.birthday,
-                                  trailing: Icon(Icons.calendar_today),
-                                  readOnly: true,
-                                  onTap: () async {
-                                    DateTime? pickedDate = await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime(1920),
-                                      lastDate: DateTime(2100),
-                                    );
-                                    if (pickedDate != null) {
-                                      if (pickedDate.isAfter(DateTime.now())) {
-                                        setState(() {
-                                          //'${trans.birthday} ${trans.mustInput}';
-                                        });
-                                      } else {
-                                        setState(() {
-                                          birthday.text =
-                                              DateFormat('dd-MM-yyyy')
-                                                  .format(pickedDate);
-                                        });
-                                      }
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 16.0),
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  trans.gender,
-                                  style: h3.copyWith(
-                                      color: theme.colorScheme.onPrimary),
-                                ),
-                                SizedBox(height: 8.0),
-                                CustomDropdownFormField(
-                                  controller: gender,
-                                  items: ["Male", "Female", "Other"],
-                                  placeholder: gender.text.isEmpty
-                                      ? trans.sellectGender
-                                      : gender.text,
-                                  onTap: () {
-                                    // Optional: handle dropdown tap
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 40.0),
-                      CustomButton(
-                        title: trans.save,
-                        style: ButtonStyleType.Primary,
-                        onPressed: () async {
-                          setState(() {
-                            _isLoading = true;
-                            _changeProfile(context);
-                          });
-                        },
-                      ),
-                      SizedBox(height: 16.0),
-                      CustomButton(
-                        title: trans.changePassword,
-                        style: ButtonStyleType.Tertiary,
-                        onPressed: () {
-                          _changePasswordBottomSheet(context);
-                        },
-                      ),
-                      CustomButton(
-                        title: trans.changeBMI,
-                        style: ButtonStyleType.Tertiary,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ChangeBMIPage(
-                                onBMIUpdated: widget.onProfileUpdated ?? () {},
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.all(24.0),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(child: _buildAvatar(context)),
+                    SizedBox(height: 8),
+                    CustomButton(
+                      title: trans.changeAvatar,
+                      style: ButtonStyleType.Tertiary,
+                      onPressed: _pickImage,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      trans.lastName,
+                      style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                    ),
+                    SizedBox(height: 8.0),
+                    BoxInputField(
+                      controller: lastName,
+                      placeholder: trans.yourLastName,
+                    ),
+                    SizedBox(height: 16.0),
+                    Text(
+                      trans.firstName,
+                      style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                    ),
+                    SizedBox(height: 8.0),
+                    BoxInputField(
+                      controller: firstName,
+                      placeholder: trans.firstName,
+                    ),
+                    SizedBox(height: 16.0),
+                    Text(
+                      trans.phoneNumber,
+                      style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                    ),
+                    SizedBox(height: 8.0),
+                    BoxInputField(
+                      controller: phone,
+                      placeholder: widget.account?.phone ?? '',
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      regExp: phoneRegExp,
+                    ),
+                    SizedBox(height: 16.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                trans.birthday,
+                                style: h3.copyWith(color: theme.colorScheme.onPrimary),
                               ),
+                              SizedBox(height: 8.0),
+                              BoxInputField(
+                                controller: birthday,
+                                placeholder: trans.birthday,
+                                trailing: Icon(Icons.calendar_today),
+                                readOnly: true,
+                                onTap: () async {
+                                  DateTime? pickedDate = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(1920),
+                                    lastDate: DateTime(2100),
+                                  );
+                                  if (pickedDate != null) {
+                                    if (pickedDate.isAfter(DateTime.now())) {
+                                      setState(() {
+                                        //'${trans.birthday} ${trans.mustInput}';
+                                      });
+                                    } else {
+                                      setState(() {
+                                        birthday.text = DateFormat('dd-MM-yyyy').format(pickedDate);
+                                      });
+                                    }
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 16.0),
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                trans.gender,
+                                style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                              ),
+                              SizedBox(height: 8.0),
+                              CustomDropdownFormField(
+                                controller: gender,
+                                items: ["Male", "Female", "Other"],
+                                placeholder: gender.text.isEmpty ? trans.sellectGender : gender.text,
+                                onTap: () {
+                                  // Optional: handle dropdown tap
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 40.0),
+                    CustomButton(
+                      title: trans.save,
+                      style: ButtonStyleType.Primary,
+                      onPressed: () async {
+                        setState(() {
+                          _isLoading = true;
+                          _changeProfile(context);
+                        });
+                      },
+                    ),
+                    SizedBox(height: 16.0),
+                    CustomButton(
+                      title: trans.changePassword,
+                      style: ButtonStyleType.Tertiary,
+                      onPressed: () {
+                        _changePasswordBottomSheet(context);
+                      },
+                    ),
+                    CustomButton(
+                      title: trans.changeBMI,
+                      style: ButtonStyleType.Tertiary,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChangeBMIPage(
+                              onBMIUpdated: widget.onProfileUpdated ?? () {},
                             ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
+          ),
+          if (_isLoading)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -414,101 +421,149 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     final TextEditingController currentPassword = TextEditingController();
     final TextEditingController newPassword = TextEditingController();
     final TextEditingController confirmNewPassword = TextEditingController();
-
+    bool isValid = true;
+    String newpasswarn = '';
+    String repasswarn = '';
+    String currentpasswarn = '';
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: theme.colorScheme.onSecondary,
       builder: (BuildContext context) {
-        return Padding(
-          padding: MediaQuery.of(context).viewInsets,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 36),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(trans.oldPassword,
-                    style: h3.copyWith(color: theme.colorScheme.onSurface)),
-                SizedBox(height: 16.0),
-                BoxInputField(
-                  controller: currentPassword,
-                  password: true,
-                ),
-                SizedBox(height: 16.0),
-                Text(trans.newPassword,
-                    style: h3.copyWith(color: theme.colorScheme.onSurface)),
-                SizedBox(height: 16.0),
-                BoxInputField(
-                  controller: newPassword,
-                  password: true,
-                ),
-                SizedBox(height: 16.0),
-                Text(trans.confirmNewPassword,
-                    style: h3.copyWith(color: theme.colorScheme.onSurface)),
-                SizedBox(height: 16.0),
-                BoxInputField(
-                  controller: confirmNewPassword,
-                  password: true,
-                ),
-                SizedBox(height: 32.0),
-                CustomButton(
-                  title: trans.save,
-                  style: ButtonStyleType.Primary,
-                  state: ButtonState.Enabled,
-                  onPressed: () async {
-                    if (newPassword.text != confirmNewPassword.text) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: theme.colorScheme.onSecondary,
-                          content: Text(
-                            trans.passwordsDoNotMatch,
-                            style: bd_text.copyWith(
-                                color: theme.colorScheme.onSurface),
-                          ),
-                        ),
-                      );
-                      return;
-                    }
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 36),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(trans.oldPassword,
+                            style: h3.copyWith(color: theme.colorScheme.onSurface)),
+                        SizedBox(height: 16.0),
+                        BoxInputField(controller: currentPassword, password: true),
+                        Text(currentpasswarn, style: bd_text.copyWith(color: Colors.red)),
+                        SizedBox(height: 8.0),
+                        Text(trans.newPassword,
+                            style: h3.copyWith(color: theme.colorScheme.onSurface)),
+                        SizedBox(height: 16.0),
+                        BoxInputField(controller: newPassword, password: true),
+                        Text(newpasswarn, style: bd_text.copyWith(color: Colors.red)),
+                        SizedBox(height: 8.0),
+                        Text(trans.confirmNewPassword,
+                            style: h3.copyWith(color: theme.colorScheme.onSurface)),
+                        SizedBox(height: 16.0),
+                        BoxInputField(controller: confirmNewPassword, password: true),
+                        Text(repasswarn, style: bd_text.copyWith(color: Colors.red)),
+                        SizedBox(height: 40.0),
+                        CustomButton(
+                          title: trans.save,
+                          style: ButtonStyleType.Primary,
+                          state: ButtonState.Enabled,
+                          onPressed: () async {
+                            String newPass = newPassword.text;
+                            String curentPass = currentPassword.text;
+                            String rePass = confirmNewPassword.text;
 
-                    PasswordChangeRequest request = PasswordChangeRequest(
-                      currentPassword: currentPassword.text,
-                      newPassword: newPassword.text,
-                      reNewPassword: confirmNewPassword.text,
-                    );
+                            setState(() {
+                              if (newPass == '' || curentPass == '' || rePass == '') {
+                                isValid = false;
+                                newPass == ''
+                                    ? newpasswarn =
+                                        '${trans.newPassword} ${trans.fiedNotEmty}'
+                                    : newpasswarn = '';
+                                rePass == ''
+                                    ? repasswarn =
+                                        '${trans.confirmNewPassword} ${trans.fiedNotEmty}'
+                                    : repasswarn = '';
+                                curentPass == ''
+                                    ? currentpasswarn =
+                                        '${trans.oldPassword} ${trans.fiedNotEmty}'
+                                    : currentpasswarn = '';
+                              } else {
+                                newpasswarn = '';
+                                repasswarn = '';
+                                currentpasswarn = '';
+                                if (newPass != rePass) {
+                                  isValid = false;
+                                  repasswarn = '${trans.passwordsDoNotMatch}';
+                                } else {
+                                  isValid = true;
+                                }
+                              }
+                            });
 
-                    bool result = await changePassword(request);
+                            if (!isValid) return;
 
-                    if (result) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: theme.colorScheme.onSecondary,
-                          content: Text(
-                            trans.passwordChangedSuccessfully,
-                            style: bd_text.copyWith(
-                                color: theme.colorScheme.onSurface),
-                          ),
+                            if (isValid) {
+                              PasswordChangeRequest request = PasswordChangeRequest(
+                                currentPassword: currentPassword.text,
+                                newPassword: newPassword.text,
+                                reNewPassword: confirmNewPassword.text,
+                              );
+
+                              setState(() {
+                                _isChangingPassword = true;
+                              });
+
+                              bool? result = await changePassword(request);
+
+                              setState(() {
+                                _isChangingPassword = false;
+                              });
+
+                              if (result == true) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: theme.colorScheme.onSecondary,
+                                    content: Text(
+                                      trans.passwordChangedSuccessfully,
+                                      style: bd_text.copyWith(
+                                          color: theme.colorScheme.onSurface),
+                                    ),
+                                  ),
+                                );
+                                Navigator.pop(context);
+                              } else if (result == null) {
+                                setState(() {
+                                  isValid = false;
+                                  currentpasswarn =
+                                      '${trans.password} ${trans.incorrect}';
+                                });
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: theme.colorScheme.onSecondary,
+                                    content: Text(
+                                      trans.passwordChangeFailed,
+                                      style: bd_text.copyWith(
+                                          color: theme.colorScheme.onSurface),
+                                    ),
+                                  ),
+                                );
+                                Navigator.pop(context);
+                              }
+                            }
+                          },
                         ),
-                      );
-                      Navigator.pop(context);
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: theme.colorScheme.onSecondary,
-                          content: Text(
-                            trans.passwordChangeFailed,
-                            style: bd_text.copyWith(
-                                color: theme.colorScheme.onSurface),
-                          ),
-                        ),
-                      );
-                    }
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ),
-          ),
+                      ],
+                    ),
+                  ),
+                  if (_isChangingPassword)
+                    Container(
+                      color: Colors.black.withOpacity(0.5),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
         );
       },
     );

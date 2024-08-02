@@ -286,5 +286,7 @@
   "noFuture" : "Your birth is invalidate!",
   "updateBMI" : "Update new BMI",
   "firstAndLastName" : "Please fill in both last name and first name!",
-  "formatPhone" :"Please enter a valid phone number!"
+  "formatPhone" :"Please enter a valid phone number!",
+  "fiedNotEmty":"can't be empty.",
+  "incorrect":"inconrrect."
 }

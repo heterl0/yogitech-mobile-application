@@ -287,5 +287,8 @@
   "noFuture": "Ngày sinh không hợp lệ!",
   "updateBMI" : "Cập nhật BMI mới",
   "firstAndLastName" : "Vui lòng điền đầy đủ họ và tên!",
-  "formatPhone" :"Vui lòng điền đúng định dạng số điện thoại!"
+  "formatPhone" :"Vui lòng điền đúng định dạng số điện thoại!",
+  "fiedNotEmty":"không được bỏ trống.",
+  "incorrect":"Không đúng."
+
 }
