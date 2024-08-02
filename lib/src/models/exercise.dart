@@ -83,6 +83,7 @@ class Exercise {
   int active_status;
   List<PoseWithTime> poses;
   List<Comment> comments;
+  bool? is_admin;
 
   Exercise({
     required this.id,
@@ -103,6 +104,7 @@ class Exercise {
     required this.active_status,
     required this.poses,
     required this.comments,
+    this.is_admin,
   });
 
   Exercise copyWith({
@@ -124,6 +126,7 @@ class Exercise {
     int? active_status,
     List<PoseWithTime>? poses,
     List<Comment>? comments,
+    bool? is_admin,
   }) {
     return Exercise(
       id: id ?? this.id,
@@ -144,6 +147,7 @@ class Exercise {
       active_status: active_status ?? this.active_status,
       poses: poses ?? this.poses,
       comments: comments ?? this.comments,
+      is_admin: is_admin ?? this.is_admin,
     );
   }
 
@@ -167,6 +171,7 @@ class Exercise {
       'active_status': active_status,
       'poses': poses.map((x) => x.toMap()).toList(),
       'comments': comments.map((x) => x.toMap()).toList(),
+      'is_admin': is_admin,
     };
   }
 
@@ -199,6 +204,7 @@ class Exercise {
           (x) => Comment.fromMap(x as Map<String, dynamic>),
         ),
       ),
+      is_admin: map['is_admin'] as bool?,
     );
   }
 
@@ -209,7 +215,7 @@ class Exercise {
 
   @override
   String toString() {
-    return 'Exercise(id: $id, title: $title, image_url: $image_url, video_url: $video_url, durations: $durations, level: $level, benefit: $benefit, description: $description, calories: $calories, number_poses: $number_poses, point: $point, is_premium: $is_premium, created_at: $created_at, updated_at: $updated_at, owner: $owner, active_status: $active_status, poses: $poses, comments: $comments)';
+    return 'Exercise(id: $id, title: $title, image_url: $image_url, video_url: $video_url, durations: $durations, level: $level, benefit: $benefit, description: $description, calories: $calories, number_poses: $number_poses, point: $point, is_premium: $is_premium, created_at: $created_at, updated_at: $updated_at, owner: $owner, active_status: $active_status, poses: $poses, comments: $comments, is_admin: $is_admin)';
   }
 
   @override
@@ -233,7 +239,8 @@ class Exercise {
         other.owner == owner &&
         other.active_status == active_status &&
         listEquals(other.poses, poses) &&
-        listEquals(other.comments, comments);
+        listEquals(other.comments, comments) &&
+        other.is_admin == is_admin;
   }
 
   @override
@@ -255,7 +262,8 @@ class Exercise {
         owner.hashCode ^
         active_status.hashCode ^
         poses.hashCode ^
-        comments.hashCode;
+        comments.hashCode ^
+        is_admin.hashCode;
   }
 }
 

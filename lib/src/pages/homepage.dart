@@ -1,16 +1,9 @@
 import 'package:YogiTech/src/pages/blog_detail.dart';
-import 'package:YogiTech/src/pages/tutorial.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:YogiTech/api/blog/blog_service.dart';
-import 'package:YogiTech/src/models/exercise.dart';
-import 'package:YogiTech/src/pages/_onbroading.dart';
-import 'package:YogiTech/src/pages/pre_launch_survey_page.dart';
 import 'package:YogiTech/src/pages/subscription.dart';
-import 'package:YogiTech/src/widgets/box_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/models/account.dart';
@@ -48,7 +41,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _fetchExercisesSort() async {
-    final List<dynamic> exercisesSort = await getExercises();
+    List<dynamic> exercisesSort = await getExercises();
+    exercisesSort =
+        exercisesSort.where((element) => element.is_admin == true).toList();
 
     exercisesSort.sort((a, b) {
       var dateA = DateTime.parse(a.created_at);
@@ -396,7 +391,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     children: [
-                      if (jsonList != null)
+                      if (jsonList.isNotEmpty)
                         for (final exercise in jsonList.take(5))
                           CustomCard(
                             premium: _account?.is_premium,
@@ -463,7 +458,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     children: [
-                      if (jsonListSort != null)
+                      if (jsonListSort.isNotEmpty)
                         for (final exercise in jsonListSort.take(5))
                           CustomCard(
                             premium: _account?.is_premium,

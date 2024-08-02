@@ -57,8 +57,10 @@ class AllExerciseState extends State<AllExercise> {
       _isLoading = true;
     });
     try {
-      final List<dynamic> exercises =
+      List<dynamic> exercises =
           await getExercises(); // Assuming getExercises() returns a List<Exercise>
+      exercises =
+          exercises.where((element) => element.is_admin == true).toList();
       List<dynamic> filteredExercises = exercises;
       if (query != null && query.isNotEmpty) {
         filteredExercises = exercises
