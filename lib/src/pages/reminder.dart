@@ -70,8 +70,12 @@ class _ReminderPageState extends State<ReminderPage> {
     for (var item in _selectedTimes) {
       if (item['isEnabled']) {
         for (var day in item['days']) {
+          // Calculate a unique ID for each day of the recurring reminder
+          int uniqueId =
+              item['id'] * 10 + day; // You can adjust the multiplier if needed
+
           await LocalNotificationService.showWeeklyAtDayAndTime(
-            id: item['id'],
+            id: uniqueId, // Use the unique ID
             title: trans.yourReminder,
             body: trans.yourReminderDetail,
             time: item['time'],
@@ -80,13 +84,17 @@ class _ReminderPageState extends State<ReminderPage> {
           );
         }
       } else {
-        await LocalNotificationService.cancel(item['id']);
+        // Cancel all notifications associated with this reminder (for all days)
+        for (var day in item['days']) {
+          int uniqueId = item['id'] * 10 + day;
+          await LocalNotificationService.cancel(uniqueId);
+        }
       }
     }
   }
 
   int _generateUniqueId() {
-    return DateTime.now().millisecondsSinceEpoch.remainder(100000);
+    return DateTime.now().millisecondsSinceEpoch.remainder(1000000);
   }
 
   Future<void> _showSetupReminderPage(BuildContext context,

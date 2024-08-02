@@ -110,7 +110,9 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(
                           width: 28,
                           height: 28,
-                          child: Image.asset('assets/images/Emerald.png'),
+                          child: (!(_account?.is_premium ?? false))
+                              ? Image.asset('assets/images/Emerald.png')
+                              : Image.asset('assets/images/Emerald2.png'),
                         ),
                         SizedBox(
                           width: 4,
@@ -126,9 +128,10 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ],
-                titleWidget: StreakValue(_account != null
-                    ? _account!.profile.streak.toString()
-                    : '0'),
+                titleWidget: StreakValue(
+                  _account != null ? _account!.profile.streak.toString() : '0',
+                  account: _account,
+                ),
                 postActions: [
                   IconButton(
                     icon:
@@ -149,7 +152,9 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       pushScreenWithNavBar(
                         context,
-                        FilterPage(),
+                        FilterPage(
+                          account: _account,
+                        ),
                       );
                     },
                   ),
@@ -281,14 +286,26 @@ class _HomePageState extends State<HomePage> {
                 //   ),
                 // ),
 
-                CarouselSlider(
-                  items: [
-                    _buildCarouselItem(
+                Container(
+                  margin: EdgeInsets.all(16), // Khoảng cách ngoài viền
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: (!(_account?.is_premium ?? false))
+                          ? primary
+                          : primary2, // Màu của viền
+                      width: 2, // Độ dày của viền
+                    ),
+                    borderRadius: BorderRadius.circular(16), // Bo góc cho viền
+                  ),
+                  child: CarouselSlider(
+                    items: [
+                      _buildCarouselItem(
                         title: trans.tryThisExercise,
                         subtitle: trans.forBeginner,
                         poseName: 'Yoga Beginners',
-                        imagePath:
-                            'assets/images/ads_exercise_for_beginner.png',
+                        imagePath: (!(_account?.is_premium ?? false))
+                            ? 'assets/images/ads_exercise_for_beginner.png'
+                            : 'assets/images/ads_exercise_for_beginner2.png',
                         onTap: () {
                           final exercise = jsonList.first;
                           pushWithoutNavBar(
@@ -301,18 +318,15 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           );
-                        }),
-                    // _buildCarouselItem(
-                    //     title: trans.thirtyDayYogaChallenge,
-                    //     subtitle: trans.improveHealthAndFlexibility,
-                    //     poseName: trans.joinNow,
-                    //     imagePath: 'assets/images/Muscle.png',
-                    //     onTap: () {}),
-                    _buildCarouselItem(
+                        },
+                      ),
+                      _buildCarouselItem(
                         title: trans.yogaChangedMyLife,
                         subtitle: trans.minhAnhInspirationalStory,
                         poseName: trans.shareYourJourney,
-                        imagePath: 'assets/images/Fire.png',
+                        imagePath: (!(_account?.is_premium ?? false))
+                            ? 'assets/images/Fire.png'
+                            : 'assets/images/Fire2.png',
                         onTap: () {
                           Navigator.push(
                             context,
@@ -322,43 +336,54 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           );
-                        }),
-                    _buildCarouselItem(
+                        },
+                      ),
+                      _buildCarouselItem(
                         title: trans.specialOfferForNewMembers,
                         subtitle: trans.receiveTwoFreeSessions,
                         poseName: trans.subscribePremiumNow,
-                        imagePath: 'assets/images/Crown.png',
+                        imagePath: (!(_account?.is_premium ?? false))
+                            ? 'assets/images/Crown.png'
+                            : 'assets/images/Crown2.png',
                         onTap: () {
                           pushWithoutNavBar(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SubscriptionPage(
-                                      account: _account,
-                                      fetchAccount: widget.fetchAccount)));
-                        }),
-                    _buildCarouselItem(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SubscriptionPage(
+                                account: _account,
+                                fetchAccount: widget.fetchAccount,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildCarouselItem(
                         title: trans.yogaTipsForBeginners,
                         subtitle: trans.fiveBasicPoses,
                         poseName: trans.exploreNow,
-                        imagePath: 'assets/images/Universe.png',
+                        imagePath: (!(_account?.is_premium ?? false))
+                            ? 'assets/images/Universe.png'
+                            : 'assets/images/Universe2.png',
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AllExercise(
-                                      account: _account,
-                                    )), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                              builder: (context) => AllExercise(
+                                account: _account,
+                              ),
+                            ),
                           );
-                        }),
-                  ],
-                  options: CarouselOptions(
-                    height: 240, // Adjust height as needed
-                    viewportFraction: 1, // Make items take full width
-                    autoPlay: true, // Enable auto-playing if desired
-                    // ... other CarouselOptions as needed
+                        },
+                      ),
+                    ],
+                    options: CarouselOptions(
+                      height: 200, // Adjust height as needed
+                      viewportFraction: 1, // Make items take full width
+                      autoPlay: true, // Enable auto-playing if desired
+                    ),
                   ),
                 ),
-                // Placeholder for ad content
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Text(
@@ -374,8 +399,11 @@ class _HomePageState extends State<HomePage> {
                       if (jsonList != null)
                         for (final exercise in jsonList.take(5))
                           CustomCard(
+                            premium: _account?.is_premium,
                             topRightIcon: exercise.is_premium
-                                ? Image.asset('assets/images/Crown.png')
+                                ? (!(_account?.is_premium ?? false))
+                                    ? Image.asset('assets/images/Crown.png')
+                                    : Image.asset('assets/images/Crown2.png')
                                 : null,
                             title: exercise.title,
                             imageUrl: exercise.image_url,
@@ -411,7 +439,10 @@ class _HomePageState extends State<HomePage> {
                           padding: EdgeInsets.symmetric(horizontal: 8),
                           child: Text(
                             trans.seeall,
-                            style: bd_text.copyWith(color: primary),
+                            style: bd_text.copyWith(
+                                color: (!(_account?.is_premium ?? false))
+                                    ? primary
+                                    : primary2),
                           ),
                         ),
                         onTap: () {
@@ -435,8 +466,11 @@ class _HomePageState extends State<HomePage> {
                       if (jsonListSort != null)
                         for (final exercise in jsonListSort.take(5))
                           CustomCard(
+                            premium: _account?.is_premium,
                             topRightIcon: exercise.is_premium
-                                ? Image.asset('assets/images/Crown.png')
+                                ? (!(_account?.is_premium ?? false))
+                                    ? Image.asset('assets/images/Crown.png')
+                                    : Image.asset('assets/images/Crown2.png')
                                 : null,
                             title: exercise.title,
                             // subtitle: exercise.durations ?? '0',
@@ -482,8 +516,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Expanded(
               child: Padding(
-                padding:
-                    const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 16.0),
+                padding: EdgeInsets.zero,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -501,7 +534,10 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(height: 16),
                     Text(
                       poseName,
-                      style: bd_text.copyWith(color: primary),
+                      style: bd_text.copyWith(
+                          color: (!(_account?.is_premium ?? false))
+                              ? primary
+                              : primary2),
                     ),
                   ],
                 ),
@@ -515,7 +551,7 @@ class _HomePageState extends State<HomePage> {
                 fit: BoxFit.cover,
               ),
             ),
-            SizedBox(width: 16),
+            SizedBox(width: 8),
           ],
         ),
       ),
@@ -526,8 +562,9 @@ class _HomePageState extends State<HomePage> {
 // Phải tạo Widget riêng chỉ nhằm mục đích áp dụng màu Gradient
 class StreakValue extends StatelessWidget {
   final String streakValue;
+  final Account? account;
 
-  const StreakValue(this.streakValue, {super.key});
+  const StreakValue(this.streakValue, {super.key, this.account});
 
   @override
   Widget build(BuildContext context) {
@@ -539,7 +576,10 @@ class StreakValue extends StatelessWidget {
           pushWithoutNavBar(
             context,
             MaterialPageRoute(
-              builder: (context) => Streak(currentStreak: streakValue),
+              builder: (context) => Streak(
+                currentStreak: streakValue,
+                account: account,
+              ),
             ),
           );
         },
@@ -556,7 +596,9 @@ class StreakValue extends StatelessWidget {
               height: 32,
               child: ShaderMask(
                 shaderCallback: (bounds) {
-                  return gradient.createShader(bounds);
+                  return (!(account?.is_premium ?? false))
+                      ? gradient.createShader(bounds)
+                      : gradient2.createShader(bounds);
                 },
                 child: Text(
                   streakValue,

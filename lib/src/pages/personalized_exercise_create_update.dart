@@ -223,7 +223,10 @@ class _PersonalizedExerciseCreatePageState
         future: _fetchPoses(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+              color: primary2,
+            ));
           } else if (snapshot.hasError) {
             return Center(
                 child: Text('${trans.error}: ${snapshot.error}',
@@ -295,11 +298,11 @@ class _PersonalizedExerciseCreatePageState
                       ),
                       cancelText: Text(
                         trans.cancel,
-                        style: bd_text.copyWith(color: primary),
+                        style: bd_text.copyWith(color: primary2),
                       ),
                       confirmText: Text(
                         trans.choose,
-                        style: bd_text.copyWith(color: primary),
+                        style: bd_text.copyWith(color: primary2),
                       ),
                       title: Text(trans.selectPoses,
                           style: h3.copyWith(
@@ -314,7 +317,7 @@ class _PersonalizedExerciseCreatePageState
                       chipDisplay: MultiSelectChipDisplay.none(),
                       separateSelectedItems: true,
                       searchable: true,
-                      selectedColor: primary,
+                      selectedColor: primary2,
                       selectedItemsTextStyle: TextStyle(
                         color: active,
                         fontFamily: 'ReadexPro',
@@ -381,7 +384,7 @@ class _PersonalizedExerciseCreatePageState
                 children: [
                   Text(
                     pose.name,
-                    style: bd_text.copyWith(color: primary, height: 1.2),
+                    style: bd_text.copyWith(color: primary2, height: 1.2),
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: 4),
@@ -392,7 +395,7 @@ class _PersonalizedExerciseCreatePageState
                   SizedBox(height: 4),
                   Text(
                     '${trans.duration} (${trans.seconds})',
-                    style: min_cap.copyWith(color: primary),
+                    style: min_cap.copyWith(color: primary2),
                   ),
                   SizedBox(height: 4),
                   BoxInputField(

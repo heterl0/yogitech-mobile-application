@@ -1,4 +1,5 @@
 import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/api/event/event_service.dart';
@@ -57,7 +58,10 @@ class _ActivitiesState extends State<Activities> {
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
     return _isloading
-        ? Center(child: CircularProgressIndicator())
+        ? Center(
+            child: CircularProgressIndicator(
+            color: primary,
+          ))
         : Container(
             width: double.infinity,
             height: double.infinity,

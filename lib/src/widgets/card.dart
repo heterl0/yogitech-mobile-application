@@ -10,6 +10,7 @@ class CustomCard extends StatelessWidget {
   final String? imageUrl;
   final VoidCallback? onTap; // Thêm thuộc tính onTap
   final Widget? topRightIcon; // Thêm thuộc tính topRightIcon
+  final bool? premium;
 
   const CustomCard({
     super.key,
@@ -18,7 +19,8 @@ class CustomCard extends StatelessWidget {
     this.subtitle,
     this.imageUrl,
     this.onTap, // Thêm thuộc tính onTap vào constructor
-    this.topRightIcon, // Thêm thuộc tính topRightIcon vào constructor
+    this.topRightIcon,
+    this.premium = false, // Thêm thuộc tính topRightIcon vào constructor
   });
 
   @override
@@ -54,7 +56,9 @@ class CustomCard extends StatelessWidget {
                         placeholder: (context, url) =>
                             Center(child: CircularProgressIndicator()),
                         errorWidget: (context, url, error) => Image.asset(
-                          'assets/images/Null_Exercise.png',
+                          premium == true
+                              ? 'assets/images/Null_Exercise2.png'
+                              : 'assets/images/Null_Exercise.png',
                           fit: BoxFit.cover,
                           height: 90, // Fixed height
                           width: double

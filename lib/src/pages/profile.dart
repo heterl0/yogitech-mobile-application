@@ -1,6 +1,7 @@
 import 'package:YogiTech/src/shared/premium_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:YogiTech/api/account/account_service.dart';
@@ -53,10 +54,10 @@ class _ProfilePageState extends State<ProfilePage>
   final int initialTabIndex = 0;
   bool _isChartDataLoading = true; // Flag to indicate chart data loading
 
-  List<double> monthInChart = [];
   List<FlSpot> expDataPoints = [];
   List<FlSpot> pointDataPoints = [];
   List<FlSpot> caloriesDataPoints = [];
+  late DateTime _startDate;
 
   void refreshProfile() {
     // Gọi API để lấy lại dữ liệu hồ sơ sau khi cập nhật BMI
@@ -64,36 +65,54 @@ class _ProfilePageState extends State<ProfilePage>
     _fetchUserProfile();
   }
 
+  DateTime parseDate(String dateStr) {
+    final dateFormat = DateFormat('yyyy-MM-dd');
+    return dateFormat.parse(dateStr);
+  }
+
   Future<void> _fetchSevenRecentDays() async {
     final data = await getSevenRecentDays();
     print('Dữ liệu lấy về là ${data}');
     if (data != null && data is List) {
       setState(() {
-        monthInChart = data
-            .map((item) => double.parse(item['date'].split('-')[1]))
-            .toList();
-        expDataPoints = data
-            .map((item) => FlSpot(
-                  // Chuyển đổi ngày tháng thành dạng dd/mm
-                  double.parse(item['date'].split('-')[2]),
-                  item['total_exp'].toDouble(),
-                ))
-            .toList();
-        pointDataPoints = data
-            .map((item) => FlSpot(
-                  double.parse(item['date'].split('-')[2]),
-                  item['total_point'].toDouble(),
-                ))
-            .toList();
-        caloriesDataPoints = data
-            .map((item) => FlSpot(
-                  double.parse(item['date'].split('-')[2]),
-                  item['total_calories'].toDouble(),
-                ))
-            .toList();
+        final DateTime startDate = parseDate(
+            data.first['date']); // Ngày gốc là ngày đầu tiên trong dữ liệu
+
+        expDataPoints = data.map((item) {
+          final currentDate = parseDate(item['date']);
+          final int daysSinceStart = currentDate.difference(startDate).inDays;
+
+          return FlSpot(
+            daysSinceStart.toDouble(),
+            item['total_exp'].toDouble(),
+          );
+        }).toList();
+
+        pointDataPoints = data.map((item) {
+          final currentDate = parseDate(item['date']);
+          final int daysSinceStart = currentDate.difference(startDate).inDays;
+
+          return FlSpot(
+            daysSinceStart.toDouble(),
+            item['total_point'].toDouble(),
+          );
+        }).toList();
+
+        caloriesDataPoints = data.map((item) {
+          final currentDate = parseDate(item['date']);
+          final int daysSinceStart = currentDate.difference(startDate).inDays;
+
+          return FlSpot(
+            daysSinceStart.toDouble(),
+            item['total_calories'].toDouble(),
+          );
+        }).toList();
+        _startDate = startDate;
+        print('EXP: ${expDataPoints}');
+        print('Point: ${pointDataPoints}');
+        print('Calories: ${caloriesDataPoints}');
       });
     }
-    print('Các tháng lấy được ${monthInChart}');
   }
 
   Future<void> _logout() async {
@@ -193,470 +212,524 @@ class _ProfilePageState extends State<ProfilePage>
           ],
         ),
         body: _isLoading // Check loading state
-            ? Center(child: CircularProgressIndicator())
+            ? Center(
+                child: CircularProgressIndicator(
+                color: (!(_account?.is_premium ?? false)) ? primary : primary2,
+              ))
             : SafeArea(
-                child: SingleChildScrollView(
-                  child: Container(
-                    margin: const EdgeInsets.all(24.0),
-                    child: Column(
-                      children: [
-                        ShaderMask(
-                          shaderCallback: (bounds) {
-                            return gradient.createShader(bounds);
-                          },
-                          child: Text(
-                            [
-                              (_profile?.last_name ?? ''),
-                              (_profile?.first_name ?? '')
-                            ].where((s) => s.isNotEmpty).join(' ').isEmpty
-                                ? trans.name
-                                : [
-                                    (_profile?.last_name ?? ''),
-                                    (_profile?.first_name ?? '')
-                                  ].where((s) => s.isNotEmpty).join(' '),
-                            style: h2.copyWith(color: active),
-                          ),
-                        ),
+                child: RefreshIndicator(
+                  color:
+                      (!(_account?.is_premium ?? false)) ? primary : primary2,
+                  backgroundColor: theme.colorScheme.onSecondary,
 
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                pushWithoutNavBar(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ChangeProfilePage(
-                                            onProfileUpdated: refreshProfile,
-                                            account: _account,
-                                          )), // Thay NewPage() bằng trang bạn muốn chuyển tới
-                                );
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width:
-                                        144, // 2 * radius + 8 (border width) * 2
-                                    height:
-                                        144, // Đã sửa lại thành 144 cho khớp tỉ lệ so với Figma
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: _profile != null &&
-                                            (_profile!.avatar_url != null &&
-                                                _profile!
-                                                    .avatar_url!.isNotEmpty)
-                                        ? CircleAvatar(
-                                            radius: 50,
-                                            backgroundImage: _profile!
-                                                        .avatar_url !=
-                                                    null
-                                                ? CachedNetworkImageProvider(
-                                                    _profile!.avatar_url!)
-                                                : null,
-                                            backgroundColor: Colors.transparent,
-                                            child: _profile!.avatar_url == null
-                                                ? Icon(Icons.person, size: 50)
-                                                : null,
-                                          )
-                                        : Center(
-                                            child: _profile != null &&
-                                                    (_profile!.avatar_url !=
-                                                            null &&
-                                                        _profile!.avatar_url!
-                                                            .isNotEmpty)
-                                                ? CircleAvatar(
-                                                    radius: 50,
-                                                    backgroundImage:
-                                                        CachedNetworkImageProvider(
-                                                            _profile!
-                                                                .avatar_url!),
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                  )
-                                                : Center(
-                                                    child: Container(
-                                                      width: 144,
-                                                      height: 144,
-                                                      decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        color:
-                                                            Colors.transparent,
-                                                        border: Border.all(
-                                                          color:
-                                                              primary, // Màu của border
-                                                          width:
-                                                              3.0, // Độ rộng của border
-                                                        ),
-                                                      ),
-                                                      child: Center(
-                                                        child: Text(
-                                                          (_account?.username ??
-                                                                      '')
-                                                                  .isNotEmpty
-                                                              ? (_account!
-                                                                  .username[0]
-                                                                  .toUpperCase())
-                                                              : '',
-                                                          style: TextStyle(
-                                                            fontSize: 40,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: theme
-                                                                .colorScheme
-                                                                .onPrimary, // Màu chữ
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                          ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    trans.avatar,
-                                    style: bd_text.copyWith(color: text),
-                                  ),
-                                ],
-                              ),
+                  // Bọc SingleChildScrollView bằng RefreshIndicator
+                  onRefresh: () async {
+                    // Gọi hàm để refresh dữ liệu ở đây
+                    _fetchUserProfile();
+                    _fetchSevenRecentDays();
+                  },
+                  child: SingleChildScrollView(
+                    child: Container(
+                      margin: const EdgeInsets.all(24.0),
+                      child: Column(
+                        children: [
+                          ShaderMask(
+                            shaderCallback: (bounds) {
+                              return (!(_account?.is_premium ?? false))
+                                  ? gradient.createShader(bounds)
+                                  : gradient2.createShader(bounds);
+                            },
+                            child: Text(
+                              [
+                                (_profile?.last_name ?? ''),
+                                (_profile?.first_name ?? '')
+                              ].where((s) => s.isNotEmpty).join(' ').isEmpty
+                                  ? trans.name
+                                  : [
+                                      (_profile?.last_name ?? ''),
+                                      (_profile?.first_name ?? '')
+                                    ].where((s) => s.isNotEmpty).join(' '),
+                              style: h2.copyWith(color: active),
                             ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  InfoCard(
-                                    title: trans.friends,
-                                    subtitle: trans.listFriend,
-                                    icon: Icons.people_alt_outlined,
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => FriendListPage(
-                                            initialTabIndex: 0,
-                                            account: _account,
-                                            onProfileUpdated: refreshProfile,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  const SizedBox(height: 6),
-                                  InfoCard(
-                                    title: trans.social,
-                                    subtitle: trans.yourFriends,
-                                    icon: Icons.diversity_2_outlined,
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => SocialPage(
-                                            account: _account,
-                                            onProfileUpdated: refreshProfile,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  const SizedBox(height: 6),
-                                  ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(16)),
-                                      child: Stack(
-                                        children: [
-                                          InfoCard(
-                                            title: trans.personalizedExercise,
-                                            subtitle: trans.customizeExercise,
-                                            icon: Icons.tune_outlined,
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PersonalizedExercisePage(),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                          if (!(_account?.is_premium ?? false))
-                                            Positioned.fill(
-                                              child: BackdropFilter(
-                                                filter: ImageFilter.blur(
-                                                    sigmaX: 5, sigmaY: 5),
-                                                child: GestureDetector(
-                                                  onTap: () => {
-                                                    showPremiumDialog(
-                                                        context,
-                                                        _account!,
-                                                        widget.fetchAccount),
-                                                  },
-                                                  child: Container(
-                                                    color: theme
-                                                        .colorScheme.onSecondary
-                                                        .withOpacity(0.8),
-                                                    child: Center(
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Icon(
-                                                            Icons.lock_outline,
-                                                            color: theme
-                                                                .colorScheme
-                                                                .onPrimary,
-                                                            size: 24,
-                                                          ),
-                                                          SizedBox(width: 8),
-                                                          Text(
-                                                            trans
-                                                                .premiumFeature,
-                                                            style: bd_text.copyWith(
-                                                                color: theme
-                                                                    .colorScheme
-                                                                    .onPrimary),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                        ],
-                                      )),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16.0),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  StatCard(
-                                    title: trans.following,
-                                    value:
-                                        _account?.following.length.toString() ??
-                                            '0', // Replace with API data
-                                    valueColor: theme.colorScheme.onPrimary,
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => FriendListPage(
-                                            initialTabIndex: 0,
-                                            account: _account,
-                                            onProfileUpdated: refreshProfile,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  StatCard(
-                                    title: trans.follower,
-                                    value:
-                                        _account?.followers.length.toString() ??
-                                            '0', // Replace with API data
-                                    valueColor: theme.colorScheme.onPrimary,
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => FriendListPage(
-                                            initialTabIndex: 1,
-                                            account: _account,
-                                            onProfileUpdated: refreshProfile,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  StatCard(
-                                    title: 'EXP',
-                                    value: _profile?.exp.toString() ?? '',
-// Replace with API data
-                                    valueColor: primary,
-                                    isTitleFirst: true,
-                                  ),
-                                  StatCard(
-                                    title: 'BMI',
-                                    value: _profile?.bmi?.toString() ??
-                                        '0', // Replace with API data
-                                    valueColor: theme.colorScheme.onPrimary,
-                                    isTitleFirst: true,
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ChangeBMIPage(
-                                            onBMIUpdated: refreshProfile,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20.0),
-                        ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(16)),
-                          child: Stack(
+                          ),
+
+                          const SizedBox(height: 16),
+                          Row(
                             children: [
-                              TabBar(
-                                dividerColor: Colors.transparent,
-                                controller: _tabController,
-                                indicator: BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: primary,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                ),
-                                unselectedLabelColor: text,
-                                tabs: [
-                                  Tab(
-                                    child: Text(
-                                      'EXP',
-                                      style: h3,
-                                    ),
-                                  ),
-                                  Tab(
-                                    child: Text(
-                                      trans.point,
-                                      style: h3,
-                                    ),
-                                  ),
-                                  Tab(
-                                    child: Text(
-                                      trans.calorie,
-                                      style: h3,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(top: 60),
-                                height: 320,
-                                child: _isChartDataLoading
-                                    ? Center(child: CircularProgressIndicator())
-                                    : TabBarView(
-                                        controller: _tabController,
-                                        children: [
-                                          _buildLineChart(pointDataPoints,
-                                              trans.days, 'EXP', monthInChart),
-                                          _buildLineChart(
-                                              expDataPoints,
-                                              trans.days,
-                                              trans.point,
-                                              monthInChart),
-                                          _buildLineChart(
-                                              caloriesDataPoints,
-                                              trans.days,
-                                              trans.calorie,
-                                              monthInChart),
-                                        ],
+                              GestureDetector(
+                                onTap: () {
+                                  pushWithoutNavBar(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ChangeProfilePage(
+                                              onProfileUpdated: refreshProfile,
+                                              account: _account,
+                                            )), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                                  );
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width:
+                                          144, // 2 * radius + 8 (border width) * 2
+                                      height:
+                                          144, // Đã sửa lại thành 144 cho khớp tỉ lệ so với Figma
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
                                       ),
+                                      child: _profile != null &&
+                                              (_profile!.avatar_url != null &&
+                                                  _profile!
+                                                      .avatar_url!.isNotEmpty)
+                                          ? CircleAvatar(
+                                              radius: 50,
+                                              backgroundImage: _profile!
+                                                          .avatar_url !=
+                                                      null
+                                                  ? CachedNetworkImageProvider(
+                                                      _profile!.avatar_url!)
+                                                  : null,
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              child: _profile!.avatar_url ==
+                                                      null
+                                                  ? Icon(Icons.person, size: 50)
+                                                  : null,
+                                            )
+                                          : Center(
+                                              child: _profile != null &&
+                                                      (_profile!.avatar_url !=
+                                                              null &&
+                                                          _profile!.avatar_url!
+                                                              .isNotEmpty)
+                                                  ? CircleAvatar(
+                                                      radius: 50,
+                                                      backgroundImage:
+                                                          CachedNetworkImageProvider(
+                                                              _profile!
+                                                                  .avatar_url!),
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                    )
+                                                  : Center(
+                                                      child: Container(
+                                                        width: 144,
+                                                        height: 144,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          color: Colors
+                                                              .transparent,
+                                                          border: Border.all(
+                                                            color: (!(_account
+                                                                        ?.is_premium ??
+                                                                    false))
+                                                                ? primary
+                                                                : primary2, // Màu của border
+                                                            width:
+                                                                3.0, // Độ rộng của border
+                                                          ),
+                                                        ),
+                                                        child: Center(
+                                                          child: Text(
+                                                            (_account?.username ??
+                                                                        '')
+                                                                    .isNotEmpty
+                                                                ? (_account!
+                                                                    .username[0]
+                                                                    .toUpperCase())
+                                                                : '',
+                                                            style: TextStyle(
+                                                              fontSize: 40,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: theme
+                                                                  .colorScheme
+                                                                  .onPrimary, // Màu chữ
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                            ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      trans.avatar,
+                                      style: bd_text.copyWith(color: text),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              if (!(_account?.is_premium ?? false))
-                                Positioned.fill(
-                                  child: BackdropFilter(
-                                    filter:
-                                        ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                                    child: GestureDetector(
-                                      onTap: () => {
-                                        showPremiumDialog(context, _account!,
-                                            widget.fetchAccount),
-                                      },
-                                      child: Container(
-                                        color: theme.colorScheme.onSecondary
-                                            .withOpacity(0.8),
-                                        child: Center(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.lock_outline,
-                                                color:
-                                                    theme.colorScheme.onPrimary,
-                                                size: 40,
-                                              ),
-                                              SizedBox(height: 8),
-                                              Text(
-                                                trans.premiumFeature,
-                                                style: h2.copyWith(
-                                                    color: theme
-                                                        .colorScheme.onPrimary),
-                                              ),
-                                            ],
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    InfoCard(
+                                      title: trans.friends,
+                                      subtitle: trans.listFriend,
+                                      icon: Icons.people_alt_outlined,
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                FriendListPage(
+                                              initialTabIndex: 0,
+                                              account: _account,
+                                              onProfileUpdated: refreshProfile,
+                                            ),
                                           ),
-                                        ),
-                                      ),
+                                        );
+                                      },
                                     ),
-                                  ),
+                                    const SizedBox(height: 6),
+                                    InfoCard(
+                                      title: trans.social,
+                                      subtitle: trans.yourFriends,
+                                      icon: Icons.diversity_2_outlined,
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => SocialPage(
+                                              account: _account,
+                                              onProfileUpdated: refreshProfile,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    const SizedBox(height: 6),
+                                    ClipRRect(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(16)),
+                                        child: Stack(
+                                          children: [
+                                            InfoCard(
+                                              title: trans.personalizedExercise,
+                                              subtitle: trans.customizeExercise,
+                                              icon: Icons.tune_outlined,
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PersonalizedExercisePage(),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            if (!(_account?.is_premium ??
+                                                false))
+                                              Positioned.fill(
+                                                child: BackdropFilter(
+                                                  filter: ImageFilter.blur(
+                                                      sigmaX: 5, sigmaY: 5),
+                                                  child: GestureDetector(
+                                                    onTap: () => {
+                                                      showPremiumDialog(
+                                                          context,
+                                                          _account!,
+                                                          widget.fetchAccount),
+                                                    },
+                                                    child: Container(
+                                                      color: theme.colorScheme
+                                                          .onSecondary
+                                                          .withOpacity(0.8),
+                                                      child: Center(
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Icon(
+                                                              Icons
+                                                                  .lock_outline,
+                                                              color: theme
+                                                                  .colorScheme
+                                                                  .onPrimary,
+                                                              size: 24,
+                                                            ),
+                                                            SizedBox(width: 8),
+                                                            Text(
+                                                              trans
+                                                                  .premiumFeature,
+                                                              style: bd_text.copyWith(
+                                                                  color: theme
+                                                                      .colorScheme
+                                                                      .onPrimary),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        )),
+                                  ],
                                 ),
+                              ),
                             ],
                           ),
-                        ),
-
-                        const SizedBox(
-                            height: 20.0), // Added space for better layout
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                height: 50.0,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(44.0),
-                                  border: Border.all(color: error, width: 2.0),
+                          const SizedBox(height: 16.0),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    StatCard(
+                                      title: trans.following,
+                                      value: _account?.following.length
+                                              .toString() ??
+                                          '0', // Replace with API data
+                                      valueColor: theme.colorScheme.onPrimary,
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                FriendListPage(
+                                              initialTabIndex: 0,
+                                              account: _account,
+                                              onProfileUpdated: refreshProfile,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    StatCard(
+                                      title: trans.follower,
+                                      value: _account?.followers.length
+                                              .toString() ??
+                                          '0', // Replace with API data
+                                      valueColor: theme.colorScheme.onPrimary,
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                FriendListPage(
+                                              initialTabIndex: 1,
+                                              account: _account,
+                                              onProfileUpdated: refreshProfile,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
                                 ),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () {
-                                      // Xử lý sự kiện khi nhấn vào nút "Đăng xuất"
-                                      _logout();
-                                    },
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    StatCard(
+                                      title: 'EXP',
+                                      value: _profile?.exp.toString() ?? '',
+// Replace with API data
+                                      valueColor:
+                                          (!(_account?.is_premium ?? false))
+                                              ? primary
+                                              : primary2,
+                                      isTitleFirst: true,
+                                    ),
+                                    StatCard(
+                                      title: 'BMI',
+                                      value: _profile?.bmi?.toString() ??
+                                          '0', // Replace with API data
+                                      valueColor: theme.colorScheme.onPrimary,
+                                      isTitleFirst: true,
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ChangeBMIPage(
+                                              onBMIUpdated: refreshProfile,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20.0),
+                          ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                            child: Stack(
+                              children: [
+                                TabBar(
+                                  labelColor: (!(_account?.is_premium ?? false))
+                                      ? primary
+                                      : primary2,
+                                  dividerColor: Colors.transparent,
+                                  controller: _tabController,
+                                  indicator: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color:
+                                            (!(_account?.is_premium ?? false))
+                                                ? primary
+                                                : primary2,
+                                        width: 2.0,
+                                      ),
+                                    ),
+                                  ),
+                                  unselectedLabelColor: text,
+                                  tabs: [
+                                    Tab(
+                                      child: Text(
+                                        'EXP',
+                                        style: h3,
+                                      ),
+                                    ),
+                                    Tab(
+                                      child: Text(
+                                        trans.point,
+                                        style: h3,
+                                      ),
+                                    ),
+                                    Tab(
+                                      child: Text(
+                                        trans.calorie,
+                                        style: h3,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(top: 60),
+                                  height: 320,
+                                  child: _isChartDataLoading
+                                      ? Center(
+                                          child: CircularProgressIndicator(
+                                          color:
+                                              (!(_account?.is_premium ?? false))
+                                                  ? primary
+                                                  : primary2,
+                                        ))
+                                      : TabBarView(
+                                          controller: _tabController,
+                                          children: [
+                                            _buildLineChart(pointDataPoints,
+                                                trans.days, 'EXP', _startDate),
+                                            _buildLineChart(
+                                                expDataPoints,
+                                                trans.days,
+                                                trans.point,
+                                                _startDate),
+                                            _buildLineChart(
+                                                caloriesDataPoints,
+                                                trans.days,
+                                                trans.calorie,
+                                                _startDate),
+                                          ],
+                                        ),
+                                ),
+                                if (!(_account?.is_premium ?? false))
+                                  Positioned.fill(
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                          sigmaX: 5, sigmaY: 5),
+                                      child: GestureDetector(
+                                        onTap: () => {
+                                          showPremiumDialog(context, _account!,
+                                              widget.fetchAccount),
+                                        },
+                                        child: Container(
+                                          color: theme.colorScheme.onSecondary
+                                              .withOpacity(0.8),
+                                          child: Center(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.lock_outline,
+                                                  color: theme
+                                                      .colorScheme.onPrimary,
+                                                  size: 40,
+                                                ),
+                                                SizedBox(height: 8),
+                                                Text(
+                                                  trans.premiumFeature,
+                                                  style: h2.copyWith(
+                                                      color: theme.colorScheme
+                                                          .onPrimary),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(
+                              height: 20.0), // Added space for better layout
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  height: 50.0,
+                                  decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(44.0),
-                                    child: Center(
-                                      child: Text(trans.logout,
-                                          style: h3.copyWith(color: error)),
+                                    border:
+                                        Border.all(color: error, width: 2.0),
+                                  ),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        // Xử lý sự kiện khi nhấn vào nút "Đăng xuất"
+                                        _logout();
+                                      },
+                                      borderRadius: BorderRadius.circular(44.0),
+                                      child: Center(
+                                        child: Text(trans.logout,
+                                            style: h3.copyWith(color: error)),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ));
+//             SafeArea(
+
+//               ));
   }
 }
 
-Widget _buildLineChart(List<FlSpot> data, String xLabel, String yLabel,
-    List<double> monthInChart) {
-  print('Tháng lấy được: ${monthInChart}');
+Widget _buildLineChart(
+  List<FlSpot> data,
+  String xLabel,
+  String yLabel,
+  DateTime startDate,
+) {
   return LineChart(
     LineChartData(
       borderData: FlBorderData(show: false),
+      minX: data.first.x,
+      maxX: data.last.x,
       titlesData: FlTitlesData(
         leftTitles: AxisTitles(
           axisNameWidget: Padding(
@@ -671,29 +744,31 @@ Widget _buildLineChart(List<FlSpot> data, String xLabel, String yLabel,
             reservedSize: 40,
             getTitlesWidget: (value, meta) {
               return Text(
-                value.toString(),
+                value.toStringAsFixed(
+                    1), // Hiển thị giá trị y với 1 chữ số thập phân
                 style: min_cap.copyWith(color: text),
               );
             },
           ),
         ),
         bottomTitles: AxisTitles(
-          axisNameWidget: Text(
-            xLabel,
-            style: min_cap.copyWith(color: text),
-          ),
+          axisNameWidget: Text(xLabel, style: min_cap.copyWith(color: text)),
           sideTitles: SideTitles(
             showTitles: true,
+            reservedSize: 40,
+            interval: 1, // Đảm bảo hiển thị tất cả các giá trị x
             getTitlesWidget: (value, meta) {
-              final intValue = value.toInt();
-              int index = data.indexWhere((spot) => spot.x.toInt() == intValue);
-              final month = monthInChart[index].toInt();
+              // Tính toán ngày hiển thị từ số ngày đã qua
+              final date = startDate.add(Duration(days: value.toInt()));
+              final formattedDate = DateFormat('dd/MM').format(date);
+
               return Padding(
-                  padding: EdgeInsets.only(top: 4),
-                  child: Text(
-                    '${value.floor().toString()}/$month',
-                    style: min_cap.copyWith(color: text),
-                  ));
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  formattedDate, // Hiển thị ngày/tháng
+                  style: min_cap.copyWith(color: text),
+                ),
+              );
             },
           ),
         ),
@@ -709,6 +784,7 @@ Widget _buildLineChart(List<FlSpot> data, String xLabel, String yLabel,
       gridData: FlGridData(show: true),
       lineBarsData: [
         LineChartBarData(
+          color: primary2,
           spots: data,
           barWidth: 4,
           isStrokeCapRound: true,
@@ -717,7 +793,7 @@ Widget _buildLineChart(List<FlSpot> data, String xLabel, String yLabel,
             show: true,
             gradient: LinearGradient(
               colors: [
-                primary.withOpacity(0.2),
+                primary2.withOpacity(0.2),
                 darkblue.withOpacity(0.0),
               ],
               begin: Alignment.topCenter,
