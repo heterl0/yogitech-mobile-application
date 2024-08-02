@@ -13,6 +13,7 @@ const Color elevationLight = Color(0xFFE9E9E9); // Màu độ cao sáng
 
 // Other colors
 const Color primary = Color(0xFF4095d0); // Màu chính
+const Color primary2 = Color(0xFF560bad); // Màu chính 2
 const Color green = Color(0xFF3BE2B0);
 const Color error = Color(0xFFff5858); // Màu lỗi
 const Color darkblue = Color(0xFF5986cc);
@@ -28,6 +29,17 @@ const LinearGradient gradient = LinearGradient(
     green,
     primary,
     darkblue,
+  ],
+);
+
+// Theme colors (light and dark)
+const LinearGradient gradient2 = LinearGradient(
+  begin: Alignment.centerLeft,
+  end: Alignment.centerRight,
+  colors: [
+    Color(0xFFb5179e),
+    primary2,
+    Color(0xFF3a0ca3),
   ],
 );
 

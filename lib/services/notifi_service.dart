@@ -1,7 +1,7 @@
 import 'package:YogiTech/api/exercise/exercise_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:rxdart/rxdart.dart';
 
@@ -146,15 +146,16 @@ class LocalNotificationService {
     required String payload,
   }) async {
     tz.TZDateTime scheduledDate =
-        _nextInstanceOfDayAndTime(_convertIntToDay(day), time)
-            .subtract(const Duration(days: 1));
+        _nextInstanceOfDayAndTime(_convertIntToDay(day), time);
 
-    // Sử dụng múi giờ địa phương cho thời gian hiện tại
     final now = tz.TZDateTime.now(tz.local);
+
+    print('Id thời gian: $id');
+    print('Thời gian truyền tới: ${day}, chuyển đổi ${_convertIntToDay(day)}');
     print('Thời gian hệ thống hiện tại: $now');
-    // In ra thời gian đã được tính toán
+    scheduledDate = scheduledDate.subtract(
+        Duration(days: 1)); // Không hiểu vì sao nhưng nó luôn huốc 1 ngày
     print('Scheduled notification for: $scheduledDate');
-    // print('Lên lịch sau 1 phút: ${now.add(Duration(minutes: 1))}');
 
     await _flutterLocalNotificationsPlugin.zonedSchedule(
       id,
@@ -171,7 +172,6 @@ class LocalNotificationService {
           ticker: 'ticker',
         ),
       ),
-      androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
@@ -181,24 +181,31 @@ class LocalNotificationService {
 
   static tz.TZDateTime _nextInstanceOfDayAndTime(Day day, TimeOfDay time) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduledDate = tz.TZDateTime(
+
+    // Calculate the target day of the week
+    int daysToAdd = day.value - now.weekday;
+    if (daysToAdd < 0) {
+      daysToAdd +=
+          7; // If the target day is earlier in the week, move to next week
+    }
+
+    // Create the scheduledDate initially for the target day
+    tz.TZDateTime scheduledDate = now.add(Duration(days: daysToAdd));
+
+    // Set the time for the scheduledDate
+    scheduledDate = tz.TZDateTime(
       tz.local,
-      now.year,
-      now.month,
-      now.day,
+      scheduledDate.year,
+      scheduledDate.month,
+      scheduledDate.day,
       time.hour,
       time.minute,
     );
 
-    // Tính toán số ngày cần thêm vào để đến ngày đã chọn
-    int daysDifference = day.value - now.weekday;
-    if (daysDifference < 0 ||
-        (daysDifference == 0 && scheduledDate.isBefore(now))) {
-      daysDifference +=
-          7; // Chuyển sang tuần tiếp theo nếu thời gian đã trôi qua trong ngày
+    // If the scheduled time is in the past on the target day, move it to the next week
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 7));
     }
-
-    scheduledDate = scheduledDate.add(Duration(days: daysDifference));
 
     return scheduledDate;
   }

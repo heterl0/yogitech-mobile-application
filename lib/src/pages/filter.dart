@@ -1,3 +1,4 @@
+import 'package:YogiTech/src/models/account.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/api/pose/pose_service.dart';
@@ -11,7 +12,8 @@ import 'package:YogiTech/src/widgets/dropdown_field.dart'; // Import DropdownFie
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FilterPage extends StatefulWidget {
-  const FilterPage({super.key});
+  final Account? account;
+  const FilterPage({super.key, this.account});
 
   @override
   _FilterPageState createState() => _FilterPageState();
@@ -21,10 +23,12 @@ class _FilterPageState extends State<FilterPage> {
   final TextEditingController category = TextEditingController();
   List<dynamic> _muscles = [];
   String? selectedMuscle;
+  Account? _account;
 
   @override
   void initState() {
     super.initState();
+    _account = widget.account;
     _loadMuscles();
   }
 
@@ -44,6 +48,7 @@ class _FilterPageState extends State<FilterPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+    print('Có account hay không? ${_account}');
     Map<String, String> muscleMap = {
       'Quadriceps': 'Cơ tứ đầu',
       'Pelvis': 'Khung chậu',
@@ -115,6 +120,7 @@ class _FilterPageState extends State<FilterPage> {
                   muscleName: selectedMuscle!,
                   muscles: _muscles,
                   muscleMap: muscleMap,
+                  account: _account,
                 ),
             ],
           ),
@@ -136,7 +142,10 @@ class _FilterPageState extends State<FilterPage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => AllExercise(
-                      selectedMuscle: muscle, category: selectedMuscle!),
+                    selectedMuscle: muscle,
+                    category: selectedMuscle!,
+                    account: _account,
+                  ),
                 ),
               );
               // Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
@@ -153,12 +162,14 @@ class MuscleInfoWidget extends StatelessWidget {
   final String muscleName;
   final List<dynamic> muscles;
   final Map<String, String> muscleMap;
+  final Account? account;
 
   const MuscleInfoWidget({
     super.key,
     required this.muscleName,
     required this.muscles,
     required this.muscleMap,
+    this.account,
   });
 
   @override
@@ -210,7 +221,10 @@ class MuscleInfoWidget extends StatelessWidget {
                                   ? detail[muscleName]!
                                   : mus.description),
                               textAlign: TextAlign.left,
-                              style: bd_text.copyWith(color: primary),
+                              style: bd_text.copyWith(
+                                  color: (!(account?.is_premium ?? false))
+                                      ? primary
+                                      : primary2),
                             ),
                             Expanded(
                               flex: 2,
@@ -219,7 +233,11 @@ class MuscleInfoWidget extends StatelessWidget {
                                   imageUrl: mus.image,
                                   fit: BoxFit.cover,
                                   placeholder: (context, url) => Center(
-                                      child: CircularProgressIndicator()),
+                                      child: CircularProgressIndicator(
+                                    color: (!(account?.is_premium ?? false))
+                                        ? primary
+                                        : primary2,
+                                  )),
                                   errorWidget: (context, url, error) =>
                                       Icon(Icons.error),
                                 ),

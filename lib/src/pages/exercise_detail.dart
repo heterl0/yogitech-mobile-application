@@ -63,7 +63,9 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
             width: 48,
             height: 28,
             child: _exercise!.is_premium
-                ? Image.asset('assets/images/Crown.png')
+                ? (!(_account?.is_premium ?? false))
+                    ? Image.asset('assets/images/Crown.png')
+                    : Image.asset('assets/images/Crown2.png')
                 : null,
           ),
         ],
@@ -73,7 +75,10 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           ? Container(
               color: theme.colorScheme.surface,
               child: Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color:
+                      (!(_account?.is_premium ?? false)) ? primary : primary2,
+                ),
               ),
             )
           : _buildBody(context),
@@ -229,7 +234,9 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         ),
         Text(
           '$minute ${trans.minutes}',
-          style: bd_text.copyWith(color: primary),
+          style: bd_text.copyWith(
+            color: _exercise!.is_premium ? primary2 : primary,
+          ),
         ),
         const SizedBox(width: 16),
         Expanded(
@@ -243,7 +250,9 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
               level == 1
                   ? trans.beginner
                   : (level == 2 ? trans.intermediate : trans.advanced),
-              style: bd_text.copyWith(color: primary),
+              style: bd_text.copyWith(
+                color: _exercise!.is_premium ? primary2 : primary,
+              ),
             ),
           ],
         )),
@@ -316,8 +325,12 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                     width: double
                         .infinity, // Đảm bảo ảnh chiếm toàn bộ chiều ngang
                     fit: BoxFit.cover,
-                    placeholder: (context, url) =>
-                        Center(child: CircularProgressIndicator()),
+                    placeholder: (context, url) => Center(
+                        child: CircularProgressIndicator(
+                      color: (!(_account?.is_premium ?? false))
+                          ? primary
+                          : primary2,
+                    )),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
@@ -334,15 +347,21 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                   children: [
                     Text(
                       '${trans.duration}: ${pose.duration} ${trans.seconds}.',
-                      style: bd_text.copyWith(color: primary),
+                      style: bd_text.copyWith(
+                        color: _exercise!.is_premium ? primary2 : primary,
+                      ),
                     ),
                     Text(
                       '${trans.burned}: ${pose.calories} ${trans.calorie}.',
-                      style: bd_text.copyWith(color: primary),
+                      style: bd_text.copyWith(
+                        color: _exercise!.is_premium ? primary2 : primary,
+                      ),
                     ),
                     Text(
                       '${trans.level}: ${pose.level == 1 ? trans.beginner : (pose.level == 2 ? trans.intermediate : trans.advanced)}.',
-                      style: bd_text.copyWith(color: primary),
+                      style: bd_text.copyWith(
+                        color: _exercise!.is_premium ? primary2 : primary,
+                      ),
                     ),
                   ],
                 ),
@@ -356,7 +375,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                     return Material(
                       elevation: appElevation,
                       borderRadius: BorderRadius.circular(20.0),
-                      color: primary,
+                      color: _exercise!.is_premium ? primary2 : primary,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 4.0),
@@ -497,7 +516,9 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                                 shape: BoxShape.circle,
                                 color: Colors.transparent,
                                 border: Border.all(
-                                  color: primary,
+                                  color: _exercise!.is_premium
+                                      ? primary2
+                                      : primary,
                                   width: 1.0,
                                 ),
                               ),
@@ -509,7 +530,9 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: primary,
+                                    color: _exercise!.is_premium
+                                        ? primary2
+                                        : primary,
                                   ),
                                 ),
                               ),
@@ -526,7 +549,10 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                             Text(
                               name,
                               textAlign: TextAlign.start,
-                              style: min_cap.copyWith(color: primary),
+                              style: min_cap.copyWith(
+                                color:
+                                    _exercise!.is_premium ? primary2 : primary,
+                              ),
                             ),
                             Text(
                               formatDateTime(
@@ -615,7 +641,11 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                                     children: [
                                       Text(
                                         'Admin', // Replace with dynamic data based on repComment[index]
-                                        style: min_cap.copyWith(color: primary),
+                                        style: min_cap.copyWith(
+                                          color: _exercise!.is_premium
+                                              ? primary2
+                                              : primary,
+                                        ),
                                       ),
                                       Text(
                                         formatDateTime(

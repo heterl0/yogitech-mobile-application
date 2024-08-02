@@ -10,7 +10,7 @@ class BoxInputField extends StatefulWidget {
   final bool readOnly;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
-  final String? errorText;
+  // final String? errorText;
   final RegExp? regExp;
   final VoidCallback? onTap;
   final ValueChanged<String>? onChanged;
@@ -30,7 +30,7 @@ class BoxInputField extends StatefulWidget {
       this.regExp,
       this.onTap,
       this.onChanged,
-      this.errorText = 'Invalid input',
+      // this.errorText = 'Invalid input',
       this.isSmall = false, // Giá trị mặc định là false
       this.onSubmitted});
 
@@ -79,13 +79,13 @@ class _BoxInputFieldState extends State<BoxInputField> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final errorText = (widget.regExp != null &&
-            widget.controller.text.isNotEmpty &&
-            !widget.regExp!.hasMatch(widget.controller.text))
-        ? widget.errorText
-        : null;
+    // final errorText = (widget.regExp != null &&
+    //         widget.controller.text.isNotEmpty &&
+    //         !widget.regExp!.hasMatch(widget.controller.text))
+    //     ? widget.errorText
+    //     : null;
 
-    _hasError = errorText != null;
+    // _hasError = errorText != null;
 
     final fontSize = widget.isSmall ? 14.0 : 16.0;
     final contentPadding = widget.isSmall
@@ -172,7 +172,7 @@ class _BoxInputFieldState extends State<BoxInputField> {
           enabledBorder: circleBorder.copyWith(
             borderSide: BorderSide(color: theme.colorScheme.secondary),
           ),
-          errorText: errorText,
+          // errorText: errorText,
           errorStyle: TextStyle(
             fontFamily: 'ReadexPro',
             fontSize: 12,

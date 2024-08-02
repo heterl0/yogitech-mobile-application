@@ -72,16 +72,7 @@ class OTP_Page extends StatelessWidget {
               height: 50.0,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(44.0),
-                gradient: LinearGradient(
-                  colors: const [
-                    Color(0xFF3BE2B0),
-                    Color(0xFF4095D0),
-                    Color(0xFF5986CC),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: const [0.0, 0.5, 1.0],
-                ),
+                gradient: gradient,
               ),
               child: Material(
                 color: Colors.transparent,

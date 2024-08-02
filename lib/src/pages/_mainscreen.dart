@@ -68,7 +68,8 @@ class _MainScreenState extends State<MainScreen> {
             textStyle: min_cap,
             icon: const Icon(Icons.grid_view),
             title: trans.home,
-            activeForegroundColor: primary,
+            activeForegroundColor:
+                (!(_account?.is_premium ?? false)) ? primary : primary2,
             inactiveForegroundColor: text,
           ),
         ),
@@ -78,17 +79,22 @@ class _MainScreenState extends State<MainScreen> {
             textStyle: min_cap,
             icon: const Icon(Icons.newspaper_outlined),
             title: trans.blog,
-            activeForegroundColor: primary,
+            activeForegroundColor:
+                (!(_account?.is_premium ?? false)) ? primary : primary2,
             inactiveForegroundColor: text,
           ),
         ),
         PersistentTabConfig(
-          screen: Activities(account: _account,fetchAccount: _fetchAccount,),
+          screen: Activities(
+            account: _account,
+            fetchAccount: _fetchAccount,
+          ),
           item: ItemConfig(
             textStyle: min_cap,
             icon: const Icon(Icons.celebration),
             title: trans.event,
-            activeForegroundColor: primary,
+            activeForegroundColor:
+                (!(_account?.is_premium ?? false)) ? primary : primary2,
             inactiveForegroundColor: text,
           ),
         ),
@@ -98,7 +104,8 @@ class _MainScreenState extends State<MainScreen> {
             textStyle: min_cap,
             icon: const Icon(Icons.self_improvement),
             title: trans.meditate,
-            activeForegroundColor: primary,
+            activeForegroundColor:
+                (!(_account?.is_premium ?? false)) ? primary : primary2,
             inactiveForegroundColor: text,
           ),
         ),
@@ -116,7 +123,8 @@ class _MainScreenState extends State<MainScreen> {
             textStyle: min_cap,
             icon: const Icon(Icons.account_circle_outlined),
             title: trans.profile,
-            activeForegroundColor: primary,
+            activeForegroundColor:
+                (!(_account?.is_premium ?? false)) ? primary : primary2,
             inactiveForegroundColor: text,
           ),
         ),
