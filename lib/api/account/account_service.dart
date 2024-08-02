@@ -125,21 +125,44 @@ class PasswordChangeRequest {
   }
 }
 
-Future<bool> changePassword(PasswordChangeRequest data) async {
+Future<bool?> changePassword(PasswordChangeRequest data) async {
   try {
     final url = formatApiUrl('/api/v1/users/set_password/');
     final Response response = await DioInstance.post(url, data: data.toMap());
     if (response.statusCode == 204) {
       return true;
     } else {
+      print(response.data);
       print('Change password failed with status code: ${response.statusCode}');
       return false;
     }
   } catch (e) {
-    print('Change password error: $e');
+    if (e is DioException) {
+      // DioError caught, check if response data contains the specific error
+      if (e.response != null) {
+        final responseData = e.response?.data;
+        if (responseData is Map<String, dynamic> && responseData.containsKey('current_password')) {
+          final errors = responseData['current_password'];
+          if (errors is List && errors.contains('Invalid password.')) {
+            return null;
+          } else {
+            print('Change password error: ${e.response?.data}');
+          }
+        } else {
+          print('Change password error: ${e.response?.data}');
+        }
+      } else {
+        print('Change password error: ${e.message}');
+      }
+    } else {
+      // Non-Dio error
+      print('Change password error: $e');
+    }
     return false;
   }
 }
+
+
 
 class PatchBMIRequest {
   double? weight;
