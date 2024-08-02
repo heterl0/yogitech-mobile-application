@@ -286,9 +286,20 @@ class _HomePageState extends State<HomePage> {
                 //   ),
                 // ),
 
-                CarouselSlider(
-                  items: [
-                    _buildCarouselItem(
+                Container(
+                  margin: EdgeInsets.all(16), // Khoảng cách ngoài viền
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: (!(_account?.is_premium ?? false))
+                          ? primary
+                          : primary2, // Màu của viền
+                      width: 2, // Độ dày của viền
+                    ),
+                    borderRadius: BorderRadius.circular(16), // Bo góc cho viền
+                  ),
+                  child: CarouselSlider(
+                    items: [
+                      _buildCarouselItem(
                         title: trans.tryThisExercise,
                         subtitle: trans.forBeginner,
                         poseName: 'Yoga Beginners',
@@ -307,14 +318,9 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           );
-                        }),
-                    // _buildCarouselItem(
-                    //     title: trans.thirtyDayYogaChallenge,
-                    //     subtitle: trans.improveHealthAndFlexibility,
-                    //     poseName: trans.joinNow,
-                    //     imagePath: 'assets/images/Muscle.png',
-                    //     onTap: () {}),
-                    _buildCarouselItem(
+                        },
+                      ),
+                      _buildCarouselItem(
                         title: trans.yogaChangedMyLife,
                         subtitle: trans.minhAnhInspirationalStory,
                         poseName: trans.shareYourJourney,
@@ -330,8 +336,9 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           );
-                        }),
-                    _buildCarouselItem(
+                        },
+                      ),
+                      _buildCarouselItem(
                         title: trans.specialOfferForNewMembers,
                         subtitle: trans.receiveTwoFreeSessions,
                         poseName: trans.subscribePremiumNow,
@@ -340,13 +347,17 @@ class _HomePageState extends State<HomePage> {
                             : 'assets/images/Crown2.png',
                         onTap: () {
                           pushWithoutNavBar(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SubscriptionPage(
-                                      account: _account,
-                                      fetchAccount: widget.fetchAccount)));
-                        }),
-                    _buildCarouselItem(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SubscriptionPage(
+                                account: _account,
+                                fetchAccount: widget.fetchAccount,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildCarouselItem(
                         title: trans.yogaTipsForBeginners,
                         subtitle: trans.fiveBasicPoses,
                         poseName: trans.exploreNow,
@@ -357,20 +368,22 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AllExercise(
-                                      account: _account,
-                                    )), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                              builder: (context) => AllExercise(
+                                account: _account,
+                              ),
+                            ),
                           );
-                        }),
-                  ],
-                  options: CarouselOptions(
-                    height: 240, // Adjust height as needed
-                    viewportFraction: 1, // Make items take full width
-                    autoPlay: true, // Enable auto-playing if desired
-                    // ... other CarouselOptions as needed
+                        },
+                      ),
+                    ],
+                    options: CarouselOptions(
+                      height: 200, // Adjust height as needed
+                      viewportFraction: 1, // Make items take full width
+                      autoPlay: true, // Enable auto-playing if desired
+                    ),
                   ),
                 ),
-                // Placeholder for ad content
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Text(
@@ -503,8 +516,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Expanded(
               child: Padding(
-                padding:
-                    const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 16.0),
+                padding: EdgeInsets.zero,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -539,7 +551,7 @@ class _HomePageState extends State<HomePage> {
                 fit: BoxFit.cover,
               ),
             ),
-            SizedBox(width: 16),
+            SizedBox(width: 8),
           ],
         ),
       ),
