@@ -17,6 +17,9 @@ class Streak extends StatefulWidget {
 class _StreakState extends State<Streak> {
   DateTime _currentDate = DateTime.now();
   DateTime? _lastStreakStartDate;
+  List<DateTime> streakDays = [];
+  int streakDaysCount = 0;
+
   late Map<String, dynamic> streakData = {
     "number_of_dates": 0,
     "streak_dates": []
@@ -25,18 +28,17 @@ class _StreakState extends State<Streak> {
   @override
   void initState() {
     super.initState();
-    print("initState called");
     _fetchStreakData();
   }
 
   Future<void> _fetchStreakData() async {
-    print("Fetching streak data...");
     try {
       final data =
           await getStreakInMonth(_currentDate.month, _currentDate.year);
-      print("Streak Data: $data");
       setState(() {
         streakData = data;
+        streakDaysCount = streakData['number_of_dates'];
+        _generateStreakData();
       });
     } catch (e) {
       print("Error fetching streak data: $e");
@@ -61,18 +63,14 @@ class _StreakState extends State<Streak> {
     return DateUtils.getDaysInMonth(year, month);
   }
 
-  List<DateTime> _generateStreakData() {
-    List<DateTime> streakDays = [];
+  void _generateStreakData() {
     List<int> streakDates = streakData['streak_dates']?.cast<int>() ?? [];
-
-    for (int day in streakDates) {
-      DateTime date = DateTime(_currentDate.year, _currentDate.month, day);
-      streakDays.add(date);
-    }
-
-    _lastStreakStartDate = streakDays.isNotEmpty ? streakDays.first : null;
-
-    return streakDays;
+    setState(() {
+      streakDays = streakDates
+          .map((day) => DateTime(_currentDate.year, _currentDate.month, day))
+          .toList();
+      _lastStreakStartDate = streakDays.isNotEmpty ? streakDays.first : null;
+    });
   }
 
   @override
@@ -113,8 +111,6 @@ class _StreakState extends State<Streak> {
               children: [
                 _buildStreakInfo(trans),
                 SizedBox(height: 16),
-                // _buildMonthInfo(context),
-                // SizedBox(height: 16),
                 _buildAdditionalInfo(context),
                 SizedBox(height: 16),
                 _buildCalendar(context),
@@ -190,11 +186,6 @@ class _StreakState extends State<Streak> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          // Text(
-          //   DateFormat('MMMM y', Localizations.localeOf(context).toString())
-          //       .format(_currentDate),
-          //   style: h2.copyWith(color: theme.colorScheme.onSurface, height: 1),
-          // ),
           Row(
             children: [
               _buildMonthControlBack(),
@@ -232,9 +223,6 @@ class _StreakState extends State<Streak> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
-    List<DateTime> streakDays = _generateStreakData();
-    int streakDaysCount = streakData['number_of_dates'];
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -268,42 +256,6 @@ class _StreakState extends State<Streak> {
           ),
         ),
         SizedBox(width: 16),
-
-        // Expanded(
-        //   child: Container(
-        //     height: 60,
-        //     decoration: BoxDecoration(
-        //       borderRadius: BorderRadius.circular(16),
-        //       border: Border.all(
-        //         color: stroke,
-        //       ),
-        //     ),
-        //     child: Padding(
-        //       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        //       child: Column(
-        //         crossAxisAlignment: CrossAxisAlignment.start,
-        //         mainAxisAlignment: MainAxisAlignment.center,
-        //         children: [
-        //           Text(
-        //             _lastStreakStartDate != null
-        //                 ? DateFormat.yMMMd(
-        //                         Localizations.localeOf(context).toString())
-        //                     .format(_lastStreakStartDate!)
-        //                 : 'N/A',
-        //             style: h3.copyWith(
-        //                 color: theme.colorScheme.onPrimary, height: 1.2),
-        //           ),
-        //           Text(
-        //             trans.beginOfTheStreak,
-        //             style: min_cap.copyWith(
-        //               color: theme.colorScheme.onSurface,
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        // ),
         Expanded(
           flex: 3,
           child: Text(
@@ -327,7 +279,6 @@ class _StreakState extends State<Streak> {
   }
 
   Widget _buildCalendar(BuildContext context) {
-    List<DateTime> streakDays = _generateStreakData();
     int daysInMonth = _getDaysInMonth(_currentDate.year, _currentDate.month);
     int firstWeekdayOfMonth =
         DateTime(_currentDate.year, _currentDate.month, 1).weekday;
