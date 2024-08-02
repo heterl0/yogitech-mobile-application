@@ -386,6 +386,7 @@ class _HomePageState extends State<HomePage> {
                       if (jsonList != null)
                         for (final exercise in jsonList.take(5))
                           CustomCard(
+                            premium: _account?.is_premium,
                             topRightIcon: exercise.is_premium
                                 ? (!(_account?.is_premium ?? false))
                                     ? Image.asset('assets/images/Crown.png')
@@ -452,6 +453,7 @@ class _HomePageState extends State<HomePage> {
                       if (jsonListSort != null)
                         for (final exercise in jsonListSort.take(5))
                           CustomCard(
+                            premium: _account?.is_premium,
                             topRightIcon: exercise.is_premium
                                 ? (!(_account?.is_premium ?? false))
                                     ? Image.asset('assets/images/Crown.png')

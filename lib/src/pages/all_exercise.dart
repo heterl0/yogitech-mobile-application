@@ -263,6 +263,7 @@ class AllExerciseState extends State<AllExercise> {
               itemBuilder: (context, index) {
                 final ex = _exercises[index];
                 return CustomCard(
+                  premium: _account?.is_premium,
                   topRightIcon: ex.is_premium
                       ? (!(_account?.is_premium ?? false))
                           ? Image.asset('assets/images/Crown.png')
@@ -270,7 +271,10 @@ class AllExerciseState extends State<AllExercise> {
                       : null,
                   title: ex.title,
                   caption: ex.description.replaceAll(RegExp(r'<[^>]*>'), ''),
-                  imageUrl: ex.image_url ?? 'assets/images/Null_Exercise.png',
+                  imageUrl: ex.image_url ??
+                      ((!(_account?.is_premium ?? false))
+                          ? 'assets/images/Null_Exercise.png'
+                          : 'assets/images/Null_Exercise2.png'),
                   onTap: () {
                     pushWithoutNavBar(
                       context,
