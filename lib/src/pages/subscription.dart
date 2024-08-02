@@ -688,9 +688,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                       height: 18,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: (!(_account?.is_premium ?? false))
-                              ? AssetImage('assets/images/Emerald.png')
-                              : AssetImage('assets/images/Emerald2.png'),
+                          image: AssetImage('assets/images/Emerald.png'),
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -714,8 +712,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                 Text(
                   '${sub.price.toInt().toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} VND',
                   style: h3.copyWith(
-                    color:
-                        (!(_account?.is_premium ?? false)) ? primary : primary2,
+                    color: primary,
                   ),
                 ),
               ],

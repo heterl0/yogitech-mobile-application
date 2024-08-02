@@ -157,7 +157,7 @@ class _EventDetailState extends State<EventDetail>
     return isLoading
         ? Center(
             child: CircularProgressIndicator(
-            color: (!(_account?.is_premium ?? false)) ? primary : primary2,
+            color: primary,
           ))
         : Scaffold(
             extendBodyBehindAppBar: true,
@@ -175,9 +175,7 @@ class _EventDetailState extends State<EventDetail>
                       color: theme.colorScheme.surface,
                       child: Center(
                         child: CircularProgressIndicator(
-                          color: (!(_account?.is_premium ?? false))
-                              ? primary
-                              : primary2,
+                          color: primary,
                         ),
                       ),
                     ),
@@ -252,7 +250,7 @@ class _EventDetailState extends State<EventDetail>
           fit: BoxFit.cover,
           placeholder: (context, url) => Center(
               child: CircularProgressIndicator(
-            color: (!(_account?.is_premium ?? false)) ? primary : primary2,
+            color: primary,
           )),
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),
@@ -276,14 +274,13 @@ class _EventDetailState extends State<EventDetail>
           if (_event != null) _buildDescription(),
           const SizedBox(height: 16),
           TabBar(
-            labelColor: (!(_account?.is_premium ?? false)) ? primary : primary2,
+            labelColor: primary,
             dividerColor: Colors.transparent,
             controller: _tabController,
             indicator: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color:
-                      (!(_account?.is_premium ?? false)) ? primary : primary2,
+                  color: primary,
                   width: 2.0,
                 ),
               ),
@@ -352,10 +349,7 @@ class _EventDetailState extends State<EventDetail>
                   ),
                   Text(
                     ' $startDay',
-                    style: bd_text.copyWith(
-                        color: (!(_account?.is_premium ?? false))
-                            ? primary
-                            : primary2),
+                    style: bd_text.copyWith(color: primary),
                   ),
                 ],
               ),
@@ -369,10 +363,7 @@ class _EventDetailState extends State<EventDetail>
                   ),
                   Text(
                     ' $endDay',
-                    style: bd_text.copyWith(
-                        color: (!(_account?.is_premium ?? false))
-                            ? primary
-                            : primary2),
+                    style: bd_text.copyWith(color: primary),
                   )
                 ],
               ),
@@ -391,13 +382,10 @@ class _EventDetailState extends State<EventDetail>
                     trans.numOfExercise,
                     style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
                   ),
-                  Text(
-                    ' ${_event!.exercises.length}',
-                    style: bd_text.copyWith(
-                        color: (!(_account?.is_premium ?? false))
-                            ? primary
-                            : primary2),
-                  ),
+                  Text(' ${_event!.exercises.length}',
+                      style: bd_text.copyWith(
+                        color: primary,
+                      )),
                 ],
               ),
               Row(
@@ -410,10 +398,7 @@ class _EventDetailState extends State<EventDetail>
                   ),
                   Text(
                     ' ${_event!.event_candidate.length}',
-                    style: bd_text.copyWith(
-                        color: (!(_account?.is_premium ?? false))
-                            ? primary
-                            : primary2),
+                    style: bd_text.copyWith(color: primary),
                   ),
                 ],
               ),
@@ -553,10 +538,7 @@ class _EventDetailState extends State<EventDetail>
                           Text(
                             '${item.event_point.toStringAsFixed(1)} ${trans.point}',
                             textAlign: TextAlign.right,
-                            style: h3.copyWith(
-                                color: (!(_account?.is_premium ?? false))
-                                    ? primary
-                                    : primary2),
+                            style: h3.copyWith(color: primary),
                           ),
                         ],
                       ),

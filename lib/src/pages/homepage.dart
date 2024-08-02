@@ -292,8 +292,9 @@ class _HomePageState extends State<HomePage> {
                         title: trans.tryThisExercise,
                         subtitle: trans.forBeginner,
                         poseName: 'Yoga Beginners',
-                        imagePath:
-                            'assets/images/ads_exercise_for_beginner.png',
+                        imagePath: (!(_account?.is_premium ?? false))
+                            ? 'assets/images/ads_exercise_for_beginner.png'
+                            : 'assets/images/ads_exercise_for_beginner2.png',
                         onTap: () {
                           final exercise = jsonList.first;
                           pushWithoutNavBar(
@@ -349,7 +350,9 @@ class _HomePageState extends State<HomePage> {
                         title: trans.yogaTipsForBeginners,
                         subtitle: trans.fiveBasicPoses,
                         poseName: trans.exploreNow,
-                        imagePath: 'assets/images/Universe.png',
+                        imagePath: (!(_account?.is_premium ?? false))
+                            ? 'assets/images/Universe.png'
+                            : 'assets/images/Universe2.png',
                         onTap: () {
                           Navigator.push(
                             context,

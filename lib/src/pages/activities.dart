@@ -60,8 +60,7 @@ class _ActivitiesState extends State<Activities> {
     return _isloading
         ? Center(
             child: CircularProgressIndicator(
-            color:
-                (!(widget.account?.is_premium ?? false)) ? primary : primary2,
+            color: primary,
           ))
         : Container(
             width: double.infinity,
