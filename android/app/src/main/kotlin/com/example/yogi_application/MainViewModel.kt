@@ -44,6 +44,8 @@ class MainViewModel : ViewModel() {
 
     var exercise: Exercise? = null;
 
+    var local: String? = "en";
+
     var poseLogResults: MutableList<PoseLogResult> = mutableListOf<PoseLogResult>();
 
     private val _eventTrigger = MutableLiveData<Int>()

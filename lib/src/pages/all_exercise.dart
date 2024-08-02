@@ -1,4 +1,3 @@
-import 'package:YogiTech/src/pages/homepage.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -19,13 +18,15 @@ class AllExercise extends StatefulWidget {
   final String? category;
   final Account? account;
   final VoidCallback? fetchAccount;
+  final int? level;
   const AllExercise(
       {super.key,
       this.searchString,
       this.selectedMuscle,
       this.account,
       this.fetchAccount,
-      this.category});
+      this.category,
+      this.level});
 
   @override
   AllExerciseState createState() => AllExerciseState();
@@ -61,6 +62,11 @@ class AllExerciseState extends State<AllExercise> {
           await getExercises(); // Assuming getExercises() returns a List<Exercise>
       exercises =
           exercises.where((element) => element.is_admin == true).toList();
+      if (widget.level != null) {
+        exercises = exercises
+            .where((element) => element.level == widget.level)
+            .toList();
+      }
       List<dynamic> filteredExercises = exercises;
       if (query != null && query.isNotEmpty) {
         filteredExercises = exercises

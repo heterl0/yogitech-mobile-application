@@ -34,6 +34,7 @@ class ExerciseActivity : AppCompatActivity() {
         val locale = prefs.getString("flutter.locale", "vi")
         if (locale != null) {
             setLocale(this, locale)
+            viewModel.local = locale
         };
         val flutterEngine = (application as YogiApplication).flutterEngine
         viewModel.flutterEngine =flutterEngine

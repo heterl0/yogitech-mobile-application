@@ -89,26 +89,57 @@ data class FeedbackDetails(
 //        }
 //    }
 
-    fun getFeedback(): String? {
+//    fun getFeedback(): String? {
+//        val bodyParts = listOf(
+//            "Right Knee" to rightKnee,
+//            "Left Knee" to leftKnee,
+//            "Right Hip" to rightHip,
+//            "Left Hip" to leftHip,
+//            "Right Shoulder" to rightShoulder,
+//            "Left Shoulder" to leftShoulder,
+//            "Left Elbow" to leftElbow,
+//            "Right Elbow" to rightElbow
+//        )
+//
+//        for ((bodyPart, value) in bodyParts) {
+//            when {
+//                value == null -> return "$bodyPart data is missing." // Highest priority feedback
+//                !value.endsWith("Good alignment!") && value.endsWith("Severe misalignment!") ->
+//                    return "$bodyPart: Severe misalignment!" // Second highest priority
+//                !value.endsWith("Good alignment!") ->
+//                    return "$bodyPart: ${value.split(". ").lastOrNull() ?: "is not in good alignment."}"
+//            }
+//        }
+//        return "Good job!" // All in good alignment
+//
+//    }
+
+    fun getFeedback(): List<String?> {
         val bodyParts = listOf(
             "Right Knee" to rightKnee,
             "Left Knee" to leftKnee,
             "Right Hip" to rightHip,
             "Left Hip" to leftHip,
             "Right Shoulder" to rightShoulder,
-            "Left Shoulder" to leftShoulder
+            "Left Shoulder" to leftShoulder,
+            "Left Elbow" to leftElbow,
+            "Right Elbow" to rightElbow
         )
 
         for ((bodyPart, value) in bodyParts) {
             when {
-                value == null -> return "$bodyPart data is missing." // Highest priority feedback
+                value == null -> return listOf("$bodyPart data is missing.") // Highest priority feedback
                 !value.endsWith("Good alignment!") && value.endsWith("Severe misalignment!") ->
-                    return "$bodyPart: Severe misalignment!" // Second highest priority
-                !value.endsWith("Good alignment!") ->
-                    return "$bodyPart: ${value.split(". ").lastOrNull() ?: "is not in good alignment."}"
+                    return listOf("$bodyPart: Severe misalignment!") // Second highest priority
+                !value.endsWith("Good alignment!") -> {
+                    val parts = value.split(". ").map { instruction ->
+                        instruction.split("by").first().trim()
+                    }
+                    if (parts.size >= 2) return parts
+                }
             }
         }
-        return null // All in good alignment
+        return listOf("Good job!") // All in good alignment
     }
 }
 

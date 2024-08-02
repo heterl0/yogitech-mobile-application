@@ -25,7 +25,8 @@ data class Exercise(
     val owner: Int?,
         @SerialName("active_status") val activeStatus: Int,
     val poses: List<PoseWithTime>,
-    val comments: List<Comment>
+    val comments: List<Comment>,
+    @SerialName("is_admin") val isAdmin: Boolean
 ) {
     companion object {
         fun fromJson(source: String): Exercise {

@@ -33,6 +33,8 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
     private val localeVI = Locale("vi", "VN")
     private var isGiveSuggest = false;
 
+    private var lastSpokenText: String? = null
+
     private var _fragmentScoreBinding: FragmentScoreBinding? = null
 
     private val fragmentCameraBinding
@@ -82,7 +84,10 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
 
     private fun speak(text: String, language: Locale) {
         tts.language = language
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+        if (!tts.isSpeaking && text != lastSpokenText) {
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+            lastSpokenText = text
+        }
     }
 
 
@@ -153,19 +158,46 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                             startCountDownTimer(duration)
                         }
                     } else {
+                        Log.d("Result", "triggerObserve: $result")
                         if (result.data?.isValid == false) {
                             _fragmentScoreBinding!!.result.text = "0%";
                             _fragmentScoreBinding!!.description.text =
                                 getString(R.string.adjust)
                             if (isGiveSuggest == false) {
-                                speak(getString(R.string.adjust), localeVI);
+                                speak(getString(R.string.adjust), localeEN);
                                 isGiveSuggest = true;
                             }
                         } else {
                             _fragmentScoreBinding!!.result.text =
                                 "${result.data?.score?.toInt().toString()}%";
-                            _fragmentScoreBinding!!.description.text =
-                                "${result.data?.feedback?.getFeedback()}"
+                            val feedbacks = result.data?.feedback?.getFeedback()
+                            if (feedbacks?.size == 2) {
+                                var feedback1Name = feedbacks[0] // Replace with your actual string name
+                                feedback1Name = feedback1Name?.toLowerCase()?.replace(" ", "")?.replace(".", "")
+                                val feedback1ResId = resources.getIdentifier(feedback1Name, "string", context?.packageName)
+                                val feedback1 = getString(feedback1ResId)
+                                var feedback2Name = feedbacks[1] // Replace with your actual string name
+                                feedback2Name = feedback2Name?.toLowerCase()?.replace(" ", "")?.replace(".", "")
+                                val feedback2ResId = resources.getIdentifier(feedback2Name, "string", context?.packageName)
+                                val feedback2 = getString(feedback2ResId)
+                                val feedback = feedback1 + ", " + feedback2
+                                if (viewModel.local == "en") {
+                                    speak(feedback, localeEN);
+                                } else {
+                                    speak(feedback, localeVI)
+                                }
+                                _fragmentScoreBinding!!.description.text =
+                                    feedback
+                            } else {
+                                if (viewModel.local == "en") {
+                                    speak(getString(R.string.goodJob), localeEN);
+                                } else {
+                                    speak(getString(R.string.goodJob), localeVI)
+                                }
+                                _fragmentScoreBinding!!.description.text =
+                                    getString(R.string.goodJob)
+                            }
+
                             if (isTimerRunning) {
                                 scoreList.add(result.data?.score!!)
                             }

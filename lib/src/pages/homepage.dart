@@ -208,79 +208,6 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // CustomButton(
-                //   title: 'title',
-                //   style: ButtonStyleType.Primary,
-                //   onPressed: () {
-                //     pushWithoutNavBar(
-                //       context,
-                //       MaterialPageRoute(
-                //           builder: (context) => PrelaunchSurveyPage()),
-                //     ); // Thay NewPage() bằng trang bạn muốn chuyển tới);
-                //   },
-                // ),
-                // CustomButton(
-                //     title: 'title',
-                //     style: ButtonStyleType.Primary,
-                //     onPressed: () => {
-                //           pushWithoutNavBar(
-                //             context,
-                //             MaterialPageRoute(builder: (context) => Tutorial()),
-                //           ) // Thay NewPage() bằng trang bạn muốn chuyển tới);
-                //         }),
-                // Padding(
-                //   padding:
-                //       const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                //   child: Container(
-                //     height: 160, // Chiều cao của khung viền
-                //     decoration: BoxDecoration(
-                //       borderRadius: BorderRadius.circular(16),
-                //       border: Border.all(color: primary, width: 2),
-                //     ),
-                //     child: Row(
-                //       children: [
-                //         Expanded(
-                //             flex: 2,
-                //             child: Padding(
-                //               padding: EdgeInsets.only(
-                //                   left: 16, top: 16, bottom: 16),
-                //               child: Column(
-                //                 mainAxisAlignment:
-                //                     MainAxisAlignment.spaceBetween,
-                //                 crossAxisAlignment: CrossAxisAlignment.start,
-                //                 children: [
-                //                   Text(
-                //                     trans.tryThisExercise,
-                //                     textAlign: TextAlign.left,
-                //                     style: bd_text.copyWith(
-                //                         color: theme.colorScheme.onPrimary),
-                //                   ),
-                //                   Text(
-                //                     trans.forBeginner,
-                //                     textAlign: TextAlign.left,
-                //                     style: h3.copyWith(
-                //                         color: theme.colorScheme.onPrimary),
-                //                   ),
-                //                   const Spacer(),
-                //                   Text(
-                //                     'Warrior 2 pose!',
-                //                     textAlign: TextAlign.left,
-                //                     style: h3.copyWith(color: primary),
-                //                   ),
-                //                 ],
-                //               ),
-                //             )),
-                //         const Expanded(
-                //           flex: 2,
-                //           child: Image(
-                //               image: AssetImage(
-                //                   'assets/images/ads_exercise_for_beginner.png')),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-
                 Container(
                   margin: EdgeInsets.all(16), // Khoảng cách ngoài viền
                   decoration: BoxDecoration(
@@ -378,7 +305,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Text(
@@ -392,7 +318,10 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     children: [
                       if (jsonList.isNotEmpty)
-                        for (final exercise in jsonList.take(5))
+                        for (final exercise in jsonList
+                            .where((element) =>
+                                element.level == _account!.profile.level)
+                            .take(5))
                           CustomCard(
                             premium: _account?.is_premium,
                             topRightIcon: exercise.is_premium
@@ -418,47 +347,48 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        trans.newest,
-                        style: h3.copyWith(color: theme.colorScheme.onPrimary),
-                      ),
-                      Spacer(),
-                      InkWell(
-                        borderRadius: BorderRadius.all(Radius.circular(16)),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
-                          child: Text(
-                            trans.seeall,
-                            style: bd_text.copyWith(
-                                color: (!(_account?.is_premium ?? false))
-                                    ? primary
-                                    : primary2),
-                          ),
+                if (jsonListSort.isNotEmpty) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          trans.newest,
+                          style:
+                              h3.copyWith(color: theme.colorScheme.onPrimary),
                         ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AllExercise(
-                                      account: _account,
-                                    )), // Thay NewPage() bằng trang bạn muốn chuyển tới
-                          );
-                        },
-                      ),
-                    ],
+                        Spacer(),
+                        InkWell(
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(
+                              trans.seeall,
+                              style: bd_text.copyWith(
+                                  color: (!(_account?.is_premium ?? false))
+                                      ? primary
+                                      : primary2),
+                            ),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AllExercise(
+                                        account: _account,
+                                      )), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      if (jsonListSort.isNotEmpty)
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
                         for (final exercise in jsonListSort.take(5))
                           CustomCard(
                             premium: _account?.is_premium,
@@ -485,9 +415,229 @@ class _HomePageState extends State<HomePage> {
                               );
                             },
                           ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          trans.beginner,
+                          style:
+                              h3.copyWith(color: theme.colorScheme.onPrimary),
+                        ),
+                        Spacer(),
+                        InkWell(
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(
+                              trans.seeall,
+                              style: bd_text.copyWith(
+                                  color: (!(_account?.is_premium ?? false))
+                                      ? primary
+                                      : primary2),
+                            ),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AllExercise(
+                                      account: _account,
+                                      level:
+                                          1)), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        for (final exercise in jsonListSort
+                            .where((element) => element.level == 1)
+                            .take(5))
+                          CustomCard(
+                            premium: _account?.is_premium,
+                            topRightIcon: exercise.is_premium
+                                ? (!(_account?.is_premium ?? false))
+                                    ? Image.asset('assets/images/Crown.png')
+                                    : Image.asset('assets/images/Crown2.png')
+                                : null,
+                            title: exercise.title,
+                            // subtitle: exercise.durations ?? '0',
+                            imageUrl:
+                                exercise.image_url, // URL hình ảnh của bài tập
+                            onTap: () {
+                              // Chuyển sang trang chi tiết của bài tập khi thẻ được nhấn
+                              pushWithoutNavBar(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ExerciseDetail(
+                                    exercise: exercise,
+                                    account: _account,
+                                    fetchAccount: widget.fetchAccount,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          trans.intermediate,
+                          style:
+                              h3.copyWith(color: theme.colorScheme.onPrimary),
+                        ),
+                        Spacer(),
+                        InkWell(
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(
+                              trans.seeall,
+                              style: bd_text.copyWith(
+                                  color: (!(_account?.is_premium ?? false))
+                                      ? primary
+                                      : primary2),
+                            ),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AllExercise(
+                                        account: _account,
+                                        level: 2,
+                                      )), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        for (final exercise in jsonListSort
+                            .where((element) => element.level == 2)
+                            .take(5))
+                          CustomCard(
+                            premium: _account?.is_premium,
+                            topRightIcon: exercise.is_premium
+                                ? (!(_account?.is_premium ?? false))
+                                    ? Image.asset('assets/images/Crown.png')
+                                    : Image.asset('assets/images/Crown2.png')
+                                : null,
+                            title: exercise.title,
+                            // subtitle: exercise.durations ?? '0',
+                            imageUrl:
+                                exercise.image_url, // URL hình ảnh của bài tập
+                            onTap: () {
+                              // Chuyển sang trang chi tiết của bài tập khi thẻ được nhấn
+                              pushWithoutNavBar(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ExerciseDetail(
+                                    exercise: exercise,
+                                    account: _account,
+                                    fetchAccount: widget.fetchAccount,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          trans.advanced,
+                          style:
+                              h3.copyWith(color: theme.colorScheme.onPrimary),
+                        ),
+                        Spacer(),
+                        InkWell(
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(
+                              trans.seeall,
+                              style: bd_text.copyWith(
+                                  color: (!(_account?.is_premium ?? false))
+                                      ? primary
+                                      : primary2),
+                            ),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AllExercise(
+                                      account: _account,
+                                      level:
+                                          2)), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        for (final exercise in jsonListSort
+                            .where((element) => element.level == 3)
+                            .take(5))
+                          CustomCard(
+                            premium: _account?.is_premium,
+                            topRightIcon: exercise.is_premium
+                                ? (!(_account?.is_premium ?? false))
+                                    ? Image.asset('assets/images/Crown.png')
+                                    : Image.asset('assets/images/Crown2.png')
+                                : null,
+                            title: exercise.title,
+                            // subtitle: exercise.durations ?? '0',
+                            imageUrl:
+                                exercise.image_url, // URL hình ảnh của bài tập
+                            onTap: () {
+                              // Chuyển sang trang chi tiết của bài tập khi thẻ được nhấn
+                              pushWithoutNavBar(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ExerciseDetail(
+                                    exercise: exercise,
+                                    account: _account,
+                                    fetchAccount: widget.fetchAccount,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                ]
               ],
             ),
           ),
