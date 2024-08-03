@@ -227,9 +227,6 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                 if (secondsRemaining.toInt() == 3) {
                     countDownThree = true;
                 }
-                if (secondsRemaining.toInt() == 0) {
-                    countDownThree = false;
-                }
                 if (countDownThree) {
                     if (viewModel.local == "en") {
                         speak(secondsRemaining.toString(), localeEN);
