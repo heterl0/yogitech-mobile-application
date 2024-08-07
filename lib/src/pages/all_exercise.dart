@@ -19,6 +19,7 @@ class AllExercise extends StatefulWidget {
   final Account? account;
   final VoidCallback? fetchAccount;
   final int? level;
+
   const AllExercise(
       {super.key,
       this.searchString,
@@ -35,6 +36,7 @@ class AllExercise extends StatefulWidget {
 class AllExerciseState extends State<AllExercise> {
   List<dynamic> _exercises = [];
   bool _isLoading = false;
+
   final TextEditingController _searchController = TextEditingController();
   Account? _account;
 

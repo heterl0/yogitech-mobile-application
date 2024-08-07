@@ -294,6 +294,7 @@ class _HomePageState extends State<HomePage> {
                             MaterialPageRoute(
                               builder: (context) => AllExercise(
                                 account: _account,
+                                fetchAccount: widget.fetchAccount,
                               ),
                             ),
                           );
@@ -408,6 +409,7 @@ class _HomePageState extends State<HomePage> {
                               MaterialPageRoute(
                                   builder: (context) => AllExercise(
                                         account: _account,
+                                        fetchAccount: widget.fetchAccount,
                                       )), // Thay NewPage() bằng trang bạn muốn chuyển tới
                             );
                           },
@@ -477,9 +479,10 @@ class _HomePageState extends State<HomePage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => AllExercise(
-                                      account: _account,
-                                      level:
-                                          1)), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                                        account: _account,
+                                        level: 1,
+                                        fetchAccount: widget.fetchAccount,
+                                      )), // Thay NewPage() bằng trang bạn muốn chuyển tới
                             );
                           },
                         ),
@@ -551,6 +554,7 @@ class _HomePageState extends State<HomePage> {
                               MaterialPageRoute(
                                   builder: (context) => AllExercise(
                                         account: _account,
+                                        fetchAccount: widget.fetchAccount,
                                         level: 2,
                                       )), // Thay NewPage() bằng trang bạn muốn chuyển tới
                             );
@@ -623,9 +627,10 @@ class _HomePageState extends State<HomePage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => AllExercise(
-                                      account: _account,
-                                      level:
-                                          2)), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                                        account: _account,
+                                        level: 3,
+                                        fetchAccount: widget.fetchAccount,
+                                      )), // Thay NewPage() bằng trang bạn muốn chuyển tới
                             );
                           },
                         ),
