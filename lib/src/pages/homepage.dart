@@ -31,6 +31,8 @@ class _HomePageState extends State<HomePage> {
   bool _isnotSearching = true;
   final TextEditingController _searchController = TextEditingController();
   Account? _account;
+  late int current = 0;
+  late CarouselController carouselController = CarouselController();
 
   @override
   void initState() {
@@ -302,8 +304,37 @@ class _HomePageState extends State<HomePage> {
                       height: 200, // Adjust height as needed
                       viewportFraction: 1, // Make items take full width
                       autoPlay: true, // Enable auto-playing if desired
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          current = index;
+                        });
+                      },
                     ),
+                    carouselController: carouselController,
                   ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [0, 1, 2, 3].map((entry) {
+                    return GestureDetector(
+                      onTap: () => carouselController.animateToPage(
+                          entry, // Move to the selected page
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut),
+                      child: Container(
+                        width: 12.0,
+                        height: 12.0,
+                        margin: EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 4.0),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: (current == entry)
+                              ? primary
+                              : Colors.grey.withOpacity(0.4),
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
