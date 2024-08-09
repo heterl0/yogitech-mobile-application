@@ -74,7 +74,9 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
         PersistentTabConfig(
-          screen: Blog(),
+          screen: Blog(
+            account: _account,
+          ),
           item: ItemConfig(
             textStyle: min_cap,
             icon: const Icon(Icons.newspaper_outlined),

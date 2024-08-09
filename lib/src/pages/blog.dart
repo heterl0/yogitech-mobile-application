@@ -1,3 +1,5 @@
+import 'package:YogiTech/api/account/account_service.dart';
+import 'package:YogiTech/src/models/account.dart';
 import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +11,9 @@ import 'package:YogiTech/src/pages/blog_detail.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Blog extends StatefulWidget {
-  const Blog({super.key});
+  final Account? account;
+
+  const Blog({super.key, this.account});
 
   @override
   BlogState createState() => BlogState();
@@ -20,7 +24,6 @@ class BlogState extends State<Blog> {
   bool _isNotSearching = true;
   bool _isLoading = false;
   final TextEditingController _searchController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -105,15 +108,24 @@ class BlogState extends State<Blog> {
         ? Center(
             child: CircularProgressIndicator(),
           )
-        : Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: BoxDecoration(color: theme.colorScheme.surface),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildBlogMainContent(),
-                ],
+        : SafeArea(
+            child: RefreshIndicator(
+              color:
+                  (!(widget.account?.is_premium ?? false)) ? primary : primary2,
+              backgroundColor: theme.colorScheme.onSecondary,
+
+              // Bọc SingleChildScrollView bằng RefreshIndicator
+              onRefresh: () async {
+                // Gọi hàm để refresh dữ liệu ở đây
+                _fetchBlogs();
+              },
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(color: theme.colorScheme.surface),
+                  child: _buildBlogMainContent(),
+                ),
               ),
             ),
           );
