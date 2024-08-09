@@ -74,6 +74,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _fetchAccount() async {
+    print('I got account');
     if (widget.account != null) {
       setState(() {
         _account = widget.account;
@@ -88,123 +89,132 @@ class _HomePageState extends State<HomePage> {
     final trans = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return Scaffold(
-        backgroundColor: theme.colorScheme.surface,
-        appBar: _isnotSearching
-            ? CustomAppBar(
-                showBackButton: false,
-                preActions: [
-                  GestureDetector(
-                    onTap: () {
-                      pushWithoutNavBar(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SubscriptionPage(
-                                  account: _account,
-                                  fetchAccount: widget.fetchAccount)));
-                    },
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 28,
-                          height: 28,
-                          child: (!(_account?.is_premium ?? false))
-                              ? Image.asset('assets/images/Emerald.png')
-                              : Image.asset('assets/images/Emerald2.png'),
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                          _account != null
-                              ? _account!.profile.point.toString()
-                              : '0',
-                          style:
-                              h3.copyWith(color: theme.colorScheme.onSurface),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-                titleWidget: StreakValue(
-                  _account != null ? _account!.profile.streak.toString() : '0',
-                  account: _account,
-                ),
-                postActions: [
-                  IconButton(
-                    icon:
-                        Icon(Icons.search, color: theme.colorScheme.onSurface),
-                    onPressed: () {
-                      setState(() {
-                        _isnotSearching = false;
-                      });
-                    },
-                  ),
-                ],
-              )
-            : CustomAppBar(
-                showBackButton: false,
-                preActions: [
-                  IconButton(
-                    icon: Icon(Icons.tune_outlined),
-                    onPressed: () {
-                      pushScreenWithNavBar(
+      backgroundColor: theme.colorScheme.surface,
+      appBar: _isnotSearching
+          ? CustomAppBar(
+              showBackButton: false,
+              preActions: [
+                GestureDetector(
+                  onTap: () {
+                    pushWithoutNavBar(
                         context,
-                        FilterPage(
-                          account: _account,
-                        ),
-                      );
-                    },
+                        MaterialPageRoute(
+                            builder: (context) => SubscriptionPage(
+                                account: _account,
+                                fetchAccount: widget.fetchAccount)));
+                  },
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 28,
+                        height: 28,
+                        child: (!(_account?.is_premium ?? false))
+                            ? Image.asset('assets/images/Emerald.png')
+                            : Image.asset('assets/images/Emerald2.png'),
+                      ),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                        _account != null
+                            ? _account!.profile.point.toString()
+                            : '0',
+                        style: h3.copyWith(color: theme.colorScheme.onSurface),
+                      ),
+                    ],
                   ),
-                ],
-                style: widthStyle.Large,
-                titleWidget: BoxInputField(
-                  controller: _searchController,
-                  placeholder: trans.search,
-                  trailing: IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () {
-                      setState(() {
-                        String searchValue = _searchController.text.trim();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AllExercise(
-                                searchString: searchValue, account: _account),
-                          ),
-                        );
-                      });
-                    },
-                  ),
-                  keyboardType: TextInputType.text,
-                  inputFormatters: const [],
-                  onSubmitted: (value) {
+                ),
+              ],
+              titleWidget: StreakValue(
+                _account != null ? _account!.profile.streak.toString() : '0',
+                account: _account,
+              ),
+              postActions: [
+                IconButton(
+                  icon: Icon(Icons.search, color: theme.colorScheme.onSurface),
+                  onPressed: () {
                     setState(() {
-                      String searchValue = value.trim();
+                      _isnotSearching = false;
+                    });
+                  },
+                ),
+              ],
+            )
+          : CustomAppBar(
+              showBackButton: false,
+              preActions: [
+                IconButton(
+                  icon: Icon(Icons.tune_outlined),
+                  onPressed: () {
+                    pushScreenWithNavBar(
+                      context,
+                      FilterPage(
+                        account: _account,
+                      ),
+                    );
+                  },
+                ),
+              ],
+              style: widthStyle.Large,
+              titleWidget: BoxInputField(
+                controller: _searchController,
+                placeholder: trans.search,
+                trailing: IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    setState(() {
+                      String searchValue = _searchController.text.trim();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => AllExercise(
-                            searchString: searchValue,
-                            account: _account,
-                          ),
+                              searchString: searchValue, account: _account),
                         ),
                       );
                     });
                   },
                 ),
-                postActions: [
-                  IconButton(
-                    icon: Icon(Icons.close),
-                    onPressed: () {
-                      setState(() {
-                        _searchController.clear(); // Clear the search text
-                        _isnotSearching = true;
-                      });
-                    },
-                  ),
-                ],
+                keyboardType: TextInputType.text,
+                inputFormatters: const [],
+                onSubmitted: (value) {
+                  setState(() {
+                    String searchValue = value.trim();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AllExercise(
+                          searchString: searchValue,
+                          account: _account,
+                        ),
+                      ),
+                    );
+                  });
+                },
               ),
-        body: SafeArea(
+              postActions: [
+                IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    setState(() {
+                      _searchController.clear(); // Clear the search text
+                      _isnotSearching = true;
+                    });
+                  },
+                ),
+              ],
+            ),
+      body: SafeArea(
+        child: RefreshIndicator(
+          color: (!(widget.account?.is_premium ?? false)) ? primary : primary2,
+          backgroundColor: theme.colorScheme.onSecondary,
+
+          // Bọc SingleChildScrollView bằng RefreshIndicator
+          onRefresh: () async {
+            // Gọi hàm để refresh dữ liệu ở đây
+            _fetchExercises();
+            _fetchExercisesSort();
+            _fetchAccount();
+          },
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 12),
             child: Column(
@@ -677,7 +687,9 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget _buildCarouselItem({
