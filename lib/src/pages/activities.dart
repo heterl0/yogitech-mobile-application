@@ -31,16 +31,49 @@ class _ActivitiesState extends State<Activities> {
   @override
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: CustomAppBar(
-        title: trans.event,
-        showBackButton: false,
-      ),
-      body: _buildBody(context),
-    );
+        backgroundColor: theme.colorScheme.surface,
+        appBar: CustomAppBar(
+          title: trans.event,
+          showBackButton: false,
+        ),
+        body: _isloading
+            ? Center(
+                child: CircularProgressIndicator(
+                color: primary,
+              ))
+            : SafeArea(
+                child: RefreshIndicator(
+                  color: (!(widget.account?.is_premium ?? false))
+                      ? primary
+                      : primary2,
+                  backgroundColor: theme.colorScheme.onSecondary,
+
+                  // Bọc SingleChildScrollView bằng RefreshIndicator
+                  onRefresh: () async {
+                    // Gọi hàm để refresh dữ liệu ở đây
+                    _loadEvents(null);
+                  },
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Container(
+                      width: double.infinity,
+                      // height: double.infinity,
+                      decoration:
+                          BoxDecoration(color: theme.colorScheme.surface),
+                      child: SingleChildScrollView(
+                        child: _buildEventMainContent(),
+                      ),
+                    ),
+                  ),
+                ),
+              ));
   }
 
   Future<void> _loadEvents(int? eventId) async {
+    print('Loading activities...');
     setState(() {
       _isloading = true;
     });
@@ -53,27 +86,6 @@ class _ActivitiesState extends State<Activities> {
     } catch (e) {
       print('Error loading activities: $e');
     }
-  }
-
-  Widget _buildBody(BuildContext context) {
-    final theme = Theme.of(context);
-    return _isloading
-        ? Center(
-            child: CircularProgressIndicator(
-            color: primary,
-          ))
-        : Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: BoxDecoration(color: theme.colorScheme.surface),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildEventMainContent(),
-                ],
-              ),
-            ),
-          );
   }
 
   Widget _buildEventMainContent() {
