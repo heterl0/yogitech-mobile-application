@@ -37,7 +37,9 @@ class _MeditateState extends State<Meditate> {
 
   Future<void> _initSharedPreferences() async {
     prefs = await SharedPreferences.getInstance();
+    await _checkStreakData();
     _loadStreakData();
+    
   }
 
   void _loadStreakData() {
@@ -61,9 +63,8 @@ class _MeditateState extends State<Meditate> {
 
       if (daysDifference == 1) {
         currentStreak++;
-      } else if (daysDifference > 1) {
-        currentStreak = 0;
       }
+
     } else {
       currentStreak = 1;
     }
@@ -71,6 +72,19 @@ class _MeditateState extends State<Meditate> {
     await prefs?.setInt('currentStreak', currentStreak);
     await prefs?.setString('lastMeditationDate', today.toIso8601String());
     _loadStreakData();
+  }
+
+  Future<void> _checkStreakData() async {
+    DateTime today = DateTime.now();
+    DateTime? lastMeditationDate =
+        DateTime.tryParse(prefs?.getString('lastMeditationDate') ?? '');
+    if (lastMeditationDate != null) {
+      final int daysDifference =
+          today.difference(lastMeditationDate).inDays;
+      if (daysDifference >= 2) {
+        await prefs?.setInt('currentStreak', currentStreak);
+      }
+    }
   }
 
   Future<void> _resetStreakData() async {
