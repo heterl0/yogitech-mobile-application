@@ -46,4 +46,5 @@
     <string name="breathSlowly">Breath slowly!</string>
     <string name="finishTheExercise">Congratulation!</string>
     <string name="nextExercise">The next Exercise!</string>
+    <string name="notSupportVi">Does not support TTS Vietnamese</string>
 </resources>

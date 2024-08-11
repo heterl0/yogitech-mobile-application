@@ -46,4 +46,6 @@
     <string name="breathSlowly">Thở từ từ!</string>
     <string name="finishTheExercise">Chúc mừng!</string>
     <string name="nextExercise">Bài tiếp theo!</string>
+    <string name="notSupportVi">Máy bạn chưa cài TTS Tiếng Việt!</string>
+
 </resources>

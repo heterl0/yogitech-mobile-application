@@ -14,6 +14,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.yogi_application.BuildConfig
@@ -70,6 +71,9 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
 
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e("TTS", "Language not supported")
+                if (viewModel.local == "vi") {
+                    Toast.makeText(requireContext(), getString(R.string.notSupportVi), Toast.LENGTH_SHORT).show()
+                }
             } else {
                 supportVi = true;
                 // Set the pitch and speech rate suitable for yoga instructions
