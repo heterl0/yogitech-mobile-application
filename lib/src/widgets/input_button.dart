@@ -103,7 +103,7 @@ class _CustomInputButtonState extends State<CustomInputButton> {
             CustomButtonV2(
               title: "+",
               style: ButtonStyleType.Primary,
-              state: _value > 95 ? ButtonState.Disabled : ButtonState.Enabled,
+              state: _value > 25 ? ButtonState.Disabled : ButtonState.Enabled,
               onPressed: () {
                 if (_value <= 95) {
                   setState(() {

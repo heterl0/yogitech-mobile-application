@@ -110,49 +110,4 @@ class _ExerciseSettingsPageState extends State<ExerciseSettingsPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
-
-  // void _handleNewActivitiesNotifications(bool isFriendsOn) {
-  //   final now = DateTime.now();
-
-  //   if (isFriendsOn) {
-  //     print('Bật thông báo các hoạt động');
-  //     if (_notifications != null) {
-  //       for (var notification in _notifications!) {
-  //         final notificationTime = DateTime.parse(notification.time);
-  //         if (notificationTime.isAfter(now)) {
-  //           print('Thông báo: ${notification}');
-  //           LocalNotificationService.showActivitiesNotification(
-  //             id: notification.id + 10,
-  //             title: notification.title,
-  //             body: notification.body,
-  //             scheduledTime: notificationTime,
-  //             payload: 'friend_notification_${notification.id}',
-  //           );
-  //         }
-  //       }
-  //     }
-  //   } else {
-  //     print('Hủy thông báo của bạn bè');
-  //     if (_notifications != null) {
-  //       for (var notification in _notifications!) {
-  //         LocalNotificationService.cancel(notification.id);
-  //       }
-  //     }
-  //   }
-  // }
-
-  // void _handleStreakSaverNotifications(bool isStreakSaverOn) {
-  //   if (isStreakSaverOn) {
-  //     print('Bật bảo vệ chuỗi');
-  //     LocalNotificationService.showPeriodicNotification(
-  //       title: AppLocalizations.of(context)!.streakSaver,
-  //       body: AppLocalizations.of(context)!.yourReminderDetail,
-  //       repeat: RepeatInterval.daily,
-  //       payload: 'yoga_reminder',
-  //     );
-  //   } else {
-  //     print('Hủy bảo vệ chuỗi');
-  //     LocalNotificationService.cancel(1);
-  //   }
-  // }
 }
