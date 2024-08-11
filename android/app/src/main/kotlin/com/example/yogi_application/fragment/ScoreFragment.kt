@@ -47,6 +47,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
     private val scoreList: MutableList<Float> = mutableListOf<Float>();
     private var timeLeftInMillis: Long = 0
     private var isCountDown = true
+    private var supportVi = false
 
     private var countDownTimer: CountDownTimer? = null
     var startTime: Long? = null
@@ -67,10 +68,10 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
             // Set default language to English
             val result = tts.setLanguage(localeVI)
 
-
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e("TTS", "Language not supported")
             } else {
+                supportVi = true;
                 // Set the pitch and speech rate suitable for yoga instructions
                 tts.setPitch(1.0f) // Normal pitch
                 tts.setSpeechRate(0.8f) // Slightly slower speech rate
@@ -83,6 +84,9 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
 
 
     private fun speak(text: String, language: Locale) {
+        if (language.language == "vi" && supportVi == false) {
+            return;
+        }
         tts.language = language
         if (!tts.isSpeaking && text != lastSpokenText) {
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
