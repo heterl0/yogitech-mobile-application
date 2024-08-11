@@ -1,4 +1,5 @@
 import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/src/pages/exercise_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
@@ -92,6 +93,19 @@ class SettingsPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => NotificationsPage(),
+                    ),
+                  );
+                },
+              ),
+              SettingItem(
+                title: trans.exerciseSetting,
+                description: trans.exerciseSettingDescription,
+                icon: Icons.settings_accessibility,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ExerciseSettingsPage(),
                     ),
                   );
                 },

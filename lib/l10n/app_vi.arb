@@ -288,5 +288,10 @@
   "firstAndLastName": "Vui lòng điền đầy đủ họ và tên!",
   "formatPhone": "Vui lòng điền đúng định dạng số điện thoại!",
   "fiedNotEmty": "không được bỏ trống.",
-  "incorrect": "Không đúng."
+  "incorrect": "Không đúng.",
+  "exerciseSetting": "Cài đặt bài tập",
+  "exerciseSettingDescription": "Thiết lập bài tập của bạn để có trải nghiệm tốt nhất",
+  "hideVideoTutorial": "Ẩn hướng dẫn video",
+  "allowSkipExercise": "Cho phép bỏ qua bài tập",
+  "timeToRest": "Thời gian nghỉ ngơi (giây)"
 }

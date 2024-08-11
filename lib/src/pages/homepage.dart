@@ -340,7 +340,9 @@ class _HomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: (current == entry)
-                              ? primary
+                              ? (!(_account?.is_premium ?? false))
+                                  ? primary
+                                  : primary2
                               : Colors.grey.withOpacity(0.4),
                         ),
                       ),

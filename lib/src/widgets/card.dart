@@ -88,7 +88,8 @@ class CustomCard extends StatelessWidget {
                       if (subtitle != null)
                         Text(
                           subtitle!,
-                          style: min_cap.copyWith(color: primary),
+                          style: min_cap.copyWith(
+                              color: premium == false ? primary : primary2),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),

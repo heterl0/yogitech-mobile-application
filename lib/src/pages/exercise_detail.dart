@@ -196,7 +196,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           const SizedBox(height: 16),
           ...exComments.map(
             (comment) => comment.comment.active_status == 1
-                ? _buildComment(context, comment)
+                ? _buildComment(context, comment, _account!)
                 : Container(),
           ),
         ],
@@ -294,6 +294,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           onTap: () {
             showDetailDialog(context, poseDetail);
           },
+          premium: _account?.is_premium ?? false,
         );
       },
     );
@@ -462,6 +463,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
   Widget _buildComment(
     BuildContext context,
     ExtendComment exComment,
+    Account _account,
   ) {
     Comment comment = exComment.comment;
     bool isLike = comment.hasUserVoted(user_id);
@@ -598,9 +600,12 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                                   },
                                   iconSize: 24,
                                   icon: isLike
-                                      ? const Icon(
+                                      ? Icon(
                                           Icons.favorite,
-                                          color: primary,
+                                          color:
+                                              (!(_account.is_premium ?? false))
+                                                  ? primary
+                                                  : primary2,
                                         )
                                       : const Icon(
                                           Icons.favorite_border_outlined,

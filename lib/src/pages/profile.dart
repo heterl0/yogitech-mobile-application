@@ -620,10 +620,10 @@ class _ProfilePageState extends State<ProfilePage>
                                       : TabBarView(
                                           controller: _tabController,
                                           children: [
-                                            _buildLineChart(pointDataPoints,
+                                            _buildLineChart(expDataPoints,
                                                 trans.days, 'EXP', _startDate),
                                             _buildLineChart(
-                                                expDataPoints,
+                                                pointDataPoints,
                                                 trans.days,
                                                 trans.point,
                                                 _startDate),

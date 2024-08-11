@@ -20,7 +20,6 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
   late bool _streakSaverOn = false;
   late bool _friendActivitiesOn = false;
-  late bool _newEventOn = false;
   late List<n.Notification>? _notifications;
   int currentStreak = 0;
   late Future<void> _loadPreferencesFuture;
@@ -45,7 +44,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
       currentStreak = prefs.getInt('currentStreak') ?? 0;
       _streakSaverOn = prefs.getBool('streakSaverOn') ?? false;
       _friendActivitiesOn = prefs.getBool('friendActivitiesOn') ?? false;
-      _newEventOn = prefs.getBool('newEventOn') ?? false;
     });
   }
 

@@ -42,7 +42,9 @@ class _ActivitiesState extends State<Activities> {
         body: _isloading
             ? Center(
                 child: CircularProgressIndicator(
-                color: primary,
+                color: (!(widget.account?.is_premium ?? false))
+                    ? primary
+                    : primary2,
               ))
             : SafeArea(
                 child: RefreshIndicator(

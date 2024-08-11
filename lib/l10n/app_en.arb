@@ -288,5 +288,10 @@
   "firstAndLastName": "Please fill in both last name and first name!",
   "formatPhone": "Please enter a valid phone number!",
   "fiedNotEmty": "can't be empty.",
-  "incorrect": "inconrrect."
+  "incorrect": "inconrrect.",
+  "exerciseSetting": "Exercise Setting",
+  "exerciseSettingDescription": "Set up your exercise to get the best experience",
+  "hideVideoTutorial": "Hide video tutorial",
+  "allowSkipExercise": "Allow skip exercise",
+  "timeToRest": "Time to rest (in seconds)"
 }
