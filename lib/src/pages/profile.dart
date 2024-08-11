@@ -227,6 +227,7 @@ class _ProfilePageState extends State<ProfilePage>
                     // Gọi hàm để refresh dữ liệu ở đây
                     _fetchUserProfile();
                     _fetchSevenRecentDays();
+                    widget.fetchAccount?.call();
                   },
                   child: SingleChildScrollView(
                     child: Container(

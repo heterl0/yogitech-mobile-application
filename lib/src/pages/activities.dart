@@ -57,6 +57,7 @@ class _ActivitiesState extends State<Activities> {
                   onRefresh: () async {
                     // Gọi hàm để refresh dữ liệu ở đây
                     _loadEvents(null);
+                    widget.fetchAccount?.call();
                   },
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),

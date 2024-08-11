@@ -213,7 +213,7 @@ class _HomePageState extends State<HomePage> {
             // Gọi hàm để refresh dữ liệu ở đây
             _fetchExercises();
             _fetchExercisesSort();
-            _fetchAccount();
+            widget.fetchAccount?.call();
           },
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 12),
