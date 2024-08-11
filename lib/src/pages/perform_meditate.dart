@@ -11,11 +11,13 @@ import 'package:audioplayers/audioplayers.dart';
 class PerformMeditate extends StatefulWidget {
   final Duration duration;
   final String track;
+  final VoidCallback? updateStreak;
 
   const PerformMeditate({
     Key? key,
     this.duration = const Duration(seconds: 5),
     this.track = '',
+    this.updateStreak,
   }) : super(key: key);
 
   @override
@@ -73,6 +75,7 @@ class _PerformMeditateState extends State<PerformMeditate>
                 payload: 'payload');
             _isPlaying = false;
             _stopAudio();
+            widget.updateStreak?.call();
             _animationController.reset();
           }
         });

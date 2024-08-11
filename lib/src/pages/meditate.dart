@@ -39,7 +39,6 @@ class _MeditateState extends State<Meditate> {
     prefs = await SharedPreferences.getInstance();
     await _checkStreakData();
     _loadStreakData();
-    
   }
 
   void _loadStreakData() {
@@ -64,7 +63,6 @@ class _MeditateState extends State<Meditate> {
       if (daysDifference == 1) {
         currentStreak++;
       }
-
     } else {
       currentStreak = 1;
     }
@@ -79,8 +77,7 @@ class _MeditateState extends State<Meditate> {
     DateTime? lastMeditationDate =
         DateTime.tryParse(prefs?.getString('lastMeditationDate') ?? '');
     if (lastMeditationDate != null) {
-      final int daysDifference =
-          today.difference(lastMeditationDate).inDays;
+      final int daysDifference = today.difference(lastMeditationDate).inDays;
       if (daysDifference >= 2) {
         await prefs?.setInt('currentStreak', currentStreak);
       }
@@ -265,14 +262,13 @@ class _MeditateState extends State<Meditate> {
           context,
           MaterialPageRoute(
             builder: (context) => PerformMeditate(
-              duration: _selectedDuration,
-              track: _selectedTrackIndex != null
-                  ? theTracks[_selectedTrackIndex!]['asset']
-                  : '',
-            ),
+                duration: _selectedDuration,
+                track: _selectedTrackIndex != null
+                    ? theTracks[_selectedTrackIndex!]['asset']
+                    : '',
+                updateStreak: _updateStreakData),
           ),
         );
-        _updateStreakData();
       },
       child: Ink(
         decoration: const BoxDecoration(
