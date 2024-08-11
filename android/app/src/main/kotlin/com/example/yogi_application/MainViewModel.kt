@@ -40,6 +40,7 @@ class MainViewModel : ViewModel() {
         get() =
             _minPosePresenceConfidence
 
+    var restTime: Long = 10000;
     var currentIndex: Int = 0;
 
     var exercise: Exercise? = null;

@@ -58,6 +58,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
         _fragmentScoreBinding = FragmentScoreBinding.inflate(inflater, container, false);
         setHasOptionsMenu(true)  // Enable options menu in fragment
         tts = TextToSpeech(requireContext(), this)
+
         return _fragmentScoreBinding!!.root;
     }
 
@@ -108,7 +109,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                         startCountDownTimer(value);
                     } else {
                         isWaitingRunning = false
-                        startWaitingTimer(value);
+                        startWaitingTimer(value.toLong());
                     }
                 }
             } else {
@@ -162,7 +163,13 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                             _fragmentScoreBinding!!.result.text = "0%";
                             _fragmentScoreBinding!!.description.text =
                                 getString(R.string.adjust)
-                            speak(getString(R.string.adjust), localeEN);
+                            if (
+                                viewModel.local == "en"
+                            ) {
+                                speak(getString(R.string.adjust), localeEN);
+                            } else {
+                                speak(getString(R.string.adjust), localeVI);
+                            }
                         } else {
                             _fragmentScoreBinding!!.result.text =
                                 "${result.data?.score?.toInt().toString()}%";
@@ -266,21 +273,21 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                     }
                 }
                 viewModel.triggerEvent();
-                var duration = 10000
+                var duration = viewModel.restTime
                 if (BuildConfig.DEV_MODE == true) duration = 1000;
                 startWaitingTimer(duration);
             }
         }.start()
     }
 
-    private fun startWaitingTimer(duration: Int) {
+    private fun startWaitingTimer(duration: Long) {
         if (isWaitingRunning) return
         isCountDown = false
         countDownTimer?.cancel()
         isWaitingRunning = true
 //        val duration = viewModel.exercise?.poses?.get(viewModel.currentIndex)?.duration!! * 1000
 
-        countDownTimer = object : CountDownTimer(duration.toLong(), 1000) {
+        countDownTimer = object : CountDownTimer(duration, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
                 val secondsRemaining = millisUntilFinished / 1000

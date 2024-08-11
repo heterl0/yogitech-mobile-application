@@ -1,5 +1,6 @@
 package com.example.yogi_application
 
+import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
@@ -22,9 +23,17 @@ class MainActivity: FlutterActivity() {
 //                    val intent = Intent(this, ExerciseActivity::class.java)
 //                    startActivityForResult(intent, 0)
 //                    result.success("Activity started") // More informative success message
+                    val prefs = getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
 
-                    val intent = Intent(this, ViewTutorialActivity::class.java)
-                    startActivity(intent)
+                    // Retrieve the tokens using the same keys but prefixed with "flutter."
+                    val isHidden = prefs.getBoolean("flutter.hideTutorial", false)
+                    if (isHidden) {
+                        val intent = Intent(this, ExerciseActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        val intent = Intent(this, ViewTutorialActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
                 else -> {
                     result.notImplemented()

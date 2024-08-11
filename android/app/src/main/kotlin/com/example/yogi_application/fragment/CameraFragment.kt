@@ -135,6 +135,13 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         val prefs = activity?.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
         val exerciseString = prefs?.getString("flutter.exercise", "")
         val event = prefs?.getString("flutter.event_id", null)
+        var restTime = prefs?.getLong("flutter.delayValue", 10)
+        if (restTime == null) {
+            restTime = 10000
+        } else {
+            restTime = restTime * 1000;
+            viewModel.restTime = restTime
+        }
 
         exercise = exerciseString?.let { Exercise.fromJson(it) };
         viewModel.exercise = exercise;
@@ -203,7 +210,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                             coverImageSample.startAnimation(animZoomOut)
                         }
                     }
-                }, 10000)
+                }, restTime)
             } else {
                 val totalTimeFinish = (System.currentTimeMillis() - startTime!!) / 1000
 
