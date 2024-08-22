@@ -104,15 +104,17 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     const double avatarSize = 144;
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AvatarViewPage(
-              avatarUrl: widget.account?.profile.avatar_url ?? '',
-              imageBytes: _imageBytes,
+        if (_imageBytes != null || widget.account?.profile.avatar_url != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AvatarViewPage(
+                avatarUrl: widget.account?.profile.avatar_url ?? '',
+                imageBytes: _imageBytes,
+              ),
             ),
-          ),
-        );
+          );
+        }
       },
       child: Container(
         width: avatarSize,

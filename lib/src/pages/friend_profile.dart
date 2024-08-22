@@ -81,15 +81,17 @@ class _nameState extends State<FriendProfile> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AvatarViewPage(
-                              avatarUrl: _soProfile!.avatar!,
-                              imageBytes: _imageBytes,
+                        if (_soProfile!.avatar != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AvatarViewPage(
+                                avatarUrl: _soProfile!.avatar!,
+                                imageBytes: _imageBytes,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
                       },
                       child: Container(
                         width: 144, // 2 * radius + 8 (border width) * 2
