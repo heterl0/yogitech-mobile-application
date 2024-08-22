@@ -556,6 +556,7 @@ class _ProfilePageState extends State<ProfilePage>
                                           MaterialPageRoute(
                                             builder: (context) => ChangeBMIPage(
                                               onBMIUpdated: refreshProfile,
+                                              profile: widget.account!.profile,
                                             ),
                                           ),
                                         );

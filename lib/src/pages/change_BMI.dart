@@ -10,8 +10,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChangeBMIPage extends StatefulWidget {
   final VoidCallback onBMIUpdated;
+  final Profile profile;
 
-  const ChangeBMIPage({super.key, required this.onBMIUpdated});
+  const ChangeBMIPage(
+      {super.key, required this.onBMIUpdated, required this.profile});
 
   @override
   State<ChangeBMIPage> createState() => _ChangeBMIPageState();
@@ -22,7 +24,6 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
   final TextEditingController heightController = TextEditingController();
   String bmiResult = '';
   String bmiComment = '';
-  Profile? _profile;
 
   @override
   void initState() {
@@ -31,15 +32,8 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
   }
 
   Future<void> _fetchUserProfile() async {
-    Profile? profile = await getUserProfile();
-    setState(() {
-      _profile = profile;
-      if (_profile != null) {
-        weightController.text = _profile!.weight ?? '';
-        heightController.text = _profile!.height ?? '';
-        _calculateBMI();
-      }
-    });
+    weightController.text = widget.profile.weight ?? '';
+    heightController.text = widget.profile.height ?? '';
   }
 
   void _calculateBMI() {
@@ -165,8 +159,8 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
                         child: Text(
                           bmiResult.isNotEmpty
                               ? bmiResult
-                              : (_profile?.bmi != null
-                                  ? _profile!.bmi.toString()
+                              : (widget.profile.bmi != null
+                                  ? widget.profile.bmi.toString()
                                   : 'BMI'),
                           style: h1.copyWith(color: primary),
                         ),

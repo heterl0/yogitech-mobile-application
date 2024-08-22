@@ -47,12 +47,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   final RegExp phoneRegExp =
       RegExp(r'^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$');
 
-  final Map<int, String> genderMap = {
-    0: 'Female',
-    1: 'Male',
-    2: 'Other',
-  };
-
   @override
   void initState() {
     super.initState();
@@ -66,7 +60,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
       lastName.text = widget.account?.profile.last_name ?? '';
       firstName.text = widget.account?.profile.first_name ?? '';
       phone.text = widget.account?.phone ?? '';
-      gender.text = genderMap[widget.account?.profile.gender] ?? '';
       birthday.text = widget.account?.profile.birthdate != null
           ? _formatDate(widget.account!.profile.birthdate!)
           : '';
@@ -168,7 +161,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
@@ -178,6 +170,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
       1: trans.male,
       2: trans.other,
     };
+
+    gender.text = genderMap[widget.account?.profile.gender] ?? '';
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
@@ -293,7 +287,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                               SizedBox(height: 8.0),
                               CustomDropdownFormField(
                                 controller: gender,
-                                items: ["Male", "Female", "Other"],
+                                items: [trans.male, trans.female, trans.other],
                                 placeholder: gender.text.isEmpty
                                     ? trans.sellectGender
                                     : gender.text,
@@ -334,6 +328,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                           MaterialPageRoute(
                             builder: (context) => ChangeBMIPage(
                               onBMIUpdated: widget.onProfileUpdated ?? () {},
+                              profile: widget.account!.profile,
                             ),
                           ),
                         );
@@ -365,6 +360,12 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
       });
       return;
     }
+
+    final Map<int, String> genderMap = {
+      0: trans.female,
+      1: trans.male,
+      2: trans.other,
+    };
 
     // Kiểm tra số điện thoại
     if (!phoneRegExp.hasMatch(phone.text) || phone.text.length != 10) {
