@@ -12,7 +12,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class PersonalizedExercisePage extends StatefulWidget {
-  const PersonalizedExercisePage({super.key});
+  final VoidCallback? fetchAccount;
+
+  const PersonalizedExercisePage({super.key, this.fetchAccount});
 
   @override
   _PersonalizedExercisePageState createState() =>
@@ -106,6 +108,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
               builder: (context) => ExerciseDetail(
                 exercise: exercise,
                 account: account,
+                fetchAccount: widget.fetchAccount,
               ),
             ),
           );
