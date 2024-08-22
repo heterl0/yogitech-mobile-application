@@ -10,7 +10,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class Streak extends StatefulWidget {
   final String currentStreak;
   final Account? account;
-  const Streak({super.key, this.currentStreak = '0', this.account});
+  final bool? streakStatus;
+  const Streak(
+      {super.key, this.currentStreak = '0', this.account, this.streakStatus});
 
   @override
   _StreakState createState() => _StreakState();
@@ -18,7 +20,6 @@ class Streak extends StatefulWidget {
 
 class _StreakState extends State<Streak> {
   DateTime _currentDate = DateTime.now();
-  DateTime? _lastStreakStartDate;
   List<DateTime> streakDays = [];
   int streakDaysCount = 0;
 
@@ -74,7 +75,6 @@ class _StreakState extends State<Streak> {
       streakDays = streakDates
           .map((day) => DateTime(_currentDate.year, _currentDate.month, day))
           .toList();
-      _lastStreakStartDate = streakDays.isNotEmpty ? streakDays.first : null;
     });
   }
 
@@ -147,23 +147,34 @@ class _StreakState extends State<Streak> {
   Widget _buildStreakText(AppLocalizations trans) {
     return Column(
       children: [
-        ShaderMask(
-          shaderCallback: (bounds) {
-            return (!(_account?.is_premium ?? false))
-                ? gradient.createShader(bounds)
-                : gradient2.createShader(bounds);
-          },
-          child: Text(
-            widget.currentStreak,
-            style: TextStyle(
-              color: active,
-              fontSize: 60,
-              fontFamily: 'ReadexPro',
-              fontWeight: FontWeight.w700,
-              height: 1,
-            ),
-          ),
-        ),
+        widget.streakStatus == true
+            ? ShaderMask(
+                shaderCallback: (bounds) {
+                  return (!(_account?.is_premium ?? false))
+                      ? gradient.createShader(bounds)
+                      : gradient2.createShader(bounds);
+                },
+                child: Text(
+                  widget.currentStreak,
+                  style: TextStyle(
+                    color: active,
+                    fontSize: 60,
+                    fontFamily: 'ReadexPro',
+                    fontWeight: FontWeight.w700,
+                    height: 1,
+                  ),
+                ),
+              )
+            : Text(
+                widget.currentStreak,
+                style: TextStyle(
+                  color: text,
+                  fontSize: 60,
+                  fontFamily: 'ReadexPro',
+                  fontWeight: FontWeight.w700,
+                  height: 1,
+                ),
+              ),
         Text(
           trans.dayStreak,
           textAlign: TextAlign.center,

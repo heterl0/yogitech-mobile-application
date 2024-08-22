@@ -28,6 +28,7 @@ class _MeditateState extends State<Meditate> {
   int currentStreak = 0;
   Duration _selectedDuration = const Duration(minutes: 1);
   SharedPreferences? prefs;
+  bool streakStatus = false;
 
   @override
   void initState() {
@@ -39,6 +40,30 @@ class _MeditateState extends State<Meditate> {
     prefs = await SharedPreferences.getInstance();
     await _checkStreakData();
     _loadStreakData();
+    _loadStreakStatus();
+  }
+
+  void _loadStreakStatus() {
+    DateTime today = DateTime.now();
+    DateTime? lastMeditationDate =
+        DateTime.tryParse(prefs?.getString('lastMeditationDate') ?? '');
+
+    if (lastMeditationDate != null) {
+      DateTime normalizedToday = DateTime(today.year, today.month, today.day);
+      DateTime normalizedLastDate = DateTime(lastMeditationDate.year,
+          lastMeditationDate.month, lastMeditationDate.day);
+      int daysDifference =
+          normalizedToday.difference(normalizedLastDate).inDays;
+      if (daysDifference != 0) {
+        setState(() {
+          streakStatus = false;
+        });
+      } else {
+        setState(() {
+          streakStatus = true;
+        });
+      }
+    }
   }
 
   void _loadStreakData() {
@@ -60,6 +85,9 @@ class _MeditateState extends State<Meditate> {
           normalizedToday.difference(normalizedLastDate).inDays;
       if (daysDifference != 0) {
         currentStreak++;
+        setState(() {
+          streakStatus = true;
+        });
       }
     } else {
       currentStreak = 1;
@@ -112,12 +140,12 @@ class _MeditateState extends State<Meditate> {
       height: double.infinity,
       decoration: BoxDecoration(color: theme.colorScheme.surface),
       child: SingleChildScrollView(
-        child: _buildMainContent(),
+        child: _buildMainContent(streakStatus),
       ),
     );
   }
 
-  Widget _buildMainContent() {
+  Widget _buildMainContent(bool streakStatus) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     final List<Map<String, dynamic>> _tracks = [
@@ -228,21 +256,32 @@ class _MeditateState extends State<Meditate> {
           textAlign: TextAlign.center,
           style: bd_text.copyWith(color: text),
         ),
-        ShaderMask(
-          shaderCallback: (bounds) {
-            return gradient.createShader(bounds);
-          },
-          child: Text(
-            currentStreak.toString(),
-            style: const TextStyle(
-              color: active,
-              fontSize: 60,
-              fontFamily: 'ReadexPro',
-              fontWeight: FontWeight.w700,
-              height: 1,
-            ),
-          ),
-        ),
+        streakStatus
+            ? ShaderMask(
+                shaderCallback: (bounds) {
+                  return gradient.createShader(bounds);
+                },
+                child: Text(
+                  currentStreak.toString(),
+                  style: const TextStyle(
+                    color: active,
+                    fontSize: 60,
+                    fontFamily: 'ReadexPro',
+                    fontWeight: FontWeight.w700,
+                    height: 1,
+                  ),
+                ),
+              )
+            : Text(
+                currentStreak.toString(),
+                style: const TextStyle(
+                  color: text,
+                  fontSize: 60,
+                  fontFamily: 'ReadexPro',
+                  fontWeight: FontWeight.w700,
+                  height: 1,
+                ),
+              ),
       ],
     );
   }

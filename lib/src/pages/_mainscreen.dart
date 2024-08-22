@@ -46,9 +46,6 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _account = account;
     });
-
-    // Print the account after it's set
-    print(_account);
   }
 
   @override

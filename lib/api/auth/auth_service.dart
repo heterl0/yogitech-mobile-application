@@ -72,10 +72,8 @@ Future<dynamic> loginGoogle(String authToken) async {
     final url = formatApiUrl('/api/v1/auth/google/');
     final data = {'auth_token': authToken};
     Response response = await DioInstance.post(url, data: data);
-    print(response.data);
     if (response.statusCode == 200) {
       final tokens = response.data['tokens'];
-      print(tokens);
       final accessToken = tokens['access'];
       final refreshToken = tokens['refresh'];
       await saveTokens(accessToken, refreshToken);

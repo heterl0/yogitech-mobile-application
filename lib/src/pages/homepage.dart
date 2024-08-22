@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:YogiTech/src/pages/blog_detail.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:YogiTech/src/pages/subscription.dart';
@@ -33,13 +35,14 @@ class _HomePageState extends State<HomePage> {
   Account? _account;
   late int current = 0;
   late CarouselController carouselController = CarouselController();
-
+  late bool streakStatus = false;
   @override
   void initState() {
     super.initState();
     _fetchExercises();
     _fetchExercisesSort();
     _fetchAccount();
+    _fetchStreakStatus();
   }
 
   Future<void> _fetchExercisesSort() async {
@@ -62,6 +65,19 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       jsonList = exercises;
     });
+  }
+
+  Future<void> _fetchStreakStatus() async {
+    final bool status = await isExerciseToday();
+    setState(() {
+      streakStatus = status;
+    });
+  }
+
+  Future<void> _fetchAccountAndStatus() async {
+    // ignore: await_only_futures
+    widget.fetchAccount?.call();
+    await _fetchStreakStatus();
   }
 
   @override
@@ -128,6 +144,7 @@ class _HomePageState extends State<HomePage> {
               titleWidget: StreakValue(
                 _account != null ? _account!.profile.streak.toString() : '0',
                 account: _account,
+                streakStatus: streakStatus,
               ),
               postActions: [
                 IconButton(
@@ -211,6 +228,7 @@ class _HomePageState extends State<HomePage> {
           // Bọc SingleChildScrollView bằng RefreshIndicator
           onRefresh: () async {
             // Gọi hàm để refresh dữ liệu ở đây
+            _fetchStreakStatus();
             _fetchExercises();
             _fetchExercisesSort();
             widget.fetchAccount?.call();
@@ -248,7 +266,7 @@ class _HomePageState extends State<HomePage> {
                               builder: (context) => ExerciseDetail(
                                 exercise: exercise,
                                 account: _account,
-                                fetchAccount: widget.fetchAccount,
+                                fetchAccount: _fetchAccountAndStatus,
                               ),
                             ),
                           );
@@ -285,7 +303,7 @@ class _HomePageState extends State<HomePage> {
                             MaterialPageRoute(
                               builder: (context) => SubscriptionPage(
                                 account: _account,
-                                fetchAccount: widget.fetchAccount,
+                                fetchAccount: _fetchAccountAndStatus,
                               ),
                             ),
                           );
@@ -304,7 +322,7 @@ class _HomePageState extends State<HomePage> {
                             MaterialPageRoute(
                               builder: (context) => AllExercise(
                                 account: _account,
-                                fetchAccount: widget.fetchAccount,
+                                fetchAccount: _fetchAccountAndStatus,
                               ),
                             ),
                           );
@@ -382,7 +400,7 @@ class _HomePageState extends State<HomePage> {
                                   builder: (context) => ExerciseDetail(
                                     exercise: exercise,
                                     account: _account,
-                                    fetchAccount: widget.fetchAccount,
+                                    fetchAccount: _fetchAccountAndStatus,
                                   ),
                                 ),
                               );
@@ -421,7 +439,7 @@ class _HomePageState extends State<HomePage> {
                               MaterialPageRoute(
                                   builder: (context) => AllExercise(
                                         account: _account,
-                                        fetchAccount: widget.fetchAccount,
+                                        fetchAccount: _fetchAccountAndStatus,
                                       )), // Thay NewPage() bằng trang bạn muốn chuyển tới
                             );
                           },
@@ -454,7 +472,7 @@ class _HomePageState extends State<HomePage> {
                                   builder: (context) => ExerciseDetail(
                                     exercise: exercise,
                                     account: _account,
-                                    fetchAccount: widget.fetchAccount,
+                                    fetchAccount: _fetchAccountAndStatus,
                                   ),
                                 ),
                               );
@@ -493,7 +511,7 @@ class _HomePageState extends State<HomePage> {
                                   builder: (context) => AllExercise(
                                         account: _account,
                                         level: 1,
-                                        fetchAccount: widget.fetchAccount,
+                                        fetchAccount: _fetchAccountAndStatus,
                                       )), // Thay NewPage() bằng trang bạn muốn chuyển tới
                             );
                           },
@@ -528,7 +546,7 @@ class _HomePageState extends State<HomePage> {
                                   builder: (context) => ExerciseDetail(
                                     exercise: exercise,
                                     account: _account,
-                                    fetchAccount: widget.fetchAccount,
+                                    fetchAccount: _fetchAccountAndStatus,
                                   ),
                                 ),
                               );
@@ -566,7 +584,7 @@ class _HomePageState extends State<HomePage> {
                               MaterialPageRoute(
                                   builder: (context) => AllExercise(
                                         account: _account,
-                                        fetchAccount: widget.fetchAccount,
+                                        fetchAccount: _fetchAccountAndStatus,
                                         level: 2,
                                       )), // Thay NewPage() bằng trang bạn muốn chuyển tới
                             );
@@ -602,7 +620,7 @@ class _HomePageState extends State<HomePage> {
                                   builder: (context) => ExerciseDetail(
                                     exercise: exercise,
                                     account: _account,
-                                    fetchAccount: widget.fetchAccount,
+                                    fetchAccount: _fetchAccountAndStatus,
                                   ),
                                 ),
                               );
@@ -641,7 +659,7 @@ class _HomePageState extends State<HomePage> {
                                   builder: (context) => AllExercise(
                                         account: _account,
                                         level: 3,
-                                        fetchAccount: widget.fetchAccount,
+                                        fetchAccount: _fetchAccountAndStatus,
                                       )), // Thay NewPage() bằng trang bạn muốn chuyển tới
                             );
                           },
@@ -676,7 +694,7 @@ class _HomePageState extends State<HomePage> {
                                   builder: (context) => ExerciseDetail(
                                     exercise: exercise,
                                     account: _account,
-                                    fetchAccount: widget.fetchAccount,
+                                    fetchAccount: _fetchAccountAndStatus,
                                   ),
                                 ),
                               );
@@ -758,8 +776,10 @@ class _HomePageState extends State<HomePage> {
 class StreakValue extends StatelessWidget {
   final String streakValue;
   final Account? account;
+  final bool? streakStatus;
 
-  const StreakValue(this.streakValue, {super.key, this.account});
+  const StreakValue(this.streakValue,
+      {super.key, this.account, this.streakStatus});
 
   @override
   Widget build(BuildContext context) {
@@ -774,6 +794,7 @@ class StreakValue extends StatelessWidget {
               builder: (context) => Streak(
                 currentStreak: streakValue,
                 account: account,
+                streakStatus: streakStatus ?? false,
               ),
             ),
           );
@@ -789,17 +810,22 @@ class StreakValue extends StatelessWidget {
             ),
             SizedBox(
               height: 32,
-              child: ShaderMask(
-                shaderCallback: (bounds) {
-                  return (!(account?.is_premium ?? false))
-                      ? gradient.createShader(bounds)
-                      : gradient2.createShader(bounds);
-                },
-                child: Text(
-                  streakValue,
-                  style: h2.copyWith(color: active, height: 1),
-                ),
-              ),
+              child: streakStatus == true
+                  ? ShaderMask(
+                      shaderCallback: (bounds) {
+                        return (!(account?.is_premium ?? false))
+                            ? gradient.createShader(bounds)
+                            : gradient2.createShader(bounds);
+                      },
+                      child: Text(
+                        streakValue,
+                        style: h2.copyWith(color: active, height: 1),
+                      ),
+                    )
+                  : Text(
+                      streakValue,
+                      style: h2.copyWith(color: text, height: 1),
+                    ),
             )
           ],
         ),
