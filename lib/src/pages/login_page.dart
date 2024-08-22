@@ -69,6 +69,9 @@ class _LoginPageState extends State<LoginPage> {
                     controller: passwordController,
                     placeholder: trans.password,
                     password: true,
+                    onSubmitted: (_) async {
+                      _handleLogin(context);
+                    },
                   ),
                   Align(
                     alignment: Alignment.centerLeft,

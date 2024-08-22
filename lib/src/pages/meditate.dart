@@ -56,11 +56,9 @@ class _MeditateState extends State<Meditate> {
       DateTime normalizedToday = DateTime(today.year, today.month, today.day);
       DateTime normalizedLastDate = DateTime(lastMeditationDate.year,
           lastMeditationDate.month, lastMeditationDate.day);
-
       int daysDifference =
           normalizedToday.difference(normalizedLastDate).inDays;
-
-      if (daysDifference == 1) {
+      if (daysDifference != 0) {
         currentStreak++;
       }
     } else {
