@@ -6,7 +6,6 @@ import 'package:YogiTech/utils/method_channel_handler.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:YogiTech/src/custombar/appbar.dart';
@@ -235,7 +234,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         Text(
           '$minute ${trans.minutes}',
           style: bd_text.copyWith(
-            color: _exercise!.is_premium ? primary2 : primary,
+            color: _account?.is_premium == true ? primary2 : primary,
           ),
         ),
         const SizedBox(width: 16),
@@ -251,7 +250,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                   ? trans.beginner
                   : (level == 2 ? trans.intermediate : trans.advanced),
               style: bd_text.copyWith(
-                color: _exercise!.is_premium ? primary2 : primary,
+                color: _account?.is_premium == true ? primary2 : primary,
               ),
             ),
           ],
