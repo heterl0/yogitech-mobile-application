@@ -518,7 +518,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                                 shape: BoxShape.circle,
                                 color: Colors.transparent,
                                 border: Border.all(
-                                  color: _exercise!.is_premium
+                                  color: widget.account!.is_premium == true
                                       ? primary2
                                       : primary,
                                   width: 1.0,
@@ -532,7 +532,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: _exercise!.is_premium
+                                    color: widget.account!.is_premium == true
                                         ? primary2
                                         : primary,
                                   ),
@@ -552,8 +552,9 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                               name,
                               textAlign: TextAlign.start,
                               style: min_cap.copyWith(
-                                color:
-                                    _exercise!.is_premium ? primary2 : primary,
+                                color: widget.account!.is_premium == true
+                                    ? primary2
+                                    : primary,
                               ),
                             ),
                             Text(
@@ -647,9 +648,10 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                                       Text(
                                         'Admin', // Replace with dynamic data based on repComment[index]
                                         style: min_cap.copyWith(
-                                          color: _exercise!.is_premium
-                                              ? primary2
-                                              : primary,
+                                          color:
+                                              widget.account!.is_premium == true
+                                                  ? primary2
+                                                  : primary,
                                         ),
                                       ),
                                       Text(

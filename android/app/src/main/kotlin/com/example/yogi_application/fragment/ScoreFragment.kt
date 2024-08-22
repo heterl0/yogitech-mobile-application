@@ -49,6 +49,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
     private var timeLeftInMillis: Long = 0
     private var isCountDown = true
     private var supportVi = false
+    private var allowSpeak = true;
 
     private var countDownTimer: CountDownTimer? = null
     var startTime: Long? = null
@@ -92,7 +93,8 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
             return;
         }
         tts.language = language
-        if (!tts.isSpeaking && text != lastSpokenText) {
+        tts.setSpeechRate(1.5f)
+        if (!tts.isSpeaking && text != lastSpokenText && allowSpeak == true) {
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
             lastSpokenText = text
         }
@@ -232,6 +234,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
     private fun startCountDownTimer(duration: Int) {
         if (isTimerRunning) return
         isCountDown = true;
+        allowSpeak = false;
         countDownTimer?.cancel()
         isTimerRunning = true
         countDownTimer = object : CountDownTimer(duration.toLong(), 1000) {
@@ -241,6 +244,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                 val secondsRemaining = millisUntilFinished / 1000
                 if (secondsRemaining.toInt() == 3) {
                     countDownThree = true;
+                    allowSpeak = true;
                 }
                 if (countDownThree) {
                     if (viewModel.local == "en") {

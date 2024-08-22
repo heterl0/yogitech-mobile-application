@@ -41,8 +41,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   File? _image;
   Uint8List? _imageBytes;
   bool _isLoading = false;
-   bool _isChangingPassword = false;
-  
+  bool _isChangingPassword = false;
 
   // Regular expression for Vietnamese phone numbers
   final RegExp phoneRegExp =
@@ -101,6 +100,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   }
 
   Widget _buildAvatar(BuildContext context) {
+    final theme = Theme.of(context);
     const double avatarSize = 144;
     return GestureDetector(
       onTap: () {
@@ -149,7 +149,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                             style: TextStyle(
                               fontSize: 40,
                               fontWeight: FontWeight.bold,
-                              color: active,
+                              color: theme.colorScheme.onPrimary,
                             ),
                           ),
                         ),
@@ -166,7 +166,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   }
 
   @override
-   @override
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
@@ -245,7 +245,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                             children: [
                               Text(
                                 trans.birthday,
-                                style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                                style: h3.copyWith(
+                                    color: theme.colorScheme.onPrimary),
                               ),
                               SizedBox(height: 8.0),
                               BoxInputField(
@@ -267,7 +268,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                                       });
                                     } else {
                                       setState(() {
-                                        birthday.text = DateFormat('dd-MM-yyyy').format(pickedDate);
+                                        birthday.text = DateFormat('dd-MM-yyyy')
+                                            .format(pickedDate);
                                       });
                                     }
                                   }
@@ -283,13 +285,16 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                             children: [
                               Text(
                                 trans.gender,
-                                style: h3.copyWith(color: theme.colorScheme.onPrimary),
+                                style: h3.copyWith(
+                                    color: theme.colorScheme.onPrimary),
                               ),
                               SizedBox(height: 8.0),
                               CustomDropdownFormField(
                                 controller: gender,
                                 items: ["Male", "Female", "Other"],
-                                placeholder: gender.text.isEmpty ? trans.sellectGender : gender.text,
+                                placeholder: gender.text.isEmpty
+                                    ? trans.sellectGender
+                                    : gender.text,
                                 onTap: () {
                                   // Optional: handle dropdown tap
                                 },
@@ -437,28 +442,37 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
               child: Stack(
                 children: [
                   SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 36),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 36),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(trans.oldPassword,
-                            style: h3.copyWith(color: theme.colorScheme.onSurface)),
+                            style: h3.copyWith(
+                                color: theme.colorScheme.onSurface)),
                         SizedBox(height: 16.0),
-                        BoxInputField(controller: currentPassword, password: true),
-                        Text(currentpasswarn, style: bd_text.copyWith(color: Colors.red)),
+                        BoxInputField(
+                            controller: currentPassword, password: true),
+                        Text(currentpasswarn,
+                            style: bd_text.copyWith(color: Colors.red)),
                         SizedBox(height: 8.0),
                         Text(trans.newPassword,
-                            style: h3.copyWith(color: theme.colorScheme.onSurface)),
+                            style: h3.copyWith(
+                                color: theme.colorScheme.onSurface)),
                         SizedBox(height: 16.0),
                         BoxInputField(controller: newPassword, password: true),
-                        Text(newpasswarn, style: bd_text.copyWith(color: Colors.red)),
+                        Text(newpasswarn,
+                            style: bd_text.copyWith(color: Colors.red)),
                         SizedBox(height: 8.0),
                         Text(trans.confirmNewPassword,
-                            style: h3.copyWith(color: theme.colorScheme.onSurface)),
+                            style: h3.copyWith(
+                                color: theme.colorScheme.onSurface)),
                         SizedBox(height: 16.0),
-                        BoxInputField(controller: confirmNewPassword, password: true),
-                        Text(repasswarn, style: bd_text.copyWith(color: Colors.red)),
+                        BoxInputField(
+                            controller: confirmNewPassword, password: true),
+                        Text(repasswarn,
+                            style: bd_text.copyWith(color: Colors.red)),
                         SizedBox(height: 40.0),
                         CustomButton(
                           title: trans.save,
@@ -470,7 +484,9 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                             String rePass = confirmNewPassword.text;
 
                             setState(() {
-                              if (newPass == '' || curentPass == '' || rePass == '') {
+                              if (newPass == '' ||
+                                  curentPass == '' ||
+                                  rePass == '') {
                                 isValid = false;
                                 newPass == ''
                                     ? newpasswarn =
@@ -500,7 +516,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                             if (!isValid) return;
 
                             if (isValid) {
-                              PasswordChangeRequest request = PasswordChangeRequest(
+                              PasswordChangeRequest request =
+                                  PasswordChangeRequest(
                                 currentPassword: currentPassword.text,
                                 newPassword: newPassword.text,
                                 reNewPassword: confirmNewPassword.text,
@@ -519,7 +536,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                               if (result == true) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    backgroundColor: theme.colorScheme.onSecondary,
+                                    backgroundColor:
+                                        theme.colorScheme.onSecondary,
                                     content: Text(
                                       trans.passwordChangedSuccessfully,
                                       style: bd_text.copyWith(
@@ -537,7 +555,8 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    backgroundColor: theme.colorScheme.onSecondary,
+                                    backgroundColor:
+                                        theme.colorScheme.onSecondary,
                                     content: Text(
                                       trans.passwordChangeFailed,
                                       style: bd_text.copyWith(
