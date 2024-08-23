@@ -79,7 +79,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                 supportVi = true;
                 // Set the pitch and speech rate suitable for yoga instructions
                 tts.setPitch(1.2f) // Normal pitch
-                tts.setSpeechRate(2.5f) // Slightly slower speech rate
+                tts.setSpeechRate(2f) // Slightly slower speech rate
             }
         } else {
             Log.e("TTS", "Initialization failed")
@@ -93,7 +93,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
             return;
         }
         tts.language = language
-        tts.setSpeechRate(2.5f)
+        tts.setSpeechRate(2f)
         if (!tts.isSpeaking && text != lastSpokenText && allowSpeak == true) {
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
             lastSpokenText = text
