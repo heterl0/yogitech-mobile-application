@@ -88,6 +88,10 @@ class _MeditateState extends State<Meditate> {
         setState(() {
           streakStatus = true;
         });
+      } else {
+        setState(() {
+          streakStatus = true;
+        });
       }
     } else {
       currentStreak = 1;
