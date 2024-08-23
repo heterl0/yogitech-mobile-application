@@ -91,6 +91,9 @@ class _MeditateState extends State<Meditate> {
       }
     } else {
       currentStreak = 1;
+      setState(() {
+        streakStatus = true;
+      });
     }
 
     await prefs?.setInt('currentStreak', currentStreak);

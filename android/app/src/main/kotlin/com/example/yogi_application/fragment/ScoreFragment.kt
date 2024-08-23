@@ -78,8 +78,8 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
             } else {
                 supportVi = true;
                 // Set the pitch and speech rate suitable for yoga instructions
-                tts.setPitch(1.0f) // Normal pitch
-                tts.setSpeechRate(0.8f) // Slightly slower speech rate
+                tts.setPitch(1.2f) // Normal pitch
+                tts.setSpeechRate(2.5f) // Slightly slower speech rate
             }
         } else {
             Log.e("TTS", "Initialization failed")
@@ -93,7 +93,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
             return;
         }
         tts.language = language
-        tts.setSpeechRate(1.5f)
+        tts.setSpeechRate(2.5f)
         if (!tts.isSpeaking && text != lastSpokenText && allowSpeak == true) {
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
             lastSpokenText = text
@@ -241,8 +241,12 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
 
             override fun onTick(millisUntilFinished: Long) {
                 timeLeftInMillis = millisUntilFinished
-                val secondsRemaining = millisUntilFinished / 1000
-                if (secondsRemaining.toInt() == 3) {
+                var secondsRemaining = millisUntilFinished / 1000
+                val minutesRemaining = secondsRemaining / 60
+                if (minutesRemaining > 0) {
+                    secondsRemaining = secondsRemaining % 60
+                }
+                if (secondsRemaining.toInt() == 3 && minutesRemaining.toInt() == 0) {
                     countDownThree = true;
                     allowSpeak = true;
                 }
@@ -253,7 +257,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                         speak(secondsRemaining.toString(), localeVI)
                     }
                 }
-                _fragmentScoreBinding!!.timer.text = "00:$secondsRemaining"
+                _fragmentScoreBinding!!.timer.text = "$minutesRemaining:$secondsRemaining"
             }
 
             override fun onFinish() {
@@ -302,8 +306,12 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
         countDownTimer = object : CountDownTimer(duration, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
-                val secondsRemaining = millisUntilFinished / 1000
-                if (secondsRemaining.toInt() == 3) {
+                var secondsRemaining = millisUntilFinished / 1000
+                val minutesRemaining = secondsRemaining / 60
+                if (minutesRemaining > 0) {
+                    secondsRemaining = secondsRemaining % 60
+                }
+                if (secondsRemaining.toInt() == 3 && minutesRemaining.toInt() == 0) {
                     countDownThree = true;
                 }
                 if (countDownThree) {
@@ -315,7 +323,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                 }
                 timeLeftInMillis = millisUntilFinished
 
-                _fragmentScoreBinding!!.timer.text = "00:$secondsRemaining"
+                _fragmentScoreBinding!!.timer.text = "$minutesRemaining:$secondsRemaining"
                 _fragmentScoreBinding!!.result.text = getString(R.string.takeARest);
                 _fragmentScoreBinding!!.description.text = getString(R.string.breathSlowly);
             }

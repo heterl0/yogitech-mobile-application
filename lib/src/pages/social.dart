@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:YogiTech/api/social/social_service.dart';
+import 'package:YogiTech/services/notifi_service.dart';
 import 'package:YogiTech/src/models/notification.dart' as n;
 import 'package:YogiTech/src/custombar/appbar.dart';
 import 'package:YogiTech/src/models/account.dart';
@@ -9,9 +10,7 @@ import 'package:YogiTech/src/shared/app_colors.dart';
 import 'package:YogiTech/src/shared/styles.dart';
 import 'package:YogiTech/utils/formatting.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import "package:timeago/timeago.dart" as timeago;
 
@@ -45,6 +44,22 @@ class _SocialPageState extends State<SocialPage> {
   Future<void> fetchNotification() async {
     try {
       final notifications = await getNotifications();
+      DateTime now = DateTime.now();
+      if (_notifications != null) {
+        for (var notification in _notifications!) {
+          final notificationTime = DateTime.parse(notification.time);
+          if (notificationTime.isAfter(now)) {
+            print('Thông báo: ${notification}');
+            LocalNotificationService.showActivitiesNotification(
+              id: notification.id + 10,
+              title: notification.title,
+              body: notification.body,
+              scheduledTime: notificationTime,
+              payload: 'friend_notification_${notification.id}',
+            );
+          }
+        }
+      }
       setState(() {
         _notifications = notifications.cast<n.Notification>();
         _notifications!.sort((a, b) => b.time.compareTo(a.time));

@@ -4,6 +4,7 @@ import 'package:YogiTech/services/notifi_service.dart';
 import 'package:YogiTech/src/models/social.dart';
 import 'package:YogiTech/src/pages/notification_detail.dart';
 import 'package:YogiTech/src/pages/subscription.dart';
+import 'package:YogiTech/utils/formatting.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -77,11 +78,17 @@ void main() async {
   final bool isNotificationsOn = prefs.getBool('friendActivitiesOn') ?? false;
   if (isNotificationsOn) {
     await Workmanager().initialize(callbackDispatcher);
-    Workmanager().registerPeriodicTask(
-      "15_min_task",
+    // Workmanager().registerPeriodicTask(
+    //   "15_min_task",
+    //   "fetchAndNotify",
+    //   frequency: const Duration(minutes: 15),
+    // );
+    Workmanager().registerOneOffTask(
       "fetchAndNotify",
-      frequency: const Duration(minutes: 15),
+      "fetchAndNotify",
+      initialDelay: Duration(seconds: 5),
     );
+    print("Task registered");
   } else {
     Workmanager().cancelAll();
   }
@@ -91,17 +98,20 @@ void main() async {
 
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
+    // Đặt múi giờ Việt Nam
+    // await LocalNotificationService().init();
     // Fetch notifications from your serve
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool isNotificationsOn = prefs.getBool('friendActivitiesOn') ?? false;
     if (!isNotificationsOn) {
       return Future.value(false);
     }
-    DateTime now = DateTime.now();
+    DateTime now = DateTime.now().subtract(Duration(minutes: 15));
     await loadEnv();
 
     final accessToken = await prefs.getString('accessToken');
-    final url = dotenv.get("API_BASE_URL") + '/api/v1/notification/';
+    // final url = dotenv.get("API_BASE_URL") + '/api/v1/notification/';
+    final url = formatApiUrl('/api/v1/notification/');
     final _dio = Dio();
     _dio.options.headers['Authorization'] = 'Bearer $accessToken';
     final Response response = await _dio.get(url);
@@ -116,6 +126,8 @@ void callbackDispatcher() {
       // Parse the response and schedule a notification
       showNotification(notifications);
     }
+    print(notifications);
+    print('Task was executed');
     return Future.value(true);
   });
 }
@@ -124,15 +136,24 @@ void showNotification(List<dynamic> notifications) async {
   final now = DateTime.now();
   print('Showing notifications');
   print(notifications.length);
-  await LocalNotificationService().init();
+
   for (var notification in notifications) {
+    print(notification);
     final notificationTime = DateTime.parse(notification.time);
     if (notificationTime.isAfter(now)) {
-      LocalNotificationService.showActivitiesNotification(
+      await LocalNotificationService.showActivitiesNotification(
         id: notification.id + 10,
         title: notification.title,
         body: notification.body,
         scheduledTime: notificationTime,
+        payload: 'friend_notification_${notification.id}',
+      );
+    } else {
+      await LocalNotificationService.showActivitiesNotification(
+        id: notification.id + 10,
+        title: notification.title,
+        body: notification.body,
+        scheduledTime: now.add(Duration(seconds: 5)),
         payload: 'friend_notification_${notification.id}',
       );
     }

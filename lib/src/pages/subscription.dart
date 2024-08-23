@@ -301,7 +301,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                             style: min_cap.copyWith(color: active),
                           ),
                           Text(
-                            '$startDay',
+                            startDay,
                             style: min_cap.copyWith(color: active),
                           ),
                           Text(
@@ -309,7 +309,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                             style: min_cap.copyWith(color: active),
                           ),
                           Text(
-                            ' $endDay',
+                            endDay,
                             style: min_cap.copyWith(color: active),
                           ),
                         ]),

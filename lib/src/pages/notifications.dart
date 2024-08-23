@@ -117,9 +117,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
     );
   }
 
-  void _handleNewActivitiesNotifications(bool isFriendsOn) {
-    final now = DateTime.now();
-
+  void _handleNewActivitiesNotifications(bool isFriendsOn) async {
+    DateTime now = DateTime.now().subtract(Duration(minutes: 15));
+    await fetchNotification();
     if (isFriendsOn) {
       print('Bật thông báo các hoạt động');
       if (_notifications != null) {

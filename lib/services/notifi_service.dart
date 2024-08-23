@@ -89,6 +89,20 @@ class LocalNotificationService {
     required String payload,
     required DateTime scheduledTime,
   }) async {
+    final List<PendingNotificationRequest> pendingNotifications =
+        await _flutterLocalNotificationsPlugin.pendingNotificationRequests();
+
+    // Check if the id already exists
+    final bool idExists =
+        pendingNotifications.any((notification) => notification.id == id);
+
+    if (idExists) {
+      // Handle the case where the id already exists
+      // For example, you can generate a new id or skip scheduling
+      print('Notification with id $id already exists.');
+      return;
+    }
+
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails('yogi3', 'YogiTech',
             channelDescription: 'YogiTech notification',
