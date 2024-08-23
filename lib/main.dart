@@ -82,9 +82,6 @@ void main() async {
       "fetchAndNotify",
       frequency: const Duration(minutes: 15),
     );
-    // await Workmanager().registerOneOffTask("fetchAndNotify", "fetchAndNotify",
-    //     initialDelay: Duration(seconds: 10));
-    // print("Notifications are on");
   } else {
     Workmanager().cancelAll();
   }
