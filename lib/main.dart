@@ -1,9 +1,10 @@
 import 'package:YogiTech/api/account/account_service.dart';
-import 'package:YogiTech/api/exercise/exercise_service.dart';
+import 'package:YogiTech/api/notification/notification_service.dart';
 import 'package:YogiTech/services/notifi_service.dart';
 import 'package:YogiTech/src/models/social.dart';
 import 'package:YogiTech/src/pages/notification_detail.dart';
 import 'package:YogiTech/src/pages/subscription.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
@@ -45,6 +46,8 @@ import 'dart:io';
 import 'dart:async';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:workmanager/workmanager.dart';
+import 'package:YogiTech/src/models/notification.dart' as n;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -70,9 +73,73 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final bool isNotificationsOn = prefs.getBool('friendActivitiesOn') ?? false;
+  if (isNotificationsOn) {
+    await Workmanager().initialize(callbackDispatcher);
+    Workmanager().registerPeriodicTask(
+      "15_min_task",
+      "fetchAndNotify",
+      frequency: const Duration(minutes: 15),
+    );
+    // await Workmanager().registerOneOffTask("fetchAndNotify", "fetchAndNotify",
+    //     initialDelay: Duration(seconds: 10));
+    // print("Notifications are on");
+  } else {
+    Workmanager().cancelAll();
+  }
   // Chạy ứng dụng với token nếu có
   runApp(accessToken != null ? MyApp(access: accessToken) : MyApp());
+}
+
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    // Fetch notifications from your serve
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool isNotificationsOn = prefs.getBool('friendActivitiesOn') ?? false;
+    if (!isNotificationsOn) {
+      return Future.value(false);
+    }
+    DateTime now = DateTime.now();
+    await loadEnv();
+
+    final accessToken = await prefs.getString('accessToken');
+    final url = dotenv.get("API_BASE_URL") + '/api/v1/notification/';
+    final _dio = Dio();
+    _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+    final Response response = await _dio.get(url);
+    List<dynamic> notifications = response.data
+        .map((e) => n.Notification.fromMap(e))
+        .toList()
+        .where((notification) {
+      DateTime notificationTime = DateTime.parse(notification.time);
+      return notificationTime.isAfter(now);
+    }).toList();
+    if (notifications.isNotEmpty) {
+      // Parse the response and schedule a notification
+      showNotification(notifications);
+    }
+    return Future.value(true);
+  });
+}
+
+void showNotification(List<dynamic> notifications) async {
+  final now = DateTime.now();
+  print('Showing notifications');
+  print(notifications.length);
+  await LocalNotificationService().init();
+  for (var notification in notifications) {
+    final notificationTime = DateTime.parse(notification.time);
+    if (notificationTime.isAfter(now)) {
+      LocalNotificationService.showActivitiesNotification(
+        id: notification.id + 10,
+        title: notification.title,
+        body: notification.body,
+        scheduledTime: notificationTime,
+        payload: 'friend_notification_${notification.id}',
+      );
+    }
+  }
 }
 
 Future<String?> checkToken() async {

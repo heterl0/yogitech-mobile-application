@@ -4,14 +4,12 @@ class DioInstance {
   static final Dio _dio = Dio();
 
   static void setAccessToken(String accessToken) {
-    _dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
-          options.headers['Authorization'] = 'Bearer $accessToken';
-          return handler.next(options); //continue
-        },
-      ),
-    );
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        options.headers['Authorization'] = 'Bearer $accessToken';
+        return handler.next(options); //continue
+      },
+    ));
   }
 
   static Future<Response> get(String url,
