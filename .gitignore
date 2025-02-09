@@ -141,3 +141,4 @@ app.*.symbols
 
 # Google Pay
 default_google_pay_config.json
+google-services.json
