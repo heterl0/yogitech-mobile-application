@@ -34,7 +34,9 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
   Account? _account;
   late int current = 0;
-  late CarouselController carouselController = CarouselController();
+  late CarouselSliderController carouselController =
+      CarouselSliderController(); // mới update lên 5.0.0
+
   late bool streakStatus = false;
   @override
   void initState() {

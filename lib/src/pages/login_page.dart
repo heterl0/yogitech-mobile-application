@@ -268,10 +268,8 @@ class _LoginPageState extends State<LoginPage> {
     }
     try {
       final accessToken = await login(enteredEmail, enteredPassword);
-
       if (accessToken != null && accessToken is String) {
         final user = await getUser();
-
         if (user != null && user.active_status == 1) {
           if ((user.profile.first_name == null ||
               user.profile.last_name == null ||
