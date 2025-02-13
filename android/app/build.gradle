@@ -39,7 +39,8 @@ if (devMode == null) {
 
 android {
     namespace "com.example.yogi_application"
-    compileSdk flutter.compileSdkVersion
+    compileSdk 34
+    //flutter.compileSdkVersion
     // ndkVersion flutter.ndkVersion
     ndkVersion "27.0.11902837"
 

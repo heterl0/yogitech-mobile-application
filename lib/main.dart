@@ -204,7 +204,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.dark;
-  Locale _locale = const Locale('vi');
+  Locale _locale = const Locale('en');
 
   @override
   void initState() {

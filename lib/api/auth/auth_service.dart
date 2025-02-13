@@ -12,7 +12,6 @@ Future<dynamic> login(String email, String password) async {
     final url = formatApiUrl('/api/v1/auth/login/');
     final data = {'email': email, 'password': password};
     Response response = await DioInstance.post(url, data: data);
-
     if (response.statusCode == 200) {
       final accessToken = response.data['access'];
       final refreshToken = response.data['refresh'];
