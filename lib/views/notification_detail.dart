@@ -1,5 +1,4 @@
 import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/views/friend_profile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/models/notification.dart' as n;
@@ -9,6 +8,8 @@ import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+
+import 'profile/friend_profile.dart';
 
 class NotificationDetail extends StatefulWidget {
   final n.Notification? notification;

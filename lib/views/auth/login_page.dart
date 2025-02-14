@@ -92,7 +92,6 @@ class _LoginPageState extends State<LoginPage> {
                     state: ButtonState.Enabled,
                     onPressed: () async {
                       _handleLogin(context);
-                      // print(await getExercises());
                     },
                   ),
                   SizedBox(height: 10.0),
@@ -132,10 +131,6 @@ class _LoginPageState extends State<LoginPage> {
                           textColor: theme.colorScheme.onPrimary,
                           buttonType: SocialLoginButtonType.google,
                           onPressed: () async {
-                            // var user = await LoginGoogle.login();
-                            // if (user != null) {
-                            //   print(user.displayName);
-                            // }
                             await _handleGoogleSignIn(trans);
                           },
                           text: trans.loginWithGoogle,

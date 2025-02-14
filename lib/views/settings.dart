@@ -9,7 +9,7 @@ import 'package:YogiTech/views/reminder.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/widgets/switch.dart';
-import 'package:YogiTech/views/change_profile.dart';
+import 'package:YogiTech/views/profile/change_profile.dart';
 
 class SettingsPage extends StatelessWidget {
   final bool isDarkMode;
