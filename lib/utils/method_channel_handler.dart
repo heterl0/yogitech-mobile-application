@@ -1,9 +1,9 @@
 import 'package:YogiTech/api/account/account_service.dart';
 import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/exercise/exercise_service.dart';
-import 'package:YogiTech/src/models/account.dart';
-import 'package:YogiTech/src/models/exercise.dart';
-import 'package:YogiTech/src/pages/result.dart';
+import 'package:YogiTech/models/account.dart';
+import 'package:YogiTech/models/exercise.dart';
+import 'package:YogiTech/views/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

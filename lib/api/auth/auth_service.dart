@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:YogiTech/api/account/account_service.dart';
 import 'package:YogiTech/api/dioInstance.dart';
-import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/models/account.dart';
 import 'package:YogiTech/utils/formatting.dart';
 
 Future<dynamic> login(String email, String password) async {
@@ -12,7 +12,6 @@ Future<dynamic> login(String email, String password) async {
     final url = formatApiUrl('/api/v1/auth/login/');
     final data = {'email': email, 'password': password};
     Response response = await DioInstance.post(url, data: data);
-
     if (response.statusCode == 200) {
       final accessToken = response.data['access'];
       final refreshToken = response.data['refresh'];
