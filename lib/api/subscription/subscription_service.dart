@@ -4,7 +4,7 @@ import 'package:YogiTech/api/dioInstance.dart';
 import 'package:YogiTech/utils/formatting.dart';
 import 'package:dio/dio.dart';
 
-import '../../src/models/subscriptions.dart';
+import '../../models/subscriptions.dart';
 
 Future<List<dynamic>> getSubscriptions() async {
   try {
