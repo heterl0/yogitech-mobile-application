@@ -1,5 +1,5 @@
+import 'package:YogiTech/services/dioInstance.dart';
 import 'package:dio/dio.dart';
-import 'package:YogiTech/api/dioInstance.dart';
 import 'package:YogiTech/models/blog.dart';
 import 'package:YogiTech/utils/formatting.dart';
 

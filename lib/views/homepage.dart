@@ -1,12 +1,12 @@
 import 'dart:ffi';
 
+import 'package:YogiTech/services/exercise/exercise_service.dart';
 import 'package:YogiTech/views/blog_detail.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:YogiTech/views/subscription.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/models/account.dart';
 import 'package:YogiTech/views/all_exercise.dart';

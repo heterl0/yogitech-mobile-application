@@ -1,10 +1,10 @@
-import 'package:YogiTech/api/social/social_service.dart';
+import 'package:YogiTech/services/event/event_service.dart';
+import 'package:YogiTech/services/social/social_service.dart';
 import 'package:YogiTech/views/exercise_detail.dart';
-import 'package:YogiTech/views/friend_profile.dart';
+import 'package:YogiTech/views/profile/friend_profile.dart';
 import 'package:YogiTech/widgets/box_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:YogiTech/api/event/event_service.dart';
 import 'package:YogiTech/custombar/bottombar.dart';
 import 'package:YogiTech/models/account.dart';
 import 'package:YogiTech/models/event.dart';

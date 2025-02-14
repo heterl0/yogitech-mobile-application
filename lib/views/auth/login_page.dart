@@ -1,7 +1,8 @@
+import 'package:YogiTech/services/account/account_service.dart';
+import 'package:YogiTech/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
-import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/routing/app_routes.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/shared/app_colors.dart';
@@ -9,7 +10,6 @@ import 'package:YogiTech/widgets/box_input_field.dart';
 import 'package:YogiTech/widgets/box_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:YogiTech/api/account/account_service.dart';
 import 'package:YogiTech/views/pre_launch_survey_page.dart';
 
 class LoginPage extends StatefulWidget {

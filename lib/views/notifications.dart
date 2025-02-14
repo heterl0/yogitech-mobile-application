@@ -1,5 +1,5 @@
-import 'package:YogiTech/api/notification/notification_service.dart';
-import 'package:YogiTech/services/notifi_service.dart';
+import 'package:YogiTech/notifi_services/notifi_service.dart';
+import 'package:YogiTech/services/notification/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/widgets/switch.dart';

@@ -1,8 +1,8 @@
-import 'package:YogiTech/api/dioInstance.dart';
-import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:YogiTech/custombar/bottombar.dart';
 import 'package:YogiTech/models/exercise.dart';
 import 'package:YogiTech/models/pose.dart';
+import 'package:YogiTech/services/dioInstance.dart';
+import 'package:YogiTech/services/exercise/exercise_service.dart';
 import 'package:YogiTech/widgets/dropdown_field.dart';
 import 'package:YogiTech/utils/formatting.dart';
 import 'package:dio/dio.dart';

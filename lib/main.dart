@@ -1,24 +1,24 @@
-import 'package:YogiTech/api/account/account_service.dart';
-import 'package:YogiTech/api/notification/notification_service.dart';
-import 'package:YogiTech/services/notifi_service.dart';
+import 'package:YogiTech/notifi_services/notifi_service.dart';
+import 'package:YogiTech/services/account/account_service.dart';
+import 'package:YogiTech/services/auth/auth_service.dart';
+import 'package:YogiTech/services/dioInstance.dart';
 import 'package:YogiTech/models/social.dart';
 import 'package:YogiTech/views/notification_detail.dart';
 import 'package:YogiTech/views/subscription.dart';
 import 'package:YogiTech/utils/formatting.dart';
+import 'package:YogiTech/views/auth/verify_email.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
-import 'package:YogiTech/api/auth/auth_service.dart';
-import 'package:YogiTech/api/dioInstance.dart';
 import 'package:YogiTech/views/_mainscreen.dart';
 import 'package:YogiTech/views/activities.dart';
 import 'package:YogiTech/views/blog.dart';
 import 'package:YogiTech/views/event_detail.dart';
-import 'package:YogiTech/views/change_profile.dart';
+import 'package:YogiTech/views/profile/change_profile.dart';
 import 'package:YogiTech/views/exercise_detail.dart';
-import 'package:YogiTech/views/forgot_password.dart';
-import 'package:YogiTech/views/friend_profile.dart';
+import 'package:YogiTech/views/auth/forgot_password.dart';
+import 'package:YogiTech/views/profile/friend_profile.dart';
 import 'package:YogiTech/views/notifications.dart';
 import 'package:YogiTech/views/payment_history.dart';
 import 'package:YogiTech/views/perform_meditate.dart';
@@ -27,14 +27,13 @@ import 'package:YogiTech/views/meditate.dart';
 import 'package:YogiTech/views/reminder.dart';
 import 'package:YogiTech/views/result.dart';
 import 'package:YogiTech/views/streak.dart';
-import 'package:YogiTech/views/verify_email.dart';
 import 'package:YogiTech/routing/app_routes.dart';
-import 'package:YogiTech/views/login_page.dart';
-import 'package:YogiTech/views/sign_up_page.dart';
+import 'package:YogiTech/views/auth/login_page.dart';
+import 'package:YogiTech/views/auth/sign_up_page.dart';
 import 'package:YogiTech/views/OTP_confirm_page.dart';
-import 'package:YogiTech/views/reset_password_page.dart';
+import 'package:YogiTech/views/auth/reset_password_page.dart';
 import 'package:YogiTech/views/homepage.dart';
-import 'package:YogiTech/views/profile.dart';
+import 'package:YogiTech/views/profile/profile.dart';
 import 'package:YogiTech/views/settings.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -226,7 +225,7 @@ class _MyAppState extends State<MyApp> {
       _themeMode = prefs.getBool('isDarkMode') ?? false
           ? ThemeMode.dark
           : ThemeMode.light;
-      final localeCode = prefs.getString('locale') ?? 'vi'; // Lấy language code
+      final localeCode = prefs.getString('locale') ?? 'en'; // Lấy language code
       _locale = Locale(localeCode);
     });
   }

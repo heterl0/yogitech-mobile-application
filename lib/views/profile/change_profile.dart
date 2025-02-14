@@ -5,18 +5,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:YogiTech/api/account/account_service.dart';
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/models/account.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/widgets/box_input_field.dart';
 import 'package:YogiTech/widgets/dropdown_field.dart';
 import 'package:YogiTech/widgets/box_button.dart';
-import 'package:YogiTech/views/change_BMI.dart';
+import 'package:YogiTech/views/profile/change_BMI.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'dart:typed_data';
+
+import '../../services/account/account_service.dart';
 
 class ChangeProfilePage extends StatefulWidget {
   final VoidCallback? onProfileUpdated;

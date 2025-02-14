@@ -1,6 +1,6 @@
 import 'package:YogiTech/models/pose.dart';
+import 'package:YogiTech/services/dioInstance.dart';
 import 'package:dio/dio.dart';
-import 'package:YogiTech/api/dioInstance.dart';
 import 'package:YogiTech/models/exercise.dart';
 import 'package:YogiTech/utils/formatting.dart';
 import 'package:shared_preferences/shared_preferences.dart';

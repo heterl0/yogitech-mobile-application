@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:ffi';
 
-import 'package:YogiTech/api/auth/auth_service.dart';
-import 'package:YogiTech/api/subscription/subscription_service.dart';
 import 'package:YogiTech/models/account.dart';
 import 'package:YogiTech/models/subscriptions.dart';
+import 'package:YogiTech/services/auth/auth_service.dart';
+import 'package:YogiTech/services/subscription/subscription_service.dart';
 import 'package:YogiTech/shared/future_function_dialog.dart';
 import 'package:YogiTech/widgets/checkbox.dart';
 import 'package:YogiTech/utils/formatting.dart';

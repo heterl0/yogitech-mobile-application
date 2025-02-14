@@ -1,6 +1,6 @@
-import 'package:YogiTech/api/account/account_service.dart';
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/models/account.dart';
+import 'package:YogiTech/services/account/account_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:YogiTech/shared/app_colors.dart';

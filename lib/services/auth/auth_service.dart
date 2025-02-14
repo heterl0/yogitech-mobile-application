@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:YogiTech/services/account/account_service.dart';
+import 'package:YogiTech/services/dioInstance.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:YogiTech/api/account/account_service.dart';
-import 'package:YogiTech/api/dioInstance.dart';
 import 'package:YogiTech/models/account.dart';
 import 'package:YogiTech/utils/formatting.dart';
 

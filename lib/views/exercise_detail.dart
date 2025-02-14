@@ -1,5 +1,6 @@
 import 'package:YogiTech/models/account.dart';
 import 'package:YogiTech/models/event.dart';
+import 'package:YogiTech/services/exercise/exercise_service.dart';
 import 'package:YogiTech/shared/premium_dialog.dart';
 import 'package:YogiTech/widgets/box_button.dart';
 import 'package:YogiTech/utils/method_channel_handler.dart';
@@ -7,7 +8,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:YogiTech/api/exercise/exercise_service.dart';
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/custombar/bottombar.dart';
 import 'package:YogiTech/models/exercise.dart';

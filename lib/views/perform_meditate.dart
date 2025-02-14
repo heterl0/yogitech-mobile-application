@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:YogiTech/services/notifi_service.dart';
+import 'package:YogiTech/notifi_services/notifi_service.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/widgets/box_button.dart';

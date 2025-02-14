@@ -1,8 +1,8 @@
 import 'package:YogiTech/models/account.dart';
+import 'package:YogiTech/services/blog/blog_service.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:YogiTech/api/blog/blog_service.dart';
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/widgets/box_input_field.dart';
 import 'package:YogiTech/widgets/card.dart';

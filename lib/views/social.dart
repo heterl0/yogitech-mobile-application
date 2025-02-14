@@ -1,10 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'package:YogiTech/api/social/social_service.dart';
-import 'package:YogiTech/services/notifi_service.dart';
 import 'package:YogiTech/models/notification.dart' as n;
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/models/account.dart';
+import 'package:YogiTech/notifi_services/notifi_service.dart';
+import 'package:YogiTech/services/notification/notification_service.dart';
+import 'package:YogiTech/services/social/social_service.dart';
 import 'package:YogiTech/views/notification_detail.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/shared/styles.dart';
@@ -13,8 +14,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import "package:timeago/timeago.dart" as timeago;
-
-import '../api/notification/notification_service.dart';
 
 class SocialPage extends StatefulWidget {
   final VoidCallback? onProfileUpdated;

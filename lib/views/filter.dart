@@ -1,7 +1,7 @@
 import 'package:YogiTech/models/account.dart';
+import 'package:YogiTech/services/pose/pose_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:YogiTech/api/pose/pose_service.dart';
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/models/pose.dart';
 import 'package:YogiTech/views/all_exercise.dart';
