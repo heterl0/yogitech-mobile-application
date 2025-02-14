@@ -1,6 +1,9 @@
 import 'package:YogiTech/services/account/account_service.dart';
 import 'package:YogiTech/services/auth/auth_service.dart';
 import 'package:YogiTech/shared/premium_dialog.dart';
+import 'package:YogiTech/view_models/auth/auth_view_model.dart';
+import 'package:YogiTech/widgets/infor_card_component.dart';
+import 'package:YogiTech/widgets/stat_card_component.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -13,7 +16,7 @@ import 'package:YogiTech/views/social.dart';
 import 'package:YogiTech/routing/app_routes.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/views/personalized_exercise_list.dart';
+import 'package:YogiTech/views/profile/personalized_exercise_list.dart';
 import 'package:YogiTech/views/settings.dart';
 import 'package:YogiTech/views/profile/friendlist.dart';
 import 'package:YogiTech/views/profile/change_BMI.dart';
@@ -265,7 +268,7 @@ class _ProfilePageState extends State<ProfilePage>
                                         builder: (context) => ChangeProfilePage(
                                               onProfileUpdated: refreshProfile,
                                               account: _account,
-                                            )), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                                            )),
                                   );
                                 },
                                 child: Column(
@@ -427,8 +430,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                 );
                                               },
                                             ),
-                                            if (!(_account?.is_premium ??
-                                                false))
+                                            if ((_account?.is_premium ?? false))
                                               Positioned.fill(
                                                 child: BackdropFilter(
                                                   filter: ImageFilter.blur(
@@ -537,7 +539,6 @@ class _ProfilePageState extends State<ProfilePage>
                                     StatCard(
                                       title: 'EXP',
                                       value: _profile?.exp.toString() ?? '',
-// Replace with API data
                                       valueColor:
                                           (!(_account?.is_premium ?? false))
                                               ? primary
@@ -573,7 +574,7 @@ class _ProfilePageState extends State<ProfilePage>
                             child: Stack(
                               children: [
                                 TabBar(
-                                  labelColor: (!(_account?.is_premium ?? false))
+                                  labelColor: ((_account?.is_premium ?? false))
                                       ? primary
                                       : primary2,
                                   dividerColor: Colors.transparent,
@@ -618,7 +619,7 @@ class _ProfilePageState extends State<ProfilePage>
                                       ? Center(
                                           child: CircularProgressIndicator(
                                           color:
-                                              (!(_account?.is_premium ?? false))
+                                              ((_account?.is_premium ?? false))
                                                   ? primary
                                                   : primary2,
                                         ))
@@ -640,7 +641,7 @@ class _ProfilePageState extends State<ProfilePage>
                                           ],
                                         ),
                                 ),
-                                if (!(_account?.is_premium ?? false))
+                                if ((_account?.is_premium ?? false))
                                   Positioned.fill(
                                     child: BackdropFilter(
                                       filter: ImageFilter.blur(
@@ -698,7 +699,6 @@ class _ProfilePageState extends State<ProfilePage>
                                     color: Colors.transparent,
                                     child: InkWell(
                                       onTap: () {
-                                        // Xử lý sự kiện khi nhấn vào nút "Đăng xuất"
                                         _logout();
                                       },
                                       borderRadius: BorderRadius.circular(44.0),
@@ -718,9 +718,6 @@ class _ProfilePageState extends State<ProfilePage>
                   ),
                 ),
               ));
-//             SafeArea(
-
-//               ));
   }
 }
 
@@ -809,120 +806,4 @@ Widget _buildLineChart(
       ],
     ),
   );
-}
-
-// Widget dùng chung cho Calorie, Social và Personalized Exercise
-class InfoCard extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final VoidCallback onTap;
-
-  const InfoCard({
-    super.key,
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return InkWell(
-      // InkWell bao toàn bộ container
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16.0), // Bo góc cho InkWell
-      child: Container(
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          border: Border.all(color: stroke),
-          borderRadius: BorderRadius.circular(16.0),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
-                ),
-                Text(
-                  subtitle,
-                  style: min_cap.copyWith(color: text),
-                ),
-              ],
-            ),
-            Icon(
-              icon,
-              size: 20,
-              color: stroke,
-            ),
-            // Image.asset(
-            //   icon,
-            //   width: 20,
-            //   height: 20,
-            // ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// Widget dùng chung cho Following, EXP, Follower và BMI
-class StatCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final Color valueColor;
-  final bool isTitleFirst;
-  final VoidCallback? onTap;
-
-  const StatCard({
-    super.key,
-    required this.title,
-    required this.value,
-    required this.valueColor,
-    this.isTitleFirst = false,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    Theme.of(context);
-
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16.0), // Bo góc cho InkWell
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          borderRadius:
-              BorderRadius.circular(16.0), // Bo góc cho Container (tùy chọn)
-        ),
-        child: Row(
-          children: isTitleFirst
-              ? [
-                  Text(
-                    title,
-                    style: min_cap.copyWith(color: text),
-                  ),
-                  const SizedBox(width: 10),
-                  Text(value, style: h2.copyWith(color: valueColor)),
-                ]
-              : [
-                  Text(value, style: h2.copyWith(color: valueColor)),
-                  const SizedBox(width: 10),
-                  Text(
-                    title,
-                    style: min_cap.copyWith(color: text),
-                  ),
-                ],
-        ),
-      ),
-    );
-  }
 }

@@ -3,7 +3,7 @@ import 'package:YogiTech/models/exercise.dart';
 import 'package:YogiTech/services/auth/auth_service.dart';
 import 'package:YogiTech/services/exercise/exercise_service.dart';
 import 'package:YogiTech/views/exercise_detail.dart';
-import 'package:YogiTech/views/personalized_exercise_create_update.dart';
+import 'package:YogiTech/views/profile/personalized_exercise_create_update.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/shared/styles.dart';
