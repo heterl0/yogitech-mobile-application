@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/api/dioInstance.dart';
-import 'package:YogiTech/src/models/account.dart';
+import 'package:YogiTech/models/account.dart';
 import 'package:YogiTech/utils/formatting.dart';
 
 Future<Account?> getUser() async {

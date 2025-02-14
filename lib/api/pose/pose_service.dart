@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:YogiTech/api/dioInstance.dart';
-import 'package:YogiTech/src/models/pose.dart';
+import 'package:YogiTech/models/pose.dart';
 import 'package:YogiTech/utils/formatting.dart';
 
 Future<List<dynamic>> getPoses() async {
