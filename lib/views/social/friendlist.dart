@@ -5,7 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/custombar/appbar.dart';
-import 'package:YogiTech/views/profile/friend_profile.dart';
+import 'package:YogiTech/views/social/friend_profile.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/widgets/box_input_field.dart';

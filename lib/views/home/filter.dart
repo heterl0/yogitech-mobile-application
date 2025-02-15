@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/models/pose.dart';
-import 'package:YogiTech/views/all_exercise.dart';
+import 'package:YogiTech/views/exercise/all_exercise.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/custombar/bottombar.dart';

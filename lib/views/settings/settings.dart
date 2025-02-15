@@ -1,11 +1,11 @@
 import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/views/exercise_settings.dart';
+import 'package:YogiTech/views/exercise/exercise_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:YogiTech/views/notifications.dart';
-import 'package:YogiTech/views/reminder.dart';
+import 'package:YogiTech/views/notifi/notifications.dart';
+import 'package:YogiTech/views/settings/reminder.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/widgets/switch.dart';

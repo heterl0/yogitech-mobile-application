@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:YogiTech/views/view_avatar.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +17,7 @@ import 'package:http/http.dart' as http;
 import 'dart:typed_data';
 
 import '../../services/account/account_service.dart';
+import 'view_avatar.dart';
 
 class ChangeProfilePage extends StatefulWidget {
   final VoidCallback? onProfileUpdated;

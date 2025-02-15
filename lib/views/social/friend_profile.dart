@@ -1,6 +1,6 @@
 import 'package:YogiTech/models/account.dart';
 import 'package:YogiTech/models/social.dart';
-import 'package:YogiTech/views/view_avatar.dart';
+import 'package:YogiTech/views/profile/view_avatar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/custombar/appbar.dart';

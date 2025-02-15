@@ -4,7 +4,7 @@ import 'package:YogiTech/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/custombar/appbar.dart';
-import 'package:YogiTech/views/event_detail.dart';
+import 'package:YogiTech/views/event/event_detail.dart';
 import 'package:YogiTech/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:YogiTech/utils/formatting.dart';
@@ -39,40 +39,48 @@ class _ActivitiesState extends State<Activities> {
           title: trans.event,
           showBackButton: false,
         ),
-        body: _isloading
-            ? Center(
-                child: CircularProgressIndicator(
-                color: (!(widget.account?.is_premium ?? false))
-                    ? primary
-                    : primary2,
-              ))
-            : SafeArea(
-                child: RefreshIndicator(
-                  color: (!(widget.account?.is_premium ?? false))
-                      ? primary
-                      : primary2,
-                  backgroundColor: theme.colorScheme.onSecondary,
+        body: Center(
+          child: Text(
+            "Chức năng đang phát triển",
+            style: theme.textTheme.bodyLarge,
+          ),
+        )
+        // _isloading
+        //     ? Center(
+        //         child: CircularProgressIndicator(
+        //         color: (!(widget.account?.is_premium ?? false))
+        //             ? primary
+        //             : primary2,
+        //       ))
+        //     : SafeArea(
+        //         child: RefreshIndicator(
+        //           color: (!(widget.account?.is_premium ?? false))
+        //               ? primary
+        //               : primary2,
+        //           backgroundColor: theme.colorScheme.onSecondary,
 
-                  // Bọc SingleChildScrollView bằng RefreshIndicator
-                  onRefresh: () async {
-                    // Gọi hàm để refresh dữ liệu ở đây
-                    _loadEvents(null);
-                    widget.fetchAccount?.call();
-                  },
-                  child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: Container(
-                      width: double.infinity,
-                      // height: double.infinity,
-                      decoration:
-                          BoxDecoration(color: theme.colorScheme.surface),
-                      child: SingleChildScrollView(
-                        child: _buildEventMainContent(),
-                      ),
-                    ),
-                  ),
-                ),
-              ));
+        //           // Bọc SingleChildScrollView bằng RefreshIndicator
+        //           onRefresh: () async {
+        //             // Gọi hàm để refresh dữ liệu ở đây
+        //             _loadEvents(null);
+        //             widget.fetchAccount?.call();
+        //           },
+        //           child: SingleChildScrollView(
+        //             physics: const AlwaysScrollableScrollPhysics(),
+        //             child: Container(
+        //               width: double.infinity,
+        //               // height: double.infinity,
+        //               decoration:
+        //                   BoxDecoration(color: theme.colorScheme.surface),
+        //               child: SingleChildScrollView(
+        //                 child: _buildEventMainContent(),
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //       )
+
+        );
   }
 
   Future<void> _loadEvents(int? eventId) async {

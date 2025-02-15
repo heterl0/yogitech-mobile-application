@@ -9,7 +9,7 @@ import 'package:YogiTech/shared/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
-import 'profile/friend_profile.dart';
+import '../social/friend_profile.dart';
 
 class NotificationDetail extends StatefulWidget {
   final n.Notification? notification;

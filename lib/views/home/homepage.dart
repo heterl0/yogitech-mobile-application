@@ -1,18 +1,18 @@
 import 'dart:ffi';
 
 import 'package:YogiTech/services/exercise/exercise_service.dart';
-import 'package:YogiTech/views/blog_detail.dart';
+import 'package:YogiTech/views/blog/blog_detail.dart';
+import 'package:YogiTech/views/home/filter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:YogiTech/views/subscription.dart';
+import 'package:YogiTech/views/home/subscription.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/views/all_exercise.dart';
-import 'package:YogiTech/views/exercise_detail.dart';
-import 'package:YogiTech/views/filter.dart';
-import 'package:YogiTech/views/streak.dart';
+import 'package:YogiTech/views/exercise/all_exercise.dart';
+import 'package:YogiTech/views/exercise/exercise_detail.dart';
+import 'package:YogiTech/views/home/streak.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/widgets/box_input_field.dart';
@@ -28,6 +28,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool _isSnackbarActive = false;
   List<dynamic> jsonList = [];
   List<dynamic> jsonListSort = [];
   bool _isnotSearching = true;
@@ -114,12 +115,30 @@ class _HomePageState extends State<HomePage> {
               preActions: [
                 GestureDetector(
                   onTap: () {
-                    pushWithoutNavBar(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SubscriptionPage(
-                                account: _account,
-                                fetchAccount: widget.fetchAccount)));
+                    // pushWithoutNavBar(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => SubscriptionPage(
+                    //             account: _account,
+                    //             fetchAccount: widget.fetchAccount)));
+                    if (!_isSnackbarActive) {
+                      setState(() {
+                        _isSnackbarActive = true;
+                      });
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(trans.systemInDevelopment),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+
+                      Future.delayed(Duration(seconds: 2), () {
+                        setState(() {
+                          _isSnackbarActive = false;
+                        });
+                      });
+                    }
                   },
                   child: Row(
                     children: [

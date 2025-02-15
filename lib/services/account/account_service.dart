@@ -314,13 +314,16 @@ Future<Profile?> patchProfile(
     PatchProfileRequest data, Uint8List? binaryImage) async {
   try {
     final Account? currentUser = await retrieveAccount();
+
     final int profileId = currentUser!.profile.id;
+
     final url = formatApiUrl('/api/v1/user-profiles/$profileId/');
     // Get the current date and time
     late FormData formData;
-    if (binaryImage != null) {
-      final now = DateTime.now();
 
+    if (binaryImage != null) {
+      print("Ảnh được chọn, kích thước: ${binaryImage.lengthInBytes} bytes");
+      final now = DateTime.now();
       // Format the date and time as a string
       final timestamp =
           '${now.year}${now.month}${now.day}_${now.hour}${now.minute}${now.second}';
@@ -343,7 +346,10 @@ Future<Profile?> patchProfile(
         'gender': data.gender,
       });
     }
+    print("Ảnh được chọn, kích thước: ${binaryImage} bytes");
+
     final response = await DioInstance.patch(url, data: formData);
+
     if (data.phone != null) {
       await DioInstance.patch(formatApiUrl('/api/v1/users/me/'),
           data: {'phone': data.phone});

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:YogiTech/custombar/appbar.dart';
-import 'package:YogiTech/views/perform_meditate.dart';
+import 'package:YogiTech/views/meditate/perform_meditate.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'dart:math';

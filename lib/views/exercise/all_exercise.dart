@@ -5,12 +5,13 @@ import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/models/account.dart';
 import 'package:YogiTech/models/pose.dart';
-import 'package:YogiTech/views/exercise_detail.dart';
-import 'package:YogiTech/views/filter.dart';
+import 'package:YogiTech/views/exercise/exercise_detail.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/widgets/box_input_field.dart';
 import 'package:YogiTech/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../home/filter.dart';
 
 class AllExercise extends StatefulWidget {
   final String? searchString;

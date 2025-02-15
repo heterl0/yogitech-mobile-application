@@ -11,6 +11,8 @@ import 'package:YogiTech/widgets/box_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:YogiTech/views/pre_launch_survey_page.dart';
+import 'package:provider/provider.dart';
+import '../../view_models/auth/auth_view_model.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -32,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
-
+    final authViewModel = Provider.of<AuthViewModel>(context);
     final String imageAsset = theme.brightness == Brightness.dark
         ? 'assets/images/login-sign.png'
         : 'assets/images/login-sign_light.png';
@@ -70,7 +72,8 @@ class _LoginPageState extends State<LoginPage> {
                     placeholder: trans.password,
                     password: true,
                     onSubmitted: (_) async {
-                      _handleLogin(context);
+                      authViewModel.handleLogin(
+                          context, emailController, passwordController);
                     },
                   ),
                   Align(
@@ -91,7 +94,8 @@ class _LoginPageState extends State<LoginPage> {
                     style: ButtonStyleType.Primary,
                     state: ButtonState.Enabled,
                     onPressed: () async {
-                      _handleLogin(context);
+                      authViewModel.handleLogin(
+                          context, emailController, passwordController);
                     },
                   ),
                   SizedBox(height: 10.0),
@@ -131,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                           textColor: theme.colorScheme.onPrimary,
                           buttonType: SocialLoginButtonType.google,
                           onPressed: () async {
-                            await _handleGoogleSignIn(trans);
+                            authViewModel.handleGoogleSignIn(context, trans);
                           },
                           text: trans.loginWithGoogle,
                         ),
