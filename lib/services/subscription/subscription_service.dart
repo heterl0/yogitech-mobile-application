@@ -117,7 +117,6 @@ Future<UserSubscription?> cancelSubscription(int id) async {
   }
 }
 
-// dev commit
 Future<UserSubscription?> expiredSubscription(int id) async {
   try {
     final url = formatApiUrl('/api/v1/user-subscriptions/$id/');

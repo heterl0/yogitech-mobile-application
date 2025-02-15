@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:YogiTech/routing/app_routes.dart';
-import 'package:YogiTech/views/pre_launch_survey_page.dart';
+import 'package:YogiTech/views/pre_launch_survey_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthViewModel extends ChangeNotifier {

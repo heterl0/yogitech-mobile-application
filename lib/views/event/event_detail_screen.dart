@@ -1,6 +1,6 @@
 import 'package:YogiTech/services/event/event_service.dart';
 import 'package:YogiTech/services/social/social_service.dart';
-import 'package:YogiTech/views/exercise/exercise_detail.dart';
+import 'package:YogiTech/views/exercise/exercise_detail_screen.dart';
 import 'package:YogiTech/views/social/friend_profile.dart';
 import 'package:YogiTech/widgets/box_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';

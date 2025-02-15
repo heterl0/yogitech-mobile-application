@@ -6,7 +6,7 @@ import 'package:YogiTech/models/account.dart';
 import 'package:YogiTech/notifi_services/notifi_service.dart';
 import 'package:YogiTech/services/notification/notification_service.dart';
 import 'package:YogiTech/services/social/social_service.dart';
-import 'package:YogiTech/views/notifi/notification_detail.dart';
+import 'package:YogiTech/views/notifi/notification_detail_screen.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/utils/formatting.dart';
