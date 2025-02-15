@@ -10,14 +10,14 @@ import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/widgets/box_input_field.dart';
 import 'package:YogiTech/widgets/dropdown_field.dart';
 import 'package:YogiTech/widgets/box_button.dart';
-import 'package:YogiTech/views/profile/change_BMI.dart';
+import 'package:YogiTech/views/profile/change_BMI_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'dart:typed_data';
 
 import '../../services/account/account_service.dart';
-import 'view_avatar.dart';
+import 'view_avatar_screen.dart';
 
 class ChangeProfilePage extends StatefulWidget {
   final VoidCallback? onProfileUpdated;

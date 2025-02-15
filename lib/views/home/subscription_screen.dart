@@ -12,7 +12,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/custombar/bottombar.dart';
-import 'package:YogiTech/views/home/payment_history.dart';
+import 'package:YogiTech/views/home/payment_history_screen.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/widgets/box_button.dart';

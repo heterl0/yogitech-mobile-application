@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/widgets/box_input_field.dart';
 import 'package:YogiTech/widgets/card.dart';
-import 'package:YogiTech/views/blog/blog_detail.dart';
+import 'package:YogiTech/views/blog/blog_detail_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Blog extends StatefulWidget {
