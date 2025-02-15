@@ -293,5 +293,6 @@
   "exerciseSettingDescription": "Set up your exercise to get the best experience",
   "hideVideoTutorial": "Hide video tutorial",
   "allowSkipExercise": "Allow skip exercise",
-  "timeToRest": "Time to rest (in seconds)"
+  "timeToRest": "Time to rest (in seconds)",
+  "systemInDevelopment": "system in development"
 }

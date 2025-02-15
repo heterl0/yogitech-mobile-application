@@ -293,5 +293,6 @@
   "exerciseSettingDescription": "Thiết lập bài tập của bạn để có trải nghiệm tốt nhất",
   "hideVideoTutorial": "Ẩn hướng dẫn video",
   "allowSkipExercise": "Cho phép bỏ qua bài tập",
-  "timeToRest": "Thời gian nghỉ ngơi (giây)"
+  "timeToRest": "Thời gian nghỉ ngơi (giây)",
+  "systemInDevelopment" : "Hệ thống đang phát triển"
 }

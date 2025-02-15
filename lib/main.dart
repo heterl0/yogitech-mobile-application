@@ -1,41 +1,39 @@
-import 'package:YogiTech/api/account/account_service.dart';
-import 'package:YogiTech/api/notification/notification_service.dart';
-import 'package:YogiTech/services/notifi_service.dart';
+import 'package:YogiTech/notifi_services/notifi_service.dart';
+import 'package:YogiTech/services/account/account_service.dart';
+import 'package:YogiTech/services/auth/auth_service.dart';
+import 'package:YogiTech/services/dioInstance.dart';
 import 'package:YogiTech/models/social.dart';
-import 'package:YogiTech/views/notification_detail.dart';
-import 'package:YogiTech/views/subscription.dart';
+import 'package:YogiTech/views/notifi/notification_detail.dart';
+import 'package:YogiTech/views/home/subscription.dart';
 import 'package:YogiTech/utils/formatting.dart';
+import 'package:YogiTech/views/auth/verify_email.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
-import 'package:YogiTech/api/auth/auth_service.dart';
-import 'package:YogiTech/api/dioInstance.dart';
 import 'package:YogiTech/views/_mainscreen.dart';
-import 'package:YogiTech/views/activities.dart';
-import 'package:YogiTech/views/blog.dart';
-import 'package:YogiTech/views/event_detail.dart';
-import 'package:YogiTech/views/change_profile.dart';
-import 'package:YogiTech/views/exercise_detail.dart';
-import 'package:YogiTech/views/forgot_password.dart';
-import 'package:YogiTech/views/friend_profile.dart';
-import 'package:YogiTech/views/notifications.dart';
-import 'package:YogiTech/views/payment_history.dart';
-import 'package:YogiTech/views/perform_meditate.dart';
+import 'package:YogiTech/views/event/activities.dart';
+import 'package:YogiTech/views/blog/blog.dart';
+import 'package:YogiTech/views/event/event_detail.dart';
+import 'package:YogiTech/views/profile/change_profile.dart';
+import 'package:YogiTech/views/exercise/exercise_detail.dart';
+import 'package:YogiTech/views/auth/forgot_password.dart';
+import 'package:YogiTech/views/social/friend_profile.dart';
+import 'package:YogiTech/views/notifi/notifications.dart';
+import 'package:YogiTech/views/home/payment_history.dart';
+import 'package:YogiTech/views/meditate/perform_meditate.dart';
 import 'package:YogiTech/views/pre_launch_survey_page.dart';
-import 'package:YogiTech/views/meditate.dart';
-import 'package:YogiTech/views/reminder.dart';
-import 'package:YogiTech/views/result.dart';
-import 'package:YogiTech/views/streak.dart';
-import 'package:YogiTech/views/verify_email.dart';
+import 'package:YogiTech/views/meditate/meditate.dart';
+import 'package:YogiTech/views/settings/reminder.dart';
+import 'package:YogiTech/views/exercise/result_exercise_practice.dart';
+import 'package:YogiTech/views/home/streak.dart';
 import 'package:YogiTech/routing/app_routes.dart';
-import 'package:YogiTech/views/login_page.dart';
-import 'package:YogiTech/views/sign_up_page.dart';
-import 'package:YogiTech/views/OTP_confirm_page.dart';
-import 'package:YogiTech/views/reset_password_page.dart';
-import 'package:YogiTech/views/homepage.dart';
-import 'package:YogiTech/views/profile.dart';
-import 'package:YogiTech/views/settings.dart';
+import 'package:YogiTech/views/auth/login_page.dart';
+import 'package:YogiTech/views/auth/sign_up_page.dart';
+import 'package:YogiTech/views/auth/reset_password_page.dart';
+import 'package:YogiTech/views/home/homepage.dart';
+import 'package:YogiTech/views/profile/profile.dart';
+import 'package:YogiTech/views/settings/settings.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -49,6 +47,10 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:workmanager/workmanager.dart';
 import 'package:YogiTech/models/notification.dart' as n;
+import 'package:provider/provider.dart';
+
+import 'view_models/auth/auth_view_model.dart';
+import 'views/inprogress/OTP_confirm_page.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -93,7 +95,14 @@ void main() async {
     Workmanager().cancelAll();
   }
   // Chạy ứng dụng với token nếu có
-  runApp(accessToken != null ? MyApp(access: accessToken) : MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthViewModel()),
+      ],
+      child: MyApp(access: accessToken),
+    ),
+  );
 }
 
 void callbackDispatcher() {
@@ -178,9 +187,6 @@ Future<String?> checkToken() async {
 }
 
 Future<void> loadEnv() async {
-  // To load the .env file contents into dotenv.
-  // NOTE: fileName defaults to .env and can be omitted in this case.
-  // Ensure that the filename corresponds to the path in step 1 and 2.
   await dotenv.load(fileName: ".env");
 }
 
@@ -226,7 +232,7 @@ class _MyAppState extends State<MyApp> {
       _themeMode = prefs.getBool('isDarkMode') ?? false
           ? ThemeMode.dark
           : ThemeMode.light;
-      final localeCode = prefs.getString('locale') ?? 'vi'; // Lấy language code
+      final localeCode = prefs.getString('locale') ?? 'en'; // Lấy language code
       _locale = Locale(localeCode);
     });
   }

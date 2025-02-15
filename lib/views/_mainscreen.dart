@@ -1,13 +1,13 @@
-import 'package:YogiTech/api/auth/auth_service.dart';
 import 'package:YogiTech/models/account.dart';
+import 'package:YogiTech/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:YogiTech/views/activities.dart';
-import 'package:YogiTech/views/blog.dart';
-import 'package:YogiTech/views/homepage.dart';
-import 'package:YogiTech/views/meditate.dart';
-import 'package:YogiTech/views/profile.dart';
+import 'package:YogiTech/views/event/activities.dart';
+import 'package:YogiTech/views/blog/blog.dart';
+import 'package:YogiTech/views/home/homepage.dart';
+import 'package:YogiTech/views/meditate/meditate.dart';
+import 'package:YogiTech/views/profile/profile.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/shared/styles.dart';
 

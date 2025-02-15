@@ -93,6 +93,7 @@ class _CustomInputButtonState extends State<CustomInputButton> {
             BoxInputFieldV2(
               controller: delayController,
               keyboardType: TextInputType.number,
+              readOnly: true,
               onChanged: (value) {
                 if (widget.onChanged != null) {
                   widget.onChanged!(int.parse(value));
