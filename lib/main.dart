@@ -293,7 +293,7 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.login: (context) => LoginPage(),
           AppRoutes.signup: (context) => SignUp(),
           AppRoutes.verifyEmail: (context) => VerifyEmail(),
-          AppRoutes.forgotpassword: (context) => ForgotPasswordPage(),
+          AppRoutes.forgotpassword: (context) => ForgotPasswordScreen(),
           AppRoutes.OtpConfirm: (context) => OTP_Page(),
           AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
           AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),

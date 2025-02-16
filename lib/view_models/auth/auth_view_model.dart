@@ -21,6 +21,54 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> handleSignUp(
+    BuildContext context,
+    TextEditingController usernameController,
+    TextEditingController emailController,
+    TextEditingController passwordController,
+    TextEditingController confirmPasswordController,
+  ) async {
+    final trans = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    String username = usernameController.text;
+    String email = emailController.text;
+    String password = passwordController.text;
+    String confirmPassword = confirmPasswordController.text;
+
+    if (username.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
+      showSnackbar(context, trans.missingInfor, theme, isError: true);
+      return;
+    }
+
+    if (password != confirmPassword) {
+      showSnackbar(context, trans.passDonotMatch, theme, isError: true);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      final response = await register(RegisterRequest(
+        email: email,
+        password: password,
+        username: username,
+        re_password: confirmPassword,
+      ));
+
+      if (response['status'] == 201) {
+        Navigator.pushReplacementNamed(context, AppRoutes.verifyEmail);
+      } else {
+        showSnackbar(context, trans.failRegister, theme, isError: true);
+      }
+    } catch (e) {
+      showSnackbar(context, trans.anError, theme, isError: true);
+    }
+    setLoading(false);
+  }
+
   Future<void> handleGoogleSignIn(
       BuildContext context, AppLocalizations trans) async {
     final theme = Theme.of(context);
@@ -114,6 +162,31 @@ class AuthViewModel extends ChangeNotifier {
       }
     } catch (e) {
       showSnackbar(context, '$e', theme);
+    }
+    setLoading(false);
+  }
+
+  Future<void> handleResetPassword(BuildContext context, String email) async {
+    final trans = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    if (email.isEmpty) {
+      showSnackbar(context, trans.enterEmail, theme, isError: true);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      final response = await resetPassword(email);
+      if (response['status'] == 204) {
+        showSnackbar(context, '${trans.sendResetPasswordTo} $email', theme);
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
+      } else {
+        showSnackbar(context, trans.invalidEmail, theme, isError: true);
+      }
+    } catch (e) {
+      showSnackbar(context, "${trans.error}: ${e.toString()}", theme,
+          isError: true);
     }
     setLoading(false);
   }
