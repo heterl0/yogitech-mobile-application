@@ -1,7 +1,7 @@
 import 'package:YogiTech/services/account/account_service.dart';
 import 'package:YogiTech/services/auth/auth_service.dart';
 import 'package:YogiTech/shared/premium_dialog.dart';
-import 'package:YogiTech/view_models/auth/auth_viewmodel.dart';
+import 'package:YogiTech/viewmodels/auth/auth_viewmodel.dart';
 import 'package:YogiTech/widgets/infor_card_component.dart';
 import 'package:YogiTech/widgets/stat_card_component.dart';
 import 'package:cached_network_image/cached_network_image.dart';

@@ -11,7 +11,7 @@ import 'package:YogiTech/widgets/box_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-import '../../view_models/auth/auth_viewmodel.dart';
+import '../../viewmodels/auth/auth_viewmodel.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

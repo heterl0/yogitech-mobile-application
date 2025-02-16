@@ -8,7 +8,7 @@ import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/widgets/box_input_field.dart';
 import 'package:YogiTech/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../view_models/auth/auth_viewmodel.dart';
+import '../../viewmodels/auth/auth_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
