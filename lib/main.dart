@@ -48,8 +48,8 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:workmanager/workmanager.dart';
 import 'package:YogiTech/models/notification.dart' as n;
 import 'package:provider/provider.dart';
-
-import 'view_models/auth/auth_view_model.dart';
+import 'view_models/blog/blog_detail_viewmodel.dart';
+import 'view_models/auth/auth_viewmodel.dart';
 import 'views/inprogress/OTP_confirm_screen.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -99,6 +99,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthViewModel()),
+        ChangeNotifierProvider(create: (context) => BlogDetailViewModel()),
       ],
       child: MyApp(access: accessToken),
     ),

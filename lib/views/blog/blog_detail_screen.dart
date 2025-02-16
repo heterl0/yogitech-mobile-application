@@ -286,11 +286,6 @@ class _BlogDetailState extends State<BlogDetail> {
   }
 
   Widget _buildSubtitle() {
-    // return Text(
-    //   widget.subtitle,
-    //   style: min_cap.copyWith(color: text),
-    //   textAlign: TextAlign.left,
-    // );
     return HtmlWidget(
       blog?.content ?? '',
       textStyle: TextStyle(fontFamily: 'ReadexPro', fontSize: 16, height: 1.2),
@@ -315,11 +310,6 @@ class _BlogDetailState extends State<BlogDetail> {
   }
 
   Widget _buildDescription() {
-    // return Text(
-    //   widget.caption,
-    //   style: min_cap.copyWith(color: text),
-    //   textAlign: TextAlign.left,
-    // );
     return HtmlWidget(
       blog?.description ?? '',
       textStyle: TextStyle(

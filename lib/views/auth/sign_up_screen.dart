@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../view_models/auth/auth_view_model.dart';
+import '../../view_models/auth/auth_viewmodel.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});

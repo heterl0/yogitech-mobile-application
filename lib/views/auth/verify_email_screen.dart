@@ -33,7 +33,7 @@ class VerifyEmail extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.asset(
-                'assets/images/EmailOpen.png', // Thay đổi đường dẫn đến hình ảnh của bạn
+                'assets/images/EmailOpen.png',
                 width: 120,
                 height: 120,
               ),
