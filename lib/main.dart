@@ -100,7 +100,9 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AuthViewModel()),
+        ChangeNotifierProvider(
+          create: (context) => AuthViewModel(),
+        ),
         ChangeNotifierProvider(create: (context) => BlogDetailViewModel()),
         ChangeNotifierProvider(create: (context) => ChangeBMIViewModel()),
         ChangeNotifierProvider(create: (context) => ChangeProfileViewModel()),
