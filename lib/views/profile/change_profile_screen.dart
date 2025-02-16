@@ -92,11 +92,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     }
   }
 
-  String _formatDate(String date) {
-    DateTime parsedDate = DateTime.parse(date).toUtc().toLocal();
-    return DateFormat('dd-MM-yyyy').format(parsedDate);
-  }
-
   void _viewAvatar() {
     if (_imageBytes != null || widget.account?.profile.avatar_url != null) {
       Navigator.push(
@@ -342,6 +337,9 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     print(
         "Giới tánh được sửa? ${genderValue}, giá trị của text: ${gender.text}");
 
+    print("${gender.text} $lastName: ${gender}");
+
+    print("$firstName $lastName $genderValue $genderMap $birthday");
     PatchProfileRequest request = PatchProfileRequest(
       lastName: lastName.text,
       firstName: firstName.text,

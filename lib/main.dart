@@ -105,7 +105,7 @@ void main() async {
         ),
         ChangeNotifierProvider(create: (context) => BlogDetailViewModel()),
         ChangeNotifierProvider(create: (context) => ChangeBMIViewModel()),
-        ChangeNotifierProvider(create: (context) => ChangeProfileViewModel()),
+        // ChangeNotifierProvider(create: (context) => ChangeProfileViewModel()),
       ],
       child: MyApp(access: accessToken),
     ),

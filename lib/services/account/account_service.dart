@@ -322,7 +322,6 @@ Future<Profile?> patchProfile(
     late FormData formData;
 
     if (binaryImage != null) {
-      print("Ảnh được chọn, kích thước: ${binaryImage.lengthInBytes} bytes");
       final now = DateTime.now();
       // Format the date and time as a string
       final timestamp =
@@ -346,7 +345,6 @@ Future<Profile?> patchProfile(
         'gender': data.gender,
       });
     }
-    print("Ảnh được chọn, kích thước: ${binaryImage} bytes");
 
     final response = await DioInstance.patch(url, data: formData);
 
