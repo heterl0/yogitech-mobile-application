@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/utils/formatting.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -38,6 +36,8 @@ class ChangeProfilePage extends StatefulWidget {
 }
 
 class _ChangeProfilePageState extends State<ChangeProfilePage> {
+  late ChangeProfileViewModel _viewModel;
+
   final TextEditingController lastName = TextEditingController();
   final TextEditingController firstName = TextEditingController();
   final TextEditingController phone = TextEditingController();
@@ -59,6 +59,22 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
       _fetchUserProfile();
     }
   }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _viewModel = ChangeProfileViewModel(
+  //       trans: AppLocalizations.of(context)!, account: widget.account);
+  //   _viewModel.loadProfile();
+  // }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   final trans = AppLocalizations.of(context)!;
+  //   _viewModel = ChangeProfileViewModel(trans: trans, account: widget.account);
+  //   _viewModel.loadProfile();
+  // }
 
   void _fetchUserProfile() {
     if (widget.account?.profile != null) {
@@ -373,6 +389,73 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
         ),
         duration: Duration(seconds: 2),
       ),
+    );
+  }
+
+  Widget _buildTextField(String label, TextEditingController controller,
+      {TextInputType keyboardType = TextInputType.text,
+      List<TextInputFormatter>? inputFormatters,
+      RegExp? regExp}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label,
+            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary)),
+        SizedBox(height: 8),
+        BoxInputField(
+          controller: controller,
+          keyboardType: keyboardType,
+          inputFormatters: inputFormatters,
+          regExp: regExp,
+        ),
+        SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget _buildDateAndGenderFields(AppLocalizations trans) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(trans.birthday,
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary)),
+              SizedBox(height: 8.0),
+              BoxInputField(
+                controller: _viewModel.birthday,
+                placeholder: trans.birthday,
+                trailing: Icon(Icons.calendar_today),
+                readOnly: true,
+                onTap: () => _viewModel.selectDate(context),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(width: 16.0),
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(trans.gender,
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary)),
+              SizedBox(height: 8.0),
+              CustomDropdownFormField(
+                controller: _viewModel.gender,
+                items: [trans.male, trans.female, trans.other],
+                placeholder: _viewModel.gender.text.isEmpty
+                    ? trans.sellectGender
+                    : _viewModel.gender.text,
+                onTap: () {},
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
