@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:YogiTech/custombar/appbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:audioplayers/audioplayers.dart';
+import '../../widgets/abmob/interstitial_ad_widget.dart';
 
 class PerformMeditate extends StatefulWidget {
   final Duration duration;
@@ -33,6 +34,7 @@ class _PerformMeditateState extends State<PerformMeditate>
   late AnimationController _animationController;
   late Animation<double> _animation;
 
+  final InterstitialAdWidget _interstitialAdWidget = InterstitialAdWidget();
   @override
   void initState() {
     super.initState();
@@ -46,6 +48,7 @@ class _PerformMeditateState extends State<PerformMeditate>
 
     _remainingTime = widget.duration;
     _audioPlayer = AudioPlayer();
+    _interstitialAdWidget.loadInterstitialAd();
   }
 
   @override
@@ -77,6 +80,11 @@ class _PerformMeditateState extends State<PerformMeditate>
             _stopAudio();
             widget.updateStreak?.call();
             _animationController.reset();
+
+            // Hiển thị quảng cáo khi kết thúc
+            if (_interstitialAdWidget.isAdLoaded) {
+              _interstitialAdWidget.showInterstitialAd();
+            }
           }
         });
       });

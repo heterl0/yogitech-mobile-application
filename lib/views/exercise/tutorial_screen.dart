@@ -16,7 +16,6 @@ class _TutorialState extends State<Tutorial> {
 
   @override
   void didChangeDependencies() {
-    // Sử dụng didChangeDependencies
     super.didChangeDependencies();
     _initializeVideoPlayer();
   }
