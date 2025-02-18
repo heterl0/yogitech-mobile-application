@@ -18,6 +18,8 @@ import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/widgets/box_input_field.dart';
 import 'package:YogiTech/widgets/card.dart';
 
+import '../../widgets/banner_ad.dart';
+
 class HomePage extends StatefulWidget {
   final Account? account;
   final VoidCallback? fetchAccount;

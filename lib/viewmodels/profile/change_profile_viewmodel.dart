@@ -45,30 +45,6 @@ class ChangeProfileViewModel {
     }
   }
 
-  Future<void> pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      _image = File(pickedFile.path);
-      imageBytes = await _image!.readAsBytes();
-    }
-  }
-
-  void viewAvatar(BuildContext context) {
-    if (imageBytes != null || account?.profile.avatar_url != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AvatarViewPage(
-            avatarUrl: account?.profile.avatar_url ?? '',
-            imageBytes: imageBytes,
-          ),
-        ),
-      );
-    }
-  }
-
   Future<void> selectDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,

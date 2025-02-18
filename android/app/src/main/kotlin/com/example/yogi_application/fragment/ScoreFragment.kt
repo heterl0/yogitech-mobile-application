@@ -186,12 +186,12 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                             val feedbacks = result.data?.feedback?.getFeedback()
                             if (feedbacks?.size == 2) {
                                 var feedback1Name = feedbacks[0] // Replace with your actual string name
-                                feedback1Name = feedback1Name?.toLowerCase()?.replace(" ", "")?.replace(".", "")
+                                feedback1Name = feedback1Name?.lowercase()?.replace(" ", "")?.replace(".", "")
                                 Log.d("feedback 1", "$feedback1Name");
                                 val feedback1ResId = resources.getIdentifier(feedback1Name, "string", context?.packageName)
                                 val feedback1 = getString(feedback1ResId)
                                 var feedback2Name = feedbacks[1] // Replace with your actual string name
-                                feedback2Name = feedback2Name?.toLowerCase()?.replace(" ", "")?.replace(".", "")
+                                feedback2Name = feedback2Name?.lowercase()?.replace(" ", "")?.replace(".", "")
                                 Log.d("feedback 2", "$feedback2Name");
                                 val feedback2ResId = resources.getIdentifier(feedback2Name, "string", context?.packageName)
                                 val feedback2 = getString(feedback2ResId)
