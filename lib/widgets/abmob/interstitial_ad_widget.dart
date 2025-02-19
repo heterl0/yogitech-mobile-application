@@ -11,7 +11,8 @@ class InterstitialAdWidget {
   void loadInterstitialAd() {
     InterstitialAd.load(
       adUnitId:
-          'ca-app-pub-3940256099942544/1033173712', // Thay bằng Ad Unit ID thật
+          // 'ca-app-pub-3767915082225357/8216493830', // Thay bằng Ad Unit ID thật
+          'ca-app-pub-3940256099942544/1033173712',
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {

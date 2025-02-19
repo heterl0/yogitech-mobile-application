@@ -20,7 +20,10 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   void _initializeBannerAd() {
     _bannerAd = BannerAd(
       adUnitId:
-          'ca-app-pub-3940256099942544/6300978111', // Thay bằng Ad Unit ID của bạn
+          // 'ca-app-pub-3767915082225357/9404123439', // Thay bằng Ad Unit ID của bạn
+          'ca-app-pub-3940256099942544/6300978111',
+
+
       size: AdSize.banner,
       request: AdRequest(),
       listener: BannerAdListener(

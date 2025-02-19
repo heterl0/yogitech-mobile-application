@@ -1,5 +1,5 @@
 plugins {
-    id "com.android.application"
+    id "com.android.application" version "8.4.0"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
     id 'com.google.gms.google-services'
@@ -83,15 +83,26 @@ android {
         compileSdkVersion 34        
 //        apiUrl apiUrl
     }
+    def keystoreProperties = new Properties()
+    def keystorePropertiesFile = rootProject.file("key.properties")
+    if (keystorePropertiesFile.exists()) {
+        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    }
     
     signingConfigs {
+        // release {
+        //     storeFile file("android/app/yogitech-keystore.jks")
+        //     storePassword "android"
+        //     keyAlias "upload"
+        //     keyPassword "android"
+        // }
         release {
-            storeFile file("android/app/yogitech-keystore.jks")
-            storePassword "android"
-            keyAlias "upload"
-            keyPassword "android"
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
         }
-        
+
         // debug {
         //    storeFile file("yogitech-keystore.jks")
         //     storePassword "android"
@@ -103,13 +114,17 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            shrinkResources false
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         }
 
         // debug {
         //     signingConfig signingConfigs.debug
         // }
+    }
+    lintOptions {
+        warning 'deprecation'
     }
 
 }
