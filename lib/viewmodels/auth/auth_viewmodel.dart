@@ -78,10 +78,12 @@ class AuthViewModel extends ChangeNotifier {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       GoogleSignInAuthentication googleSignInAuthentication =
           await googleUser!.authentication;
+      print(googleUser);
 
       final accessToken =
           await loginGoogle(googleSignInAuthentication.idToken ?? "");
-
+      print(googleSignInAuthentication.idToken);
+      print(accessToken);
       if (accessToken != null) {
         _googleSignIn.signOut();
         final user = await getUser();

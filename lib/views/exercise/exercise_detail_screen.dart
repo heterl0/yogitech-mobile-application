@@ -62,7 +62,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
             width: 48,
             height: 28,
             child: _exercise!.is_premium
-                ? (!(_account?.is_premium ?? false))
+                ? ((_account?.is_premium ?? false))
                     ? Image.asset('assets/images/Crown.png')
                     : Image.asset('assets/images/Crown2.png')
                 : null,
@@ -76,7 +76,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
               child: Center(
                 child: CircularProgressIndicator(
                   color:
-                      (!(_account?.is_premium ?? false)) ? primary : primary2,
+                      ((_account?.is_premium ?? false)) ? primary : primary2,
                 ),
               ),
             )

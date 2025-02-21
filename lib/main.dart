@@ -64,6 +64,7 @@ void main() async {
   // Đảm bảo WidgetsFlutterBinding đã được khởi tạo
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+
   tz.initializeTimeZones();
   tz.setLocalLocation(
       tz.getLocation('Asia/Ho_Chi_Minh')); // Đặt múi giờ Việt Nam
