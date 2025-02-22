@@ -156,14 +156,14 @@ class ResultAfterPractice extends StatelessWidget {
             title: trans.finish,
             style: ButtonStyleType.Primary,
             onPressed: () {
-              // if (interstitialAdWidget.isAdLoaded) {
-              //   interstitialAdWidget.showInterstitialAd();
-              //   Future.delayed(Duration(seconds: 1), () {
-              //     Navigator.pop(context);
-              //   });
-              // } else {
-              Navigator.pop(context);
-              // }
+              if (interstitialAdWidget.isAdLoaded) {
+                interstitialAdWidget.showInterstitialAd();
+                Future.delayed(Duration(seconds: 1), () {
+                  Navigator.pop(context);
+                });
+              } else {
+                Navigator.pop(context);
+              }
             },
           ),
         ],

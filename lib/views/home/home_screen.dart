@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:YogiTech/services/exercise/exercise_service.dart';
 import 'package:YogiTech/views/blog/blog_detail_screen.dart';
 import 'package:YogiTech/views/home/filter_screen.dart';
@@ -121,24 +120,24 @@ class _HomePageState extends State<HomePage> {
                     //         builder: (context) => SubscriptionPage(
                     //             account: _account,
                     //             fetchAccount: widget.fetchAccount)));
-                    if (!_isSnackbarActive) {
-                      setState(() {
-                        _isSnackbarActive = true;
-                      });
+                    // if (!_isSnackbarActive) {
+                    //   setState(() {
+                    //     _isSnackbarActive = true;
+                    //   });
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(trans.systemInDevelopment),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //       content: Text(trans.systemInDevelopment),
+                    //       duration: Duration(seconds: 2),
+                    //     ),
+                    //   );
 
-                      Future.delayed(Duration(seconds: 2), () {
-                        setState(() {
-                          _isSnackbarActive = false;
-                        });
-                      });
-                    }
+                    //   Future.delayed(Duration(seconds: 2), () {
+                    //     setState(() {
+                    //       _isSnackbarActive = false;
+                    //     });
+                    //   });
+                    // }
                   },
                   child: Row(
                     children: [

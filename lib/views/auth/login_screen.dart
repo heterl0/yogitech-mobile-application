@@ -34,9 +34,9 @@ class _LoginPageState extends State<LoginPage> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     final authViewModel = Provider.of<AuthViewModel>(context);
-    final String imageAsset = theme.brightness == Brightness.dark
-        ? 'assets/images/login-sign.png'
-        : 'assets/images/login-sign_light.png';
+    final String imageAsset = theme.brightness == Brightness.light
+        ? 'assets/images/login-sign_light.png'
+        : 'assets/images/login-sign.png';
 
     return Scaffold(
       backgroundColor: theme.colorScheme.onSecondary,

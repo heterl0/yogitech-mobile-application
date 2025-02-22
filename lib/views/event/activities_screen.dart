@@ -41,7 +41,7 @@ class _ActivitiesState extends State<Activities> {
         ),
         body: Center(
           child: Text(
-            "Chức năng đang phát triển",
+            trans.systemInDevelopment,
             style: theme.textTheme.bodyLarge,
           ),
         )

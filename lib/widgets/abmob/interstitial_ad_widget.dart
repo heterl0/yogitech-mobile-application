@@ -5,13 +5,13 @@ class InterstitialAdWidget {
   late InterstitialAd _interstitialAd;
   bool _isAdLoaded = false;
 
-  // Getter công khai để kiểm tra trạng thái quảng cáo
+  // Getter
   bool get isAdLoaded => _isAdLoaded;
 
   void loadInterstitialAd() {
     InterstitialAd.load(
       adUnitId:
-          // 'ca-app-pub-3767915082225357/8216493830', // Thay bằng Ad Unit ID thật
+          // 'ca-app-pub-3767915082225357/8216493830', // thay id that vao
           'ca-app-pub-3940256099942544/1033173712',
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(

@@ -55,7 +55,6 @@ import 'package:YogiTech/views/social/friend_profile.dart';
 import 'viewmodels/auth/auth_viewmodel.dart';
 import 'viewmodels/blog/blog_detail_viewmodel.dart';
 import 'viewmodels/profile/change_BMI_viewmodel.dart';
-import 'viewmodels/profile/change_profile_viewmodel.dart';
 import 'views/inprogress/OTP_confirm_screen.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -132,6 +131,7 @@ void callbackDispatcher() {
     await loadEnv();
 
     final accessToken = await prefs.getString('accessToken');
+
     // final url = dotenv.get("API_BASE_URL") + '/api/v1/notification/';
     final url = formatApiUrl('/api/v1/notification/');
     final _dio = Dio();
@@ -222,20 +222,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = ThemeMode.dark;
+  ThemeMode _themeMode = ThemeMode.light;
   Locale _locale = const Locale('en');
-
+  bool _isLoading = true; // Biến để kiểm soát việc load settings
   @override
   void initState() {
     super.initState();
     _loadSettings();
-  }
-
-  // Hàm lưu cài đặt
-  void _saveSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isDarkMode', _themeMode == ThemeMode.dark);
-    await prefs.setString('locale', _locale.languageCode); // Lưu language code
   }
 
   // Hàm tải cài đặt
@@ -247,7 +240,15 @@ class _MyAppState extends State<MyApp> {
           : ThemeMode.light;
       final localeCode = prefs.getString('locale') ?? 'en'; // Lấy language code
       _locale = Locale(localeCode);
+      _isLoading = false;
     });
+  }
+
+  // Hàm lưu cài đặt
+  void _saveSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkMode', _themeMode == ThemeMode.dark);
+    await prefs.setString('locale', _locale.languageCode); // Lưu language code
   }
 
   void _toggleTheme(bool isDarkMode) {
@@ -277,6 +278,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(
+          child:
+              CircularProgressIndicator()); // Hiển thị màn hình loading trước
+    }
     FlutterNativeSplash.remove();
     return MaterialApp(
         debugShowCheckedModeBanner: false,
