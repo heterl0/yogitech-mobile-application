@@ -118,20 +118,6 @@ class _ProfilePageState extends State<ProfilePage>
     }
   }
 
-  Future<void> _logout() async {
-    try {
-      // Xóa token từ SharedPreferences khi người dùng logout
-      await clearToken();
-      await clearAccount();
-      // Chuyển hướng đến trang đăng nhập và xóa tất cả các route cũ
-      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-          AppRoutes.login, (Route<dynamic> route) => false);
-    } catch (e) {
-      print('Logout error: $e');
-      // Xử lý lỗi khi logout
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -164,6 +150,9 @@ class _ProfilePageState extends State<ProfilePage>
       _isLoading = true;
       _account = widget.account;
       _profile = _account?.profile;
+      print(
+          'Account from widget: $_account'); // Thêm print để kiểm tra _account
+      print('Profile from account: $_profile');
       _isLoading = false;
     });
   }

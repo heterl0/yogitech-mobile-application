@@ -78,15 +78,16 @@ class AuthViewModel extends ChangeNotifier {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       GoogleSignInAuthentication googleSignInAuthentication =
           await googleUser!.authentication;
-      print(googleUser);
 
       final accessToken =
           await loginGoogle(googleSignInAuthentication.idToken ?? "");
-      print(googleSignInAuthentication.idToken);
-      print(accessToken);
       if (accessToken != null) {
         _googleSignIn.signOut();
         final user = await getUser();
+        if (googleUser.photoUrl != null) {
+          user?.profile.avatar_url = googleUser.photoUrl;
+        }
+        print(user);
         if (user != null && user.active_status == 1) {
           if (user.profile.first_name == null ||
               user.profile.last_name == null) {
@@ -108,7 +109,6 @@ class AuthViewModel extends ChangeNotifier {
       showSnackbar(context, '${trans.anError} $e', theme);
       _googleSignIn.signOut();
     }
-
     setLoading(false);
   }
 

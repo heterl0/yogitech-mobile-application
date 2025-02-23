@@ -92,7 +92,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _fetchAccount() async {
-    print('I got account');
     if (widget.account != null) {
       setState(() {
         _account = widget.account;
@@ -310,25 +309,25 @@ class _HomePageState extends State<HomePage> {
                           );
                         },
                       ),
-                      _buildCarouselItem(
-                        title: trans.specialOfferForNewMembers,
-                        subtitle: trans.receiveTwoFreeSessions,
-                        poseName: trans.subscribePremiumNow,
-                        imagePath: (!(_account?.is_premium ?? false))
-                            ? 'assets/images/Crown.png'
-                            : 'assets/images/Crown2.png',
-                        onTap: () {
-                          pushWithoutNavBar(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SubscriptionPage(
-                                account: _account,
-                                fetchAccount: _fetchAccountAndStatus,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
+                      // _buildCarouselItem(
+                      //   title: trans.specialOfferForNewMembers,
+                      //   subtitle: trans.receiveTwoFreeSessions,
+                      //   poseName: trans.subscribePremiumNow,
+                      //   imagePath: (!(_account?.is_premium ?? false))
+                      //       ? 'assets/images/Crown.png'
+                      //       : 'assets/images/Crown2.png',
+                      //   onTap: () {
+                      //     pushWithoutNavBar(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (context) => SubscriptionPage(
+                      //           account: _account,
+                      //           fetchAccount: _fetchAccountAndStatus,
+                      //         ),
+                      //       ),
+                      //     );
+                      //   },
+                      // ),
                       _buildCarouselItem(
                         title: trans.yogaTipsForBeginners,
                         subtitle: trans.fiveBasicPoses,
@@ -364,7 +363,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [0, 1, 2, 3].map((entry) {
+                  children: [0, 1, 2].map((entry) {
                     return GestureDetector(
                       onTap: () => carouselController.animateToPage(
                           entry, // Move to the selected page

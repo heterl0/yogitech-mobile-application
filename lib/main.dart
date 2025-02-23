@@ -1,6 +1,6 @@
+// main.dart
 import 'dart:async';
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:workmanager/workmanager.dart';
-
 import 'package:YogiTech/l10n/l10n.dart';
 import 'package:YogiTech/models/notification.dart' as n;
 import 'package:YogiTech/models/social.dart';
@@ -51,138 +50,38 @@ import 'package:YogiTech/views/profile/profile_screen.dart';
 import 'package:YogiTech/views/settings/reminder_screen.dart';
 import 'package:YogiTech/views/settings/settings_screen.dart';
 import 'package:YogiTech/views/social/friend_profile.dart';
-
 import 'viewmodels/auth/auth_viewmodel.dart';
 import 'viewmodels/blog/blog_detail_viewmodel.dart';
 import 'viewmodels/profile/change_BMI_viewmodel.dart';
 import 'views/inprogress/OTP_confirm_screen.dart';
 
+// ============================================================================
+// GLOBAL VARIABLES
+// ============================================================================
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
-void main() async {
-  // Đảm bảo WidgetsFlutterBinding đã được khởi tạo
+
+// ============================================================================
+// APP INITIALIZATION
+// ============================================================================
+Future<void> _initializeApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
 
   tz.initializeTimeZones();
-  tz.setLocalLocation(
-      tz.getLocation('Asia/Ho_Chi_Minh')); // Đặt múi giờ Việt Nam
-  // Khởi tạo các dịch vụ hoặc các thành phần cần thiết khác
+  tz.setLocalLocation(tz.getLocation('Asia/Ho_Chi_Minh'));
+
   await LocalNotificationService().init();
   HttpOverrides.global = MyHttpOverrides();
-
-  // Loại bỏ splash screen ngay lập tức
   FlutterNativeSplash.remove();
-  // Tải các biến môi trường
-  await loadEnv();
-  // Kiểm tra và lấy token
-  final accessToken = await checkToken();
-
-  // Đặt chế độ xoay màn hình
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  final bool isNotificationsOn = prefs.getBool('friendActivitiesOn') ?? false;
-  if (isNotificationsOn) {
-    await Workmanager().initialize(callbackDispatcher);
-    // Workmanager().registerPeriodicTask(
-    //   "15_min_task",
-    //   "fetchAndNotify",
-    //   frequency: const Duration(minutes: 15),
-    // );
-    Workmanager().registerOneOffTask(
-      "fetchAndNotify",
-      "fetchAndNotify",
-      initialDelay: Duration(seconds: 5),
-    );
-    print("Task registered");
-  } else {
-    Workmanager().cancelAll();
-  }
-  // Chạy ứng dụng với token nếu có
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => AuthViewModel(),
-        ),
-        ChangeNotifierProvider(create: (context) => BlogDetailViewModel()),
-        ChangeNotifierProvider(create: (context) => ChangeBMIViewModel()),
-        // ChangeNotifierProvider(create: (context) => ChangeProfileViewModel()),
-      ],
-      child: MyApp(access: accessToken),
-    ),
-  );
+  await _loadEnv();
 }
 
-void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) async {
-    // Đặt múi giờ Việt Nam
-    // await LocalNotificationService().init();
-    // Fetch notifications from your serve
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool isNotificationsOn = prefs.getBool('friendActivitiesOn') ?? false;
-    if (!isNotificationsOn) {
-      return Future.value(false);
-    }
-    DateTime now = DateTime.now().subtract(Duration(minutes: 15));
-    await loadEnv();
-
-    final accessToken = await prefs.getString('accessToken');
-
-    // final url = dotenv.get("API_BASE_URL") + '/api/v1/notification/';
-    final url = formatApiUrl('/api/v1/notification/');
-    final _dio = Dio();
-    _dio.options.headers['Authorization'] = 'Bearer $accessToken';
-    final Response response = await _dio.get(url);
-    List<dynamic> notifications = response.data
-        .map((e) => n.Notification.fromMap(e))
-        .toList()
-        .where((notification) {
-      DateTime notificationTime = DateTime.parse(notification.time);
-      return notificationTime.isAfter(now);
-    }).toList();
-    if (notifications.isNotEmpty) {
-      // Parse the response and schedule a notification
-      showNotification(notifications);
-    }
-    print(notifications);
-    print('Task was executed');
-    return Future.value(true);
-  });
+Future<void> _loadEnv() async {
+  await dotenv.load(fileName: ".env");
 }
 
-void showNotification(List<dynamic> notifications) async {
-  final now = DateTime.now();
-  print('Showing notifications');
-  print(notifications.length);
-
-  for (var notification in notifications) {
-    print(notification);
-    final notificationTime = DateTime.parse(notification.time);
-    if (notificationTime.isAfter(now)) {
-      await LocalNotificationService.showActivitiesNotification(
-        id: notification.id + 10,
-        title: notification.title,
-        body: notification.body,
-        scheduledTime: notificationTime,
-        payload: 'friend_notification_${notification.id}',
-      );
-    } else {
-      await LocalNotificationService.showActivitiesNotification(
-        id: notification.id + 10,
-        title: notification.title,
-        body: notification.body,
-        scheduledTime: now.add(Duration(seconds: 5)),
-        payload: 'friend_notification_${notification.id}',
-      );
-    }
-  }
-}
-
-Future<String?> checkToken() async {
+Future<String?> _checkToken() async {
   try {
     final tokens = await getToken();
     final accessToken = tokens['access'];
@@ -192,17 +91,88 @@ Future<String?> checkToken() async {
     }
     return accessToken;
   } catch (error) {
-    // Handle error, e.g., log the error or show an error message.
     print("Error fetching token: $error");
-    // You might want to redirect to a login screen or handle the error differently.
+    return null;
   }
-  return null;
 }
 
-Future<void> loadEnv() async {
-  await dotenv.load(fileName: ".env");
+// ============================================================================
+// WORKMANAGER CONFIGURATION
+// ============================================================================
+Future<void> _setupWorkManager() async {
+  final prefs = await SharedPreferences.getInstance();
+  final bool isNotificationsOn = prefs.getBool('friendActivitiesOn') ?? false;
+
+  if (isNotificationsOn) {
+    await Workmanager().initialize(callbackDispatcher);
+    Workmanager().registerOneOffTask(
+      "fetchAndNotify",
+      "fetchAndNotify",
+      initialDelay: const Duration(seconds: 5),
+    );
+    print("Task registered");
+  } else {
+    Workmanager().cancelAll();
+  }
 }
 
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    final prefs = await SharedPreferences.getInstance();
+    final bool isNotificationsOn = prefs.getBool('friendActivitiesOn') ?? false;
+    if (!isNotificationsOn) return Future.value(false);
+
+    final now = DateTime.now().subtract(const Duration(minutes: 15));
+    await _loadEnv();
+    final accessToken = await prefs.getString('accessToken');
+    final url = formatApiUrl('/api/v1/notification/');
+    final dio = Dio()..options.headers['Authorization'] = 'Bearer $accessToken';
+
+    try {
+      final response = await dio.get(url);
+      final notifications = (response.data as List)
+          .map((e) => n.Notification.fromMap(e))
+          .where(
+              (notification) => DateTime.parse(notification.time).isAfter(now))
+          .toList();
+
+      if (notifications.isNotEmpty) {
+        _showNotifications(notifications);
+      }
+      print('Task was executed');
+      return Future.value(true);
+    } catch (e) {
+      print('Error in workmanager task: $e');
+      return Future.value(false);
+    }
+  });
+}
+
+// ============================================================================
+// NOTIFICATION HANDLING
+// ============================================================================
+Future<void> _showNotifications(List<dynamic> notifications) async {
+  final now = DateTime.now();
+
+  for (var notification in notifications) {
+    final notificationTime = DateTime.parse(notification.time);
+    final scheduledTime = notificationTime.isAfter(now)
+        ? notificationTime
+        : now.add(const Duration(seconds: 5));
+
+    await LocalNotificationService.showActivitiesNotification(
+      id: notification.id + 10,
+      title: notification.title,
+      body: notification.body,
+      scheduledTime: scheduledTime,
+      payload: 'friend_notification_${notification.id}',
+    );
+  }
+}
+
+// ============================================================================
+// HTTP OVERRIDES
+// ============================================================================
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
@@ -212,60 +182,48 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
+// ============================================================================
+// MAIN APP
+// ============================================================================
+void main() async {
+  await _initializeApp();
+  final accessToken = await _checkToken();
+
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  await _setupWorkManager();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        ChangeNotifierProvider(create: (_) => BlogDetailViewModel()),
+        ChangeNotifierProvider(create: (_) => ChangeBMIViewModel()),
+      ],
+      child: MyApp(access: accessToken),
+    ),
+  );
+}
+
 class MyApp extends StatefulWidget {
   final String? access;
-
   const MyApp({super.key, this.access});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  // ==========================================================================
+  // STATE VARIABLES
+  // ==========================================================================
   ThemeMode _themeMode = ThemeMode.light;
   Locale _locale = const Locale('en');
-  bool _isLoading = true; // Biến để kiểm soát việc load settings
-  @override
-  void initState() {
-    super.initState();
-    _loadSettings();
-  }
-
-  // Hàm tải cài đặt
-  void _loadSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _themeMode = prefs.getBool('isDarkMode') ?? false
-          ? ThemeMode.dark
-          : ThemeMode.light;
-      final localeCode = prefs.getString('locale') ?? 'en'; // Lấy language code
-      _locale = Locale(localeCode);
-      _isLoading = false;
-    });
-  }
-
-  // Hàm lưu cài đặt
-  void _saveSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isDarkMode', _themeMode == ThemeMode.dark);
-    await prefs.setString('locale', _locale.languageCode); // Lưu language code
-  }
-
-  void _toggleTheme(bool isDarkMode) {
-    setState(() {
-      _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
-      _saveSettings(); // Save settings after changing theme
-    });
-  }
-
-  void _changeLanguage(bool isVietnamese) {
-    setState(() {
-      _locale = isVietnamese ? Locale('vi') : Locale('en');
-      _saveSettings();
-    });
-  }
-
-  final SocialProfile profile = SocialProfile(
+  bool _isLoading = true;
+  final SocialProfile _profile = SocialProfile(
     user_id: 1,
     username: 'username',
     first_name: 'first_name',
@@ -276,93 +234,127 @@ class _MyAppState extends State<MyApp> {
     streak: 1,
   );
 
+  // ==========================================================================
+  // LIFECYCLE METHODS
+  // ==========================================================================
+  @override
+  void initState() {
+    super.initState();
+    _loadSettings();
+  }
+
+  // ==========================================================================
+  // SETTINGS MANAGEMENT
+  // ==========================================================================
+  Future<void> _loadSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _themeMode = prefs.getBool('isDarkMode') ?? false
+          ? ThemeMode.dark
+          : ThemeMode.light;
+      _locale = Locale(prefs.getString('locale') ?? 'en');
+      _isLoading = false;
+    });
+  }
+
+  Future<void> _saveSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkMode', _themeMode == ThemeMode.dark);
+    await prefs.setString('locale', _locale.languageCode);
+  }
+
+  void _toggleTheme(bool isDarkMode) {
+    setState(() {
+      _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
+      _saveSettings();
+    });
+  }
+
+  void _changeLanguage(bool isVietnamese) {
+    setState(() {
+      _locale = isVietnamese ? const Locale('vi') : const Locale('en');
+      _saveSettings();
+    });
+  }
+
+  // ==========================================================================
+  // UI BUILD
+  // ==========================================================================
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Center(
-          child:
-              CircularProgressIndicator()); // Hiển thị màn hình loading trước
+      return const Center(child: CircularProgressIndicator());
     }
+
     FlutterNativeSplash.remove();
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        initialRoute:
-            widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
-        // onGenerateRoute: _generateRoute,
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        themeMode: _themeMode,
-        supportedLocales: L10n.all,
-        locale: _locale,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        routes: {
-          AppRoutes.firstScreen: (context) => MainScreen(
-                isVietnamese: _locale == const Locale('vi'),
-                isDarkMode: _themeMode == ThemeMode.dark,
-                onThemeChanged: _toggleTheme,
-                locale: _locale,
-                onLanguageChanged: _changeLanguage,
-              ),
-          AppRoutes.homepage: (context) => HomePage(),
-          AppRoutes.login: (context) => LoginPage(),
-          AppRoutes.signup: (context) => SignUp(),
-          AppRoutes.verifyEmail: (context) => VerifyEmail(),
-          AppRoutes.forgotpassword: (context) => ForgotPasswordScreen(),
-          AppRoutes.OtpConfirm: (context) => OTP_Page(),
-          AppRoutes.ResetPassword: (context) => ResetPasswordPage(),
-          AppRoutes.preLaunchSurvey: (context) => PrelaunchSurveyPage(),
-          AppRoutes.meditate: (context) => Meditate(),
-          AppRoutes.performMeditate: (context) => PerformMeditate(),
-          AppRoutes.streak: (context) => Streak(),
-          AppRoutes.exercisedetail: (context) => ExerciseDetail(),
-          AppRoutes.result: (context) => Result(),
-          AppRoutes.subscription: (context) => SubscriptionPage(),
-          AppRoutes.Profile: (context) => ProfilePage(
-                isDarkMode: _themeMode == ThemeMode.dark,
-                onThemeChanged: _toggleTheme,
-                locale: _locale,
-                onLanguageChanged: _changeLanguage,
-                isVietnamese: _locale == Locale('vi'),
-              ),
-          AppRoutes.activities: (context) => Activities(),
-          AppRoutes.eventDetail: (context) => EventDetail(
-                event: null,
-              ),
-          AppRoutes.blog: (context) => Blog(),
-          AppRoutes.reminder: (context) => ReminderPage(),
-          AppRoutes.notifications: (context) => NotificationsPage(),
-          AppRoutes.notificationDetail: (context) => NotificationDetail(),
-          AppRoutes.friendProfile: (context) => FriendProfile(
-              // Sửa lại tên class
-              profile: profile),
-        });
+      debugShowCheckedModeBanner: false,
+      initialRoute:
+          widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: _themeMode,
+      supportedLocales: L10n.all,
+      locale: _locale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      routes: _buildRoutes(),
+    );
   }
 
-  Route<dynamic>? _generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case AppRoutes.settings:
-        return MaterialPageRoute(
-          builder: (context) => SettingsPage(
-            isVietnamese: _locale == Locale('vi'),
+  // ==========================================================================
+  // ROUTING CONFIGURATION
+  // ==========================================================================
+  Map<String, WidgetBuilder> _buildRoutes() {
+    return {
+      AppRoutes.firstScreen: (_) => MainScreen(
+            isVietnamese: _locale == const Locale('vi'),
             isDarkMode: _themeMode == ThemeMode.dark,
             onThemeChanged: _toggleTheme,
             locale: _locale,
             onLanguageChanged: _changeLanguage,
           ),
-        );
-      case AppRoutes.paymentHistory:
-        return MaterialPageRoute(builder: (context) => PaymentHistory());
-      case AppRoutes.changeProfile:
-        return MaterialPageRoute(builder: (context) => ChangeProfilePage());
-      default:
-        return MaterialPageRoute(
-          builder: (context) => HomePage(),
-        );
-    }
+      AppRoutes.homepage: (_) => HomePage(),
+      AppRoutes.login: (_) => LoginPage(),
+      AppRoutes.signup: (_) => SignUp(),
+      AppRoutes.verifyEmail: (_) => VerifyEmail(),
+      AppRoutes.forgotpassword: (_) => ForgotPasswordScreen(),
+      AppRoutes.OtpConfirm: (_) => OTP_Page(),
+      AppRoutes.ResetPassword: (_) => ResetPasswordPage(),
+      AppRoutes.preLaunchSurvey: (_) => PrelaunchSurveyPage(),
+      AppRoutes.meditate: (_) => Meditate(),
+      AppRoutes.performMeditate: (_) => PerformMeditate(),
+      AppRoutes.streak: (_) => Streak(),
+      AppRoutes.exercisedetail: (_) => ExerciseDetail(),
+      AppRoutes.result: (_) => Result(),
+      AppRoutes.subscription: (_) => SubscriptionPage(),
+      AppRoutes.Profile: (_) => ProfilePage(
+            isDarkMode: _themeMode == ThemeMode.dark,
+            onThemeChanged: _toggleTheme,
+            locale: _locale,
+            onLanguageChanged: _changeLanguage,
+            isVietnamese: _locale == const Locale('vi'),
+          ),
+      AppRoutes.activities: (_) => Activities(),
+      AppRoutes.eventDetail: (_) => EventDetail(event: null),
+      AppRoutes.blog: (_) => Blog(),
+      AppRoutes.reminder: (_) => ReminderPage(),
+      AppRoutes.notifications: (_) => NotificationsPage(),
+      AppRoutes.notificationDetail: (_) => NotificationDetail(),
+      AppRoutes.friendProfile: (_) => FriendProfile(profile: _profile),
+      AppRoutes.settings: (_) => SettingsPage(
+            isVietnamese: _locale == const Locale('vi'),
+            isDarkMode: _themeMode == ThemeMode.dark,
+            onThemeChanged: _toggleTheme,
+            locale: _locale,
+            onLanguageChanged: _changeLanguage,
+          ),
+      AppRoutes.paymentHistory: (_) => PaymentHistory(),
+      AppRoutes.changeProfile: (_) => ChangeProfilePage(),
+    };
   }
 }

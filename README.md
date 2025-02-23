@@ -19,4 +19,5 @@ video hướng dẫn cài đặt và kết nối máy ảo android studio:https:
    flutter clean
    flutter pub get
    flutter run flutter_native_splash:create
+   riêng lỗi localization chỉ cần run flutter gen-l10n, nếu không hoạt động thì save file pubspec.yaml
 5. Mở source bằng vscode dùng terminal dùng lệnh "flutter run"
