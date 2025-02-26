@@ -36,7 +36,6 @@ def devMode = localProperties.getProperty('DEV_MODE')
 if (devMode == null) {
     devMode = 'false'
 }
-
 android {
     namespace "com.example.yogi_application"
     compileSdk 34

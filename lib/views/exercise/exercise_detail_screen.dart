@@ -75,8 +75,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
               color: theme.colorScheme.surface,
               child: Center(
                 child: CircularProgressIndicator(
-                  color:
-                      ((_account?.is_premium ?? false)) ? primary : primary2,
+                  color: ((_account?.is_premium ?? false)) ? primary : primary2,
                 ),
               ),
             )
