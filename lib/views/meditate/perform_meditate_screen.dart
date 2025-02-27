@@ -111,7 +111,7 @@ class _PerformMeditateState extends State<PerformMeditate>
   Future<void> _playAudio() async {
     try {
       await _audioPlayer.setReleaseMode(ReleaseMode.loop);
-      await _audioPlayer.play(AssetSource(widget.track));
+      await _audioPlayer.play(UrlSource(widget.track));
     } catch (e) {
       print("Error playing audio: $e");
     }

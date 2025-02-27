@@ -221,7 +221,7 @@ class _MyAppState extends State<MyApp> {
   // STATE VARIABLES
   // ==========================================================================
   ThemeMode _themeMode = ThemeMode.light;
-  Locale _locale = const Locale('en');
+  Locale _locale = const Locale('vi');
   bool _isLoading = true;
   final SocialProfile _profile = SocialProfile(
     user_id: 1,
@@ -252,7 +252,7 @@ class _MyAppState extends State<MyApp> {
       _themeMode = prefs.getBool('isDarkMode') ?? false
           ? ThemeMode.dark
           : ThemeMode.light;
-      _locale = Locale(prefs.getString('locale') ?? 'en');
+      _locale = Locale(prefs.getString('locale') ?? 'vn');
       _isLoading = false;
     });
   }

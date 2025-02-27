@@ -21,10 +21,14 @@ class _TutorialState extends State<Tutorial> {
   }
 
   void _initializeVideoPlayer() {
-    final locale = AppLocalizations.of(context)?.localeName ?? 'en';
+    final locale = AppLocalizations.of(context)?.localeName ?? 'vi';
     print('Ngôn ngữ là: $locale');
-    String videoAssetPath = 'assets/video/$locale\_Tutorial.mp4';
-    _videoPlayerController = VideoPlayerController.asset(videoAssetPath)
+    // String videoAssetPath = 'assets/video/$locale\_Tutorial.mp4';
+    String videoUrl =
+        'https://storage.yogitech.me/res/raw/$locale\_tutorial.mp4';
+
+    // _videoPlayerController = VideoPlayerController.asset(videoAssetPath)
+    _videoPlayerController = VideoPlayerController.network(videoUrl)
       ..initialize().then((_) {
         setState(() {
           _videoPlayerController!.play(); // Lưu ý dấu ! để chắc chắn không null
