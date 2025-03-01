@@ -87,7 +87,6 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-    - assets/audios/
     - assets/native_splash/logo.riv
     - .env
     - assets/
