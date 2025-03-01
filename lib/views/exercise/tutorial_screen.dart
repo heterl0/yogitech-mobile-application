@@ -31,13 +31,13 @@ class _TutorialState extends State<Tutorial> {
     _videoPlayerController = VideoPlayerController.network(videoUrl)
       ..initialize().then((_) {
         setState(() {
-          _videoPlayerController!.play(); // Lưu ý dấu ! để chắc chắn không null
+          _videoPlayerController.play(); // Lưu ý dấu ! để chắc chắn không null
         });
 
-        _videoPlayerController!.addListener(() {
+        _videoPlayerController.addListener(() {
           // Lưu ý dấu !
-          if (_videoPlayerController!.value.position >=
-              _videoPlayerController!.value.duration) {
+          if (_videoPlayerController.value.position >=
+              _videoPlayerController.value.duration) {
             setState(() {
               _showSkipButton = false;
             });
@@ -51,7 +51,7 @@ class _TutorialState extends State<Tutorial> {
 
   @override
   void dispose() {
-    _videoPlayerController?.dispose(); // Kiểm tra null trước khi dispose
+    _videoPlayerController.dispose(); // Kiểm tra null trước khi dispose
     super.dispose();
   }
 

@@ -1,14 +1,11 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../models/account.dart';
 import '../../services/account/account_service.dart';
 import '../../utils/formatting.dart';
-import '../../views/profile/view_avatar_screen.dart';
 
 class ChangeProfileViewModel {
   final AppLocalizations trans;
@@ -18,7 +15,6 @@ class ChangeProfileViewModel {
   final TextEditingController birthday = TextEditingController();
   final TextEditingController gender = TextEditingController();
 
-  File? _image;
   Uint8List? imageBytes;
   bool isLoading = false;
 
