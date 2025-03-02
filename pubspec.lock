@@ -213,34 +213,34 @@ packages:
     dependency: "direct main"
     description:
       name: camera
-      sha256: "2170a943dcb67be2af2c6bcda8775e74b41d4c02d6a4eb10bdc832ee185c4eea"
+      sha256: "413d2b34fe28496c35c69ede5b232fb9dd5ca2c3a4cb606b14efc1c7546cc8cb"
       url: "https://pub.dev"
     source: hosted
-    version: "0.11.0+1"
+    version: "0.11.1"
   camera_android_camerax:
     dependency: transitive
     description:
       name: camera_android_camerax
-      sha256: "7abb0faddbf103c59365e805ad9a30ab4d602b2eb7a8de469697945fd4a69daa"
+      sha256: "7cc6adf1868bdcf4e63a56b24b41692dfbad2bec1cdceea451c77798f6a605c3"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.5+6"
+    version: "0.6.13"
   camera_avfoundation:
     dependency: transitive
     description:
       name: camera_avfoundation
-      sha256: "7d021e8cd30d9b71b8b92b4ad669e80af432d722d18d6aac338572754a786c15"
+      sha256: eff7ed630b1ac3994737c790368fe006388ad9f271d7148e432263721e45dc75
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.16"
+    version: "0.9.18+7"
   camera_platform_interface:
     dependency: transitive
     description:
       name: camera_platform_interface
-      sha256: a250314a48ea337b35909a4c9d5416a208d736dcb01d0b02c6af122be66660b0
+      sha256: "953e7baed3a7c8fae92f7200afeb2be503ff1a17c3b4e4ed7b76f008c2810a31"
       url: "https://pub.dev"
     source: hosted
-    version: "2.7.4"
+    version: "2.9.0"
   camera_web:
     dependency: transitive
     description:
@@ -677,6 +677,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.1+1"
+  google_mobile_ads:
+    dependency: "direct main"
+    description:
+      name: google_mobile_ads
+      sha256: "0d4a3744b5e8ed1b8be6a1b452d309f811688855a497c6113fc4400f922db603"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.3.1"
   google_sign_in:
     dependency: "direct main"
     description:
@@ -1233,18 +1241,18 @@ packages:
     dependency: transitive
     description:
       name: rive
-      sha256: "3c0047e636ebe8e4044087e239dffdd026cf839fe9aecf55d53431b255668bcf"
+      sha256: "2551a44fa766a7ed3f52aa2b94feda6d18d00edc25dee5f66e72e9b365bb6d6c"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.9"
+    version: "0.13.20"
   rive_common:
     dependency: transitive
     description:
       name: rive_common
-      sha256: "3fe76ba4680787741688ee393e47b63417e8643816795e4eac01021683af1d84"
+      sha256: "2ba42f80d37a4efd0696fb715787c4785f8a13361e8aea9227c50f1e78cf763a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.9"
+    version: "0.4.15"
   rive_loading:
     dependency: transitive
     description:
@@ -1734,18 +1742,18 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter
-      sha256: "6869c8786d179f929144b4a1f86e09ac0eddfe475984951ea6c634774c16b522"
+      sha256: "889a0a678e7c793c308c68739996227c9661590605e70b1f6cf6b9a6634f7aec"
       url: "https://pub.dev"
     source: hosted
-    version: "4.8.0"
+    version: "4.10.0"
   webview_flutter_android:
     dependency: transitive
     description:
       name: webview_flutter_android
-      sha256: f42447ca49523f11d8f70abea55ea211b3cafe172dd7a0e7ac007bb35dd356dc
+      sha256: "512c26ccc5b8a571fd5d13ec994b7509f142ff6faf85835e243dde3538fdc713"
       url: "https://pub.dev"
     source: hosted
-    version: "3.16.4"
+    version: "4.3.2"
   webview_flutter_platform_interface:
     dependency: transitive
     description:
@@ -1758,10 +1766,10 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_wkwebview
-      sha256: "7affdf9d680c015b11587181171d3cad8093e449db1f7d9f0f08f4f33d24f9a0"
+      sha256: "7310de7efa4e6df8b3d2ff14aef3f290bc00b43363f2d0028845e6de46507fc9"
       url: "https://pub.dev"
     source: hosted
-    version: "3.13.1"
+    version: "3.18.1"
   win32:
     dependency: transitive
     description:
@@ -1803,5 +1811,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.4.0 <4.0.0"
-  flutter: ">=3.22.0"
+  dart: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"

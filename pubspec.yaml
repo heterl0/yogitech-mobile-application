@@ -35,7 +35,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   timeago: ^3.0.2
   cached_network_image: ^3.2.0
-  rive_splash_screen: ^0.1.1
   persistent_bottom_nav_bar_v2: ^5.2.3
   http: ^1.2.1
   cupertino_icons: ^1.0.6
@@ -47,7 +46,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   social_login_buttons: ^1.0.7
   intl: any
-
+  google_mobile_ads: ^5.3.1
   flutter_localizations:
     sdk: flutter
   #   json_annotation: ^4.9.0
@@ -62,7 +61,7 @@ dependencies:
   pay: ^2.0.0
   permission_handler: ^11.3.1
   image: ^4.2.0
-  camera: ^0.11.0+1
+  camera: ^0.11.1
   get_it: ^7.7.0
   flutter_screenutil: ^5.9.3
   rxdart: ^0.27.7
@@ -73,7 +72,7 @@ dependencies:
   crypto: ^3.0.3
   multi_select_flutter: ^4.1.3
   workmanager: ^0.5.2
-
+  rive_splash_screen: ^0.1.1
 # dev dependency
 dev_dependencies:
   flutter_test:
@@ -81,21 +80,17 @@ dev_dependencies:
   json_serializable: ^6.8.0
   build_runner: ^2.4.9
   flutter_lints: ^4.0.0
-
 # assets path
 flutter:
   generate: true
   uses-material-design: true
-
   assets:
     - assets/images/
     - assets/icons/
-    - assets/audios/
     - assets/native_splash/logo.riv
     - .env
     - assets/
     - assets/onboarding/
-
   # font settings
   fonts:
     - family: ReadexPro
@@ -105,10 +100,9 @@ flutter:
           weight: 700
         - asset: assets/fonts/ReadexPro-SemiBold.ttf
           weight: 600
-
 # launcher Icon
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/ic_launcher/playstore.png"
-  min_sdk_android: 21 # android min sdk min:16, default 21
+  min_sdk_android: 26 # android min sdk min:16, default 21

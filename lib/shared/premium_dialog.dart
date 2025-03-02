@@ -1,6 +1,6 @@
 // premium_dialog.dart
 import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/views/home/subscription.dart';
+import 'package:YogiTech/views/home/subscription_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/widgets/box_button.dart';
