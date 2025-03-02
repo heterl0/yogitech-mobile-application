@@ -7,7 +7,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface FeedbackApiService {
-
     @POST("/api/v1/exercise-feedback/")
     suspend fun postExerciseFeedback(@Body feedback: ExerciseFeedback): Response<FeedbackResponse> // Response type depends on your API's response structure
 }

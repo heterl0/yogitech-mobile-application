@@ -82,38 +82,6 @@ data class FeedbackDetails(
         return Json.encodeToString(this)
     }
 
-//    fun getFeedback(): String {
-//        if (!leftElbow?.endsWith("Good alignment!")!!) {
-//            val content = leftElbow.split(". ");
-//            return "Your left Elbow ${content.get(content.size - 1)}"
-//        }
-//    }
-
-//    fun getFeedback(): String? {
-//        val bodyParts = listOf(
-//            "Right Knee" to rightKnee,
-//            "Left Knee" to leftKnee,
-//            "Right Hip" to rightHip,
-//            "Left Hip" to leftHip,
-//            "Right Shoulder" to rightShoulder,
-//            "Left Shoulder" to leftShoulder,
-//            "Left Elbow" to leftElbow,
-//            "Right Elbow" to rightElbow
-//        )
-//
-//        for ((bodyPart, value) in bodyParts) {
-//            when {
-//                value == null -> return "$bodyPart data is missing." // Highest priority feedback
-//                !value.endsWith("Good alignment!") && value.endsWith("Severe misalignment!") ->
-//                    return "$bodyPart: Severe misalignment!" // Second highest priority
-//                !value.endsWith("Good alignment!") ->
-//                    return "$bodyPart: ${value.split(". ").lastOrNull() ?: "is not in good alignment."}"
-//            }
-//        }
-//        return "Good job!" // All in good alignment
-//
-//    }
-
     fun getFeedback(): List<String?> {
         val bodyParts = listOf(
             "Right Knee" to rightKnee,

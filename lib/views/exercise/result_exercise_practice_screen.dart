@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/widgets/box_button.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../../widgets/abmob/interstitial_ad_widget.dart';
 
 class Result extends StatelessWidget {
@@ -43,7 +41,7 @@ class ResultAfterPractice extends StatelessWidget {
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final minite = exerciseResult!.totalTimeFinish ~/ 60;
+    final minute = exerciseResult!.totalTimeFinish ~/ 60;
     final second = exerciseResult!.totalTimeFinish % 60;
     return Container(
       width: 360,
@@ -126,28 +124,12 @@ class ResultAfterPractice extends StatelessWidget {
                   style: bd_text.copyWith(color: theme.colorScheme.onSurface),
                 ),
                 const SizedBox(height: 4),
-                minite == 0
-                    ? Text(
-                        trans.duration +
-                            ': ' +
-                            second.toString() +
-                            " " +
-                            trans.seconds,
-                        style: bd_text.copyWith(
-                            color: theme.colorScheme.onSurface),
-                      )
-                    : Text(
-                        trans.duration +
-                            ': ' +
-                            minite.toString() +
-                            " " +
-                            trans.minutes +
-                            second.toString() +
-                            " " +
-                            trans.seconds,
-                        style: bd_text.copyWith(
-                            color: theme.colorScheme.onSurface),
-                      ),
+                Text(
+                  minute == 0
+                      ? "${trans.duration}: $second ${trans.seconds}"
+                      : "${trans.duration}: $minute ${trans.minutes} $second ${trans.seconds}",
+                  style: bd_text.copyWith(color: theme.colorScheme.onSurface),
+                )
               ],
             ),
           ),
@@ -159,13 +141,17 @@ class ResultAfterPractice extends StatelessWidget {
               if (interstitialAdWidget.isAdLoaded) {
                 interstitialAdWidget.showInterstitialAd();
                 Future.delayed(Duration(seconds: 1), () {
-                  Navigator.pop(context);
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                  }
                 });
               } else {
-                Navigator.pop(context);
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
               }
             },
-          ),
+          )
         ],
       ),
     );

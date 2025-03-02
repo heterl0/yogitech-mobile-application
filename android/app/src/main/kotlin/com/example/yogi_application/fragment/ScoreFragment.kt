@@ -53,6 +53,46 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
 
     private var countDownTimer: CountDownTimer? = null
     var startTime: Long? = null
+
+    companion object {
+        val feedbackMap = mapOf(
+            "straightenyourleftelbow" to R.string.straightenyourleftelbow,
+            "straightenyourrightelbow" to R.string.straightenyourrightelbow,
+            "straightenyourleftshoulder" to R.string.straightenyourleftshoulder,
+            "straightenyourrightshoulder" to R.string.straightenyourrightshoulder,
+            "straightenyourlefthip" to R.string.straightenyourlefthip,
+            "straightenyourrighthip" to R.string.straightenyourrighthip,
+            "straightenyourleftknee" to R.string.straightenyourleftknee,
+            "straightenyourrightknee" to R.string.straightenyourrightknee,
+            "bendyourleftelbow" to R.string.bendyourleftelbow,
+            "bendyourrightelbow" to R.string.bendyourrightelbow,
+            "bendyourleftshoulder" to R.string.bendyourleftshoulder,
+            "bendyourrightshoulder" to R.string.bendyourrightshoulder,
+            "bendyourlefthip" to R.string.bendyourlefthip,
+            "bendyourrighthip" to R.string.bendyourrighthip,
+            "bendyourleftknee" to R.string.bendyourleftknee,
+            "bendyourrightknee" to R.string.bendyourrightknee,
+            "moveyourarmup" to R.string.moveyourarmup,
+            "moveyourarmdown" to R.string.moveyourarmdown,
+            "moveyourarmright" to R.string.moveyourarmright,
+            "moveyourarmleft" to R.string.moveyourarmleft,
+            "moveyourarmforward" to R.string.moveyourarmforward,
+            "moveyourarmbackward" to R.string.moveyourarmbackward,
+            "moveyourlegup" to R.string.moveyourlegup,
+            "moveyourlegdown" to R.string.moveyourlegdown,
+            "moveyourlegright" to R.string.moveyourlegright,
+            "moveyourlegleft" to R.string.moveyourlegleft,
+            "moveyourlegforward" to R.string.moveyourlegforward,
+            "moveyourlegbackward" to R.string.moveyourlegbackward,
+            "moveyourhipup" to R.string.moveyourhipup,
+            "moveyourhipdown" to R.string.moveyourhipdown,
+            "moveyourhipright" to R.string.moveyourhipright,
+            "moveyourhipleft" to R.string.moveyourhipleft,
+            "moveyourhipforward" to R.string.moveyourhipforward,
+            "moveyourhipbackward" to R.string.moveyourhipbackward
+        )
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -188,13 +228,21 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                                 var feedback1Name = feedbacks[0] // Replace with your actual string name
                                 feedback1Name = feedback1Name?.lowercase()?.replace(" ", "")?.replace(".", "")
                                 Log.d("feedback 1", "$feedback1Name");
-                                val feedback1ResId = resources.getIdentifier(feedback1Name, "string", context?.packageName)
-                                val feedback1 = getString(feedback1ResId)
+//                                val feedback1ResId = resources.getIdentifier(feedback1Name, "string", context?.packageName)
+                                var feedback1 = ""
+                                val feedback1ResId = feedbackMap[feedback1Name]
+                                if (feedback1ResId!= null) {
+                                    feedback1 = getString(feedback1ResId)
+                                }
                                 var feedback2Name = feedbacks[1] // Replace with your actual string name
                                 feedback2Name = feedback2Name?.lowercase()?.replace(" ", "")?.replace(".", "")
                                 Log.d("feedback 2", "$feedback2Name");
-                                val feedback2ResId = resources.getIdentifier(feedback2Name, "string", context?.packageName)
-                                val feedback2 = getString(feedback2ResId)
+//                                val feedback2ResId = resources.getIdentifier(feedback2Name, "string", context?.packageName)
+                                val feedback2ResId = feedbackMap[feedback2Name]
+                                var feedback2 = ""
+                                if (feedback2ResId != null) {
+                                    feedback2 = getString(feedback2ResId)
+                                }
                                 val feedback = feedback1 + ", " + feedback2
                                 if (!countDownThree)
                                 if (viewModel.local == "en") {
@@ -257,7 +305,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                         speak(secondsRemaining.toString(), localeVI)
                     }
                 }
-                _fragmentScoreBinding!!.timer.text = "$minutesRemaining:$secondsRemaining"
+                _fragmentScoreBinding!!.timer.setText(String.format(Locale.getDefault(), "%02d:%02d", minutesRemaining, secondsRemaining))
             }
 
             override fun onFinish() {
