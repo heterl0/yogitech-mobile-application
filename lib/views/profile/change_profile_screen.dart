@@ -14,10 +14,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'dart:typed_data';
-import 'package:provider/provider.dart';
 import '../../services/account/account_service.dart';
 import '../../viewmodels/profile/change_password_viewmodel.dart';
-import '../../viewmodels/profile/change_profile_viewmodel.dart';
 import '../../widgets/build_avatart_widget.dart';
 import 'view_avatar_screen.dart';
 
@@ -36,8 +34,6 @@ class ChangeProfilePage extends StatefulWidget {
 }
 
 class _ChangeProfilePageState extends State<ChangeProfilePage> {
-  late ChangeProfileViewModel _viewModel;
-
   final TextEditingController lastName = TextEditingController();
   final TextEditingController firstName = TextEditingController();
   final TextEditingController phone = TextEditingController();
@@ -46,7 +42,6 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
   File? _image;
   Uint8List? _imageBytes;
   bool _isLoading = false;
-  bool _isChangingPassword = false;
 
   // Regular expression for Vietnamese phone numbers
   final RegExp phoneRegExp =

@@ -1,5 +1,4 @@
 import 'package:YogiTech/services/account/account_service.dart';
-import 'package:YogiTech/services/auth/auth_service.dart';
 import 'package:YogiTech/shared/premium_dialog.dart';
 import 'package:YogiTech/viewmodels/auth/auth_viewmodel.dart';
 import 'package:YogiTech/widgets/infor_card_component.dart';
@@ -13,7 +12,6 @@ import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/models/account.dart';
 import 'package:YogiTech/views/profile/change_profile_screen.dart';
 import 'package:YogiTech/views/social/social.dart';
-import 'package:YogiTech/routing/app_routes.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/views/settings/settings_screen.dart';
@@ -564,7 +562,7 @@ class _ProfilePageState extends State<ProfilePage>
                             child: Stack(
                               children: [
                                 TabBar(
-                                  labelColor: ((_account?.is_premium ?? false))
+                                  labelColor: (!(_account?.is_premium ?? false))
                                       ? primary
                                       : primary2,
                                   dividerColor: Colors.transparent,
@@ -778,7 +776,7 @@ Widget _buildLineChart(
       gridData: FlGridData(show: true),
       lineBarsData: [
         LineChartBarData(
-          color: primary2,
+          color: primary,
           spots: data,
           barWidth: 4,
           isStrokeCapRound: true,
@@ -787,7 +785,7 @@ Widget _buildLineChart(
             show: true,
             gradient: LinearGradient(
               colors: [
-                primary2.withOpacity(0.2),
+                primary.withOpacity(0.2),
                 darkblue.withOpacity(0.0),
               ],
               begin: Alignment.topCenter,
