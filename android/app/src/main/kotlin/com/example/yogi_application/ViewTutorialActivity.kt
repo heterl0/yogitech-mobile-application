@@ -21,7 +21,7 @@ class ViewTutorialActivity: AppCompatActivity() {
 
         // Lấy ngôn ngữ từ SharedPreferences
         val prefs = getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
-        val locale = prefs.getString("flutter.locale", "vi") ?: "vi"
+        val locale = prefs.getString("flutter.locale", "en") ?: "en"
         setLocale(this, locale)
 
         setContentView(R.layout.activity_view_tutorial)

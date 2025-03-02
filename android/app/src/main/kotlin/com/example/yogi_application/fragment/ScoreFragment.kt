@@ -107,7 +107,7 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            // Set default language to English
+            // Set default language to Vietnamese
             val result = tts.setLanguage(localeVI)
 
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
@@ -116,10 +116,11 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                     Toast.makeText(requireContext(), getString(R.string.notSupportVi), Toast.LENGTH_SHORT).show()
                 }
             } else {
-                supportVi = true;
-                // Set the pitch and speech rate suitable for yoga instructions
-                tts.setPitch(1.2f) // Normal pitch
-                tts.setSpeechRate(2f) // Slightly slower speech rate
+                supportVi = true
+
+                // Adjust pitch and speech rate for a natural experience
+                tts.setPitch(1.1f) // Slightly higher pitch for clarity
+                tts.setSpeechRate(if (viewModel.local == "vi") 0.95f else 1.1f) // Vietnamese is slower, English is slightly faster
             }
         } else {
             Log.e("TTS", "Initialization failed")
@@ -128,13 +129,29 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
 
 
 
+//    private fun speak(text: String, language: Locale) {
+//        if (language.language == "vi" && supportVi == false) {
+//            return;
+//        }
+//        tts.language = language
+//        tts.setSpeechRate(2f)
+//        if (!tts.isSpeaking && text != lastSpokenText && allowSpeak == true) {
+//            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+//            lastSpokenText = text
+//        }
+//    }
+
     private fun speak(text: String, language: Locale) {
-        if (language.language == "vi" && supportVi == false) {
-            return;
+        if (language.language == "vi" && !supportVi) {
+            return
         }
+
         tts.language = language
-        tts.setSpeechRate(2f)
-        if (!tts.isSpeaking && text != lastSpokenText && allowSpeak == true) {
+
+        // Set different speech rates for Vietnamese and English
+        tts.setSpeechRate(if (language.language == "vi") 1.0f else 1.2f) // Adjust as needed
+
+        if (!tts.isSpeaking && text != lastSpokenText && allowSpeak) {
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
             lastSpokenText = text
         }
@@ -371,14 +388,14 @@ class ScoreFragment: Fragment(R.layout.fragment_score), TextToSpeech.OnInitListe
                 }
                 timeLeftInMillis = millisUntilFinished
 
-                _fragmentScoreBinding!!.timer.text = "$minutesRemaining:$secondsRemaining"
-                _fragmentScoreBinding!!.result.text = getString(R.string.takeARest);
-                _fragmentScoreBinding!!.description.text = getString(R.string.breathSlowly);
+                _fragmentScoreBinding!!.timer.setText(String.format(Locale.getDefault(), "%02d:%02d", minutesRemaining, secondsRemaining))
+                _fragmentScoreBinding!!.result.setText(getString(R.string.takeARest));
+                _fragmentScoreBinding!!.description.setText(getString(R.string.breathSlowly));
             }
 
             override fun onFinish() {
                 countDownThree = false
-                _fragmentScoreBinding!!.timer.text = ""
+                _fragmentScoreBinding!!.timer.setText("")
                 isWaitingRunning = false
                 if (viewModel.local == "en") {
                     speak(getString(R.string.nextExercise), localeEN);
