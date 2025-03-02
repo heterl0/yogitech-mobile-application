@@ -29,6 +29,7 @@ import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
 import com.example.yogi_application.PoseLandmarkerHelper
 import com.example.yogi_application.MainViewModel
+import com.example.yogi_application.PoseLandmarkerHelper.Companion.GPU_ERROR
 import com.example.yogi_application.R
 import com.example.yogi_application.databinding.FragmentCameraBinding
 import com.example.yogi_application.model.Exercise
@@ -147,11 +148,16 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         viewModel.exercise = exercise;
         if (exercise?.poses?.size != null) {
             val keypointUrl = exercise?.poses?.get(0)?.pose?.keypointUrl
+            Log.d(TAG, "onCreateView: " + keypointUrl)
             loadJsonFromUrl(keypointUrl) { jsonString ->
                 if (jsonString != null) {
                     // Example using Gson:
                     val listType = object : TypeToken<List<KeyPoint>>() {}.type
+                    Log.d(TAG, "onCreateView: " + jsonString)
+
                     poseKeypoint = Gson().fromJson(jsonString, listType)
+                    Log.d(TAG, "onCreateView: " + poseKeypoint.toString())
+
                     Log.d(TAG, "onCreateView: success $poseKeypoint")
                 } else {
                     Log.d(TAG, "onCreateView: error Keypoint")
@@ -391,7 +397,6 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
             val request = Request.Builder()
                 .url(url)
                 .build()
-
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val response = client.newCall(request).execute()

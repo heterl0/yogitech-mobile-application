@@ -1,10 +1,7 @@
-import 'dart:ffi';
-
 import 'package:YogiTech/services/exercise/exercise_service.dart';
 import 'package:YogiTech/views/blog/blog_detail_screen.dart';
 import 'package:YogiTech/views/home/filter_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:YogiTech/views/home/subscription_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -28,7 +25,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _isSnackbarActive = false;
   List<dynamic> jsonList = [];
   List<dynamic> jsonListSort = [];
   bool _isnotSearching = true;
@@ -93,7 +89,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _fetchAccount() async {
-    print('I got account');
     if (widget.account != null) {
       setState(() {
         _account = widget.account;
@@ -121,24 +116,24 @@ class _HomePageState extends State<HomePage> {
                     //         builder: (context) => SubscriptionPage(
                     //             account: _account,
                     //             fetchAccount: widget.fetchAccount)));
-                    if (!_isSnackbarActive) {
-                      setState(() {
-                        _isSnackbarActive = true;
-                      });
+                    // if (!_isSnackbarActive) {
+                    //   setState(() {
+                    //     _isSnackbarActive = true;
+                    //   });
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(trans.systemInDevelopment),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //       content: Text(trans.systemInDevelopment),
+                    //       duration: Duration(seconds: 2),
+                    //     ),
+                    //   );
 
-                      Future.delayed(Duration(seconds: 2), () {
-                        setState(() {
-                          _isSnackbarActive = false;
-                        });
-                      });
-                    }
+                    //   Future.delayed(Duration(seconds: 2), () {
+                    //     setState(() {
+                    //       _isSnackbarActive = false;
+                    //     });
+                    //   });
+                    // }
                   },
                   child: Row(
                     children: [
@@ -311,25 +306,25 @@ class _HomePageState extends State<HomePage> {
                           );
                         },
                       ),
-                      _buildCarouselItem(
-                        title: trans.specialOfferForNewMembers,
-                        subtitle: trans.receiveTwoFreeSessions,
-                        poseName: trans.subscribePremiumNow,
-                        imagePath: (!(_account?.is_premium ?? false))
-                            ? 'assets/images/Crown.png'
-                            : 'assets/images/Crown2.png',
-                        onTap: () {
-                          pushWithoutNavBar(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SubscriptionPage(
-                                account: _account,
-                                fetchAccount: _fetchAccountAndStatus,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
+                      // _buildCarouselItem(
+                      //   title: trans.specialOfferForNewMembers,
+                      //   subtitle: trans.receiveTwoFreeSessions,
+                      //   poseName: trans.subscribePremiumNow,
+                      //   imagePath: (!(_account?.is_premium ?? false))
+                      //       ? 'assets/images/Crown.png'
+                      //       : 'assets/images/Crown2.png',
+                      //   onTap: () {
+                      //     pushWithoutNavBar(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (context) => SubscriptionPage(
+                      //           account: _account,
+                      //           fetchAccount: _fetchAccountAndStatus,
+                      //         ),
+                      //       ),
+                      //     );
+                      //   },
+                      // ),
                       _buildCarouselItem(
                         title: trans.yogaTipsForBeginners,
                         subtitle: trans.fiveBasicPoses,
@@ -365,7 +360,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [0, 1, 2, 3].map((entry) {
+                  children: [0, 1, 2].map((entry) {
                     return GestureDetector(
                       onTap: () => carouselController.animateToPage(
                           entry, // Move to the selected page
@@ -502,44 +497,47 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          trans.beginner,
-                          style:
-                              h3.copyWith(color: theme.colorScheme.onPrimary),
-                        ),
-                        Spacer(),
-                        InkWell(
-                          borderRadius: BorderRadius.all(Radius.circular(16)),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              trans.seeall,
-                              style: bd_text.copyWith(
-                                  color: (!(_account?.is_premium ?? false))
-                                      ? primary
-                                      : primary2),
-                            ),
+                  if (jsonListSort
+                      .where((element) => element.level == 1)
+                      .isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            trans.beginner,
+                            style:
+                                h3.copyWith(color: theme.colorScheme.onPrimary),
                           ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AllExercise(
-                                        account: _account,
-                                        level: 1,
-                                        fetchAccount: _fetchAccountAndStatus,
-                                      )), // Thay NewPage() bằng trang bạn muốn chuyển tới
-                            );
-                          },
-                        ),
-                      ],
+                          Spacer(),
+                          InkWell(
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: Text(
+                                trans.seeall,
+                                style: bd_text.copyWith(
+                                    color: (!(_account?.is_premium ?? false))
+                                        ? primary
+                                        : primary2),
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AllExercise(
+                                          account: _account,
+                                          level: 1,
+                                          fetchAccount: _fetchAccountAndStatus,
+                                        )), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -576,44 +574,47 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          trans.intermediate,
-                          style:
-                              h3.copyWith(color: theme.colorScheme.onPrimary),
-                        ),
-                        Spacer(),
-                        InkWell(
-                          borderRadius: BorderRadius.all(Radius.circular(16)),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              trans.seeall,
-                              style: bd_text.copyWith(
-                                  color: (!(_account?.is_premium ?? false))
-                                      ? primary
-                                      : primary2),
-                            ),
+                  if (jsonListSort
+                      .where((element) => element.level == 2)
+                      .isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            trans.intermediate,
+                            style:
+                                h3.copyWith(color: theme.colorScheme.onPrimary),
                           ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AllExercise(
-                                        account: _account,
-                                        fetchAccount: _fetchAccountAndStatus,
-                                        level: 2,
-                                      )), // Thay NewPage() bằng trang bạn muốn chuyển tới
-                            );
-                          },
-                        ),
-                      ],
+                          Spacer(),
+                          InkWell(
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: Text(
+                                trans.seeall,
+                                style: bd_text.copyWith(
+                                    color: (!(_account?.is_premium ?? false))
+                                        ? primary
+                                        : primary2),
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AllExercise(
+                                          account: _account,
+                                          fetchAccount: _fetchAccountAndStatus,
+                                          level: 2,
+                                        )), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -650,44 +651,47 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          trans.advanced,
-                          style:
-                              h3.copyWith(color: theme.colorScheme.onPrimary),
-                        ),
-                        Spacer(),
-                        InkWell(
-                          borderRadius: BorderRadius.all(Radius.circular(16)),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              trans.seeall,
-                              style: bd_text.copyWith(
-                                  color: (!(_account?.is_premium ?? false))
-                                      ? primary
-                                      : primary2),
-                            ),
+                  if (jsonListSort
+                      .where((element) => element.level == 3)
+                      .isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            trans.advanced,
+                            style:
+                                h3.copyWith(color: theme.colorScheme.onPrimary),
                           ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AllExercise(
-                                        account: _account,
-                                        level: 3,
-                                        fetchAccount: _fetchAccountAndStatus,
-                                      )), // Thay NewPage() bằng trang bạn muốn chuyển tới
-                            );
-                          },
-                        ),
-                      ],
+                          Spacer(),
+                          InkWell(
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: Text(
+                                trans.seeall,
+                                style: bd_text.copyWith(
+                                    color: (!(_account?.is_premium ?? false))
+                                        ? primary
+                                        : primary2),
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AllExercise(
+                                          account: _account,
+                                          level: 3,
+                                          fetchAccount: _fetchAccountAndStatus,
+                                        )), // Thay NewPage() bằng trang bạn muốn chuyển tới
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 16),

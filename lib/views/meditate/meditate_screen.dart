@@ -18,9 +18,9 @@ class Meditate extends StatefulWidget {
 }
 
 final List<Map<String, dynamic>> theTracks = [
-  {'asset': 'audios/rain.mp3'},
-  {'asset': 'audios/wave.mp3'},
-  {'asset': 'audios/morning.mp3'}
+  {'url': 'https://storage.yogitech.me/assets/audios/rain.mp3'},
+  {'url': 'https://storage.yogitech.me/assets/audios/wave.mp3'},
+  {'url': 'https://storage.yogitech.me/assets/audios/morning.mp3'}
 ];
 
 class _MeditateState extends State<Meditate> {
@@ -155,21 +155,22 @@ class _MeditateState extends State<Meditate> {
   Widget _buildMainContent(bool streakStatus) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
+
     final List<Map<String, dynamic>> _tracks = [
       {
         'title': trans.soundRain,
         'subtitle': trans.soundRainDescription,
-        'asset': 'audios/rain.mp3'
+        'url': 'https://storage.yogitech.me/assets/audios/rain.mp3'
       },
       {
         'title': trans.soundWave,
         'subtitle': trans.soundWaveDescription,
-        'asset': 'audios/wave.mp3'
+        'url': 'https://storage.yogitech.me/assets/audios/wave.mp3'
       },
       {
         'title': trans.soundMorning,
         'subtitle': trans.soundMorningDescription,
-        'asset': 'audios/morning.mp3'
+        'url': 'https://storage.yogitech.me/assets/audios/morning.mp3'
       },
     ];
 
@@ -308,7 +309,7 @@ class _MeditateState extends State<Meditate> {
             builder: (context) => PerformMeditate(
                 duration: _selectedDuration,
                 track: _selectedTrackIndex != null
-                    ? theTracks[_selectedTrackIndex!]['asset']
+                    ? theTracks[_selectedTrackIndex!]['url']
                     : '',
                 updateStreak: _updateStreakData),
           ),

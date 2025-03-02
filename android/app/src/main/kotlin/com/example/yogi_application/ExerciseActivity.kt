@@ -31,7 +31,7 @@ class ExerciseActivity : AppCompatActivity() {
 
         // Retrieve the tokens using the same keys but prefixed with "flutter."
         val accessToken = prefs.getString("flutter.accessToken", "default_value")
-        val locale = prefs.getString("flutter.locale", "vi")
+        val locale = prefs.getString("flutter.locale", "en")
         if (locale != null) {
             setLocale(this, locale)
             viewModel.local = locale

@@ -111,10 +111,12 @@ class PoseLandmarkerHelper(
             poseLandmarker =
                 PoseLandmarker.createFromOptions(context, options)
         } catch (e: IllegalStateException) {
+
             poseLandmarkerHelperListener?.onError(
                 "Pose Landmarker failed to initialize. See error logs for " +
                         "details"
             )
+            
             Log.e(
                 TAG, "MediaPipe failed to load the task with error: " + e
                     .message

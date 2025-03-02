@@ -1,7 +1,6 @@
 import 'package:YogiTech/services/account/account_service.dart';
-import 'package:YogiTech/services/auth/auth_service.dart';
 import 'package:YogiTech/shared/premium_dialog.dart';
-import 'package:YogiTech/view_models/auth/auth_view_model.dart';
+import 'package:YogiTech/viewmodels/auth/auth_viewmodel.dart';
 import 'package:YogiTech/widgets/infor_card_component.dart';
 import 'package:YogiTech/widgets/stat_card_component.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -13,10 +12,8 @@ import 'package:YogiTech/custombar/appbar.dart';
 import 'package:YogiTech/models/account.dart';
 import 'package:YogiTech/views/profile/change_profile_screen.dart';
 import 'package:YogiTech/views/social/social.dart';
-import 'package:YogiTech/routing/app_routes.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/views/profile/personalized_exercise_list_screen.dart';
 import 'package:YogiTech/views/settings/settings_screen.dart';
 import 'package:YogiTech/views/social/friendlist.dart';
 import 'package:YogiTech/views/profile/change_BMI_screen.dart';
@@ -119,20 +116,6 @@ class _ProfilePageState extends State<ProfilePage>
     }
   }
 
-  Future<void> _logout() async {
-    try {
-      // Xóa token từ SharedPreferences khi người dùng logout
-      await clearToken();
-      await clearAccount();
-      // Chuyển hướng đến trang đăng nhập và xóa tất cả các route cũ
-      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-          AppRoutes.login, (Route<dynamic> route) => false);
-    } catch (e) {
-      print('Logout error: $e');
-      // Xử lý lỗi khi logout
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -165,6 +148,9 @@ class _ProfilePageState extends State<ProfilePage>
       _isLoading = true;
       _account = widget.account;
       _profile = _account?.profile;
+      print(
+          'Account from widget: $_account'); // Thêm print để kiểm tra _account
+      print('Profile from account: $_profile');
       _isLoading = false;
     });
   }
@@ -414,69 +400,70 @@ class _ProfilePageState extends State<ProfilePage>
                                             Radius.circular(16)),
                                         child: Stack(
                                           children: [
-                                            InfoCard(
-                                              title: trans.personalizedExercise,
-                                              subtitle: trans.customizeExercise,
-                                              icon: Icons.tune_outlined,
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        PersonalizedExercisePage(
-                                                      fetchAccount:
-                                                          widget.fetchAccount,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                            if ((_account?.is_premium ?? false))
-                                              Positioned.fill(
-                                                child: BackdropFilter(
-                                                  filter: ImageFilter.blur(
-                                                      sigmaX: 5, sigmaY: 5),
-                                                  child: GestureDetector(
-                                                    onTap: () => {
-                                                      showPremiumDialog(
-                                                          context,
-                                                          _account!,
-                                                          widget.fetchAccount),
-                                                    },
-                                                    child: Container(
-                                                      color: theme.colorScheme
-                                                          .onSecondary
-                                                          .withOpacity(0.8),
-                                                      child: Center(
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Icon(
-                                                              Icons
-                                                                  .lock_outline,
-                                                              color: theme
-                                                                  .colorScheme
-                                                                  .onPrimary,
-                                                              size: 24,
-                                                            ),
-                                                            SizedBox(width: 8),
-                                                            Text(
-                                                              trans
-                                                                  .premiumFeature,
-                                                              style: bd_text.copyWith(
-                                                                  color: theme
-                                                                      .colorScheme
-                                                                      .onPrimary),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
+                                            // InfoCard(
+                                            //   title: trans.personalizedExercise,
+                                            //   subtitle: trans.customizeExercise,
+                                            //   icon: Icons.tune_outlined,
+                                            //   onTap: () {
+                                            //     Navigator.push(
+                                            //       context,
+                                            //       MaterialPageRoute(
+                                            //         builder: (context) =>
+                                            //             PersonalizedExercisePage(
+                                            //           fetchAccount:
+                                            //               widget.fetchAccount,
+                                            //         ),
+                                            //       ),
+                                            //     );
+                                            //   },
+                                            // ),
+                                            // if (!(_account?.is_premium ??
+                                            //     false))
+                                            //   Positioned.fill(
+                                            //     child: BackdropFilter(
+                                            //       filter: ImageFilter.blur(
+                                            //           sigmaX: 5, sigmaY: 5),
+                                            //       child: GestureDetector(
+                                            //         onTap: () => {
+                                            //           showPremiumDialog(
+                                            //               context,
+                                            //               _account!,
+                                            //               widget.fetchAccount),
+                                            //         },
+                                            //         child: Container(
+                                            //           color: theme.colorScheme
+                                            //               .onSecondary
+                                            //               .withOpacity(0.8),
+                                            //           child: Center(
+                                            //             child: Row(
+                                            //               mainAxisAlignment:
+                                            //                   MainAxisAlignment
+                                            //                       .center,
+                                            //               children: [
+                                            //                 Icon(
+                                            //                   Icons
+                                            //                       .lock_outline,
+                                            //                   color: theme
+                                            //                       .colorScheme
+                                            //                       .onPrimary,
+                                            //                   size: 24,
+                                            //                 ),
+                                            //                 SizedBox(width: 8),
+                                            //                 Text(
+                                            //                   trans
+                                            //                       .premiumFeature,
+                                            //                   style: bd_text.copyWith(
+                                            //                       color: theme
+                                            //                           .colorScheme
+                                            //                           .onPrimary),
+                                            //                 ),
+                                            //               ],
+                                            //             ),
+                                            //           ),
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //   ),
                                           ],
                                         )),
                                   ],
@@ -570,119 +557,119 @@ class _ProfilePageState extends State<ProfilePage>
                             ],
                           ),
                           const SizedBox(height: 20.0),
-                          // ClipRRect(
-                          //   borderRadius: BorderRadius.all(Radius.circular(16)),
-                          //   child: Stack(
-                          //     children: [
-                          //       TabBar(
-                          //         labelColor: ((_account?.is_premium ?? false))
-                          //             ? primary
-                          //             : primary2,
-                          //         dividerColor: Colors.transparent,
-                          //         controller: _tabController,
-                          //         indicator: BoxDecoration(
-                          //           border: Border(
-                          //             bottom: BorderSide(
-                          //               color:
-                          //                   (!(_account?.is_premium ?? false))
-                          //                       ? primary
-                          //                       : primary2,
-                          //               width: 2.0,
-                          //             ),
-                          //           ),
-                          //         ),
-                          //         unselectedLabelColor: text,
-                          //         tabs: [
-                          //           Tab(
-                          //             child: Text(
-                          //               'EXP',
-                          //               style: h3,
-                          //             ),
-                          //           ),
-                          //           Tab(
-                          //             child: Text(
-                          //               trans.point,
-                          //               style: h3,
-                          //             ),
-                          //           ),
-                          //           Tab(
-                          //             child: Text(
-                          //               trans.calorie,
-                          //               style: h3,
-                          //             ),
-                          //           ),
-                          //         ],
-                          //       ),
-                          //       Container(
-                          //         padding: EdgeInsets.only(top: 60),
-                          //         height: 320,
-                          //         child: _isChartDataLoading
-                          //             ? Center(
-                          //                 child: CircularProgressIndicator(
-                          //                 color:
-                          //                     ((_account?.is_premium ?? false))
-                          //                         ? primary
-                          //                         : primary2,
-                          //               ))
-                          //             : TabBarView(
-                          //                 controller: _tabController,
-                          //                 children: [
-                          //                   _buildLineChart(expDataPoints,
-                          //                       trans.days, 'EXP', _startDate),
-                          //                   _buildLineChart(
-                          //                       pointDataPoints,
-                          //                       trans.days,
-                          //                       trans.point,
-                          //                       _startDate),
-                          //                   _buildLineChart(
-                          //                       caloriesDataPoints,
-                          //                       trans.days,
-                          //                       trans.calorie,
-                          //                       _startDate),
-                          //                 ],
-                          //               ),
-                          //       ),
-                          //       if ((_account?.is_premium ?? false))
-                          //         Positioned.fill(
-                          //           child: BackdropFilter(
-                          //             filter: ImageFilter.blur(
-                          //                 sigmaX: 5, sigmaY: 5),
-                          //             child: GestureDetector(
-                          //               onTap: () => {
-                          //                 showPremiumDialog(context, _account!,
-                          //                     widget.fetchAccount),
-                          //               },
-                          //               child: Container(
-                          //                 color: theme.colorScheme.onSecondary
-                          //                     .withOpacity(0.8),
-                          //                 child: Center(
-                          //                   child: Column(
-                          //                     mainAxisAlignment:
-                          //                         MainAxisAlignment.center,
-                          //                     children: [
-                          //                       Icon(
-                          //                         Icons.lock_outline,
-                          //                         color: theme
-                          //                             .colorScheme.onPrimary,
-                          //                         size: 40,
-                          //                       ),
-                          //                       SizedBox(height: 8),
-                          //                       Text(
-                          //                         trans.premiumFeature,
-                          //                         style: h2.copyWith(
-                          //                             color: theme.colorScheme
-                          //                                 .onPrimary),
-                          //                       ),
-                          //                     ],
-                          //                   ),
-                          //                 ),
-                          //               ),
-                          //             ),
-                          //           ),
-                          //         ),
-                          //     ],
-                          //   ),
-                          // ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                            child: Stack(
+                              children: [
+                                TabBar(
+                                  labelColor: (!(_account?.is_premium ?? false))
+                                      ? primary
+                                      : primary2,
+                                  dividerColor: Colors.transparent,
+                                  controller: _tabController,
+                                  indicator: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color:
+                                            (!(_account?.is_premium ?? false))
+                                                ? primary
+                                                : primary2,
+                                        width: 2.0,
+                                      ),
+                                    ),
+                                  ),
+                                  unselectedLabelColor: text,
+                                  tabs: [
+                                    Tab(
+                                      child: Text(
+                                        'EXP',
+                                        style: h3,
+                                      ),
+                                    ),
+                                    Tab(
+                                      child: Text(
+                                        trans.point,
+                                        style: h3,
+                                      ),
+                                    ),
+                                    Tab(
+                                      child: Text(
+                                        trans.calorie,
+                                        style: h3,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(top: 60),
+                                  height: 320,
+                                  child: _isChartDataLoading
+                                      ? Center(
+                                          child: CircularProgressIndicator(
+                                          color:
+                                              ((_account?.is_premium ?? false))
+                                                  ? primary
+                                                  : primary2,
+                                        ))
+                                      : TabBarView(
+                                          controller: _tabController,
+                                          children: [
+                                            _buildLineChart(expDataPoints,
+                                                trans.days, 'EXP', _startDate),
+                                            _buildLineChart(
+                                                pointDataPoints,
+                                                trans.days,
+                                                trans.point,
+                                                _startDate),
+                                            _buildLineChart(
+                                                caloriesDataPoints,
+                                                trans.days,
+                                                trans.calorie,
+                                                _startDate),
+                                          ],
+                                        ),
+                                ),
+                                if ((_account?.is_premium ?? false))
+                                  Positioned.fill(
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                          sigmaX: 5, sigmaY: 5),
+                                      child: GestureDetector(
+                                        onTap: () => {
+                                          showPremiumDialog(context, _account!,
+                                              widget.fetchAccount),
+                                        },
+                                        child: Container(
+                                          color: theme.colorScheme.onSecondary
+                                              .withOpacity(0.8),
+                                          child: Center(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.lock_outline,
+                                                  color: theme
+                                                      .colorScheme.onPrimary,
+                                                  size: 40,
+                                                ),
+                                                SizedBox(height: 8),
+                                                Text(
+                                                  trans.premiumFeature,
+                                                  style: h2.copyWith(
+                                                      color: theme.colorScheme
+                                                          .onPrimary),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
 
                           const SizedBox(
                               height: 20.0), // Added space for better layout
@@ -789,7 +776,7 @@ Widget _buildLineChart(
       gridData: FlGridData(show: true),
       lineBarsData: [
         LineChartBarData(
-          color: primary2,
+          color: primary,
           spots: data,
           barWidth: 4,
           isStrokeCapRound: true,
@@ -798,7 +785,7 @@ Widget _buildLineChart(
             show: true,
             gradient: LinearGradient(
               colors: [
-                primary2.withOpacity(0.2),
+                primary.withOpacity(0.2),
                 darkblue.withOpacity(0.0),
               ],
               begin: Alignment.topCenter,

@@ -98,7 +98,6 @@ class LocalNotificationService {
 
     if (idExists) {
       // Handle the case where the id already exists
-      // For example, you can generate a new id or skip scheduling
       print('Notification with id $id already exists.');
       return;
     }

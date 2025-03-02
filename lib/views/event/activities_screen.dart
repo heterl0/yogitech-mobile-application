@@ -1,6 +1,5 @@
 import 'package:YogiTech/models/account.dart';
 import 'package:YogiTech/services/event/event_service.dart';
-import 'package:YogiTech/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:YogiTech/custombar/appbar.dart';
@@ -41,7 +40,7 @@ class _ActivitiesState extends State<Activities> {
         ),
         body: Center(
           child: Text(
-            "Chức năng đang phát triển",
+            trans.systemInDevelopment,
             style: theme.textTheme.bodyLarge,
           ),
         )

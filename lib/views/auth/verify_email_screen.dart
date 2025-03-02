@@ -33,7 +33,7 @@ class VerifyEmail extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.asset(
-                'assets/images/EmailOpen.png', // Thay đổi đường dẫn đến hình ảnh của bạn
+                'assets/images/EmailOpen.png',
                 width: 120,
                 height: 120,
               ),
@@ -65,21 +65,6 @@ class VerifyEmail extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  void _handleSendOTP(BuildContext context, String login) {
-    final theme = Theme.of(context);
-    final trans = AppLocalizations.of(context)!;
-    // Xử lý sự kiện gửi OTP
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: theme.colorScheme.onSecondary,
-        content: Text(
-          '${trans.returnLogin} $login',
-          style: bd_text.copyWith(color: theme.colorScheme.onSurface),
         ),
       ),
     );

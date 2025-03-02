@@ -1,18 +1,13 @@
-import 'package:YogiTech/services/account/account_service.dart';
-import 'package:YogiTech/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 import 'package:YogiTech/routing/app_routes.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/widgets/box_input_field.dart';
 import 'package:YogiTech/widgets/box_button.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:YogiTech/views/pre_launch_survey_screen.dart';
 import 'package:provider/provider.dart';
-import '../../view_models/auth/auth_view_model.dart';
+import '../../viewmodels/auth/auth_viewmodel.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,10 +19,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: <String>[
-    'email',
-    'https://www.googleapis.com/auth/contacts.readonly',
-  ], serverClientId: dotenv.env['GOOGLE_CLIENT_ID']);
+
   bool _isLoading = false;
 
   @override
@@ -35,288 +27,176 @@ class _LoginPageState extends State<LoginPage> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
     final authViewModel = Provider.of<AuthViewModel>(context);
-    final String imageAsset = theme.brightness == Brightness.dark
-        ? 'assets/images/login-sign.png'
-        : 'assets/images/login-sign_light.png';
+    final String imageAsset = theme.brightness == Brightness.light
+        ? 'assets/images/login-sign_light.png'
+        : 'assets/images/login-sign.png';
 
     return Scaffold(
       backgroundColor: theme.colorScheme.onSecondary,
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(imageAsset),
-                  fit: BoxFit.fitWidth,
-                  alignment: Alignment.topCenter,
-                ),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    trans.login,
-                    style: h1.copyWith(color: theme.colorScheme.onPrimary),
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(height: 16.0),
-                  BoxInputField(
-                    controller: emailController,
-                    placeholder: trans.email,
-                  ),
-                  SizedBox(height: 16.0),
-                  BoxInputField(
-                    controller: passwordController,
-                    placeholder: trans.password,
-                    password: true,
-                    onSubmitted: (_) async {
-                      authViewModel.handleLogin(
-                          context, emailController, passwordController);
-                    },
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, AppRoutes.forgotpassword);
-                      },
-                      child: Text(
-                        trans.forgotPassword,
-                        style: bd_text.copyWith(
-                            color: theme.primaryColor, height: 1),
-                      ),
-                    ),
-                  ),
-                  CustomButton(
-                    title: trans.login,
-                    style: ButtonStyleType.Primary,
-                    state: ButtonState.Enabled,
-                    onPressed: () async {
-                      authViewModel.handleLogin(
-                          context, emailController, passwordController);
-                    },
-                  ),
-                  SizedBox(height: 10.0),
-                  Column(
-                    children: [
-                      Row(children: <Widget>[
-                        Expanded(
-                            child: Divider(
-                          color: text,
-                        )),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(
-                            trans.orSignInWith,
-                            style: bd_text.copyWith(color: text),
-                          ),
-                        ),
-                        const Expanded(child: Divider(color: text)),
-                      ]),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: theme.scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(
-                            color: stroke,
-                            width: 2, // Adjust the border width as needed
-                          ),
-                        ),
-                        child: SocialLoginButton(
-                          backgroundColor: theme.scaffoldBackgroundColor,
-                          height: 50,
-                          borderRadius: 30,
-                          fontSize: 20,
-                          textColor: theme.colorScheme.onPrimary,
-                          buttonType: SocialLoginButtonType.google,
-                          onPressed: () async {
-                            authViewModel.handleGoogleSignIn(context, trans);
-                          },
-                          text: trans.loginWithGoogle,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            trans.dontHaveAccount,
-                            style: bd_text.copyWith(color: text),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, AppRoutes.signup);
-                            },
-                            child: Text(
-                              trans.signUp,
-                              style: h3.copyWith(color: primary),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+      body: Stack(
+        children: [
+          // Nội dung chính
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(imageAsset),
+                fit: BoxFit.fitWidth,
+                alignment: Alignment.topCenter,
               ),
             ),
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  trans.login,
+                  style: h1.copyWith(color: theme.colorScheme.onPrimary),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(height: 16.0),
+                BoxInputField(
+                  controller: emailController,
+                  placeholder: trans.email,
+                ),
+                SizedBox(height: 16.0),
+                BoxInputField(
+                  controller: passwordController,
+                  placeholder: trans.password,
+                  password: true,
+                  onSubmitted: (_) async {
+                    await _handleLogin(authViewModel, context);
+                  },
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, AppRoutes.forgotpassword);
+                    },
+                    child: Text(
+                      trans.forgotPassword,
+                      style: bd_text.copyWith(
+                          color: theme.primaryColor, height: 1),
+                    ),
+                  ),
+                ),
+                CustomButton(
+                  title: trans.login,
+                  style: ButtonStyleType.Primary,
+                  state: ButtonState.Enabled,
+                  onPressed: () async {
+                    await _handleLogin(authViewModel, context);
+                  },
+                ),
+                SizedBox(height: 10.0),
+                Column(
+                  children: [
+                    Row(children: <Widget>[
+                      Expanded(
+                          child: Divider(
+                        color: text,
+                      )),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          trans.orSignInWith,
+                          style: bd_text.copyWith(color: text),
+                        ),
+                      ),
+                      const Expanded(child: Divider(color: text)),
+                    ]),
+                    const SizedBox(height: 20),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: theme.scaffoldBackgroundColor,
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(
+                          color: stroke,
+                          width: 2,
+                        ),
+                      ),
+                      child: SocialLoginButton(
+                        backgroundColor: theme.scaffoldBackgroundColor,
+                        height: 50,
+                        borderRadius: 30,
+                        fontSize: 20,
+                        textColor: theme.colorScheme.onPrimary,
+                        buttonType: SocialLoginButtonType.google,
+                        onPressed: () async {
+                          await _handleGoogleSignIn(
+                              authViewModel, context, trans);
+                        },
+                        text: trans.loginWithGoogle,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          trans.dontHaveAccount,
+                          style: bd_text.copyWith(color: text),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, AppRoutes.signup);
+                          },
+                          child: Text(
+                            trans.signUp,
+                            style: h3.copyWith(color: primary),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          // Màn hình loading với hiệu ứng mờ
+          if (_isLoading)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withOpacity(0.5), // Làm mờ nền
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white, // Màu loading
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
-  Future<void> _handleGoogleSignIn(AppLocalizations trans) async {
-    final theme = Theme.of(context);
+  /// Xử lý đăng nhập email
+  Future<void> _handleLogin(
+      AuthViewModel authViewModel, BuildContext context) async {
     setState(() {
-      _isLoading = true;
+      _isLoading = true; // Hiển thị loading
     });
 
-    try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      GoogleSignInAuthentication googleSignInAuthentication =
-          await googleUser!.authentication;
-      try {
-        print(googleSignInAuthentication.idToken ?? "");
-        final accessToken =
-            await loginGoogle(googleSignInAuthentication.idToken ?? "");
-
-        if (accessToken != null) {
-          _googleSignIn.signOut();
-          final user = await getUser();
-          if (user != null && user.active_status == 1) {
-            if (user.profile.first_name == null ||
-                user.profile.last_name == null) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PrelaunchSurveyPage(),
-                ),
-              );
-            } else {
-              Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
-            }
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  trans.baned,
-                  style: bd_text.copyWith(color: active),
-                ),
-                backgroundColor: error,
-              ),
-            );
-          }
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: theme.colorScheme.onSecondary,
-              content: Text(
-                trans.usingEmail,
-                style: bd_text.copyWith(color: theme.colorScheme.onSurface),
-              ),
-            ),
-          );
-          _googleSignIn.signOut();
-        }
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: theme.colorScheme.onSecondary,
-            content: Text(
-              '${trans.anError} $e',
-              style: bd_text.copyWith(color: theme.colorScheme.onSurface),
-            ),
-          ),
-        );
-        _googleSignIn.signOut();
-      }
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            backgroundColor: theme.colorScheme.onSecondary,
-            content: Text('${trans.failSignIn} $error',
-                style: bd_text.copyWith(color: theme.colorScheme.onSurface))),
-      );
-    }
+    await authViewModel.handleLogin(
+        context, emailController, passwordController);
 
     setState(() {
-      _isLoading = false;
+      _isLoading = false; // Ẩn loading sau khi hoàn tất
     });
   }
 
-  Future<void> _handleLogin(BuildContext context) async {
-    final theme = Theme.of(context);
-    String enteredEmail = emailController.text;
-    String enteredPassword = passwordController.text;
-    final trans = AppLocalizations.of(context)!;
+  /// Xử lý đăng nhập Google
+  Future<void> _handleGoogleSignIn(AuthViewModel authViewModel,
+      BuildContext context, AppLocalizations trans) async {
     setState(() {
-      _isLoading = true;
+      _isLoading = true; // Hiển thị loading
     });
-    if (enteredEmail.isEmpty || enteredPassword.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            backgroundColor: error,
-            content: Text(trans.dontEmpty,
-                style: bd_text.copyWith(color: theme.colorScheme.onSurface))),
-      );
-      setState(() {
-        _isLoading = false;
-      });
-      return;
-    }
-    try {
-      final accessToken = await login(enteredEmail, enteredPassword);
-      if (accessToken != null && accessToken is String) {
-        final user = await getUser();
-        if (user != null && user.active_status == 1) {
-          if ((user.profile.first_name == null ||
-              user.profile.last_name == null ||
-              user.profile.bmi == null)) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PrelaunchSurveyPage(),
-              ),
-            );
-          } else {
-            Navigator.pushReplacementNamed(context, AppRoutes.firstScreen);
-          }
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                backgroundColor: theme.colorScheme.onSecondary,
-                content: Text(
-                  trans.baned,
-                  style: bd_text.copyWith(color: theme.colorScheme.onSurface),
-                )),
-          );
-        }
-      } else if (accessToken['status'] == 403) {
-        Navigator.pushReplacementNamed(context, AppRoutes.verifyEmail);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              backgroundColor: theme.colorScheme.onSecondary,
-              content: Text(
-                trans.doesntexist,
-                style: bd_text.copyWith(color: theme.colorScheme.onSurface),
-              )),
-        );
-      }
-    } catch (e) {
-      print('Error: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            backgroundColor: theme.colorScheme.onSecondary,
-            content: Text(
-              '$e',
-              style: bd_text.copyWith(color: theme.colorScheme.onSurface),
-            )),
-      );
-    }
+
+    await authViewModel.handleGoogleSignIn(context, trans);
+
     setState(() {
-      _isLoading = false;
+      _isLoading = false; // Ẩn loading sau khi hoàn tất
     });
   }
 }
