@@ -1,14 +1,10 @@
-import 'package:YogiTech/services/account/account_service.dart';
-import 'package:YogiTech/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 import 'package:YogiTech/routing/app_routes.dart';
 import 'package:YogiTech/shared/styles.dart';
 import 'package:YogiTech/shared/app_colors.dart';
 import 'package:YogiTech/widgets/box_input_field.dart';
 import 'package:YogiTech/widgets/box_button.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/auth/auth_viewmodel.dart';
@@ -23,10 +19,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  // final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: <String>[
-  //   'email',
-  //   'https://www.googleapis.com/auth/contacts.readonly',
-  // ], serverClientId: dotenv.env['GOOGLE_CLIENT_ID']);
+
   bool _isLoading = false;
 
   @override

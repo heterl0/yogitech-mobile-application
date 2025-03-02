@@ -282,7 +282,6 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         final PoseWithTime pose = _exercise!.poses[index];
         final Pose poseDetail = pose.pose;
         final title = poseDetail.name;
-        // final title = trans.pose + ' ${index + 1}';
         final subtitle = '${pose.duration} ${trans.seconds}';
 
         return CustomCard(
@@ -318,19 +317,20 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
               children: <Widget>[
                 ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: CachedNetworkImage(
-                    imageUrl: pose.image_url,
-                    height: 240, // Chiều cao cố định của ảnh
-                    width: double
-                        .infinity, // Đảm bảo ảnh chiếm toàn bộ chiều ngang
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Center(
-                        child: CircularProgressIndicator(
-                      color: (!(_account?.is_premium ?? false))
-                          ? primary
-                          : primary2,
-                    )),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9, // Điều chỉnh theo tỷ lệ ảnh của bạn
+                    child: CachedNetworkImage(
+                      imageUrl: pose.image_url,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Center(
+                          child: CircularProgressIndicator(
+                        color: (!(_account?.is_premium ?? false))
+                            ? primary
+                            : primary2,
+                      )),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
