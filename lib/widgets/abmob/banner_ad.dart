@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class BannerAdWidget extends StatefulWidget {
@@ -8,8 +9,8 @@ class BannerAdWidget extends StatefulWidget {
 
 class _BannerAdWidgetState extends State<BannerAdWidget> {
   late BannerAd _bannerAd;
+  final _adUnitId = dotenv.env['BANNER_ADD'];
   bool _isBannerAdLoaded = false;
-
   @override
   void initState() {
     super.initState();
@@ -19,11 +20,8 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   // Khởi tạo Banner Ad
   void _initializeBannerAd() {
     _bannerAd = BannerAd(
-      adUnitId:
-          // 'ca-app-pub-3767915082225357/9404123439', // Thay bằng Ad Unit ID của bạn
-          'ca-app-pub-3940256099942544/6300978111',
-
-
+      adUnitId: '$_adUnitId', // Thay bằng Ad Unit ID của bạn
+      // 'ca-app-pub-3940256099942544/6300978111',
       size: AdSize.banner,
       request: AdRequest(),
       listener: BannerAdListener(

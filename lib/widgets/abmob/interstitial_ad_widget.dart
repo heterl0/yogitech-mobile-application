@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class InterstitialAdWidget {
   late InterstitialAd _interstitialAd;
   bool _isAdLoaded = false;
-
+  final _adUnitId = dotenv.env['INTERSTITIAL_AD'];
   // Getter
   bool get isAdLoaded => _isAdLoaded;
 
@@ -12,7 +13,7 @@ class InterstitialAdWidget {
     InterstitialAd.load(
       adUnitId:
           // 'ca-app-pub-3767915082225357/8216493830', // thay id that vao
-          'ca-app-pub-3940256099942544/1033173712',
+          '$_adUnitId',
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
