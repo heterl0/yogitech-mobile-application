@@ -40,7 +40,7 @@ class _ChangeBMIPageState extends State<ChangeBMIPage> {
       backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.changeBMI,
-        style: widthStyle.Large,
+        style: WidthStyle.large,
       ),
       body: SingleChildScrollView(
         child: Padding(

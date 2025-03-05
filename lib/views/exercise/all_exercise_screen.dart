@@ -124,7 +124,7 @@ class AllExerciseState extends State<AllExercise> {
             },
           ),
         ],
-        style: widthStyle.Large,
+        style: WidthStyle.large,
         titleWidget: BoxInputField(
           controller: _searchController,
           placeholder: trans.search,

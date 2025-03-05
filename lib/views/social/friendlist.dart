@@ -163,7 +163,7 @@ class _FriendListPageState extends State<FriendListPage>
       backgroundColor: theme.colorScheme.surface,
       appBar: _isNotSearching
           ? CustomAppBar(
-              style: widthStyle.Large,
+              style: WidthStyle.large,
               title: trans.friends,
               postActions: [
                 IconButton(
@@ -176,7 +176,7 @@ class _FriendListPageState extends State<FriendListPage>
           : CustomAppBar(
               showBackButton: false,
               onBackPressed: _stopSearch,
-              style: widthStyle.Large,
+              style: WidthStyle.large,
               titleWidget: BoxInputField(
                 controller: _searchController,
                 placeholder: trans.search,

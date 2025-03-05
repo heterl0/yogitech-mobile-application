@@ -114,7 +114,7 @@ class _SocialPageState extends State<SocialPage> {
       backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.social,
-        style: widthStyle.Large,
+        style: WidthStyle.large,
       ),
       body: SingleChildScrollView(
         child: Container(

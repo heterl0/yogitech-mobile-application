@@ -217,7 +217,7 @@ class _PersonalizedExerciseCreatePageState
         title: widget.exercise == null
             ? trans.createExercise
             : trans.updateExercise,
-        style: widthStyle.Large,
+        style: WidthStyle.large,
       ),
       body: FutureBuilder<List<Pose>>(
         future: _fetchPoses(),

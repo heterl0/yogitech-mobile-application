@@ -44,7 +44,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
         extendBodyBehindAppBar: true,
         appBar: CustomAppBar(
           title: trans.social,
-          style: widthStyle.Large,
+          style: WidthStyle.large,
         ),
         resizeToAvoidBottomInset: true,
         body: _isLoading

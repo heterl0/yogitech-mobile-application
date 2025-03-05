@@ -91,7 +91,6 @@ Future<String?> _checkToken() async {
     }
     return accessToken;
   } catch (error) {
-    print("Error fetching token: $error");
     return null;
   }
 }
@@ -110,7 +109,6 @@ Future<void> _setupWorkManager() async {
       "fetchAndNotify",
       initialDelay: const Duration(seconds: 5),
     );
-    print("Task registered");
   } else {
     Workmanager().cancelAll();
   }
@@ -139,10 +137,8 @@ void callbackDispatcher() {
       if (notifications.isNotEmpty) {
         _showNotifications(notifications);
       }
-      print('Task was executed');
       return Future.value(true);
     } catch (e) {
-      print('Error in workmanager task: $e');
       return Future.value(false);
     }
   });

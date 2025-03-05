@@ -34,7 +34,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
-        style: widthStyle.Large,
+        style: WidthStyle.large,
         title: trans.paymentHistory,
       ),
       body: Padding(

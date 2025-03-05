@@ -63,7 +63,7 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
       backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.yourExercise,
-        style: widthStyle.Large,
+        style: WidthStyle.large,
       ),
       body: FutureBuilder<List<Exercise>>(
         future: _exerciseFuture,

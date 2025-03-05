@@ -71,7 +71,7 @@ class BlogState extends State<Blog> {
                   _isNotSearching = true;
                 });
               },
-              style: widthStyle.Large,
+              style: WidthStyle.large,
               titleWidget: BoxInputField(
                 controller: _searchController,
                 placeholder: trans.search,

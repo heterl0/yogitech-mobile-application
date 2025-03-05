@@ -118,7 +118,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
       backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.editProfile,
-        style: widthStyle.Large,
+        style: WidthStyle.large,
       ),
       body: Stack(
         children: [

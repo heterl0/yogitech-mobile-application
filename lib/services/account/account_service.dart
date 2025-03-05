@@ -13,12 +13,9 @@ Future<Account?> getUser() async {
       storeAccount(Account.fromMap(response.data));
       return Account.fromMap(response.data);
     } else {
-      print(
-          'Get account detail failed with status code: ${response.statusCode}');
       return null;
     }
   } catch (e) {
-    print('Get account detail error: $e');
     return null;
   }
 }
@@ -33,11 +30,9 @@ Future<List<Account>> getUserProfiles([String query = '']) async {
           .map((data) => Account.fromMap(data))
           .toList();
     } else {
-      print('Failed to get user profiles: ${response.statusCode}');
       return [];
     }
   } catch (e) {
-    print('Error getting user profiles: $e');
     return [];
   }
 }
@@ -49,12 +44,9 @@ Future<Profile?> getUserProfile() async {
     if (response.statusCode == 200) {
       return Account.fromMap(response.data).profile;
     } else {
-      print(
-          'Get account detail failed with status code: ${response.statusCode}');
       return null;
     }
   } catch (e) {
-    print('Get account detail error: $e');
     return null;
   }
 }

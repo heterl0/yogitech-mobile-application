@@ -44,7 +44,10 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.topCenter,
               ),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.shortestSide > 600
+                    ? 100.0
+                    : 20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,

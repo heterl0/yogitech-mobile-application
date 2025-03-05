@@ -45,7 +45,7 @@ class _BlogDetailState extends State<BlogDetail> {
       backgroundColor: theme.colorScheme.surface,
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
-        style: widthStyle.Small,
+        style: WidthStyle.small,
         postActions: [_buildDislikeButton(_disLike), _buildLikeButton(_like)],
       ),
       body: isLoading

@@ -188,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ],
-              style: widthStyle.Large,
+              style: WidthStyle.large,
               titleWidget: BoxInputField(
                 controller: _searchController,
                 placeholder: trans.search,
@@ -250,7 +250,12 @@ class _HomePageState extends State<HomePage> {
             widget.fetchAccount?.call();
           },
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 12),
+            padding: EdgeInsets.symmetric(
+              vertical: 12,
+              // horizontal: MediaQuery.of(context).size.shortestSide > 600
+              //     ? 60.0
+              //     : 20.0
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

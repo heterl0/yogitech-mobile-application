@@ -57,7 +57,7 @@ class _FriendProfile extends State<FriendProfile> {
       backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.friendProfile,
-        style: widthStyle.Large,
+        style: WidthStyle.large,
       ),
       body: Container(
         margin: const EdgeInsets.all(24.0),

@@ -16,10 +16,10 @@ class CustomBottomBar extends StatefulWidget {
   });
 
   @override
-  _CustomBottomBarState createState() => _CustomBottomBarState();
+  CustomBottomBarState createState() => CustomBottomBarState();
 }
 
-class _CustomBottomBarState extends State<CustomBottomBar> {
+class CustomBottomBarState extends State<CustomBottomBar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

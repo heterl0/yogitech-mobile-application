@@ -54,7 +54,7 @@ class _ExerciseSettingsPageState extends State<ExerciseSettingsPage> {
       backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.exerciseSetting,
-        style: widthStyle.Large,
+        style: WidthStyle.large,
       ),
       body: FutureBuilder(
         future: _loadPreferencesFuture,

@@ -56,7 +56,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
         title: trans.exerciseDetail,
-        style: widthStyle.Large,
+        style: WidthStyle.large,
         postActions: [
           SizedBox(
             width: 48,

@@ -61,7 +61,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       backgroundColor: theme.colorScheme.surface,
       appBar: CustomAppBar(
         title: trans.notifications,
-        style: widthStyle.Large,
+        style: WidthStyle.large,
       ),
       body: FutureBuilder(
         future: _loadPreferencesFuture,

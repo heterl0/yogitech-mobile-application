@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:YogiTech/shared/styles.dart';
 
-enum widthStyle { Small, Medium, Large }
+enum WidthStyle { small, medium, large }
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? titleWidget;
@@ -10,7 +10,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget> preActions, postActions;
   final double height;
   final VoidCallback? onBackPressed;
-  final widthStyle style;
+  final WidthStyle style;
 
   const CustomAppBar({
     super.key,
@@ -21,14 +21,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.postActions = const [],
     this.height = 108.0,
     this.onBackPressed,
-    this.style = widthStyle.Small,
+    this.style = WidthStyle.small,
   });
 
   @override
   Widget build(BuildContext context) {
-    final iconWidth = (style == widthStyle.Large)
+    final iconWidth = (style == WidthStyle.large)
         ? 2
-        : (style == widthStyle.Small || title == '')
+        : (style == WidthStyle.small || title == '')
             ? 8
             : 4;
 
