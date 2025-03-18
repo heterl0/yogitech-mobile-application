@@ -22,7 +22,7 @@ Hỗ trợ đa ngôn ngữ: Tiếng Việt & Tiếng Anh.
 
 Flutter SDK (phiên bản >= 3.3.4)
 
-Dart SDK (phiên bản >= 3.3)
+Dart SDK (phiên bản >= 3.5)
 
 Android minSdkVersion: 26
 
