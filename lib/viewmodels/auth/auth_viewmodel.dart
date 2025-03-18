@@ -44,6 +44,11 @@ class AuthViewModel extends ChangeNotifier {
       return;
     }
 
+    if (password.length < 8) {
+      showSnackbar(context, trans.atleast8chars, theme, isError: true);
+      return;
+    }
+
     if (password != confirmPassword) {
       showSnackbar(context, trans.passDonotMatch, theme, isError: true);
       return;
@@ -61,7 +66,19 @@ class AuthViewModel extends ChangeNotifier {
       if (response['status'] == 201) {
         Navigator.pushReplacementNamed(context, AppRoutes.verifyEmail);
       } else {
-        showSnackbar(context, trans.failRegister, theme, isError: true);
+        print(response['status']);
+        print(response['message']);
+
+        String errorMessage = trans.defaultError;
+        if (response['message'] is Map) {
+          if (response['message'].containsKey("username")) {
+            errorMessage = trans.usernameExists;
+          } else if (response['message'].containsKey("email")) {
+            errorMessage = trans.emailExists;
+          }
+        }
+
+        showSnackbar(context, errorMessage, theme, isError: true);
       }
     } catch (e) {
       showSnackbar(context, trans.anError, theme, isError: true);

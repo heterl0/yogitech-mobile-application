@@ -11,8 +11,9 @@ class InterstitialAdWidget {
 
   void loadInterstitialAd() {
     InterstitialAd.load(
-      adUnitId: 'ca-app-pub-3940256099942544/1033173712', // thay id that vao
-      // '$_adUnitId',
+      adUnitId:
+          //'ca-app-pub-3940256099942544/1033173712', // thay id that vao
+          '$_adUnitId',
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
