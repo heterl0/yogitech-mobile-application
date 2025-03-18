@@ -1,4 +1,4 @@
-### **YogiTech – Your AI-Powered Yoga Companion** 🧘‍♂️
+### **Yoga with YogiTech: AI-Powered** 🧘‍♂️
 
 🚀 **Transform Your Yoga Journey with AI!** 🚀
 
