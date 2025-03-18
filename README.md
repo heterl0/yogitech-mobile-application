@@ -54,34 +54,6 @@ flutter gen-l10n
 
 Hoặc chỉ cần lưu file pubspec.yaml để cập nhật lại.
 
-📦 Build ứng dụng
-
-1️⃣ Build file APK (release)
-
-flutter build apk --release
-
-👉 File APK nằm tại: build/app/outputs/flutter-apk/app-release.apk
-
-2️⃣ Build file AAB (dùng để upload lên Google Play)
-
-flutter build appbundle
-
-👉 File AAB nằm tại: build/app/outputs/bundle/release/app-release.aab
-
-3️⃣ Tăng version trước khi build bản mới
-
-Mở pubspec.yaml và chỉnh sửa:
-
-version: 1.0.1+2
-
-1.0.1: Phiên bản hiển thị
-
-+2: Version Code (phải lớn hơn lần trước)
-
-Sau đó build lại bằng:
-
-flutter build appbundle
-
 📜 Công nghệ sử dụng
 
 Flutter (Dart) - Framework chính
@@ -105,6 +77,7 @@ Rive - Hiệu ứng splash screen
 💡 Đóng góp & Liên hệ
 
 Nếu bạn muốn đóng góp vào dự án hoặc gặp bất kỳ vấn đề gì, vui lòng liên hệ:
-📧 Email: your.email@example.com💬 Facebook: Fanpage YogiTech
+📧 Email: support@yogitech.me
+💬 Facebook: [Fanpage YogiTech](https://www.facebook.com/YogitechApp)
 
 🌟 Cảm ơn bạn đã quan tâm đến YogiTech! Chúc bạn luyện tập Yoga hiệu quả! 🧘‍♂️✨
