@@ -1,4 +1,4 @@
-package com.example.yogi_application.model
+package com.yogitech.yogi_application.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

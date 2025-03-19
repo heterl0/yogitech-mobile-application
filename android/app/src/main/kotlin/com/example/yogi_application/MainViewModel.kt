@@ -1,16 +1,16 @@
-package com.example.yogi_application
+package com.yogitech.yogi_application
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.yogi_application.model.Exercise
-import com.example.yogi_application.model.ExerciseFeedback
-import com.example.yogi_application.model.FeedbackResponse
-import com.example.yogi_application.model.PoseLogResult
-import com.example.yogi_application.network.FeedbackApiService
-import com.example.yogi_application.network.ServiceBuilder
+import com.yogitech.yogi_application.model.Exercise
+import com.yogitech.yogi_application.model.ExerciseFeedback
+import com.yogitech.yogi_application.model.FeedbackResponse
+import com.yogitech.yogi_application.model.PoseLogResult
+import com.yogitech.yogi_application.network.FeedbackApiService
+import com.yogitech.yogi_application.network.ServiceBuilder
 import io.flutter.embedding.engine.FlutterEngine
 import kotlinx.coroutines.launch
 

@@ -1,4 +1,4 @@
-package com.example.yogi_application.fragment
+package com.yogitech.yogi_application.fragment
 
 import android.graphics.Color
 import android.graphics.LinearGradient
@@ -17,12 +17,12 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.yogi_application.BuildConfig
-import com.example.yogi_application.FeedbackResult
-import com.example.yogi_application.MainViewModel
-import com.example.yogi_application.R
-import com.example.yogi_application.databinding.FragmentScoreBinding
-import com.example.yogi_application.model.PoseLogResult
+import com.yogitech.yogi_application.BuildConfig
+import com.yogitech.yogi_application.FeedbackResult
+import com.yogitech.yogi_application.MainViewModel
+import com.yogitech.yogi_application.R
+import com.yogitech.yogi_application.databinding.FragmentScoreBinding
+import com.yogitech.yogi_application.model.PoseLogResult
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Locale

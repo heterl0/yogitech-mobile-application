@@ -1,4 +1,4 @@
-package com.example.yogi_application
+package com.yogitech.yogi_application
 
 import android.app.Application
 import io.flutter.embedding.engine.FlutterEngine

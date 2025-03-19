@@ -1,16 +1,16 @@
-package com.example.yogi_application
+package com.yogitech.yogi_application
 
 import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import com.example.yogi_application.model.ExerciseLog
+import com.yogitech.yogi_application.model.ExerciseLog
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity: FlutterActivity() {
-    private val CHANNEL = "com.example.yogitech" // Define channel name as a constant
+    private val CHANNEL = "com.yogitech.yogitech" // Define channel name as a constant
 //    private val viewModel: MainViewModel by viewModels();
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)

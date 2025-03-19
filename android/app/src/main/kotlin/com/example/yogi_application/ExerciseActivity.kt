@@ -1,4 +1,4 @@
-package com.example.yogi_application
+package com.yogitech.yogi_application
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
@@ -9,12 +9,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.yogi_application.databinding.ActivityMainBinding
-import com.example.yogi_application.fragment.CustomDialogFragment
-import com.example.yogi_application.model.Exercise
-import com.example.yogi_application.model.ExerciseFeedback
-import com.example.yogi_application.network.FeedbackApiService
-import com.example.yogi_application.network.ServiceBuilder
+import com.yogitech.yogi_application.databinding.ActivityMainBinding
+import com.yogitech.yogi_application.fragment.CustomDialogFragment
+import com.yogitech.yogi_application.model.Exercise
+import com.yogitech.yogi_application.model.ExerciseFeedback
+import com.yogitech.yogi_application.network.FeedbackApiService
+import com.yogitech.yogi_application.network.ServiceBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

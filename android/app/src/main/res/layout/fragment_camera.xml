@@ -12,7 +12,7 @@
         app:scaleType="fillStart" />
 
 
-    <com.example.yogi_application.OverlayView
+    <com.yogitech.yogi_application.OverlayView
         android:id="@+id/overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

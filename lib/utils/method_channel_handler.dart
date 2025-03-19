@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class MethodChannelHandler {
-  static const MethodChannel _channel = MethodChannel('com.example.yogitech');
+  static const MethodChannel _channel = MethodChannel('com.yogitech.yogitech');
   late BuildContext context;
   final Account? account;
   final VoidCallback? fetchAccount;

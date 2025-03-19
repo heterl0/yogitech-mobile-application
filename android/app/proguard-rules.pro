@@ -64,7 +64,7 @@
 -keepattributes Signature
 
 # Keep your model classes
--keep class com.example.yogi_application.model.** { *; }
+-keep class com.yogitech.yogi_application.model.** { *; }
 
 # Keep kotlinx.serialization classes
 -keep class kotlinx.serialization.** { *; }
@@ -78,5 +78,5 @@
 }
 
 # Keep all enums if necessary
--keep class com.example.yogi_application.** { *; }
+-keep class com.yogitech.yogi_application.** { *; }
 -keepclassmembers class **.R$* { *; }

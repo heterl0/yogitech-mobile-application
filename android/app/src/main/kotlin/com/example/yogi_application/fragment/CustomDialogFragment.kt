@@ -1,4 +1,4 @@
-package com.example.yogi_application.fragment
+package com.yogitech.yogi_application.fragment
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
@@ -12,10 +12,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.transition.Visibility
-import com.example.yogi_application.MainViewModel
-import com.example.yogi_application.R
-import com.example.yogi_application.databinding.DialogCustomBinding
-import com.example.yogi_application.model.PoseLogResult
+import com.yogitech.yogi_application.MainViewModel
+import com.yogitech.yogi_application.R
+import com.yogitech.yogi_application.databinding.DialogCustomBinding
+import com.yogitech.yogi_application.model.PoseLogResult
 
 class CustomDialogFragment : DialogFragment() {
 

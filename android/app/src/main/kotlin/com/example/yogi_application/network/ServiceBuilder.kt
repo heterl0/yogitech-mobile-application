@@ -1,6 +1,6 @@
-package com.example.yogi_application.network
+package com.yogitech.yogi_application.network
 
-import com.example.yogi_application.BuildConfig
+import com.yogitech.yogi_application.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

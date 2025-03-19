@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/permissions_fragment"
-        android:name="com.example.yogi_application.fragment.PermissionsFragment"
+        android:name="com.yogitech.yogi_application.fragment.PermissionsFragment"
         android:label="PermissionsFragment">
 
         <action
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/camera_fragment"
-        android:name="com.example.yogi_application.fragment.CameraFragment"
+        android:name="com.yogitech.yogi_application.fragment.CameraFragment"
         android:label="CameraFragment">
 
         <action
@@ -31,6 +31,6 @@
 
     <fragment
         android:id="@+id/score_fragment"
-        android:name="com.example.yogi_application.fragment.ScoreFragment"
+        android:name="com.yogitech.yogi_application.fragment.ScoreFragment"
         android:label="ScoreFragment" />
 </navigation>

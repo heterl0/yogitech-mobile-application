@@ -1,4 +1,4 @@
-package com.example.yogi_application.model
+package com.yogitech.yogi_application.model
 
 import com.google.gson.annotations.SerializedName
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark

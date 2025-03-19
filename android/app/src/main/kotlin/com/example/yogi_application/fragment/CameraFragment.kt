@@ -1,4 +1,4 @@
-package com.example.yogi_application.fragment
+package com.yogitech.yogi_application.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -27,15 +27,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
-import com.example.yogi_application.PoseLandmarkerHelper
-import com.example.yogi_application.MainViewModel
-import com.example.yogi_application.PoseLandmarkerHelper.Companion.GPU_ERROR
-import com.example.yogi_application.R
-import com.example.yogi_application.databinding.FragmentCameraBinding
-import com.example.yogi_application.model.Exercise
-import com.example.yogi_application.model.ExerciseFeedback
-import com.example.yogi_application.model.ExerciseLog
-import com.example.yogi_application.model.KeyPoint
+import com.yogitech.yogi_application.PoseLandmarkerHelper
+import com.yogitech.yogi_application.MainViewModel
+import com.yogitech.yogi_application.PoseLandmarkerHelper.Companion.GPU_ERROR
+import com.yogitech.yogi_application.R
+import com.yogitech.yogi_application.databinding.FragmentCameraBinding
+import com.yogitech.yogi_application.model.Exercise
+import com.yogitech.yogi_application.model.ExerciseFeedback
+import com.yogitech.yogi_application.model.ExerciseLog
+import com.yogitech.yogi_application.model.KeyPoint
 import com.google.common.flogger.backend.LogData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -227,7 +227,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 Handler(Looper.getMainLooper()).post {
                     MethodChannel(
                         viewModel.flutterEngine?.dartExecutor?.binaryMessenger!!, // Use flutterEngine here
-                        "com.example.yogitech"
+                        "com.yogitech.yogitech"
                     ).invokeMethod("receiveObject", exerciseLog.toJson())
                 }
                 activity?.finish();

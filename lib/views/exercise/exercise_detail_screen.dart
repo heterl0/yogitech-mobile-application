@@ -91,7 +91,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
             } else {
               await storeExercise(_exercise!, null);
             }
-            const platform = MethodChannel('com.example.yogitech');
+            const platform = MethodChannel('com.yogitech.yogitech');
             final methodChannel = MethodChannelHandler(
                 account: _account,
                 fetchAccount: widget.fetchAccount,
