@@ -298,5 +298,8 @@
   "atleast8chars": "Mật khẩu phải có ít nhất 8 ký tự!",
   "usernameExists": "Tên người dùng đã tồn tại.",
   "emailExists": "Email đã tồn tại.",
-  "defaultError": "Đăng ký thất bại, vui lòng thử lại."
+  "defaultError": "Đăng ký thất bại, vui lòng thử lại.",
+  "yogaBenefits" :"Lợi ích của Yoga",
+  "yogaForBetterSleep" :"Yoga cho giấc ngủ ngon hơn",
+  "letFindOut" :"Hãy cùng tìm hiểu!"
 }

@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchStreakStatus() async {
     final bool status = await isExerciseToday();
-      print('testttt $status - Thời gian: ${DateTime.now()}'); 
+    print('testttt $status - Thời gian: ${DateTime.now()}');
     setState(() {
       streakStatus = status;
     });
@@ -296,9 +296,9 @@ class _HomePageState extends State<HomePage> {
                         },
                       ),
                       _buildCarouselItem(
-                        title: trans.yogaChangedMyLife,
-                        subtitle: trans.minhAnhInspirationalStory,
-                        poseName: trans.shareYourJourney,
+                        title: trans.yogaBenefits,
+                        subtitle: trans.yogaForBetterSleep,
+                        poseName: trans.letFindOut,
                         imagePath: (!(_account?.is_premium ?? false))
                             ? 'assets/images/Fire.png'
                             : 'assets/images/Fire2.png',
@@ -307,7 +307,7 @@ class _HomePageState extends State<HomePage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => BlogDetail(
-                                id: 9,
+                                id: 3,
                               ),
                             ),
                           );

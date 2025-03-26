@@ -298,5 +298,8 @@
   "atleast8chars": "Password must be at least 8 characters!",
   "usernameExists": "Username already exists.",
   "emailExists": "Email already exists.",
-  "defaultError": "Registration failed, please try again."
+  "defaultError": "Registration failed, please try again.",
+  "yogaBenefits" :"benefits of yoga",
+  "yogaForBetterSleep" :"Yoga for better sleep",
+  "letFindOut" :"Let's find out!"
 }
