@@ -25,6 +25,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // list json
   List<dynamic> jsonList = [];
   List<dynamic> jsonListSort = [];
   bool _isnotSearching = true;
@@ -68,6 +69,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchStreakStatus() async {
     final bool status = await isExerciseToday();
+      print('testttt $status - Thời gian: ${DateTime.now()}'); 
     setState(() {
       streakStatus = status;
     });
@@ -802,7 +804,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// Phải tạo Widget riêng chỉ nhằm mục đích áp dụng màu Gradient
 class StreakValue extends StatelessWidget {
   final String streakValue;
   final Account? account;
@@ -817,7 +818,6 @@ class StreakValue extends StatelessWidget {
     return Center(
       child: GestureDetector(
         onTap: () {
-          // Chuyển sang trang mới khi nhấn vào
           pushWithoutNavBar(
             context,
             MaterialPageRoute(
@@ -834,29 +834,41 @@ class StreakValue extends StatelessWidget {
           children: [
             Text(
               trans.streak,
-              style: min_cap.copyWith(
-                color: text,
-              ),
+              style: min_cap.copyWith(color: text),
             ),
             SizedBox(
               height: 32,
-              child: streakStatus == true
-                  ? ShaderMask(
-                      shaderCallback: (bounds) {
-                        return (!(account?.is_premium ?? false))
-                            ? gradient.createShader(bounds)
-                            : gradient2.createShader(bounds);
-                      },
-                      child: Text(
-                        streakValue,
-                        style: h2.copyWith(color: active, height: 1),
-                      ),
-                    )
-                  : Text(
-                      streakValue,
-                      style: h2.copyWith(color: text, height: 1),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (streakStatus ==
+                      false) // Nếu chưa tập, hiển thị dấu chấm than
+                    Icon(
+                      Icons.error_outline, // Dấu chấm than kiểu nhẹ nhàng hơn
+                      color: text, // Cùng màu với chữ "Streak"
+                      size: 20,
                     ),
-            )
+                  const SizedBox(
+                      width: 2), // Khoảng cách giữa icon và số streak
+                  streakStatus == true
+                      ? ShaderMask(
+                          shaderCallback: (bounds) {
+                            return (!(account?.is_premium ?? false))
+                                ? gradient.createShader(bounds)
+                                : gradient2.createShader(bounds);
+                          },
+                          child: Text(
+                            streakValue,
+                            style: h2.copyWith(color: active, height: 1),
+                          ),
+                        )
+                      : Text(
+                          streakValue,
+                          style: h2.copyWith(color: text, height: 1),
+                        ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

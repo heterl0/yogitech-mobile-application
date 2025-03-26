@@ -1,5 +1,6 @@
 import 'package:YogiTech/models/pose.dart';
 import 'package:YogiTech/services/dioInstance.dart';
+import 'package:YogiTech/services/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:YogiTech/models/exercise.dart';
 import 'package:YogiTech/utils/formatting.dart';
@@ -155,11 +156,17 @@ Future<dynamic> postExerciseLog(dynamic data) async {
 }
 
 Future<bool> isExerciseToday() async {
+  int timezoneOffset = DateTime.now().timeZoneOffset.inMinutes;
+
   try {
     final url = formatApiUrl('/api/v1/exercise-logs/today/');
-    final Response response = await DioInstance.get(url);
+
+    // final Response response = await DioInstance.get(url);
+    final Dio dio = DioClient.create(); // Sử dụng custom Dio client
+    final Response response = await dio.get(url);
     if (response.statusCode == 200) {
       List<dynamic> logs = response.data;
+      print('Thời gian kiểm tra: ${DateTime.now()}');
       return logs.isNotEmpty;
     } else {
       print(

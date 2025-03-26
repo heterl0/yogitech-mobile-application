@@ -245,7 +245,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _themeMode = prefs.getBool('isDarkMode') ?? false
+      _themeMode = prefs.getBool('isDarkMode') ?? true
           ? ThemeMode.dark
           : ThemeMode.light;
       _locale = Locale(prefs.getString('locale') ?? 'vn');
