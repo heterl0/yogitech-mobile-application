@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:YogiTech/models/account.dart';
 import 'package:YogiTech/utils/formatting.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 
 Future<dynamic> login(String email, String password) async {
   try {
@@ -16,7 +17,9 @@ Future<dynamic> login(String email, String password) async {
       final accessToken = response.data['access'];
       final refreshToken = response.data['refresh'];
       await saveTokens(accessToken, refreshToken);
-      DioInstance.setAccessToken(accessToken);
+      String timezoneLocation = await FlutterTimezone.getLocalTimezone();
+
+      DioInstance.setAccessToken(accessToken, timezoneLocation);
       Account? account = await getUser();
       storeAccount(account!);
       return accessToken;
@@ -76,7 +79,8 @@ Future<dynamic> loginGoogle(String authToken) async {
       final accessToken = tokens['access'];
       final refreshToken = tokens['refresh'];
       await saveTokens(accessToken, refreshToken);
-      DioInstance.setAccessToken(accessToken);
+      String timezoneLocation = await FlutterTimezone.getLocalTimezone();
+      DioInstance.setAccessToken(accessToken, timezoneLocation);
       Account? account = await getUser();
       storeAccount(account!);
       return accessToken;

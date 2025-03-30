@@ -54,6 +54,7 @@ import 'viewmodels/auth/auth_viewmodel.dart';
 import 'viewmodels/blog/blog_detail_viewmodel.dart';
 import 'viewmodels/profile/change_BMI_viewmodel.dart';
 import 'views/inprogress/OTP_confirm_screen.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 
 // ============================================================================
 // GLOBAL VARIABLES
@@ -69,7 +70,11 @@ Future<void> _initializeApp() async {
   MobileAds.instance.initialize();
 
   tz.initializeTimeZones();
-  tz.setLocalLocation(tz.getLocation('Asia/Ho_Chi_Minh'));
+  final String timeZoneName = await FlutterTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(timeZoneName));
+
+  // setting timezone for local follow the local devices
+  // tz.setLocalLocation(tz.getLocation('Asia/Ho_Chi_Minh'));
 
   await LocalNotificationService().init();
   HttpOverrides.global = MyHttpOverrides();
@@ -86,7 +91,9 @@ Future<String?> _checkToken() async {
     final tokens = await getToken();
     final accessToken = tokens['access'];
     if (accessToken != null) {
-      DioInstance.setAccessToken(accessToken);
+      String timezoneLocation = await FlutterTimezone.getLocalTimezone();
+
+      DioInstance.setAccessToken(accessToken, timezoneLocation);
       await getUser();
     }
     return accessToken;
