@@ -7,6 +7,7 @@ class DioInstance {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
         options.headers['X-Client-Timezone1'] = timezoneLocation.toLowerCase();
+        print("timezone: $timezoneLocation");
         options.headers['Authorization'] = 'Bearer $accessToken';
         return handler.next(options); //continue
       },
