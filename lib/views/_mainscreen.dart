@@ -1,5 +1,5 @@
 import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/services/auth/auth_service.dart';
+import 'package:YogiTech/services/account/account_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -40,7 +40,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future<void> _fetchAccount() async {
-    final Account? account = await retrieveAccount();
+    // final Account? account = await retrieveAccount();
+    final Account? account = await getUser();
 
     setState(() {
       _account = account;
