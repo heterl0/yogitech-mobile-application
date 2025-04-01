@@ -221,6 +221,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
   Widget _buildRowWithText(AppLocalizations trans, BuildContext context) {
     final durations = _exercise?.durations ?? 0;
     final minute = durations ~/ 60;
+    final second = durations % 60;
     final int level = _exercise?.level ?? 1;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -231,7 +232,9 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           style: bd_text.copyWith(color: text),
         ),
         Text(
-          '$minute ${trans.minutes}',
+          minute > 0
+              ? '$minute ${trans.minutes} $second ${trans.seconds}'
+              : '$second ${trans.seconds}',
           style: bd_text.copyWith(
             color: _account?.is_premium == true ? primary2 : primary,
           ),
