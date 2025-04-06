@@ -3,9 +3,10 @@ import 'package:dio/dio.dart';
 class DioInstance {
   static final Dio _dio = Dio();
 
-  static void setAccessToken(String accessToken) {
+  static void setAccessToken(String accessToken, String timezoneLocation) {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
+        options.headers['X-Client-Timezone'] = timezoneLocation.toLowerCase();
         options.headers['Authorization'] = 'Bearer $accessToken';
         return handler.next(options); //continue
       },
