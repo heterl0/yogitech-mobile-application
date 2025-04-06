@@ -251,10 +251,25 @@ class _MyAppState extends State<MyApp> {
   // ==========================================================================
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
+    final bool isDarkMode = prefs.getBool('isDarkMode') ?? true;
+
+    if (isDarkMode) {
+      SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: elevationDark,
+        ),
+      );
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: elevationLight,
+        ),
+      );
+    }
     setState(() {
-      _themeMode = prefs.getBool('isDarkMode') ?? true
-          ? ThemeMode.dark
-          : ThemeMode.light;
+      _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
       _locale = Locale(prefs.getString('locale') ?? 'vn');
       _isLoading = false;
     });
@@ -267,6 +282,21 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _toggleTheme(bool isDarkMode) {
+    if (isDarkMode) {
+      SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: elevationDark,
+        ),
+      );
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: elevationLight,
+        ),
+      );
+    }
     setState(() {
       _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
       _saveSettings();
