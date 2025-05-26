@@ -16,7 +16,7 @@ const Color primary = Color(0xFF4095d0); // Màu chính
 const Color primary2 = Color(0xFF560bad); // Màu chính 2
 const Color green = Color(0xFF3BE2B0);
 const Color error = Color(0xFFff5858); // Màu lỗi
-const Color darkblue = Color(0xFF5986cc);
+const Color darkblue = Color(0xFF1C46F2);
 
 // Derived colors
 Color stroke = Color(0xFFa4b8be).withOpacity(0.5); // Màu viền với độ mờ 50%
