@@ -219,7 +219,7 @@ void main() async {
 
   await _setupWorkManager();
 
-  await DownloadService.preloadAssets();
+  // await DownloadService.preloadAssets();
   runApp(
     MultiProvider(
       providers: [
