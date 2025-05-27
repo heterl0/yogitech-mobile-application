@@ -73,7 +73,7 @@ class _ProfilePageState extends State<ProfilePage>
 
   Future<void> _fetchSevenRecentDays() async {
     final data = await getSevenRecentDays();
-    print('Dữ liệu lấy về là ${data}');
+    // print('Dữ liệu lấy về là ${data}');
     if (data != null && data is List) {
       setState(() {
         final DateTime startDate = parseDate(
@@ -150,7 +150,7 @@ class _ProfilePageState extends State<ProfilePage>
       _profile = _account?.profile;
       print(
           'Account from widget: $_account'); // Thêm print để kiểm tra _account
-      print('Profile from account: $_profile');
+      // print('Profile from account: $_profile');
       _isLoading = false;
     });
   }

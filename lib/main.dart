@@ -10,6 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -50,6 +51,7 @@ import 'package:YogiTech/views/profile/profile_screen.dart';
 import 'package:YogiTech/views/settings/reminder_screen.dart';
 import 'package:YogiTech/views/settings/settings_screen.dart';
 import 'package:YogiTech/views/social/friend_profile.dart';
+import 'services/download/download_service.dart';
 import 'viewmodels/auth/auth_viewmodel.dart';
 import 'viewmodels/blog/blog_detail_viewmodel.dart';
 import 'viewmodels/profile/change_BMI_viewmodel.dart';
@@ -101,6 +103,23 @@ Future<String?> _checkToken() async {
     return null;
   }
 }
+
+// Future<void> requestStoragePermission() async {
+//   if (await Permission.storage.isGranted) {
+//     print("🔹 Quyền storage đã được cấp!");
+//   } else {
+//     final status = await Permission.storage.request();
+//     if (status.isGranted) {
+//       print("🔹 Quyền storage được cấp!");
+//     } else if (status.isDenied) {
+//       print("❌ Quyền storage bị từ chối!");
+//       // Hiển thị dialog thông báo nếu cần
+//     } else if (status.isPermanentlyDenied) {
+//       print("❌ Quyền storage bị từ chối vĩnh viễn!");
+//       await openAppSettings(); // Mở cài đặt để người dùng cấp quyền
+//     }
+//   }
+// }
 
 // ============================================================================
 // WORKMANAGER CONFIGURATION
@@ -190,6 +209,7 @@ class MyHttpOverrides extends HttpOverrides {
 // ============================================================================
 void main() async {
   await _initializeApp();
+  // await requestStoragePermission();
   final accessToken = await _checkToken();
 
   await SystemChrome.setPreferredOrientations([
@@ -199,6 +219,7 @@ void main() async {
 
   await _setupWorkManager();
 
+  // await DownloadService.preloadAssets();
   runApp(
     MultiProvider(
       providers: [
