@@ -88,7 +88,7 @@ jobs:
 
   notify:
     name: Notify Deployment Status
-    needs: [test, build-and-deploy]
+    needs: [build-and-deploy]
     runs-on: ubuntu-latest
     if: always()
 
