@@ -76,7 +76,7 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
           packageName: ${{ secrets.ANDROID_PACKAGE_NAME }}
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          track: closed-testing
+          track: Closed testing - Beta
           status: inProgress
           userFraction: 0.9
           changesNotSentForReview: false
