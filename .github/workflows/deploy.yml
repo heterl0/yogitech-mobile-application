@@ -77,8 +77,8 @@ jobs:
           packageName: ${{ secrets.ANDROID_PACKAGE_NAME }}
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
           track: closed-testing
-          status: completed
-          userFraction: 1
+          status: inProgress
+          userFraction: 0.9
           changesNotSentForReview: false
           whatsNewDirectory: distribution/whatsnew
         env:
