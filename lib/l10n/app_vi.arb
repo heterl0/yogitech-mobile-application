@@ -302,5 +302,7 @@
   "yogaBenefits" :"Lợi ích của Yoga",
   "yogaForBetterSleep" :"Yoga cho giấc ngủ ngon hơn",
   "letFindOut" :"Hãy cùng tìm hiểu!",
-  "failedInternetConnection": "kết nối internet thất bại"
+  "failedConnectTitle": "Không có kết nối internet",
+  "failedConnectText": "Vui lòng kiểm tra kết nối internet của bạn và thử lại",
+  "tryConnectAgain": "Thử lại"
 }

@@ -1,6 +1,7 @@
 // main.dart
 import 'dart:async';
 import 'dart:io';
+import 'package:YogiTech/views/no_internet_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -344,6 +345,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute:
+          // AppRoutes.noInternet,
           widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
       theme: lightTheme,
       darkTheme: darkTheme,
@@ -409,6 +411,7 @@ class _MyAppState extends State<MyApp> {
           ),
       AppRoutes.paymentHistory: (_) => PaymentHistory(),
       AppRoutes.changeProfile: (_) => ChangeProfilePage(),
+      AppRoutes.noInternet: (_) => const NoInternetScreen(),
     };
   }
 }
