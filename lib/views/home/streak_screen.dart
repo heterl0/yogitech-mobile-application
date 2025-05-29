@@ -355,7 +355,7 @@ class _StreakState extends State<Streak> {
         child: Text(
           date.day.toString(),
           style: bd_text.copyWith(
-              color: isStreakDay ? active : theme.colorScheme.onSurface),
+              color: isStreakDay ? stroke : theme.colorScheme.onSurface),
         ),
       ),
     );
