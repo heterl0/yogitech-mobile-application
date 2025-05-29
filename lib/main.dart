@@ -1,6 +1,6 @@
-// main.dart
 import 'dart:async';
 import 'dart:io';
+import 'package:YogiTech/services/network/network_service.dart';
 import 'package:YogiTech/views/no_internet_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -211,6 +211,7 @@ class MyHttpOverrides extends HttpOverrides {
 void main() async {
   await _initializeApp();
   // await requestStoragePermission();
+  final bool hasInternet = await NetworkService.hasInternetConnection();
   final accessToken = await _checkToken();
 
   await SystemChrome.setPreferredOrientations([
@@ -228,14 +229,18 @@ void main() async {
         ChangeNotifierProvider(create: (_) => BlogDetailViewModel()),
         ChangeNotifierProvider(create: (_) => ChangeBMIViewModel()),
       ],
-      child: MyApp(access: accessToken),
+      child: MyApp(
+        access: accessToken,
+        hasInternet: hasInternet,
+      ),
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
   final String? access;
-  const MyApp({super.key, this.access});
+  final bool hasInternet;
+  const MyApp({super.key, this.access, required this.hasInternet});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -346,7 +351,12 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute:
           // AppRoutes.noInternet,
-          widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
+          // widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
+          widget.hasInternet
+              ? (widget.access != null
+                  ? AppRoutes.firstScreen
+                  : AppRoutes.login)
+              : AppRoutes.noInternet,
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: _themeMode,
