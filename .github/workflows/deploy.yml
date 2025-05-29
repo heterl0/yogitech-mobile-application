@@ -51,6 +51,12 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
 
+      - name: Create google-services.json file from secret
+        run: echo "${{ secrets.GOOGLE_SERVICES_FILE }}" > android/app/google-services.json
+
+      - name: Create .env file from secret
+        run: echo "${{ secrets.DOTENV_FILE }}" > .env
+
       - name: Build Android App Bundle
         run: |
           BUILD_NUMBER=$((1000 + $GITHUB_RUN_NUMBER))
