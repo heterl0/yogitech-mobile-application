@@ -9,8 +9,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthViewModel extends ChangeNotifier {
   final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: <String>[
+    // 'email',
+    // 'https://www.googleapis.com/auth/contacts.readonly',
     'email',
-    'https://www.googleapis.com/auth/contacts.readonly',
+    'profile',
   ], serverClientId: dotenv.env['GOOGLE_CLIENT_ID']);
 
   bool _isLoading = false;
@@ -95,7 +97,6 @@ class AuthViewModel extends ChangeNotifier {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       GoogleSignInAuthentication googleSignInAuthentication =
           await googleUser!.authentication;
-
       final accessToken =
           await loginGoogle(googleSignInAuthentication.idToken ?? "");
       if (accessToken != null) {
