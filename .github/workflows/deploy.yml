@@ -1,0 +1,106 @@
+name: Flutter CI/CD - Deploy to Google Play Beta Track
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy to Play Store Beta
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+          cache: "gradle"
+
+      - name: Update version
+        run: |
+          chmod +x scripts/version.sh
+          ./scripts/version.sh
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.27.4"
+          channel: "stable"
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Setup Android keystore
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 -d > android/app/yogitech-keystore.jks
+          echo "storeFile=yogitech-keystore.jks" >> android/key.properties
+          echo "storePassword=$KEYSTORE_PASSWORD" >> android/key.properties
+          echo "keyAlias=$KEY_ALIAS" >> android/key.properties
+          echo "keyPassword=$KEY_PASSWORD" >> android/key.properties
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Build Android App Bundle
+        run: |
+          BUILD_NUMBER=$((1000 + $GITHUB_RUN_NUMBER))
+          BUILD_NAME="1.0.$GITHUB_RUN_NUMBER"
+          echo "Building version: $BUILD_NAME ($BUILD_NUMBER)"
+          flutter build appbundle --release \
+            --build-number=$BUILD_NUMBER \
+            --build-name=$BUILD_NAME \
+            --dart-define=FLUTTER_WEB_AUTO_DETECT=true
+        env:
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+
+      - name: Upload to Google Play Console (Beta Track)
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+          packageName: ${{ secrets.ANDROID_PACKAGE_NAME }}
+          releaseFiles: build/app/outputs/bundle/release/app-release.aab
+          track: closed-testing
+          status: completed
+          userFraction: 1
+          changesNotSentForReview: false
+          whatsNewDirectory: distribution/whatsnew
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app-release-aab
+          path: build/app/outputs/bundle/release/app-release.aab
+          retention-days: 30
+
+  notify:
+    name: Notify Deployment Status
+    needs: [test, build-and-deploy]
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Notify Success
+        if: needs.build-and-deploy.result == 'success'
+        run: |
+          echo "✅ Deployment to Beta track successful!"
+          echo "Check your Google Play Console for the new release."
+
+      - name: Notify Failure
+        if: needs.build-and-deploy.result == 'failure'
+        run: |
+          echo "❌ Deployment failed!"
+          echo "Check the logs above for error details."
