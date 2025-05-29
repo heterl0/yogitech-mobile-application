@@ -837,7 +837,7 @@ class StreakValue extends StatelessWidget {
               style: min_cap.copyWith(color: text),
             ),
             SizedBox(
-              height: 32,
+              height: 28,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
