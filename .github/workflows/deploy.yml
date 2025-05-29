@@ -56,6 +56,7 @@ jobs:
           BUILD_NUMBER=$((1000 + $GITHUB_RUN_NUMBER))
           BUILD_NAME="1.0.$GITHUB_RUN_NUMBER"
           echo "Building version: $BUILD_NAME ($BUILD_NUMBER)"
+          flutter gen-l10n
           flutter build appbundle --release \
             --build-number=$BUILD_NUMBER \
             --build-name=$BUILD_NAME \
