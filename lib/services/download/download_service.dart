@@ -51,13 +51,13 @@ class DownloadService {
     if (isFirstRun) {
       print("🔄 Đang tải assets...");
       await downloadFile(
-          'https://storage.yogitech.me/assets/audios/rain.mp3', 'rain.mp3');
+          'https://storage.zenaiyoga.com/assets/audios/rain.mp3', 'rain.mp3');
       await downloadFile(
-          'https://storage.yogitech.me/assets/audios/wave.mp3', 'wave.mp3');
+          'https://storage.zenaiyoga.com/assets/audios/wave.mp3', 'wave.mp3');
       await downloadFile(
-          'https://storage.yogitech.me/assets/audios/morning.mp3',
+          'https://storage.zenaiyoga.com/assets/audios/morning.mp3',
           'morning.mp3');
-      await downloadFile('https://storage.yogitech.me/res/raw/vi_tutorial.mp4',
+      await downloadFile('https://storage.zenaiyoga.com/res/raw/vi_tutorial.mp4',
           'vi_tutorial.mp4');
       prefs.setBool('first_run', false);
       print("✅ Tải assets thành công!");

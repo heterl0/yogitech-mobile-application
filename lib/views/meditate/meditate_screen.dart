@@ -18,9 +18,9 @@ class Meditate extends StatefulWidget {
 }
 
 final List<Map<String, dynamic>> theTracks = [
-  {'url': 'https://storage.yogitech.me/assets/audios/rain.mp3'},
-  {'url': 'https://storage.yogitech.me/assets/audios/wave.mp3'},
-  {'url': 'https://storage.yogitech.me/assets/audios/morning.mp3'}
+  {'url': 'https://storage.zenaiyoga.com/assets/audios/rain.mp3'},
+  {'url': 'https://storage.zenaiyoga.com/assets/audios/wave.mp3'},
+  {'url': 'https://storage.zenaiyoga.com/assets/audios/morning.mp3'}
 ];
 
 class _MeditateState extends State<Meditate> {
@@ -160,17 +160,17 @@ class _MeditateState extends State<Meditate> {
       {
         'title': trans.soundRain,
         'subtitle': trans.soundRainDescription,
-        'url': 'https://storage.yogitech.me/assets/audios/rain.mp3'
+        'url': 'https://storage.zenaiyoga.com/assets/audios/rain.mp3'
       },
       {
         'title': trans.soundWave,
         'subtitle': trans.soundWaveDescription,
-        'url': 'https://storage.yogitech.me/assets/audios/wave.mp3'
+        'url': 'https://storage.zenaiyoga.com/assets/audios/wave.mp3'
       },
       {
         'title': trans.soundMorning,
         'subtitle': trans.soundMorningDescription,
-        'url': 'https://storage.yogitech.me/assets/audios/morning.mp3'
+        'url': 'https://storage.zenaiyoga.com/assets/audios/morning.mp3'
       },
     ];
 

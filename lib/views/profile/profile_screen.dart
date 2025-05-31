@@ -172,7 +172,7 @@ class _ProfilePageState extends State<ProfilePage>
               ),
               onPressed: () async {
                 await Share.share(
-                    'check out my website https://www.yogitech.me',
+                    'check out my website https://www.zenaiyoga.com',
                     subject: 'Look what I made!');
               },
             ),

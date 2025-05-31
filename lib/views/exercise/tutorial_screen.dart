@@ -25,7 +25,7 @@ class _TutorialState extends State<Tutorial> {
     print('Ngôn ngữ là: $locale');
     // String videoAssetPath = 'assets/video/$locale\_Tutorial.mp4';
     String videoUrl =
-        'https://storage.yogitech.me/res/raw/$locale\_tutorial.mp4';
+        'https://storage.zenaiyoga.com/res/raw/$locale\_tutorial.mp4';
 
     // _videoPlayerController = VideoPlayerController.asset(videoAssetPath)
     _videoPlayerController = VideoPlayerController.network(videoUrl)
