@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-import 'package:YogiTech/models/account.dart';
+import 'package:ZenAiYoga/models/account.dart';
 import 'package:collection/collection.dart';
 
 class BlogVote {

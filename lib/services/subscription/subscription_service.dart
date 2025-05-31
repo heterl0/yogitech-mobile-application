@@ -1,7 +1,7 @@
-import 'package:YogiTech/services/account/account_service.dart';
-import 'package:YogiTech/services/auth/auth_service.dart';
-import 'package:YogiTech/services/dioInstance.dart';
-import 'package:YogiTech/utils/formatting.dart';
+import 'package:ZenAiYoga/services/account/account_service.dart';
+import 'package:ZenAiYoga/services/auth/auth_service.dart';
+import 'package:ZenAiYoga/services/dioInstance.dart';
+import 'package:ZenAiYoga/utils/formatting.dart';
 import 'package:dio/dio.dart';
 
 import '../../models/subscriptions.dart';

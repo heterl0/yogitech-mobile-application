@@ -1,19 +1,19 @@
-import 'package:YogiTech/services/exercise/exercise_service.dart';
-import 'package:YogiTech/views/blog/blog_detail_screen.dart';
-import 'package:YogiTech/views/home/filter_screen.dart';
+import 'package:ZenAiYoga/services/exercise/exercise_service.dart';
+import 'package:ZenAiYoga/views/blog/blog_detail_screen.dart';
+import 'package:ZenAiYoga/views/home/filter_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:YogiTech/custombar/appbar.dart';
-import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/views/exercise/all_exercise_screen.dart';
-import 'package:YogiTech/views/exercise/exercise_detail_screen.dart';
-import 'package:YogiTech/views/home/streak_screen.dart';
-import 'package:YogiTech/shared/styles.dart';
-import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/widgets/box_input_field.dart';
-import 'package:YogiTech/widgets/card.dart';
+import 'package:ZenAiYoga/custombar/appbar.dart';
+import 'package:ZenAiYoga/models/account.dart';
+import 'package:ZenAiYoga/views/exercise/all_exercise_screen.dart';
+import 'package:ZenAiYoga/views/exercise/exercise_detail_screen.dart';
+import 'package:ZenAiYoga/views/home/streak_screen.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
+import 'package:ZenAiYoga/widgets/box_input_field.dart';
+import 'package:ZenAiYoga/widgets/card.dart';
 
 class HomePage extends StatefulWidget {
   final Account? account;

@@ -90,12 +90,7 @@ android {
     }
     
     signingConfigs {
-        // release {
-        //     storeFile file("android/app/yogitech-keystore.jks")
-        //     storePassword "android"
-        //     keyAlias "upload"
-        //     keyPassword "android"
-        // }
+        
         release {
             storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']

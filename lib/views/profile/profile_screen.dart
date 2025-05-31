@@ -1,22 +1,22 @@
-import 'package:YogiTech/services/account/account_service.dart';
-import 'package:YogiTech/shared/premium_dialog.dart';
-import 'package:YogiTech/viewmodels/auth/auth_viewmodel.dart';
-import 'package:YogiTech/widgets/infor_card_component.dart';
-import 'package:YogiTech/widgets/stat_card_component.dart';
+import 'package:ZenAiYoga/services/account/account_service.dart';
+import 'package:ZenAiYoga/shared/premium_dialog.dart';
+import 'package:ZenAiYoga/viewmodels/auth/auth_viewmodel.dart';
+import 'package:ZenAiYoga/widgets/infor_card_component.dart';
+import 'package:ZenAiYoga/widgets/stat_card_component.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:YogiTech/custombar/appbar.dart';
-import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/views/profile/change_profile_screen.dart';
-import 'package:YogiTech/views/social/social.dart';
-import 'package:YogiTech/shared/styles.dart';
-import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/views/settings/settings_screen.dart';
-import 'package:YogiTech/views/social/friendlist.dart';
-import 'package:YogiTech/views/profile/change_BMI_screen.dart';
+import 'package:ZenAiYoga/custombar/appbar.dart';
+import 'package:ZenAiYoga/models/account.dart';
+import 'package:ZenAiYoga/views/profile/change_profile_screen.dart';
+import 'package:ZenAiYoga/views/social/social.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
+import 'package:ZenAiYoga/views/settings/settings_screen.dart';
+import 'package:ZenAiYoga/views/social/friendlist.dart';
+import 'package:ZenAiYoga/views/profile/change_BMI_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:ui';
@@ -172,7 +172,7 @@ class _ProfilePageState extends State<ProfilePage>
               ),
               onPressed: () async {
                 await Share.share(
-                    'check out my website https://www.yogitech.me',
+                    'check out my website https://www.zenaiyoga.com',
                     subject: 'Look what I made!');
               },
             ),

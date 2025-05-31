@@ -1,7 +1,7 @@
-import 'package:YogiTech/views/_mainscreen.dart';
-import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/shared/styles.dart';
-import 'package:YogiTech/widgets/box_button.dart';
+import 'package:ZenAiYoga/views/_mainscreen.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
+import 'package:ZenAiYoga/widgets/box_button.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

@@ -1,4 +1,4 @@
-import 'package:YogiTech/services/exercise/exercise_service.dart';
+import 'package:ZenAiYoga/services/exercise/exercise_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;

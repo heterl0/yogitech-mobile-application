@@ -1,8 +1,8 @@
-import 'package:YogiTech/models/subscriptions.dart';
+import 'package:ZenAiYoga/models/subscriptions.dart';
 import 'package:flutter/material.dart';
-import 'package:YogiTech/custombar/appbar.dart';
-import 'package:YogiTech/shared/styles.dart';
-import 'package:YogiTech/shared/app_colors.dart';
+import 'package:ZenAiYoga/custombar/appbar.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 

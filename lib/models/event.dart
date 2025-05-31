@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:YogiTech/models/social.dart';
+import 'package:ZenAiYoga/models/social.dart';
 import 'package:flutter/foundation.dart';
-import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/models/exercise.dart';
+import 'package:ZenAiYoga/models/account.dart';
+import 'package:ZenAiYoga/models/exercise.dart';
 
 class Event {
   int id;

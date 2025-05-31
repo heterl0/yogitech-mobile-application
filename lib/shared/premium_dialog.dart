@@ -1,9 +1,9 @@
 // premium_dialog.dart
-import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/views/home/subscription_screen.dart';
+import 'package:ZenAiYoga/models/account.dart';
+import 'package:ZenAiYoga/views/home/subscription_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:YogiTech/shared/styles.dart';
-import 'package:YogiTech/widgets/box_button.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
+import 'package:ZenAiYoga/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
