@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:YogiTech/custombar/appbar.dart';
-import 'package:YogiTech/views/meditate/perform_meditate_screen.dart';
-import 'package:YogiTech/shared/styles.dart';
-import 'package:YogiTech/shared/app_colors.dart';
+import 'package:ZenAiYoga/custombar/appbar.dart';
+import 'package:ZenAiYoga/views/meditate/perform_meditate_screen.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
 import 'dart:math';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:YogiTech/widgets/checkbox.dart';
+import 'package:ZenAiYoga/widgets/checkbox.dart';
 
 class Meditate extends StatefulWidget {
   const Meditate({super.key});

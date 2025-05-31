@@ -1,12 +1,12 @@
-import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/services/event/event_service.dart';
+import 'package:ZenAiYoga/models/account.dart';
+import 'package:ZenAiYoga/services/event/event_service.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:YogiTech/custombar/appbar.dart';
-import 'package:YogiTech/views/event/event_detail_screen.dart';
-import 'package:YogiTech/widgets/card.dart';
+import 'package:ZenAiYoga/custombar/appbar.dart';
+import 'package:ZenAiYoga/views/event/event_detail_screen.dart';
+import 'package:ZenAiYoga/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:YogiTech/utils/formatting.dart';
+import 'package:ZenAiYoga/utils/formatting.dart';
 
 class Activities extends StatefulWidget {
   final Account? account;

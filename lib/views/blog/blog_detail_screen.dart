@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:YogiTech/services/auth/auth_service.dart';
-import 'package:YogiTech/services/blog/blog_service.dart';
+import 'package:ZenAiYoga/services/auth/auth_service.dart';
+import 'package:ZenAiYoga/services/blog/blog_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/models/blog.dart';
-import 'package:YogiTech/shared/app_colors.dart';
-import "package:YogiTech/shared/styles.dart";
-import 'package:YogiTech/custombar/appbar.dart';
+import 'package:ZenAiYoga/models/account.dart';
+import 'package:ZenAiYoga/models/blog.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
+import "package:ZenAiYoga/shared/styles.dart";
+import 'package:ZenAiYoga/custombar/appbar.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class BlogDetail extends StatefulWidget {

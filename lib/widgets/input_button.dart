@@ -1,8 +1,8 @@
-import 'package:YogiTech/widgets/box_button_v2.dart';
-import 'package:YogiTech/widgets/box_input_field_v2.dart';
+import 'package:ZenAiYoga/widgets/box_button_v2.dart';
+import 'package:ZenAiYoga/widgets/box_input_field_v2.dart';
 import 'package:flutter/material.dart';
-import 'package:YogiTech/shared/app_colors.dart'; // Import your color definitions
-import 'package:YogiTech/shared/styles.dart'; // Import your text styles
+import 'package:ZenAiYoga/shared/app_colors.dart'; // Import your color definitions
+import 'package:ZenAiYoga/shared/styles.dart'; // Import your text styles
 
 class CustomInputButton extends StatefulWidget {
   final String title;

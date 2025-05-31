@@ -1,7 +1,7 @@
 // premium_dialog.dart
-import 'package:YogiTech/widgets/box_button.dart';
+import 'package:ZenAiYoga/widgets/box_button.dart';
 import 'package:flutter/material.dart';
-import 'package:YogiTech/shared/styles.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void showDevelopmentDialog(BuildContext context) {

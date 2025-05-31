@@ -1,11 +1,11 @@
-import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/models/social.dart';
-import 'package:YogiTech/views/profile/view_avatar_screen.dart';
+import 'package:ZenAiYoga/models/account.dart';
+import 'package:ZenAiYoga/models/social.dart';
+import 'package:ZenAiYoga/views/profile/view_avatar_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:YogiTech/custombar/appbar.dart';
-import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/shared/styles.dart';
+import 'package:ZenAiYoga/custombar/appbar.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:typed_data';
 

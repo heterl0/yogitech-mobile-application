@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:YogiTech/routing/app_routes.dart';
-import 'package:YogiTech/shared/styles.dart';
-import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/widgets/box_input_field.dart';
-import 'package:YogiTech/widgets/box_button.dart';
+import 'package:ZenAiYoga/routing/app_routes.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
+import 'package:ZenAiYoga/widgets/box_input_field.dart';
+import 'package:ZenAiYoga/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../viewmodels/auth/auth_viewmodel.dart';
 import 'package:provider/provider.dart';
