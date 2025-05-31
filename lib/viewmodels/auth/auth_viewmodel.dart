@@ -1,10 +1,10 @@
-import 'package:YogiTech/services/auth/auth_service.dart';
-import 'package:YogiTech/services/account/account_service.dart';
+import 'package:ZenAiYoga/services/auth/auth_service.dart';
+import 'package:ZenAiYoga/services/account/account_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:YogiTech/routing/app_routes.dart';
-import 'package:YogiTech/views/pre_launch_survey_screen.dart';
+import 'package:ZenAiYoga/routing/app_routes.dart';
+import 'package:ZenAiYoga/views/pre_launch_survey_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthViewModel extends ChangeNotifier {

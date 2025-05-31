@@ -1,28 +1,28 @@
 import 'dart:convert';
 import 'dart:ffi';
 
-import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/models/subscriptions.dart';
-import 'package:YogiTech/services/auth/auth_service.dart';
-import 'package:YogiTech/services/subscription/subscription_service.dart';
-import 'package:YogiTech/shared/future_function_dialog.dart';
-import 'package:YogiTech/widgets/checkbox.dart';
-import 'package:YogiTech/utils/formatting.dart';
+import 'package:ZenAiYoga/models/account.dart';
+import 'package:ZenAiYoga/models/subscriptions.dart';
+import 'package:ZenAiYoga/services/auth/auth_service.dart';
+import 'package:ZenAiYoga/services/subscription/subscription_service.dart';
+import 'package:ZenAiYoga/shared/future_function_dialog.dart';
+import 'package:ZenAiYoga/widgets/checkbox.dart';
+import 'package:ZenAiYoga/utils/formatting.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:YogiTech/custombar/appbar.dart';
-import 'package:YogiTech/custombar/bottombar.dart';
-import 'package:YogiTech/views/home/payment_history_screen.dart';
-import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/shared/styles.dart';
-import 'package:YogiTech/widgets/box_button.dart';
+import 'package:ZenAiYoga/custombar/appbar.dart';
+import 'package:ZenAiYoga/custombar/bottombar.dart';
+import 'package:ZenAiYoga/views/home/payment_history_screen.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
+import 'package:ZenAiYoga/widgets/box_button.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:pay/pay.dart';
-import 'package:YogiTech/utils/formatting.dart' as format;
+import 'package:ZenAiYoga/utils/formatting.dart' as format;
 
 class SubscriptionPage extends StatefulWidget {
   final Account? account;

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:YogiTech/custombar/appbar.dart';
-import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/shared/styles.dart';
-import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/widgets/box_input_field.dart';
-import 'package:YogiTech/widgets/box_button.dart';
+import 'package:ZenAiYoga/custombar/appbar.dart';
+import 'package:ZenAiYoga/models/account.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
+import 'package:ZenAiYoga/widgets/box_input_field.dart';
+import 'package:ZenAiYoga/widgets/box_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../viewmodels/profile/change_BMI_viewmodel.dart';

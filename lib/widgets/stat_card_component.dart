@@ -1,5 +1,5 @@
-import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/shared/styles.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
 import 'package:flutter/material.dart';
 
 class StatCard extends StatelessWidget {

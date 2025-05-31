@@ -1,14 +1,14 @@
-import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/services/account/account_service.dart';
+import 'package:ZenAiYoga/models/account.dart';
+import 'package:ZenAiYoga/services/account/account_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:YogiTech/views/blog/blog_screen.dart';
-import 'package:YogiTech/views/home/home_screen.dart';
-import 'package:YogiTech/views/meditate/meditate_screen.dart';
-import 'package:YogiTech/views/profile/profile_screen.dart';
-import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/shared/styles.dart';
+import 'package:ZenAiYoga/views/blog/blog_screen.dart';
+import 'package:ZenAiYoga/views/home/home_screen.dart';
+import 'package:ZenAiYoga/views/meditate/meditate_screen.dart';
+import 'package:ZenAiYoga/views/profile/profile_screen.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
 
 class MainScreen extends StatefulWidget {
   final bool isDarkMode;

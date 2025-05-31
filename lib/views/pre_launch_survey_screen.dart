@@ -1,14 +1,14 @@
-import 'package:YogiTech/services/account/account_service.dart';
-import 'package:YogiTech/views/_onbroading.dart';
-import 'package:YogiTech/widgets/dropdown_field.dart';
+import 'package:ZenAiYoga/services/account/account_service.dart';
+import 'package:ZenAiYoga/views/_onbroading.dart';
+import 'package:ZenAiYoga/widgets/dropdown_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:YogiTech/custombar/bottombar.dart';
-import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/shared/styles.dart';
-import 'package:YogiTech/widgets/box_input_field.dart';
-import 'package:YogiTech/models/account.dart';
+import 'package:ZenAiYoga/custombar/bottombar.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
+import 'package:ZenAiYoga/widgets/box_input_field.dart';
+import 'package:ZenAiYoga/models/account.dart';
 import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 

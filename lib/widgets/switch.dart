@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:YogiTech/shared/app_colors.dart'; // Import your color definitions
-import 'package:YogiTech/shared/styles.dart'; // Import your text styles
+import 'package:ZenAiYoga/shared/app_colors.dart'; // Import your color definitions
+import 'package:ZenAiYoga/shared/styles.dart'; // Import your text styles
 
 class CustomSwitch extends StatefulWidget {
   final String title;

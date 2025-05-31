@@ -1,9 +1,9 @@
-import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/models/exercise.dart';
-import 'package:YogiTech/services/account/account_service.dart';
-import 'package:YogiTech/services/auth/auth_service.dart';
-import 'package:YogiTech/services/exercise/exercise_service.dart';
-import 'package:YogiTech/views/exercise/result_exercise_practice_screen.dart';
+import 'package:ZenAiYoga/models/account.dart';
+import 'package:ZenAiYoga/models/exercise.dart';
+import 'package:ZenAiYoga/services/account/account_service.dart';
+import 'package:ZenAiYoga/services/auth/auth_service.dart';
+import 'package:ZenAiYoga/services/exercise/exercise_service.dart';
+import 'package:ZenAiYoga/views/exercise/result_exercise_practice_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

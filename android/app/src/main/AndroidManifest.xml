@@ -20,7 +20,7 @@
     <application
         android:name=".YogiApplication"
         android:icon="@mipmap/ic_launcher"
-        android:label="YogiTech"
+        android:label="ZenAiYoga"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
         >
@@ -43,7 +43,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="YogiTech"
+            android:label="ZenAiYoga"
             android:theme="@style/LaunchTheme"
             android:exported="true"
             android:launchMode="singleTop"

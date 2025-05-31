@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/shared/styles.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
 
 // Enum to represent more descriptive checkbox states
 enum CheckState { Checked, Unchecked }
