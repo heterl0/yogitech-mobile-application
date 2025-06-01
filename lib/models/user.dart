@@ -1,4 +1,4 @@
-import 'package:YogiTech/models/account.dart';
+import 'package:ZenAiYoga/models/account.dart';
 
 class UserModel {
   final Account account;

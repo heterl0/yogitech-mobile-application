@@ -1,11 +1,11 @@
-import 'package:YogiTech/notifi_services/notifi_service.dart';
-import 'package:YogiTech/services/notification/notification_service.dart';
+import 'package:ZenAiYoga/notifi_services/notifi_service.dart';
+import 'package:ZenAiYoga/services/notification/notification_service.dart';
 import 'package:flutter/material.dart';
-import 'package:YogiTech/custombar/appbar.dart';
-import 'package:YogiTech/widgets/switch.dart';
+import 'package:ZenAiYoga/custombar/appbar.dart';
+import 'package:ZenAiYoga/widgets/switch.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:YogiTech/models/notification.dart' as n;
+import 'package:ZenAiYoga/models/notification.dart' as n;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 

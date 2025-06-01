@@ -53,7 +53,7 @@ class ViewTutorialActivity: AppCompatActivity() {
         }
 
         // **Cập nhật để sử dụng video từ Cloudflare**
-        val videoUrl = "https://storage.yogitech.me/res/raw/${locale}_tutorial.mp4"
+        val videoUrl = "https://storage.zenaiyoga.com/res/raw/${locale}_tutorial.mp4"
         videoView.setVideoURI(Uri.parse(videoUrl))
 
         // Ẩn nút ban đầu

@@ -1,7 +1,7 @@
-import 'package:YogiTech/services/dioInstance.dart';
+import 'package:ZenAiYoga/services/dioInstance.dart';
 import 'package:dio/dio.dart';
-import 'package:YogiTech/models/notification.dart';
-import 'package:YogiTech/utils/formatting.dart';
+import 'package:ZenAiYoga/models/notification.dart';
+import 'package:ZenAiYoga/utils/formatting.dart';
 
 Future<List<dynamic>> getNotifications() async {
   try {
