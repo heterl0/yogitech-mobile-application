@@ -1,13 +1,39 @@
+import 'dart:async'; // 👈 Thêm dòng này
+
 import 'package:ZenAiYoga/shared/styles.dart';
-import 'package:ZenAiYoga/widgets/box_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:connectivity_plus/connectivity_plus.dart'; // 👈 Thêm dòng này
 
 import '../routing/app_routes.dart';
 import '../services/network/network_service.dart';
 
-class NoInternetScreen extends StatelessWidget {
+class NoInternetScreen extends StatefulWidget {
   const NoInternetScreen({super.key});
+
+  @override
+  State<NoInternetScreen> createState() => _NoInternetScreenState();
+}
+
+class _NoInternetScreenState extends State<NoInternetScreen> {
+  StreamSubscription? _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _subscription = Connectivity().onConnectivityChanged.listen((result) async {
+      final hasInternet = await NetworkService.hasInternetConnection();
+      if (hasInternet) {
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,21 +80,6 @@ class NoInternetScreen extends StatelessWidget {
             trans.failedConnectText,
             textAlign: TextAlign.center,
             style: bd_text.copyWith(color: theme.colorScheme.onPrimary),
-          ),
-          const SizedBox(height: 48),
-          CustomButton(
-            title: trans.tryConnectAgain,
-            style: ButtonStyleType.Primary,
-            onPressed: () async {
-              final hasInternet = await NetworkService.hasInternetConnection();
-              if (hasInternet) {
-                Navigator.pushReplacementNamed(context, AppRoutes.login);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(trans.failedConnectText)),
-                );
-              }
-            },
           ),
         ],
       ),

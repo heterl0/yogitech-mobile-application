@@ -106,23 +106,6 @@ Future<String?> _checkToken() async {
   }
 }
 
-// Future<void> requestStoragePermission() async {
-//   if (await Permission.storage.isGranted) {
-//     print("🔹 Quyền storage đã được cấp!");
-//   } else {
-//     final status = await Permission.storage.request();
-//     if (status.isGranted) {
-//       print("🔹 Quyền storage được cấp!");
-//     } else if (status.isDenied) {
-//       print("❌ Quyền storage bị từ chối!");
-//       // Hiển thị dialog thông báo nếu cần
-//     } else if (status.isPermanentlyDenied) {
-//       print("❌ Quyền storage bị từ chối vĩnh viễn!");
-//       await openAppSettings(); // Mở cài đặt để người dùng cấp quyền
-//     }
-//   }
-// }
-
 // ============================================================================
 // WORKMANAGER CONFIGURATION
 // ============================================================================
