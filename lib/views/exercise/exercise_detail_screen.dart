@@ -445,7 +445,12 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
       children: [
         Expanded(
           child: BoxInputField(
-              controller: commentController, placeholder: trans.yourComment),
+            controller: commentController,
+            placeholder: trans.yourComment,
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(35),
+            ],
+          ),
         ),
         IconButton(
           onPressed: () async {
@@ -569,13 +574,15 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8.0), // Adjust the value as needed
-                              child: Text(
-                                comment.text,
-                                style: bd_text.copyWith(
-                                  color: theme.colorScheme.onPrimary,
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 8.0), // Adjust the value as needed
+                                child: Text(
+                                  comment.text,
+                                  style: bd_text.copyWith(
+                                    color: theme.colorScheme.onPrimary,
+                                  ),
                                 ),
                               ),
                             ),
