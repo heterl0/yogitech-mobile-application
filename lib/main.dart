@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:YogiTech/services/network/network_service.dart';
-import 'package:YogiTech/views/no_internet_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -53,11 +51,14 @@ import 'package:ZenAiYoga/views/settings/reminder_screen.dart';
 import 'package:ZenAiYoga/views/settings/settings_screen.dart';
 import 'package:ZenAiYoga/views/social/friend_profile.dart';
 import 'services/download/download_service.dart';
+import 'services/network/network_service.dart';
 import 'viewmodels/auth/auth_viewmodel.dart';
 import 'viewmodels/blog/blog_detail_viewmodel.dart';
 import 'viewmodels/profile/change_BMI_viewmodel.dart';
 import 'views/inprogress/OTP_confirm_screen.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+
+import 'views/no_internet_screen.dart';
 
 // ============================================================================
 // GLOBAL VARIABLES
@@ -212,6 +213,7 @@ void main() async {
   await _initializeApp();
   // await requestStoragePermission();
   final bool hasInternet = await NetworkService.hasInternetConnection();
+
   final accessToken = await _checkToken();
 
   await SystemChrome.setPreferredOrientations([
