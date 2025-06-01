@@ -3,6 +3,9 @@ import 'package:ZenAiYoga/widgets/box_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../routing/app_routes.dart';
+import '../services/network/network_service.dart';
+
 class NoInternetScreen extends StatelessWidget {
   const NoInternetScreen({super.key});
 
@@ -56,7 +59,16 @@ class NoInternetScreen extends StatelessWidget {
           CustomButton(
             title: trans.tryConnectAgain,
             style: ButtonStyleType.Primary,
-            onPressed: () => print("test"),
+            onPressed: () async {
+              final hasInternet = await NetworkService.hasInternetConnection();
+              if (hasInternet) {
+                Navigator.pushReplacementNamed(context, AppRoutes.login);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(trans.failedConnectText)),
+                );
+              }
+            },
           ),
         ],
       ),
