@@ -334,14 +334,9 @@ class _MyAppState extends State<MyApp> {
     FlutterNativeSplash.remove();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute:
-          // AppRoutes.noInternet,
-          // widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
-          widget.hasInternet
-              ? (widget.access != null
-                  ? AppRoutes.firstScreen
-                  : AppRoutes.login)
-              : AppRoutes.noInternet,
+      initialRoute: widget.hasInternet
+          ? (widget.access != null ? AppRoutes.firstScreen : AppRoutes.login)
+          : AppRoutes.noInternet,
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: _themeMode,
