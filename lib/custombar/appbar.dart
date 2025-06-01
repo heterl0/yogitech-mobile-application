@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:YogiTech/shared/styles.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
 
 enum WidthStyle { small, medium, large }
 

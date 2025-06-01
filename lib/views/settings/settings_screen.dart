@@ -1,15 +1,15 @@
-import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/views/exercise/exercise_settings_screen.dart';
+import 'package:ZenAiYoga/models/account.dart';
+import 'package:ZenAiYoga/views/exercise/exercise_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-import 'package:YogiTech/custombar/appbar.dart';
+import 'package:ZenAiYoga/custombar/appbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:YogiTech/views/notifi/notifications_screen.dart';
-import 'package:YogiTech/views/settings/reminder_screen.dart';
-import 'package:YogiTech/shared/styles.dart';
-import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/widgets/switch.dart';
-import 'package:YogiTech/views/profile/change_profile_screen.dart';
+import 'package:ZenAiYoga/views/notifi/notifications_screen.dart';
+import 'package:ZenAiYoga/views/settings/reminder_screen.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
+import 'package:ZenAiYoga/widgets/switch.dart';
+import 'package:ZenAiYoga/views/profile/change_profile_screen.dart';
 
 class SettingsPage extends StatelessWidget {
   final bool isDarkMode;

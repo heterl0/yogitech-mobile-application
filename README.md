@@ -28,4 +28,4 @@ Download **YogiTech** now and experience the best **AI-powered yoga app** on And
 Your privacy is our priority. We ensure your data remains safe and secure.
 
 📩 **Feedback & Support**  
-Need help or have suggestions? Contact us at **support@yogitech.me** or leave a review!
+Need help or have suggestions? Contact us at **support@zenaiyoga.com** or leave a review!

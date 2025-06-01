@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:YogiTech/services/account/account_service.dart';
-import 'package:YogiTech/services/dioInstance.dart';
+import 'package:ZenAiYoga/services/account/account_service.dart';
+import 'package:ZenAiYoga/services/dioInstance.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/utils/formatting.dart';
+import 'package:ZenAiYoga/models/account.dart';
+import 'package:ZenAiYoga/utils/formatting.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 
 Future<dynamic> login(String email, String password) async {

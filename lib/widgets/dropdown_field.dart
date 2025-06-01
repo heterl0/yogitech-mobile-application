@@ -1,4 +1,4 @@
-import 'package:YogiTech/shared/styles.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
 import 'package:flutter/material.dart';
 
 class CustomDropdownFormField extends StatefulWidget {

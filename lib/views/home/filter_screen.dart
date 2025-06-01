@@ -1,14 +1,14 @@
-import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/services/pose/pose_service.dart';
+import 'package:ZenAiYoga/models/account.dart';
+import 'package:ZenAiYoga/services/pose/pose_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:YogiTech/custombar/appbar.dart';
-import 'package:YogiTech/models/pose.dart';
-import 'package:YogiTech/views/exercise/all_exercise_screen.dart';
-import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/shared/styles.dart';
-import 'package:YogiTech/custombar/bottombar.dart';
-import 'package:YogiTech/widgets/dropdown_field.dart'; // Import DropdownField
+import 'package:ZenAiYoga/custombar/appbar.dart';
+import 'package:ZenAiYoga/models/pose.dart';
+import 'package:ZenAiYoga/views/exercise/all_exercise_screen.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
+import 'package:ZenAiYoga/custombar/bottombar.dart';
+import 'package:ZenAiYoga/widgets/dropdown_field.dart'; // Import DropdownField
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FilterPage extends StatefulWidget {

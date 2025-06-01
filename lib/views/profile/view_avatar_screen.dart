@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:YogiTech/shared/app_colors.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 

@@ -1,23 +1,23 @@
-import 'package:YogiTech/models/account.dart';
-import 'package:YogiTech/models/event.dart';
-import 'package:YogiTech/services/exercise/exercise_service.dart';
-import 'package:YogiTech/shared/premium_dialog.dart';
-import 'package:YogiTech/widgets/box_button.dart';
-import 'package:YogiTech/utils/method_channel_handler.dart';
+import 'package:ZenAiYoga/models/account.dart';
+import 'package:ZenAiYoga/models/event.dart';
+import 'package:ZenAiYoga/services/exercise/exercise_service.dart';
+import 'package:ZenAiYoga/shared/premium_dialog.dart';
+import 'package:ZenAiYoga/widgets/box_button.dart';
+import 'package:ZenAiYoga/utils/method_channel_handler.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:YogiTech/custombar/appbar.dart';
-import 'package:YogiTech/custombar/bottombar.dart';
-import 'package:YogiTech/models/exercise.dart';
-import 'package:YogiTech/models/pose.dart';
-import 'package:YogiTech/shared/app_colors.dart';
-import 'package:YogiTech/shared/styles.dart';
-import 'package:YogiTech/widgets/box_input_field.dart';
-import 'package:YogiTech/widgets/card.dart';
+import 'package:ZenAiYoga/custombar/appbar.dart';
+import 'package:ZenAiYoga/custombar/bottombar.dart';
+import 'package:ZenAiYoga/models/exercise.dart';
+import 'package:ZenAiYoga/models/pose.dart';
+import 'package:ZenAiYoga/shared/app_colors.dart';
+import 'package:ZenAiYoga/shared/styles.dart';
+import 'package:ZenAiYoga/widgets/box_input_field.dart';
+import 'package:ZenAiYoga/widgets/card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:YogiTech/utils/formatting.dart';
+import 'package:ZenAiYoga/utils/formatting.dart';
 
 class ExerciseDetail extends StatefulWidget {
   final Account? account;
