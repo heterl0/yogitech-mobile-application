@@ -301,5 +301,8 @@
   "defaultError": "Registration failed, please try again.",
   "yogaBenefits" :"benefits of yoga",
   "yogaForBetterSleep" :"Yoga for better sleep",
-  "letFindOut" :"Let's find out!"
+  "letFindOut" :"Let's find out!",
+  "failedConnectTitle" : "No internet connection",
+  "failedConnectText": "Please check your internet connection and try again",
+  "tryConnectAgain": "Try again"
 }
