@@ -33,7 +33,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
   late n.Notification? _noti;
   late Account? _account;
 
-  late bool _isLoading = false;
+  late final bool _isLoading = false;
   final TextEditingController commentController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -154,7 +154,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
               (!_noti!.is_admin)
                   ? ((_noti!.profile.avatar != null) &&
                           _noti!.profile.avatar != '')
-                      ? Container(
+                      ? SizedBox(
                           width: 60,
                           height: 60,
                           child: CircleAvatar(
@@ -219,7 +219,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
                       children: [
                         Expanded(
                           child: Text(
-                            '${DateFormat('HH:mm dd/MM/yyyy').format(dateTime)}',
+                            DateFormat('HH:mm dd/MM/yyyy').format(dateTime),
                             textAlign: TextAlign.start,
                             style: bd_text.copyWith(color: active),
                           ),

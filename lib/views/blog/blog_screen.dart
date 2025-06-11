@@ -135,7 +135,7 @@ class BlogState extends State<Blog> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
-      child: jsonList.length > 0
+      child: jsonList.isNotEmpty
           ? GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),

@@ -21,7 +21,7 @@ class SettingsPage extends StatelessWidget {
   final Account? account;
 
   const SettingsPage({
-    Key? key,
+    super.key,
     required this.isDarkMode,
     required this.onThemeChanged,
     required this.locale,
@@ -29,7 +29,7 @@ class SettingsPage extends StatelessWidget {
     required this.isVietnamese,
     this.onProfileUpdated,
     this.account,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

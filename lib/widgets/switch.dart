@@ -78,7 +78,7 @@ class _CustomSwitchState extends State<CustomSwitch> {
           activeTrackColor: primary,
           inactiveThumbColor: theme.scaffoldBackgroundColor,
           inactiveTrackColor: text,
-          trackOutlineColor: MaterialStateColor.resolveWith(
+          trackOutlineColor: WidgetStateColor.resolveWith(
               (states) => theme.scaffoldBackgroundColor),
         ),
       ),

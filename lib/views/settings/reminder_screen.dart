@@ -335,7 +335,7 @@ class __SetupReminderWidgetState extends State<_SetupReminderWidget> {
               ),
               Text(
                 trans.setReminder,
-                style: h3.copyWith(color: theme.colorScheme.onBackground),
+                style: h3.copyWith(color: theme.colorScheme.onSurface),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context, {

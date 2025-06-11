@@ -71,4 +71,5 @@ Future<CandidateEvent?> updateStatusCandidateEvent(int id, int status) async {
     print('Give up event detail error: $e');
     return null;
   }
+  return null;
 }

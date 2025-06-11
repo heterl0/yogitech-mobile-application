@@ -328,10 +328,9 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
             orElse: () => MapEntry(2, 'Other'))
         .key;
 
-    print(
-        "Giới tánh được sửa? ${genderValue}, giá trị của text: ${gender.text}");
+    print("Giới tánh được sửa? $genderValue, giá trị của text: ${gender.text}");
 
-    print("${gender.text} $lastName: ${gender}");
+    print("${gender.text} $lastName: $gender");
 
     print("$firstName $lastName $genderValue $genderMap $birthday");
     PatchProfileRequest request = PatchProfileRequest(

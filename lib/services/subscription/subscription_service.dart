@@ -61,18 +61,18 @@ Future<List<dynamic>> getUserSubscriptions() async {
 }
 
 Future<UserSubscription?> subscribe(
-    int subscription, int subscriptionType, String secret_key) async {
+    int subscription, int subscriptionType, String secretKey) async {
   try {
     final url = formatApiUrl('/api/v1/user-subscriptions/');
     final data = {
       'subscription': subscription,
       'subscriptionType': subscriptionType,
-      'secret_key': secret_key
+      'secret_key': secretKey
     };
     final Response response = await DioInstance.post(url, data: data);
     if (response.statusCode == 200 || response.statusCode == 201) {
       UserSubscription data = UserSubscription.fromMap(response.data);
-      PatchUserAccountRequest ac = new PatchUserAccountRequest(isPremium: true);
+      PatchUserAccountRequest ac = PatchUserAccountRequest(isPremium: true);
       final account = await patchUserAccount(ac);
       if (account != null) {
         storeAccount(account);
@@ -99,8 +99,7 @@ Future<UserSubscription?> cancelSubscription(int id) async {
     final data = {"active_status": 0, "cancel_at": now.toString()};
     final Response response = await DioInstance.patch(url, data: data);
     if (response.statusCode == 200) {
-      PatchUserAccountRequest ac =
-          new PatchUserAccountRequest(isPremium: false);
+      PatchUserAccountRequest ac = PatchUserAccountRequest(isPremium: false);
       final account = await patchUserAccount(ac);
       if (account != null) {
         storeAccount(account);
@@ -115,6 +114,7 @@ Future<UserSubscription?> cancelSubscription(int id) async {
     print('Cancel UserSubscription detail error: $e');
     return null;
   }
+  return null;
 }
 
 //tesst
@@ -127,8 +127,7 @@ Future<UserSubscription?> expiredSubscription(int id) async {
     final Response response = await DioInstance.patch(url, data: data);
     if (response.statusCode == 200) {
       print('expried');
-      PatchUserAccountRequest ac =
-          new PatchUserAccountRequest(isPremium: false);
+      PatchUserAccountRequest ac = PatchUserAccountRequest(isPremium: false);
       final account = await patchUserAccount(ac);
       if (account != null) {
         storeAccount(account);
@@ -143,4 +142,5 @@ Future<UserSubscription?> expiredSubscription(int id) async {
     print('Cancel UserSubscription detail error: $e');
     return null;
   }
+  return null;
 }

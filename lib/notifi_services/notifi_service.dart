@@ -28,7 +28,7 @@ class LocalNotificationService {
         AndroidInitializationSettings('@mipmap/ic_launcher');
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
-      onDidReceiveLocalNotification: (id, title, body, payload) => null,
+      onDidReceiveLocalNotification: (id, title, body, payload) {},
     );
     final LinuxInitializationSettings initializationSettingsLinux =
         LinuxInitializationSettings(defaultActionName: 'Open notification');
@@ -163,7 +163,7 @@ class LocalNotificationService {
     final now = tz.TZDateTime.now(tz.local);
 
     print('Id thời gian: $id');
-    print('Thời gian truyền tới: ${day}, chuyển đổi ${_convertIntToDay(day)}');
+    print('Thời gian truyền tới: $day, chuyển đổi ${_convertIntToDay(day)}');
     print('Thời gian hệ thống hiện tại: $now');
     scheduledDate = scheduledDate.subtract(
         Duration(days: 1)); // Không hiểu vì sao nhưng nó luôn huốc 1 ngày

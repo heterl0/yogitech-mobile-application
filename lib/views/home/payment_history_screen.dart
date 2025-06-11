@@ -124,7 +124,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
             )
           ] else ...[
             Text(
-              '${formatCurrency(sub.price)}',
+              formatCurrency(sub.price),
               style: h3.copyWith(color: primary),
             ),
           ],

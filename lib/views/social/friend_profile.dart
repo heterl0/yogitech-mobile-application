@@ -16,14 +16,13 @@ class FriendProfile extends StatefulWidget {
   final void Function(int id)? unFollow;
   final void Function(int id)? followUserByUserId;
 
-  FriendProfile(
-      {Key? key,
+  const FriendProfile(
+      {super.key,
       this.id,
       required this.profile,
       this.account,
       this.unFollow,
-      this.followUserByUserId})
-      : super(key: key);
+      this.followUserByUserId});
 
   @override
   State<FriendProfile> createState() => _FriendProfile();
@@ -250,11 +249,11 @@ class BoxButton extends StatelessWidget {
 
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(backgroundColor),
-        foregroundColor: MaterialStateProperty.all(foregroundColor),
-        padding: MaterialStateProperty.all(padding),
-        textStyle: MaterialStateProperty.all(textStyle),
-        shape: MaterialStateProperty.all(buttonShape as OutlinedBorder?),
+        backgroundColor: WidgetStateProperty.all(backgroundColor),
+        foregroundColor: WidgetStateProperty.all(foregroundColor),
+        padding: WidgetStateProperty.all(padding),
+        textStyle: WidgetStateProperty.all(textStyle),
+        shape: WidgetStateProperty.all(buttonShape as OutlinedBorder?),
       ),
       onPressed: onPressed,
       child: Text(title),

@@ -13,7 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class PrelaunchSurveyPage extends StatefulWidget {
-  const PrelaunchSurveyPage({Key? key}) : super(key: key);
+  const PrelaunchSurveyPage({super.key});
 
   @override
   _PrelaunchSurveyPageState createState() => _PrelaunchSurveyPageState();
@@ -273,7 +273,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
               SizedBox(height: 8.0),
               CustomDropdownFormField(
                 controller: gender,
-                items: [
+                items: const [
                   'Female',
                   'Male',
                   'Other',
@@ -423,7 +423,7 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
           .firstWhere((entry) => entry.value == gender.text,
               orElse: () => MapEntry(2, 'Other'))
           .key;
-      print("Giới tánh: ${gender.text}, int là? ${userGender}");
+      print("Giới tánh: ${gender.text}, int là? $userGender");
 
       if (userWeight != null && userHeight != null) {
         try {

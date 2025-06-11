@@ -7,6 +7,8 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key});
+
   // final VoidCallback onComplete;
 
   // OnboardingScreen({required this.onComplete});

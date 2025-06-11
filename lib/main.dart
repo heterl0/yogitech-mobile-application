@@ -133,7 +133,7 @@ void callbackDispatcher() {
 
     final now = DateTime.now().subtract(const Duration(minutes: 15));
     await _loadEnv();
-    final accessToken = await prefs.getString('accessToken');
+    final accessToken = prefs.getString('accessToken');
     final url = formatApiUrl('/api/v1/notification/');
     final dio = Dio()..options.headers['Authorization'] = 'Bearer $accessToken';
 

@@ -3,6 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class BannerAdWidget extends StatefulWidget {
+  const BannerAdWidget({super.key});
+
   @override
   _BannerAdWidgetState createState() => _BannerAdWidgetState();
 }
@@ -49,9 +51,9 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
     return _isBannerAdLoaded
         ? Container(
             alignment: Alignment.center,
-            child: AdWidget(ad: _bannerAd),
             width: _bannerAd.size.width.toDouble(),
             height: _bannerAd.size.height.toDouble(),
+            child: AdWidget(ad: _bannerAd),
           )
         : SizedBox.shrink(); // Nếu chưa tải được quảng cáo, không hiển thị gì
   }

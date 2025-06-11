@@ -20,10 +20,10 @@ class SocialPage extends StatefulWidget {
   final Account? account;
 
   const SocialPage({
-    Key? key,
+    super.key,
     this.onProfileUpdated,
     required this.account,
-  }) : super(key: key);
+  });
 
   @override
   State<SocialPage> createState() => _SocialPageState();
@@ -48,7 +48,7 @@ class _SocialPageState extends State<SocialPage> {
         for (var notification in _notifications!) {
           final notificationTime = DateTime.parse(notification.time);
           if (notificationTime.isAfter(now)) {
-            print('Thông báo: ${notification}');
+            print('Thông báo: $notification');
             LocalNotificationService.showActivitiesNotification(
               id: notification.id + 10,
               title: notification.title,
@@ -238,7 +238,7 @@ class NewsListItem extends StatelessWidget {
                   (!notification.is_admin)
                       ? ((notification.profile.avatar != null) &&
                               notification.profile.avatar != '')
-                          ? Container(
+                          ? SizedBox(
                               width: 60,
                               height: 60,
                               child: CircleAvatar(

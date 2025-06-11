@@ -23,12 +23,12 @@ class EventDetail extends StatefulWidget {
   final void Function(int)? fetchEvent;
 
   const EventDetail({
-    Key? key, // Add a key here
+    super.key, // Add a key here
     required this.event,
     this.account,
     this.fetchAccount,
     this.fetchEvent,
-  }) : super(key: key);
+  });
 
   @override
   _EventDetailState createState() => _EventDetailState();

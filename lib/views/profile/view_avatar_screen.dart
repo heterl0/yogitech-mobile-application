@@ -8,10 +8,10 @@ class AvatarViewPage extends StatelessWidget {
   final Uint8List? imageBytes;
 
   const AvatarViewPage({
-    Key? key,
+    super.key,
     required this.avatarUrl,
     this.imageBytes,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

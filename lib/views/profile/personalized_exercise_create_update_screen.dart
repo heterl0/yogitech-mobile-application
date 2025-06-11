@@ -104,7 +104,9 @@ class _PersonalizedExerciseCreatePageState
   void dispose() {
     _titleController.dispose();
     _difficultyController.dispose();
-    _durationControllers.values.forEach((controller) => controller.dispose());
+    for (var controller in _durationControllers.values) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -148,7 +150,7 @@ class _PersonalizedExerciseCreatePageState
         .map((pose) => int.tryParse(_durationControllers[pose.id]!.text) ?? 0)
         .toList();
 
-    print('Durations: ${durations}');
+    print('Durations: $durations');
 
     // Create PostPersonalExerciseRequest object
     final request = PostPersonalExerciseRequest(

@@ -7,7 +7,7 @@ import '../../widgets/box_button.dart';
 import '../../widgets/box_input_field.dart';
 
 Future<void> changePasswordBottomSheet(BuildContext context) {
-  bool _isChangingPassword = false;
+  bool isChangingPassword = false;
   final theme = Theme.of(context);
   final trans = AppLocalizations.of(context)!;
   final TextEditingController currentPassword = TextEditingController();
@@ -93,7 +93,7 @@ Future<void> changePasswordBottomSheet(BuildContext context) {
                               currentpasswarn = '';
                               if (newPass != rePass) {
                                 isValid = false;
-                                repasswarn = '${trans.passwordsDoNotMatch}';
+                                repasswarn = trans.passwordsDoNotMatch;
                               } else {
                                 isValid = true;
                               }
@@ -111,13 +111,13 @@ Future<void> changePasswordBottomSheet(BuildContext context) {
                             );
 
                             setState(() {
-                              _isChangingPassword = true;
+                              isChangingPassword = true;
                             });
 
                             bool? result = await changePassword(request);
 
                             setState(() {
-                              _isChangingPassword = false;
+                              isChangingPassword = false;
                             });
 
                             if (result == true) {
@@ -159,7 +159,7 @@ Future<void> changePasswordBottomSheet(BuildContext context) {
                     ],
                   ),
                 ),
-                if (_isChangingPassword)
+                if (isChangingPassword)
                   Container(
                     color: Colors.black.withOpacity(0.5),
                     child: Center(

@@ -26,13 +26,11 @@ class CheckBoxListTile extends StatefulWidget {
 }
 
 class _CheckBoxListTileState extends State<CheckBoxListTile> {
-  bool _isChecked = false; // Internal state for checkbox value
-
-  @override
-  void initState() {
-    super.initState();
-    _isChecked = widget.state == CheckState.Checked;
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _isChecked = widget.state == CheckState.Checked;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +53,10 @@ class _CheckBoxListTileState extends State<CheckBoxListTile> {
             )
           : null,
       leading: Checkbox(
-        value: _isChecked,
+        value: widget.state == CheckState.Checked,
         onChanged: (value) {
-          setState(() {
-            _isChecked = value!;
-            widget.onChanged
-                ?.call(value); // Notify parent widget of state change
-          });
+          widget.onChanged
+              ?.call(value!); // Notify parent widget of state change
         },
         fillColor: WidgetStateColor.resolveWith((states) {
           final ThemeData theme = Theme.of(context);

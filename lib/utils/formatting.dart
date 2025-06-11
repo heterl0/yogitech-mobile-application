@@ -48,7 +48,7 @@ CheckDateResult checkDateExpired(
 
   if (difference.isNegative) {
     int daysPassed = -difference.inDays;
-    String message = '${trans.eventPassed}';
+    String message = trans.eventPassed;
     if (daysPassed >= 1) {
       message += ' $daysPassed ${trans.days}';
     }

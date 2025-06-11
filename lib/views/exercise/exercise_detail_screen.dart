@@ -469,7 +469,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
   Widget _buildComment(
     BuildContext context,
     ExtendComment exComment,
-    Account _account,
+    Account account,
   ) {
     Comment comment = exComment.comment;
     bool isLike = comment.hasUserVoted(user_id);
@@ -612,7 +612,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                                       ? Icon(
                                           Icons.favorite,
                                           color:
-                                              (!(_account.is_premium ?? false))
+                                              (!(account.is_premium ?? false))
                                                   ? primary
                                                   : primary2,
                                         )
@@ -637,7 +637,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
               ),
 
               // Nếu có parent_comment, hiển thị reply của admin bên dưới
-              repComment.length > 0
+              repComment.isNotEmpty
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

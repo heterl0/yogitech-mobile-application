@@ -48,7 +48,7 @@ class _FilterPageState extends State<FilterPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
-    print('Có account hay không? ${_account}');
+    print('Có account hay không? $_account');
     Map<String, String> muscleMap = {
       'Quadriceps': 'Cơ tứ đầu',
       'Pelvis': 'Khung chậu',
@@ -190,7 +190,7 @@ class MuscleInfoWidget extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-            child: Container(
+            child: SizedBox(
               height: 540,
               child: Row(
                 children: [

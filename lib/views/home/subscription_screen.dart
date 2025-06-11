@@ -82,7 +82,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
         _userSubs = ussub;
         print(_userSubs);
 
-        if ((_userSubs.length > 0) &&
+        if ((_userSubs.isNotEmpty) &&
             (_userSubs[_userSubs.length - 1]?.activeStatus != 0) &&
             (_account!.is_premium!)) {
           _currendSub = _userSubs[_userSubs.length - 1];
@@ -260,7 +260,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                 Expanded(
                   child: Center(
                     child: Text(
-                      '${_subStatus}',
+                      '$_subStatus',
                       style: h3.copyWith(color: active, height: 1),
                     ),
                   ),
@@ -706,7 +706,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
                   ],
                 ),
                 Text(
-                  (sub.gemPrice != null && sub.price != null) ? (trans.or) : '',
+                  (sub.gemPrice != null) ? (trans.or) : '',
                   style: min_cap.copyWith(color: text, height: 1),
                 ),
                 Text(
@@ -842,6 +842,7 @@ class _SubscriptionState extends State<SubscriptionPage> {
         _account = account;
       });
     }
+    return null;
   }
 
   CheckDateResult? checkExpire(UserSubscription usub) {

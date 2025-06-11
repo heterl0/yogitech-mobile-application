@@ -41,19 +41,19 @@ Future<Exercise?> getExercise(int id) async {
   }
 }
 
-Future<void> storeExercise(Exercise exercise, int? event_id) async {
+Future<void> storeExercise(Exercise exercise, int? eventId) async {
   // Store exercise in local storage
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('exercise', exercise.toJson());
-  if (event_id != null) {
-    await prefs.setString('event_id', event_id.toString());
+  if (eventId != null) {
+    await prefs.setString('event_id', eventId.toString());
   }
 }
 
 Future<bool> checkEvent() async {
   final prefs = await SharedPreferences.getInstance();
-  final event_id = prefs.getString('event_id');
-  if (event_id != null) {
+  final eventId = prefs.getString('event_id');
+  if (eventId != null) {
     prefs.remove('event_id');
     return true;
   }

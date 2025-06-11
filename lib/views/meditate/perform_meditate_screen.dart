@@ -15,11 +15,11 @@ class PerformMeditate extends StatefulWidget {
   final VoidCallback? updateStreak;
 
   const PerformMeditate({
-    Key? key,
+    super.key,
     this.duration = const Duration(seconds: 5),
     this.track = '',
     this.updateStreak,
-  }) : super(key: key);
+  });
 
   @override
   _PerformMeditateState createState() => _PerformMeditateState();

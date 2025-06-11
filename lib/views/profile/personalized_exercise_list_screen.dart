@@ -43,9 +43,9 @@ class _PersonalizedExercisePageState extends State<PersonalizedExercisePage> {
   }
 
   Future<void> getAccount() async {
-    final Account? _account = await retrieveAccount();
+    Account? account = await retrieveAccount();
     setState(() {
-      account = _account!;
+      account = account!;
     });
   }
 

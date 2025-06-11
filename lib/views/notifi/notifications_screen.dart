@@ -126,7 +126,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         for (var notification in _notifications!) {
           final notificationTime = DateTime.parse(notification.time);
           if (notificationTime.isAfter(now)) {
-            print('Thông báo: ${notification}');
+            print('Thông báo: $notification');
             LocalNotificationService.showActivitiesNotification(
               id: notification.id + 10,
               title: notification.title,

@@ -109,9 +109,9 @@ class _ProfilePageState extends State<ProfilePage>
           );
         }).toList();
         _startDate = startDate;
-        print('EXP: ${expDataPoints}');
-        print('Point: ${pointDataPoints}');
-        print('Calories: ${caloriesDataPoints}');
+        print('EXP: $expDataPoints');
+        print('Point: $pointDataPoints');
+        print('Calories: $caloriesDataPoints');
       });
     }
   }
@@ -399,7 +399,7 @@ class _ProfilePageState extends State<ProfilePage>
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(16)),
                                         child: Stack(
-                                          children: [
+                                          children: const [
                                             // InfoCard(
                                             //   title: trans.personalizedExercise,
                                             //   subtitle: trans.customizeExercise,

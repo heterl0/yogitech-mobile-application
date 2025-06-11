@@ -41,7 +41,7 @@ class BoxInputFieldV2 extends StatefulWidget {
 class _BoxInputFieldV2State extends State<BoxInputFieldV2> {
   bool _showPassword = false;
   bool _isFocused = false;
-  bool _hasError = false;
+  final bool _hasError = false;
   final FocusNode _focusNode = FocusNode();
 
   @override

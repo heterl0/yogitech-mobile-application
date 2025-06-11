@@ -1,3 +1,4 @@
+import 'package:ZenAiYoga/widgets/checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -8,7 +9,6 @@ import 'package:ZenAiYoga/shared/styles.dart';
 import 'package:ZenAiYoga/shared/app_colors.dart';
 import 'dart:math';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ZenAiYoga/widgets/checkbox.dart';
 
 class Meditate extends StatefulWidget {
   const Meditate({super.key});
@@ -24,7 +24,7 @@ final List<Map<String, dynamic>> theTracks = [
 ];
 
 class _MeditateState extends State<Meditate> {
-  int? _selectedTrackIndex;
+  int? _selectedTrackIndex = 0;
   int currentStreak = 0;
   Duration _selectedDuration = const Duration(minutes: 1);
   SharedPreferences? prefs;
@@ -156,7 +156,7 @@ class _MeditateState extends State<Meditate> {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
 
-    final List<Map<String, dynamic>> _tracks = [
+    final List<Map<String, dynamic>> tracks = [
       {
         'title': trans.soundRain,
         'subtitle': trans.soundRainDescription,
@@ -205,10 +205,10 @@ class _MeditateState extends State<Meditate> {
           ListView(
             shrinkWrap: true,
             children: [
-              for (var index = 0; index < _tracks.length; index++)
+              for (var index = 0; index < tracks.length; index++)
                 CheckBoxListTile(
-                  title: _tracks[index]['title'],
-                  subtitle: _tracks[index]['subtitle'],
+                  title: tracks[index]['title'],
+                  subtitle: tracks[index]['subtitle'],
                   state: _selectedTrackIndex == index
                       ? CheckState.Checked
                       : CheckState.Unchecked,
@@ -216,7 +216,7 @@ class _MeditateState extends State<Meditate> {
                     setState(() {
                       if (value) {
                         _selectedTrackIndex = index;
-                      } else {
+                      } else if (_selectedTrackIndex == index) {
                         _selectedTrackIndex = null;
                       }
                     });
