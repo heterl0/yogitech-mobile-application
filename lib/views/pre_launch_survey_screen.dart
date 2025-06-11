@@ -168,12 +168,12 @@ class _PrelaunchSurveyPageState extends State<PrelaunchSurveyPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    trans.welcomeToYogi.replaceFirst(" Yogi", ""),
+                    trans.welcomeToYogi,
                     style: h1.copyWith(
                         color: theme.colorScheme.onPrimary, height: 1.2),
                   ),
                   Text(
-                    'Yogi',
+                    'ZenAiYoga',
                     style: h1.copyWith(color: primary, height: 1.2),
                   ),
                 ],
