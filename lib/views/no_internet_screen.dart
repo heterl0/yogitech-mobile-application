@@ -1,19 +1,66 @@
+import 'dart:async';
+
 import 'package:ZenAiYoga/shared/styles.dart';
-import 'package:ZenAiYoga/widgets/box_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../routing/app_routes.dart';
 import '../services/network/network_service.dart';
+import '../widgets/box_button.dart';
 
-class NoInternetScreen extends StatelessWidget {
+class NoInternetScreen extends StatefulWidget {
   const NoInternetScreen({super.key});
+
+  @override
+  State<NoInternetScreen> createState() => _NoInternetScreenState();
+}
+
+class _NoInternetScreenState extends State<NoInternetScreen> {
+  StreamSubscription? _subscription;
+  bool _isChecking = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _subscription = Connectivity().onConnectivityChanged.listen((result) async {
+      final hasInternet = await NetworkService.hasInternetConnection();
+      if (hasInternet && !_isChecking) {
+        _checkInternetAndRedirect();
+      }
+    });
+  }
+
+  Future<void> _checkInternetAndRedirect() async {
+    setState(() => _isChecking = true);
+
+    final hasInternet = await NetworkService.hasInternetConnection();
+    await Future.delayed(
+        const Duration(milliseconds: 300)); // Delay nhẹ để thấy loading
+
+    if (!mounted) return;
+
+    if (hasInternet) {
+      Navigator.pushReplacementNamed(context, AppRoutes.login);
+    } else {
+      setState(
+          () => _isChecking = false); // Trả về lại giao diện nếu vẫn mất mạng
+    }
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: _buildNoInternetContent(context),
+        child: _isChecking
+            ? const CircularProgressIndicator()
+            : _buildNoInternetContent(context),
       ),
     );
   }
@@ -35,8 +82,8 @@ class NoInternetScreen extends StatelessWidget {
             child: Container(
               width: 90,
               height: 90,
-              decoration: BoxDecoration(
-                image: const DecorationImage(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
                   image: AssetImage('assets/images/signal_wifi_bad.png'),
                   fit: BoxFit.fill,
                 ),
@@ -59,16 +106,7 @@ class NoInternetScreen extends StatelessWidget {
           CustomButton(
             title: trans.tryConnectAgain,
             style: ButtonStyleType.Primary,
-            onPressed: () async {
-              final hasInternet = await NetworkService.hasInternetConnection();
-              if (hasInternet) {
-                Navigator.pushReplacementNamed(context, AppRoutes.login);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(trans.failedConnectText)),
-                );
-              }
-            },
+            onPressed: _isChecking ? null : _checkInternetAndRedirect,
           ),
         ],
       ),
