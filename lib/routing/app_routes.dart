@@ -30,4 +30,5 @@ class AppRoutes {
   static const String allExercise = '/allexercise';
   static const String notificationDetail = '/notificationDetail';
   static const String onboarding = '/onboarding';
+  static const String noInternet = '/nointernet';
 }
