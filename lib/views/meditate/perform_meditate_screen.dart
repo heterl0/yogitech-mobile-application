@@ -33,8 +33,12 @@ class _PerformMeditateState extends State<PerformMeditate>
   late AudioPlayer _audioPlayer;
   late AnimationController _animationController;
   late Animation<double> _animation;
-
   final InterstitialAdWidget _interstitialAdWidget = InterstitialAdWidget();
+
+  Future<void> preloadAudio() async {
+    await _audioPlayer.setSourceUrl(widget.track);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -49,6 +53,7 @@ class _PerformMeditateState extends State<PerformMeditate>
     _remainingTime = widget.duration;
     _audioPlayer = AudioPlayer();
     _interstitialAdWidget.loadInterstitialAd();
+    preloadAudio();
   }
 
   @override

@@ -117,14 +117,6 @@ class _MeditateState extends State<Meditate> {
     }
   }
 
-  Future<void> _resetStreakData() async {
-    await prefs?.remove('currentStreak');
-    await prefs?.remove('lastMeditationDate');
-    setState(() {
-      currentStreak = 0;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final trans = AppLocalizations.of(context)!;
