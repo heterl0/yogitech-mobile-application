@@ -352,8 +352,6 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute:
-          // AppRoutes.noInternet,
-          // widget.access != null ? AppRoutes.firstScreen : AppRoutes.login,
           widget.hasInternet
               ? (widget.access != null
                   ? AppRoutes.firstScreen
