@@ -12,7 +12,7 @@ class VerifyEmail extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final trans = AppLocalizations.of(context)!;
-    // Kiểm tra giao diện hiện tại để chọn hình ảnh phù hợp
+    // Kiểm tra giao diện hiện tại để chọn hình ảnh phù hợp test
     final String imageAsset = theme.brightness == Brightness.dark
         ? 'assets/images/login-sign.png'
         : 'assets/images/login-sign_light.png';
